@@ -74,6 +74,7 @@ ROLLE: & #4 \\
 
 \newcommand{\rref}[1]{\ref{#1}\textsuperscript{$\rightarrow$ p. \pageref{#1}}}
 \newcommand{\faref}[1]{FA\ref{#1}\textsuperscript{$\rightarrow$ p. \pageref{#1}}}
+\newcommand{\mfaref}[1]{FA\ref{#1}}
 \newcommand{\nfaref}[1]{QA\ref{#1}\textsuperscript{$\rightarrow$ p. \pageref{#1}}}
 
 
@@ -1066,8 +1067,55 @@ In diesem Abschnitt werden die Anwendungsfälle des gesamten Systems in zwei UML
 
 \flushleft
 
+Bei dem Anwendungsfalldigramm \autoref{fig:use-case-config} sind den Anwendungsfällen folgende funktionalen Anforderungen aus \autoref{ssec:fas} zugeordnet: 
 
-Im Folgenden ... werden die Abläufe und Vorgänge der Anwendungsfälle genauer spezifiziert. 
+\vspace{0.5cm}
+
+\begin{tabularx}{16cm}{l|X}
+	\textbf{Anwendungsfall} & \textbf{zugeordnete Anforderungen} \\
+	\hline
+	Spiel konfigurieren und laden & \mfaref{FA-Editor}, \mfaref{FA-Server-Partie-Konfiguration}, \mfaref{FA-ServerlädtSzenario} \\
+	Szenario erstellen und konfigurieren & \mfaref{FA-Spielbrett-Erstellung}, \mfaref{FA-Konfiguration}-\mfaref{FA-LadenUndModifizieren}, \mfaref{FA-Szenariokonfiguration}-\mfaref{FA-ZufälligeSzenariokonfiguration} \\
+	Partie konfigurieren & \mfaref{FA-Partiekonfiguration}, \mfaref{FA-Parameter-Partiekonfiguration} \\
+	Teilnahme als Zuschauer & \mfaref{FA-BC}, \mfaref{FA-Server-Erlaube-Zuschauer}, \mfaref{FA-Registrierung-Zuschauer} \\
+	Teilnahme als Mitspieler & \mfaref{FA-BC}, \mfaref{FA-KI}, \mfaref{FA-Registrierung-Spieler}, \mfaref{FA-Verbindungsaufbau-BC}, \mfaref{FA-Start-KI}, \mfaref{FA-Verbindungsaufbau-KI}, \mfaref{FA-Einbindung-KI}, \\
+	Verwaltung von Clients & \mfaref{FA-Server}, \mfaref{FA-Spieleranzahl}, \mfaref{FA-Beobachtung}, \mfaref{FA-BC}, \mfaref{FA-Server-Clientverbindung} \\ 
+\end{tabularx}
+
+\vspace{0.5cm}
+
+Bei dem Anwendungsfalldigramm \autoref{fig:use-case-gameflow} sind den Anwendungsfällen folgende funktionalen Anforderungen aus \autoref{ssec:fas} zugeordnet: 
+
+\vspace{0.5cm}
+
+
+\begin{tabularx}{16cm}{l|X}
+	\textbf{Anwendungsfall} & \textbf{zugeordnete Anforderungen} \\
+	\hline
+	Spielfeld und -zustand anzeigen & \mfaref{FA-Sichtbarkeit-Spielfeld}-\mfaref{FA-Spielbrett}, \mfaref{FA-Feld}-\mfaref{FA-Feldart-Gebirge}, \mfaref{FA-Server-Information-Spielzustand}, \mfaref{FA-Visualisierung-Spiel}-\mfaref{FA-Visualisierungsdauer} \\
+	Great House Wahl & \mfaref{FA-GreatHouses}-\mfaref{FA-Haus-Vernius}, \mfaref{FA-Wahl-GreatHouses} \\ 
+	Partie vorbereiten und beginnen & \mfaref{FA-Partievorbereitung}, \mfaref{FA-Beginn einer Partie}, \mfaref{FA-Server-Partiebeginn}, \\ 
+	Verwaltung von Partie & \mfaref{FA-Server} \\
+	Partie beenden & \mfaref{FA-Partieende} \\
+	Siegbedingung prüfen & \mfaref{FA-Partieende}, \mfaref{FA-Siegmetrik}, \mfaref{FA-Server-Siegbedingung},  \\
+	Behandlung überlanger Partien & \mfaref{FA-Behandlung-überlanger-Partien}-\mfaref{FA-Phase-Shai-Hulud} \\
+	Abhandlung der Runden & \mfaref{FA-Aktion-Spiceblow}, \mfaref{FA-Runden und Züge} \\ 
+	Partie pausieren und fortsetzen & \mfaref{FA-Server-Partiepause}, \mfaref{FA-Pausierung-BC}, \mfaref{FA-Pausierung-KI},\\ 
+	Dünenwanderungsphase & \mfaref{FA-Dünenwanderung}, \mfaref{FA-Phase-Dünenwanderung}, \mfaref{FA-Zellulärer-Automat} \\ 
+	Sandsturmphase & \mfaref{FA-Sandsturm}, \mfaref{FA-Phase-Sandsturm} \\ 
+	Sandwurmphase & \mfaref{FA-Sandwurm}, \mfaref{FA-Phase-Sandwurm}\\ 
+	Klonphase & \mfaref{FA-Phase-Klon} \\ 
+	Charakterzug & \mfaref{FA-Charaktere}-\mfaref{FA-Stärken-Schwächen-Charaktere}, \mfaref{FA-Spice-Streuung}, \mfaref{FA-Charakterzug-Rundenphase}, \mfaref{FA-Charakterzug}, \mfaref{FA-Server-Verbindungstrennung}-\mfaref{FA-Server-verspätete-Nachrichten}, \mfaref{FA-Server-Session-offen-halten}, \mfaref{FA-Server-Protokollverletzung}, \mfaref{FA-Spielinteraktion}, \mfaref{FA-Vereinfachung-Spielinteraktion}, \mfaref{FA-Zugwahl-KI}-\mfaref{FA-Intelligenzstufen},\\ 
+	Bewegung von Charakter & \mfaref{FA-Abstand-Felder}, \mfaref{FA-Bewegung-Charakter}, \mfaref{FA-Spicelieferung-Charakter}, \mfaref{FA-Suche-Nachbarfeld}, \mfaref{FA-gleichwertige-Alternativen}, \\ 
+	Aktion von Charakter & \mfaref{FA-Aktionen}-\mfaref{FA-Aktion-Sword-Spin}\\ 
+	Spielverlauf aufzeichnen & \mfaref{FA-ReplayLog}\\ 
+	Replay abspielen & \mfaref{FA-Replay} \\
+	
+\end{tabularx}
+
+\vspace{0.5cm}
+
+Im Folgenden \autoref{ssec:fas} werden die Abläufe und Vorgänge der Anwendungsfälle genauer spezifiziert. 
 
 \subsection{Funktionale Anforderungen}
 \label{ssec:fas}
@@ -1317,49 +1365,49 @@ werden können. Dabei können in einer vom Standardisierungskomitee definierten 
 \rref{A-Teilnehmer}, \rref{A-Server} \rref{FA-Szenariokonfiguration}}{FA-ServerlädtSzenario}
 
 \fa{Server erlaubt Clientverbindung}{Der Server erlaubt genau zwei Clients, sich über das Netzwerk bei ihm für eine Partie als Mitspieler anzumelden.}{Der Server muss es genau zwei Clients ermöglichen, sich, als Mitspieler anzumelden.}{\faref{FA-Server}, \faref{FA-BC}, \faref{FA-Spieleranzahl}}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}, 
-\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Konfiguration}
+\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Server-Clientverbindung}
 
 \fa{Server startet Partie}{Sobald sich zwei mitspielende Clients beim Server registriert haben, startet der Server eine Partie und
 wickelt sie gemäß der Spielregeln ab.}{Es muss klar definiert sein, wann der Server die Partie startet.}{\faref{FA-Server}, \faref{FA-Beginn einer Partie}}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}, 
-\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Konfiguration}
+\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Server-Partiebeginn}
 
 \fa{Server erlaubt Zuschauer}{Der Server erlaubt Benutzer-Clients sich als Zuschauer für eine Partie zu registrieren. Sie bekommen dann den aktuellen Spielzustand und zukünftige Updates geschickt.}{Es muss klar definiert sein, ob und wie viele Zuschauer Clients der Server zulässt.}{\faref{FA-Server}, \faref{FA-Registrierung-Zuschauer}}{3}{\rref{A-Auftraggeber}, \rref{A-Entwickler}, 
-\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Konfiguration}
+\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Server-Erlaube-Zuschauer}
 
 \fa{Server trennt Verbindung}{Falls von einem Client erwartet wird, innerhalb einer in der Partie-Konfiguration festgelegten Zeitspanne
 eine Nachricht an den Server zu schicken, ein Fortgang der Partie ohne diese Nachricht nicht sinnvoll möglich ist, und
 der Server keine Nachricht rechtzeitig empfängt, soll der Server die Verbindung zum Client abbrechen. Im Falle eines
 mitspielenden Clients wird dieser disqualifiziert.}{Es muss klar definiert sein, unter welchen Bedingungen der Server die Verbindung zum Client trennt.}{\faref{FA-Server}, \nfaref {QA-Toleranz}}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}, 
-\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Konfiguration}
+\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Server-Verbindungstrennung}
 
 \fa{Server übernimmt Client Input}{In Situationen, in denen der Server eine nicht rechtzeitig empfangene Nachricht als Wunsch des Clients
 interpretieren kann, nichts zu tun, sollte er tolerant sein, und für den Clients ein Default-Verhalten wählen. Damit kann eine Partie manchmal fortgesetzt werden, wenn ein Client
 kurzzeitig die Verbindung verliert, oder für eine Nachricht zu lange braucht. Der Client verliert lediglich einen Zug, wird aber nicht sofort aus dem Spiel geworfen.}{Der Server soll im Falle eines kurzzeitigen Verbindungsabbruchs den Client vertreten, um den Spielfluss in Gang zu halten, und dafür zu sorgen, dass der möglichst weiter spielen kann.}{\faref{FA-Server}, \nfaref {QA-Toleranz}}{3}{\rref{A-Auftraggeber}, \rref{A-Entwickler}, 
-\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Konfiguration}
+\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Server-ClientInput}
 
 \fa{Server Erkennung verspäteter Nachrichten}{Verspätet eintreffende Nachrichten für eine Rundenphase, die in einer späteren Rundenphase beim Server eingehen, sollten entsprechend vom Server nicht als Protokollverletzung betrachtet, sondern als verspätet erkannt und
 einfach verworfen werden.}{Der Server soll klar definiert wissen, ob eine Client-Nachricht eine Protokollverletzung darstellt oder verspätet ist.}{}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}, 
-\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Konfiguration}
+\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Server-verspätete-Nachrichten}
 
 \fa{Server pausiert Partie}{Falls ein mitspielender Benutzer-Client eine Pausierung der Partie wünscht, unterbricht der Server diese, bis irgendeiner der Mitspieler anzeigt, dass er weiterspielen möchte. KI-Clients dürfen keine Pausen verlangen, und auch keine Pausen beenden.}{Es muss klar definiert sein, welche Clients eine Pausierung wünschen können und wie diese Pausierung vom Server gehandhabt wird.}{}{4}{\rref{A-Auftraggeber}, \rref{A-Entwickler}, 
-\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Konfiguration}
+\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Server-Partiepause}
 
 \fa{Server hält Session offen}{Falls ein mitspielender Client seine Connection zum Server verliert, so bleibt seine Session zunächst
 bestehen. Der Client kann sich, innerhalb einer gewissen Zeitspanne, erneut mit dem Server verbinden, und seine
 Session fortsetzen. Der Client bekommt dazu vom Server den vollständigen aktuellen Spielzustand geschickt, für den
 Fall, dass der Client bspw. neu gestartet werden musste.}{Es muss definiert sein, wie der Server mit dem Verbindungsverlust eines Clients umgeht.}{}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}, 
-\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Konfiguration}
+\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Server-Session-offen-halten}
 
 \fa{Server Handhabung von Protokollverletzungen}{Falls ein Client sich nicht an das Kommunikationsprotokoll hält, oder eine nach den Spielregeln unzulässige Aktion durchführen will, sendet der Server dem Client eine Nachricht mit einer aussagekräftigen Fehlermeldung,
 beendet die Verbindung zu ihm und schließt ihn damit vom weiteren Verlauf der Partie aus. Im Fall eines mitspielenden
 Clients gewinnt dadurch der gegnerische Mitspieler.}{Es muss definiert sein, wie der Server darauf reagiert, wenn ein Client sich nicht an das Kommunikationsprotokoll hält.}{}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}, 
-\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Konfiguration}
+\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Server-Protokollverletzung}
 
 \fa{Server informiert Clients über Spielzustand}{Der Server informiert alle Clients über die Aktionen der Spieler und die Ereignisse, die sich daraus ergeben haben, und den daraus resultierenden Spielzustand.}{Es muss definiert sein, welche Clients wie über den Spielzustand informiert werden.}{}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}, 
-\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Konfiguration}
+\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Server-Information-Spielzustand}
 
 \fa{Server überprüft Siegbedingungen}{Der Server überprüft zu den relevanten Zeitpunkten, ob ein Spieler gemäß der Siegbedingungen gewonnen hat. Wenn dies der Fall ist, beendet er die Partie und benachrichtigt alle Clients entsprechend.}{Der Server muss dazu in der lange sein zu den relevanten Zeitpunkten die Spielbedingung zu prüfen.}{}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}, 
-\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Konfiguration}
+\rref{A-Teilnehmer}, \rref{A-Server}}{FA-Server-Siegbedingung}
 
 \fa{Server loggt Partie}{Der Server schreibt alle Informationen in eine Logdatei, die zum Nachvollziehen des Partieverlaufs nötig sind. Dadurch können Clients ein Replay der Partie abspielen. Das Standardisierungskomitee legt das Format für Logs bzw. Replay-Dateien fest. Am Ende einer Partie kann das Replay auch direkt den teilnehmenden Clients zugeschickt
 werden.}{Der Server solle alle Informationen in eine Logdatei schreiben, um den Informationsgewinn über den Verlauf der Partie zu optimieren.}{}{3}{\rref{A-Auftraggeber}, \rref{A-Entwickler}, 
