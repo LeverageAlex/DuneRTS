@@ -1049,6 +1049,7 @@ werden.
 \akteur{A-Standardisierungskomitee}{Standardisierungskomitee}{teamübergreifendes Komitee zur Standardisierung von Protokollen}{Das zu entwickelnde Spiel ist eine verteilte Anwendung. Da nicht alle Komponenten von einem Team entwickelt werden und die Komponenten über Protokolle kommunizieren, muss für die Kommunikation ein einheitliches Protokoll existieren. Damit dieses Protokoll teamübergreifend identisch ist und damit von allen Teams verwendet werden kann, muss es von einem Standadisierungskomitee definiert werden. Außerdem muss jedes Team einen Vertreter in dem Komitee haben.}
 
 \subsubsection{Anwendungsfälle}
+\label{sssec:use-cases}
 
 In diesem Abschnitt werden die Anwendungsfälle des gesamten Systems in zwei UML2-Anwendungsfalldiagrammen vorgestellt. In \autoref{fig:use-case-config} werden die Anwendungsfälle vorgestellt, die vor dem Beginn einer Partie auftreten. Diese behandeln die Konfiguration des Systems und die Teilnahme der Clients. \\ Im zweiten Anwendungsfalldiagramm \autoref{fig:use-case-gameflow} werden die Anwendungsfälle dargestellt, die mit dem Spielablauf verbunden sind, das heißt die Partie und deren Verlauf darstellen. \\ Die Anwendungsfälle wurden auf diese Weise in zwei Diagramme aufgeteilt, weil die Anwendungsfälle nicht zwangsläufig zusammen hängen und der Übersichtlichkeit halber getrennt werden können. \\ 
 
@@ -1117,6 +1118,13 @@ Bei dem Anwendungsfalldigramm \autoref{fig:use-case-gameflow} sind den Anwendung
 
 Die funktionalen Anforderungen \mfaref{FA-Architektur}-\mfaref{FA-Kombinierbarkeit-Komponenten}, \mfaref{FA-Netzwerkprotokoll}-\mfaref{FA-Spielprotokoll} und \mfaref{FA-Docker-Server} finden sich nicht in den Tabellen wieder, da sich nicht eindeutig einem Anwendungsfall zuzuordnen sind. Die Anwendungsfälle \mfaref{FA-Architektur}-\mfaref{FA-Kombinierbarkeit-Komponenten}, die sich mit der Architektur befassen finden sich in den gesamten Anwendungsfalldiagrammen \autoref{fig:use-case-gameflow} und \autoref{fig:use-case-config} wieder durch die Aufteilung der Anwendungsfälle auf die Akteure. \\ Die funktionalen Anforderungen \mfaref{FA-Netzwerkprotokoll}-\mfaref{FA-Spielprotokoll}, die sich mit der Netzwerkkommunikation befassen können allen Anwendungsfällen zugeordnet werden, die etwas mit der Netzwerkkommunikation zu tun haben, wie zum Beispiel \textit{Spielfeld und -zustand anzeigen} oder \textit{Aktion von Charakter}. \\ Die Anforderung \mfaref{FA-Docker-Server} ist eine Anforderung, die sich ebenfalls nicht eindeutig zuordnen lässt, da die Diagramme voraussetzen, dass Server und Benutzer-Client laufen und bereits gestartet wurden, weswegen diese Anforderungen ebenso nicht dargestellt werden kann. \par \par 
 Im Folgenden \autoref{ssec:fas} werden die Abläufe und Vorgänge der Anwendungsfälle genauer spezifiziert. 
+
+\subsubsection{Abläufe}
+\label{ssec:processes}
+
+Die folgenden Aktivitäts- und Sequenzdiagramme veranschaulichen die Abläufe der einzelnen Anwendungsfälle aus \autoref{sssec:use-cases} und damit die wichtigen Abläufe vor und während des Spiels bzw. Systems
+
+%ToDo: alle Aktivitäts- und Sequenzdiagramme gemäß der Reihenfolge von den Anwendungsfällen aus der Tabelle oben
 
 \subsection{Funktionale Anforderungen}
 \label{ssec:fas}
