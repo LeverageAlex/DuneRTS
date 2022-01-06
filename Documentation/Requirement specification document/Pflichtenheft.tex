@@ -7,14 +7,6 @@
 \usepackage{CJKutf8}
 \usepackage{graphicx}
 \usepackage{caption}
-
-% 1: Titel, 2: Beschreibung, 3: Begründung, 4: Abhängigkeit, 5: Priorität, 6: Akteur, 7: Labelname
-\newcounter{requirement}
-\newenvironment{requirement}[7]
-    {
-    
-    }
-    {}
     
 \makeatletter
 \newcommand{\labeltext}[2]{%
@@ -120,7 +112,7 @@ ROLLE: & #4 \\
 
 \subsection{Einleitung}
 
-In unserem Projekt geht es darum, ein funktionierendes Spiel gemäß Vorgaben aus einem Lastenheft zu erstellen, welches den Namen \textit{Deserts of Dune} tragen wird. Das Spiel ist für zwei Personen gedacht, wobei mehrere Personen dem Spielgeschen als Zuschauer folgen können. Hierbei wird alles, also sowohl die gesamte Spiellogik, als auch die graphische Gestaltung von uns selbst entwickelt und implementiert werden.
+In unserem Projekt geht es darum, ein funktionierendes Spiel gemäß Vorgaben aus einem Lastenheft zu erstellen, welches den Namen \textit{Deserts of Dune} tragen wird. Das Spiel ist für zwei Personen gedacht, wobei mehrere Personen dem Spielgeschehen als Zuschauer folgen können. Hierbei wird alles, also sowohl die gesamte Spiellogik, als auch die graphische Gestaltung von uns selbst entwickelt und implementiert werden.
 
 \subsection{Motivation}
 
@@ -1055,8 +1047,30 @@ werden.
 
 \akteur{A-Standardisierungskomitee}{Standardisierungskomitee}{teamübergreifendes Komitee zur Standardisierung von Protokollen}{Das zu entwickelnde Spiel ist eine verteilte Anwendung. Da nicht alle Komponenten von einem Team entwickelt werden und die Komponenten über Protokolle kommunizieren, muss für die Kommunikation ein einheitliches Protokoll existieren. Damit dieses Protokoll teamübergreifend identisch ist und damit von allen Teams verwendet werden kann, muss es von einem Standadisierungskomitee definiert werden. Außerdem muss jedes Team einen Vertreter in dem Komitee haben.}
 
+\subsubsection{Anwendungsfälle}
+
+In diesem Abschnitt werden die Anwendungsfälle des gesamten Systems in zwei UML2-Anwendungsfalldiagrammen vorgestellt. In \autoref{fig:use-case-config} werden die Anwendungsfälle vorgestellt, die vor dem Beginn einer Partie auftreten. Diese behandeln die Konfiguration des Systems und die Teilnahme der Clients. \\ Im zweiten Anwendungsfalldiagramm \autoref{fig:use-case-gameflow} werden die Anwendungsfälle dargestellt, die mit dem Spielablauf verbunden sind, das heißt die Partie und deren Verlauf darstellen. \\ Die Anwendungsfälle wurden auf diese Weise in zwei Diagramme aufgeteilt, weil die Anwendungsfälle nicht zwangsläufig zusammen hängen und der Übersichtlichkeit halber getrennt werden können. \\ 
+
+\centering
+\includegraphics[width=\textwidth]{images/Anwendungsfalldiagramm_Konfiguration}
+\captionof{figure}{Anwendungsfalldiagramm für die Anwendungsfälle bei der Konfiguration und Vorbereitung eines Spieles bzw. einer Partie}
+\label{fig:use-case-config}
+
+\vspace{2cm}
+
+\includegraphics[width=\textwidth]{images/Anwendungsfalldiagramm_Spielablauf}
+\captionof{figure}{Anwendungsfalldiagramm für die Anwendungsfälle Spielablaufs von \textsc{DUNE}}
+\label{fig:use-case-gameflow}
+
+\newpage
+
+\flushleft
+
+
+Im Folgenden ... werden die Abläufe und Vorgänge der Anwendungsfälle genauer spezifiziert. 
 
 \subsection{Funktionale Anforderungen}
+\label{ssec:fas}
 
 Dieser Abschnitt enthält alle Anforderungen, die die grundlegenden Aktionen des Softwaresystems
 spezifizieren. \\ Dabei gilt für Priorisierung, dass eine Anforderung eine Priorität von 1 (sehr gering) bis 5 (essenziell wichtig) bekommen kann. 
