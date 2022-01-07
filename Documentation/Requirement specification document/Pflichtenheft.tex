@@ -1057,16 +1057,20 @@ In diesem Abschnitt werden die Anwendungsfälle des gesamten Systems in zwei UML
 \includegraphics[width=\textwidth]{images/Anwendungsfalldiagramm_Konfiguration}
 \captionof{figure}{Anwendungsfalldiagramm für die Anwendungsfälle bei der Konfiguration und Vorbereitung eines Spieles bzw. einer Partie}
 \label{fig:use-case-config}
+\flushleft
 
 \vspace{2cm}
 
+Die Akteure \rref{A-Benutzer-Client} und \rref{A-Editor} wurden gruppiert, um deutlich zu machen, dass der Editor ein Teil des Benutzer-Clients ist. Denn die Anwender des Spiels nutzen den Editor im Benutzer-Client, um das Spiel zu konfigurieren, wodurch beide Akteure gleichermaßen benötigt werden. \\ Wie man in dem Anwendungsfalldiagramm \autoref{fig:use-case-config} sieht, inkludiert der Anwendungsfall \textit{Spiel konfigurieren und laden} die Anwendungsfälle \textit{Szenario erstellen und konfigurieren} sowie \textit{Partie konfigurieren}. Diese Gruppenbeziehung besteht so, weil bevor der Server die Konfiguration laden kann, müssen das Szenario und die Partie zunächst konfiguriert werden, weil der Server sonst das Spiel nicht starten kann. Da beide Konfigurationen notwendig sind, müssen sie ablaufen, bevor der Server die Konfiguration laden kann und somit der Anwendungsfall \textit{Spiel konfigurieren und laden} abgeschlossen wird. \\ Wie den funktionalen Anforderungen zu entnehmen ist, hat der Server die Aufgabe, die Clients zu verwalten, weswegen der Anwendungsfall \textit{Verwaltung von Clients} mit dem Server verbunden ist. Dabei sind, um das Spiel anschließend auch spielen zu können, Mitspieler notwendig. Daher inkludiert \textit{Verwaltung von Clients} den Anwendungsfall \textit{Teilnahme als Mitspieler}. Die Tatsache, dass für den Server zwei Mitspieler notwendig sind, lässt sich jedoch nicht darstellen. Außerdem erlaubt der Server, dass Zuschauer der Partie beitreten und über den Spielablauf informiert werden. Deswegen gibt es einen Anwendungsfall \textit{Teilnahme als Zuschauer}, der \textit{Verwaltung von Clients} extended. Das wird damit begründet, dass Zuschauer teilnehmen können, jedoch kein Teilnehmer einer Partie bewohnen muss, das heißt dieser Anwendungsfall optional ausgeführt wird. 
+
+\centering
 \includegraphics[width=\textwidth]{images/Anwendungsfalldiagramm_Spielablauf}
 \captionof{figure}{Anwendungsfalldiagramm für die Anwendungsfälle Spielablaufs von \textsc{DUNE}}
 \label{fig:use-case-gameflow}
 
-\newpage
-
 \flushleft
+
+Dieses Anwendungsfalldiagramm \autoref{fig:use-case-gameflow} behandelt alle Anwendungsfälle, die mit der Spieldurchführung zu tun haben. Dabei gibt es Anwendungsfälle, die nur von dem Akteur \rref{A-Spieler} ausgeführt werden und manche, die auch vom Akteur \rref{A-KI-Client} und damit allgemein dem Mitspieler bzw. Teilnehmer ausgeführt werden. Daher sind Spieler und KI Client Spezialisierung des Teilnehmers. \\ Wie in den funktionalen Anforderungen definiert wurde, hat der Server ebenso die Aufgabe, die Partie zu verwalten. Das heißt, er hat die Aufgabe, die Partie vorzubereiten, zu beginnen, durchzuführen und anschließend auch zu beenden. Um diese Logik darzustellen, gibt es einen Anwendungsfall \textit{Verwaltung von Partie} der \textit{Partie vorbereiten und beginnen}, \textit{Abhandlung der Runden} (= Spieldurchführung) und \textit{Partie beenden} inkludiert, weil alle diese Anwendungsfälle ausgeführt werden müssen, um eine Partie abzuhandeln und zu verwalten. \\ Da die Partievorbereitung die Great-House Wahl beinhaltet, wird \textit{Great House Wahl} von \textit{Partie vorbereiten und beginnen} inkludiert. \\ Die Abhandlung der Runden, das heißt die Durchführung von einem Rundenzyklus beinhaltet die Durchführung der in den Anforderungen definierten Runden. Das heißt, dass zur Abhandlung einer Runde die Anwendungsfälle \textit{Dünenwanderungsphase}, \textit{Sandsturmphase}, \textit{Sandwurmphase}, \textit{Klonphase} und \textit{Charakterzugphase} voraussetzt, weswegen diese inkludiert werden. \\ Der \textit{Charakterzug} wiederum besteht aus Zugphasen, die entweder eine Bewegung oder eine Aktion eines Charakters beinhalten. Da der Charakter sich nicht bewegen muss und auch keine Aktion ausführen muss und damit keiner der beiden Fälle Voraussetzung für einen Charakterzug ist, extenden die Anwendungsfälle \textit{Bewegung von Charakter} und \textit{Aktion von Charakter} \textit{Charakterzug}. \\ Ein ähnliches Argument begründet, warum \textit{Behandlung überlanger Partien} den Fall \textit{Partie beenden} extended. Da nicht unbedingt eine überlange Partie auftreten muss, muss dieser Anwendungsfall nicht unbedingt umgesetzt werden. In jedem Fall muss der Server jedoch die Siegbedingung prüfen\footnote{Bei der Behandlung überlanger Partien sieht diese Siegbedingung zwar anders aus, jedoch wird auch auf eine Siegbedingung geprüft.}, das heißt der Anwendungsfall \textit{Siegbedingung prüfen} muss von dem Fall \textit{Partie beenden} inkludiert werden. \par \par 
 
 Bei dem Anwendungsfalldigramm \autoref{fig:use-case-config} sind den Anwendungsfällen folgende funktionalen Anforderungen aus \autoref{ssec:fas} zugeordnet: 
 
@@ -1100,7 +1104,7 @@ Bei dem Anwendungsfalldigramm \autoref{fig:use-case-gameflow} sind den Anwendung
 	Partie beenden & \mfaref{FA-Partieende} \\
 	Siegbedingung prüfen & \mfaref{FA-Partieende}, \mfaref{FA-Siegmetrik}, \mfaref{FA-Server-Siegbedingung},  \\
 	Behandlung überlanger Partien & \mfaref{FA-Behandlung-überlanger-Partien}-\mfaref{FA-Phase-Shai-Hulud} \\
-	Abhandlung der Runden & \mfaref{FA-Aktion-Spiceblow}, \mfaref{FA-Runden und Züge} \\ 
+	Abhandlung der Runden & \mfaref{FA-Aktion-Spice-Blow}, \mfaref{FA-Runden und Züge} \\ 
 	Partie pausieren und fortsetzen & \mfaref{FA-Server-Partiepause}, \mfaref{FA-Pausierung-BC}, \mfaref{FA-Pausierung-KI},\\ 
 	Dünenwanderungsphase & \mfaref{FA-Dünenwanderung}, \mfaref{FA-Phase-Dünenwanderung}, \mfaref{FA-Zellulärer-Automat} \\ 
 	Sandsturmphase & \mfaref{FA-Sandsturm}, \mfaref{FA-Phase-Sandsturm} \\ 
