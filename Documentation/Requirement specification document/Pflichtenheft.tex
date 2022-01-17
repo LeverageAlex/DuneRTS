@@ -107,6 +107,9 @@ ROLLE: & #4 \\
 
 \begin{document}
 
+\tableofcontents
+\newpage
+
 \maketitle
 
 \section{Überblick}
@@ -1613,6 +1616,42 @@ Diese müssen in dem Editor erzeugt und bearbeitet werden können.
 }{Die Konfiguration eines Spielfeldes ist aufwendig und erfordert Erfahrung. Eine automatische Generierung oder Konfiguration erleichtert den Spieleinstieg und spart Zeit. Jedoch soll trotzdem noch nachjustiert werden können.}{\faref{FA-Szenariokonfiguration}}{3}{\rref{A-Entwickler}, \rref{A-Spieler}}{FA-ZufälligeSzenariokonfiguration}
 
 \section{Softwarespezifikation}
+
+\subsection{Systemschnittstellen}
+\subsubsection{Dialogstruktur}
+\subsubsection{Graphische Gestaltung und Nutzungskonzept}
+
+\includegraphics[width=\textwidth]{images/Hauptmenue}
+\captionof{figure}{\textbf{Hauptmenü}:\\
+Der \glqq Hauptmenü\grqq -Dialog wird beim Starten der Anwendung zu Beginn angezeigt.}
+
+\includegraphics[width=\textwidth]{images/Hilfe}
+\captionof{figure}{\textbf{Hilfe}:\\
+Der \glqq Hilfe\grqq -Dialog kann von jedem Dialog, bei dem das Fragezeichen rechts oben im Eck, aufgerufen werden und hier wird zu dem Dialog, wovon es aufgerufen wurde, eine kurze Beschreibung zu dem jeweiligen Dialog stehen}
+
+\includegraphics[width=\textwidth]{images/Spielwahl}
+\captionof{figure}{\textbf{Spielwahl}: Hier kann der Nutzer auswählen, ob er einem bereits erstellten Spiel beitreten will, selbst ein Spiel erstellen möchte oder ein vergangenes Spiel nochmals anschauen will.}
+
+\includegraphics[width=\textwidth]{images/Spielsuche}
+\captionof{figure}{\textbf{Spiel suchen}:\\
+Wurde im Spielwahl-Dialog der \glqq Spiel beitreten\grqq -Button gedrückt, kann der Nutzer jetzt einem bereits erstellten Spiel beitreten. \\
+Hier kann der Nutzer seinen Namen eingeben und seine Rolle wählen, also ob er als Spieler oder als Zuschauer beitreten möchte. Dem Nutzer werden alle verfügbaren Spiele angezeigt und wenn in einem Spiel schon zwei Spieler sind, kann man dort nur noch als Zuschauer beitreten. Durch drücken auf den \glqq Spiel beitreten\grqq -Button kommt der Nutzer in den \glqq Lobby\grqq -Dialog.}
+
+\includegraphics[width=\textwidth]{images/Spiel_erstellen}
+\captionof{figure}{\textbf{Spiel erstellen}: \\
+Wurde im Spielwahl-Dialog der \glqq Neues Spiel\grqq -Button gedrückt, kann der Nutzer jetzt ein neues Spiel erstellen.\\
+Er kann dabei seinen Namen eingeben und den Namen des Spiels. Außerdem kann er auch hier seine Rolle auswählen, ob er Spieler oder Zuschauer sein möchte. Er hat zusätzlich ein Dropdown-Menü, bei dem er eine bereits hinzugefügte Konfiguration auswählen kann oder er kann auch selbst eine neue Spielkonfiguration hinzufügen mit dem \glqq Konfiguration hinzufügen\grqq -Button.}
+
+\includegraphics[width=\textwidth]{images/Konfiguration_hinzufügen}
+\captionof{figure}{\textbf{Konfiguration hinzufügen}:\\
+Wurde im \glqq Spiel erstellen\grqq -Dialog der \glqq Konfiguration hinzufügen\grqq -Button gedrückt, kommt man in diesen Dialog, bei dem man in einer Textbox den Pfad und den Dateinamen für eine erstellte Konfiguration eingeben kann und dieses dann hinzugefügt wird.\\}
+
+\includegraphics[width=\textwidth]{images/Lobby}
+\captionof{figure}{\textbf{Lobby}:\\
+In dem \glqq Lobby\grqq -Dialog werden in einer Liste alle bereits beigetretenen Spieler und Zuschauer angezeigt. Hier besteht auch die Option einen KI-Spieler über einen Button hinzuzufügen. Außerdem ist hier noch ein \glqq Spiel starten\grqq -Button, womit man das Spiel starten kann unter der Bedingung, dass zwei Spieler in der Lobby sind.}
+
+\newpage
+
 \subsection{Domänenmodell}
 Dieser Abschnitt enthält das Domänenmodel, welches in fünf kleinere Modelle unterteilt wurde. Zu Beginn die Gesamtstruktur und darauf folgend die zugehörigen Teilmodelle.
 
