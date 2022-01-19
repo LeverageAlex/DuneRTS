@@ -1636,20 +1636,62 @@ eine Kommandozeile besitzen. \\ Dies ist einerseits eine Anforderungen aus dem L
 \paragraph{Editor}
 Der Editor soll über eine graphische Benutzeroberfläche bedient werden, das heißt als Schnittstelle 
 eine GUI besitzen. \\ In dem Editor sollen die Benutzer das Spiel und damit insbesondere das Spielfeld konfigurieren. Das bedeutet, dass die Benutzer viele Interaktionen mit dem System vornehmen müssen und vermutlich keine besonderen Kenntnisse haben, da sie das Spiel spielen wollen. Dementsprechend ist eine graphische Benutzeroberfläche komfortabler und intuitiver zu bedienen, da viele Benutzer den Umgang mit einer Kommandozeile vermutlich nicht gewohnt wären. Außerdem kann der Benutzer so einfacher ein Szenario konfigurieren und sieht das Ergebnis sofort. 
-
 \subsubsection{Dialogstruktur}
+Da sowohl der Editor, als auch der Benutzer-Client eine graphische Benutzeroberfläche haben sollen, müssen für diese Oberflächen die entsprechenden Dialoge definiert werden und wie diese voneinander abhängen. Dies wird in den folgenden Dialogstrukturdiagrammen zusammengefasst: 
 
 \includegraphics[width=\textwidth]{images/meilen3_a1_Hauptdiagramm}
-\captionof{figure}{\textbf{Hauptdiagram}\\}
+\captionof{figure}{Dialogstruktur für den grundlegenden Spielstart und -ablauf}
 
 
 \includegraphics[width=\textwidth]{images/meilen3_a1_Spielfeld}
-\captionof{figure}{\textbf{Spielfeld\\}}
+\captionof{figure}{Dialogstruktur für das Spielfeld und die Optionen während des Spiels. Generell gibt es einen Dialog für das Spielfeld, welcher jedoch je nach Benutzer anders aussieht. Wenn das Spielfeld für einen Zuschauer aufgerufen wird, dann sieht das Spielfeld anders aus, als bei einem Spieler. Deswegen gibt es spezialisierte Dialoge für das \glqq{}Spielfeld\grqq{}}
 
 
 \includegraphics[width=\textwidth]{images/meilen3_a1_Spielkonfiguration}
-\captionof{figure}{\textbf{Spielkonfiguration}\\}
+\captionof{figure}{Dialogstruktur für die Spielkonfiguration}
 
+Das für das Spiel zu viele Dialoge existieren wurden die Dialoge bzw. das Dialogstrukturdiagramm der Übersichtlichkeit halber aufgeteilt. In das jeweilige Subdiagramm kommt man, wenn man einen Dialog erreicht, der mit \textit{<<Subdiagramm>>} gekennzeichnet ist. \\ Dabei gibt es folgende Zuordnung der Dialoge und Anwendungsfällen aus \autoref{sssec:use-cases}, wobei in dem Kapitel auch die entsprechenden Anforderungen zugeordnet sind: 
+
+\vspace{0.5cm}
+
+\begin{tabularx}{16cm}{p{4cm}|p{7cm}|l}
+	\textbf{Dialog} & \textbf{zugeordneter Anwendungsfall} & Typ \\
+	\hline
+	Replay & Replay abspielen & Dialog \\
+	Replay/Auswahl & Replay abspielen & Dialog \\
+	Help/Hilfe & kein konkreter Anwendungsfall; siehe \nfaref{QA-Bedienbarkeit} \\			Spielwahl & Teilnahme als Zuschauer / Mitspieler & Dialog \\
+	Hauptmenü & Teilnahme als Zuschauer / Mitspieler & Dialog \\
+	Editor & Spiel konfigurieren und laden & Dialog \\
+	Spiel suchen & Teilnahme als Zuschauer / Mitspieler & Dialog \\
+	Spiel erstellen & Teilnahme als Zuschauer / Mitspieler & Dialog \\
+	Konfiguration hinzufügen & Spiel konfigurieren und laden & Dialog \\
+	Lobby & Teilnahme als Zuschauer / Mitspieler & Dialog \\
+	Great House Wahl & Great House Wahl & Dialog \\
+	Spielmenü & Partie pausieren und fortsetzen & Dialog \\
+	Partie wurde pausiert & Partie pausieren und fortsetzen & Hinweisfenster \\
+	Partie verlassen & Partie beenden & Bestätigungsfenster \\
+	Endbildschirm & Partie beenden & Hinweisfenster \\ 	
+	Partie pausieren & Partie pausieren und fortsetzen & Bestätigungsfenster \\
+	Partie nicht pausiert & Partie pausieren und fortsetzen & Fehlerbenachrichtigung \\		
+	Partie pausiert & Partie pausieren und fortsetzen & Hinweisfenster \\	
+	Partie nicht fortgesetzt & Partie pausieren und fortsetzen & Fehlerbenachrichtigung \\ 
+	Partie wiederaufnehmen & Partie pausieren und fortsetzen & Bestätigungsfenster \\
+	Spielfeld & Spielfeld und -zustand anzeigen & Dialog \\
+	Charakterzug & Charakterzug (Bewegung und Aktion von Charakter) & Dialog \\ 
+	Eingabefehler & Charakterzug (Bewegung und Aktion von Charakter) & Fehlerbenachrichtigung \\
+	Rundenstatistik & Spielfeld und -zustand anzeigen & Hinweisfenster \\ 
+	Spiel konfigurieren & Spiel konfigurieren und laden & Dialog \\ 
+	Szenariokonfiguration & Szenario erstellen und konfigurieren & Dialog \\ 
+	Szenario laden & Szenario erstellen und konfigurieren & Dialog \\
+	Szenario modifizieren / neu erstellen & Szenario erstellen und konfigurieren & Dialog \\
+	Szenario zufällig erstellt & Szenario erstellen und konfigurieren & Dialog \\
+	Szenario speichern & Szenario erstellen und konfigurieren & Bestätigungsfenster \\
+	ungültige Eingabe & Spiel konfigurieren und laden & Fehlerbenachrichtigung \\
+	Partiekonfigurarion laden & Partie konfigurieren & Dialog \\
+	Partiekonfigurarion modifizieren / neu erstellen & Partie konfigurieren & Dialog \\
+	Partiekonfigurarion speichern & Partie konfigurieren & Bestätigungsfenster \\
+	Partiekonfiguration & Partie konfigurieren & Dialog 
+\end{tabularx}
 
 \subsubsection{Graphische Gestaltung und Nutzungskonzept}
 
