@@ -1699,7 +1699,7 @@ Im Folgenden sind die verschiedenen graphische Prototypen in Form von \glqq{}Moc
 \begin{center}
 \includegraphics[width=\textwidth]{images/Hauptmenue}
 \captionof{figure}{\textbf{Hauptmenü}:\\
-Der \glqq Hauptmenü\grqq -Dialog wird beim Starten der Anwendung zu Beginn angezeigt.}
+Der \glqq Hauptmenü\grqq -Dialog wird beim Starten der Anwendung zu Beginn angezeigt. In diesem Dialog hat der Benutzer die Möglichkeit den Editor zu starten, ein neues Spiel zu starten oder die Anwendung wieder zu schließen, indem er die entsprechenden Buttons drückt.}
 
 \includegraphics[width=0.7\textwidth]{images/Hilfe}
 \captionof{figure}{\textbf{Hilfe}:\\
@@ -1812,9 +1812,15 @@ bestätigt der Spieler seine Auswahl. Wenn der Nutzer über ein definiertes Zeit
 Der Nutzer kehrt dann in die Lobby zurück.
 }
 
-\includegraphics[width=0.8\textwidth]{images/Spielmenü}
-\captionof{figure}{\textbf{Spielmenü}:\\
-Im \glqq{}Spielmenü\grqq{}-Dialog hat der Benutzer im Benutzer-Client die Möglichkeit, die Partie entweder zu pausieren oder die Partie zu verlassen. Dafür gibt es zwei unterschiedliche Buttons. Dabei gibt es jedoch einen Unterschied, ob das Spielmenü von einem Zuschauer oder einem Spieler aufgerufen wird. Denn wenn der Zuschauer die Partie pausiert, dann läuft die Partie im Hintergrund weiter und der Zuschauer schaut einfach nicht zu. Wenn der Spieler die Partie pausieren will, dann wird der Antrag vom Server geprüft und die Partie gegebenenfalls angehalten. Zudem kann der Benutzer das Menü wieder schließen (Kreuz). 
+
+\includegraphics[width=\textwidth]{images/Spielfeld}
+\captionof{figure}{\textbf{Spielfeld}:\\
+Der Dialog \glqq{}Spielfeld\grqq zeigt das aktuelle Spielfeld und den aktuellen Spielzustand an. Dafür sieht man in der Mitte das Spielfeld und auf der linken und rechten Seite jeweils die Statistiken der Spieler, das heißt zum Beispiel wie viel Spice der Spieler hat oder in welcher Runde sie sich befinden. Das ist auch die Oberfläche, die ein Zuschauer sehen kann. Wenn der Server die Charakterzugphase abhandelt, dann ändert sich der Dialog für den Spieler und der \glqq{}Spielfeld\grqq{}-Dialog wird zum \glqq{}Charakterzug\grqq{}-Dialog.
+}
+
+\includegraphics[width=0.8\textwidth]{images/Charakterzug}
+\captionof{figure}{\textbf{Charakterzug}:\\
+Im \glqq{}Charakterzug\grqq{}-Dialog hat der Benutzer die Möglichkeit seine Charakterzüge durchzuführen. Dafür wird quasi ein Overlay erzeugt, das heißt der Dialog des Spielfeldes wird erweitert für den Spieler, der am Zug ist. \\ Dann sieht der Spieler unten in einer Leiste alle auf der Karte platzierten Charakter und kann diese mit einem Klick (Kasten zeigt aktuelle Auswahl) auswählen. Die Leiste ist wie eine horizontale Scrollbar. Wenn der Spieler einen Charakter ausgewählt hat, dann sieht er an der linken Seite Informationen zu dem Charakter und zu dieser Phase. Das heißt wie viele MP und AP der Spieler noch hat und dieser Charakter verbrauchen würde. Außerdem existieren in diesem Abschnitt Buttons für die verschiedenen Aktionen, die man mit dem Charakter machen kann. \\ Wenn der Spieler den Charakter bewegen will, dann muss er mit der Maus auf das Feld des Charakters klicken und den Charakter an die gewünschte Stelle ziehen. Damit wird die Bewegung ausgeführt. 
 }
 
 \includegraphics[width=0.7\textwidth]{images/Partie wurde pausiert}
