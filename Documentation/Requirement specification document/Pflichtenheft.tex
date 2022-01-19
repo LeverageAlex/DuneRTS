@@ -103,13 +103,14 @@ ROLLE: & #4 \\
 
 \assignmenttype{}
 \assignmentno{}
-\title{Meilenstein 1: Kontextanalyse und Anforderungsdefinition}
+\title{Meilenstein 3: Benutzerschnittstelle}
 
 \begin{document}
 
 \maketitle
 
 \tableofcontents
+
 \newpage
 
 \section{Überblick}
@@ -1224,7 +1225,7 @@ Die folgenden Aktivitäts- und Sequenzdiagramme veranschaulichen die Abläufe de
 Dieser Abschnitt enthält alle Anforderungen, die die grundlegenden Aktionen des Softwaresystems
 spezifizieren. \\ Dabei gilt für Priorisierung, dass eine Anforderung eine Priorität von 1 (sehr gering) bis 5 (essenziell wichtig) bekommen kann. 
 
-\subsubsection{Komponenten und Architektur}
+\subsubsection*{Komponenten und Architektur}
 \fa{Architektur}{Das Spiel \glqq{}Deserts of Dune\grqq{} ist eine verteilte Anwendung mit der Client-Server-Architektur.}{Damit hat man das Spiel in Instanzen aufteilen, die das Spiel bereit stellen und organisieren und Instanzen, die es spielen. Außerdem können somit zwei Spieler auf unterschiedlichen Systemen gegeneinander spielen}{\faref{FA-Spielkomponenten}}{5}{\rref{A-Auftraggeber}}{FA-Architektur}
 
 \fa{Komponenten des Spiels}{Das gesamte System besteht aus vier Komponenten: Server, Benutzer-Client, KI-Client und Editor}{Die Spiellogik soll in diese vier Komponenten aufgeteilt werden als Vorgabe vom Auftraggeber}{\faref{FA-Kombinierbarkeit-Komponenten}, \faref{FA-Server}, \faref{FA-BC}, \faref{FA-KI}, \faref{FA-Editor}}{5}{\rref{A-Auftraggeber}}{FA-Spielkomponenten}
@@ -1244,7 +1245,7 @@ spezifizieren. \\ Dabei gilt für Priorisierung, dass eine Anforderung eine Prio
 
 \fa{Editor}{Mit dem Editor kann der Spieler das Spiel konfigurieren}{Dem Nutzer muss es möglich sein, die Konfiguration für ein Spiel anzupassen.}{\faref{FA-Partiekonfiguration}, \faref{FA-Szenariokonfiguration}, \faref{FA-Konfiguration}}{5}{\rref{A-Auftraggeber}, \rref{A-Benutzer}}{FA-Editor}
 
-\subsubsection{Netzwerkkommunikation und Nachrichtenprotokoll}
+\subsubsection*{Netzwerkkommunikation und Nachrichtenprotokoll}
 \fa{Netzwerkprotokoll}{Die Komponenten verwenden für die Kommunikation untereinander ein Netzwerkprotokoll. Das Netzwerkprotokoll ist ein WebSocket-Protokoll.}{Die Komponenten müssen nach einem Standard kommunizieren und das WebSocket-Protokoll ist ein etabliertes, gut funktionierendes Protokoll}{\faref{FA-Kodierung}}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}}{FA-Netzwerkprotokoll}
 
 \fa{Kodierung der Netzwerknachrichten}{Die über die WebSocket-Verbindung ausgetauschten Textstrings sind im UTF-8 Format kodiert}{Die Textstrings müssen aufgrund des Websocket-Protokoll kodiert werden und UTF-8 ist ein Standardformat}{\faref{FA-Netzwerkprotokoll}}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}}{FA-Kodierung}
@@ -1253,7 +1254,7 @@ spezifizieren. \\ Dabei gilt für Priorisierung, dass eine Anforderung eine Prio
 
 \fa{Spielprotokoll}{Das Spielprotokoll wird durch das Standardisierungskomitee definiert.}{Es muss ein fest definiertes Spielprotokoll verwendet werden, um eine Standardisierung zu erhalten. Dieses Protokoll muss teamübergreifend erstellt werden, da es mehrere Teams verwenden.}{\faref{FA-Netzwerkprotokoll}, \faref{FA-Nachrichtenformat}}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}}{FA-Spielprotokoll}
 
-\subsubsection{Szenarios}
+\subsubsection*{Szenarios}
 
 \fa{Sichtbarkeit des Spielfeldes}{Alle Spieler können zu jedem Zeitpunkt das gesamte Spielfeld sehen.}{Die Spieler sollen zu jedem Zeitpunkt des Spiels sämtliche Informationen über den Status des Spiels haben, weil das Spiel ein Spiel mit vollständiger Information sein soll.}{\faref{FA-Spielbrett}}{5}{\rref{A-Auftraggeber}, \rref{A-Benutzer}, \rref{A-Teilnehmer}}{FA-Sichtbarkeit-Spielfeld}
 
@@ -1287,7 +1288,7 @@ und Carthag. Beiden Spielern gehört jeweils eine davon. Felder mit der Feldart 
 \fa{Entfernung Felder}{Die Entfernung zwischen zwei Feldern A und B ist definiert als die minimale Anzahl von aufeinanderfolgenden
 Schritten auf alle 8 Nachbarfelder (gemäß der Moore Neighborhood-Definition), um von A nach B zu gelangen.}{Der Abstand zwischen Feldern muss klar definiert sein.}{\faref{FA-Feld}}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}}{FA-Abstand-Felder}
 
-\subsubsection{Great Houses}
+\subsubsection*{Great Houses}
 
 \fa{Great Houses}{Im Spiel gibt es sechs Great Houses, das heißt große Adelshäuser, die miteinander konkurrieren. Jedes der Häuser hat genau einen Namen und genau eine Farbe und besteht aus
 einer Reihe von Charakteren, die bei \faref{FA-Charaktere} genauer beschrieben werden}{Die Great Houses sollen farblich, namentlich und durch die Eigenschaften ihrer Charaktere unterscheidbar sein und dem Spieler Abwechselung bieten und verschiene Strategien in das Spiel bringen.}{\faref{FA-Charaktere}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}, \rref{A-Benutzer}}{FA-GreatHouses}
@@ -1304,7 +1305,7 @@ einer Reihe von Charakteren, die bei \faref{FA-Charaktere} genauer beschrieben w
 
 \fa{Haus Vernius}{Dieses Great House hat den Namen \textit{House Vernius}, die Farbe \textit{Violett} und die folgenden Charaktere: Earl Dominic Vernius (Noble), Lady Shando Vernius (Noble), Kailea Vernius (Noble), Tessia Vernius (Bene Gesserit), Rhombur Vernius (Fighter) und Bronso Vernius (Mentat).}{Die Great Houses sollen farblich, namentlich und durch die Eigenschaften ihrer Charaktere unterscheidbar sein.}{\faref{FA-GreatHouses}, \faref{FA-Noble}, \faref{FA-Mentat}, \faref{FA-Bene-Gesserit}, \faref{FA-Fighter}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}, \rref{A-Benutzer}}{FA-Haus-Vernius}
 
-\subsubsection{Charaktere}
+\subsubsection*{Charaktere}
 
 \fa{Charaktere}{Charaktere haben bestimmte Eigenschaften, deren Werte (abhängig vom Charakter-Typ) in der Partiekonfiguration
 definiert sind. Sie haben einen \textit{Namen}, ein \textit{Haus}, welchem sie angehören, \textit{Health Points}, \textit{Movement Points}, \textit{Angriffsschaden} und ein \textit{Inventar}. Die Werte und das Inventar aller Charaktere sind für alle Spieler sichtbar.}{Charaktere werden strategisch durch ihre Eigenschaften und deren Werte unterschieden.}{\faref{FA-Partiekonfiguration}, \faref{FA-Sichtbarkeit-Inventar}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}, \rref{A-Benutzer}}{FA-Charaktere}
@@ -1330,7 +1331,7 @@ definiert sind. Sie haben einen \textit{Namen}, ein \textit{Haus}, welchem sie a
 
 \fa{Stärken und Schwächen von Charakter-Typen}{Charakter-Typen haben unterschiedliche Stärken und Schwächen ähnlich dem Schere-Stein-Papier Prinzip.}{Kein Charakter-Typ soll alleine alles gut können, sie sollen sich gegenseitig ergänzen und effektiv gegeneinander sein.}{\faref{FA-Charaktere}, \faref{FA-Charakter-Typen}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}, \rref{A-Benutzer}}{FA-Stärken-Schwächen-Charaktere}
 
-\subsubsection{Bewegung}
+\subsubsection*{Bewegung}
 
 \fa{Bewegung von Charakteren}{Zu Beginn seines Zuges bekommt jeder Charakter so viele Movement Points (MP), wie in der Partiekonfiguration
 für seinen Charakter-Typ festgelegt ist. Für einen Movement Point kann sich der Charakter auf ein betretbares Nachbarfeld bewegen.}{Es muss klar definiert sein, wie weit und wohin sich Charaktere jede Runde bewegen dürfen.}{\faref{FA-Charaktere}, \faref{FA-Charakter-Typen}, \faref{FA-Feld}, \faref{FA-Betretbarkeit}, \faref{FA-Bewegungsrichtung-Charakter}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Bewegung-Charakter}
@@ -1343,7 +1344,7 @@ für seinen Charakter-Typ festgelegt ist. Für einen Movement Point kann sich de
 
 \fa{Abliefern von Spice}{Ist ein Charakter auf einem Nachbarfeld seiner Stadt, so wird das Spice aus seinem Inventar direkt der Stadt übergeben und dem Spice-Vorrat des Hauses hinzugezählt. Das heißt der Chatakter hat genau 0 Spice im Inventar und die Stadt genau die Menge mehr, die der Charakter vorher im Inventar hatte.}{Es muss klar geregelt sein, wie Charaktere Spice bei ihrer Stadt abliefern.}{\faref{FA-Charaktere}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Spicelieferung-Charakter}
 
-\subsubsection{Aktionen}
+\subsubsection*{Aktionen}
 
 \fa{Aktionen}{Aktionen sind aktive Handlungen, welche Charaktere ausführen können. Das Einsetzen von Aktionen kostet den Charakter immer Action Points, die der Charakter zu Beginn seines Zuges erhält.}{Aktionen sind notwendig, um zu definieren, welche Handlungen welche Charaktere ausführen können.}{\faref{FA-Charaktere}, \faref{FA-Charakter-Typen}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Aktionen}
 
@@ -1372,13 +1373,13 @@ für seinen Charakter-Typ festgelegt ist. Für einen Movement Point kann sich de
 
 \fa{Aktion: Sword Spin}{Die spezielle Aktion Sword Spin kann nur von einem Charakter mit dem Charakter-Typ Fighter eingesetzt werden. Die Aktion Sword Spin macht allen benachbarten Charakteren schaden wie bei einem normalen Angriff.}{Es muss klar definiert sein, wie die Aktion Sword Spin abläuft, welche Vorbedingungen gelten müssen und welche Auswirkungen sie hat.}{\faref{FA-Charaktere}, \faref{FA-Charakter-Typen}, \faref{FA-Spezielle-Aktion}, }{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Aktion-Sword-Spin}
 
-\subsubsection{Spice}
+\subsubsection*{Spice}
 
 \fa{Spice Blow}{Spice Blow findet statt, wenn zu Beginn eine Runde die Spicekrümel Anzahl auf der Karte kleiner als der Spiceschwellwert ist. Es wird ein zufälliges Wüstenfeld gewählt und eine Zufallszahl im Intervall [3,6] ermittelt. Das gewählte Wüstenfeld und die benachbarten Wüstenfelder werden zufällig auf Flachland oder Düne gesetzt. Entsprechend der ermittelten Zufallszahl werden Spicekrümel über die Felder mittels Spice Streuung verstreut.}{Es muss klar definiert sein, wie der Spice Blow funktioniert.}{\faref{FA-Feld}, \faref{FA-Feldarten}, \faref{FA-Spice-Streuung}, }{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Aktion-Spice-Blow}
 
 \fa{Spice Streuung}{Spicekrümel werden bei Tod eines Charakters oder einem Spice Blow verteilt. Es wird das aktuelle Feld mit Spice bestreut, falls kein Spice auf dem aktuellen Feld liegt. Wenn das aktuelle Feld bestreut ist, werden n-1 zufällige Nachbarfeldern bestreut, falls dieses betretbar sind.}{Es muss klar definiert sein wie die Spice Streuung funktioniert.}{\faref{FA-Feld}, \faref{FA-Feldarten}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}, \rref{A-Benutzer}}{FA-Spice-Streuung}
 
-\subsubsection{Dünenwanderung}
+\subsubsection*{Dünenwanderung}
 
 \fa{Dünenwanderung}{Die Dünenwanderung muss mittels zellulären Automaten implementiert werden. Jedes Wüstenfeld hat ein niedriges oder hohes Höhenniveau, ist also Flachsand oder eine Düne. Wir betrachten niedrige Felder als “tot” und hohe als “lebendig” im Sinne des zellulären Automaten.}{Es muss klar definiert sein wie die Dünenwanderung funktioniert.}{\faref{FA-Feld}, \faref{FA-Feldarten}, \faref{FA-Phase-Dünenwanderung}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Dünenwanderung}
 
@@ -1389,34 +1390,34 @@ also ob das Feld Flachsand oder eine Dune bleiben bzw. werden soll. Städte und 
 
 \fa{Transitionsregel des zellulären Automaten}{Die Transitionsregel des zellulären Automaten beschreibt, für den zellulären Automaten, bei welcher Anzahlen an lebendigen Nachbarfeldern eine tote Zelle lebendig wird oder eine lebendige Zelle überlebt. Die Transitionen orientieren sich an Conway’s Original Game of Life. Eine spezifische zu verwendete Regel wird in der Partie-Konfiguration festgehalten. Das Format ist hierbei ein String mit dem Inhalt B<Ziffernfolge>/S<Ziffernfolge> (B für Born und S für survive).}{Es muss klar definiert sein, was mit den Transitionsregeln gemeint ist, und wo diese spezifiziert werden.}{\faref{FA-Phase-Dünenwanderung}, \faref{FA-Dünenwanderung}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Zellulärer-Automat}
 
-\subsubsection{Sandsturm}
+\subsubsection*{Sandsturm}
 
 \fa{Sandsturm}{Zu Beginn der Partie wird vom Server ein zufälliges Feld gewählt zentrales Feld des Sandsturms gewählt. Auf diesem Feld und den Nachbarfeldern, also einem 3x3-Quadrat aus Feldern tobt ein gefährlicher Sandsturm. Zu Beginn jeder Runde wird die Sandsturm-Rundenphase ausgelöst. Charaktere, die sich im Sturm befinden, können keine Aktionen machen, und auch selbst nicht das Ziel von Aktionen sein. Lediglich durch einen Atomics-Einsatz können sie Ziel einer Aktion sein.}{Es bedarf einer klaren Definition des Sandsturms.}{\faref{FA-Phase-Sandsturm}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Sandsturm}
 
 \fa{Sandsturm-Rundenphase}{In der Sandsturm-Rundenphase wird das Zentralfeld des Sturms auf ein zufälliges Nachbarfeld gesetzt. Danach wird jedes Feld im 3x3 Bereich des Sturms zufällig auf ein niedriges oder hohes Höhenniveau gesetzt. Der Sandsturm bringt also kleine
 lokale Störungen in den zellulären Automaten ein, und verhindert damit statische Zustände des Automaten.}{Es bedarf einer klaren Definition des Ablaufes der Sandsturm-Rundenphase.}{\faref{FA-Sandsturm}, \faref{FA-Zellulärer-Automat}, \faref{FA-Höhenniveau}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Phase-Sandsturm}
 
-\subsubsection{Sandwurm}
+\subsubsection*{Sandwurm}
 
 \fa{Sandwurm}{Auf Arakis leben riesige Sandwürmer, sie können sich über Wüstenfelder bewegen, aber nicht über Felsenfelder. Der Sandwurm wird in der Sandwurm-Rundenphase aktiv. Wüstenfelder, auf denen sich ein Sandwurm befindet, gelten als nicht betretbar. Alle Wüstenfelder, von denen ein Sandwurm sich wegbewegt, werden auf Flachsand gesetzt.}{Es muss klar definiert sein, was ein Sandwurm ist und welche Eigenschaften er hat.}{\faref{FA-Phase-Sandwurm}, \faref{FA-Betretbarkeit}, \faref{FA-Feldarten}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Sandwurm}
 
 \fa{Sandwurm-Rundenphase}{ Zu Beginn jeder Runde in der Sandwurm-Rundenphase bewegt sich der Sandwurm, falls vorhanden n Felder auf eine Zielperson zu (n ist in der Partie-Konfiguration definiert). Wenn der Sandwurm sich auf das Feld eines Charakters bewegt, so wird dieser verschluckt und der Sandwurm verschwindet. Falls der Sandwurm keine nur über Wüstenfelder führende Strecke hat, um zu seiner Zielperson zu gelangen, verschwindet er und taucht direkt danach auf einem zufällig gewählten Wüstenfeld wieder auf. Seine Rundenphase ist damit beendet. Falls es keinen Sandwurm gibt, wird geprüft, ob in der vorangegangenen Rundenphase ein Charakter als Lauf markiert wurde. Falls keiner als laut markiert wurde passiert nichts. Wenn es mindestens einen lauten Charakter gibt, wird dieser oder ein zufälliger lauter Charakter vom Sandwurm ausgewählt. Der Sandwurm taucht dann auf einem zufälligen Wüsten Feld, welches kein Nachbarfeld des ausgewählten Charakters ist auf. Seine Rundenphase endet und er verfolgt später weiter den gleichen Charakter.}{Die Sandwurm-Rundenphase muss wohl definiert sein.}{\faref{FA-Sandwurm}, \faref{FA-Charaktere}, \faref{FA-Lautheit-Charakter}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Phase-Sandwurm}
 
-\subsubsection{Klonen von besiegten Charakteren}
+\subsubsection*{Klonen von besiegten Charakteren}
 
 \fa{Klon-Rundenphase}{Jeder besiegte Charakter eines der beiden Great Houses wird mit einer Klon-Erfolgswahrscheinlichkeit aus der Partiekonfiguration geklont. Der geklonte Charakter wird nun auf ein zufälliges freies Nachbarfeld der Stadt platziert. Charaktere die vom Sandwurm verschluckt wurden, können nicht geklont werden.}{Es muss klar definiert sein, wie die Klon-Rundenphase abläuft und von welchen Parameter sie beeinflusst wird.}{\faref{FA-Sandwurm}, \faref{FA-Charaktere}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Phase-Klon}
 
-\subsubsection{Partievorbereitung}
+\subsubsection*{Partievorbereitung}
 
 \fa{Partievorbereitung}{Bevor die Partie startet, wählen die Spieler eines der Great Houses für sich aus. Dies geschieht in der Great House Wahl.}{Es muss klar definiert sein, was in der Partie-Vorbereitung passiert. }{\faref{FA-Wahl-GreatHouses}, \faref{FA-GreatHouses}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Partievorbereitung}
 
 \fa{Great House Wahl}{Der Server nimmt aus der Liste der sechs Great Houses zwei zufällige heraus, die dem Spieler angezeigt werden. Der Spieler wählt eines davon aus. Dies findet Nebenläufig für beide Spieler statt. Der Server muss den beiden Spielern jeweils eine Menge aus zwei Häusern zur Auswahl anbieten, diese Mengen müssen disjunkt sein.}{Es muss klar definiert sein, wie die Great House Wahl abläuft.}{\faref{FA-GreatHouses}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Wahl-GreatHouses}
 
-\subsubsection{Beginn einer Partie}
+\subsubsection*{Beginn einer Partie}
 
 \fa{Beginn einer Partie}{Vor der ersten Runde weist der Server jedem der Häuser eine der beiden Städte zu, und platziert dann alle Charaktere eines Hauses auf zufälligen freien betretbaren Felder benachbart der jeweiligen Stadt.}{Es muss klar definiert sein, wie die Partie beginnt.}{\faref{FA-GreatHouses}, \faref{FA-Charaktere},\faref{FA-Feld}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Beginn einer Partie}
 
-\subsubsection{Runden und Züge}
+\subsubsection*{Runden und Züge}
 
 \fa{Runden und Züge}{Deserts of Dune läuft in Runden ab, in denen Ereignisse passieren, und die einzelnen Charaktere nacheinander ihre Züge machen. Zu Beginn jeder Runde handelt der Server einige Ereignisse ab. Die Reihenfolge der Rundenphasen ist:
 1. Dünenwanderungs-Rundenphase
@@ -1432,7 +1433,7 @@ gemacht wird. Wenn ein Charakter mit seinem Zug an der Reihe ist, werden zuerst 
 Points auf die seinem Charakter-Typ entsprechenden Werte aus der Partie-Konfiguration gesetzt. Der Spieler kann
 dann für den aktiven Charakter diese Punkte in beliebiger Reihenfolge, Zugphase für Zugphase, einen nach dem anderen ausgeben.}{Es muss klar definiert sein, wie Züge von Charakteren ablaufen.}{}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Charakterzug}
 
-\subsubsection{Ende der Partie und Bestimmung des Siegers}
+\subsubsection*{Ende der Partie und Bestimmung des Siegers}
 
 \fa{Ende der Partie}{Wenn in der Sandwurm-Rundenphase der letzte Charakter, den ein Haus kontrolliert, durch einen gewöhnlichen
 Sandwurm-Angriff verschluckt wird, während das andere Haus nach Abhandlung dieser Sandwurm-Rundenphase noch
@@ -1453,7 +1454,7 @@ Partie beendet.}{Es muss klar definiert sein, wie der Überlängenmechanismus fu
 
 \fa{Behandlung von gleichwertigen Alternativen}{Liegen zwei gleichwertige Alternativen vor, dann wird zufällig eine der beiden gewählt.}{Es muss klar definiert werden, wie zwei gleichwertige Alternativen behandelt werden.}{}{5}{\rref{A-Server}, \rref{A-Auftraggeber}}{FA-gleichwertige-Alternativen}
 
-\subsubsection{Server}
+\subsubsection*{Server}
 
 \fa{Starten des Servers über Docker Container}{Ein Server muss nicht-interaktiv über die Kommandozeile in Form eines Docker-Containers gestartet
 werden können. Dabei können in einer vom Standardisierungskomitee definierten Form die nötigen Argumente übergeben werden.}{Es muss möglich sein den Server, ohne kompliziertes lokales Build verfahren, mit allen notwendigen Parametern zu starten.}{\faref{FA-Server}}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}, 
@@ -1515,7 +1516,7 @@ werden.}{Der Server solle alle Informationen in eine Logdatei schreiben, um den 
 \rref{A-Teilnehmer}, \rref{A-Server}}{FA-ReplayLog}
 
 
-\subsubsection{Benutzer-Client}
+\subsubsection*{Benutzer-Client}
 
 \fa{Registrierung als Spieler}{Ein menschlicher Teilnehmer muss sich über den Benutzer-Client beim Server als Spieler registrieren können. Diese Registrierung gilt für genau eine Partie.}{Der Server muss wissen, dass ein Spieler eine Partie spielen möchte}{\faref{FA-Verbindungsaufbau-BC}, \faref{FA-Visualisierung-Spiel}}{5}{\rref{A-Spieler}, \rref{A-Auftraggeber}}{FA-Registrierung-Spieler}
 
@@ -1553,7 +1554,7 @@ werden.}{Der Server solle alle Informationen in eine Logdatei schreiben, um den 
 
 \fa{Abspielen eines Replay}{Der Benutzer kann mit Hilfe einer Log-Datei vom Server ein Replay laden und somit eine gespielte Partie nochmal anschauen}{Der Spieler möchte vielleicht alte Partien analysieren und sich so verbessern oder sehen, wie andere Spieler spielen, auch wenn er nicht live die Partie folgen konnte. Für die Entwicklern kann ein Replay beim Debuggen helfen, um so sehen, wie gut der KI-Client spielt.}{\faref{FA-Visualisierung-Spiel}, \faref{FA-ReplayLog}}{2}{\rref{A-Benutzer}, \rref{A-Auftraggeber}, \rref{A-Entwickler}}{FA-Replay}
 
-\subsubsection{KI-Client}
+\subsubsection*{KI-Client}
 
 \fa{Start des KI-Client}{Der KI-Client muss über die Kommandozeile mit Hilfe eines Docker-Containers gestartet werden können. Dafür werden ihm die von dem Standardisierungskomitee nötigen Argumente übergeben.}{Der KI-Client braucht keine graphische Oberfläche und der Start über die Kommandozeile als Docker-Container erleichtert den Build- und Startprozess}{\faref{FA-Verbindungsaufbau-KI}}{5}{\rref{A-Auftraggeber}}{FA-Start-KI}
 
@@ -1577,7 +1578,7 @@ werden.}{Der Server solle alle Informationen in eine Logdatei schreiben, um den 
 
 \fa{Einbindung in Benutzer-Client}{Der KI-Client soll auch in den Benutzer-Client einbindbar sein, das heißt aus dem Benutzer-Client heraus gestartet werden.}{Der Benutzer möchte vielleicht nicht selber spielen, sondern ein Spiel nur beobachten. Eine Einbindung in den Benutzer-Client ermöglicht den Start eines KI-Clients auch für menschliche Benutzer, die nicht wissen, wie man den KI-Client über die Kommandozeile startet}{\faref{FA-Start-KI}}{5}{\rref{A-Benutzer}}{FA-Einbindung-KI}
 
-\subsubsection{Editor}
+\subsubsection*{Editor}
 
 \fa{Konfiguration über graphische Benutzeroberfläche}{Der Benutzer kann über die graphische Benutzeroberfläche des Editors Konfigurationen vornehmen. Dabei gibt es die folgenden Konfigurationen: 
 \begin{itemize}
@@ -1616,31 +1617,103 @@ Diese müssen in dem Editor erzeugt und bearbeitet werden können.
 }{Die Konfiguration eines Spielfeldes ist aufwendig und erfordert Erfahrung. Eine automatische Generierung oder Konfiguration erleichtert den Spieleinstieg und spart Zeit. Jedoch soll trotzdem noch nachjustiert werden können.}{\faref{FA-Szenariokonfiguration}}{3}{\rref{A-Entwickler}, \rref{A-Spieler}}{FA-ZufälligeSzenariokonfiguration}
 
 \section{Softwarespezifikation}
-
+In den folgenden Kapiteln wird für jede Komponente eine sinnvolle Schnittstellenart vorgestellt und im Falle einer graphischen Oberfläche die definierten Dialoge vorgestellt. Dafür werden den Dialogen die entsprechenden Anwendungsfälle und Komponenten zugeordnet und die Struktur der Dialoge, das heißt, wie die Dialoge miteinander zusammenhängen, in einem Dialogstrukturdiagramm dargestellt. Zudem ist für jeden Dialog eine graphische Skizze in Form eines \glqq{}Mockups\grqq{} zu finden, sowie eine textuelle Beschreibung, wie dieser Dialog benutzt werden kann. 
 \subsection{Systemschnittstellen}
+Das System bzw. Spiel \textsc{DESERTS OF DUNE} besteht hauptsächlich aus vier großen Komponenten (siehe \faref{FA-Spielkomponenten}). Im Folgenden wird für jede Komponente eine Schnittstellenart definiert: 
+
+\paragraph{Server}
+Der Server soll über eine Konsole bedient werden, das heißt als Schnittstelle 
+eine Kommandozeile besitzen. \\ Dies ist einerseits eine Anforderungen aus dem Lastenheft (siehe \faref{FA-Docker-Server}), andererseits bietet die Kommandozeile den Vorteil, dass sie für die Entwickler weniger Arbeitsaufwand bedeutet und die Benutzer den Server so einfach und schnell über die Konsole starten können. Da für die Aufgabe eine Konsole also besser geeignet ist und keine weitere Interaktion besteht, ist eine Kommandozeile ausreichend. 
+
+\paragraph{Benutzer-Client}
+Der Benutzer-Client soll über eine graphische Benutzeroberfläche bedient werden, das heißt als Schnittstelle 
+eine GUI besitzen. \\ Der Benutzer-Client dient hauptsächlich dem Spielen des Spiels und dementsprechend auch der Anzeige des aktuellen Spielzustands und Spielfeldes. Daher ist eine graphische Oberfläche ein schöneres Spielerlebnis, als die Daten textuell zu sehen. \\ Da die Benutzer ebenfalls mit dem Umgang einer Kommandozeile nicht vertraut sein werden, eignet sich eine graphische Benutzeroberfläche bezüglich der Eingabe besser. 
+
+\paragraph{KI-Client}
+Der KI-Client soll über eine Konsole bedient werden, das heißt als Schnittstelle 
+eine Kommandozeile besitzen. \\ Dies ist einerseits eine Anforderungen aus dem Lastenheft (siehe \faref{FA-Start-KI}), andererseits bietet die Kommandozeile den Vorteil, dass sie für die Entwickler weniger Arbeitsaufwand bedeutet und die Benutzer den KI-Client so einfach und schnell über die Konsole starten können. Da für die Aufgabe eine Konsole also besser geeignet ist und keine weitere Interaktion besteht, ist eine Kommandozeile ausreichend. \\ Jedoch besteht auch die Möglichkeit, den KI-Client aus dem Benutzer-Client heraus zu starten, was bedeuten würde, dass der KI-Client eine graphische Schnittstelle hätte. Da diese jedoch in den Benutzer-Client eingebettet wäre, würde es keine extra Schnittstelle sein. 
+
+\paragraph{Editor}
+Der Editor soll über eine graphische Benutzeroberfläche bedient werden, das heißt als Schnittstelle 
+eine GUI besitzen. \\ In dem Editor sollen die Benutzer das Spiel und damit insbesondere das Spielfeld konfigurieren. Das bedeutet, dass die Benutzer viele Interaktionen mit dem System vornehmen müssen und vermutlich keine besonderen Kenntnisse haben, da sie das Spiel spielen wollen. Dementsprechend ist eine graphische Benutzeroberfläche komfortabler und intuitiver zu bedienen, da viele Benutzer den Umgang mit einer Kommandozeile vermutlich nicht gewohnt wären. Außerdem kann der Benutzer so einfacher ein Szenario konfigurieren und sieht das Ergebnis sofort. 
 \subsubsection{Dialogstruktur}
+Da sowohl der Editor, als auch der Benutzer-Client eine graphische Benutzeroberfläche haben sollen, müssen für diese Oberflächen die entsprechenden Dialoge definiert werden und wie diese voneinander abhängen. Dies wird in den folgenden Dialogstrukturdiagrammen zusammengefasst: 
 
 \includegraphics[width=\textwidth]{images/meilen3_a1_Hauptdiagramm}
-\captionof{figure}{\textbf{Hauptdiagram}\\}
+\captionof{figure}{Dialogstruktur für den grundlegenden Spielstart und -ablauf}
 
 
 \includegraphics[width=\textwidth]{images/meilen3_a1_Spielfeld}
-\captionof{figure}{\textbf{Spielfeld\\}}
+\captionof{figure}{Dialogstruktur für das Spielfeld und die Optionen während des Spiels. Generell gibt es einen Dialog für das Spielfeld, welcher jedoch je nach Benutzer anders aussieht. Wenn das Spielfeld für einen Zuschauer aufgerufen wird, dann sieht das Spielfeld anders aus, als bei einem Spieler. Deswegen gibt es spezialisierte Dialoge für das \glqq{}Spielfeld\grqq{}}
 
 
 \includegraphics[width=\textwidth]{images/meilen3_a1_Spielkonfiguration}
-\captionof{figure}{\textbf{Spielkonfiguration}\\}
+\captionof{figure}{Dialogstruktur für die Spielkonfiguration}
 
+Das für das Spiel zu viele Dialoge existieren wurden die Dialoge bzw. das Dialogstrukturdiagramm der Übersichtlichkeit halber aufgeteilt. In das jeweilige Subdiagramm kommt man, wenn man einen Dialog erreicht, der mit \textit{<<Subdiagramm>>} gekennzeichnet ist. \\ Dabei gibt es folgende Zuordnung der Dialoge und Anwendungsfällen aus \autoref{sssec:use-cases}, wobei in dem Kapitel auch die entsprechenden Anforderungen zugeordnet sind: 
+
+\vspace{0.5cm}
+
+\begin{tabularx}{16cm}{p{4cm}|p{7cm}|l}
+	\textbf{Dialog} & \textbf{zugeordneter Anwendungsfall} & Typ \\
+	\hline
+	Replay & Replay abspielen & Dialog \\
+	Replay/Auswahl & Replay abspielen & Dialog \\
+	Help/Hilfe & kein konkreter Anwendungsfall; siehe \nfaref{QA-Bedienbarkeit} \\			Spielwahl & Teilnahme als Zuschauer / Mitspieler & Dialog \\
+	Hauptmenü & Teilnahme als Zuschauer / Mitspieler & Dialog \\
+	Editor & Spiel konfigurieren und laden & Dialog \\
+	Spiel suchen & Teilnahme als Zuschauer / Mitspieler & Dialog \\
+	Spiel erstellen & Teilnahme als Zuschauer / Mitspieler & Dialog \\
+	Konfiguration hinzufügen & Spiel konfigurieren und laden & Dialog \\
+	Lobby & Teilnahme als Zuschauer / Mitspieler & Dialog \\
+	Great House Wahl & Great House Wahl & Dialog \\
+	Spielmenü & Partie pausieren und fortsetzen & Dialog \\
+	Partie wurde pausiert & Partie pausieren und fortsetzen & Hinweisfenster \\
+	Partie verlassen & Partie beenden & Bestätigungsfenster \\
+	Endbildschirm & Partie beenden & Hinweisfenster \\ 	
+	Partie pausieren & Partie pausieren und fortsetzen & Bestätigungsfenster \\
+	Partie nicht pausiert & Partie pausieren und fortsetzen & Fehlerbenachrichtigung \\		
+	Partie pausiert & Partie pausieren und fortsetzen & Hinweisfenster \\	
+	Partie nicht fortgesetzt & Partie pausieren und fortsetzen & Fehlerbenachrichtigung \\ 
+	Partie wiederaufnehmen & Partie pausieren und fortsetzen & Bestätigungsfenster \\
+	Spielfeld & Spielfeld und -zustand anzeigen & Dialog \\
+	Charakterzug & Charakterzug (Bewegung und Aktion von Charakter) & Dialog \\ 
+	Eingabefehler & Charakterzug (Bewegung und Aktion von Charakter) & Fehlerbenachrichtigung \\
+	Rundenstatistik & Spielfeld und -zustand anzeigen & Hinweisfenster \\ 
+	Spiel konfigurieren & Spiel konfigurieren und laden & Dialog \\ 
+	Szenariokonfiguration & Szenario erstellen und konfigurieren & Dialog \\ 
+	Szenario laden & Szenario erstellen und konfigurieren & Dialog \\
+	Szenario modifizieren / neu erstellen & Szenario erstellen und konfigurieren & Dialog \\
+	Szenario zufällig erstellt & Szenario erstellen und konfigurieren & Dialog \\
+	Szenario speichern & Szenario erstellen und konfigurieren & Bestätigungsfenster \\
+	ungültige Eingabe & Spiel konfigurieren und laden & Fehlerbenachrichtigung \\
+	Partiekonfigurarion laden & Partie konfigurieren & Dialog \\
+	Partiekonfigurarion modifizieren / neu erstellen & Partie konfigurieren & Dialog \\
+	Partiekonfigurarion speichern & Partie konfigurieren & Bestätigungsfenster \\
+	Partiekonfiguration & Partie konfigurieren & Dialog 
+\end{tabularx}
 
 \subsubsection{Graphische Gestaltung und Nutzungskonzept}
+Im Folgenden sind die verschiedenen graphische Prototypen in Form von \glqq{}Mockup\grqq{}-Zeichnung aufgelistet. Für jeden graphischen Prototypen wird in textuellen Form zusätzlich beschrieben, was die Elemente auf der Oberfläche bedeuten und wie dieser Dialog bedient werden kann. 
 
+\begin{center}
 \includegraphics[width=\textwidth]{images/Hauptmenue}
 \captionof{figure}{\textbf{Hauptmenü}:\\
-Der \glqq Hauptmenü\grqq -Dialog wird beim Starten der Anwendung zu Beginn angezeigt.}
+Der \glqq Hauptmenü\grqq -Dialog wird beim Starten der Anwendung zu Beginn angezeigt. In diesem Dialog hat der Benutzer die Möglichkeit den Editor zu starten, ein neues Spiel zu starten oder die Anwendung wieder zu schließen, indem er die entsprechenden Buttons drückt.}
 
-\includegraphics[width=\textwidth]{images/Hilfe}
+\includegraphics[width=0.7\textwidth]{images/Hilfe}
 \captionof{figure}{\textbf{Hilfe}:\\
 Der \glqq Hilfe\grqq -Dialog kann von jedem Dialog, bei dem das Fragezeichen rechts oben im Eck, aufgerufen werden und hier wird zu dem Dialog, wovon es aufgerufen wurde, eine kurze Beschreibung zu dem jeweiligen Dialog stehen}
+
+\includegraphics[width=0.7\textwidth]{images/Fehlerbenachrichtigung}
+\captionof{figure}{\textbf{allgemeine Fehlerbenachrichtigung (analog Hinweisfenster)}:\\
+Der \glqq{}Fehlerbenachrichtung\grqq{}-Dialog taucht immer dann auf, wenn es zu einem Fehler kam. Dieser Dialog zeigt dem Benutzer einen Text an und der Dialog lässt sich schließen, wenn der Benutzer den \textit{OK}-Button betätigt. Damit bestätigt er, dass er den Text gelesen hat oder das Fenster nicht mehr sehen will. \\ Der Dialog für ein Hinweisfenster sieht identisch aus, nur das ein anderer Text angezeigt wird. 
+}
+
+\includegraphics[width=0.7\textwidth]{images/Bestätigungsfenster}
+\captionof{figure}{\textbf{Bestätigungsfenster}:\\
+Der Dialog \glqq{}Bestätigungsfenster\grqq{} wird immer dann dem Benutzer angezeigt, wenn eine wichtige Aktion des Benutzers bestätigt werden soll, zum Beispiel wenn der Benutzer das Spiel verlassen will. Dann hat der Nutzer, die Aktion mit \textit{Ok} zu bestätigen oder mit \textit{Abbrechen} zu dem Dialog zurückkehren, von dem er gekommen ist.
+}
 
 \includegraphics[width=\textwidth]{images/Spielwahl}
 \captionof{figure}{\textbf{Spielwahl}: Hier kann der Nutzer auswählen, ob er einem bereits erstellten Spiel beitreten will, selbst ein Spiel erstellen möchte oder ein vergangenes Spiel nochmals anschauen will.}
@@ -1683,7 +1756,7 @@ Der Benutzer sieht eine Liste mit gespeicherten Partie-Konfigurationen und kann 
 Der Benutzer legt für jeden Parameter aus der angezeigten Liste einen gewünschten Wert fest. Der Benutzer kann die erstellte/ modifizierte Partie-Konfiguration speichern.
 }
 
-\includegraphics[width=\textwidth]{images/PartiekonfigurationSpeichern}
+\includegraphics[width=0.7\textwidth]{images/PartiekonfigurationSpeichern}
 \captionof{figure}{\textbf{Partie-Konfiguration speichern}:\\
 Der Benutzer kann eine soeben erstellte/ modifizierte Partie-Konfiguration speichern, indem er sie benennt und bestätigt. 
 }
@@ -1708,7 +1781,7 @@ Der Benutzer kann eine Szenario-Konfiguration zufällig erstellen lassen und bek
 Der Benutzer kann verschieden Werte, wie Dimension oder Farbschema festlegen. Der Benutzer kann für die einzelnen Felder die jeweilige Feldart festlegen.
 }
 
-\includegraphics[width=\textwidth]{images/SzenarioSpeichern}
+\includegraphics[width=0.7\textwidth]{images/SzenarioSpeichern}
 \captionof{figure}{\textbf{Szenario speichern}:\\
 Der Benutzer kann eine soeben erstellte/ modifizierte Szenario-Konfiguration speichern, indem er sie benennt und bestätigt.
 }
@@ -1739,6 +1812,35 @@ bestätigt der Spieler seine Auswahl. Wenn der Nutzer über ein definiertes Zeit
 Der Nutzer kehrt dann in die Lobby zurück.
 }
 
+<<<<<<< HEAD
+=======
+
+\includegraphics[width=\textwidth]{images/Spielfeld}
+\captionof{figure}{\textbf{Spielfeld}:\\
+Der Dialog \glqq{}Spielfeld\grqq zeigt das aktuelle Spielfeld und den aktuellen Spielzustand an. Dafür sieht man in der Mitte das Spielfeld und auf der linken und rechten Seite jeweils die Statistiken der Spieler, das heißt zum Beispiel wie viel Spice der Spieler hat oder in welcher Runde sie sich befinden. Das ist auch die Oberfläche, die ein Zuschauer sehen kann. Wenn der Server die Charakterzugphase abhandelt, dann ändert sich der Dialog für den Spieler und der \glqq{}Spielfeld\grqq{}-Dialog wird zum \glqq{}Charakterzug\grqq{}-Dialog.
+}
+
+\includegraphics[width=0.8\textwidth]{images/Charakterzug}
+\captionof{figure}{\textbf{Charakterzug}:\\
+Im \glqq{}Charakterzug\grqq{}-Dialog hat der Benutzer die Möglichkeit seine Charakterzüge durchzuführen. Dafür wird quasi ein Overlay erzeugt, das heißt der Dialog des Spielfeldes wird erweitert für den Spieler, der am Zug ist. \\ Dann sieht der Spieler unten in einer Leiste alle auf der Karte platzierten Charakter und kann diese mit einem Klick (Kasten zeigt aktuelle Auswahl) auswählen. Die Leiste ist wie eine horizontale Scrollbar. Wenn der Spieler einen Charakter ausgewählt hat, dann sieht er an der linken Seite Informationen zu dem Charakter und zu dieser Phase. Das heißt wie viele MP und AP der Spieler noch hat und dieser Charakter verbrauchen würde. Außerdem existieren in diesem Abschnitt Buttons für die verschiedenen Aktionen, die man mit dem Charakter machen kann. \\ Wenn der Spieler den Charakter bewegen will, dann muss er mit der Maus auf das Feld des Charakters klicken und den Charakter an die gewünschte Stelle ziehen. Damit wird die Bewegung ausgeführt. 
+}
+
+\includegraphics[width=0.7\textwidth]{images/Partie wurde pausiert}
+\captionof{figure}{\textbf{Partie wurde pausiert}:\\
+Zudem kann es passieren, dass man die Partie spielt und der gegnerische Mitspieler die Partie pausiert. Dann wird ebenfalls ein \glqq{}Pause\grqq{}-Dialog angezeigt, in dem der Spieler jedoch keine Interaktion vornehmen kann, sondern nur auf die Partiefortsetzung warten kann. 
+}
+
+\includegraphics[width=0.7\textwidth]{images/Partie pausiert}
+\captionof{figure}{\textbf{Partie pausiert}:\\
+Im \glqq{}Pause\grqq{}-Dialog hat der Spieler dann wieder die Möglichkeit, die Partie fortzusetzen, wofür es ebenfalls einen Button gibt. Dieser öffnet einen Bestätigungsdialog. Drückt der Benutzer in diesem Dialog \glqq{}Ja\grqq{}, dann wird das Spiel fortgesetzt und der Spieler kehrt zu dem \glqq{}Spielfeld\grqq{}-Dialog zurück.
+}
+
+\includegraphics[width=0.7\textwidth]{images/Rundenstatistik}
+\captionof{figure}{\textbf{Rundenstatistik}:\\
+Der Dialog \glqq{}Rundenstatistik\grqq{} stellt eine Art Hinweisfenster dar. In diesem Dialog wird dem Benutzer die aktuellen Ergebnisse der letztem Runde anzeigt, solange der Server die Runde beendet, die nächste vorbereitet und startet. Das heißt der Spieler sieht aktuelle Statistiken, wie in dem \glqq{}Sieg/Niederlage\grqq{}-Dialog.
+}
+
+>>>>>>> origin/Meilensteine
 \includegraphics[width=\textwidth]{images/end(lose)Screen}
 \captionof{figure}{\textbf{end(lose)Screen}:\\
 Im Endbildschirm wird dem Spieler bei einer Niederlage das Label Niederlage und bei einem Sieg das Label Sieg angezeigt.
@@ -1752,6 +1854,10 @@ Im Endbildschirm wird dem Spieler bei einer Niederlage das Label Niederlage und 
 Zudem werden dem Spieler hier die Statistiken beider Spieler angezeigt.
 Durch Klicken der Taste Menü kommt der Spieler zurück in das Menü.
 }
+<<<<<<< HEAD
+=======
+\end{center}
+>>>>>>> origin/Meilensteine
 
 \newpage
 
