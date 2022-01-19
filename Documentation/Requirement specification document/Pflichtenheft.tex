@@ -1694,14 +1694,26 @@ Das für das Spiel zu viele Dialoge existieren wurden die Dialoge bzw. das Dialo
 \end{tabularx}
 
 \subsubsection{Graphische Gestaltung und Nutzungskonzept}
+Im Folgenden sind die verschiedenen graphische Prototypen in Form von \glqq{}Mockup\grqq{}-Zeichnung aufgelistet. Für jeden graphischen Prototypen wird in textuellen Form zusätzlich beschrieben, was die Elemente auf der Oberfläche bedeuten und wie dieser Dialog bedient werden kann. 
 
+\begin{center}
 \includegraphics[width=\textwidth]{images/Hauptmenue}
 \captionof{figure}{\textbf{Hauptmenü}:\\
 Der \glqq Hauptmenü\grqq -Dialog wird beim Starten der Anwendung zu Beginn angezeigt.}
 
-\includegraphics[width=\textwidth]{images/Hilfe}
+\includegraphics[width=0.7\textwidth]{images/Hilfe}
 \captionof{figure}{\textbf{Hilfe}:\\
 Der \glqq Hilfe\grqq -Dialog kann von jedem Dialog, bei dem das Fragezeichen rechts oben im Eck, aufgerufen werden und hier wird zu dem Dialog, wovon es aufgerufen wurde, eine kurze Beschreibung zu dem jeweiligen Dialog stehen}
+
+\includegraphics[width=0.7\textwidth]{images/Fehlerbenachrichtigung}
+\captionof{figure}{\textbf{allgemeine Fehlerbenachrichtigung (analog Hinweisfenster)}:\\
+Der \glqq{}Fehlerbenachrichtung\grqq{}-Dialog taucht immer dann auf, wenn es zu einem Fehler kam. Dieser Dialog zeigt dem Benutzer einen Text an und der Dialog lässt sich schließen, wenn der Benutzer den \textit{OK}-Button betätigt. Damit bestätigt er, dass er den Text gelesen hat oder das Fenster nicht mehr sehen will. \\ Der Dialog für ein Hinweisfenster sieht identisch aus, nur das ein anderer Text angezeigt wird. 
+}
+
+\includegraphics[width=0.7\textwidth]{images/Bestätigungsfenster}
+\captionof{figure}{\textbf{Bestätigungsfenster}:\\
+Der Dialog \glqq{}Bestätigungsfenster\grqq{} wird immer dann dem Benutzer angezeigt, wenn eine wichtige Aktion des Benutzers bestätigt werden soll, zum Beispiel wenn der Benutzer das Spiel verlassen will. Dann hat der Nutzer, die Aktion mit \textit{Ok} zu bestätigen oder mit \textit{Abbrechen} zu dem Dialog zurückkehren, von dem er gekommen ist.
+}
 
 \includegraphics[width=\textwidth]{images/Spielwahl}
 \captionof{figure}{\textbf{Spielwahl}: Hier kann der Nutzer auswählen, ob er einem bereits erstellten Spiel beitreten will, selbst ein Spiel erstellen möchte oder ein vergangenes Spiel nochmals anschauen will.}
@@ -1744,7 +1756,7 @@ Der Benutzer sieht eine Liste mit gespeicherten Partie-Konfigurationen und kann 
 Der Benutzer legt für jeden Parameter aus der angezeigten Liste einen gewünschten Wert fest. Der Benutzer kann die erstellte/ modifizierte Partie-Konfiguration speichern.
 }
 
-\includegraphics[width=\textwidth]{images/PartiekonfigurationSpeichern}
+\includegraphics[width=0.7\textwidth]{images/PartiekonfigurationSpeichern}
 \captionof{figure}{\textbf{Partie-Konfiguration speichern}:\\
 Der Benutzer kann eine soeben erstellte/ modifizierte Partie-Konfiguration speichern, indem er sie benennt und bestätigt. 
 }
@@ -1769,7 +1781,7 @@ Der Benutzer kann eine Szenario-Konfiguration zufällig erstellen lassen und bek
 Der Benutzer kann verschieden Werte, wie Dimension oder Farbschema festlegen. Der Benutzer kann für die einzelnen Felder die jeweilige Feldart festlegen.
 }
 
-\includegraphics[width=\textwidth]{images/SzenarioSpeichern}
+\includegraphics[width=0.7\textwidth]{images/SzenarioSpeichern}
 \captionof{figure}{\textbf{Szenario speichern}:\\
 Der Benutzer kann eine soeben erstellte/ modifizierte Szenario-Konfiguration speichern, indem er sie benennt und bestätigt.
 }
@@ -1800,6 +1812,26 @@ bestätigt der Spieler seine Auswahl. Wenn der Nutzer über ein definiertes Zeit
 Der Nutzer kehrt dann in die Lobby zurück.
 }
 
+\includegraphics[width=0.8\textwidth]{images/Spielmenü}
+\captionof{figure}{\textbf{Spielmenü}:\\
+Im \glqq{}Spielmenü\grqq{}-Dialog hat der Benutzer im Benutzer-Client die Möglichkeit, die Partie entweder zu pausieren oder die Partie zu verlassen. Dafür gibt es zwei unterschiedliche Buttons. Dabei gibt es jedoch einen Unterschied, ob das Spielmenü von einem Zuschauer oder einem Spieler aufgerufen wird. Denn wenn der Zuschauer die Partie pausiert, dann läuft die Partie im Hintergrund weiter und der Zuschauer schaut einfach nicht zu. Wenn der Spieler die Partie pausieren will, dann wird der Antrag vom Server geprüft und die Partie gegebenenfalls angehalten. Zudem kann der Benutzer das Menü wieder schließen (Kreuz). 
+}
+
+\includegraphics[width=0.7\textwidth]{images/Partie wurde pausiert}
+\captionof{figure}{\textbf{Partie wurde pausiert}:\\
+Zudem kann es passieren, dass man die Partie spielt und der gegnerische Mitspieler die Partie pausiert. Dann wird ebenfalls ein \glqq{}Pause\grqq{}-Dialog angezeigt, in dem der Spieler jedoch keine Interaktion vornehmen kann, sondern nur auf die Partiefortsetzung warten kann. 
+}
+
+\includegraphics[width=0.7\textwidth]{images/Partie pausiert}
+\captionof{figure}{\textbf{Partie pausiert}:\\
+Im \glqq{}Pause\grqq{}-Dialog hat der Spieler dann wieder die Möglichkeit, die Partie fortzusetzen, wofür es ebenfalls einen Button gibt. Dieser öffnet einen Bestätigungsdialog. Drückt der Benutzer in diesem Dialog \glqq{}Ja\grqq{}, dann wird das Spiel fortgesetzt und der Spieler kehrt zu dem \glqq{}Spielfeld\grqq{}-Dialog zurück.
+}
+
+\includegraphics[width=0.7\textwidth]{images/Rundenstatistik}
+\captionof{figure}{\textbf{Rundenstatistik}:\\
+Der Dialog \glqq{}Rundenstatistik\grqq{} stellt eine Art Hinweisfenster dar. In diesem Dialog wird dem Benutzer die aktuellen Ergebnisse der letztem Runde anzeigt, solange der Server die Runde beendet, die nächste vorbereitet und startet. Das heißt der Spieler sieht aktuelle Statistiken, wie in dem \glqq{}Sieg/Niederlage\grqq{}-Dialog.
+}
+
 \includegraphics[width=\textwidth]{images/end(lose)Screen}
 \captionof{figure}{\textbf{end(lose)Screen}:\\
 Im Endbildschirm wird dem Spieler bei einer Niederlage das Label Niederlage und bei einem Sieg das Label Sieg angezeigt.
@@ -1813,6 +1845,7 @@ Im Endbildschirm wird dem Spieler bei einer Niederlage das Label Niederlage und 
 Zudem werden dem Spieler hier die Statistiken beider Spieler angezeigt.
 Durch Klicken der Taste Menü kommt der Spieler zurück in das Menü.
 }
+\end{center}
 
 \newpage
 
