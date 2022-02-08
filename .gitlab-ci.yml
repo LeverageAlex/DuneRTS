@@ -15,7 +15,7 @@ variables:
   # thomasweise/texlive
   # adnrv/texlive
   LATEX_IMAGE: listx/texlive:2020
-  PFLICHTENHEFT_TEX_PATH: "./Documentation/Requirement specification document/"
+  PFLICHTENHEFT_TEX_PATH: "./Documentation/Requirement\ specification\ document/"
 
 compile_pdf:
   image: $LATEX_IMAGE
