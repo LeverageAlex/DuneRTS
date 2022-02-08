@@ -26,7 +26,7 @@ compile_pdf:
 
   artifacts:
     paths:
-      - Pflichtenheft.pdf
+      - $PFLICHTENHEFT_TEX_PATH/Pflichtenheft.pdf
 
   only: 
       - Documentation
