@@ -15,12 +15,13 @@ variables:
   # thomasweise/texlive
   # adnrv/texlive
   LATEX_IMAGE: listx/texlive:2020
+  PFLICHTENHEFT_TEX_PATH: "./Documentation/Requirement specification document/"
 
 compile_pdf:
   image: $LATEX_IMAGE
   stage: build
   script:
-    - cd ./Documentation/Requirement specification document/
+    - cd $PFLICHTENHEFT_TEX_PATH
     - latexmk -pdf Pflichtenheft.tex
 
   artifacts:
