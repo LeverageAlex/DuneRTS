@@ -1,4 +1,8 @@
-\documentclass{uulm-assignment}
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
 
 \usepackage{import}
 \usepackage{tabularx}
@@ -7,7 +11,25 @@
 \usepackage{CJKutf8}
 \usepackage{graphicx}
 \usepackage{caption}
-    
+\usepackage{microtype}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usetikzlibrary{arrows.meta}
+\usepackage{fancyhdr}
+
+\usepackage{times}
+\usepackage[margin=2cm,a4paper,headsep=1.2cm]{geometry}
+
+\renewcommand{\baselinestretch}{1.1}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+
+\setlength{\headheight}{1cm}
+\setlength{\headwidth}{\textwidth}
+
+\newcommand{\quotes}[1]{``#1''}
+
 \makeatletter
 \newcommand{\labeltext}[2]{%
   \@bsphack
@@ -72,46 +94,99 @@ ROLLE: & #4 \\
 \end{tabularx}
 }
 
+\newcommand{\myrule}[1]{
+	\begin{tikzpicture}
+		\draw[{Diamond[open]}-{Diamond[open]}, ultra thick] (0,0) to (#1, 0);
+	\end{tikzpicture}
+
+}
+
 \newcommand{\rref}[1]{\ref{#1}\textsuperscript{$\rightarrow$ p. \pageref{#1}}}
 \newcommand{\faref}[1]{FA\ref{#1}\textsuperscript{$\rightarrow$ p. \pageref{#1}}}
 \newcommand{\mfaref}[1]{FA\ref{#1}}
 \newcommand{\nfaref}[1]{QA\ref{#1}\textsuperscript{$\rightarrow$ p. \pageref{#1}}}
 
 
-\setboolean{showsolutions}{false}
-
-\ifthenelse{\boolean{showsolutions}}{
-\newcommand\mitloesung{1}%
-}{
-\newcommand\mitloesung{0}%
-}
-
-
-% Für Korrektur-Kommentare in roten Boxen:
-\newcommand{\flo}[1]{
-    \fcolorbox{purple}{pink}{\sffamily\scriptsize\bfseries\textcolor{black}{Flo:}} {\sffamily\bfseries\textcolor{purple}{#1}}
-}
-
-
-
-\hypersetup{colorlinks=false,urlcolor=uulm-in}
-
-\faculty{Institut für Softwaretechnik und Programmiersprachen\hspace{0.05cm}}
-\course{Softwaregrundprojekt}
-\semester{\hspace{0.05cm}WiSe 2021/22}
-\supervisor{\textbf{} \hspace{7.9cm} Prof. Dr. Thomas Thüm, Florian Ege, Dennis Jehle}
-
-\assignmenttype{}
-\assignmentno{}
-\title{Meilenstein 3: Benutzerschnittstelle}
 
 \begin{document}
 
-\maketitle
+
+%\maketitle
+
+\begin{titlepage} % Suppresses headers and footers on the title page
+
+	\centering % Centre everything on the title page
+	
+	\scshape % Use small caps for all text on the title page
+	
+	\vspace*{\baselineskip} % White space at the top of the page
+	
+	%------------------------------------------------
+	%	Title
+	%------------------------------------------------
+
+	
+	\myrule{\linewidth}	
+	\vspace*{-2\baselineskip}\vspace{4pt}
+	\rule{0.95\textwidth}{0.4pt} % Thin horizontal rule
+	
+	\includegraphics[width=0.9\textwidth]{images/Titelblatt}
+	
+		
+	\rule{0.95\textwidth}{0.4pt}
+	\vspace*{-2\baselineskip}\vspace{21pt}
+	\myrule{\linewidth}
+	
+	\vspace{2\baselineskip} % Whitespace after the title block
+	
+	%------------------------------------------------
+	%	Subtitle
+	%------------------------------------------------
+	
+	Pflichtenheft, \textit{Version: 1.0} - Team 08 \\ 
+	Softwaregrundprojekt WiSe 2021/2022 und SoSe 2022
+	
+	\vspace*{15\baselineskip} % Whitespace under the subtitle
+
+
+	\begin{tabular}{p{0.45\linewidth} p{0.03\linewidth} p{0.45\linewidth}}
+	\begin{tikzpicture}
+		\draw[{Circle[length=3pt] . Straight Barb[reversed]}-, ultra thick] (0,0.5) to 			(\linewidth, 0.5);
+	\end{tikzpicture} & \includegraphics[width=\linewidth]{images/Atreides}& \begin{tikzpicture}
+		\draw[-{Straight Barb[reversed] . Circle[length=3pt]}, ultra thick] (0,0.5) to 			(\linewidth, 0.5);
+	\end{tikzpicture}	
+	 \\
+	\end{tabular}		
+	
+	%------------------------------------------------
+	%	Editor(s)
+	%------------------------------------------------
+		
+	
+	bearbeitet von
+	
+	\vspace{0.5\baselineskip} % Whitespace before the editors
+	
+	{\scshape Leonhard Alkewitz, Louis Bock, Alexander Fink, \\ Jannis Kieselbach, Felix Schoppe, Niklas Schuerrle\\} % Editor list
+	
+	\vspace{0.5\baselineskip} % Whitespace below the editor list
+	
+	\vfill % Whitespace between editor names and publisher logo
+	
+
+\end{titlepage}
 
 \tableofcontents
+\thispagestyle{empty}
 
 \newpage
+
+\pagestyle{fancy}
+
+\fancyhead[R]{\thepage}
+\fancyhead[L]{\leftmark}
+\fancyfoot{}
+
 
 \section{Überblick}
 
@@ -139,7 +214,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \section{Anforderungsanalyse}
 \subsection{Fachwissen}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Bene Gesserit} \\
 \hline
@@ -157,7 +232,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Benutzer-Client} \\
 \hline
@@ -175,7 +250,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Charakter} \\
 \hline
@@ -200,7 +275,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Charakter-Typ} \\
 \hline
@@ -218,7 +293,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Charakter-Zug} \\
 \hline
@@ -236,7 +311,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Düne} \\
 \hline
@@ -254,7 +329,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Dünenwanderung} \\
 \hline
@@ -264,7 +339,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Kann-sein} & \\
 \hline
-\textbf{Aspekt} & Wüstenfelder mit niedrigem Höhenniveau werden im Automaten als \grqq tot\grqq betrachtet und Wüstenfelder mit hohem Höhenniveau werden als \grqq lebendig\grqq betrachtet. \\
+\textbf{Aspekt} & Wüstenfelder mit niedrigem Höhenniveau werden im Automaten als \glqq{}tot\grqq{} betrachtet und Wüstenfelder mit hohem Höhenniveau werden als \glqq{}lebendig\grqq{} betrachtet. \\
 \hline
 \textbf{Bemerkung} &  \\
 \hline
@@ -272,7 +347,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Editor} \\
 \hline
@@ -290,7 +365,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Felsplateau} \\
 \hline
@@ -308,7 +383,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Fighter} \\
 \hline
@@ -326,7 +401,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Flachsand} \\
 \hline
@@ -344,7 +419,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Gebirge} \\
 \hline
@@ -362,7 +437,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Great-Houses} \\
 \hline
@@ -380,7 +455,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Great-House-Wahlphase} \\
 \hline
@@ -398,7 +473,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{KI-Client} \\
 \hline
@@ -416,7 +491,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Szenario-Konfiguration } \\
 \hline
@@ -434,7 +509,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Mentat} \\
 \hline
@@ -452,7 +527,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Movement Points (MP)} \\
 \hline
@@ -470,7 +545,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Noble} \\
 \hline
@@ -488,7 +563,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Normale Aktion} \\
 \hline
@@ -506,7 +581,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Partie} \\
 \hline
@@ -524,7 +599,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Partie-Beginn} \\
 \hline
@@ -542,7 +617,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Partie-Ende} \\
 \hline
@@ -561,7 +636,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Partie-Konfiguration} \\
 \hline
@@ -579,7 +654,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Rundenphase} \\
 \hline
@@ -602,7 +677,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Sandsturm} \\
 \hline
@@ -620,7 +695,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Sandwurm} \\
 \hline
@@ -638,7 +713,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Server} \\
 \hline
@@ -656,7 +731,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Siegbedingungen} \\
 \hline
@@ -674,7 +749,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Spezielle Aktion} \\
 \hline
@@ -696,7 +771,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Spice} \\
 \hline
@@ -714,7 +789,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Spiceablieferung} \\
 \hline
@@ -732,7 +807,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Spielbrett} \\
 \hline
@@ -750,7 +825,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Spieler} \\
 \hline
@@ -768,7 +843,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Spielstand} \\
 \hline
@@ -786,7 +861,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Stadt} \\
 \hline
@@ -804,11 +879,11 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Wüstenlautheit} \\
 \hline
-\textbf{Beschreibung} & Damit man die gefährlichen Sandwürmer nicht anlockt, muss man sich in der Wüste sehr langsam fortbewegen, da die Sandwürmer auf Geräusche reagieren. Am Anfang seines Zuges gilt jeder Charakter als \grqq leise\grqq für diese Runde. Wenn der Charakter während seines Zuges mehr als einmal ein Wüstenfeld betritt oder einen Spicekrümel von einem Wüstenfeld ins Inventar aufnimmt, wird er für diese Runde als \grqq laut\grqq markiert.\\
+\textbf{Beschreibung} & Damit man die gefährlichen Sandwürmer nicht anlockt, muss man sich in der Wüste sehr langsam fortbewegen, da die Sandwürmer auf Geräusche reagieren. Am Anfang seines Zuges gilt jeder Charakter als \glqq{}leise\grqq{} für diese Runde. Wenn der Charakter während seines Zuges mehr als einmal ein Wüstenfeld betritt oder einen Spicekrümel von einem Wüstenfeld ins Inventar aufnimmt, wird er für diese Runde als \glqq{}laut\grqq{} markiert.\\
 \hline
 \textbf{Ist-ein} & \\
 \hline
@@ -822,7 +897,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Zuschauer} \\
 \hline
@@ -840,7 +915,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Desert of Dune} \\
 \hline
@@ -858,7 +933,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Arrakis} \\
 \hline
@@ -876,7 +951,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Health Points} \\
 \hline
@@ -894,7 +969,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Inventar} \\
 \hline
@@ -912,7 +987,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Heilungs-Health Points } \\
 \hline
@@ -930,7 +1005,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Spice-schwellwert } \\
 \hline
@@ -948,7 +1023,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Nachbarfeld } \\
 \hline
@@ -966,7 +1041,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Zufall  } \\
 \hline
@@ -985,7 +1060,7 @@ entsprechenden Möglichkeiten gemeint. \\
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Charakteren, die ein Haus kontrolliert } \\
 \hline
@@ -1003,7 +1078,7 @@ entsprechenden Möglichkeiten gemeint. \\
 \hline
 \end{tabularx}
 
-\begin{tabularx}{16cm}{|l|X|}
+\begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Spieler} \\
 \hline
@@ -1080,7 +1155,7 @@ Bei dem Anwendungsfalldigramm \autoref{fig:use-case-config} sind den Anwendungsf
 
 \vspace{0.5cm}
 
-\begin{tabularx}{16cm}{l|X}
+\begin{tabularx}{\linewidth}{l|X}
 	\textbf{Anwendungsfall} & \textbf{zugeordnete Anforderungen} \\
 	\hline
 	Spiel konfigurieren und laden & \mfaref{FA-Editor}, \mfaref{FA-Server-Partie-Konfiguration}, \mfaref{FA-ServerlädtSzenario} \\
@@ -1098,7 +1173,7 @@ Bei dem Anwendungsfalldigramm \autoref{fig:use-case-gameflow} sind den Anwendung
 \vspace{0.5cm}
 
 
-\begin{tabularx}{16cm}{l|X}
+\begin{tabularx}{\linewidth}{l|X}
 	\textbf{Anwendungsfall} & \textbf{zugeordnete Anforderungen} \\
 	\hline
 	Spielfeld und -zustand anzeigen & \mfaref{FA-Sichtbarkeit-Spielfeld}-\mfaref{FA-Spielbrett}, \mfaref{FA-Feld}-\mfaref{FA-Feldart-Gebirge}, \mfaref{FA-Server-Information-Spielzustand}, \mfaref{FA-Visualisierung-Spiel}-\mfaref{FA-Visualisierungsdauer} \\
@@ -1148,16 +1223,16 @@ Die folgenden Aktivitäts- und Sequenzdiagramme veranschaulichen die Abläufe de
 \end{center}
 
 \begin{center}
-\includegraphics[width=\textwidth]{images/Teilnahme_als_Beobachter}
+\includegraphics[width=0.9\textwidth]{images/Teilnahme_als_Beobachter}
 \captionof{figure}{Sequenzdiagramm für Ablauf der Teilnahme eines Clients als Zuschauer}
 \end{center}
 
 \begin{center}
-\includegraphics[width=0.85\textwidth]{images/Teilnahme_als_Spieler}
+\includegraphics[width=0.85\textwidth]{images/Teilnahme_als_Spieler2}
 \end{center}
 
 \begin{center}
-\includegraphics[width=0.85\textwidth]{images/Teilnahme_als_Spieler2}
+\includegraphics[width=0.85\textwidth]{images/Teilnahme_als_Spieler}
 \captionof{figure}{Sequenzdiagramm für Ablauf der Teilnahme eines Clients als Mitspieler (Fortsetzung auf nächster Seite)}
 \end{center}
 
@@ -1222,8 +1297,8 @@ Die folgenden Aktivitäts- und Sequenzdiagramme veranschaulichen die Abläufe de
 \subsection{Funktionale Anforderungen}
 \label{ssec:fas}
 
-Dieser Abschnitt enthält alle Anforderungen, die die grundlegenden Aktionen des Softwaresystems
-spezifizieren. \\ Dabei gilt für Priorisierung, dass eine Anforderung eine Priorität von 1 (sehr gering) bis 5 (essenziell wichtig) bekommen kann. 
+Dieser Abschnitt enthält alle funktionalen Systemanforderungen, die die grundlegenden Aktionen des Softwaresystems
+spezifizieren. \\ Dabei gilt für die Priorisierung, dass eine Anforderung eine Priorität von 1 (sehr gering, kann) bis 5 (essenziell wichtig, muss unbedingt) bekommen kann. 
 
 \subsubsection*{Komponenten und Architektur}
 \fa{Architektur}{Das Spiel \glqq{}Deserts of Dune\grqq{} ist eine verteilte Anwendung mit der Client-Server-Architektur.}{Damit hat man das Spiel in Instanzen aufteilen, die das Spiel bereit stellen und organisieren und Instanzen, die es spielen. Außerdem können somit zwei Spieler auf unterschiedlichen Systemen gegeneinander spielen}{\faref{FA-Spielkomponenten}}{5}{\rref{A-Auftraggeber}}{FA-Architektur}
@@ -1654,7 +1729,7 @@ Das für das Spiel zu viele Dialoge existieren wurden die Dialoge bzw. das Dialo
 
 \vspace{0.5cm}
 
-\begin{tabularx}{16cm}{p{4cm}|p{7cm}|l}
+\begin{tabularx}{\linewidth}{p{4cm}|p{7cm}|l}
 	\textbf{Dialog} & \textbf{zugeordneter Anwendungsfall} & Typ \\
 	\hline
 	Replay & Replay abspielen & Dialog \\
@@ -1935,5 +2010,24 @@ Es müssen folgende nicht-funktionalen Anforderungen an das gesamte System und d
 \nfa{Dokumentation}{Der gesamte Entwicklungsprozess und auch das entstandene Produkt muss dokumentiert werden. Das bedeutet, dass Tests, Reviews und weitere Maßnahmen zur Qualitätssicherung dokumentiert werden müssen. Außerdem soll ein Projekttagebuch zum Erfassen der Tätigkeiten (zum Beispiel Implementierung oder Treffen) geführt werden und ein Entwicklerhandbuch angelegt werden. Dieses Handbuch soll die Architektur und die implementierten Funktionen beschreiben, sowie die verwendeten Technologien auflisten und begründen.}{Die Dokumentation ermöglicht nach und während der Entwicklung der Anwendung anderen Kunden, den Prozess zu beurteilen oder sich mit der Architektur und Umsetzung der Komponenten auseinanderzusetzen. Besonders auf der Messe, wenn man andere Komponenten einkauft, kann das die Entscheidung vereinfachen.}{\nfaref{QA-Testbarkeit}, \nfaref{QA-Dokumentationssprache}}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}}{QA-Dokumentation}
 
 \nfa{Dokumentations-Sprache}{Alle im Rahmen des Projekts, das heißt der Entwicklung der Anwendung, anfallenden Dokumente, wie zum Beispiel das Benutzerhandbuch werden auf Deutsch verfasst.}{Die Anwendung wird vor allem von Personen genutzt, deren Muttersprache deutsch ist und damit würde die englische Sprache wenig Vorteile bieten, jedoch eventuell Schwierigkeiten bei der Verständlichkeit hervorrufen. }{\nfaref{QA-Dokumentation}}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}}{QA-Dokumentationssprache}
+
+\newpage
+
+\flushleft
+
+\subsection{Betriebskonzept}
+
+Das Programm ist für Systeme mit Windows als Betriebssystem gedacht. Die Anwendung lässt den Benutzer das Spiel 'Dune' spielen. Hierbei kann entweder gegen einen echten Gegner oder eine KI gespielt werden, wobei auch laufenden Partien zugesehen werden kann. Es wird im Hauptmenü eine Hilfsoption mit Erklärungen zum Spielablauf geben.
+
+\subsection{Entwicklungsvorgaben}
+
+Das Softwaregrundprojekt wird von sechs Studenten geplant und implementiert. Der Entwicklungsprozess ist in Meilensteine unterteilt, welche die Projektphasen Analyse, Entwurf und Implementierung abdecken. Während des gesamten Prozesses steht das Team in Kontakt mit dem Vertreter des Auftraggebers (Tutor). Für die Implementierung wird die Entwicklungsumgebung -TODO- benutzt und zur Versionsverwaltung ein GitLab-Repository verwendet. Der Programmcode wird in englischer Sprache kommentiert und mit Javadoc dokumentiert. 
+
+\subsection{Abnahmekriterien}
+
+Kriterien für eine erfolgreiche Abnahme sind eine fristgerechte und korrekte Abgabe aller Team-Meilensteine mit einer ausreichenden Bewertung. Zudem wird vorausgesetzt, dass jedes Team-Mitglied n-1 der insgesamt n Einzelübungsblätter, fristgerecht abgegeben und bestanden hat.
+Des Weiteren ist eine regelmäßige Anwesenheit und Mitarbeit im Tutorium notwendig und auch eine aktive Mitarbeit im Team, die durch das Projekttagebuch dokumentiert wird. Dazu gehört eine eigene Programmiertätigkeit in ausreichendem Umfang.
+Voraussetzungen für eine erfolgreiche Abnahmesitzung zum Ende des Projekts sind die Vorlage einer lauffähigen Version der Software und die Umsetzung der Kernfunktionalität, also aller verbindlichen Anforderungen. Zudem ist eine gute Qualität der entwickelten Software mit einer sinnvollen Testabdeckung und nachgewiesen durch umfangreiche und dokumentierte Maßnahmen zur Qualitätssicherung erforderlich. Die Einhaltung des Scrum-Entwicklungsprozesses und die sinnvolle Verwendung des Team-Repository und Scrum-Board im GitLab sind ebenfalls erforderlich. Dazu gehört auch eine ordentliche Dokumentation der Software und des Projektverlaufs.
+Die Abnahme ist dann erfolgreich, wenn der Kunde mit dem endgültigen Produkt zufrieden ist.
 
 \end{document}
