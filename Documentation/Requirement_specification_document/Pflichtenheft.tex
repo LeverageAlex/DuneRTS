@@ -1,4 +1,8 @@
-\documentclass{uulm-assignment}
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
 
 \usepackage{import}
 \usepackage{tabularx}
@@ -7,7 +11,17 @@
 \usepackage{CJKutf8}
 \usepackage{graphicx}
 \usepackage{caption}
-    
+\usepackage{microtype}
+
+\usepackage{times}
+\usepackage[margin=2cm,a4paper,headsep=1.2cm]{geometry}
+
+\renewcommand{\baselinestretch}{1.1}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+
+\newcommand{\quotes}[1]{``#1''}
+
 \makeatletter
 \newcommand{\labeltext}[2]{%
   \@bsphack
@@ -78,36 +92,61 @@ ROLLE: & #4 \\
 \newcommand{\nfaref}[1]{QA\ref{#1}\textsuperscript{$\rightarrow$ p. \pageref{#1}}}
 
 
-\setboolean{showsolutions}{false}
-
-\ifthenelse{\boolean{showsolutions}}{
-\newcommand\mitloesung{1}%
-}{
-\newcommand\mitloesung{0}%
-}
-
-
-% Für Korrektur-Kommentare in roten Boxen:
-\newcommand{\flo}[1]{
-    \fcolorbox{purple}{pink}{\sffamily\scriptsize\bfseries\textcolor{black}{Flo:}} {\sffamily\bfseries\textcolor{purple}{#1}}
-}
-
-
-
-\hypersetup{colorlinks=false,urlcolor=uulm-in}
-
-\faculty{Institut für Softwaretechnik und Programmiersprachen\hspace{0.05cm}}
-\course{Softwaregrundprojekt}
-\semester{\hspace{0.05cm}WiSe 2021/22}
-\supervisor{\textbf{} \hspace{7.9cm} Prof. Dr. Thomas Thüm, Florian Ege, Dennis Jehle}
-
-\assignmenttype{}
-\assignmentno{}
-\title{Meilenstein 3: Benutzerschnittstelle}
 
 \begin{document}
 
-\maketitle
+%\maketitle
+
+\begin{titlepage} % Suppresses headers and footers on the title page
+
+	\centering % Centre everything on the title page
+	
+	\scshape % Use small caps for all text on the title page
+	
+	\vspace*{\baselineskip} % White space at the top of the page
+	
+	%------------------------------------------------
+	%	Title
+	%------------------------------------------------
+	
+	\rule{\textwidth}{1.6pt}\vspace*{-\baselineskip}\vspace*{2pt} % Thick horizontal rule
+	\rule{\textwidth}{0.4pt} % Thin horizontal rule
+	
+	\vspace{0.75\baselineskip} % Whitespace above the title
+	
+	\includegraphics[width=0.9\textwidth]{images/Titelblatt}
+	
+	
+	\rule{\textwidth}{0.4pt}\vspace*{-\baselineskip}\vspace{3.2pt} % Thin horizontal rule
+	\rule{\textwidth}{1.6pt} % Thick horizontal rule
+	
+	\vspace{2\baselineskip} % Whitespace after the title block
+	
+	%------------------------------------------------
+	%	Subtitle
+	%------------------------------------------------
+	
+	Pflichtenheft, \textit{Version: 1.0} - Team 08 \\ 
+	Softwaregrundprojekt WiSe 2021/2022 und SoSe 2022
+	
+	\vspace*{15\baselineskip} % Whitespace under the subtitle
+	
+	%------------------------------------------------
+	%	Editor(s)
+	%------------------------------------------------
+	
+	bearbeitet von
+	
+	\vspace{0.5\baselineskip} % Whitespace before the editors
+	
+	{\scshape Leonhard Alkewitz, Louis Bock, Alexander Fink, \\ Jannis Kieselbach, Felix Schoppe, Niklas Schuerrle\\} % Editor list
+	
+	\vspace{0.5\baselineskip} % Whitespace below the editor list
+	
+	\vfill % Whitespace between editor names and publisher logo
+	
+
+\end{titlepage}
 
 \tableofcontents
 
@@ -264,7 +303,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Kann-sein} & \\
 \hline
-\textbf{Aspekt} & Wüstenfelder mit niedrigem Höhenniveau werden im Automaten als \grqq tot\grqq betrachtet und Wüstenfelder mit hohem Höhenniveau werden als \grqq lebendig\grqq betrachtet. \\
+\textbf{Aspekt} & Wüstenfelder mit niedrigem Höhenniveau werden im Automaten als \glqq{}tot\grqq{} betrachtet und Wüstenfelder mit hohem Höhenniveau werden als \glqq{}lebendig\grqq{} betrachtet. \\
 \hline
 \textbf{Bemerkung} &  \\
 \hline
@@ -808,7 +847,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Begriff} & \textbf{Wüstenlautheit} \\
 \hline
-\textbf{Beschreibung} & Damit man die gefährlichen Sandwürmer nicht anlockt, muss man sich in der Wüste sehr langsam fortbewegen, da die Sandwürmer auf Geräusche reagieren. Am Anfang seines Zuges gilt jeder Charakter als \grqq leise\grqq für diese Runde. Wenn der Charakter während seines Zuges mehr als einmal ein Wüstenfeld betritt oder einen Spicekrümel von einem Wüstenfeld ins Inventar aufnimmt, wird er für diese Runde als \grqq laut\grqq markiert.\\
+\textbf{Beschreibung} & Damit man die gefährlichen Sandwürmer nicht anlockt, muss man sich in der Wüste sehr langsam fortbewegen, da die Sandwürmer auf Geräusche reagieren. Am Anfang seines Zuges gilt jeder Charakter als \glqq{}leise\grqq{} für diese Runde. Wenn der Charakter während seines Zuges mehr als einmal ein Wüstenfeld betritt oder einen Spicekrümel von einem Wüstenfeld ins Inventar aufnimmt, wird er für diese Runde als \glqq{}laut\grqq{} markiert.\\
 \hline
 \textbf{Ist-ein} & \\
 \hline
