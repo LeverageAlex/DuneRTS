@@ -12,6 +12,10 @@
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{microtype}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usetikzlibrary{arrows.meta}
 
 \usepackage{times}
 \usepackage[margin=2cm,a4paper,headsep=1.2cm]{geometry}
@@ -86,6 +90,13 @@ ROLLE: & #4 \\
 \end{tabularx}
 }
 
+\newcommand{\myrule}[1]{
+	\begin{tikzpicture}
+		\draw[{Diamond[open]}-{Diamond[open]}, ultra thick] (0,0) to (#1, 0);
+	\end{tikzpicture}
+
+}
+
 \newcommand{\rref}[1]{\ref{#1}\textsuperscript{$\rightarrow$ p. \pageref{#1}}}
 \newcommand{\faref}[1]{FA\ref{#1}\textsuperscript{$\rightarrow$ p. \pageref{#1}}}
 \newcommand{\mfaref}[1]{FA\ref{#1}}
@@ -94,6 +105,7 @@ ROLLE: & #4 \\
 
 
 \begin{document}
+
 
 %\maketitle
 
@@ -108,17 +120,18 @@ ROLLE: & #4 \\
 	%------------------------------------------------
 	%	Title
 	%------------------------------------------------
+
 	
-	\rule{\textwidth}{1.6pt}\vspace*{-\baselineskip}\vspace*{2pt} % Thick horizontal rule
-	\rule{\textwidth}{0.4pt} % Thin horizontal rule
-	
-	\vspace{0.75\baselineskip} % Whitespace above the title
+	\myrule{\linewidth}	
+	\vspace*{-2\baselineskip}\vspace{4pt}
+	\rule{0.95\textwidth}{0.4pt} % Thin horizontal rule
 	
 	\includegraphics[width=0.9\textwidth]{images/Titelblatt}
 	
-	
-	\rule{\textwidth}{0.4pt}\vspace*{-\baselineskip}\vspace{3.2pt} % Thin horizontal rule
-	\rule{\textwidth}{1.6pt} % Thick horizontal rule
+		
+	\rule{0.95\textwidth}{0.4pt}
+	\vspace*{-2\baselineskip}\vspace{21pt}
+	\myrule{\linewidth}
 	
 	\vspace{2\baselineskip} % Whitespace after the title block
 	
@@ -130,10 +143,21 @@ ROLLE: & #4 \\
 	Softwaregrundprojekt WiSe 2021/2022 und SoSe 2022
 	
 	\vspace*{15\baselineskip} % Whitespace under the subtitle
+
+
+	\begin{tabular}{p{0.45\linewidth} p{0.03\linewidth} p{0.45\linewidth}}
+	\begin{tikzpicture}
+		\draw[{Circle[length=3pt] . Straight Barb[reversed]}-, ultra thick] (0,0.5) to 			(\linewidth, 0.5);
+	\end{tikzpicture} & \includegraphics[width=\linewidth]{images/Atreides}& \begin{tikzpicture}
+		\draw[-{Straight Barb[reversed] . Circle[length=3pt]}, ultra thick] (0,0.5) to 			(\linewidth, 0.5);
+	\end{tikzpicture}	
+	 \\
+	\end{tabular}		
 	
 	%------------------------------------------------
 	%	Editor(s)
 	%------------------------------------------------
+		
 	
 	bearbeitet von
 	
