@@ -351,7 +351,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Begriff} & \textbf{Editor} \\
 \hline
-\textbf{Beschreibung} & Der Editor wird zum Erstellen von Content und Konfigurationen für ein Spiel verwendet. \\
+\textbf{Beschreibung} & Der Editor wird zum Erstellen von Spielwelten, Charakteren und Konfigurationen für ein Spiel verwendet. \\
 \hline
 \textbf{Ist-ein} & - \\
 \hline
@@ -380,6 +380,24 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \textbf{Bemerkung} &  \\
 \hline
 \textbf{Beispiel} &  \\
+\hline
+\end{tabularx}
+
+\begin{tabularx}{\linewidth}{|l|X|}
+\hline
+\textbf{Begriff} & \textbf{Höhenniveau} \\
+\hline
+\textbf{Beschreibung} & Es wird zwischen zwei verschieden Höhenniveaus unterschieden. Hier geht es darum, ob ein Spielfeld hoch oder niedrig ist. \\
+\hline
+\textbf{Ist-ein} & Spielfeldeigenschaft. \\
+\hline
+\textbf{Kann-sein} & niedrig, hoch\\
+\hline
+\textbf{Aspekt} &  \\
+\hline
+\textbf{Bemerkung} &  \\
+\hline
+\textbf{Beispiel} & Das Gebirge ist hoch. Das Felsplateau ist niedrig. \\
 \hline
 \end{tabularx}
 
@@ -621,7 +639,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Begriff} & \textbf{Partie-Ende} \\
 \hline
-\textbf{Beschreibung} & Wenn in der Sandwurm-Rundenphase der letzte Charakter, der ein Haus kontrolliert, durch einen Sandwurm-Angriff verschluckt wird, während das andere Haus nach Abhandlung dieser Sandwurm-Rundenphase noch Charaktere hat, gewinnt das andere Haus unmittelbar die Partie. Falls nach r$\_max$ Runden noch immer kein Gewinner feststeht, so werden alle Felsplateaus und Gebirge zu Wüstenfelder. Zusätzlich werden fortan die Sandwurm-Runden durch Shai-Hulud Runden ersetzt.\\
+\textbf{Beschreibung} & Wenn in der Sandwurm-Rundenphase der letzte Charakter, der ein Haus kontrolliert, durch einen Sandwurm-Angriff verschluckt wird, während das andere Haus nach Abhandlung dieser Sandwurm-Rundenphase noch Charaktere hat, gewinnt das andere Haus unmittelbar die Partie. Falls nach einer festgelegten maximalen Rundenanzahl noch immer kein Gewinner feststeht, so werden alle Felsplateaus und Gebirge zu Wüstenfelder. Zusätzlich werden fortan die Sandwurm-Runden durch Shai-Hulud Runden ersetzt.\\
 %Behandlung überlanger Partien
 \hline
 \textbf{Ist-ein} & \\
@@ -735,7 +753,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Begriff} & \textbf{Siegbedingungen} \\
 \hline
-\textbf{Beschreibung} & Es werden nacheinander Sieg-Metriken in Reihenfolge betrachtet, wie z.B. welches Haus den größten Spice-Vorrat hat. \\
+\textbf{Beschreibung} & Es werden nacheinander Siegmetriken \faref{FA-Siegmetrik} in Reihenfolge betrachtet, wie z.B. welches Haus den größten Spice-Vorrat hat. \\
 \hline
 \textbf{Ist-ein} & \\
 \hline
@@ -799,7 +817,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Kann-sein} & \\
 \hline
-\textbf{Aspekt} & Alle Charaktere versuchen so viel Spice wie möglich in der Wüste zu sammeln und dann zu ihrer Stadt zurückbringen, da dies die Siegmetrik ist.\\
+\textbf{Aspekt} & Alle Charaktere versuchen so viel Spice wie möglich in der Wüste zu sammeln und dann zu ihrer Stadt zurückbringen, da dies die Siegmetrik \faref{FA-Siegmetrik} ist.\\
 \hline
 \textbf{Bemerkung} &  \\
 \hline
@@ -2026,7 +2044,7 @@ Das Programm ist für Systeme mit Windows als Betriebssystem gedacht. Die Anwend
 
 \subsection{Entwicklungsvorgaben}
 
-Das Softwaregrundprojekt wird von sechs Studenten geplant und implementiert. Der Entwicklungsprozess ist in Meilensteine unterteilt, welche die Projektphasen Analyse, Entwurf und Implementierung abdecken. Während des gesamten Prozesses steht das Team in Kontakt mit dem Vertreter des Auftraggebers (Tutor). Für die Implementierung wird die Entwicklungsumgebung -TODO- benutzt und zur Versionsverwaltung ein GitLab-Repository verwendet. Der Programmcode wird in englischer Sprache kommentiert und mit Javadoc dokumentiert. 
+Das Softwaregrundprojekt wird von sechs Studenten geplant und implementiert. Der Entwicklungsprozess ist in Meilensteine unterteilt, welche die Projektphasen Analyse, Entwurf und Implementierung abdecken. Während des gesamten Prozesses steht das Team in Kontakt mit dem Vertreter des Auftraggebers (Tutor). Für die Implementierung wird die Entwicklungsumgebung Unity benutzt und zur Versionsverwaltung ein GitLab-Repository verwendet. Der Programmcode wird in englischer Sprache kommentiert und mit Javadoc dokumentiert. 
 
 \subsection{Abnahmekriterien}
 
