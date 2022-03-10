@@ -352,7 +352,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Begriff} & \textbf{Editor} \\
 \hline
-\textbf{Beschreibung} & Der Editor wird zum Erstellen von Content und Konfigurationen für ein Spiel verwendet. \\
+\textbf{Beschreibung} & Der Editor wird zum Erstellen von Spielwelten, Charakteren und Konfigurationen für ein Spiel verwendet. \\
 \hline
 \textbf{Ist-ein} & - \\
 \hline
@@ -381,6 +381,24 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \textbf{Bemerkung} &  \\
 \hline
 \textbf{Beispiel} &  \\
+\hline
+\end{tabularx}
+
+\begin{tabularx}{\linewidth}{|l|X|}
+\hline
+\textbf{Begriff} & \textbf{Höhenniveau} \\
+\hline
+\textbf{Beschreibung} & Es wird zwischen zwei verschieden Höhenniveaus unterschieden. Hier geht es darum, ob ein Spielfeld hoch oder niedrig ist. \\
+\hline
+\textbf{Ist-ein} & Spielfeldeigenschaft. \\
+\hline
+\textbf{Kann-sein} & niedrig, hoch\\
+\hline
+\textbf{Aspekt} &  \\
+\hline
+\textbf{Bemerkung} &  \\
+\hline
+\textbf{Beispiel} & Das Gebirge ist hoch. Das Felsplateau ist niedrig. \\
 \hline
 \end{tabularx}
 
@@ -622,7 +640,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Begriff} & \textbf{Partie-Ende} \\
 \hline
-\textbf{Beschreibung} & Wenn in der Sandwurm-Rundenphase der letzte Charakter, der ein Haus kontrolliert, durch einen Sandwurm-Angriff verschluckt wird, während das andere Haus nach Abhandlung dieser Sandwurm-Rundenphase noch Charaktere hat, gewinnt das andere Haus unmittelbar die Partie. Falls nach r$\_max$ Runden noch immer kein Gewinner feststeht, so werden alle Felsplateaus und Gebirge zu Wüstenfelder. Zusätzlich werden fortan die Sandwurm-Runden durch Shai-Hulud Runden ersetzt.\\
+\textbf{Beschreibung} & Wenn in der Sandwurm-Rundenphase der letzte Charakter, der ein Haus kontrolliert, durch einen Sandwurm-Angriff verschluckt wird, während das andere Haus nach Abhandlung dieser Sandwurm-Rundenphase noch Charaktere hat, gewinnt das andere Haus unmittelbar die Partie. Falls nach einer festgelegten maximalen Rundenanzahl noch immer kein Gewinner feststeht, so werden alle Felsplateaus und Gebirge zu Wüstenfelder. Zusätzlich werden fortan die Sandwurm-Runden durch Shai-Hulud Runden ersetzt.\\
 %Behandlung überlanger Partien
 \hline
 \textbf{Ist-ein} & \\
@@ -736,7 +754,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Begriff} & \textbf{Siegbedingungen} \\
 \hline
-\textbf{Beschreibung} & Es werden nacheinander Sieg-Metriken in Reihenfolge betrachtet, wie z.B. welches Haus den größten Spice-Vorrat hat. \\
+\textbf{Beschreibung} & Es werden nacheinander Siegmetriken \faref{FA-Siegmetrik} in Reihenfolge betrachtet, wie z.B. welches Haus den größten Spice-Vorrat hat. \\
 \hline
 \textbf{Ist-ein} & \\
 \hline
@@ -800,7 +818,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Kann-sein} & \\
 \hline
-\textbf{Aspekt} & Alle Charaktere versuchen so viel Spice wie möglich in der Wüste zu sammeln und dann zu ihrer Stadt zurückbringen, da dies die Siegmetrik ist.\\
+\textbf{Aspekt} & Alle Charaktere versuchen so viel Spice wie möglich in der Wüste zu sammeln und dann zu ihrer Stadt zurückbringen, da dies die Siegmetrik \faref{FA-Siegmetrik} ist.\\
 \hline
 \textbf{Bemerkung} &  \\
 \hline
@@ -1936,6 +1954,11 @@ Der Dialog \glqq{}Spielfeld\grqq zeigt das aktuelle Spielfeld und den aktuellen 
 Im \glqq{}Charakterzug\grqq{}-Dialog hat der Benutzer die Möglichkeit seine Charakterzüge durchzuführen. Dafür wird quasi ein Overlay erzeugt, das heißt der Dialog des Spielfeldes wird erweitert für den Spieler, der am Zug ist. \\ Dann sieht der Spieler unten in einer Leiste alle auf der Karte platzierten Charakter und kann diese mit einem Klick (Kasten zeigt aktuelle Auswahl) auswählen. Die Leiste ist wie eine horizontale Scrollbar. Wenn der Spieler einen Charakter ausgewählt hat, dann sieht er an der linken Seite Informationen zu dem Charakter und zu dieser Phase. Das heißt wie viele MP und AP der Spieler noch hat und dieser Charakter verbrauchen würde. Außerdem existieren in diesem Abschnitt Buttons für die verschiedenen Aktionen, die man mit dem Charakter machen kann. \\ Wenn der Spieler den Charakter bewegen will, dann muss er mit der Maus auf das Feld des Charakters klicken und den Charakter an die gewünschte Stelle ziehen. Damit wird die Bewegung ausgeführt. 
 }
 
+\includegraphics[width=0.8\textwidth]{images/Spielmenü}
+\captionof{figure}{\textbf{Spielmenü}:\\
+Den \glqq{}Spielmenü\grqq{}-Dialog erreicht der Benutzter über das drücken der "ESC"-Taste. Hier hat der Benutzer die Möglichkeit die Partie zu pausieren oder zu verlassen.Über das Zahnrad kommt der Benutzer zu den Einstellungen. Der Dialog kann über den "X"-Knopf oder erneutes drücken der "ESC"-Taste geschlossen werden.
+}
+
 \includegraphics[width=0.7\textwidth]{images/Partie wurde pausiert}
 \captionof{figure}{\textbf{Partie wurde pausiert}:\\
 Zudem kann es passieren, dass man die Partie spielt und der gegnerische Mitspieler die Partie pausiert. Dann wird ebenfalls ein \glqq{}Pause\grqq{}-Dialog angezeigt, in dem der Spieler jedoch keine Interaktion vornehmen kann, sondern nur auf die Partiefortsetzung warten kann. 
@@ -2060,7 +2083,7 @@ Das Programm ist für Systeme mit Windows als Betriebssystem gedacht. Die Anwend
 
 \subsection{Entwicklungsvorgaben}
 
-Das Softwaregrundprojekt wird von sechs Studenten geplant und implementiert. Der Entwicklungsprozess ist in Meilensteine unterteilt, welche die Projektphasen Analyse, Entwurf und Implementierung abdecken. Während des gesamten Prozesses steht das Team in Kontakt mit dem Vertreter des Auftraggebers (Tutor). Für die Implementierung wird die Entwicklungsumgebung -TODO- benutzt und zur Versionsverwaltung ein GitLab-Repository verwendet. Der Programmcode wird in englischer Sprache kommentiert und mit Javadoc dokumentiert. 
+Das Softwaregrundprojekt wird von sechs Studenten geplant und implementiert. Der Entwicklungsprozess ist in Meilensteine unterteilt, welche die Projektphasen Analyse, Entwurf und Implementierung abdecken. Während des gesamten Prozesses steht das Team in Kontakt mit dem Vertreter des Auftraggebers (Tutor). Für die Implementierung wird die Entwicklungsumgebung Unity benutzt und zur Versionsverwaltung ein GitLab-Repository verwendet. Der Programmcode wird in englischer Sprache kommentiert und mit Javadoc dokumentiert. 
 
 \subsection{Abnahmekriterien}
 
