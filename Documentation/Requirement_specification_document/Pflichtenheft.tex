@@ -2085,4 +2085,41 @@ Des Weiteren ist eine regelmäßige Anwesenheit und Mitarbeit im Tutorium notwen
 Voraussetzungen für eine erfolgreiche Abnahmesitzung zum Ende des Projekts sind die Vorlage einer lauffähigen Version der Software und die Umsetzung der Kernfunktionalität, also aller verbindlichen Anforderungen. Zudem ist eine gute Qualität der entwickelten Software mit einer sinnvollen Testabdeckung und nachgewiesen durch umfangreiche und dokumentierte Maßnahmen zur Qualitätssicherung erforderlich. Die Einhaltung des Scrum-Entwicklungsprozesses und die sinnvolle Verwendung des Team-Repository und Scrum-Board im GitLab sind ebenfalls erforderlich. Dazu gehört auch eine ordentliche Dokumentation der Software und des Projektverlaufs.
 Die Abnahme ist dann erfolgreich, wenn der Kunde mit dem endgültigen Produkt zufrieden ist.
 
+
+\newpage
+
+\flushleft
+
+\section{Architekturentwurf}
+
+\subsection{Koponentendiagramm}
+
+\vspace{0.5cm}
+
+\begin{tabularx}{\linewidth}{l|X}
+	\textbf{Komponente} & \textbf{zugeordnete Anforderungen} \\
+	\hline
+	Editor & \mfaref{FA-Editor}, \mfaref{FA-Spielbrett} - \mfaref{FA-Feldart-Gebirge}, \mfaref{FA-Konfiguration}, \mfaref{FA-LadenUndModifizieren}- \mfaref{FA-ZufälligeSzenariokonfiguration}\\
+	KIClient & \mfaref{FA-KI}, \mfaref{FA-Start-KI}\\
+	KI-Komponente & \mfaref{FA-Pausierung-KI} - \mfaref{FA-Intelligenzstufen}\\
+	Netzwerkkomponente & \mfaref{FA-Netzwerkprotokoll} - \mfaref{FA-Spielprotokoll}\\
+	Nachrichtensender & \\
+	Verbindungsmanager & \mfaref{FA-Server-Clientverbindung}, \mfaref{FA-Server-Erlaube-Zuschauer}, \mfaref{FA-Server-Session-offen-halten}, \mfaref{FA-Verbindungsaufbau-BC}, \mfaref{FA-Verbindungsaufbau-KI}\\
+	Datenempfänger &  \\
+	Nachrichtenkonverter & \\
+	Server & \mfaref{FA-Server}, \mfaref{FA-Docker-Server}, \mfaref{FA-FormatKonfiguration}\\
+	Szenariokonfigurations-Handler & \mfaref{FA-ServerlädtSzenario}\\
+	Partiekonfigurations-Handler & \mfaref{FA-Server-Partie-Konfiguration}\\
+	Clienten-Handler & \mfaref{FA-Spieleranzahl}, \mfaref{FA-Beobachtung}, \mfaref{FA-Server-Information-Spielzustand}, \mfaref{FA-Registrierung-Spieler}, \mfaref{FA-Registrierung-Zuschauer}, \mfaref{FA-Einbindung-KI}\\
+	Partie-Handler & \mfaref{FA-Server-Partiebeginn}, \mfaref{FA-Server-Partiepause}, \mfaref{FA-ReplayLog}, \mfaref{FA-Pausierung-BC}\\
+	BenutzerClient & \mfaref{FA-BC}\\
+	Graphische Anzeige & \mfaref{FA-Replay}\\
+	Game-Engine & \\
+	GUI & \mfaref{FA-Visualisierung-Spiel}, \mfaref{FA-Spielinteraktion}\\
+	Spielfeld & \mfaref{FA-Sichtbarkeit-Spielfeld}, \mfaref{FA-Visualisierung-Spielgeschehen}, \mfaref{FA-Visualisierung-Aktion}, \mfaref{FA-Visualisierung-Phasen}, \mfaref{FA-Visualisierung-Spielausgang}\\
+	HUD & \mfaref{FA-Sichtbarkeit-Inventar}, \mfaref{FA-Visualisierung-Spielstatus}, \mfaref{FA-Visualisierungsdauer}\\
+\end{tabularx}
+
+\vspace{0.5cm}
+
 \end{document}
