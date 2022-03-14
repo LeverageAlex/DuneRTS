@@ -194,7 +194,7 @@ ROLLE: & #4 \\
 
 \subsection{Einleitung}
 
-In unserem Projekt geht es darum, ein funktionierendes Spiel gemäß Vorgaben aus einem Lastenheft zu erstellen, welches den Namen \textit{Deserts of Dune} tragen wird. Das Spiel ist für zwei Personen gedacht, wobei mehrere Personen dem Spielgeschehen als Zuschauer folgen können. Hierbei wird alles, also sowohl die gesamte Spiellogik, als auch die graphische Gestaltung von uns selbst entwickelt und implementiert werden.
+In unserem Projekt geht es darum, ein funktionierendes Spiel gemäß Vorgaben aus einem Lastenheft zu erstellen, welches den Namen \textsc{Deserts of Dune} tragen wird. Das Spiel ist für zwei Personen gedacht, wobei mehrere Personen dem Spielgeschehen als Zuschauer folgen können. Hierbei wird alles, also sowohl die gesamte Spiellogik, als auch die graphische Gestaltung von uns selbst entwickelt und implementiert werden.
 
 \subsection{Motivation}
 
@@ -604,7 +604,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Begriff} & \textbf{Partie} \\
 \hline
-\textbf{Beschreibung} & Ein ganzes Spiel von Deserts of Dune wird als eine Partie bezeichnet und endet, wenn einer der beiden Spieler gewonnen hat. \\
+\textbf{Beschreibung} & Ein ganzes Spiel von \textsc{Deserts of Dune} wird als eine Partie bezeichnet und endet, wenn einer der beiden Spieler gewonnen hat. \\
 \hline
 \textbf{Ist-ein} & \\
 \hline
@@ -677,7 +677,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Begriff} & \textbf{Rundenphase} \\
 \hline
-\textbf{Beschreibung} & \textit{Deserts of Dune} läuft in Runden ab, in denen Ereignisse passieren und die einzelnen Charaktere ihre Züge nacheinander machen. \\
+\textbf{Beschreibung} & \textsc{Deserts of Dune} läuft in Runden ab, in denen Ereignisse passieren und die einzelnen Charaktere ihre Züge nacheinander machen. \\
 \hline
 \textbf{Ist-ein} & \\
 \hline
@@ -736,13 +736,13 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Begriff} & \textbf{Server} \\
 \hline
-\textbf{Beschreibung} & Zentrale Komponente, die eine Partie von \textit{Deserts of Dune} verwalten und abwickeln kann. \\
+\textbf{Beschreibung} & Zentrale Komponente, die eine Partie von \textsc{Deserts of Dune} verwalten und abwickeln kann. \\
 \hline
 \textbf{Ist-ein} & - \\
 \hline
 \textbf{Kann-sein} & - \\
 \hline
-\textbf{Aspekt} & Beinhaltet die Anwendungslogik zur Verwaltung von Clients und Partien, sowie der Umsetzung der Spielregeln von \textit{Deserts of Dune}. \\
+\textbf{Aspekt} & Beinhaltet die Anwendungslogik zur Verwaltung von Clients und Partien, sowie der Umsetzung der Spielregeln von \textsc{Deserts of Dune}. \\
 \hline
 \textbf{Bemerkung} & - \\
 \hline
@@ -981,7 +981,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Kann-sein} & \\
 \hline
-\textbf{Aspekt} & Ist die Szenerie des Spiels Deserts of Dune. \\
+\textbf{Aspekt} & Ist die Szenerie des Spiels \textsc{Deserts of Dune}. \\
 \hline
 \textbf{Bemerkung} & \\
 \hline
@@ -1155,23 +1155,23 @@ entsprechenden Möglichkeiten gemeint. \\
 \subsection{Anwendungskontext}
 \subsubsection{Akteure und Rollen}
 
-\akteur{A-Server}{Server}{Zentraler Rechner, der allen Clients das Spiel zur Verfügung stellt}{Der Server ist die zentrale Vermittlungsinstanz zwischen den Clients. Das bedeutet, dass der Server für den Informationsaustausch zwischen den verschiedenen Clients zuständig ist. Dabei ist der Server auch für die Verwaltung der Clients zuständig. Weiterhin verwaltet er auf eine Partie des Spiels \textit{Deserts of Dune} und beinhaltet die Spielregeln und -logik. Das heißt, der Server simuliert das Spiel, verarbeitet die Befehle von den Clients und sendet ihnen den aktuellen Spielstand. Außerdem kann der Server mithilfe einer Partie- und Szenariokonfiguration eine Partie erstellen.}
+\akteur{A-Server}{Server}{Zentraler Rechner, der allen Clients das Spiel zur Verfügung stellt}{Der Server ist die zentrale Vermittlungsinstanz zwischen den Clients. Das bedeutet, dass der Server für den Informationsaustausch zwischen den verschiedenen Clients zuständig ist. Dabei ist der Server auch für die Verwaltung der Clients zuständig. Weiterhin verwaltet er auf eine Partie des Spiels \textsc{Deserts of Dune} und beinhaltet die Spielregeln und -logik. Das heißt, der Server simuliert das Spiel, verarbeitet die Befehle von den Clients und sendet ihnen den aktuellen Spielstand. Außerdem kann der Server mithilfe einer Partie- und Szenariokonfiguration eine Partie erstellen.}
 
 \akteur{A-Benutzer-Client}{Benutzer-Client}{Rechner vom Benutzer, auf dem die Endanwendung läuft}{Der Benutzer-Client dient dem menschlichen Benutzer als grafische Benutzeroberfläche, um mit dem Spiel interagieren oder beobachten zu können (z. B. aktuellen Spielstand ansehen, Zug ausführen, Spiel starten, ...). Der Client muss sich mit einem Server verbinden. Dann kann der Client dem Server durch das Senden von Nachrichten Befehle geben\footnote{Das gilt nur für Spieler und nicht für Zuschauer} oder durch den Empfang und die Verarbeitung von Nachrichten vom Server den aktuellen Spielstand anzeigen.}
 
 \akteur{A-Benutzer}{menschlicher Benutzer}{Mensch, der aktiv oder passiv am Spiel teilnimmt}{Der menschliche Benutzer ist entweder ein passiver Zuschauer oder ein aktiver Spieler. Er kann entweder aktiv oder passiv am Spiel und damit an einer Partie teilnehmen. Dafür startet er den Benutzer-Client und kann über dessen grafische Benutzeroberfläche das Spielgeschehen verfolgen und gegebenenfalls mit der Partie interagieren.}
 
-\akteur{A-Spieler}{Spieler}{Menschlicher Benutzer bzw. Teilnehmer mit direktem Einfluss auf das Spielgeschehen}{Ein Spieler ist ein aktiver Teilnehmer an einer Partie. Ein Spieler spielt das Spiel \textit{Deserts of Dune} gegen eine andere Person und kann dabei von Zuschauern beobachtet werden. Der Spieler kann gemäß der Regeln Aktionen ausführen und Befehle an den Server senden, mit dem Ziel, das Spiel zu gewinnen. Ein Spieler hat auch die Möglichkeit über den Editor das Spiel zu konfigurieren. Außerdem sieht der Spieler den aktuellen Spielstand über den Benutzer-Client.}
+\akteur{A-Spieler}{Spieler}{Menschlicher Benutzer bzw. Teilnehmer mit direktem Einfluss auf das Spielgeschehen}{Ein Spieler ist ein aktiver Teilnehmer an einer Partie. Ein Spieler spielt das Spiel \textsc{Deserts of Dune} gegen eine andere Person und kann dabei von Zuschauern beobachtet werden. Der Spieler kann gemäß der Regeln Aktionen ausführen und Befehle an den Server senden, mit dem Ziel, das Spiel zu gewinnen. Ein Spieler hat auch die Möglichkeit über den Editor das Spiel zu konfigurieren. Außerdem sieht der Spieler den aktuellen Spielstand über den Benutzer-Client.}
 
 \akteur{A-Zuschauer}{Zuschauer}{Menschlicher Benutzer ohne Einfluss auf die Partie}{Ein Zuschauer kann passiv eine Partie, das heißt das Spielgeschehen, mitverfolgen. Dafür besitzt der Zuschauer auch einen (eingeschränkten) Benutzer-Client, über den er über die grafische Benutzeroberfläche die Partie angezeigt bekommt. Der Zuschauer hat im Gegensatz zu dem Spieler keine Möglichkeit, aktiv in das Spielgeschehen einzugreifen. Das bedeutet dieser Benutzer kann nicht mit dem Server kommunizieren.}
 
-\akteur{A-KI-Client}{KI-Client}{Teilnehmer, der von einer künstlichen Intelligenz gesteuert wird}{Ein KI-Client kann als Mitspieler an einer Partie teilnehmen. Der KI-Client kann dabei das Spiel \textit{Deserts of Dune} aktiv gegen einen anderen Teilnehmer spielen. Dafür muss der KI-Client eine Verbindung beim Server aufbauen und kann dann mithilfe von Nachrichten mit dem Server kommunizieren. Dabei hat er gegenüber dem Spieler nur eingeschränkte Rechts, wie zum Beispiel, dass er keine Partie pausieren kann. Der KI-Client trifft seine Entscheidungen nach vorprogrammierten oder angelernten Regeln, die statisch oder dynamisch an das Spielgeschehen angepasst werden können. Damit versucht der KI-Client das menschliche Verhalten oder eine Spielstrategie zu simulieren.}
+\akteur{A-KI-Client}{KI-Client}{Teilnehmer, der von einer künstlichen Intelligenz gesteuert wird}{Ein KI-Client kann als Mitspieler an einer Partie teilnehmen. Der KI-Client kann dabei das Spiel \textsc{Deserts of Dune} aktiv gegen einen anderen Teilnehmer spielen. Dafür muss der KI-Client eine Verbindung beim Server aufbauen und kann dann mithilfe von Nachrichten mit dem Server kommunizieren. Dabei hat er gegenüber dem Spieler nur eingeschränkte Rechts, wie zum Beispiel, dass er keine Partie pausieren kann. Der KI-Client trifft seine Entscheidungen nach vorprogrammierten oder angelernten Regeln, die statisch oder dynamisch an das Spielgeschehen angepasst werden können. Damit versucht der KI-Client das menschliche Verhalten oder eine Spielstrategie zu simulieren.}
 
 \akteur{A-Teilnehmer}{Teilnehmer}{Spieler oder KI-Client}{Ein Teilnehmer ist eine aktive Person oder Software, die mit dem Server kommunizieren kann und dadurch aktiv in das Spielgeschehen eingreifen kann. Dafür muss der Teilnehmer eine Verbindung beim Server aufbauen und kann dann mithilfe von Nachrichten mit dem Server kommunizieren. Ein Teilnehmer kann entweder ein Spieler oder ein KI-Client sein.}
 
 \akteur{A-Editor}{Editor}{Grafische Benutzeroberfläche zur Erstellung von Konfigurationen}{Der Editor ist ein Teil des Benutzer-Clients und ist damit eine grafische Benutzeroberfläche. Der Editor soll dem Benutzer die Möglichkeit geben, Inhalt und Konfigurationen, wie zum Beispiel die Szenarios oder die Partiekonfiguration zu erstellen.}
 
-\akteur{A-Auftraggeber}{Auftraggeber}{Servicegruppe Information am Institut für Softwaretechnik und Programmiersprachen}{Der Auftraggeber ist die Person, die Erstellung des Produkts, das heißt die Umsetzung des Spiels \textit{Deserts of Dune}, beauftragt hat. Der Auftraggeber stellt in dem Lastenheft Anforderung an die Entwickler und entscheidet am Ende, ob das erstellte Produkt den Anforderungen genügt. Außerdem wird sie durch den Tutor vertreten.}
+\akteur{A-Auftraggeber}{Auftraggeber}{Servicegruppe Information am Institut für Softwaretechnik und Programmiersprachen}{Der Auftraggeber ist die Person, die Erstellung des Produkts, das heißt die Umsetzung des Spiels \textsc{Deserts of Dune}, beauftragt hat. Der Auftraggeber stellt in dem Lastenheft Anforderung an die Entwickler und entscheidet am Ende, ob das erstellte Produkt den Anforderungen genügt. Außerdem wird sie durch den Tutor vertreten.}
 
 \akteur{A-Tutor}{Vertreter des Auftraggebers}{Zugewiesener Tutor: Tim Wibiral}{Der Vertretet des Auftragsgebers, das heißt der für das Projekt zugewiesene Tutor vertritt den Auftraggeber. Das heißt, er überwacht den Entwicklungsprozess, übernimmt während der Implementierungsphase die Rolle eines \textit{Product Owners}. Zusätzlich veranstaltet der Tutor wöchentliche Treffen, die Tutorien oder \textit{Sprint Meetings} und steht für Rückfragen zur Verfügung oder gibt Feedback.}
 
@@ -1354,7 +1354,7 @@ Dieser Abschnitt enthält alle funktionalen Systemanforderungen, die die grundle
 spezifizieren. \\ Dabei gilt für die Priorisierung, dass eine Anforderung eine Priorität von 1 (sehr gering, kann) bis 5 (essenziell wichtig, muss unbedingt) bekommen kann. 
 
 \subsubsection*{Komponenten und Architektur}
-\fa{Architektur}{Das Spiel \glqq{}Deserts of Dune\grqq{} ist eine verteilte Anwendung mit der Client-Server-Architektur.}{Damit hat man das Spiel in Instanzen aufteilen, die das Spiel bereit stellen und organisieren und Instanzen, die es spielen. Außerdem können somit zwei Spieler auf unterschiedlichen Systemen gegeneinander spielen}{\faref{FA-Spielkomponenten}}{5}{\rref{A-Auftraggeber}}{FA-Architektur}
+\fa{Architektur}{Das Spiel \textsc{Deserts of Dune} ist eine verteilte Anwendung mit der Client-Server-Architektur.}{Damit hat man das Spiel in Instanzen aufteilen, die das Spiel bereit stellen und organisieren und Instanzen, die es spielen. Außerdem können somit zwei Spieler auf unterschiedlichen Systemen gegeneinander spielen}{\faref{FA-Spielkomponenten}}{5}{\rref{A-Auftraggeber}}{FA-Architektur}
 
 \fa{Komponenten des Spiels}{Das gesamte System besteht aus vier Komponenten: Server, Benutzer-Client, KI-Client und Editor}{Die Spiellogik soll in diese vier Komponenten aufgeteilt werden als Vorgabe vom Auftraggeber}{\faref{FA-Kombinierbarkeit-Komponenten}, \faref{FA-Server}, \faref{FA-BC}, \faref{FA-KI}, \faref{FA-Editor}}{5}{\rref{A-Auftraggeber}}{FA-Spielkomponenten}
 
@@ -1547,7 +1547,7 @@ lokale Störungen in den zellulären Automaten ein, und verhindert damit statisc
 
 \subsubsection*{Runden und Züge}
 
-\fa{Runden und Züge}{Deserts of Dune läuft in Runden ab, in denen Ereignisse passieren, und die einzelnen Charaktere nacheinander ihre Züge machen. Zu Beginn jeder Runde handelt der Server einige Ereignisse ab. Die Reihenfolge der Rundenphasen ist:
+\fa{Runden und Züge}{\textsc{Deserts of Dune} läuft in Runden ab, in denen Ereignisse passieren, und die einzelnen Charaktere nacheinander ihre Züge machen. Zu Beginn jeder Runde handelt der Server einige Ereignisse ab. Die Reihenfolge der Rundenphasen ist:
 1. Dünenwanderungs-Rundenphase
 2. Sandsturm-Rundenphase
 3. Sandwurm-Rundenphase
@@ -1747,7 +1747,7 @@ Diese müssen in dem Editor erzeugt und bearbeitet werden können.
 \section{Softwarespezifikation}
 In den folgenden Kapiteln wird für jede Komponente eine sinnvolle Schnittstellenart vorgestellt und im Falle einer graphischen Oberfläche die definierten Dialoge vorgestellt. Dafür werden den Dialogen die entsprechenden Anwendungsfälle und Komponenten zugeordnet und die Struktur der Dialoge, das heißt, wie die Dialoge miteinander zusammenhängen, in einem Dialogstrukturdiagramm dargestellt. Zudem ist für jeden Dialog eine graphische Skizze in Form eines \glqq{}Mockups\grqq{} zu finden, sowie eine textuelle Beschreibung, wie dieser Dialog benutzt werden kann. 
 \subsection{Systemschnittstellen}
-Das System bzw. Spiel \textsc{DESERTS OF DUNE} besteht hauptsächlich aus vier großen Komponenten (siehe \faref{FA-Spielkomponenten}). Im Folgenden wird für jede Komponente eine Schnittstellenart definiert: 
+Das System bzw. Spiel \textsc{Deserts of Dune} besteht hauptsächlich aus vier großen Komponenten (siehe \faref{FA-Spielkomponenten}). Im Folgenden wird für jede Komponente eine Schnittstellenart definiert: 
 
 \paragraph{Server}
 Der Server soll über eine Konsole bedient werden, das heißt als Schnittstelle 
@@ -2092,10 +2092,37 @@ Die Abnahme ist dann erfolgreich, wenn der Kunde mit dem endgültigen Produkt zu
 
 \section{Architekturentwurf}
 
-\subsection{Koponentendiagramm}
+\subsection{Komponentendiagramm}
+Das zu entwickelnde Spiel \textsc{Deserts of Dune} ist eine verteilte Anwendung und besteht aus vier großen Subsystemen (siehe \faref{FA-Spielkomponenten}). Diese Subsysteme sind die vier großen Komponenten (die auch ausgetauscht werden können), die wiederum aus einzelnen Teilsystemen bzw. Unterkomponenten bestehen. Die strukturelle Gliederung des gesamten Systems von dem Spiel ist in den folgenden Komponentendiagrammen visualisiert und begründet. 
+
+\vspace{0.7cm}
+
+\begin{center}
+\includegraphics[width=0.95\textwidth]{images/Komponentendiagramm-Gesamtübersicht}
+\captionof{figure}{Komponentendiagramm des Gesamtsystems. Dabei kann man die Gesamtstruktur erkennen, sowie die Gliederung des Benutzer-Clients in die graphische Anzeige und den Controller.}  
+
+\includegraphics[width=0.95\textwidth]{images/Komponentendiagramm-Netzwerk}
+\captionof{figure}{Komponentendiagramm des Moduls \textit{Netzwerk}. Da das Spiel eine verteilte Anwendung ist, müssen die einzelnen Systeme über ein Netzwerk kommunizieren und benötigen daher jeweils ein Modul, das die Schnittstelle zur Außenwelt darstellt.}  
+
+
+\includegraphics[width=0.95\textwidth]{images/Komponentendiagramm-Editor}
+\captionof{figure}{Komponentendiagramm des Editors. Dieses wurde jedoch nur angedeutet, da der Editor nicht von Team 08 entwickelt wird, sondern später eingekauft wird und somit nicht modelliert werden muss.}  
+
+\includegraphics[width=0.95\textwidth]{images/Komponentendiagramm-KI-Client}
+\captionof{figure}{Komponentendiagramm des KI-Clients. Der KI-Client beinhaltet vor allem eine Komponente, die die Züge vorschlägt, da dieser keine Visualisierung oder Eingaben benötigt, sondern nur das Spiel spielen muss.}  
+
+\includegraphics[width=0.95\textwidth]{images/Komponentendiagramm-GUI}
+\captionof{figure}{Komponentendiagramm der graphischen Anzeige bzw. der GUI. Dabei muss die GUI nicht nur das Spielfeld und alle sonstigen Informationen darstellen, sondern auch mit Nutzereingaben umgehen können.}  
+
+\includegraphics[width=0.95\textwidth]{images/Komponentendiagramm-Server}
+\captionof{figure}{Komponentendiagramm des Servers. Der Server muss wie in den funktionalen Anforderungen (siehe \autoref{ssec:fas}) die Konfigurationen laden, die Clients verwalten und die Partie abwickeln. Da diese Aufgaben weitestgehend voneinander unabhängig ausgeführt werden können, sollte man diese in eigene gekapselte Komponenten auslagern. Bei der Partieabwicklung kann man sogar die Welt (= Model), die Charakterzüge und den Abhandlung der restlichen Runden (= Controller) voneinander trennen, damit man diese Bereiche besser kapseln kann.}
+
+\end{center}
+
 
 \vspace{0.5cm}
 
+Im Folgenden ist die Zuordnung der funktionalen Anforderungen aus \autoref{ssec:fas} und den Komponenten zu erkennen. Dabei wird für jede Komponente des Systems (siehe Komponentendiagramme oben) aufgelistet, welche Anforderung sie abgedeckt: \\ 
 \begin{tabularx}{\linewidth}{l|X}
 	\textbf{Komponente} & \textbf{zugeordnete Anforderungen} \\
 	\hline
@@ -2104,7 +2131,7 @@ Die Abnahme ist dann erfolgreich, wenn der Kunde mit dem endgültigen Produkt zu
 	KI-Komponente & \mfaref{FA-Pausierung-KI} - \mfaref{FA-Intelligenzstufen}\\
 	Netzwerkkomponente & \mfaref{FA-Netzwerkprotokoll} - \mfaref{FA-Spielprotokoll}\\
 	Nachrichtensender & \\
-	Verbindungsmanager & \mfaref{FA-Server-Clientverbindung}, \mfaref{FA-Server-Erlaube-Zuschauer}, \mfaref{FA-Server-Session-offen-halten}, \mfaref{FA-Verbindungsaufbau-BC}, \mfaref{FA-Verbindungsaufbau-KI}\\
+	Verbindungsmanager & \mfaref{FA-Server-Clientverbindung}, \mfaref{FA-Server-Erlaube-Zuschauer}, \mfaref{FA-Server-Session-offen-halten}, \mfaref{FA-Verbindungsaufbau-BC}, \mfaref{FA-Verbindungsaufbau-KI} \\
 	Datenempfänger &  \\
 	Nachrichtenkonverter & \\
 	Server & \mfaref{FA-Server}, \mfaref{FA-Docker-Server}, \mfaref{FA-FormatKonfiguration}\\
