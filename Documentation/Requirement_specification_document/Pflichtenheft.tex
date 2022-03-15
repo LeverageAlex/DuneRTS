@@ -2099,10 +2099,10 @@ Das zu entwickelnde Spiel \textsc{Deserts of Dune} ist eine verteilte Anwendung 
 
 \begin{center}
 \includegraphics[width=0.95\textwidth]{images/Komponentendiagramm-Gesamtübersicht}
-\captionof{figure}{Komponentendiagramm des Gesamtsystems. Dabei kann man die Gesamtstruktur erkennen, sowie die Gliederung des Benutzer-Clients in die graphische Anzeige und den Controller.}  
+\captionof{figure}{Komponentendiagramm des Gesamtsystems. Dabei kann man die Gesamtstruktur erkennen, sowie die Gliederung des Benutzer-Clients in die graphische Anzeige und den Controller. Diese grobe Architektur wurde von den Auftraggebern festgelegt und im Benutzer-Client bietet sich eine Aufteilung in graphische Anzeige und Controller an, damit man das MVC-Pattern umsetzt, was bei der Testbarkeit und Entwicklung Vorteile bietet.}  
 
 \includegraphics[width=0.95\textwidth]{images/Komponentendiagramm-Netzwerk}
-\captionof{figure}{Komponentendiagramm des Moduls \textit{Netzwerk}. Da das Spiel eine verteilte Anwendung ist, müssen die einzelnen Systeme über ein Netzwerk kommunizieren und benötigen daher jeweils ein Modul, das die Schnittstelle zur Außenwelt darstellt.}  
+\captionof{figure}{Komponentendiagramm des Moduls \textit{Netzwerk}. Da das Spiel eine verteilte Anwendung ist, müssen die einzelnen Systeme über ein Netzwerk kommunizieren und benötigen daher jeweils ein Modul, das die Schnittstelle zur Außenwelt darstellt und die ausgetauschten Daten in für die Komponenten entsprechend lesbare Nachrichten umwandelt.}  
 
 
 \includegraphics[width=0.95\textwidth]{images/Komponentendiagramm-Editor}
@@ -2112,13 +2112,12 @@ Das zu entwickelnde Spiel \textsc{Deserts of Dune} ist eine verteilte Anwendung 
 \captionof{figure}{Komponentendiagramm des KI-Clients. Der KI-Client beinhaltet vor allem eine Komponente, die die Züge vorschlägt, da dieser keine Visualisierung oder Eingaben benötigt, sondern nur das Spiel spielen muss.}  
 
 \includegraphics[width=0.95\textwidth]{images/Komponentendiagramm-GUI}
-\captionof{figure}{Komponentendiagramm der graphischen Anzeige bzw. der GUI. Dabei muss die GUI nicht nur das Spielfeld und alle sonstigen Informationen darstellen, sondern auch mit Nutzereingaben umgehen können.}  
+\captionof{figure}{Komponentendiagramm der graphischen Anzeige bzw. der GUI. Dabei muss die GUI nicht nur das Spielfeld und alle sonstigen Informationen darstellen, sondern auch mit Nutzereingaben umgehen können, weswegen eine Komponente für die Darstellung (Aufteilung in 2D und 3D, da dies verschiedene Implementierungen benötigt) und eine für die Eingaben zuständig ist. Außerdem müssen die Eingaben verarbeitet werden das Spiel korrekt dargestellt, worum sich eine Spiellogik kümmert. \\ Diese Komponente ist dem Subsystem \textit{Benutzer-Client zugeordnet}}  
 
 \includegraphics[width=0.95\textwidth]{images/Komponentendiagramm-Server}
-\captionof{figure}{Komponentendiagramm des Servers. Der Server muss wie in den funktionalen Anforderungen (siehe \autoref{ssec:fas}) die Konfigurationen laden, die Clients verwalten und die Partie abwickeln. Da diese Aufgaben weitestgehend voneinander unabhängig ausgeführt werden können, sollte man diese in eigene gekapselte Komponenten auslagern. Bei der Partieabwicklung kann man sogar die Welt (= Model), die Charakterzüge und den Abhandlung der restlichen Runden (= Controller) voneinander trennen, damit man diese Bereiche besser kapseln kann.}
+\captionof{figure}{Komponentendiagramm des Servers. Der Server muss wie in den funktionalen Anforderungen (siehe \autoref{ssec:fas}) die Konfigurationen laden, die Clients verwalten und die Partie abwickeln. Da diese Aufgaben weitestgehend voneinander unabhängig ausgeführt werden können, sollte man diese in eigene gekapselte Komponenten auslagern. Bei der Partieabwicklung kann man sogar die Welt (= Model), und die Abhandlung der Runden (= Controller) voneinander trennen, was die Testbarkeit und Implementierung vereinfacht.}
 
 \end{center}
-
 
 \vspace{0.5cm}
 
