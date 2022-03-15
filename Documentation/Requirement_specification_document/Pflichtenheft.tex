@@ -1358,8 +1358,6 @@ spezifizieren. \\ Dabei gilt für die Priorisierung, dass eine Anforderung eine 
 
 \fa{Komponenten des Spiels}{Das gesamte System besteht aus vier Komponenten: Server, Benutzer-Client, KI-Client und Editor}{Die Spiellogik soll in diese vier Komponenten aufgeteilt werden als Vorgabe vom Auftraggeber}{\faref{FA-Kombinierbarkeit-Komponenten}, \faref{FA-Server}, \faref{FA-BC}, \faref{FA-KI}, \faref{FA-Editor}}{5}{\rref{A-Auftraggeber}}{FA-Spielkomponenten}
 
-\fa{Kombinierbarkeit von Komponenten}{Die Komponenten: Server, Benutzer-Client, KI-Client und Editor sollen beliebig über Teamgrenzen hinweg kombinierbar sein.}{Dies ist nötig, um in einer späteren Phase des Projektes Komponenten auszutauschen.}{\faref{FA-Server}, \faref{FA-BC}, \faref{FA-KI},  \faref{FA-Spielkomponenten}}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}}{FA-Kombinierbarkeit-Komponenten}
-
 \fa{Server}{Der Server hält die Anwendungslogik zur Verwaltung von Clients, Partien und zur Umsetzung der Spielregeln.}{Der Server soll die gesamte Partie managen und abwickeln, weil diese Aufgabe zentral erledigt werden soll.}{}{5}{\rref{A-Auftraggeber}, \rref{A-Benutzer}, \rref{A-Teilnehmer}}{FA-Server}
 
 \fa{Benutzer-Client}{Der Benutzer-Client ermöglicht es einem einzelnen menschlichen Benutzer, als Spieler oder als Zuschauer an einer Partie teilzuhaben.}{Der Benutzer braucht eine Anwendung, um eine Partie zu verfolgen oder daran teilzunehmen}{\faref{FA-Registrierung-Spieler}, \faref{FA-Registrierung-Zuschauer}}{5}{\rref{A-Auftraggeber}, \rref{A-Benutzer}}{FA-BC}
@@ -2066,6 +2064,8 @@ Es müssen folgende nicht-funktionalen Anforderungen an das gesamte System und d
 
 \nfa{Dokumentations-Sprache}{Alle im Rahmen des Projekts, das heißt der Entwicklung der Anwendung, anfallenden Dokumente, wie zum Beispiel das Benutzerhandbuch werden auf Deutsch verfasst.}{Die Anwendung wird vor allem von Personen genutzt, deren Muttersprache deutsch ist und damit würde die englische Sprache wenig Vorteile bieten, jedoch eventuell Schwierigkeiten bei der Verständlichkeit hervorrufen. }{\nfaref{QA-Dokumentation}}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}}{QA-Dokumentationssprache}
 
+\nfa{Kombinierbarkeit von Komponenten}{Die Komponenten: Server, Benutzer-Client, KI-Client und Editor sollen beliebig über Teamgrenzen hinweg kombinierbar sein.}{Dies ist nötig, um in einer späteren Phase des Projektes Komponenten auszutauschen.}{\faref{FA-Server}, \faref{FA-BC}, \faref{FA-KI},  \faref{FA-Spielkomponenten}}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}}{FA-Kombinierbarkeit-Komponenten}
+
 \newpage
 
 \flushleft
@@ -2126,22 +2126,18 @@ Im Folgenden ist die Zuordnung der funktionalen Anforderungen aus \autoref{ssec:
 \begin{tabularx}{\linewidth}{l|X}
 	\textbf{Komponente} & \textbf{zugeordnete Anforderungen} \\
 	\hline
+	Gesamtarchitektur & \mfaref{FA-Architektur}, \mfaref{FA-Spielkomponenten}\\
 	Editor & \mfaref{FA-Editor}, \mfaref{FA-Spielbrett} - \mfaref{FA-Feldart-Gebirge}, \mfaref{FA-Konfiguration}, \mfaref{FA-LadenUndModifizieren}- \mfaref{FA-ZufälligeSzenariokonfiguration}\\
 	KIClient & \mfaref{FA-KI}, \mfaref{FA-Start-KI}\\
 	KI-Komponente & \mfaref{FA-Pausierung-KI} - \mfaref{FA-Intelligenzstufen}\\
-	Netzwerkkomponente & \mfaref{FA-Netzwerkprotokoll} - \mfaref{FA-Spielprotokoll}\\
-	Nachrichtensender & \\
-	Verbindungsmanager & \mfaref{FA-Server-Clientverbindung}, \mfaref{FA-Server-Erlaube-Zuschauer}, \mfaref{FA-Server-Session-offen-halten}, \mfaref{FA-Verbindungsaufbau-BC}, \mfaref{FA-Verbindungsaufbau-KI} \\
-	Datenempfänger &  \\
-	Nachrichtenkonverter & \\
-	Server & \mfaref{FA-Server}, \mfaref{FA-Docker-Server}, \mfaref{FA-FormatKonfiguration}\\
+	Netzwerkkomponente & \mfaref{FA-Netzwerkprotokoll} - \mfaref{FA-Spielprotokoll}, \mfaref{FA-Server-Clientverbindung}, \mfaref{FA-Server-Erlaube-Zuschauer} - \mfaref{FA-Server-verspätete-Nachrichten}, \mfaref{FA-Server-Session-offen-halten}, \mfaref{FA-Verbindungsaufbau-BC}, \mfaref{FA-Verbindungsaufbau-KI}\\
+	Server & \mfaref{FA-Server}, \mfaref{FA-Docker-Server}, \mfaref{FA-Server-Protokollverletzung}, \mfaref{FA-FormatKonfiguration}\\
 	Szenariokonfigurations-Handler & \mfaref{FA-ServerlädtSzenario}\\
 	Partiekonfigurations-Handler & \mfaref{FA-Server-Partie-Konfiguration}\\
 	Clienten-Handler & \mfaref{FA-Spieleranzahl}, \mfaref{FA-Beobachtung}, \mfaref{FA-Server-Information-Spielzustand}, \mfaref{FA-Registrierung-Spieler}, \mfaref{FA-Registrierung-Zuschauer}, \mfaref{FA-Einbindung-KI}\\
-	Partie-Handler & \mfaref{FA-Server-Partiebeginn}, \mfaref{FA-Server-Partiepause}, \mfaref{FA-ReplayLog}, \mfaref{FA-Pausierung-BC}\\
-	BenutzerClient & \mfaref{FA-BC}\\
+	Partie-Handler & \mfaref{FA-Abstand-Felder} - \mfaref{FA-gleichwertige-Alternativen}, \mfaref{FA-Server-Partiebeginn}, \mfaref{FA-Server-Partiepause}, \mfaref{FA-Server-Siegbedingung}, \mfaref{FA-ReplayLog}, \mfaref{FA-Pausierung-BC}\\
+	BenutzerClient & \mfaref{FA-BC}, \mfaref{FA-Vereinfachung-Spielinteraktion}\\
 	Graphische Anzeige & \mfaref{FA-Replay}\\
-	Game-Engine & \\
 	GUI & \mfaref{FA-Visualisierung-Spiel}, \mfaref{FA-Spielinteraktion}\\
 	Spielfeld & \mfaref{FA-Sichtbarkeit-Spielfeld}, \mfaref{FA-Visualisierung-Spielgeschehen}, \mfaref{FA-Visualisierung-Aktion}, \mfaref{FA-Visualisierung-Phasen}, \mfaref{FA-Visualisierung-Spielausgang}\\
 	HUD & \mfaref{FA-Sichtbarkeit-Inventar}, \mfaref{FA-Visualisierung-Spielstatus}, \mfaref{FA-Visualisierungsdauer}\\
