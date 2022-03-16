@@ -59,6 +59,7 @@ PRIORITÄT & #5\\
 \hline 
 AKTEUR & #6
 \end{tabularx}
+\vspace*{0.75cm}
 }
 
 \newcommand{\nfa}[7]{
@@ -78,6 +79,7 @@ PRIORITÄT & #5\\
 \hline 
 AKTEUR & #6
 \end{tabularx}
+\vspace*{0.75cm}
 }
 
 \newcommand{\akteur}[4]{
@@ -192,7 +194,7 @@ ROLLE: & #4 \\
 
 \subsection{Einleitung}
 
-In unserem Projekt geht es darum, ein funktionierendes Spiel gemäß Vorgaben aus einem Lastenheft zu erstellen, welches den Namen \textit{Deserts of Dune} tragen wird. Das Spiel ist für zwei Personen gedacht, wobei mehrere Personen dem Spielgeschehen als Zuschauer folgen können. Hierbei wird alles, also sowohl die gesamte Spiellogik, als auch die graphische Gestaltung von uns selbst entwickelt und implementiert werden.
+In unserem Projekt geht es darum, ein funktionierendes Spiel gemäß Vorgaben aus einem Lastenheft zu erstellen, welches den Namen \textsc{Deserts of Dune} tragen wird. Das Spiel ist für zwei Personen gedacht, wobei mehrere Personen dem Spielgeschehen als Zuschauer folgen können. Hierbei wird alles, also sowohl die gesamte Spiellogik, als auch die graphische Gestaltung von uns selbst entwickelt und implementiert werden.
 
 \subsection{Motivation}
 
@@ -200,8 +202,7 @@ Das Projekt soll dazu beitragen, uns in dem langfristigen Arbeiten an größeren
 Der Auftraggeber bekommt ein funktionstüchtiges Spiel mit guter Qualität zum Zeitvertreib und kann unsere Fähigkeiten zu programmieren und als Team zu arbeiten besser einschätzen und bewerten.
 
 \subsection{Vision}
-
-Die fertige Anwendung soll ein Hauptmenü haben, von dem aus der Spieler das Spiel starten kann oder sich eine Übersicht der Häuser mit ihren dazugehörigen Charakteren und deren Statuswerte anzeigen lassen kann. 
+Die fertige Anwendung soll ein rundenbasiertes Multiplayer-Strategiespiel werden, welches wahlweise auch als Einzelspieler gegen eine KI gespielt werden kann. Dafür soll die Anwendung ein Hauptmenü haben, von dem aus der Spieler das Spiel starten kann oder sich eine Übersicht der Häuser mit ihren dazugehörigen Charakteren und deren Statuswerte anzeigen lassen kann. 
 Startet der Spieler das Spiel, so soll ihm eine Auswahl an zwei Spielbaren Häusern zur Verfügung stehen, mit welchen er spielen kann. \\
 Das Spiel selbst soll eine eigene Szenerie haben, die die Dünenlandschaft von Arrakis, mit Flachsand, Dünen, Gesteinsfeldern und Gebirgen darstellen soll. Die Statuswerte der Charaktere auf dem Feld sollen jederzeit für jeden Spieler einsehbar sein und außerdem soll ein Pausenmenü jederzeit im Spiel aufgerufen werden können.
 
@@ -262,7 +263,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Aspekt} & Name, zugehöriger Spieler oder NPC, Charakter-Typ, Health-Points, Inventar, Position auf dem Spielfeld, etc. \\
 \hline
-\textbf{Bemerkung} &  \\
+\textbf{Bemerkung} & Ein Charakter kann von einem Haus kontrolliert werden, das heißt er ist besiegt, aber noch nicht unbedingt wieder geklont und nicht vom Sandwurm gefressen. \\
 \hline
 \textbf{Beispiel} & Baron Vladimir Harkonnen, gehört zu House Harkonnen, \\
 \\
@@ -351,7 +352,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Begriff} & \textbf{Editor} \\
 \hline
-\textbf{Beschreibung} & Der Editor wird zum Erstellen von Content und Konfigurationen für ein Spiel verwendet. \\
+\textbf{Beschreibung} & Der Editor wird zum Erstellen von Spielwelten, Charakteren und Konfigurationen für ein Spiel verwendet. \\
 \hline
 \textbf{Ist-ein} & - \\
 \hline
@@ -380,6 +381,24 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \textbf{Bemerkung} &  \\
 \hline
 \textbf{Beispiel} &  \\
+\hline
+\end{tabularx}
+
+\begin{tabularx}{\linewidth}{|l|X|}
+\hline
+\textbf{Begriff} & \textbf{Höhenniveau} \\
+\hline
+\textbf{Beschreibung} & Es wird zwischen zwei verschieden Höhenniveaus unterschieden. Hier geht es darum, ob ein Spielfeld hoch oder niedrig ist. \\
+\hline
+\textbf{Ist-ein} & Spielfeldeigenschaft. \\
+\hline
+\textbf{Kann-sein} & niedrig, hoch\\
+\hline
+\textbf{Aspekt} &  \\
+\hline
+\textbf{Bemerkung} &  \\
+\hline
+\textbf{Beispiel} & Das Gebirge ist hoch. Das Felsplateau ist niedrig. \\
 \hline
 \end{tabularx}
 
@@ -449,7 +468,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Aspekt} & Es gibt im Spiel sechs Great-Houses.\\
 \hline
-\textbf{Bemerkung} &  \\
+\textbf{Bemerkung} & House Corrino, House Atreides, House Harkonnen, Haus Ordos, House Richese, House Vernius \\
 \hline
 \textbf{Beispiel} &  \\
 \hline
@@ -497,7 +516,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Beschreibung} & Eindeutige Beschreibung eines Spielfeldes in JSON-Format. \\
 \hline
-\textbf{Ist-ein} & \\
+\textbf{Ist-ein} & Datei \\
 \hline
 \textbf{Kann-sein} & \\
 \hline
@@ -585,7 +604,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Begriff} & \textbf{Partie} \\
 \hline
-\textbf{Beschreibung} & Ein ganzes Spiel von Deserts of Dune wird als eine Partie bezeichnet und endet, wenn einer der beiden Spieler gewonnen hat. \\
+\textbf{Beschreibung} & Ein ganzes Spiel von \textsc{Deserts of Dune} wird als eine Partie bezeichnet und endet, wenn einer der beiden Spieler gewonnen hat. \\
 \hline
 \textbf{Ist-ein} & \\
 \hline
@@ -621,7 +640,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Begriff} & \textbf{Partie-Ende} \\
 \hline
-\textbf{Beschreibung} & Wenn in der Sandwurm-Rundenphase der letzte Charakter, der ein Haus kontrolliert, durch einen Sandwurm-Angriff verschluckt wird, während das andere Haus nach Abhandlung dieser Sandwurm-Rundenphase noch Charaktere hat, gewinnt das andere Haus unmittelbar die Partie. Falls nach r$\_max$ Runden noch immer kein Gewinner feststeht, so werden alle Felsplateaus und Gebirge zu Wüstenfelder. Zusätzlich werden fortan die Sandwurm-Runden durch Shai-Hulud Runden ersetzt.\\
+\textbf{Beschreibung} & Wenn in der Sandwurm-Rundenphase der letzte Charakter, der ein Haus kontrolliert, durch einen Sandwurm-Angriff verschluckt wird, während das andere Haus nach Abhandlung dieser Sandwurm-Rundenphase noch Charaktere hat, gewinnt das andere Haus unmittelbar die Partie. Falls nach einer festgelegten maximalen Rundenanzahl noch immer kein Gewinner feststeht, so werden alle Felsplateaus und Gebirge zu Wüstenfelder. Zusätzlich werden fortan die Sandwurm-Runden durch Shai-Hulud Runden ersetzt.\\
 %Behandlung überlanger Partien
 \hline
 \textbf{Ist-ein} & \\
@@ -642,7 +661,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Beschreibung} & Hier sind fast alle Parameter und Werte gespeichert, welche für das Spiel wichtig sind. \\
 \hline
-\textbf{Ist-ein} & \\
+\textbf{Ist-ein} & Datei \\
 \hline
 \textbf{Kann-sein} & \\
 \hline
@@ -658,7 +677,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Begriff} & \textbf{Rundenphase} \\
 \hline
-\textbf{Beschreibung} & \textit{Deserts of Dune} läuft in Runden ab, in denen Ereignisse passieren und die einzelnen Charaktere ihre Züge nacheinander machen. \\
+\textbf{Beschreibung} & \textsc{Deserts of Dune} läuft in Runden ab, in denen Ereignisse passieren und die einzelnen Charaktere ihre Züge nacheinander machen. \\
 \hline
 \textbf{Ist-ein} & \\
 \hline
@@ -717,13 +736,13 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Begriff} & \textbf{Server} \\
 \hline
-\textbf{Beschreibung} & Zentrale Komponente, die eine Partie von \textit{Deserts of Dune} verwalten und abwickeln kann. \\
+\textbf{Beschreibung} & Zentrale Komponente, die eine Partie von \textsc{Deserts of Dune} verwalten und abwickeln kann. \\
 \hline
 \textbf{Ist-ein} & - \\
 \hline
 \textbf{Kann-sein} & - \\
 \hline
-\textbf{Aspekt} & Beinhaltet die Anwendungslogik zur Verwaltung zur Verwaltung von Clients und Partien, sowie der Umsetzung der Spielregeln von \textit{Deserts of Dune}. \\
+\textbf{Aspekt} & Beinhaltet die Anwendungslogik zur Verwaltung von Clients und Partien, sowie der Umsetzung der Spielregeln von \textsc{Deserts of Dune}. \\
 \hline
 \textbf{Bemerkung} & - \\
 \hline
@@ -735,7 +754,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Begriff} & \textbf{Siegbedingungen} \\
 \hline
-\textbf{Beschreibung} & Es werden nacheinander Sieg-Metriken in Reihenfolge betrachtet, wie z.B. welches Haus den größten Spice-Vorrat hat. \\
+\textbf{Beschreibung} & Es werden nacheinander Siegmetriken \faref{FA-Siegmetrik} in Reihenfolge betrachtet, wie z.B. welches Haus den größten Spice-Vorrat hat. \\
 \hline
 \textbf{Ist-ein} & \\
 \hline
@@ -799,7 +818,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Kann-sein} & \\
 \hline
-\textbf{Aspekt} & Alle Charaktere versuchen so viel Spice wie möglich in der Wüste zu sammeln und dann zu ihrer Stadt zurückbringen, da dies die Siegmetrik ist.\\
+\textbf{Aspekt} & Alle Charaktere versuchen so viel Spice wie möglich in der Wüste zu sammeln und dann zu ihrer Stadt zurückbringen, da dies die Siegmetrik \faref{FA-Siegmetrik} ist.\\
 \hline
 \textbf{Bemerkung} &  \\
 \hline
@@ -861,13 +880,32 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \end{tabularx}
 
+
+\begin{tabularx}{\linewidth}{|l|X|}
+\hline
+\textbf{Begriff} & \textbf{Feld} \\
+\hline
+\textbf{Beschreibung} & Ein Feld ist ein Teilbereich des Spielfeldes, der quadratisch ist. Ein Feld wird durch eine Feldart weiter charakterisiert. \\
+\hline
+\textbf{Ist-ein} &  \\
+\hline
+\textbf{Kann-sein} & Stadt, Flachsand, Düne, Felsplateau, Gebirge \\
+\hline
+\textbf{Aspekt} & kann frei oder besetzt sein (ein Objekt befindet sich auf dem Feld) \\
+\hline
+\textbf{Bemerkung} &  \\
+\hline
+\textbf{Beispiel} & \\
+\hline
+\end{tabularx}
+
 \begin{tabularx}{\linewidth}{|l|X|}
 \hline
 \textbf{Begriff} & \textbf{Stadt} \\
 \hline
-\textbf{Beschreibung} & Ist ein Spezialfeld. Auf Arrakis gibt es zwei größere Städte, Arrakeen und Carthag. Beiden Spielern gehört eine davon. \\
+\textbf{Beschreibung} & Auf Arrakis gibt es zwei größere Städte, Arrakeen und Carthag. Beiden Spielern gehört eine davon. \\
 \hline
-\textbf{Ist-ein} & Spezialfeld\\
+\textbf{Ist-ein} & spezielles Feld \\
 \hline
 \textbf{Kann-sein} & \\
 \hline
@@ -943,7 +981,7 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 \hline
 \textbf{Kann-sein} & \\
 \hline
-\textbf{Aspekt} & Ist die Szenerie des Spiels Deserts of Dune. \\
+\textbf{Aspekt} & Ist die Szenerie des Spiels \textsc{Deserts of Dune}. \\
 \hline
 \textbf{Bemerkung} & \\
 \hline
@@ -953,7 +991,25 @@ Eine weitere denkbare Erweiterung wäre das hinzufügen von neuen spielbaren Cha
 
 \begin{tabularx}{\linewidth}{|l|X|}
 \hline
-\textbf{Begriff} & \textbf{Health Points} \\
+\textbf{Begriff} & \textbf{Aktionspunkte / Action Points (AP)} \\
+\hline
+\textbf{Beschreibung} & Aktionspunkte sind die Eigenschaft, die angibt wie viele Aktionen der Charakter ausführen kann. \\
+\hline
+\textbf{Ist-ein} & Eine Eigenschaft eines Charakters.\\
+\hline
+\textbf{Kann-sein} & \\
+\hline
+\textbf{Aspekt} & ist ein Parameter eines Charakters. \\
+\hline
+\textbf{Bemerkung} & \\
+\hline
+\textbf{Beispiel} & Ein Noble hat beispielsweise pro Runde 2 AP  und kann damit zwei normale Angriffe durchführen (jeweils 1 AP)\\
+\hline
+\end{tabularx}
+
+\begin{tabularx}{\linewidth}{|l|X|}
+\hline
+\textbf{Begriff} & \textbf{Health Points (HP)} \\
 \hline
 \textbf{Beschreibung} & Health Points sind die Eigenschaft wie viele Lebenspunkte ein Charakter hat.\\
 \hline
@@ -1062,24 +1118,6 @@ entsprechenden Möglichkeiten gemeint. \\
 
 \begin{tabularx}{\linewidth}{|l|X|}
 \hline
-\textbf{Begriff} & \textbf{Charakteren, die ein Haus kontrolliert } \\
-\hline
-\textbf{Beschreibung} & Das sind die Charaktere welche nicht von einem Sandwurm verschluckt worden. \\
-\hline
-\textbf{Ist-ein} & Charakter\\
-\hline
-\textbf{Kann-sein} & verschluckt oder nicht verschluckt.\\
-\hline
-\textbf{Aspekt} &  \\
-\hline
-\textbf{Bemerkung} & \\
-\hline
-\textbf{Beispiel} & \\
-\hline
-\end{tabularx}
-
-\begin{tabularx}{\linewidth}{|l|X|}
-\hline
 \textbf{Begriff} & \textbf{Spieler} \\
 \hline
 \textbf{Beschreibung} & Ein Spieler ist ein Client, welcher aktiv am Spiel teilnimmt.  \\
@@ -1096,30 +1134,44 @@ entsprechenden Möglichkeiten gemeint. \\
 \hline
 \end{tabularx}
 
-
-Diese Tabelle enthält Abkürzungen und domänenspezifische Begriffe, die im Dokument verwendet
-werden.
+\begin{tabularx}{\linewidth}{|l|X|}
+\hline
+\textbf{Begriff} & \textbf{Replay} \\
+\hline
+\textbf{Beschreibung} & Unter Replay versteht man das Abspielen einer vorher aufgezeichneten Partie. Dafür für die Partie mit entsprechenden Informationen in einer speziellen Datei abgespeichert. \\
+\hline
+\textbf{Ist-ein} & Datei \\
+\hline
+\textbf{Kann-sein} & \\
+\hline
+\textbf{Aspekt} & \\
+\hline
+\textbf{Bemerkung} & \\
+\hline
+\textbf{Beispiel} & \\
+\hline
+\end{tabularx}
 
 \subsection{Anwendungskontext}
 \subsubsection{Akteure und Rollen}
 
-\akteur{A-Server}{Server}{Zentraler Rechner, der allen Clients das Spiel zur Verfügung stellt}{Der Server ist die zentrale Vermittlungsinstanz zwischen den Clients. Das bedeutet, dass der Server für den Informationsaustausch zwischen den verschiedenen Clients zuständig ist. Dabei ist der Server auch für die Verwaltung der Clients zuständig. Weiterhin verwaltet er auf eine Partie des Spiels \textit{Deserts of Dune} und beinhaltet die Spielregeln und -logik. Das heißt, der Server simuliert das Spiel, verarbeitet die Befehle von den Clients und sendet ihnen den aktuellen Spielstand. Außerdem kann der Server mithilfe einer Partie- und Szenariokonfiguration eine Partie erstellen.}
+\akteur{A-Server}{Server}{Zentraler Rechner, der allen Clients das Spiel zur Verfügung stellt}{Der Server ist die zentrale Vermittlungsinstanz zwischen den Clients. Das bedeutet, dass der Server für den Informationsaustausch zwischen den verschiedenen Clients zuständig ist. Dabei ist der Server auch für die Verwaltung der Clients zuständig. Weiterhin verwaltet er auf eine Partie des Spiels \textsc{Deserts of Dune} und beinhaltet die Spielregeln und -logik. Das heißt, der Server simuliert das Spiel, verarbeitet die Befehle von den Clients und sendet ihnen den aktuellen Spielstand. Außerdem kann der Server mithilfe einer Partie- und Szenariokonfiguration eine Partie erstellen.}
 
 \akteur{A-Benutzer-Client}{Benutzer-Client}{Rechner vom Benutzer, auf dem die Endanwendung läuft}{Der Benutzer-Client dient dem menschlichen Benutzer als grafische Benutzeroberfläche, um mit dem Spiel interagieren oder beobachten zu können (z. B. aktuellen Spielstand ansehen, Zug ausführen, Spiel starten, ...). Der Client muss sich mit einem Server verbinden. Dann kann der Client dem Server durch das Senden von Nachrichten Befehle geben\footnote{Das gilt nur für Spieler und nicht für Zuschauer} oder durch den Empfang und die Verarbeitung von Nachrichten vom Server den aktuellen Spielstand anzeigen.}
 
 \akteur{A-Benutzer}{menschlicher Benutzer}{Mensch, der aktiv oder passiv am Spiel teilnimmt}{Der menschliche Benutzer ist entweder ein passiver Zuschauer oder ein aktiver Spieler. Er kann entweder aktiv oder passiv am Spiel und damit an einer Partie teilnehmen. Dafür startet er den Benutzer-Client und kann über dessen grafische Benutzeroberfläche das Spielgeschehen verfolgen und gegebenenfalls mit der Partie interagieren.}
 
-\akteur{A-Spieler}{Spieler}{Menschlicher Benutzer bzw. Teilnehmer mit direktem Einfluss auf das Spielgeschehen}{Ein Spieler ist ein aktiver Teilnehmer an einer Partie. Ein Spieler spielt das Spiel \textit{Deserts of Dune} gegen eine andere Person und kann dabei von Zuschauern beobachtet werden. Der Spieler kann gemäß der Regeln Aktionen ausführen und Befehle an den Server senden, mit dem Ziel, das Spiel zu gewinnen. Ein Spieler hat auch die Möglichkeit über den Editor das Spiel zu konfigurieren. Außerdem sieht der Spieler den aktuellen Spielstand über den Benutzer-Client.}
+\akteur{A-Spieler}{Spieler}{Menschlicher Benutzer bzw. Teilnehmer mit direktem Einfluss auf das Spielgeschehen}{Ein Spieler ist ein aktiver Teilnehmer an einer Partie. Ein Spieler spielt das Spiel \textsc{Deserts of Dune} gegen eine andere Person und kann dabei von Zuschauern beobachtet werden. Der Spieler kann gemäß der Regeln Aktionen ausführen und Befehle an den Server senden, mit dem Ziel, das Spiel zu gewinnen. Ein Spieler hat auch die Möglichkeit über den Editor das Spiel zu konfigurieren. Außerdem sieht der Spieler den aktuellen Spielstand über den Benutzer-Client.}
 
 \akteur{A-Zuschauer}{Zuschauer}{Menschlicher Benutzer ohne Einfluss auf die Partie}{Ein Zuschauer kann passiv eine Partie, das heißt das Spielgeschehen, mitverfolgen. Dafür besitzt der Zuschauer auch einen (eingeschränkten) Benutzer-Client, über den er über die grafische Benutzeroberfläche die Partie angezeigt bekommt. Der Zuschauer hat im Gegensatz zu dem Spieler keine Möglichkeit, aktiv in das Spielgeschehen einzugreifen. Das bedeutet dieser Benutzer kann nicht mit dem Server kommunizieren.}
 
-\akteur{A-KI-Client}{KI-Client}{Teilnehmer, der von einer künstlichen Intelligenz gesteuert wird}{Ein KI-Client kann als Mitspieler an einer Partie teilnehmen. Der KI-Client kann dabei das Spiel \textit{Deserts of Dune} aktiv gegen einen anderen Teilnehmer spielen. Dafür muss der KI-Client eine Verbindung beim Server aufbauen und kann dann mithilfe von Nachrichten mit dem Server kommunizieren. Dabei hat er gegenüber dem Spieler nur eingeschränkte Rechts, wie zum Beispiel, dass er keine Partie pausieren kann. Der KI-Client trifft seine Entscheidungen nach vorprogrammierten oder angelernten Regeln, die statisch oder dynamisch an das Spielgeschehen angepasst werden können. Damit versucht der KI-Client das menschliche Verhalten oder eine Spielstrategie zu simulieren.}
+\akteur{A-KI-Client}{KI-Client}{Teilnehmer, der von einer künstlichen Intelligenz gesteuert wird}{Ein KI-Client kann als Mitspieler an einer Partie teilnehmen. Der KI-Client kann dabei das Spiel \textsc{Deserts of Dune} aktiv gegen einen anderen Teilnehmer spielen. Dafür muss der KI-Client eine Verbindung beim Server aufbauen und kann dann mithilfe von Nachrichten mit dem Server kommunizieren. Dabei hat er gegenüber dem Spieler nur eingeschränkte Rechts, wie zum Beispiel, dass er keine Partie pausieren kann. Der KI-Client trifft seine Entscheidungen nach vorprogrammierten oder angelernten Regeln, die statisch oder dynamisch an das Spielgeschehen angepasst werden können. Damit versucht der KI-Client das menschliche Verhalten oder eine Spielstrategie zu simulieren.}
 
 \akteur{A-Teilnehmer}{Teilnehmer}{Spieler oder KI-Client}{Ein Teilnehmer ist eine aktive Person oder Software, die mit dem Server kommunizieren kann und dadurch aktiv in das Spielgeschehen eingreifen kann. Dafür muss der Teilnehmer eine Verbindung beim Server aufbauen und kann dann mithilfe von Nachrichten mit dem Server kommunizieren. Ein Teilnehmer kann entweder ein Spieler oder ein KI-Client sein.}
 
 \akteur{A-Editor}{Editor}{Grafische Benutzeroberfläche zur Erstellung von Konfigurationen}{Der Editor ist ein Teil des Benutzer-Clients und ist damit eine grafische Benutzeroberfläche. Der Editor soll dem Benutzer die Möglichkeit geben, Inhalt und Konfigurationen, wie zum Beispiel die Szenarios oder die Partiekonfiguration zu erstellen.}
 
-\akteur{A-Auftraggeber}{Auftraggeber}{Servicegruppe Information am Institut für Softwaretechnik und Programmiersprachen}{Der Auftraggeber ist die Person, die Erstellung des Produkts, das heißt die Umsetzung des Spiels \textit{Deserts of Dune}, beauftragt hat. Der Auftraggeber stellt in dem Lastenheft Anforderung an die Entwickler und entscheidet am Ende, ob das erstellte Produkt den Anforderungen genügt. Außerdem wird sie durch den Tutor vertreten.}
+\akteur{A-Auftraggeber}{Auftraggeber}{Servicegruppe Information am Institut für Softwaretechnik und Programmiersprachen}{Der Auftraggeber ist die Person, die Erstellung des Produkts, das heißt die Umsetzung des Spiels \textsc{Deserts of Dune}, beauftragt hat. Der Auftraggeber stellt in dem Lastenheft Anforderung an die Entwickler und entscheidet am Ende, ob das erstellte Produkt den Anforderungen genügt. Außerdem wird sie durch den Tutor vertreten.}
 
 \akteur{A-Tutor}{Vertreter des Auftraggebers}{Zugewiesener Tutor: Tim Wibiral}{Der Vertretet des Auftragsgebers, das heißt der für das Projekt zugewiesene Tutor vertritt den Auftraggeber. Das heißt, er überwacht den Entwicklungsprozess, übernimmt während der Implementierungsphase die Rolle eines \textit{Product Owners}. Zusätzlich veranstaltet der Tutor wöchentliche Treffen, die Tutorien oder \textit{Sprint Meetings} und steht für Rückfragen zur Verfügung oder gibt Feedback.}
 
@@ -1223,12 +1275,13 @@ Die folgenden Aktivitäts- und Sequenzdiagramme veranschaulichen die Abläufe de
 \end{center}
 
 \begin{center}
-\includegraphics[width=0.9\textwidth]{images/Teilnahme_als_Beobachter}
+\includegraphics[width=0.85\textwidth]{images/Teilnahme_als_Beobachter}
 \captionof{figure}{Sequenzdiagramm für Ablauf der Teilnahme eines Clients als Zuschauer}
 \end{center}
 
 \begin{center}
-\includegraphics[width=0.85\textwidth]{images/Teilnahme_als_Spieler2}
+\includegraphics[width=0.85\textwidth]{images/Teilnahme_als_Spieler2} \\ 
+...
 \end{center}
 
 \begin{center}
@@ -1301,11 +1354,9 @@ Dieser Abschnitt enthält alle funktionalen Systemanforderungen, die die grundle
 spezifizieren. \\ Dabei gilt für die Priorisierung, dass eine Anforderung eine Priorität von 1 (sehr gering, kann) bis 5 (essenziell wichtig, muss unbedingt) bekommen kann. 
 
 \subsubsection*{Komponenten und Architektur}
-\fa{Architektur}{Das Spiel \glqq{}Deserts of Dune\grqq{} ist eine verteilte Anwendung mit der Client-Server-Architektur.}{Damit hat man das Spiel in Instanzen aufteilen, die das Spiel bereit stellen und organisieren und Instanzen, die es spielen. Außerdem können somit zwei Spieler auf unterschiedlichen Systemen gegeneinander spielen}{\faref{FA-Spielkomponenten}}{5}{\rref{A-Auftraggeber}}{FA-Architektur}
+\fa{Architektur}{Das Spiel \textsc{Deserts of Dune} ist eine verteilte Anwendung mit der Client-Server-Architektur.}{Damit hat man das Spiel in Instanzen aufteilen, die das Spiel bereit stellen und organisieren und Instanzen, die es spielen. Außerdem können somit zwei Spieler auf unterschiedlichen Systemen gegeneinander spielen}{\faref{FA-Spielkomponenten}}{5}{\rref{A-Auftraggeber}}{FA-Architektur}
 
 \fa{Komponenten des Spiels}{Das gesamte System besteht aus vier Komponenten: Server, Benutzer-Client, KI-Client und Editor}{Die Spiellogik soll in diese vier Komponenten aufgeteilt werden als Vorgabe vom Auftraggeber}{\faref{FA-Kombinierbarkeit-Komponenten}, \faref{FA-Server}, \faref{FA-BC}, \faref{FA-KI}, \faref{FA-Editor}}{5}{\rref{A-Auftraggeber}}{FA-Spielkomponenten}
-
-\fa{Kombinierbarkeit von Komponenten}{Die Komponenten: Server, Benutzer-Client, KI-Client und Editor sollen beliebig über Teamgrenzen hinweg kombinierbar sein.}{Dies ist nötig, um in einer späteren Phase des Projektes Komponenten auszutauschen.}{\faref{FA-Server}, \faref{FA-BC}, \faref{FA-KI},  \faref{FA-Spielkomponenten}}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}}{FA-Kombinierbarkeit-Komponenten}
 
 \fa{Server}{Der Server hält die Anwendungslogik zur Verwaltung von Clients, Partien und zur Umsetzung der Spielregeln.}{Der Server soll die gesamte Partie managen und abwickeln, weil diese Aufgabe zentral erledigt werden soll.}{}{5}{\rref{A-Auftraggeber}, \rref{A-Benutzer}, \rref{A-Teilnehmer}}{FA-Server}
 
@@ -1391,20 +1442,20 @@ definiert sind. Sie haben einen \textit{Namen}, ein \textit{Haus}, welchem sie a
 
 \fa{Heilung von Health-Points}{Ein Charakter, welcher in seinem Zug keine Movement-Points ausgibt, bekommt am Ende des Zuges seine Health-Points um seine Heilungs-Health Points erhöht.}{ Es muss klar definiert sein, wann ein Charakter sich heilt.}{}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Heilung-Charakter}
 
-\fa{Charakter-Typen}{Der Charakter-Typ bestimmt die \textit{Health Points}, \textit{Heilungs-Health Points}, \textit{Movement Points}, \textit{Action Points}, \textit{Inventargröße} und den \textit{Angriffsschaden} des Charakters. Zudem ermöglicht der Charakter-Typ, dem Charakter eventuell spezielle Aktionenen ausführen zu können.}{Charaktere werden strategisch durch ihre Eigenschaften und deren Werte unterschieden. }{\faref{FA-Charaktere}, \faref{FA-Spezielle-Aktion}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}, \rref{A-Benutzer}}{FA-Charakter-Typen}
+\fa{Charakter-Typen}{Der Charakter-Typ bestimmt die \textit{Health Points}, \textit{Heilungs-Health Points}, \textit{Movement Points}, \textit{Action Points}, \textit{Inventargröße} und den \textit{Angriffsschaden} des Charakters. Zudem ermöglicht der Charakter-Typ, dem Charakter eventuell spezielle Aktionenen ausführen zu können.}{Charaktere werden strategisch durch ihre Eigenschaften und deren Werte unterschieden. }{\faref{FA-Charaktere}, \faref{FA-Spezielle-Aktion}, \faref{FA-Stärken-Schwächen-Charaktere}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}, \rref{A-Benutzer}}{FA-Charakter-Typen}
 
-\fa{Noble}{Noble ist ein hochwohlgeborenener Adliger. Dafür sind seine Eigenschaften nur durchschnittlich. Die genauen Werte seiner Eigenschaften sind in der Partiekonfiguration zu konfigurieren.}{Die Eigenschaften der Charakter-Typen werden in der Partiekonfiguration konfiguriert und zu einem späteren Zeitpunkt genauer festgelegt, um eine Einfluss-Balance zwischen den Charakter-Typen zu ermöglichen.}{\faref{FA-Charaktere}, \faref{FA-Charakter-Typen}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}, \rref{A-Benutzer}}{FA-Noble}
-
-
-\fa{Mentat}{Mentat ist ein Charakter-Typ, der sehr schlau ist, und deshalb besonders effizient darin, Aktionen auszuführen und Spice zu sammeln. Er hält aber im Kampf nicht besonders viel aus. Die genauen Werte der Eigenschaften sind in der Partiekonfiguration zu konfigurieren.}{Die Eigenschaften der Charakter-Typen werden in der Partiekonfiguration konfiguriert und zu einem späteren Zeitpunkt genauer festgelegt, um eine Einfluss-Balance zwischen den Charakter-Typen zu ermöglichen.}{\faref{FA-Charaktere}, \faref{FA-Charakter-Typen}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}, \rref{A-Benutzer}}{FA-Mentat}
+\fa{Charakter-Typ Noble}{Noble ist ein hochwohlgeborenener Adliger. Dafür sind seine Eigenschaften nur durchschnittlich. Die genauen Werte seiner Eigenschaften sind in der Partiekonfiguration zu konfigurieren.}{Die Eigenschaften der Charakter-Typen werden in der Partiekonfiguration konfiguriert und zu einem späteren Zeitpunkt genauer festgelegt, um eine Einfluss-Balance zwischen den Charakter-Typen zu ermöglichen.}{\faref{FA-Charaktere}, \faref{FA-Charakter-Typen}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}, \rref{A-Benutzer}}{FA-Noble}
 
 
-\fa{Bene Gesserit}{Bene Gesserit ist ein Charakter-Typ, der schnell und wendig ist und eine hohe Heilungsrate besitzt. Die genauen Werte der Eigenschaften sind in der Partie-Konfiguration zu konfigurieren.}{Die Eigenschaften der Charakter-Typen werden in der Partiekonfiguration konfiguriert und zu einem späteren Zeitpunkt genauer festgelegt, um eine Einfluss-Balance zwischen den Charakter-Typen zu ermöglichen.}{\faref{FA-Charaktere}, \faref{FA-Charakter-Typen}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}, \rref{A-Benutzer}}{FA-Bene-Gesserit}
+\fa{Charakter-Typ Mentat}{Mentat ist ein Charakter-Typ, der sehr schlau ist, und deshalb besonders effizient darin, Aktionen auszuführen und Spice zu sammeln. Er hält aber im Kampf nicht besonders viel aus. Die genauen Werte der Eigenschaften sind in der Partiekonfiguration zu konfigurieren.}{Die Eigenschaften der Charakter-Typen werden in der Partiekonfiguration konfiguriert und zu einem späteren Zeitpunkt genauer festgelegt, um eine Einfluss-Balance zwischen den Charakter-Typen zu ermöglichen.}{\faref{FA-Charaktere}, \faref{FA-Charakter-Typen}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}, \rref{A-Benutzer}}{FA-Mentat}
 
 
-\fa{Fighter}{Fighter ist ein Charakter-Typ, der im Kampf viel Schaden macht und viele Health-Points hat. Die genauen Werte der Eigenschaften sind in der Partiekonfiguration zu konfigurieren.}{Die Eigenschaften der Charakter-Typen werden in der Partiekonfiguration konfiguriert und zu einem späteren Zeitpunkt genauer festgelegt, um eine Einfluss-Balance zwischen den Charakter-Typen zu ermöglichen.}{\faref{FA-Charaktere}, \faref{FA-Charakter-Typen}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}, \rref{A-Benutzer}}{FA-Fighter}
+\fa{Charakter-Typ Bene Gesserit}{Bene Gesserit ist ein Charakter-Typ, der schnell und wendig ist und eine hohe Heilungsrate besitzt. Die genauen Werte der Eigenschaften sind in der Partie-Konfiguration zu konfigurieren.}{Die Eigenschaften der Charakter-Typen werden in der Partiekonfiguration konfiguriert und zu einem späteren Zeitpunkt genauer festgelegt, um eine Einfluss-Balance zwischen den Charakter-Typen zu ermöglichen.}{\faref{FA-Charaktere}, \faref{FA-Charakter-Typen}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}, \rref{A-Benutzer}}{FA-Bene-Gesserit}
 
-\fa{Stärken und Schwächen von Charakter-Typen}{Charakter-Typen haben unterschiedliche Stärken und Schwächen ähnlich dem Schere-Stein-Papier Prinzip.}{Kein Charakter-Typ soll alleine alles gut können, sie sollen sich gegenseitig ergänzen und effektiv gegeneinander sein.}{\faref{FA-Charaktere}, \faref{FA-Charakter-Typen}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}, \rref{A-Benutzer}}{FA-Stärken-Schwächen-Charaktere}
+
+\fa{Charakter-Typ Fighter}{Fighter ist ein Charakter-Typ, der im Kampf viel Schaden macht und viele Health-Points hat. Die genauen Werte der Eigenschaften sind in der Partiekonfiguration zu konfigurieren.}{Die Eigenschaften der Charakter-Typen werden in der Partiekonfiguration konfiguriert und zu einem späteren Zeitpunkt genauer festgelegt, um eine Einfluss-Balance zwischen den Charakter-Typen zu ermöglichen.}{\faref{FA-Charaktere}, \faref{FA-Charakter-Typen}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}, \rref{A-Benutzer}}{FA-Fighter}
+
+\fa{Stärken und Schwächen von Charakter-Typen}{Charakter-Typen haben unterschiedliche Stärken und Schwächen ähnlich dem Schere-Stein-Papier Prinzip.}{Kein Charakter-Typ soll alleine alles gut können, sie sollen sich gegenseitig ergänzen und effektiv gegeneinander sein.}{\faref{FA-Charaktere}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}, \rref{A-Benutzer}}{FA-Stärken-Schwächen-Charaktere}
 
 \subsubsection*{Bewegung}
 
@@ -1440,7 +1491,7 @@ für seinen Charakter-Typ festgelegt ist. Für einen Movement Point kann sich de
 \fa{Aktion: Family Atomics}{Die spezielle Aktion Family Atomics kann nur durch Nobel eingesetzt werden. Dies ist für jedes Great House bis zu drei mal möglich, da der Atomic vorrat jedes Hauses drei entspricht. Hierbei wird ein beliebiges Zielfeld gewählt Auf diesem Zielfeld und auf dem gesamten 3x3 Quadrat ums Zielfeld werden Gebirge zu Felsplateaus und Dünen zu Flachsand Städten passiert nichts, alle Charaktere werden besiegt, Sandwürmer und Spicekrümel verschwinden. Wird hierbei ein gegnerischer Charakter besiegt wird und der Gegner zuvor nicht die Greatkonvention verletzt hat wird die Greatkonvention verletzt.}{ Es muss klar definiert sein, wie die Aktion abläuft, welche Vorbedingungen gelten müssen und welche Auswirkungen sie hat.}{\faref{FA-Charaktere}, \faref{FA-Charakter-Typen}, \faref{FA-Spezielle-Aktion}, \faref{FA-Aktion-Spice-Aufsammeln}, \faref{FA-GreatConvention}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Aktion-FamiliyAtomics}
 
 
-\fa{Great Convention}{Die Great Convention besagt, dass wenn ein Great House Atomics gegen einen Charakter eines anderen Great House einsetzt und zuvor keiner gegen die Great Convention verstoßen hat, dass dieses Great House geächtet wird. Das gegnerische Great House erhällt dann von den anderen vier Great Houses zu Anfang der nächsten Runde jeweils einen zufälligen Charakter. Dieser wird auf ein zufälliges Feld auf der Karte platzier. Zudem darf das Great House, dass durch den Atomic Einsatz angegriffen wurde unbestraft auch Atomics auf das andere Great House einsetzen.}{Die Great Convention muss eindeutig definiert sein.}{\faref{FA-Aktion-FamiliyAtomics}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-GreatConvention}
+\fa{Great Convention}{Die Great Convention besagt, dass wenn ein Great House Atomics gegen einen Charakter eines anderen Great House einsetzt und zuvor keiner gegen die Great Convention verstoßen hat, dass dieses Great House geächtet wird. Das gegnerische, welches \textbf{nicht} geächtet wird, Great House erhält dann von den anderen vier Great Houses zu Anfang der nächsten Runde jeweils einen zufälligen Charakter. Dieser wird auf ein zufälliges Feld auf der Karte platziert. Zudem darf das Great House, dass durch den Atomic Einsatz angegriffen wurde unbestraft auch Atomics auf das andere Great House einsetzen.}{Die Great Convention muss eindeutig definiert sein.}{\faref{FA-Aktion-FamiliyAtomics}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-GreatConvention}
 
 \fa{Aktion: Spice Hoarding}{Die spezielle Aktion Spice Hoarding kann nur von einem Charakter mit dem Charakter-Typ Mentat eingesetzt werden. Hierbei werden alle Spicekrümel auf dem aktuellen Feld des Charakters und auf den Nachbarfeldern eingesammelt und in das Inventar des Charakters aufgenommen.}{Es muss klar definiert sein, wie die Aktion Spice Hoarding abläuft, welche Vorbedingungen gelten müssen und welche Auswirkungen sie hat.}{\faref{FA-Charaktere}, \faref{FA-Charakter-Typen}, \faref{FA-Spezielle-Aktion}, \faref{FA-Aktion-Spice-Aufsammeln}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Aktion-Spice-Hoarding}
 
@@ -1484,7 +1535,7 @@ lokale Störungen in den zellulären Automaten ein, und verhindert damit statisc
 
 \subsubsection*{Partievorbereitung}
 
-\fa{Partievorbereitung}{Bevor die Partie startet, wählen die Spieler eines der Great Houses für sich aus. Dies geschieht in der Great House Wahl.}{Es muss klar definiert sein, was in der Partie-Vorbereitung passiert. }{\faref{FA-Wahl-GreatHouses}, \faref{FA-GreatHouses}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Partievorbereitung}
+\fa{Partievorbereitung}{Wenn zwei Spieler in einer Partie sind und der Server alle Daten geladen hat, wird eine Partie vorbereitet. Das heißt, die Spieler wählen eines der Great Houses für sich aus. Dies geschieht in der Great House Wahl.}{Es muss klar definiert sein, was in der Partie-Vorbereitung passiert. }{\faref{FA-Wahl-GreatHouses}, \faref{FA-GreatHouses}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Partievorbereitung}
 
 \fa{Great House Wahl}{Der Server nimmt aus der Liste der sechs Great Houses zwei zufällige heraus, die dem Spieler angezeigt werden. Der Spieler wählt eines davon aus. Dies findet Nebenläufig für beide Spieler statt. Der Server muss den beiden Spielern jeweils eine Menge aus zwei Häusern zur Auswahl anbieten, diese Mengen müssen disjunkt sein.}{Es muss klar definiert sein, wie die Great House Wahl abläuft.}{\faref{FA-GreatHouses}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{FA-Wahl-GreatHouses}
 
@@ -1494,7 +1545,7 @@ lokale Störungen in den zellulären Automaten ein, und verhindert damit statisc
 
 \subsubsection*{Runden und Züge}
 
-\fa{Runden und Züge}{Deserts of Dune läuft in Runden ab, in denen Ereignisse passieren, und die einzelnen Charaktere nacheinander ihre Züge machen. Zu Beginn jeder Runde handelt der Server einige Ereignisse ab. Die Reihenfolge der Rundenphasen ist:
+\fa{Runden und Züge}{\textsc{Deserts of Dune} läuft in Runden ab, in denen Ereignisse passieren, und die einzelnen Charaktere nacheinander ihre Züge machen. Zu Beginn jeder Runde handelt der Server einige Ereignisse ab. Die Reihenfolge der Rundenphasen ist:
 1. Dünenwanderungs-Rundenphase
 2. Sandsturm-Rundenphase
 3. Sandwurm-Rundenphase
@@ -1621,7 +1672,7 @@ werden.}{Der Server solle alle Informationen in eine Logdatei schreiben, um den 
 
 \fa{Visualisierungsdauer}{Die Animation von bestimmten Aktionen oder Phasen darf nur eine in der Partiekonfiguration festgesetzte Zeit dauern.}{Wenn die Animationen zu lange dauern, dann kommt das Spiel dem Benutzer ruckelig vor und stört den Spielfluss. Außerdem sehen lange Animationen nicht schön aus und nerven den Benutzer.}{\faref{FA-Visualisierung-Spiel}, \faref{FA-Partiekonfiguration}}{5}{\rref{A-Benutzer}, \rref{A-Auftraggeber}}{FA-Visualisierungsdauer}
 
-\fa{Ermöglichung Spielinteraktion}{Der Benutzer soll über die graphische Benutzeroberfläche des Benutzer-Clients die Möglichkeit haben, mit dem Spiel zu interagieren. Das bedeutet, dass der Spieler über die Oberfläche Aktionen vornehmen kann, die der Client an den Server sendet. Dabei muss der Benutzer-Client gewährleisten, dass nur regelkonforme Eingaben getätigt werden können.}{Der Spieler muss irgendwie mit dem Spiel interagieren können und seine Züge dem Server mitteilen. Damit der Server nicht abstürzt dürfen nur valide Züge an ihn gesendet werden.}{\faref{FA-Visualisierung-Spiel}}{5}{\rref{A-Spieler}, \rref{A-Auftraggeber}}{FA-Spielinteraktion}
+\fa{Ermöglichung Spielinteraktion}{Der Spieler kann über die Oberfläche Aktionen vornehmen, die der Client an den Server sendet. Dabei muss der Benutzer-Client gewährleisten, dass nur regelkonforme Eingaben getätigt werden können.}{Der Spieler muss irgendwie mit dem Spiel interagieren können und seine Züge dem Server mitteilen. Damit der Server nicht abstürzt dürfen nur valide Züge an ihn gesendet werden.}{\faref{FA-Visualisierung-Spiel}}{5}{\rref{A-Spieler}, \rref{A-Auftraggeber}}{FA-Spielinteraktion}
 
 \fa{Vereinfachung Spielinteraktion}{Der Benutzer-Client soll die Möglichkeit haben, dem Benutzer mit Hilfe von Hotkeys die Interaktion zu erleichtern. Damit kann der Spieler bestimmte Aktionen auch über Tastenkombinationen ausführen.}{Hotkeys können dem Spieler die Bedienung des Spiels komfortabler gestalten.}{\faref{FA-Visualisierung-Spiel}, \faref{FA-Spielinteraktion}}{2}{\rref{A-Spieler}, \rref{A-Auftraggeber}}{FA-Vereinfachung-Spielinteraktion}
 
@@ -1631,7 +1682,7 @@ werden.}{Der Server solle alle Informationen in eine Logdatei schreiben, um den 
 
 \subsubsection*{KI-Client}
 
-\fa{Start des KI-Client}{Der KI-Client muss über die Kommandozeile mit Hilfe eines Docker-Containers gestartet werden können. Dafür werden ihm die von dem Standardisierungskomitee nötigen Argumente übergeben.}{Der KI-Client braucht keine graphische Oberfläche und der Start über die Kommandozeile als Docker-Container erleichtert den Build- und Startprozess}{\faref{FA-Verbindungsaufbau-KI}}{5}{\rref{A-Auftraggeber}}{FA-Start-KI}
+\fa{Start des KI-Client}{Der Start des KI-Client erfolgt über die Kommandozeile mit Hilfe eines Docker-Containers. Dafür werden ihm die von dem Standardisierungskomitee nötigen Argumente übergeben.}{Der KI-Client braucht keine graphische Oberfläche und der Start über die Kommandozeile als Docker-Container erleichtert den Build- und Startprozess}{\faref{FA-Verbindungsaufbau-KI}}{5}{\rref{A-Auftraggeber}}{FA-Start-KI}
 
 \fa{Verbindungsaufbau zum Server}{Mit den übergebenen Argumenten beim Start des KI-Clients, wie zum Beispiel der IP-Adresse und dem Port des Servers, baut der KI-Client eine Verbindung zum Server auf und teilt diesem mit, dass dieser Client eine KI ist und welchen Namen der KI-Client hat. Danach kann er einer Partie beitreten und nicht mehr mit dem Benutzer kommunizieren}{Um an einer Partie teilnehmen, muss sich auch ein KI-Client mit dem Server verbinden. Außerdem muss der Server wissen, dass es sich um eine KI handelt, da diese andere Regeln hat, als ein Spieler (zum Beispiel keine Möglichkeit der Pausierung}{\faref{FA-Pausierung-KI}, \faref{FA-Start-KI}}{5}{\rref{A-Server}, \rref{A-Auftraggeber}}{FA-Verbindungsaufbau-KI}
 
@@ -1694,7 +1745,7 @@ Diese müssen in dem Editor erzeugt und bearbeitet werden können.
 \section{Softwarespezifikation}
 In den folgenden Kapiteln wird für jede Komponente eine sinnvolle Schnittstellenart vorgestellt und im Falle einer graphischen Oberfläche die definierten Dialoge vorgestellt. Dafür werden den Dialogen die entsprechenden Anwendungsfälle und Komponenten zugeordnet und die Struktur der Dialoge, das heißt, wie die Dialoge miteinander zusammenhängen, in einem Dialogstrukturdiagramm dargestellt. Zudem ist für jeden Dialog eine graphische Skizze in Form eines \glqq{}Mockups\grqq{} zu finden, sowie eine textuelle Beschreibung, wie dieser Dialog benutzt werden kann. 
 \subsection{Systemschnittstellen}
-Das System bzw. Spiel \textsc{DESERTS OF DUNE} besteht hauptsächlich aus vier großen Komponenten (siehe \faref{FA-Spielkomponenten}). Im Folgenden wird für jede Komponente eine Schnittstellenart definiert: 
+Das System bzw. Spiel \textsc{Deserts of Dune} besteht hauptsächlich aus vier großen Komponenten (siehe \faref{FA-Spielkomponenten}). Im Folgenden wird für jede Komponente eine Schnittstellenart definiert: 
 
 \paragraph{Server}
 Der Server soll über eine Konsole bedient werden, das heißt als Schnittstelle 
@@ -1734,7 +1785,7 @@ Das für das Spiel zu viele Dialoge existieren wurden die Dialoge bzw. das Dialo
 	\hline
 	Replay & Replay abspielen & Dialog \\
 	Replay/Auswahl & Replay abspielen & Dialog \\
-	Help/Hilfe & kein konkreter Anwendungsfall; siehe \nfaref{QA-Bedienbarkeit} \\			Spielwahl & Teilnahme als Zuschauer / Mitspieler & Dialog \\
+	Hilfe & kein konkreter Anwendungsfall; siehe \nfaref{QA-Bedienbarkeit} \\			Spielwahl & Teilnahme als Zuschauer / Mitspieler & Dialog \\
 	Hauptmenü & Teilnahme als Zuschauer / Mitspieler & Dialog \\
 	Editor & Spiel konfigurieren und laden & Dialog \\
 	Spiel suchen & Teilnahme als Zuschauer / Mitspieler & Dialog \\
@@ -1887,9 +1938,6 @@ bestätigt der Spieler seine Auswahl. Wenn der Nutzer über ein definiertes Zeit
 Der Nutzer kehrt dann in die Lobby zurück.
 }
 
-<<<<<<< HEAD
-=======
-
 \includegraphics[width=\textwidth]{images/Spielfeld}
 \captionof{figure}{\textbf{Spielfeld}:\\
 Der Dialog \glqq{}Spielfeld\grqq zeigt das aktuelle Spielfeld und den aktuellen Spielzustand an. Dafür sieht man in der Mitte das Spielfeld und auf der linken und rechten Seite jeweils die Statistiken der Spieler, das heißt zum Beispiel wie viel Spice der Spieler hat oder in welcher Runde sie sich befinden. Das ist auch die Oberfläche, die ein Zuschauer sehen kann. Wenn der Server die Charakterzugphase abhandelt, dann ändert sich der Dialog für den Spieler und der \glqq{}Spielfeld\grqq{}-Dialog wird zum \glqq{}Charakterzug\grqq{}-Dialog.
@@ -1898,6 +1946,11 @@ Der Dialog \glqq{}Spielfeld\grqq zeigt das aktuelle Spielfeld und den aktuellen 
 \includegraphics[width=0.8\textwidth]{images/Charakterzug}
 \captionof{figure}{\textbf{Charakterzug}:\\
 Im \glqq{}Charakterzug\grqq{}-Dialog hat der Benutzer die Möglichkeit seine Charakterzüge durchzuführen. Dafür wird quasi ein Overlay erzeugt, das heißt der Dialog des Spielfeldes wird erweitert für den Spieler, der am Zug ist. \\ Dann sieht der Spieler unten in einer Leiste alle auf der Karte platzierten Charakter und kann diese mit einem Klick (Kasten zeigt aktuelle Auswahl) auswählen. Die Leiste ist wie eine horizontale Scrollbar. Wenn der Spieler einen Charakter ausgewählt hat, dann sieht er an der linken Seite Informationen zu dem Charakter und zu dieser Phase. Das heißt wie viele MP und AP der Spieler noch hat und dieser Charakter verbrauchen würde. Außerdem existieren in diesem Abschnitt Buttons für die verschiedenen Aktionen, die man mit dem Charakter machen kann. \\ Wenn der Spieler den Charakter bewegen will, dann muss er mit der Maus auf das Feld des Charakters klicken und den Charakter an die gewünschte Stelle ziehen. Damit wird die Bewegung ausgeführt. 
+}
+
+\includegraphics[width=0.8\textwidth]{images/Spielmenü}
+\captionof{figure}{\textbf{Spielmenü}:\\
+Den \glqq{}Spielmenü\grqq{}-Dialog erreicht der Benutzter über das drücken der \glqq{}ESC\grqq{}-Taste. Hier hat der Benutzer die Möglichkeit die Partie zu pausieren oder zu verlassen.Über das Zahnrad kommt der Benutzer zu den Einstellungen. Der Dialog kann über den \glqq{}X\grqq{}-Knopf oder erneutes drücken der \glqq{}ESC\grqq{}-Taste geschlossen werden.
 }
 
 \includegraphics[width=0.7\textwidth]{images/Partie wurde pausiert}
@@ -1915,7 +1968,6 @@ Im \glqq{}Pause\grqq{}-Dialog hat der Spieler dann wieder die Möglichkeit, die 
 Der Dialog \glqq{}Rundenstatistik\grqq{} stellt eine Art Hinweisfenster dar. In diesem Dialog wird dem Benutzer die aktuellen Ergebnisse der letztem Runde anzeigt, solange der Server die Runde beendet, die nächste vorbereitet und startet. Das heißt der Spieler sieht aktuelle Statistiken, wie in dem \glqq{}Sieg/Niederlage\grqq{}-Dialog.
 }
 
->>>>>>> origin/Meilensteine
 \includegraphics[width=\textwidth]{images/end(lose)Screen}
 \captionof{figure}{\textbf{end(lose)Screen}:\\
 Im Endbildschirm wird dem Spieler bei einer Niederlage das Label Niederlage und bei einem Sieg das Label Sieg angezeigt.
@@ -1929,10 +1981,7 @@ Im Endbildschirm wird dem Spieler bei einer Niederlage das Label Niederlage und 
 Zudem werden dem Spieler hier die Statistiken beider Spieler angezeigt.
 Durch Klicken der Taste Menü kommt der Spieler zurück in das Menü.
 }
-<<<<<<< HEAD
-=======
 \end{center}
->>>>>>> origin/Meilensteine
 
 \newpage
 
@@ -1989,7 +2038,7 @@ Es müssen folgende nicht-funktionalen Anforderungen an das gesamte System und d
 
 \nfa{Plattformen}{Die Komponenten \textit{Benutzer-Client} und \textit{Editor} müssen auf einer aktuellen Version von Microsoft Windows oder einer aktuellen Debian Linux-Distribution (zum Beispiel Ubuntu) lauffähig sein. Die Komponenten \textit{KI-Client} und \textit{Server} müssen inklusive ihrer Abhängigkeit als Docker-Container lauffähig sein.}{Der \textit{Benutzer-Client} und der \textit{Editor} soll auf mehreren Betriebssystemen lauffähig sein, um eine möglichst große Zielgruppe zu erreichen und keine Anforderung an den Benutzer zu stellen. \textit{KI-Client} und \textit{Server} sollen als Docker-Container lauffähig sein, weil der Benutzer nicht direkt damit interagiert und die Docker-Images ohne komplizierte lokale Build-Prozesse direkt gestartet werden können. Damit erreicht man eine Unabhängigkeit von der Plattform und kann somit die Komponenten einfacher zum Laufen bekommen.}{\nfaref{QA-Portierbarkeit}}{5}{\rref{A-Auftraggeber}}{QA-Plattform}
 
-\nfa{Portierbarkeit}{Es muss möglich sein, die Anwendung auf andere Betriebssysteme zu portieren. Vielleicht stellt sich nach der Entwicklung heraus, dass die Anwendung auch auf anderen Plattformen laufen soll, weil eine Gruppe von Benutzern nicht die angebotenen Betriebssysteme nicht nutzen will.}{Die Anwendung soll portierbar sein, weil sich nach der Entwicklung herausstellen könnte, dass die Benutzer ein anderes Betriebssystem bevorzugen und daher das Spiel auf dieser Plattform nutzen wollen.}{\nfaref{QA-Plattform}}{1}{\rref{A-Entwickler}, \rref{A-Teilnehmer}}{QA-Portierbarkeit}
+\nfa{Portierbarkeit}{Es muss möglich sein, die Anwendung auf andere Betriebssysteme zu portieren. Das bedeutet, dass innerhalb von 4 Arbeitswochen eines Teammitglieds, die Anwendung auf einem anderen Betriebssystem lauffähig sein sollte.}{Die Anwendung soll portierbar sein, weil sich nach der Entwicklung herausstellen könnte, dass die Benutzer ein anderes Betriebssystem bevorzugen und daher das Spiel auf dieser Plattform nutzen wollen.}{\nfaref{QA-Plattform}}{1}{\rref{A-Entwickler}, \rref{A-Teilnehmer}}{QA-Portierbarkeit}
 
 \nfa{einfache Installation}{Die Anwendung sollte mithilfe eines Skripts oder einem Programm installiert werden können. Dieses Skript oder Programm nimmt dem Benutzer die typischen Aufgaben beim Installationsprozess, wie zum Beispiel das Herunterladen und Installieren von Abhängigkeiten, ab.}{Der Benutzer möchte das Spiel spielen und nicht die Zeit damit verbringen, das Spiel zunächst zum Laufen zu bekommen. Ein aufwendiger Installationsprozess könnte den Benutzer frustrieren.}{\nfaref{QA-Plattform}}{1}{\rref{A-Teilnehmer}}{QA-Installation}
 
@@ -2007,9 +2056,15 @@ Es müssen folgende nicht-funktionalen Anforderungen an das gesamte System und d
 
 \nfa{Benutzerhandbuch}{Für die Anwendung soll ein Benutzerhandbuch bereitgestellt werden. Dieses Dokument wird auf Deutsch verfasst und soll dem Benutzer eine einfache Bedienung der Anwendung ermöglichen. In diesem Dokument sollen alle spiel-relevanten Informationen und Komponenten, sowie die Benutzerschnittstelle anhand von Beispielen erklärt werden.}{Ein Benutzerhandbuch kann die Bedienung einer Anwendung und den Einstieg in das Spiel erleichtern. Dies vermeidet Frust bei den Benutzern, weil sie die Anwendung nicht verstehen oder Probleme bei der Bedienung haben.}{\nfaref{QA-Bedienbarkeit}, \nfaref{QA-Sprache-Benutzerschnittstelle}}{5}{\rref{A-Auftraggeber}, \rref{A-Teilnehmer}}{QA-Benutzerhandbuch}
 
-\nfa{Dokumentation}{Der gesamte Entwicklungsprozess und auch das entstandene Produkt muss dokumentiert werden. Das bedeutet, dass Tests, Reviews und weitere Maßnahmen zur Qualitätssicherung dokumentiert werden müssen. Außerdem soll ein Projekttagebuch zum Erfassen der Tätigkeiten (zum Beispiel Implementierung oder Treffen) geführt werden und ein Entwicklerhandbuch angelegt werden. Dieses Handbuch soll die Architektur und die implementierten Funktionen beschreiben, sowie die verwendeten Technologien auflisten und begründen.}{Die Dokumentation ermöglicht nach und während der Entwicklung der Anwendung anderen Kunden, den Prozess zu beurteilen oder sich mit der Architektur und Umsetzung der Komponenten auseinanderzusetzen. Besonders auf der Messe, wenn man andere Komponenten einkauft, kann das die Entscheidung vereinfachen.}{\nfaref{QA-Testbarkeit}, \nfaref{QA-Dokumentationssprache}}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}}{QA-Dokumentation}
+\nfa{Dokumentation}{Der gesamte Entwicklungsprozess und auch das entstandene Produkt muss dokumentiert werden. Das bedeutet, dass Tests, Reviews und weitere Maßnahmen zur Qualitätssicherung dokumentiert werden müssen. Außerdem soll ein Projekttagebuch und ein Entwicklerhandbuch angelegt werden.}{Die Dokumentation ermöglicht nach und während der Entwicklung der Anwendung anderen Kunden, den Prozess zu beurteilen oder sich mit der Architektur und Umsetzung der Komponenten auseinanderzusetzen.}{\nfaref{QA-Testbarkeit}, \nfaref{QA-Dokumentationssprache}, \nfaref{QA-Projekttagebuch}, \nfaref{QA-Entwicklerhandbuch}}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}}{QA-Dokumentation}
+
+\nfa{Projekttagebuch}{Es soll ein Projekttagebuch zum Erfassen der Tätigkeiten (zum Beispiel Implementierung oder Treffen) geführt werden}{Mit dem Projekttagebuch kann man später die Entwicklungsprozess nachvollziehen und ermitteln, wie viel jeder gearbeitet hat.}{\nfaref{QA-Dokumentation}}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}}{QA-Projekttagebuch}
+
+\nfa{Entwicklerhandbuch}{Es soll ein Entwicklerhandbuch angelegt werden. Dieses Entwicklerhandbuch soll die Architektur und die implementierten Funktionen beschreiben, sowie die verwendeten Technologien auflisten und begründen.}{Das Entwicklerhandbuch anderen Entwicklern das die Qualität des System zu beurteilen. Besonders auf der Messe, wenn man andere Komponenten einkauft, kann das die Entscheidung vereinfachen.}{\nfaref{QA-Dokumentation}}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}}{QA-Entwicklerhandbuch}
 
 \nfa{Dokumentations-Sprache}{Alle im Rahmen des Projekts, das heißt der Entwicklung der Anwendung, anfallenden Dokumente, wie zum Beispiel das Benutzerhandbuch werden auf Deutsch verfasst.}{Die Anwendung wird vor allem von Personen genutzt, deren Muttersprache deutsch ist und damit würde die englische Sprache wenig Vorteile bieten, jedoch eventuell Schwierigkeiten bei der Verständlichkeit hervorrufen. }{\nfaref{QA-Dokumentation}}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}}{QA-Dokumentationssprache}
+
+\nfa{Kombinierbarkeit von Komponenten}{Die Komponenten: Server, Benutzer-Client, KI-Client und Editor sollen beliebig über Teamgrenzen hinweg kombinierbar sein.}{Dies ist nötig, um in einer späteren Phase des Projektes Komponenten auszutauschen.}{\faref{FA-Server}, \faref{FA-BC}, \faref{FA-KI},  \faref{FA-Spielkomponenten}}{5}{\rref{A-Auftraggeber}, \rref{A-Entwickler}}{FA-Kombinierbarkeit-Komponenten}
 
 \newpage
 
@@ -2021,7 +2076,7 @@ Das Programm ist für Systeme mit Windows als Betriebssystem gedacht. Die Anwend
 
 \subsection{Entwicklungsvorgaben}
 
-Das Softwaregrundprojekt wird von sechs Studenten geplant und implementiert. Der Entwicklungsprozess ist in Meilensteine unterteilt, welche die Projektphasen Analyse, Entwurf und Implementierung abdecken. Während des gesamten Prozesses steht das Team in Kontakt mit dem Vertreter des Auftraggebers (Tutor). Für die Implementierung wird die Entwicklungsumgebung -TODO- benutzt und zur Versionsverwaltung ein GitLab-Repository verwendet. Der Programmcode wird in englischer Sprache kommentiert und mit Javadoc dokumentiert. 
+Das Softwaregrundprojekt wird von sechs Studenten geplant und implementiert. Der Entwicklungsprozess ist in Meilensteine unterteilt, welche die Projektphasen Analyse, Entwurf und Implementierung abdecken. Während des gesamten Prozesses steht das Team in Kontakt mit dem Vertreter des Auftraggebers (Tutor). Für die Implementierung wird die Entwicklungsumgebung IntelliJ und UnityHub benutzt und zur Versionsverwaltung ein GitLab-Repository verwendet. Der Programmcode wird in englischer Sprache kommentiert und mit Javadoc dokumentiert.
 
 \subsection{Abnahmekriterien}
 
@@ -2029,5 +2084,63 @@ Kriterien für eine erfolgreiche Abnahme sind eine fristgerechte und korrekte Ab
 Des Weiteren ist eine regelmäßige Anwesenheit und Mitarbeit im Tutorium notwendig und auch eine aktive Mitarbeit im Team, die durch das Projekttagebuch dokumentiert wird. Dazu gehört eine eigene Programmiertätigkeit in ausreichendem Umfang.
 Voraussetzungen für eine erfolgreiche Abnahmesitzung zum Ende des Projekts sind die Vorlage einer lauffähigen Version der Software und die Umsetzung der Kernfunktionalität, also aller verbindlichen Anforderungen. Zudem ist eine gute Qualität der entwickelten Software mit einer sinnvollen Testabdeckung und nachgewiesen durch umfangreiche und dokumentierte Maßnahmen zur Qualitätssicherung erforderlich. Die Einhaltung des Scrum-Entwicklungsprozesses und die sinnvolle Verwendung des Team-Repository und Scrum-Board im GitLab sind ebenfalls erforderlich. Dazu gehört auch eine ordentliche Dokumentation der Software und des Projektverlaufs.
 Die Abnahme ist dann erfolgreich, wenn der Kunde mit dem endgültigen Produkt zufrieden ist.
+
+
+\newpage
+
+\flushleft
+
+\section{Architekturentwurf}
+
+\subsection{Komponentendiagramm}
+Das zu entwickelnde Spiel \textsc{Deserts of Dune} ist eine verteilte Anwendung und besteht aus vier großen Subsystemen (siehe \faref{FA-Spielkomponenten}). Diese Subsysteme sind die vier großen Komponenten (die auch ausgetauscht werden können), die wiederum aus einzelnen Teilsystemen bzw. Unterkomponenten bestehen. Die strukturelle Gliederung des gesamten Systems von dem Spiel ist in den folgenden Komponentendiagrammen visualisiert und begründet. 
+
+\vspace{0.7cm}
+
+\begin{center}
+\includegraphics[width=0.95\textwidth]{images/Komponentendiagramm-Gesamtübersicht}
+\captionof{figure}{Komponentendiagramm des Gesamtsystems. Dabei kann man die Gesamtstruktur erkennen, sowie die Gliederung des Benutzer-Clients in die graphische Anzeige und den Controller. Diese grobe Architektur wurde von den Auftraggebern festgelegt und im Benutzer-Client bietet sich eine Aufteilung in graphische Anzeige und Controller an, damit man das MVC-Pattern umsetzt, was bei der Testbarkeit und Entwicklung Vorteile bietet.}  
+
+\includegraphics[width=0.95\textwidth]{images/Komponentendiagramm-Netzwerk}
+\captionof{figure}{Komponentendiagramm des Moduls \textit{Netzwerk}. Da das Spiel eine verteilte Anwendung ist, müssen die einzelnen Systeme über ein Netzwerk kommunizieren und benötigen daher jeweils ein Modul, das die Schnittstelle zur Außenwelt darstellt und die ausgetauschten Daten in für die Komponenten entsprechend lesbare Nachrichten umwandelt.}  
+
+
+\includegraphics[width=0.95\textwidth]{images/Komponentendiagramm-Editor}
+\captionof{figure}{Komponentendiagramm des Editors. Dieses wurde jedoch nur angedeutet, da der Editor nicht von Team 08 entwickelt wird, sondern später eingekauft wird und somit nicht modelliert werden muss.}  
+
+\includegraphics[width=0.95\textwidth]{images/Komponentendiagramm-KI-Client}
+\captionof{figure}{Komponentendiagramm des KI-Clients. Der KI-Client beinhaltet vor allem eine Komponente, die die Züge vorschlägt, da dieser keine Visualisierung oder Eingaben benötigt, sondern nur das Spiel spielen muss.}  
+
+\includegraphics[width=0.95\textwidth]{images/Komponentendiagramm-GUI}
+\captionof{figure}{Komponentendiagramm der graphischen Anzeige bzw. der GUI. Dabei muss die GUI nicht nur das Spielfeld und alle sonstigen Informationen darstellen, sondern auch mit Nutzereingaben umgehen können, weswegen eine Komponente für die Darstellung (Aufteilung in 2D und 3D, da dies verschiedene Implementierungen benötigt) und eine für die Eingaben zuständig ist. Außerdem müssen die Eingaben verarbeitet werden das Spiel korrekt dargestellt, worum sich eine Spiellogik kümmert. \\ Diese Komponente ist dem Subsystem \textit{Benutzer-Client zugeordnet}}  
+
+\includegraphics[width=0.95\textwidth]{images/Komponentendiagramm-Server}
+\captionof{figure}{Komponentendiagramm des Servers. Der Server muss wie in den funktionalen Anforderungen (siehe \autoref{ssec:fas}) die Konfigurationen laden, die Clients verwalten und die Partie abwickeln. Da diese Aufgaben weitestgehend voneinander unabhängig ausgeführt werden können, sollte man diese in eigene gekapselte Komponenten auslagern. Bei der Partieabwicklung kann man sogar die Welt (= Model), und die Abhandlung der Runden (= Controller) voneinander trennen, was die Testbarkeit und Implementierung vereinfacht.}
+
+\end{center}
+
+\vspace{0.5cm}
+
+Im Folgenden ist die Zuordnung der funktionalen Anforderungen aus \autoref{ssec:fas} und den Komponenten zu erkennen. Dabei wird für jede Komponente des Systems (siehe Komponentendiagramme oben) aufgelistet, welche Anforderung sie abgedeckt: \\ 
+\begin{tabularx}{\linewidth}{l|X}
+	\textbf{Komponente} & \textbf{zugeordnete Anforderungen} \\
+	\hline
+	Gesamtarchitektur & \mfaref{FA-Architektur}, \mfaref{FA-Spielkomponenten}\\
+	Editor & \mfaref{FA-Editor}, \mfaref{FA-Spielbrett} - \mfaref{FA-Feldart-Gebirge}, \mfaref{FA-Konfiguration}, \mfaref{FA-LadenUndModifizieren}- \mfaref{FA-ZufälligeSzenariokonfiguration}\\
+	KI-Client & \mfaref{FA-KI}, \mfaref{FA-Start-KI}\\
+	KI-Komponente & \mfaref{FA-Pausierung-KI} - \mfaref{FA-Intelligenzstufen}\\
+	Netzwerk-Komponente & \mfaref{FA-Netzwerkprotokoll} - \mfaref{FA-Spielprotokoll}, \mfaref{FA-Server-Clientverbindung}, \mfaref{FA-Server-Erlaube-Zuschauer} - \mfaref{FA-Server-verspätete-Nachrichten}, \mfaref{FA-Server-Session-offen-halten}, \mfaref{FA-Verbindungsaufbau-BC}, \mfaref{FA-Verbindungsaufbau-KI}\\
+	Server & \mfaref{FA-Server}, \mfaref{FA-Docker-Server}, \mfaref{FA-Server-Protokollverletzung}, \mfaref{FA-FormatKonfiguration}\\
+	Konfigurations-Handler & \mfaref{FA-ServerlädtSzenario}, \mfaref{FA-Server-Partie-Konfiguration}\\
+	Client-Handler & \mfaref{FA-Spieleranzahl}, \mfaref{FA-Beobachtung}, \mfaref{FA-Server-Information-Spielzustand}, \mfaref{FA-Registrierung-Spieler}, \mfaref{FA-Registrierung-Zuschauer}, \mfaref{FA-Einbindung-KI}\\
+	Partie-Handler & \mfaref{FA-Abstand-Felder} - \mfaref{FA-gleichwertige-Alternativen}, \mfaref{FA-Server-Partiebeginn}, \mfaref{FA-Server-Partiepause}, \mfaref{FA-Server-Siegbedingung}, \mfaref{FA-ReplayLog}, \mfaref{FA-Pausierung-BC}\\
+	Benutzer-Client & \mfaref{FA-BC}, \mfaref{FA-Vereinfachung-Spielinteraktion}\\
+	Graphische Anzeige & \mfaref{FA-Replay}\\
+	GUI & \mfaref{FA-Visualisierung-Spiel}, \mfaref{FA-Spielinteraktion}\\
+	Spielfeld & \mfaref{FA-Sichtbarkeit-Spielfeld}, \mfaref{FA-Visualisierung-Spielgeschehen}, \mfaref{FA-Visualisierung-Aktion}, \mfaref{FA-Visualisierung-Phasen}, \mfaref{FA-Visualisierung-Spielausgang}\\
+	HUD & \mfaref{FA-Sichtbarkeit-Inventar}, \mfaref{FA-Visualisierung-Spielstatus}, \mfaref{FA-Visualisierungsdauer}\\
+\end{tabularx}
+
+\vspace{0.5cm}
 
 \end{document}
