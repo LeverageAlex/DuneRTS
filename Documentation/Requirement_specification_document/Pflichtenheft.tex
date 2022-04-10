@@ -2133,6 +2133,7 @@ Im Folgenden ist die Zuordnung der funktionalen Anforderungen aus \autoref{ssec:
 
 \subsection{Implementierungsentwurf}
 Im Folgenden ist der Implementierungsentwurf ausgeführt. Das heißt für jede in \autoref{ssec:Komponentendiagramm} angegebene Komponente und wird nun erläutert, wie diese Komponente implementiert werden soll. Damit wird die grobe Sicht auf das System, gegebenen durch die Komponentendiagramme und die Domänenmodelle verfeinert. \\ Dabei sind die Klassendiagramme auch entsprechend der Komponenten aufgeteilt. Zu den Klassendiagramme folgen gegebenenfalls noch Erklärungen zu den Klassen und den Methoden, insofern diese nicht selbsterklärend sind \footnote{Als selbsterklärend werden beispielsweise Aufzählungsklassen (gekennzeichnet mit \textit{<<enum>>}), Konstrukturen oder aussagekräftige Methoden angesehen}. Am Ende jeden Abschnitts findet sich die Zuordnung der Methoden zu den funktionalen Anforderungen aus \autoref{ssec:fas}, die sie implementieren und umsetzen. \\ 
+
 \subsubsection{KI-Client}
 \begin{center}
 \includegraphics[width=0.95\textwidth]{images/KI-Client-Klassendiagramm}
@@ -2166,5 +2167,31 @@ Diese Hilfs-Klasse repräsentiert eine Welt, in der Szenario und alle Charaktere
 \end{tabularx}
 
 \vspace{0.5cm}
+
+\subsubsection{Netzwerk-Modul}
+Im Folgenden sind die Klassendiagramme zu sehen, die das Netzwerk-Modul umfasst. Diese Klassen müssen allen Komponenten zugänglich sein, jedoch werden manche Klassen spezifisch von jeder Komponente erweitert oder genauer implementiert. \\ 
+
+\begin{center}
+\includegraphics[width=0.95\textwidth]{images/Netzwerk-Util-Klassendiagramm}
+\label{fig:Netzwerk-Util-Klassendiagramm}
+\captionof{figure}{Übersicht über die Hilfs-Klassen aus dem Netzwerk-Modul. Diese Paket beinhaltet vor allem Aufzählungsklassen, Parser sowie Klassen, die die Informationen von Netzwerk-Nachrichten kapseln. Diese Klassen müssen von allen Komponenten des Systems verwendet werden können.}
+
+\includegraphics[width=0.95\textwidth]{images/Netzwerk-Netzwerkcontroller-Klassendiagramm}
+\label{fig:Netzwerk-Netzwerkcontroller-Klassendiagramm}
+\captionof{figure}{Übersicht über die Klassen, die die Kommunikation der Subsysteme über das Netzwerk ermöglichen. Dabei sind vor allem die Controller entscheidend, die die Nachrichten verarbeiten. Diese Klassen müssen ebenso in allen Komponenten verwendet werden können, jedoch muss die \class{NetworkController} je nach Komponente unterschiedlich implementiert werden, da dies der übergeordnete Controller ist, der die Kommunikation leitet und die Komponenten zum Beispiel verschiedene Netzwerkendpunkte sind.}
+
+
+\includegraphics[width=0.95\textwidth]{images/Netzwerk-Messages-Klassendiagramm}
+\label{fig:Netzwerk-Messages-Klassendiagramm}
+
+\includegraphics[width=0.95\textwidth]{images/Netzwerk-Messages-Klassendiagramm 2}
+\label{fig:Netzwerk-Messages-Klassendiagramm}
+
+\includegraphics[width=0.95\textwidth]{images/Netzwerk-Messages-Klassendiagramm 3}
+\label{fig:Netzwerk-Messages-Klassendiagramm}
+\captionof{figure}{Übersicht über die Klassen, die die Nachrichten gemäß des Standardisierungsdokuments darstellen. Diese können gegebenenfalls nochmal angepasst werden, müssen aber auch von allen Komponenten verwendet werden.}
+
+\end{center}
+
 
 \end{document}
