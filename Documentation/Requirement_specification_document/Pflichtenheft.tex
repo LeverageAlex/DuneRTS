@@ -2176,33 +2176,92 @@ Im Folgenden sind die Klassendiagramme zu sehen, die das Netzwerk-Modul umfasst.
 \label{fig:Netzwerk-Util-Klassendiagramm}
 \captionof{figure}{Übersicht über die Hilfs-Klassen aus dem Netzwerk-Modul. Diese Paket beinhaltet vor allem Aufzählungsklassen, Parser sowie Klassen, die die Informationen von Netzwerk-Nachrichten kapseln. Diese Klassen müssen von allen Komponenten des Systems verwendet werden können.}
 
-\includegraphics[width=0.95\textwidth]{images/Netzwerk-Netzwerkcontroller-Klassendiagramm}
-\label{fig:Netzwerk-Netzwerkcontroller-Klassendiagramm}
-\captionof{figure}{Übersicht über die Klassen, die die Kommunikation der Subsysteme über das Netzwerk ermöglichen. Dabei sind vor allem die Controller entscheidend, die die Nachrichten verarbeiten. Diese Klassen müssen ebenso in allen Komponenten verwendet werden können, jedoch muss die \class{NetworkController} je nach Komponente unterschiedlich implementiert werden, da dies der übergeordnete Controller ist, der die Kommunikation leitet und die Komponenten zum Beispiel verschiedene Netzwerkendpunkte sind.}
-
-
 \includegraphics[width=0.95\textwidth]{images/Netzwerk-Messages-Klassendiagramm}
 \label{fig:Netzwerk-Messages-Klassendiagramm}
 
 \includegraphics[width=0.95\textwidth]{images/Netzwerk-Messages-Klassendiagramm 2}
-\label{fig:Netzwerk-Messages-Klassendiagramm}
+\label{fig:Netzwerk-Messages2-Klassendiagramm}
 
 \includegraphics[width=0.95\textwidth]{images/Netzwerk-Messages-Klassendiagramm 3}
-\label{fig:Netzwerk-Messages-Klassendiagramm}
+\label{fig:Netzwerk-Messages3-Klassendiagramm}
 \captionof{figure}{Übersicht über die Klassen, die die Nachrichten gemäß des Standardisierungsdokuments darstellen. Diese können gegebenenfalls nochmal angepasst werden, müssen aber auch von allen Komponenten verwendet werden.}
-
 \end{center}
 
+\includegraphics[width=0.95\textwidth]{images/Netzwerk-Netzwerkcontroller-Klassendiagramm}
+\label{fig:Netzwerk-Netzwerkcontroller-Klassendiagramm}
+\captionof{figure}{Übersicht über die Klassen, die die Kommunikation der Subsysteme über das Netzwerk ermöglichen. Dabei sind vor allem die Controller entscheidend, die die Nachrichten verarbeiten. Diese Klassen müssen ebenso in allen Komponenten verwendet werden können, jedoch muss die \class{NetworkController} je nach Komponente unterschiedlich implementiert werden, da dies der übergeordnete Controller ist, der die Kommunikation leitet und die Komponenten zum Beispiel verschiedene Netzwerkendpunkte sind.}
+
+\paragraph{MessageConverter}
+Der \textit{MessageConverter} ist eine statische Klasse, die dem umwandeln von Nachrichten und Strings dient. Dafür wird ein JSON-Parser verwendet, der die Nachrichten, die als Objekte vorliegen, in JSON-Strings umwandelt und umgekehrt. Dafür sind ist die \method{fromMessage} (wandelt ein Nachrichten-Objekt in den entsprechenden String um) und die \method{toMessage} (wandelt den JSON-String in das passende Nachrichten-Objekt um) verfügbar.
+
+\paragraph{CommandLineParser}
+Diese Klasse dient dem auswerten der Parameter, die in der Kommandozeile eingegeben werden können. Diese Klasse dient also dem Zweck, die Parameter die beim Start des Servers oder des KI-Client über die Kommandozeile übergeben werden, zu verarbeiten und die Befehle umzusetzen. Dafür gibt es einerseits die \method{printHelp}, die alle Parameter und ihre Bedeutung in der Konsole ausgibt und die \method{parseArgument}, die ein Parameter bekommt und die entsprechenden Befehle umsetzt. Das bedeutet, dass zum Beispiel bei dem Parameter, der dafür steht die Hilfe anzufordern, alle Befehle mit deren Erklärungen (durch die \method{printHelp}) auszugeben oder durch den entsprechenden Parameter der Port des Servers in \textit{ConnectionsHandler} gesetzt wird. 
+
+\paragraph{Response}
+Diese Hilfs-Klasse dient als Antwort für gesendete Nachrichten über das Netzwerk. Das heißt, wenn eine Nachricht empfangen wird und der entsprechende Controller diese verarbeitet, wird ein \textit{Response} zurückgegeben, der angibt ob die Verarbeitung erfolgreich war oder sonst den Fehler als String. 
+
+\paragraph{Position}
+Die \class{Position} ist eine Hilfs-Klasse, die eine x- und eine y-Koordinate speichert und somit eine Position auf dem Spielfeld repräsentieren kann. Diese Kapselung ist sinnvoll, weil in manchen Nachrichten Position versendet werden. Eine Position kann bewegt werden, wenn sich ein Charakter zum Beispiel bewegt, was durch die \method{move} umgesetzt wird. 
+
+\paragraph{CharacterStatistics}
+Diese Hilfs-Klasse speichert die Statistiken eines Characters, da diese ebenfalls über das Netzwerk versendet werden können. Dafür werden in dem Objekt die Statistiken in den entsprechenden Attributen gespeichert. Diese Klasse dient alleine dem Zweck, Informationen zu speichern. 
+
+\paragraph{MapField}
+Die Klasse \textit{MapField} repräsentiert ein einziges Teil aus dem Spielfeld. Diese Klasse beinhaltet keine Funktionalität, da sie nur die Informationen über ein Teil des Spielfeldes speichern muss (Position, Feldtyp, Spice und ob es in einem Sandsturm ist), da diese Klasse nur verwendet wird um Änderungen des Spielfeldes über das Netzwerk mitzuteilen. 
+
+\paragraph{Message}
+Die \class{Message} ist eine abstrakte Message, die sozusagen das Grundgerüst jeder Nachricht darstellt. Das heißt, dass jede Nachrichtem-Klasse von dieser Klasse erbt und somit eine Version und einen Typ hat (siehe Standardisierungsdokument). Der Typ von jeder Nachricht kann mit der \method{getMessageType} abgefragt werden, um die Nachricht zu klassifizieren. Die in \autoref{fig:Netzwerk-Messages-Klassendiagramm} aufgezeigten Nachrichten-Klasse erben direkt von dieser Klasse und haben somit keine weitere Gemeinsamkeiten. Alle aufgelisteten Nachrichten-Klassen implementieren eine Nachricht aus dem Standardisierungsdokument. 
+
+\paragraph{ClientServerMessage}
+Diese Klasse ist eine Erweiterung der \class{Message} und ist die Vorlage für weitere Klassen, weshalb sie auch abstrakt ist. Die von dieser Klasse erbenden Klassen halten weiter eine Client-ID, um bei der Kommunikation über das Netzwerk den Adressaten oder Sender eindeutig identifizieren zu können. Wieder implementieren alle erbenden Nachrichten-Klassen (siehe \autoref{fig:Netzwerk-Messages2-Klassendiagramm}) die entsprechenden Nachrichten aus dem Standardisierungsdokument. 
+
+\paragraph{TurnMessage}
+Diese Klasse ist nochmal eine Erweiterung der \class{ClientServerMessage} und ist eine abstrakte Vorlage für alle Nachrichten-Klassen, die auch noch eine Charakter-ID speichern müssen, weil sie eine Nachricht repräsentieren, die in Zusammenhang mit einem Charakter oder eine Spielentität stehen, die eindeutig identifiziert werden muss. Wieder implementieren alle erbenden Nachrichten-Klassen (siehe \autoref{fig:Netzwerk-Messages3-Klassendiagramm}) die entsprechenden Nachrichten aus dem Standardisierungsdokument.
+
+\paragraph{MessageFactory}
+Die statische Klasse \textit{MessageFactory} setzt das Factory-Pattern um und ermöglicht es, Nachrichten-Objekte zu erstellen. Dafür wird mithilfe der \method{createMessage} eine Nachricht erstellt, indem der gewünschte Typ angegeben wird und die Argumenten für die Nachricht in einem Array. Die Methode erstellt dann Objekt der entsprechenden Nachricht. 
+
+\paragraph{ConnectionHandler}
+Der \textit{ConnectionHandler} ist für die Umsetzung des Netzwerkendpunkts zuständig. Das heißt diese Klasse implementiert den WebSocket und sorgt für den Verbindungsaufbau und die Kommunikation über das Netzwerk. Dafür gibt es die Methoden \textit{onOpen}, \textit{onClose}, \textit{onMessage} und \textit{onError}, die implementieren, was beim Verbindungsaufbau und -abbau passiert sowie bei Fehlern oder dem Erhalt einer Nachricht. 
+
+\paragraph{MessageReceiver}
+Diese Klasse sorgt für die Verwaltung der eingehenden Nachrichten. Dafür gibt es eine Schlange, die alle eingehenden Nachrichten speichert, damit diese später weiterverarbeitet werden können. Mit der \method{receiveMessage} können dann Nachrichten \glqq empfangen\grqq{} werden und der Warteschlange hinzugefügt werden, die dann mit der \method{parseMessage} nacheinander ausgewertet werden. 
+
+
+\paragraph{MessageEmitter}
+Diese Klasse sorgt für die Verwaltung der ausgehenden Nachrichten. Dafür gibt es eine Schlange, die alle ausgehenden Nachrichten speichert, damit diese nacheinander geparsed und abgesendet werden können. Mit der \method{sendMessage} können die Nachrichten dann \glqq versendet\grqq{} werden, wobei diese vorher mit der \method{parseMessage} in das entsprechende UTF-8 JSON-Format gebracht werden müssen. 
+
+\paragraph{NetworkController}
+Der \textit{NetworkController} ist übergeordnete Verwaltungseinheit der Netzwerkkomponente. Er hält Implementierungen der Klassen \textit{ConnectionHandler}, \textit{MessageReceiver} und \textit{MessageEmitter}, sowie einen \textit{MessageController}. Damit kann der \textit{NetworkController} die eingehenden und ausgehenden Nachrichten, die Verbindung zu den anderen Netzwerk-Clients und die 
+Nachrichten an sich verwalten und auswerten. Mit der \method{handleSendingMessage} werden dann zu sendende Nachrichten verarbeitet und gesendet und mit der \method{handleReceivedMessage} eingehende Nachrichten verarbeitet. Diese Methoden sind die, die von der entsprechenden Komponenten zugänglich sind und verwendet werden, um über das Netzwerk zu kommunizieren. Die anderen Klassen und Methoden werden kann von diesem \textit{NetworkController} verwaltet. 
+
+\paragraph{MessageController}
+Die \class{MessageController} ist der Controller, der die Logik enthält, die beim Erhalt oder beim Senden einer Nachricht ausgeführt werden soll. Durch die Aufteilung in diesen Controller und die Nachrichten-Klassen (Model) wird das MVC-Pattern implementiert. Der \textit{MessageController} implementiert dann die Interfaces \textit{iReceivedMessageHandler} und \textit{iEmittedMessageHandler}, die alle Methoden enthalten, die die Controller für eingehende und zu sendende Nachrichten repräsentieren. \\ Der \textit{MessageController} wird von weiteren Controllern erweitert, um je nach Komponenten und Implementierung des Netzwerk-Moduls verschiedene Controller-Funktionalitäten umzusetzen. Jeder Controller muss jedoch Debug-Nachrichten versenden und handlen können, was durch die Methoden \textit{onDebugMessage} und \textit{doDebug} umgesetzt wird.
+\\ Generell sind die Methoden mit dem Namen \textit{on<Nachrichtenname>} dafür da, eingehende Nachrichten zu verarbeiten und die Logik zu implementieren, die bei Erhalt der entsprechenden Nachricht auszuführen ist. Die Methoden mit dem Namen \textit{do<Nachrichtenname>} beinhalten die Logik, die ausgeführt werden soll, wenn eine bestimmte Nachricht versendet werden soll. \\ Dabei gibt es weitere speziellere Controller, die den \textit{MessageController} erweitern. So verwendet der Server die \class{ServerMessageController}, welche alle Methoden beinhaltet, die notwendig sind um alle Nachrichten zu empfangen und zu versenden, die der Server laut dem Standardisierungsdokument verarbeiten muss. Die \class{ClientMessageController} umfasst alle Methoden, die jeder Client braucht, wobei diese einmal von der \class{SpectatorMessageController} erweitert wird (Klasse, die der Benutzer-Client des Zuschauers verwendet) und von der \class{PlayerMessageController}. Diese Klasse beinhaltet alle Methoden, die die Nachrichten verarbeiten, die die mitspielenden Clients versenden und empfangen müssen. Dabei gibt es weiterhin eine Unterteilung in die Klassen \textit{HumanPlayerMessageController} und \textit{AIPlayerMessageController}, die der Benutzer-Client für den Spieler und der KI-Client beinhalten. Diese Aufteilung besteht, da der menschliche Spieler mehr Nachrichten versenden kann (zum Beispiel Antrag auf Pausierung) als der KI-Client und somit auch einen erweiterten Controller benötigt, der diese zusätzliche Logik umsetzen kann. 
+
+\begin{tabularx}{\linewidth}{l|X}
+	\textbf{funktionale Anforderung} & \textbf{Methode(n), die diese umsetzt} \\ \hline
+	\mfaref{FA-Netzwerkprotokoll} & \textit{onOpen}, \textit{onClose}, \textit{onMessage}, \textit{onError} \\	
+	\mfaref{FA-Kodierung} & \textit{fromMessage}, \textit{toMessage} \\
+	\mfaref{FA-Nachrichtenformat} & \textit{fromMessage}, \textit{toMessage} \\ 
+	\mfaref{FA-Spielprotokoll} & \textit{alle Methoden der MessageController bzw. die der Interfaces} \\  
+	\mfaref{FA-Docker-Server} & \textit{parseArgument} \\ 
+	\mfaref{FA-Start-KI} & \textit{parseArgument} \\ 
+\end{tabularx}
+
+\vspace{2cm}
+
+
 Im Folgenden ist die Zuordnung der funktionalen Anforderungen aus Unterabschnitt 2.3 und den
-Klassendiagrammen zu erkennen. Dabei wird für jede Klasse und jedes Diagram aufgelistet, welche Anforderungen es abdeckt:
+Klassendiagrammen zu erkennen. Dabei wird für jede Klasse und jedes Diagramm aufgelistet, welche Anforderungen es abdeckt:
 \begin{tabularx}{\linewidth}{l|X}
 	\textbf{Klassendiagramm} & \textbf{zugeordnete Anforderungen} \\
 	\hline
-	Charaktere & \mfaref{FA-Sichtbarkeit-Spielfeld},  \mfaref{FA-Feldart-Düne},   \mfaref{FA-Heilung-Charakter},   \mfaref{FA-Lautheit-Charakter},   \mfaref{FA-Aktion-Angriff},  \mfaref{FA-Aktion-Spice-Aufsammeln},  \mfaref{FA-Aktion-Spice-Hoarding},   \mfaref{FA-Aktion-Voice},   \mfaref{FA-Spezielle-Aktion},   \mfaref{FA-Aktion-Kanly}, \faref{FA-Mentat},  \faref{FA-Normale-Aktion},  \faref{FA-Charaktere},  \faref{FA-Aktion-Angriff},  \faref{FA-Aktion-Spice-Aufsammeln} \\
+	Charaktere & \mfaref{FA-Sichtbarkeit-Spielfeld},  \mfaref{FA-Feldart-Düne},   \mfaref{FA-Heilung-Charakter},   \mfaref{FA-Lautheit-Charakter},   \mfaref{FA-Aktion-Angriff},  \mfaref{FA-Aktion-Spice-Aufsammeln},  \mfaref{FA-Aktion-Spice-Hoarding},   \mfaref{FA-Aktion-Voice},   \mfaref{FA-Spezielle-Aktion},   \mfaref{FA-Aktion-Kanly}, \mfaref{FA-Mentat},  \mfaref{FA-Normale-Aktion},  \faref{FA-Charaktere},  \mfaref{FA-Aktion-Angriff},  \mfaref{FA-Aktion-Spice-Aufsammeln} \\
 	Häuser & \mfaref{FA-GreatHouses}, \mfaref{FA-Haus-Corrino}, \mfaref{FA-Haus-Atreides}, \mfaref{FA-Haus-Harkonnen},  \mfaref{FA-Haus-Ordos}, \mfaref{FA-Haus-Richese}, \mfaref{FA-Haus-Vernius} \\
 	Szenario & \mfaref{FA-Spielbrett}, \mfaref{FA-Höhenniveau}, \mfaref{FA-Feld},  \mfaref{FA-Feldarten}, \mfaref{FA-Betretbarkeit}, \mfaref{FA-Feldart-Stadt FA-Feldart-Flachsand}, \mfaref{FA-Feldart-Düne}, \mfaref{FA-Feldart-Felsplateau}, \mfaref{FA-Feldart-Gebirge}, \mfaref{FA-Abstand-Felder}, \mfaref{FA-Sichtbarkeit-Inventar}, \mfaref{FA-Sichtbarkeit-Spielfeld} \\
 	Charakterzug-Rundphase & \mfaref{FA-Charaktere}, \mfaref{FA-Runden und Züge}, \mfaref{FA-Charakterzug-Rundenphase},  \mfaref{FA-Charakterzug},  \mfaref{FA-Bewegung-Charakter}, \mfaref{FA-Bewegungsrichtung-Charakter},  \mfaref{FA-Drängeln-Charakter}, \mfaref{FA-Spicelieferung-Charakter},  \mfaref{FA-Aktionen}, \mfaref{FA-Normale-Aktion}, \mfaref{FA-Aktion-Angriff}, \mfaref{FA-Aktion-Spice-Aufsammeln}, \mfaref{FA-Aktion-Spice-Übergeben}, \mfaref{FA-Spezielle-Aktion}, \mfaref{FA-Aktion-Kanly}, \mfaref{FA-Aktion-FamiliyAtomics}, \mfaref{FA-Aktion-Spice-Hoarding}, \mfaref{FA-Aktion-Sword-Spin}, \mfaref{FA-Aktion-Voice}  \\
-	Runde (ohne FA's von #charakterzug) & \mfaref{FA-Aktion-Spice-Blow}, \mfaref{FA-Dünenwanderung}, \mfaref{FA-Phase-Dünenwanderung}, \mfaref{FA-Zellulärer-Automat}, \mfaref{FA-Sandsturm}, \mfaref{FA-Phase-Sandsturm}, \mfaref{FA-Sandwurm}, \mfaref{FA-Phase-Sandwurm}, \mfaref{FA-Phase-Klon} \\
+	Runde (ohne FA's von Charakterzug) & \mfaref{FA-Aktion-Spice-Blow}, \mfaref{FA-Dünenwanderung}, \mfaref{FA-Phase-Dünenwanderung}, \mfaref{FA-Zellulärer-Automat}, \mfaref{FA-Sandsturm}, \mfaref{FA-Phase-Sandsturm}, \mfaref{FA-Sandwurm}, \mfaref{FA-Phase-Sandwurm}, \mfaref{FA-Phase-Klon} \\
 \end{tabularx}
 
 \vspace{0.5cm}
