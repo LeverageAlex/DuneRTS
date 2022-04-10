@@ -39,6 +39,9 @@
 }
 \makeatother    
     
+\newcommand{\class}[1]{\textit{#1}-Klasse}
+\newcommand{\method}[1]{\textit{#1}-Methode}    
+    
 \newcounter{fa}
 \newcounter{nfa}
 
@@ -2077,6 +2080,7 @@ Die Abnahme ist dann erfolgreich, wenn der Kunde mit dem endgültigen Produkt zu
 \section{Architekturentwurf}
 
 \subsection{Komponentendiagramm}
+\label{ssec:Komponentendiagramm}
 Das zu entwickelnde Spiel \textsc{Deserts of Dune} ist eine verteilte Anwendung und besteht aus vier großen Subsystemen (siehe \faref{FA-Spielkomponenten}). Diese Subsysteme sind die vier großen Komponenten (die auch ausgetauscht werden können), die wiederum aus einzelnen Teilsystemen bzw. Unterkomponenten bestehen. Die strukturelle Gliederung des gesamten Systems von dem Spiel ist in den folgenden Komponentendiagrammen visualisiert und begründet. 
 
 \vspace{0.7cm}
@@ -2123,6 +2127,42 @@ Im Folgenden ist die Zuordnung der funktionalen Anforderungen aus \autoref{ssec:
 	GUI & \mfaref{FA-Visualisierung-Spiel}, \mfaref{FA-Spielinteraktion}\\
 	Spielfeld & \mfaref{FA-Sichtbarkeit-Spielfeld}, \mfaref{FA-Visualisierung-Spielgeschehen}, \mfaref{FA-Visualisierung-Aktion}, \mfaref{FA-Visualisierung-Phasen}, \mfaref{FA-Visualisierung-Spielausgang}\\
 	HUD & \mfaref{FA-Sichtbarkeit-Inventar}, \mfaref{FA-Visualisierung-Spielstatus}, \mfaref{FA-Visualisierungsdauer}\\
+\end{tabularx}
+
+\vspace{0.5cm}
+
+\subsection{Implementierungsentwurf}
+Im Folgenden ist der Implementierungsentwurf ausgeführt. Das heißt für jede in \autoref{ssec:Komponentendiagramm} angegebene Komponente und wird nun erläutert, wie diese Komponente implementiert werden soll. Damit wird die grobe Sicht auf das System, gegebenen durch die Komponentendiagramme und die Domänenmodelle verfeinert. \\ Dabei sind die Klassendiagramme auch entsprechend der Komponenten aufgeteilt. Zu den Klassendiagramme folgen gegebenenfalls noch Erklärungen zu den Klassen und den Methoden, insofern diese nicht selbsterklärend sind \footnote{Als selbsterklärend werden beispielsweise Aufzählungsklassen (gekennzeichnet mit \textit{<<enum>>}), Konstrukturen oder aussagekräftige Methoden angesehen}. Am Ende jeden Abschnitts findet sich die Zuordnung der Methoden zu den funktionalen Anforderungen aus \autoref{ssec:fas}, die sie implementieren und umsetzen. \\ 
+\subsubsection{KI-Client}
+\begin{center}
+\includegraphics[width=0.95\textwidth]{images/KI-Client-Klassendiagramm}
+\label{fig:KI-Client-Klassendiagramm}
+\captionof{figure}{Übersicht über die Klassen, die der KI-Client voraussichtlich beinhalten wird. Da zu dem aktuellen Zeitpunkt die genaue Logik bzw. Strategie, die der KI-Client verwenden wird um zu spielen, noch nicht endgültig festgelegt wurde, sind diese Klassen möglichst generisch gehalten. Zudem verwendet der KI-Client für die Simulation des Spiels und Validierung der Züge die \textit{shared logic}}
+\end{center}
+\paragraph{Main}
+Da der KI-Client eine eigenständige Komponente von \textsc{Deserts of Dune} sein wird, muss diese Komponente auch gestartet werden und dafür einen Einstiegspunkt haben. Dafür bietet sich eine \class{Main} an. Mithilfe der \method{main} kann der der KI-Client dann gestartet werden, wobei der Start in der Konsole stattfindet und entsprechende Parameter als Argumente übergeben werden. Um den Client dann zu starten, wird die \method{startAiClient} aufgerufen, die entweder mit dem entsprechend implementieren Netzwerkcontroller (\class{NetworkController} aus Netzwerk-Paket) oder einem schnellen Interface (\class{FastServerInterface}) eine Verbindung zu dem Server aufbaut.
+\paragraph{FastServerInterface}
+Diese Klasse realisiert eine schnelle Verbindung zum Server. Normalerweise kommuniziert der KI-Client über das Netzwerk mit dem Server. Da diese Kommunikation über die WebSockets aber langsam ist und man beim Training des KI-Clients viele Spiele in kurzer Zeit spielen will, muss der KI-Client auch eine direkte Verbindung zum Server haben. Mithilfe der \method{connectToServer} und \method{disconnectFromServer} kann der KI-Client direkt eine Instanz vom Server erstellen bzw. zerstören, sich mit dem Server verbinden oder trennen und dann schneller mit dem Server kommunizieren. Diese findet dann mithilfe der \method{sendMessage} und \method{receiveMessage} statt, welche die Funktionalität von den Methoden aus dem Netzwerkmodul nachahmen. 
+\paragraph{GameSimulator}
+Diese Klasse spielt oder simuliert eine Partie, in der der KI-Client gegen einen anderen Client spielt. Dafür kann das Spiel mit der \method{playGame} gespielt werden, wie es ein menschlicher Spieler in dem Benutzer-Client ebenso macht. Dafür wird mithilfe der \method{findBestMove} der beste Zug ermittelt. Die Implementierung und das Verhalten der Methode ist noch nicht festgelegt. Generell wird jedoch in dieser Methode mit der \method{simulateGame} das Spiel vor simuliert (das heißt alle erlaubten Züge gespielt und und am Ende wieder rückgängig gemacht) und die möglichen Stellungen bewertet. Dafür muss die \method{doEvaluate} aus dem Interface \textit{Evaluation} implementiert werden. Dann wird anhand der Bewertung der beste Zug ausgewählt und dem Server mitgeteilt. Am Ende der Partie kann diese noch gespeichert werden, was ein Replay ermöglicht (durch \method{saveGame} realisiert). Dafür wird jede Nachricht in einem String gespeichert und dieser in eine Textdatei gespeichert. 
+\paragraph{GameDB}
+Die \class{GameDB} repräsentiert eine Art Datenbank für die gespielten und gespeicherten Spiele. Da diese Datenbank nur einmal benötigt wird, implementiert diese Klasse das Singleton-Pattern durch die \method{getInstance}. Mithilfe der \method{getGames} kann man dann später die Partie wieder anfordern und gegebenenfalls nochmal wiedergeben oder für das Training einsetzen. 
+\paragraph{Game}
+Diese Klasse repräsentiert eine gespielte Partie, indem dort der Verweis auf die entsprechende Textdatei mit dem Nachrichtenverlauf der Partie gespeichert ist. Diese Datei kann mithilfe der \method{readReplayFile} gelesen werden. Diese Methode liest dann diese Datei wieder aus und speichert die Nachrichten wieder in einem String. Mit der \method{replayGame} kann dieser String dann verwendet werden, um die Nachrichten darin Stück für Stück zu analysieren und an den Server zu senden. Damit kann das Spiel nochmal abgespielt werden
+\paragraph{World}
+Diese Hilfs-Klasse repräsentiert eine Welt, in der Szenario und alle Charaktere gespeichert sind. Diese dient der Simulation der nächsten Züge aus der \class{GameSimulator}. Denn mit der \method{changeWorld} kann ein Zug simuliert werden, indem diese fiktive Welt entsprechend den Spielregeln verändert wird,  ohne dabei das richtige Spielfeld vom Server zu verändern. Mit der \method{getAvailableMoves} können alle nach den Spielregeln erlaubten Züge angefragt werden, um einen Spielbaum zu erstellen. Dafür wird jeder mögliche Zug generiert und überprüft, ob dieser erlaubt ist.
+
+\begin{tabularx}{\linewidth}{l|X}
+	\textbf{funktionale Anforderung} & \textbf{Methode(n), die diese umsetzt} \\ \hline
+	\mfaref{FA-KI} & \textit{playGame}, \textit{simulateGame}, \textit{findBestMove}, \textit{doEvaluate} \\ 
+	\mfaref{FA-Replay} & \textit{saveGame}, \textit{readReplayFile}, \textit{replayGame} \\ 
+	\mfaref{FA-Start-KI} & \textit{main}, \textit{startAIClient} (\textit{connectToServer}) \\ 
+	\mfaref{FA-Verbindungsaufbau-KI} & \textit{startAIClient} (\textit{connectToServer}) \\
+	\mfaref{FA-Pausierung-KI} & \textit{playGame} \\
+	\mfaref{FA-Zugwahl-KI} & \textit{playGame}, \textit{simulateGame}, \textit{findBestMove}, \textit{doEvaluate} \\ 
+	\mfaref{FA-Zugdauer-KI} & \textit{findBestMove} \\ 
+	\mfaref{FA-Intelligenzstufen} & \textit{Difficulty-enum}, \textit{findBestMove}, \textit{doEvaluate} \\
+	\mfaref{FA-Einbindung-KI} & \textit{main} \\
 \end{tabularx}
 
 \vspace{0.5cm}
