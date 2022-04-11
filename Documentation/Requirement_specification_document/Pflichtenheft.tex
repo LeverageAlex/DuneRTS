@@ -2253,17 +2253,88 @@ Die \class{MessageController} ist der Controller, der die Logik enthält, die be
 
 
 Im Folgenden ist die Zuordnung der funktionalen Anforderungen aus Unterabschnitt 2.3 und den
-Klassendiagrammen zu erkennen. Dabei wird für jede Klasse und jedes Diagramm aufgelistet, welche Anforderungen es abdeckt:
+Klassendiagrammen zu erkennen. Dabei wird für die wichtigen Klassen und jedes Diagramms aufgelistet, welche Anforderungen es abdeckt:
 \begin{tabularx}{\linewidth}{l|X}
-	\textbf{Klassendiagramm} & \textbf{zugeordnete Anforderungen} \\
+	\textbf{Klassendiagramm Charaktere und Häuser} & \textbf{zugeordnete Anforderungen} \\
 	\hline
 	Charaktere & \mfaref{FA-Sichtbarkeit-Spielfeld},  \mfaref{FA-Feldart-Düne},   \mfaref{FA-Heilung-Charakter},   \mfaref{FA-Lautheit-Charakter},   \mfaref{FA-Aktion-Angriff},  \mfaref{FA-Aktion-Spice-Aufsammeln},  \mfaref{FA-Aktion-Spice-Hoarding},   \mfaref{FA-Aktion-Voice},   \mfaref{FA-Spezielle-Aktion},   \mfaref{FA-Aktion-Kanly}, \mfaref{FA-Mentat},  \mfaref{FA-Normale-Aktion},  \faref{FA-Charaktere},  \mfaref{FA-Aktion-Angriff},  \mfaref{FA-Aktion-Spice-Aufsammeln} \\
 	Häuser & \mfaref{FA-GreatHouses}, \mfaref{FA-Haus-Corrino}, \mfaref{FA-Haus-Atreides}, \mfaref{FA-Haus-Harkonnen},  \mfaref{FA-Haus-Ordos}, \mfaref{FA-Haus-Richese}, \mfaref{FA-Haus-Vernius} \\
-	Szenario & \mfaref{FA-Spielbrett}, \mfaref{FA-Höhenniveau}, \mfaref{FA-Feld},  \mfaref{FA-Feldarten}, \mfaref{FA-Betretbarkeit}, \mfaref{FA-Feldart-Stadt FA-Feldart-Flachsand}, \mfaref{FA-Feldart-Düne}, \mfaref{FA-Feldart-Felsplateau}, \mfaref{FA-Feldart-Gebirge}, \mfaref{FA-Abstand-Felder}, \mfaref{FA-Sichtbarkeit-Inventar}, \mfaref{FA-Sichtbarkeit-Spielfeld} \\
-	Charakterzug-Rundphase & \mfaref{FA-Charaktere}, \mfaref{FA-Runden und Züge}, \mfaref{FA-Charakterzug-Rundenphase},  \mfaref{FA-Charakterzug},  \mfaref{FA-Bewegung-Charakter}, \mfaref{FA-Bewegungsrichtung-Charakter},  \mfaref{FA-Drängeln-Charakter}, \mfaref{FA-Spicelieferung-Charakter},  \mfaref{FA-Aktionen}, \mfaref{FA-Normale-Aktion}, \mfaref{FA-Aktion-Angriff}, \mfaref{FA-Aktion-Spice-Aufsammeln}, \mfaref{FA-Aktion-Spice-Übergeben}, \mfaref{FA-Spezielle-Aktion}, \mfaref{FA-Aktion-Kanly}, \mfaref{FA-Aktion-FamiliyAtomics}, \mfaref{FA-Aktion-Spice-Hoarding}, \mfaref{FA-Aktion-Sword-Spin}, \mfaref{FA-Aktion-Voice}  \\
+\end{tabularx}
+\vspace{0.5cm}
+
+
+\begin{tabularx}{\linewidth}{l|X}
+	\textbf{Klassendiagramm Szenario und Felder} & \textbf{zugeordnete Anforderungen} \\
+	\hline
+	Feld & \mfaref{FA-Höhenniveau}, \mfaref{FA-Feld}, \mfaref{FA-Feldarten}, \mfaref{FA-Betretbarkeit}, \mfaref{FA-Feldart-Stadt}, \mfaref{FA-Feldart-Flachsand}, \mfaref{FA-Feldart-Düne}, \mfaref{FA-Feldart-Felsplateau}, \mfaref{FA-Feldart-Gebirge},
+	Szenario & \mfaref{FA-Spielbrett}, \mfaref{FA-Abstand-Felder}, \mfaref{FA-Sichtbarkeit-Inventar}, \mfaref{FA-Sichtbarkeit-Spielfeld} \\
+\end{tabularx}
+\vspace{0.5cm}
+
+
+\begin{tabularx}{\linewidth}{l|X}
+	\textbf{Klassendiagramm Charakterzug-Rundphase} & \textbf{zugeordnete Anforderungen} \\
+	\hline
+	Charakterzug-Rundphase & \mfaref{FA-Charaktere}, \mfaref{FA-Runden und Züge}, \mfaref{FA-Charakterzug-Rundenphase},  \mfaref{FA-Charakterzug}, \mfaref{FA-Charakterzug} \\
+	CharakterZug & \mfaref{FA-Charakterzug}, \mfaref{FA-Aktionen}, Bewegungsschritt \\
+	Bewegungsschritt & \mfaref{FA-Charakterzug}, \mfaref{FA-Bewegungsrichtung-Charakter},  \mfaref{FA-Drängeln-Charakter}, \mfaref{FA-Bewegung-Charakter} \\
+	Aktion & \mfaref{FA-Aktionen}, \mfaref{FA-Spezielle-Aktion}, \mfaref{FA-Normale-Aktion} \\
+	SpezielleAktion & \mfaref{FA-Spezielle-Aktion}, \mfaref{FA-Aktion-Kanly}, \mfaref{FA-Aktion-FamiliyAtomics}, \mfaref{FA-Aktion-Spice-Hoarding}, \mfaref{FA-Aktion-Voice}, \mfaref{FA-Aktion-Sword-Spin}, \mfaref{swordspin}, \mfaref{voice}, \mfaref{kanly}, \mfaref{familyatomics}, \mfaref{spicehoarding} \\
+	NormaleAktion & \mfaref{FA-Normale-Aktion}, \mfaref{FA-Aktion-Angriff}, \mfaref{FA-Aktion-Spice-Aufsammeln}, \mfaref{FA-Aktion-Spice-Übergeben} \\
+\end{tabularx}
+\vspace{0.5cm}
+
+\begin{tabularx}{\linewidth}{l|X}
+	\textbf{Klassendiagramm Runde} & \textbf{zugeordnete Anforderungen} \\
+	\hline
 	Runde (ohne FA's von Charakterzug) & \mfaref{FA-Aktion-Spice-Blow}, \mfaref{FA-Dünenwanderung}, \mfaref{FA-Phase-Dünenwanderung}, \mfaref{FA-Zellulärer-Automat}, \mfaref{FA-Sandsturm}, \mfaref{FA-Phase-Sandsturm}, \mfaref{FA-Sandwurm}, \mfaref{FA-Phase-Sandwurm}, \mfaref{FA-Phase-Klon} \\
 \end{tabularx}
-
 \vspace{0.5cm}
+
+\begin{tabularx}{\linewidth}{l|X}
+	\textbf{Klassendiagramm network} & \textbf{zugeordnete Anforderungen} \\
+	\hline
+	MessageConverter & \mfaref{FA-Netzwerkprotokoll}, \mfaref{FA-Kodierung}, \mfaref{FA-Spielprotokoll} \\
+	ConnectionHandler &  \mfaref{FA-Server-Clientverbindung}, \mfaref{FA-Server-Verbindungstrennung}, \mfaref{FA-Server-Session-offen-halten}, \mfaref{FA-Server-Protokollverletzung}, \mfaref{FA-Verbindungsaufbau-BC}, \mfaref{QA-Toleranz} \\
+	MessageEmitter & \mfaref{FA-Server-Erlaube-Zuschauer}, \mfaref{FA-ReplayLog}, \mfaref{FA-Server-Information-Spielzustand} \\
+	MessageReceiver & \mfaref{FA-Server-ClientInput} \\
+	ClientMessageController & \mfaref{FA-Server-ClientInput} \\
+	HumanMessageController & \mfaref{FA-Registrierung-Spieler},  \\
+	SpectatorMessageController & \mfaref{FA-Registrierung-Zuschauer}, \mfaref{FA-Beobachtung} \\
+	AIMessageController & \mfaref{FA-Verbindungsaufbau-KI}, \mfaref{FA-Zugdauer-KI} \\
+\end{tabularx}
+\vspace{0.5cm}
+
+
+\begin{tabularx}{\linewidth}{l|X}
+	\textbf{Klassendiagramm AI} & \textbf{zugeordnete Anforderungen} \\
+	\hline
+	Main & \mfaref{FA-Verbindungsaufbau-KI}, \mfaref{FA-Intelligenzstufen}, \mfaref{FA-Start-KI}  \\
+	Difficulty & \mfaref{FA-Intelligenzstufen} \\
+	FastServerInterface &  \mfaref{FA-Server-ClientInput}, \mfaref{FA-Server-Information-Spielzustand} {FA-Verbindungsaufbau-KI} \\
+	GameSimulator & \mfaref{FA-Zugwahl-KI}, \mfaref{FA-FormatKonfiguration} \\
+	World & \mfaref{FA-Spielbrett}, \mfaref{FA-Charaktere} \\
+	Game & \mfaref{FA-ReplayLog}, \mfaref{FA-Replay} \\
+\end{tabularx}
+\vspace{0.5cm}
+
+\begin{tabularx}{\linewidth}{l|X}
+	\textbf{{Klassendiagramm UserClient} & \textbf{zugeordnete Anforderungen} \\
+	\hline
+	MenuScene & \mfaref{FA-Registrierung-Spieler}, \mfaref{FA-Registrierung-Zuschauer}, \mfaref{FA-Verbindungsaufbau-BC} \\
+	GameScene & \mfaref{FA-Visualisierung-Spielstatus}, \mfaref{FA-Visualisierung-Spielgeschehen}, \mfaref{FA-Visualisierung-Spiel}, \mfaref{FA-Visualisierung-Phasen}, \mfaref{FA-Visualisierung-Aktion}, \mfaref{FA-Visualisierung-Phasen}, \mfaref{FA-Visualisierung-Spielausgang}, \mfaref{FA-Visualisierungsdauer}, \mfaref{FA-Spielinteraktion}, \mfaref{FA-Vereinfachung-Spielinteraktion}, \mfaref{FA-Pausierung-BC}, \mfaref{FA-Replay} \\
+\end{tabularx}
+\vspace{0.5cm}
+
+\begin{tabularx}{\linewidth}{l|X}
+	\textbf{{Klassendiagramm Configuration} & \textbf{zugeordnete Anforderungen} \\
+	\hline
+	ConfigurationParser & \mfaref{FA-Server-Partie-Konfiguration}, \mfaref{FA-ServerlädtSzenario}, \mfaref{FA-LadenUndModifizieren} \\
+	Configuration & \mfaref{FA-ZufälligeSzenariokonfiguration}, \mfaref{FA-Szenariokonfiguration}, \mfaref{FA-Partiekonfiguration} \\
+	PartyConfiguration & \mfaref{FA-FormatKonfiguration}, \mfaref{FA-Parameter-Partiekonfiguration}, \mfaref{FA-Partiekonfiguration} \\
+	ScenarioConfiguration & \mfaref{FA-FormatKonfiguration}, \mfaref{FA-Szenariokonfiguration}, \mfaref{FA-Parameter-Szenariokonfiguration} \\
+\end{tabularx}
+\vspace{0.5cm}
+
 
 \end{document}
