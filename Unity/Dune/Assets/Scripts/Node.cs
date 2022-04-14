@@ -13,7 +13,7 @@ public class Node : MonoBehaviour
         high, low
     }
 
-    public Color startColor = Color.white;
+    private Color startColor;
     public Color hoverColor = Color.red;
 
 
@@ -27,6 +27,7 @@ public class Node : MonoBehaviour
     void Start()
     {
         rend = GetComponent<Renderer>();
+        startColor = rend.material.color;
     }
 
     // Update is called once per frame
