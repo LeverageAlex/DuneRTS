@@ -16,9 +16,6 @@ public class Node : MonoBehaviour
     private Color startColor;
     public Color hoverColor = Color.red;
 
-
-
-
     bool accessible;
 
 
