@@ -6,10 +6,13 @@ using static PartyConfiguration;
 public class Character : MonoBehaviour
 {
     public string charName;
+    public float walkSpeed = 3f;
+
+
+    private int characterId;
     //TODO
     //Wird nur während des erstellen von noch nicht selbstgenerierten Leveln benötigt (da so im UnityEditor gewählt werden kann).
     //Sollte später durch einfach durch eine direkte Referenz ersetzt
-    public string charType = "Noble";
     //Es fehlt die Zuordnung zum Haus
 
     private int HP;  //Health Points
@@ -19,7 +22,8 @@ public class Character : MonoBehaviour
     private int AD;  //Attack-Damage
     private int spiceInv;
 
-    private bool noisy;
+    private bool isLoud;
+    private bool isSwallowed;
 
 
 
@@ -32,12 +36,13 @@ public class Character : MonoBehaviour
     void Start()
     {
         //SampleCode only
-        CharacterBaseValue type = getTypeByString(charType);
+        CharacterBaseValue type = getTypeByString(gameObject.name);
         initCharacter(type);
-        Debug.Log("HP " + HP + ", AP " + AP);
+        //Debug.Log("HP " + HP + ", AP " + AP);
+        //Debug.Log("Object name: " + gameObject.name);
     }
 
-  
+
     public void initCharacter(CharacterBaseValue characterBaseValue)
     {
         HP = characterBaseValue.HP;
@@ -46,6 +51,9 @@ public class Character : MonoBehaviour
         AD = characterBaseValue.AD;
         spiceInv = characterBaseValue.spiceInv;
         healingHP = characterBaseValue.HealHP;
+
+        isLoud = false;
+        isSwallowed = false;
     }
 
 
@@ -56,7 +64,7 @@ public class Character : MonoBehaviour
         {
             case "Noble":
                 return PartyConfiguration.Noble;
-            case "BenneGesserit":
+            case "BeneGesserit":
                 return PartyConfiguration.BeneGesserit;
             case "Mentat":
                 return PartyConfiguration.Mentat;
@@ -65,6 +73,34 @@ public class Character : MonoBehaviour
             default:
                 Debug.Log("Error in Character-Script. String did not Match");
                 return null;
+        }
+    }
+
+
+    public void updateCharStats(int HP, int HealHP, int MP, int AP, int AD, int spiceInv, bool isLoud, bool isSwallowed)
+    {
+        this.HP = HP;
+        this.healingHP=HealHP;
+        this.MP = MP;
+        this.AP = AP;
+        this.AD = AD;
+        this.spiceInv = spiceInv;
+        this.isLoud = isLoud;
+        this.isSwallowed = isSwallowed;
+
+        Debug.Log("Updated " + gameObject.name + "s stats.");
+
+    }
+
+
+    public void moveToPoint(Transform target)
+    {
+        Vector3 dir = target.position - transform.position;
+        transform.Translate(dir.normalized * walkSpeed * Time.deltaTime, Space.World);
+
+        if (Vector3.Distance(transform.position, target.position) <= 0.2f)
+        {
+            //E. g. go To next Point
         }
     }
 
