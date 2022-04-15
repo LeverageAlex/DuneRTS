@@ -25,10 +25,13 @@ public class Character : MonoBehaviour
     private bool isLoud;
     private bool isSwallowed;
 
+    public bool move;
+// public Transform t;
 
 
 
-    
+
+
 
 
 
@@ -40,6 +43,13 @@ public class Character : MonoBehaviour
         initCharacter(type);
         //Debug.Log("HP " + HP + ", AP " + AP);
         //Debug.Log("Object name: " + gameObject.name);
+    }
+
+    private void Update()
+    {
+        if (!move) return;
+
+// moveToPoint(t);
     }
 
 

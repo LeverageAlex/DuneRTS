@@ -6308,7 +6308,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1192810091}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.153044, y: 6.074188, z: 3.820199}
+  m_LocalPosition: {x: 22.36, y: 1.6, z: 3.820199}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -9828,6 +9828,14 @@ PrefabInstance:
     - target: {fileID: 248485424704963574, guid: 87352ed578074554f87332f551b8dce6, type: 3}
       propertyPath: m_Name
       value: Fighter
+      objectReference: {fileID: 0}
+    - target: {fileID: 248485424704963575, guid: 87352ed578074554f87332f551b8dce6, type: 3}
+      propertyPath: t
+      value: 
+      objectReference: {fileID: 1192810093}
+    - target: {fileID: 248485424704963575, guid: 87352ed578074554f87332f551b8dce6, type: 3}
+      propertyPath: move
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 248485424704963579, guid: 87352ed578074554f87332f551b8dce6, type: 3}
       propertyPath: m_RootOrder
