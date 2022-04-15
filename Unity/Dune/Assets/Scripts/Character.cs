@@ -5,7 +5,7 @@ using static PartyConfiguration;
 
 public class Character : MonoBehaviour
 {
-    public string name;
+    public string charName;
     //TODO
     //Wird nur während des erstellen von noch nicht selbstgenerierten Leveln benötigt (da so im UnityEditor gewählt werden kann).
     //Sollte später durch einfach durch eine direkte Referenz ersetzt
@@ -32,8 +32,8 @@ public class Character : MonoBehaviour
     void Start()
     {
         //SampleCode only
-
-        initCharacter(PartyConfiguration.Noble);
+        CharacterBaseValue type = getTypeByString(charType);
+        initCharacter(type);
         Debug.Log("HP " + HP + ", AP " + AP);
     }
 
@@ -48,13 +48,14 @@ public class Character : MonoBehaviour
         healingHP = characterBaseValue.HealHP;
     }
 
+
+    //To be deleted
     CharacterBaseValue getTypeByString(string charType)
     {
         switch(charType)
         {
             case "Noble":
                 return PartyConfiguration.Noble;
-                break;
             case "BenneGesserit":
                 return PartyConfiguration.BeneGesserit;
             case "Mentat":
