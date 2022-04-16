@@ -38,13 +38,16 @@ public class Character : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        GameManager gameManager = GameManager.instance;
         //SampleCode only
         CharacterBaseValue type = getTypeByString(gameObject.name);
         initCharacter(type);
 
 
         //Update Nodes references on start (only needed because of editor)
-        GameManager.getNodeFromPos((int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z)).placeObjectOnNode(gameObject);
+        //gameManager.getNodeFromPos((int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z)).placeObjectOnNode(gameObject);
+        gameManager.placeObjectOnNode(gameManager.getNodeFromPos((int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z)).gameObject, (int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z));
         //Debug.Log("HP " + HP + ", AP " + AP);
         //Debug.Log("Object name: " + gameObject.name);
     }

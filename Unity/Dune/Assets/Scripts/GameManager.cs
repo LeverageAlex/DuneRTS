@@ -4,51 +4,92 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+
+    public static GameManager instance;
+
     private static int _gridSizeX = 11;
     private static int _gridSizeZ = 11;
 
-    public static Node[] field;
+    public GameObject[] enemiesOnBoard;
 
-    //Getters
+
 
 
     public Node[] nodes;
+
+
     // Start is called before the first frame update
     void Awake()
     {
-        field = nodes;
+        if (instance != null)
+        {
+            Debug.LogError("More than one GameManger in scene!");
+            return;
+        }
+        instance = this;
+        enemiesOnBoard = new GameObject[nodes.Length];
+        
     }
 
   
-    public static Node getNodeRightFrom(Node node)
+    public Node getNodeRightFrom(Node node)
     {
-        return getNodeFromPos((int)(node.transform.position.x) + 1, (int)(node.transform.position.z));
+        return getNodeFromPos((node.X) + 1, (node.Z));
     }
 
-    public static Node getNodeLeftFrom(Node node)
+    public Node getNodeLeftFrom(Node node)
     {
-        return getNodeFromPos((int) (node.transform.position.x)-1, (int)(node.transform.position.z));
+        return getNodeFromPos( (node.X)-1, (node.Z));
     }
 
-    public static Node getNodeUpFrom(Node node)
+    public Node getNodeUpFrom(Node node)
     {
-        return getNodeFromPos((int)(node.transform.position.x), (int)Mathf.Round(node.transform.position.z)+1);
+        return getNodeFromPos((node.X), (node.Z)+1);
     }
 
-    public static Node getNodeDownFrom(Node node)
+    public Node getNodeDownFrom(Node node)
     {
-        return getNodeFromPos((int)(node.transform.position.x), (int)(node.transform.position.z) - 1);
+        return getNodeFromPos((node.X), (node.Z) - 1);
     }
 
-
-    public static Node getNodeFromPos(int x, int z)
+    //Getters
+    public Node getNodeFromPos(int x, int z)
     {
-        if(z + GridSizeZ * x < 0 || z + GridSizeZ * x >= field.Length) { return null; }
-        return field[z + GridSizeZ * x];
+        if(z + GridSizeZ * x < 0 || z + GridSizeZ * x >= nodes.Length) { return null; }
+        return nodes[z + GridSizeZ * x];
     }
 
+    public bool placeObjectOnNode(GameObject obj, int x, int z)
+    {
+        if(z + GridSizeZ * x < 0 || z + GridSizeZ * x >= nodes.Length) {
+            return false;
+        }
+
+        enemiesOnBoard[z + GridSizeZ * x] = obj;
+        return true;
+
+    }
+
+    public bool placeObjectOnNode(GameObject obj, Node node)
+    {
+        if (node.Z + GridSizeZ * node.X < 0 || node.Z + GridSizeZ * node.X >= nodes.Length)
+        {
+            return false;
+        }
+
+        enemiesOnBoard[node.Z + GridSizeZ * node.X] = obj;
+        return true;
+
+    }
+
+    public GameObject getObjectOnNode(Node node)
+    {
+        return enemiesOnBoard[node.Z + node.X * GridSizeZ];
+    }
+
+    
 
 
-    public static int GridSizeX { get { return _gridSizeX; } }
-    public static int GridSizeZ { get { return _gridSizeZ; } }
+    public int GridSizeX { get { return _gridSizeX; } }
+    public int GridSizeZ { get { return _gridSizeZ; } }
 }

@@ -7,7 +7,13 @@ public class Node : MonoBehaviour
 {
 
     private Renderer rend;
-    private GameObject objectOnNode;
+    private int _X, _Z;
+
+    public int X { get { return _X; } }
+    public int Z { get { return _Z; } }
+
+    
+
 
     public enum HeightLevel
     {
@@ -26,6 +32,10 @@ public class Node : MonoBehaviour
     {
         rend = GetComponent<Renderer>();
         startColor = rend.material.color;
+
+        _X = (int)transform.position.x;
+        _Z = (int)transform.position.z;
+
     }
 
     // Update is called once per frame
@@ -52,31 +62,8 @@ public class Node : MonoBehaviour
         rend.material.color = startColor;
     }
 
-    public GameObject getObjectOnNode()
-    {
-        return objectOnNode;
-    }
 
 
-    public bool placeObjectOnNode(GameObject obj)
-    {
-        if (isPlaceAble())
-        {
-            objectOnNode = obj;
-            return true;
-        }
 
-        else return false;
-    }
-
-
-    /*
- * Might be calling the "Shared-Logic", if such thing will exist
- */
-    public bool isPlaceAble()
-    {
-    if (objectOnNode == null) return true;
-    return false;
-    }
 
 }
