@@ -7,6 +7,7 @@ public class Node : MonoBehaviour
 {
 
     private Renderer rend;
+    private GameObject objectOnNode;
 
     public enum HeightLevel
     {
@@ -49,6 +50,33 @@ public class Node : MonoBehaviour
     void OnMouseExit()
     {
         rend.material.color = startColor;
+    }
+
+    public GameObject getObjectOnNode()
+    {
+        return objectOnNode;
+    }
+
+
+    public bool placeObjectOnNode(GameObject obj)
+    {
+        if (isPlaceAble())
+        {
+            objectOnNode = obj;
+            return true;
+        }
+
+        else return false;
+    }
+
+
+    /*
+ * Might be calling the "Shared-Logic", if such thing will exist
+ */
+    public bool isPlaceAble()
+    {
+    if (objectOnNode == null) return true;
+    return false;
     }
 
 }
