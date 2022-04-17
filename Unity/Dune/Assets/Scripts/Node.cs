@@ -74,14 +74,14 @@ public class Node : MonoBehaviour
      */
     public void SelectNode()
     {
-        if (!MovementManager.charSelected && GameManager.instance.getObjectOnNode(this) != null)  //To ADD: Check whether Character is allowed to move
+        if (!MovementManager.charSelected && NodeManager.instance.getObjectOnNode(this) != null)  //To ADD: Check whether Character is allowed to move
         {
             //Select Character
-            Character localChar = (Character)GameManager.instance.getObjectOnNode(this).GetComponent(typeof(Character));
+            Character localChar = (Character)NodeManager.instance.getObjectOnNode(this).GetComponent(typeof(Character));
             MovementManager.instance.selectCharacter(localChar);
            // Debug.Log("Node set Character!");
         }
-        else if(MovementManager.charSelected && GameManager.instance.getObjectOnNode(this) == null)
+        else if(MovementManager.charSelected && NodeManager.instance.getObjectOnNode(this) == null)
         {
             //create Path to walk for Character
             //Change MaterialColor to green

@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class NodeManager : MonoBehaviour
 {
 
-    public static GameManager instance;
+    public static NodeManager instance;
 
     private static int _gridSizeX = 11;
     private static int _gridSizeZ = 11;

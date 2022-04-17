@@ -48,7 +48,7 @@ public class Character : MonoBehaviour
     {
         _x = (int)transform.position.x;
         _z = (int)transform.position.z;
-        GameManager gameManager = GameManager.instance;
+        NodeManager nodeManager = NodeManager.instance;
         //SampleCode only
         CharacterBaseValue type = GetTypeByString(gameObject.name);
         initCharacter(type);
@@ -56,7 +56,7 @@ public class Character : MonoBehaviour
 
         //Update Nodes references on start (only needed because of editor)
         //gameManager.getNodeFromPos((int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z)).placeObjectOnNode(gameObject);
-        gameManager.placeObjectOnNode(gameObject, (int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z));
+        nodeManager.placeObjectOnNode(gameObject, (int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z));
         //Debug.Log("HP " + HP + ", AP " + AP);
         //Debug.Log("Object name: " + gameObject.name);
     }
@@ -133,14 +133,14 @@ public class Character : MonoBehaviour
         if (Vector3.Distance(transform.position, walkPath.First.Value) <= 0.2f)
         {
             walkPath.RemoveFirst();
-            GameManager.instance.placeObjectOnNode(gameObject, (int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z));
+            NodeManager.instance.placeObjectOnNode(gameObject, (int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z));
 
-            GameManager.instance.RemoveObjectOnNode(x, z);
+            NodeManager.instance.RemoveObjectOnNode(x, z);
 
             _x = (int)transform.position.x;
             _z = (int)transform.position.z;
 
-            GameManager.instance.placeObjectOnNode(gameObject, x, z);
+            NodeManager.instance.placeObjectOnNode(gameObject, x, z);
 
             //E. g. go To next Point
             return walkPath.Count > 0;
