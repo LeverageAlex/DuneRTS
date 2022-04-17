@@ -80,8 +80,8 @@ public class MovementManager : MonoBehaviour
         {
             updateCharacters.AddLast(selectedChar);
             selectedChar.SetWalkPath(selCharPath);
-            Debug.Log(selCharPath.ToString());
             selCharPath = new LinkedList<Vector3>();
+            selectedChar = null;
         }
     }
 

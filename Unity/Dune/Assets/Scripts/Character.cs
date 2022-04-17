@@ -22,6 +22,13 @@ public class Character : MonoBehaviour
     private int AD;  //Attack-Damage
     private int spiceInv;
 
+    private int _x;
+    private int _z;
+
+    public int x { get { return _x; } }
+    public int z { get { return _z; } }
+
+
     private bool isLoud;
     private bool isSwallowed;
 
@@ -39,7 +46,8 @@ public class Character : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        _x = (int)transform.position.x;
+        _z = (int)transform.position.z;
         GameManager gameManager = GameManager.instance;
         //SampleCode only
         CharacterBaseValue type = GetTypeByString(gameObject.name);
@@ -125,6 +133,15 @@ public class Character : MonoBehaviour
         if (Vector3.Distance(transform.position, walkPath.First.Value) <= 0.2f)
         {
             walkPath.RemoveFirst();
+            GameManager.instance.placeObjectOnNode(gameObject, (int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z));
+
+            GameManager.instance.RemoveObjectOnNode(x, z);
+
+            _x = (int)transform.position.x;
+            _z = (int)transform.position.z;
+
+            GameManager.instance.placeObjectOnNode(gameObject, x, z);
+
             //E. g. go To next Point
             return walkPath.Count > 0;
         }

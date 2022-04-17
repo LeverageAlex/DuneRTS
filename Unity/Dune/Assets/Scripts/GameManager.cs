@@ -70,6 +70,18 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public bool RemoveObjectOnNode(int x, int z)
+    {
+        if (z + GridSizeZ * x < 0 || z + GridSizeZ * x >= nodes.Length)
+        {
+            return false;
+        }
+
+        enemiesOnBoard[z + GridSizeZ * x] = null;
+        return true;
+
+    }
+
     public bool placeObjectOnNode(GameObject obj, Node node)
     {
         if (node.Z + GridSizeZ * node.X < 0 || node.Z + GridSizeZ * node.X >= nodes.Length)
