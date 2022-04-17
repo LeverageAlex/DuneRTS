@@ -26,6 +26,7 @@ public class Character : MonoBehaviour
     private bool isSwallowed;
 
     public bool move;
+    private LinkedList<Vector3> walkPath;
 // public Transform t;
 
 
@@ -41,20 +42,23 @@ public class Character : MonoBehaviour
 
         GameManager gameManager = GameManager.instance;
         //SampleCode only
-        CharacterBaseValue type = getTypeByString(gameObject.name);
+        CharacterBaseValue type = GetTypeByString(gameObject.name);
         initCharacter(type);
 
 
         //Update Nodes references on start (only needed because of editor)
         //gameManager.getNodeFromPos((int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z)).placeObjectOnNode(gameObject);
-        gameManager.placeObjectOnNode(gameManager.getNodeFromPos((int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z)).gameObject, (int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z));
+        gameManager.placeObjectOnNode(gameObject, (int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z));
         //Debug.Log("HP " + HP + ", AP " + AP);
         //Debug.Log("Object name: " + gameObject.name);
     }
 
-    private void Update()
+    /*
+     * Will be called within movementManager.
+     */
+    public bool calledUpdate()
     {
-        if (!move) return;
+        return MoveToPoint();
 
 // moveToPoint(t);
     }
@@ -75,7 +79,7 @@ public class Character : MonoBehaviour
 
 
     //To be deleted
-    CharacterBaseValue getTypeByString(string charType)
+    CharacterBaseValue GetTypeByString(string charType)
     {
         switch(charType)
         {
@@ -94,7 +98,7 @@ public class Character : MonoBehaviour
     }
 
 
-    public void updateCharStats(int HP, int HealHP, int MP, int AP, int AD, int spiceInv, bool isLoud, bool isSwallowed)
+    public void UpdateCharStats(int HP, int HealHP, int MP, int AP, int AD, int spiceInv, bool isLoud, bool isSwallowed)
     {
         this.HP = HP;
         this.healingHP=HealHP;
@@ -109,16 +113,27 @@ public class Character : MonoBehaviour
 
     }
 
-
-    public void moveToPoint(Transform target)
+    /*
+     * Moves Character to a specific point with very little speed. Needs to be called over and over again to finish animation
+     * @return: True, if Character is still moving, False if last wayPoint has been reached
+     */
+    public bool MoveToPoint()
     {
-        Vector3 dir = target.position - transform.position;
+        Vector3 dir = walkPath.First.Value - transform.position;
         transform.Translate(dir.normalized * walkSpeed * Time.deltaTime, Space.World);
 
-        if (Vector3.Distance(transform.position, target.position) <= 0.2f)
+        if (Vector3.Distance(transform.position, walkPath.First.Value) <= 0.2f)
         {
+            walkPath.RemoveFirst();
             //E. g. go To next Point
+            return walkPath.Count > 0;
         }
+        return true;
+    }
+
+    public void SetWalkPath(LinkedList<Vector3> way)
+    {
+        walkPath = way;
     }
 
 

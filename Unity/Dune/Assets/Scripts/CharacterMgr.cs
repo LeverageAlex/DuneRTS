@@ -42,7 +42,7 @@ public class CharacterMgr : MonoBehaviour
         GameObject newChar = (GameObject) Instantiate(getCharTypeByString(type), new Vector3(x, 0f, z), Quaternion.identity);
         characterDict.Add(characterID, newChar);
         Character localChar = (Character) newChar.GetComponent(typeof(Character));
-        localChar.updateCharStats(HPcurrent, healingHP, MPcurrent, APcurrent, attackDamage, inventoryLeft, loud, killedBySandworm);
+        localChar.UpdateCharStats(HPcurrent, healingHP, MPcurrent, APcurrent, attackDamage, inventoryLeft, loud, killedBySandworm);
         return true;
     }
 
@@ -52,7 +52,7 @@ public class CharacterMgr : MonoBehaviour
             return false;
 
         Character charScript = getCharScriptByID(characterID);
-        charScript.updateCharStats(HP, HealHP, MP, AP, AD, spiceInv, isLoud, isSwallowed);
+        charScript.UpdateCharStats(HP, HealHP, MP, AP, AD, spiceInv, isLoud, isSwallowed);
         return true;
     }
 
