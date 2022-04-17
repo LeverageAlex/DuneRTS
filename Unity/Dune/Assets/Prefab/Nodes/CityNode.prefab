@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &5500207758264723619
+--- !u!1001 &5811505394991531440
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -11,45 +11,29 @@ PrefabInstance:
       propertyPath: accessible
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -1236397413529596644, guid: 46023eff98b3f6a4e8048b11a67fd846, type: 3}
-      propertyPath: startColor.b
-      value: 0.18431373
-      objectReference: {fileID: 0}
-    - target: {fileID: -1236397413529596644, guid: 46023eff98b3f6a4e8048b11a67fd846, type: 3}
-      propertyPath: startColor.g
-      value: 0.29411766
-      objectReference: {fileID: 0}
-    - target: {fileID: -1236397413529596644, guid: 46023eff98b3f6a4e8048b11a67fd846, type: 3}
-      propertyPath: startColor.r
-      value: 0.454902
-      objectReference: {fileID: 0}
     - target: {fileID: 5658399482430883629, guid: 46023eff98b3f6a4e8048b11a67fd846, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 0f8a64f6b4a35b14d9548d9970d90dcf, type: 2}
+      objectReference: {fileID: 2100000, guid: 4552f8181b225ac4386d970449495565, type: 2}
     - target: {fileID: 7443216907934699744, guid: 46023eff98b3f6a4e8048b11a67fd846, type: 3}
       propertyPath: m_Name
-      value: Rock Node Variant
+      value: CityNodeBlue
       objectReference: {fileID: 0}
     - target: {fileID: 7956455549529302473, guid: 46023eff98b3f6a4e8048b11a67fd846, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7956455549529302473, guid: 46023eff98b3f6a4e8048b11a67fd846, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 7956455549529302473, guid: 46023eff98b3f6a4e8048b11a67fd846, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7956455549529302473, guid: 46023eff98b3f6a4e8048b11a67fd846, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.2
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 7956455549529302473, guid: 46023eff98b3f6a4e8048b11a67fd846, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7956455549529302473, guid: 46023eff98b3f6a4e8048b11a67fd846, type: 3}
       propertyPath: m_LocalRotation.w

@@ -23,7 +23,7 @@ public class Node : MonoBehaviour
     private Color startColor;
     public Color hoverColor = Color.red;
 
-    bool accessible;
+    public bool accessible = true;
 
 
 
@@ -35,6 +35,8 @@ public class Node : MonoBehaviour
 
         _X = (int)transform.position.x;
         _Z = (int)transform.position.z;
+
+        
 
     }
 
@@ -74,6 +76,7 @@ public class Node : MonoBehaviour
      */
     public void SelectNode()
     {
+        if (!accessible) return;
         if (!MovementManager.charSelected && NodeManager.instance.getObjectOnNode(this) != null)  //To ADD: Check whether Character is allowed to move
         {
             //Select Character
