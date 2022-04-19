@@ -6427,11 +6427,11 @@ Transform:
   - {fileID: 216186699}
   - {fileID: 758913425}
   - {fileID: 709998195}
+  - {fileID: 761285157}
   - {fileID: 811439353}
   - {fileID: 910408496}
-  - {fileID: 500214882}
-  - {fileID: 761285157}
   - {fileID: 476227815}
+  - {fileID: 500214882}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9274,6 +9274,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: CityNodeSouth
       objectReference: {fileID: 0}
+    - target: {fileID: 4499643893031618732, guid: 40ba543dd20fbdf4b8dde1485aa0118c, type: 3}
+      propertyPath: hoverColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4499643893031618732, guid: 40ba543dd20fbdf4b8dde1485aa0118c, type: 3}
+      propertyPath: hoverColor.g
+      value: 0.11588229
+      objectReference: {fileID: 0}
+    - target: {fileID: 4499643893031618732, guid: 40ba543dd20fbdf4b8dde1485aa0118c, type: 3}
+      propertyPath: hoverColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4525448536080097401, guid: 40ba543dd20fbdf4b8dde1485aa0118c, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -10839,7 +10851,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2011776793}
   m_Layer: 0
-  m_Name: Houses
+  m_Name: House
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
