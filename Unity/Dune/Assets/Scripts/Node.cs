@@ -87,7 +87,6 @@ public class Node : MonoBehaviour
             this.rend.material.color = Color.green;
         } else if(CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.FAMILY_ATOMICS && CharacterTurnHandler.CharSelected)
         {
-            //NodeManager.instance.getObjectOnNode(this).GetComponent(typeof(Character));
             CharacterTurnHandler.instance.GetSelectedCharacter().Attack_Atomic(this);
         }
       
