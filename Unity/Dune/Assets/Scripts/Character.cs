@@ -25,8 +25,8 @@ public class Character : MonoBehaviour
     private int _x;
     private int _z;
 
-    public int x { get { return _x; } }
-    public int z { get { return _z; } }
+    public int X { get { return _x; } }
+    public int Z { get { return _z; } }
 
 
     private bool isLoud;
@@ -46,8 +46,8 @@ public class Character : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _x = (int)transform.position.x;
-        _z = (int)transform.position.z;
+        _x = (int)Mathf.Round(transform.position.x);
+        _z = (int)Mathf.Round(transform.position.z);
         NodeManager nodeManager = NodeManager.instance;
         //SampleCode only
         CharacterBaseValue type = GetTypeByString(gameObject.name);
@@ -135,12 +135,12 @@ public class Character : MonoBehaviour
             walkPath.RemoveFirst();
             NodeManager.instance.placeObjectOnNode(gameObject, (int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z));
 
-            NodeManager.instance.RemoveObjectOnNode(x, z);
+            NodeManager.instance.RemoveObjectOnNode(X, Z);
 
-            _x = (int)transform.position.x;
-            _z = (int)transform.position.z;
+            _x = (int)Mathf.Round(transform.position.x);
+            _z = (int)Mathf.Round(transform.position.z);
 
-            NodeManager.instance.placeObjectOnNode(gameObject, x, z);
+            NodeManager.instance.placeObjectOnNode(gameObject, _x, _z);
 
             //E. g. go To next Point
             return walkPath.Count > 0;
