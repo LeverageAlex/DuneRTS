@@ -12,6 +12,8 @@ public class Node : MonoBehaviour
     public int X { get { return _X; } }
     public int Z { get { return _Z; } }
 
+
+
     
 
 
@@ -77,25 +79,18 @@ public class Node : MonoBehaviour
     public void SelectNode()
     {
         if (!accessible) return;
-        if (!MovementManager.charSelected && NodeManager.instance.getObjectOnNode(this) != null)  //To ADD: Check whether Character is allowed to move
+
+        if(MovementManager.charSelected && NodeManager.instance.getObjectOnNode(this) == null)
         {
-            //Select Character
-            Character localChar = (Character)NodeManager.instance.getObjectOnNode(this).GetComponent(typeof(Character));
-            MovementManager.instance.selectCharacter(localChar);
-           // Debug.Log("Node set Character!");
-        }
-        else if(MovementManager.charSelected && NodeManager.instance.getObjectOnNode(this) == null)
-        {
-            //create Path to walk for Character
-            //Change MaterialColor to green
             Vector3 point = new Vector3();
             point.x = transform.position.x;
             point.y = MovementManager.instance.getSelectedChar().transform.position.y;
             point.z = transform.position.z;
             MovementManager.instance.AddWaypoint(point);
-            rend.material.color = Color.green;
-      //      Debug.Log("MovementManager changed ");
+            this.rend.material.color = Color.green;
         }
+ 
+
 
     }
 

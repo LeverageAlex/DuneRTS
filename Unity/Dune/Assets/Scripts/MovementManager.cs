@@ -58,6 +58,13 @@ public class MovementManager : MonoBehaviour
         selectedChar = character;
     }
 
+    //Ignores all other functions within class
+    public void addCharacterToAnimate(Character character, LinkedList<Vector3> pathing)
+    {
+        updateCharacters.AddLast(character);
+        selectedChar.SetWalkPath(pathing);
+    }
+
     public Character getSelectedChar()
     {
         return selectedChar;

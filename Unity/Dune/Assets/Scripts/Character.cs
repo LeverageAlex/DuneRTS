@@ -34,7 +34,9 @@ public class Character : MonoBehaviour
 
     public bool move;
     private LinkedList<Vector3> walkPath;
-// public Transform t;
+
+    bool moveOrAttack = true;
+    // public Transform t;
 
 
 
@@ -150,6 +152,29 @@ public class Character : MonoBehaviour
     public void SetWalkPath(LinkedList<Vector3> way)
     {
         walkPath = way;
+    }
+
+    public void OnMouseDown()
+    {
+        selectChar();
+    }
+
+    public void selectChar()
+    {
+        if (moveOrAttack)
+        {
+            //chose move
+            if (!MovementManager.charSelected)  //To ADD: Check whether Character is allowed to move
+            {
+                MovementManager.instance.selectCharacter(this);
+                // Debug.Log("Node set Character!");
+            }
+            
+        }
+        else //Chose attack
+        {
+
+        }
     }
 
 
