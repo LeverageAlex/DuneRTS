@@ -5,17 +5,19 @@ using UnityEngine;
 public class House : ScriptableObject
 {
     private List<Character> Characters = new List<Character> ();
-    private readonly string color;
-    private readonly string name;
+    private readonly Color color;
+    private readonly string houseName;
+    
 
 
-    public House(string name, string color)
+    public House(string name, Color color)
     {
-        this.name = name;
+        this.houseName = name;
         this.color = color;
+        
     }
 
-    public string Color
+    public Color Color
     {
         get { return color; }
     }

@@ -53,7 +53,6 @@ public class Character : MonoBehaviour
         CharacterBaseValue type = GetTypeByString(gameObject.name);
         initCharacter(type);
 
-
         //Update Nodes references on start (only needed because of editor)
         //gameManager.getNodeFromPos((int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z)).placeObjectOnNode(gameObject);
         nodeManager.placeObjectOnNode(gameObject, (int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z));
