@@ -52,9 +52,19 @@ public class NodeManager : MonoBehaviour
         return getNodeFromPos((node.X), (node.Z) - 1);
     }
 
+    //moore neighbourhood (8 nodes)
     public bool isNodeNeighbour(Node baseNode, Node neighbour)
     {
-        return Mathf.Abs(baseNode.X - neighbour.X) + Mathf.Abs(baseNode.Z - neighbour.Z) <= 1;
+        if(Mathf.Abs(baseNode.X - neighbour.X) == 1)
+        {
+            return (Mathf.Abs(baseNode.Z - neighbour.Z) <= 1);
+        }
+        else if(Mathf.Abs(baseNode.X - neighbour.X) == 0)
+        {
+            return (Mathf.Abs(baseNode.Z - neighbour.Z) == 1);
+        }
+            
+        return false;
     }
 
     //Getters

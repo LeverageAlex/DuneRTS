@@ -13,6 +13,8 @@ public class CharacterTurnHandler : MonoBehaviour
     private Character secondCharacter;
     private Actions charState;
     public Actions CharState { get { return charState; } }
+    
+    private NodeManager nodeManager;
 
     public enum Actions
     {
@@ -22,6 +24,12 @@ public class CharacterTurnHandler : MonoBehaviour
     private void Awake()
     {
         instance = this;
+    }
+
+    
+    private void Start()
+    {
+        nodeManager = NodeManager.instance;
     }
 
     void Update()
@@ -55,5 +63,30 @@ public class CharacterTurnHandler : MonoBehaviour
     {
         selectedCharacter = null;
     }
+
+    public bool Attack(Character character)
+    {
+        secondCharacter = character;
+        Node selectedNode = nodeManager.getNodeFromPos(selectedCharacter.X, selectedCharacter.Z);
+        Node secondNode = nodeManager.getNodeFromPos(secondCharacter.X, secondCharacter.Z);
+        
+        
+        if(nodeManager.isNodeNeighbour(selectedNode, secondNode))
+        {
+            //TODO execute attack
+            Debug.Log("Attack");
+
+            //reset 
+            secondCharacter = null;
+
+            return true;
+        }
+        else
+        {
+            Debug.Log("illegal Attack");
+            return false;
+        }
+    }
+
 
 }

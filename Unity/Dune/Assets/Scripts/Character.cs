@@ -170,10 +170,11 @@ public class Character : MonoBehaviour
                 turnHandler.SelectCharacter(this);
             // Debug.Log("Node set Character!");
             Debug.Log("Select new Character");
-             }
-            else if (turnHandler.CharState == CharacterTurnHandler.Actions.ATTACK) {
-            turnHandler.SelectSecondCharacter(this);
-        }
+            }
+            else if (turnHandler.CharState == CharacterTurnHandler.Actions.ATTACK) 
+            {
+                turnHandler.Attack(this);
+            }
 
 
 
