@@ -14,7 +14,6 @@ public class Node : MonoBehaviour
 
 
 
-    
 
 
     public enum HeightLevel
@@ -38,8 +37,6 @@ public class Node : MonoBehaviour
         _X = (int)transform.position.x;
         _Z = (int)transform.position.z;
 
-        
-
     }
 
     // Update is called once per frame
@@ -52,10 +49,10 @@ public class Node : MonoBehaviour
     private void OnMouseEnter()
     {
         //triggers if there is an Object above the Node
-      /*  if (EventSystem.current.IsPointerOverGameObject())
-        {
-            return;
-        }*/
+        /*  if (EventSystem.current.IsPointerOverGameObject())
+          {
+              return;
+          }*/
 
         rend.material.color = hoverColor;
     }
@@ -69,7 +66,7 @@ public class Node : MonoBehaviour
     void OnMouseExit()
     {
         if(rend.material.color == hoverColor)
-        rend.material.color = startColor;
+        ResetColor();
     }
 
 
@@ -95,7 +92,10 @@ public class Node : MonoBehaviour
     }
 
 
-
+    public void ResetColor()
+    {
+        rend.material.color = startColor;
+    }
 
 
 }
