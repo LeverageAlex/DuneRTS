@@ -83,6 +83,7 @@ public class NodeManager : MonoBehaviour
         }
 
         enemiesOnBoard[z + GridSizeZ * x] = null;
+        getNodeFromPos(x, z).ResetColor();
         return true;
 
     }

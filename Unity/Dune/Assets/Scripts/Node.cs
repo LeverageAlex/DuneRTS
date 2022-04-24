@@ -77,7 +77,7 @@ public class Node : MonoBehaviour
     {
         if (!accessible) return;
 
-        if(CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.MOVE  && CharacterTurnHandler.charSelected && NodeManager.instance.getObjectOnNode(this) == null)
+        if(CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.MOVE  && CharacterTurnHandler.CharSelected && NodeManager.instance.getObjectOnNode(this) == null)
         {
             Vector3 point = new Vector3();
             point.x = transform.position.x;

@@ -7,7 +7,7 @@ public class CharacterTurnHandler : MonoBehaviour
 
     public static CharacterTurnHandler instance;
 
-    public static bool charSelected { get { return instance.selectedCharacter != null; } }
+    public static bool CharSelected { get { return instance.selectedCharacter != null; } }
 
     private Character selectedCharacter;
     private Character secondCharacter;
@@ -22,6 +22,18 @@ public class CharacterTurnHandler : MonoBehaviour
     private void Start()
     {
         instance = this;
+    }
+
+    void Update()
+    {
+        if(Input.GetKey("j"))
+        {
+            charState = Actions.MOVE;
+        }
+        else if(Input.GetKey("k"))
+        {
+            charState = Actions.ATTACK;
+        }
     }
 
     public void SelectCharacter(Character character)

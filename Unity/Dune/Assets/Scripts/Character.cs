@@ -157,24 +157,26 @@ public class Character : MonoBehaviour
     public void OnMouseDown()
     {
         selectChar();
+
     }
 
     public void selectChar()
     {
-        if (moveOrAttack)
-        {
-            //chose move
-            if (!CharacterTurnHandler.charSelected)  //To ADD: Check whether Character is allowed to move
+
+            if (!CharacterTurnHandler.CharSelected)  //To ADD: Check whether Character is allowed to move
             {
                 CharacterTurnHandler.instance.SelectCharacter(this);
-                // Debug.Log("Node set Character!");
-            }
-            
-        }
-        else //Chose attack
-        {
+            // Debug.Log("Node set Character!");
+            Debug.Log("Select new Character");
+             }
 
-        }
+
+
+        /* }
+         else //Chose attack
+         {
+
+         }*/
     }
 
 
