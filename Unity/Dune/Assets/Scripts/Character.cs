@@ -10,6 +10,7 @@ public class Character : MonoBehaviour
 
 
     private int characterId;
+    CharacterTurnHandler turnHandler;
     //TODO
     //Wird nur während des erstellen von noch nicht selbstgenerierten Leveln benötigt (da so im UnityEditor gewählt werden kann).
     //Sollte später durch einfach durch eine direkte Referenz ersetzt
@@ -48,6 +49,7 @@ public class Character : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        turnHandler = CharacterTurnHandler.instance;
         _x = (int)Mathf.Round(transform.position.x);
         _z = (int)Mathf.Round(transform.position.z);
         NodeManager nodeManager = NodeManager.instance;
@@ -165,10 +167,13 @@ public class Character : MonoBehaviour
 
             if (!CharacterTurnHandler.CharSelected)  //To ADD: Check whether Character is allowed to move
             {
-                CharacterTurnHandler.instance.SelectCharacter(this);
+                turnHandler.SelectCharacter(this);
             // Debug.Log("Node set Character!");
             Debug.Log("Select new Character");
              }
+            else if (turnHandler.CharState == CharacterTurnHandler.Actions.ATTACK) {
+            turnHandler.SelectSecondCharacter(this);
+        }
 
 
 

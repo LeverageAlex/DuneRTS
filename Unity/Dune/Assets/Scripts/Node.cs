@@ -86,6 +86,7 @@ public class Node : MonoBehaviour
             MovementManager.instance.AddWaypoint(point);
             this.rend.material.color = Color.green;
         }
+      
  
 
 

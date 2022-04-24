@@ -39,7 +39,8 @@ public class MovementManager : MonoBehaviour
         for (var cluster = updateCharacters.First;  cluster != null; ) 
         {
             var next = cluster.Next;
-            if (!cluster.Value.calledUpdate()) { 
+            if (!cluster.Value.calledUpdate()) {
+                NodeManager.instance.getNodeFromPos(cluster.Value.X, cluster.Value.Z).ResetColor();
                 updateCharacters.Remove(cluster);
             }
             cluster = next;
