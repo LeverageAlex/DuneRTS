@@ -104,7 +104,13 @@ public class NodeManager : MonoBehaviour
         return enemiesOnBoard[node.Z + node.X * GridSizeZ];
     }
 
-    
+    public void ResetNodeColors()
+    {
+        foreach(Node node in nodes)
+        {
+            node.ResetColor();
+        }
+    }
 
 
     public int GridSizeX { get { return _gridSizeX; } }

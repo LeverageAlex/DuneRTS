@@ -12,6 +12,13 @@ public class CameraController : MonoBehaviour
     public float minY = 10f;
     public float maxY = 80f;
 
+    private NodeManager nodeManager;
+
+    private void Start()
+    {
+        nodeManager = NodeManager.instance;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -57,5 +64,11 @@ public class CameraController : MonoBehaviour
         pos.y = Mathf.Clamp(pos.y, minY, maxY);
 
         transform.position = pos;
+
+        //TODO delete
+        if (Input.GetKey("r") /*|| Input.mousePosition.x <= panBorderThickness*/)
+        {
+            nodeManager.ResetNodeColors();
+        }
     }
 }
