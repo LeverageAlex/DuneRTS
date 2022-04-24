@@ -10,7 +10,7 @@ public class CharacterTurnHandler : MonoBehaviour
     public static bool CharSelected { get { return instance.selectedCharacter != null; } }
 
     private Character selectedCharacter;
-    private Character secondCharacter;
+  //  private Character secondCharacter;
     private Actions charState;
     public Actions CharState { get { return charState; } }
     
@@ -18,7 +18,7 @@ public class CharacterTurnHandler : MonoBehaviour
 
     public enum Actions
     {
-        ATTACK, MOVE, COLLECT, TRANSFER, KANLY, FAMILY_ATOMICS, SPICE_HOARDING, VOICE, SWORD_SPIN 
+        ATTACK, MOVE, COLLECT, TRANSFER, KANLY, FAMILY_ATOMICS, SPICE_HOARDING, VOICE, SWORD_SPIN, EMPTY
     }
 
     private void Awake()
@@ -42,6 +42,16 @@ public class CharacterTurnHandler : MonoBehaviour
         {
             charState = Actions.ATTACK;
         }
+        else if(Input.GetKeyDown("l"))
+        {
+            //charState = Actions.SWORD_SPIN;
+            selectedCharacter.Attack_SwordSpin();
+            
+        }
+        else if(Input.GetKey("n"))
+        {
+            charState = Actions.FAMILY_ATOMICS;
+        }
     }
 
     public void SelectCharacter(Character character)
@@ -49,10 +59,6 @@ public class CharacterTurnHandler : MonoBehaviour
         selectedCharacter = character;
     }
 
-    public void SelectSecondCharacter(Character character)
-    {
-        secondCharacter = character;
-    }
 
     public Character GetSelectedCharacter()
     {
@@ -62,31 +68,15 @@ public class CharacterTurnHandler : MonoBehaviour
     public void ResetSelection()
     {
         selectedCharacter = null;
+       charState = Actions.EMPTY;
     }
 
-    public bool Attack(Character character)
+    public void ResetAction()
     {
-        secondCharacter = character;
-        Node selectedNode = nodeManager.getNodeFromPos(selectedCharacter.X, selectedCharacter.Z);
-        Node secondNode = nodeManager.getNodeFromPos(secondCharacter.X, secondCharacter.Z);
-        
-        
-        if(nodeManager.isNodeNeighbour(selectedNode, secondNode))
-        {
-            //TODO execute attack
-            Debug.Log("Attack");
-
-            //reset 
-            secondCharacter = null;
-
-            return true;
-        }
-        else
-        {
-            Debug.Log("illegal Attack");
-            return false;
-        }
+        charState = Actions.EMPTY;
     }
+
+
 
 
 }

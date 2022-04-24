@@ -7,6 +7,7 @@ public class House : ScriptableObject
     private List<Character> Characters = new List<Character> ();
     private readonly Color color;
     private readonly string houseName;
+    private int atomicsLeft;
     
 
 
@@ -26,5 +27,12 @@ public class House : ScriptableObject
     {
         get { return name; }
     }
+
+    public int AtomicsLeft
+    {
+        get { return atomicsLeft; }
+    }
+
+    
 
 }

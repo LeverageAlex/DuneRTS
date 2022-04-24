@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static PartyConfiguration;
 
+
 public class Character : MonoBehaviour
 {
     public string charName;
@@ -10,7 +11,10 @@ public class Character : MonoBehaviour
 
 
     private int characterId;
+
     CharacterTurnHandler turnHandler;
+
+    public CharTypeEnum characterType;
     //TODO
     //Wird nur während des erstellen von noch nicht selbstgenerierten Leveln benötigt (da so im UnityEditor gewählt werden kann).
     //Sollte später durch einfach durch eine direkte Referenz ersetzt
@@ -33,10 +37,10 @@ public class Character : MonoBehaviour
     private bool isLoud;
     private bool isSwallowed;
 
-    public bool move;
     private LinkedList<Vector3> walkPath;
 
-    bool moveOrAttack = true;
+
+    private NodeManager nodeManager;
     // public Transform t;
 
 
@@ -49,10 +53,12 @@ public class Character : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        nodeManager = NodeManager.instance;
         turnHandler = CharacterTurnHandler.instance;
+
         _x = (int)Mathf.Round(transform.position.x);
         _z = (int)Mathf.Round(transform.position.z);
-        NodeManager nodeManager = NodeManager.instance;
+
         //SampleCode only
         CharacterBaseValue type = GetTypeByString(gameObject.name);
         initCharacter(type);
@@ -173,17 +179,135 @@ public class Character : MonoBehaviour
             }
             else if (turnHandler.CharState == CharacterTurnHandler.Actions.ATTACK) 
             {
-                turnHandler.Attack(this);
+                Attack_Basic(this);
             }
-
-
-
-        /* }
-         else //Chose attack
-         {
-
-         }*/
+            
     }
+
+
+    public bool Attack_Basic(Character character)
+    {
+        //secondCharacter = character;
+        Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
+        Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
+
+
+        if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
+        {
+            //TODO execute attack
+            Debug.Log("Attack");
+
+            //reset 
+            // secondCharacter = null;
+            turnHandler.ResetSelection();
+            return true;
+        }
+        else
+        {
+            CharacterTurnHandler.instance.ResetAction();
+            Debug.Log("illegal Attack");
+            return false;
+        }
+    }
+
+
+    public bool Attack_SwordSpin()
+    {
+        //secondCharacter = character;
+        if (characterType == CharTypeEnum.FIGHTER)
+        {
+            //Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
+            Debug.Log("Attack_SwordSpin");
+            //TODO: Send Attack to Server
+            return true;
+        }
+        else
+        {
+            CharacterTurnHandler.instance.ResetAction();
+            Debug.Log("illegal Attack_SwordSpin");
+            return false;
+        }
+
+
+        
+    }
+
+    public bool Attack_Atomic(Node node)
+    {
+        if(characterType == CharTypeEnum.NOBLE)
+        {
+            //Check, if there are atomics left in House
+
+            Debug.Log("Atomic explosion at x: " + node.X.ToString() + ", z: " + node.Z.ToString());
+            CharacterTurnHandler.instance.ResetSelection();
+
+            return true;
+        }
+        else
+        {
+            CharacterTurnHandler.instance.ResetAction();
+            Debug.Log("Illegal Atomic!");
+            return false;
+        }
+    }
+
+    public bool Attack_Kanly(Character character)
+    {
+        if (characterType == CharTypeEnum.NOBLE && character.GetCharType() == CharTypeEnum.NOBLE)
+        {
+           
+
+
+
+            return true;
+        }
+        else
+        {
+            CharacterTurnHandler.instance.ResetAction();
+            return false;
+        }
+    }
+
+    public bool Action_SpiceHoarding()
+    {
+        if (characterType == CharTypeEnum.MENTANT)
+        {
+            
+
+
+
+            return true;
+        }
+        else
+        {
+            CharacterTurnHandler.instance.ResetAction();
+            return false;
+        }
+    }
+
+    public bool Action_Voice(Character character)
+    {
+        if (characterType == CharTypeEnum.BENEGESSERIT)
+        {
+            
+
+
+
+            return true;
+        }
+        else
+        {
+            CharacterTurnHandler.instance.ResetAction();
+            return false;
+        }
+    }
+
+    public CharTypeEnum GetCharType()
+    {
+        return characterType;
+    }
+
+
 
 
 }

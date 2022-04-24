@@ -13,10 +13,7 @@ public class CharacterMgr : MonoBehaviour
     public GameObject fighterPrefab;
 
 
-    public enum charType
-    {
-        NOBLE, MENTANT, BENEGESSERIT, FIGHTER
-    }
+ 
 
     // Start is called before the first frame update
     void Start()
