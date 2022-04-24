@@ -6,11 +6,11 @@ public class MovementManager : MonoBehaviour
 {
 
     public static MovementManager instance;
-    private Character selectedChar;
+   // private Character selectedChar;
     private LinkedList<Character> updateCharacters;
     private LinkedList<Vector3> selCharPath;
 
-    public static bool charSelected { get { return instance.selectedChar != null; } }
+   // public static bool charSelected { get { return instance.selectedChar != null; } }
     public static bool isAnimating { get { return instance.updateCharacters.Count != 0; } }
 
     /**
@@ -53,26 +53,21 @@ public class MovementManager : MonoBehaviour
     }
 
 
-    public void selectCharacter(Character character)
+  /*  public void selectCharacter(Character character)
     {
         selectedChar = character;
-    }
+    }*/
 
     //Ignores all other functions within class
     public void addCharacterToAnimate(Character character, LinkedList<Vector3> pathing)
     {
         updateCharacters.AddLast(character);
-        selectedChar.SetWalkPath(pathing);
+        CharacterTurnHandler.instance.GetSelectedCharacter().SetWalkPath(pathing);
     }
 
-    public Character getSelectedChar()
-    {
-        return selectedChar;
-    }
 
     public void unselectCharacter()
     {
-        selectedChar = null;
         selCharPath.Clear();
     }
 
@@ -85,10 +80,11 @@ public class MovementManager : MonoBehaviour
     {
         if (!isAnimating)
         {
+            Character selectedChar = CharacterTurnHandler.instance.GetSelectedCharacter();
             updateCharacters.AddLast(selectedChar);
             selectedChar.SetWalkPath(selCharPath);
             selCharPath = new LinkedList<Vector3>();
-            selectedChar = null;
+            CharacterTurnHandler.instance.ResetSelection();
         }
     }
 

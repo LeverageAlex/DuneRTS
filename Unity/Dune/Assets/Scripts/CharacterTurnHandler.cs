@@ -5,6 +5,10 @@ using UnityEngine;
 public class CharacterTurnHandler : MonoBehaviour
 {
 
+    public static CharacterTurnHandler instance;
+
+    public static bool charSelected { get { return instance.selectedCharacter != null; } }
+
     private Character selectedCharacter;
     private Character secondCharacter;
     private Actions charState;
@@ -15,14 +19,29 @@ public class CharacterTurnHandler : MonoBehaviour
         ATTACK, MOVE, COLLECT, TRANSFER, KANLY, FAMILY_ATOMICS, SPICE_HOARDING, VOICE, SWORD_SPIN 
     }
 
-    public void selectCharacter(Character character)
+    private void Start()
+    {
+        instance = this;
+    }
+
+    public void SelectCharacter(Character character)
     {
         selectedCharacter = character;
     }
 
-    public void selectSecondCharacter(Character character)
+    public void SelectSecondCharacter(Character character)
     {
         secondCharacter = character;
+    }
+
+    public Character GetSelectedCharacter()
+    {
+        return selectedCharacter;
+    }
+
+    public void ResetSelection()
+    {
+        selectedCharacter = null;
     }
 
 }

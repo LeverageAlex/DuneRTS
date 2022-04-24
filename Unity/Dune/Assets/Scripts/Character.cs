@@ -164,9 +164,9 @@ public class Character : MonoBehaviour
         if (moveOrAttack)
         {
             //chose move
-            if (!MovementManager.charSelected)  //To ADD: Check whether Character is allowed to move
+            if (!CharacterTurnHandler.charSelected)  //To ADD: Check whether Character is allowed to move
             {
-                MovementManager.instance.selectCharacter(this);
+                CharacterTurnHandler.instance.SelectCharacter(this);
                 // Debug.Log("Node set Character!");
             }
             
