@@ -232,6 +232,9 @@ public class Character : MonoBehaviour
         
     }
 
+    /*
+    * @param target node
+    */
     public bool Attack_Atomic(Node node)
     {
         if(characterType == CharTypeEnum.NOBLE)
@@ -251,11 +254,14 @@ public class Character : MonoBehaviour
         }
     }
 
+    /*
+    * @param target of action
+    */
     public bool Attack_Kanly(Character character)
     {
         if (characterType == CharTypeEnum.NOBLE && character.GetCharType() == CharTypeEnum.NOBLE)
         {
-           
+            Debug.Log("Kanly fight!");
 
 
 
@@ -264,32 +270,38 @@ public class Character : MonoBehaviour
         else
         {
             CharacterTurnHandler.instance.ResetAction();
+            Debug.Log("Illegal Kanly!");
             return false;
         }
     }
 
     public bool Action_SpiceHoarding()
     {
+        //TODO Vorraussetzung zum aufsammeln prüfen?
         if (characterType == CharTypeEnum.MENTANT)
         {
-            
 
-
+            Debug.Log("SpiceHoarding!");
+            //TODO Implement collection of Spice (after Spice is implemented)
 
             return true;
         }
         else
         {
             CharacterTurnHandler.instance.ResetAction();
+            Debug.Log("No SpiceHoarding!");
             return false;
         }
     }
 
+    /*
+     * @param Target of Action
+     */
     public bool Action_Voice(Character character)
     {
         if (characterType == CharTypeEnum.BENEGESSERIT)
         {
-            
+            //TODO Call spice-hoarding Socket-Message and animate (Vorschlag wäre den Unity-Animator zu benutzen und dann mit einer Coroutine nach Ablauf der Animationszeit die Stats zu aktualisieren)
 
 
 
