@@ -46,6 +46,7 @@ public class CharacterTurnHandler : MonoBehaviour
         {
             //charState = Actions.SWORD_SPIN;
             selectedCharacter.Attack_SwordSpin();
+            ResetSelection();
             
         }
         else if(Input.GetKey("n"))

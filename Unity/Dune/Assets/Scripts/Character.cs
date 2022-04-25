@@ -171,16 +171,24 @@ public class Character : MonoBehaviour
     public void selectChar()
     {
 
-            if (!CharacterTurnHandler.CharSelected)  //To ADD: Check whether Character is allowed to move
-            {
-                turnHandler.SelectCharacter(this);
+        if (!CharacterTurnHandler.CharSelected)  //To ADD: Check whether Character is allowed to move
+        {
+            turnHandler.SelectCharacter(this);
             // Debug.Log("Node set Character!");
             Debug.Log("Select new Character");
-            }
-            else if (turnHandler.CharState == CharacterTurnHandler.Actions.ATTACK) 
-            {
-                Attack_Basic(this);
-            }
+        }
+        else if (turnHandler.CharState == CharacterTurnHandler.Actions.ATTACK)
+        {
+            turnHandler.GetSelectedCharacter().Attack_Basic(this);
+        }
+        else if (turnHandler.CharState == CharacterTurnHandler.Actions.KANLY)
+        {
+            turnHandler.GetSelectedCharacter().Attack_Kanly(this);
+        }
+        else if (turnHandler.CharState == CharacterTurnHandler.Actions.VOICE)
+        {
+            turnHandler.GetSelectedCharacter().Action_Voice(this);
+        }
             
     }
 
