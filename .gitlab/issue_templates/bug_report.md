@@ -19,4 +19,7 @@
 - Versionen: 
 - ...
 
+# Name des entsprechenden Branches
+Der zugeordnete Branch hat folgenden Namen: *fix/*
+
 /label ~bug
