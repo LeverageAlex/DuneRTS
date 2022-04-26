@@ -8,4 +8,7 @@
 
 # betroffene Gruppe oder Person
 
+# Name des entsprechenden Branches
+Der zugeordnete Branch hat folgenden Namen: *refactoring/*
+
 /label ~enhancement

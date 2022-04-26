@@ -19,4 +19,7 @@ Außerdem findet sich der entsprechende Wikieintrag im Wiki unter [](/../../wiki
 # nötige Tests oder Qualitätssicherung (optional)
 <!--> Beschreibung, ob und wenn ja wie das Feature getestet werden soll (ggf. Verweis auf die Aufgaben der Tests) </!-->
 
+# Name des entsprechenden Branches
+Der zugeordnete Branch hat folgenden Namen: *feature/*
+
 /label ~feature
