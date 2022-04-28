@@ -133,6 +133,21 @@ public class NodeManager : MonoBehaviour
 
     }
 
+    public bool IsSpiceOn(int x, int z)
+    {
+        return spiceCrumbs[z,x] != null;
+    }
+
+    public void CollectSpice(int x, int z)
+    {
+        if (spiceCrumbs[z, x] != null)
+        {
+            Destroy(spiceCrumbs[z, x]);
+            spiceCrumbs[z, x] = null;
+        }
+    }
+
+
 
     public int GridSizeX { get { return _gridSizeX; } }
     public int GridSizeZ { get { return _gridSizeZ; } }

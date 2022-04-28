@@ -140,7 +140,7 @@ public class Character : MonoBehaviour
         Vector3 dir = walkPath.First.Value - transform.position;
         transform.Translate(dir.normalized * walkSpeed * Time.deltaTime, Space.World);
 
-        if (Vector3.Distance(transform.position, walkPath.First.Value) <= 0.2f)
+        if (Vector3.Distance(transform.position, walkPath.First.Value) <= 0.06f)
         {
             walkPath.RemoveFirst();
             NodeManager.instance.placeObjectOnNode(gameObject, (int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z));
@@ -149,7 +149,7 @@ public class Character : MonoBehaviour
 
             _x = (int)Mathf.Round(transform.position.x);
             _z = (int)Mathf.Round(transform.position.z);
-
+            transform.position = new Vector3(X, transform.position.y, Z);
             NodeManager.instance.placeObjectOnNode(gameObject, _x, _z);
 
             //E. g. go To next Point
@@ -228,7 +228,15 @@ public class Character : MonoBehaviour
 
     public bool Action_CollectSpice()
     {
-        Debug.Log("collecting!");
+        if (nodeManager.IsSpiceOn(X, Z))
+        {
+            nodeManager.CollectSpice(X, Z);
+            Debug.Log("Collected Spice!");
+        }
+        else {
+            Debug.Log("No Spice to collect!");
+            return false;
+        }
         turnHandler.ResetSelection();
         return true;
     }
