@@ -224,6 +224,8 @@ public class CharacterTurnHandler : MonoBehaviour
 
     public void ConfirmDeactivate()
     {
+        MovementManager.instance.unselectCharacter();
+        NodeManager.instance.ResetNodeColors();
         confirmationPanel.SetActive(false);
     }
 }
