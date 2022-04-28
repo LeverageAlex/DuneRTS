@@ -15,6 +15,8 @@ public class Node : MonoBehaviour
     private float offsetSpiceLowY = 0.35f;
     private float offsetSpiceHighY = 0.525f;
 
+    public float charHeightOffset = 0f;
+
     public HeightLevel heightLvl = HeightLevel.low;
 
 
@@ -100,7 +102,7 @@ public class Node : MonoBehaviour
         {
             Vector3 point = new Vector3();
             point.x = transform.position.x;
-            point.y = CharacterTurnHandler.instance.GetSelectedCharacter().transform.position.y;
+            point.y = CharacterTurnHandler.instance.GetSelectedCharacter().transform.position.y + charHeightOffset;
             point.z = transform.position.z;
             MovementManager.instance.AddWaypoint(point);
             this.rend.material.color = Color.green;
