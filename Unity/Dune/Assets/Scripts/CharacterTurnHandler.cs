@@ -34,8 +34,8 @@ public class CharacterTurnHandler : MonoBehaviour
     private void Start()
     {
         nodeManager = NodeManager.instance;
-        ButtonToggles();
-        ConfirmDeactivate();
+       // ButtonToggles();
+      //  ConfirmDeactivate();
     }
 
     void Update()
@@ -44,7 +44,7 @@ public class CharacterTurnHandler : MonoBehaviour
         {
             charState = Actions.MOVE;
         }
-        else if(Input.GetKey("k"))
+      /*  else if(Input.GetKey("k"))
         {
             charState = Actions.ATTACK;
         }
@@ -58,7 +58,7 @@ public class CharacterTurnHandler : MonoBehaviour
         else if(Input.GetKey("n"))
         {
             charState = Actions.FAMILY_ATOMICS;
-        }
+        }*/
     }
 
     

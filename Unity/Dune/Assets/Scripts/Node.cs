@@ -12,7 +12,10 @@ public class Node : MonoBehaviour
     public int X { get { return _X; } }
     public int Z { get { return _Z; } }
 
+    private float offsetSpiceLowY = 0.35f;
+    private float offsetSpiceHighY = 0.525f ;
 
+    public HeightLevel heightLvl = HeightLevel.low;
 
 
 
@@ -57,6 +60,18 @@ public class Node : MonoBehaviour
 
 
         rend.material.color = hoverColor;
+
+
+    }
+
+    private void OnMouseOver()
+    {
+        if (Input.GetKeyDown("l"))
+        {
+            if (heightLvl == HeightLevel.high)
+                NodeManager.instance.SpawnSpiceCrumOn(_X, offsetSpiceHighY, _Z);
+            else NodeManager.instance.SpawnSpiceCrumOn(_X, offsetSpiceLowY, _Z);
+        }
     }
 
     private void OnMouseDown()

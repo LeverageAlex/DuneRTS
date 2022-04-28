@@ -12,10 +12,10 @@ public class NodeManager : MonoBehaviour
 
     public GameObject[] enemiesOnBoard;
 
-
-
-
     public Node[] nodes;
+
+    public GameObject[,] spiceCrumbs;
+    public GameObject spicePrefab;
 
 
     // Start is called before the first frame update
@@ -28,6 +28,7 @@ public class NodeManager : MonoBehaviour
         }
         instance = this;
         enemiesOnBoard = new GameObject[nodes.Length];
+        spiceCrumbs = new GameObject[_gridSizeZ, _gridSizeX];
         
     }
 
@@ -121,6 +122,15 @@ public class NodeManager : MonoBehaviour
         {
             node.ResetColor();
         }
+    }
+
+
+    public void SpawnSpiceCrumOn(int x, float y, int z)
+    {
+        if (spiceCrumbs[z, x] != null) return;
+        GameObject spice = Instantiate(spicePrefab, new Vector3(x, y, z), Quaternion.identity);
+        spiceCrumbs[z, x] = spice;
+
     }
 
 
