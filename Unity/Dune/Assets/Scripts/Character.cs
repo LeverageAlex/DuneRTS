@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static PartyConfiguration;
 
 
 public class Character : MonoBehaviour
@@ -61,8 +60,7 @@ public class Character : MonoBehaviour
         _z = (int)Mathf.Round(transform.position.z);
 
         //SampleCode only
-        CharacterBaseValue type = GetTypeByString(gameObject.name);
-        initCharacter(type);
+        initCharacter();
 
         //Update Nodes references on start (only needed because of editor)
         //gameManager.getNodeFromPos((int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z)).placeObjectOnNode(gameObject);
@@ -82,38 +80,26 @@ public class Character : MonoBehaviour
     }
 
 
-    public void initCharacter(CharacterBaseValue characterBaseValue)
+    public void initCharacter()
     {
-        HP = characterBaseValue.HP;
-        MP = characterBaseValue.MP;
-        AP = characterBaseValue.AP;
-        AD = characterBaseValue.AD;
-        spiceInv = characterBaseValue.spiceInv;
-        healingHP = characterBaseValue.HealHP;
-
-        isLoud = false;
-        isSwallowed = false;
-    }
-
-
-    //To be deleted
-    CharacterBaseValue GetTypeByString(string charType)
-    {
-        switch (charType)
+       if(characterType == CharTypeEnum.NOBLE)
         {
-            case "Noble":
-                return PartyConfiguration.Noble;
-            case "BeneGesserit":
-                return PartyConfiguration.BeneGesserit;
-            case "Mentat":
-                return PartyConfiguration.Mentat;
-            case "Fighter":
-                return PartyConfiguration.Fighter;
-            default:
-                Debug.Log("Error in Character-Script. String did not Match");
-                return null;
+            UpdateCharStats(100, 10, 2, 2, 20, 5, false, false);
+        } else if(characterType == CharTypeEnum.FIGHTER)
+        {
+            UpdateCharStats(200, 20, 2, 2, 40, 3, false, false);
+
+        } else if(characterType== CharTypeEnum.MENTANT)
+        {
+            UpdateCharStats(75, 10, 2, 3, 10, 10, false, false);
+        } else if(characterType==CharTypeEnum.BENEGESSERIT)
+        {
+            UpdateCharStats(150, 20, 3, 2, 20, 5, false, false);
         }
     }
+
+
+   
 
 
     public void UpdateCharStats(int HP, int HealHP, int MP, int AP, int AD, int spiceInv, bool isLoud, bool isSwallowed)
