@@ -89,12 +89,44 @@ public class CharacterTurnHandler : MonoBehaviour
     //Button call methods
     public void SetCharStateMove()
     {
+        //activation by node + press b
         this.charState = Actions.MOVE;
     }
 
     public void SetCharStateAttack()
     {
+        //activation by enemyChar
         this.charState = Actions.ATTACK;
+    }
+
+    public void SetCharStateCollectSpice()
+    {
+        selectedCharacter.Action_CollectSpice();
+        this.charState = Actions.COLLECT;
+    }
+
+    public void SetCharStateTransferSpice()
+    {
+        //activation by otherChar
+        this.charState = Actions.TRANSFER;
+    }
+
+    public void SetCharStateKanly()
+    {
+        //activation by enemyChar
+        this.charState = Actions.KANLY;
+    }
+
+    public void SetCharStateVoice()
+    {
+        //activation by enemyChar
+        this.charState = Actions.VOICE;
+    }
+
+    public void SetCharStateSpiceHoarding()
+    {
+        selectedCharacter.Action_SpiceHoarding();
+        this.charState = Actions.SPICE_HOARDING;
     }
 
     public void SetCharStateSwordSpin()
@@ -104,6 +136,7 @@ public class CharacterTurnHandler : MonoBehaviour
     }
     public void SetCharStateAtomics()
     {
+        //activation by node
         this.charState = Actions.FAMILY_ATOMICS;
     }
     

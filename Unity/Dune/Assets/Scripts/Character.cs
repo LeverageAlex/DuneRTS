@@ -192,7 +192,12 @@ public class Character : MonoBehaviour
         {
             turnHandler.GetSelectedCharacter().Action_Voice(this);
         }
-            
+        else if (turnHandler.CharState == CharacterTurnHandler.Actions.TRANSFER)
+        {
+            turnHandler.GetSelectedCharacter().Action_TransferSpice(this);
+        }
+        
+
     }
 
 
@@ -215,8 +220,38 @@ public class Character : MonoBehaviour
         }
         else
         {
-            CharacterTurnHandler.instance.ResetAction();
+            turnHandler.ResetAction();
             Debug.Log("illegal Attack");
+            return false;
+        }
+    }
+
+    public bool Action_CollectSpice()
+    {
+        Debug.Log("collecting!");
+        turnHandler.ResetSelection();
+        return true;
+    }
+
+    public bool Action_TransferSpice(Character character)
+    {
+        Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
+        Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
+
+        if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
+        {
+            //TODO execute attack
+            Debug.Log("Transfer!");
+
+            //reset 
+            // secondCharacter = null;
+            turnHandler.ResetSelection();
+            return true;
+        }
+        else
+        {
+            turnHandler.ResetAction();
+            Debug.Log("illegal Transfer!");
             return false;
         }
     }
@@ -229,12 +264,13 @@ public class Character : MonoBehaviour
         {
             //Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
             Debug.Log("Attack_SwordSpin");
+            turnHandler.ResetSelection();
             //TODO: Send Attack to Server
             return true;
         }
         else
         {
-            CharacterTurnHandler.instance.ResetAction();
+            turnHandler.ResetAction();
             Debug.Log("illegal Attack_SwordSpin");
             return false;
         }
@@ -253,13 +289,13 @@ public class Character : MonoBehaviour
             //Check, if there are atomics left in House
 
             Debug.Log("Atomic explosion at x: " + node.X.ToString() + ", z: " + node.Z.ToString());
-            CharacterTurnHandler.instance.ResetSelection();
+            turnHandler.ResetSelection();
 
             return true;
         }
         else
         {
-            CharacterTurnHandler.instance.ResetAction();
+            turnHandler.ResetAction();
             Debug.Log("Illegal Atomic!");
             return false;
         }
@@ -270,17 +306,27 @@ public class Character : MonoBehaviour
     */
     public bool Attack_Kanly(Character character)
     {
+
         if (characterType == CharTypeEnum.NOBLE && character.GetCharType() == CharTypeEnum.NOBLE)
         {
-            Debug.Log("Kanly fight!");
-
-
-
-            return true;
+            Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
+            Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
+            if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
+            {
+                Debug.Log("Kanly fight!");
+                turnHandler.ResetSelection();
+                return true;
+            }
+            else
+            {
+                turnHandler.ResetAction();
+                Debug.Log("Enemy too far away!");
+                return false;
+            }
         }
         else
         {
-            CharacterTurnHandler.instance.ResetAction();
+            turnHandler.ResetAction();
             Debug.Log("Illegal Kanly!");
             return false;
         }
@@ -294,12 +340,13 @@ public class Character : MonoBehaviour
 
             Debug.Log("SpiceHoarding!");
             //TODO Implement collection of Spice (after Spice is implemented)
-
+            //TODO Call spice-hoarding Socket-Message and animate (Vorschlag wäre den Unity-Animator zu benutzen und dann mit einer Coroutine nach Ablauf der Animationszeit die Stats zu aktualisieren)
+            turnHandler.ResetSelection();
             return true;
         }
         else
         {
-            CharacterTurnHandler.instance.ResetAction();
+            turnHandler.ResetAction();
             Debug.Log("No SpiceHoarding!");
             return false;
         }
@@ -312,15 +359,26 @@ public class Character : MonoBehaviour
     {
         if (characterType == CharTypeEnum.BENEGESSERIT)
         {
-            //TODO Call spice-hoarding Socket-Message and animate (Vorschlag wäre den Unity-Animator zu benutzen und dann mit einer Coroutine nach Ablauf der Animationszeit die Stats zu aktualisieren)
-
-
-
-            return true;
+            
+            Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
+            Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
+            if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
+            {
+                Debug.Log("Voice!");
+                turnHandler.ResetSelection();
+                return true;
+            } 
+            else
+            {
+                Debug.Log("Enemy too far away!");
+                turnHandler.ResetAction();
+                return false;
+            }
         }
         else
         {
-            CharacterTurnHandler.instance.ResetAction();
+            Debug.Log("Illegal voice!");
+            turnHandler.ResetAction();
             return false;
         }
     }
