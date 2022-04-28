@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class House : ScriptableObject
 {
-    private List<Character> Characters = new List<Character> ();
+    private List<Character> Characters = new List<Character>();
     private readonly Color color;
     private readonly string houseName;
     private int atomicsLeft;
-    
+
 
 
     public House(string name, Color color)
     {
         this.houseName = name;
         this.color = color;
-        
+
     }
 
     public Color Color
@@ -33,6 +33,6 @@ public class House : ScriptableObject
         get { return atomicsLeft; }
     }
 
-    
+
 
 }

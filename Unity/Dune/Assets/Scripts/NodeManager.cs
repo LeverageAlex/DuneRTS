@@ -29,10 +29,10 @@ public class NodeManager : MonoBehaviour
         instance = this;
         enemiesOnBoard = new GameObject[nodes.Length];
         spiceCrumbs = new GameObject[_gridSizeZ, _gridSizeX];
-        
+
     }
 
-  
+
     public Node getNodeRightFrom(Node node)
     {
         return getNodeFromPos((node.X) + 1, (node.Z));
@@ -40,12 +40,12 @@ public class NodeManager : MonoBehaviour
 
     public Node getNodeLeftFrom(Node node)
     {
-        return getNodeFromPos( (node.X)-1, (node.Z));
+        return getNodeFromPos((node.X) - 1, (node.Z));
     }
 
     public Node getNodeUpFrom(Node node)
     {
-        return getNodeFromPos((node.X), (node.Z)+1);
+        return getNodeFromPos((node.X), (node.Z) + 1);
     }
 
     public Node getNodeDownFrom(Node node)
@@ -56,28 +56,29 @@ public class NodeManager : MonoBehaviour
     //moore neighbourhood (8 nodes)
     public bool isNodeNeighbour(Node baseNode, Node neighbour)
     {
-        if(Mathf.Abs(baseNode.X - neighbour.X) == 1)
+        if (Mathf.Abs(baseNode.X - neighbour.X) == 1)
         {
             return (Mathf.Abs(baseNode.Z - neighbour.Z) <= 1);
         }
-        else if(Mathf.Abs(baseNode.X - neighbour.X) == 0)
+        else if (Mathf.Abs(baseNode.X - neighbour.X) == 0)
         {
             return (Mathf.Abs(baseNode.Z - neighbour.Z) == 1);
         }
-            
+
         return false;
     }
 
     //Getters
     public Node getNodeFromPos(int x, int z)
     {
-        if(z + GridSizeZ * x < 0 || z + GridSizeZ * x >= nodes.Length) { return null; }
+        if (z + GridSizeZ * x < 0 || z + GridSizeZ * x >= nodes.Length) { return null; }
         return nodes[z + GridSizeZ * x];
     }
 
     public bool placeObjectOnNode(GameObject obj, int x, int z)
     {
-        if(z + GridSizeZ * x < 0 || z + GridSizeZ * x >= nodes.Length) {
+        if (z + GridSizeZ * x < 0 || z + GridSizeZ * x >= nodes.Length)
+        {
             return false;
         }
 
@@ -118,7 +119,7 @@ public class NodeManager : MonoBehaviour
 
     public void ResetNodeColors()
     {
-        foreach(Node node in nodes)
+        foreach (Node node in nodes)
         {
             node.ResetColor();
         }
@@ -135,7 +136,11 @@ public class NodeManager : MonoBehaviour
 
     public bool IsSpiceOn(int x, int z)
     {
-        return spiceCrumbs[z,x] != null;
+        if (x >= 0 && x < _gridSizeX && z >= 0 && z < _gridSizeZ)
+        {
+            return spiceCrumbs[z, x] != null;
+        }
+        else return false;
     }
 
     public void CollectSpice(int x, int z)

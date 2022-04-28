@@ -78,7 +78,7 @@ public class Character : MonoBehaviour
     {
         return MoveToPoint();
 
-// moveToPoint(t);
+        // moveToPoint(t);
     }
 
 
@@ -99,7 +99,7 @@ public class Character : MonoBehaviour
     //To be deleted
     CharacterBaseValue GetTypeByString(string charType)
     {
-        switch(charType)
+        switch (charType)
         {
             case "Noble":
                 return PartyConfiguration.Noble;
@@ -119,7 +119,7 @@ public class Character : MonoBehaviour
     public void UpdateCharStats(int HP, int HealHP, int MP, int AP, int AD, int spiceInv, bool isLoud, bool isSwallowed)
     {
         this.HP = HP;
-        this.healingHP=HealHP;
+        this.healingHP = HealHP;
         this.MP = MP;
         this.AP = AP;
         this.AD = AD;
@@ -196,7 +196,7 @@ public class Character : MonoBehaviour
         {
             turnHandler.GetSelectedCharacter().Action_TransferSpice(this);
         }
-        
+
 
     }
 
@@ -233,7 +233,8 @@ public class Character : MonoBehaviour
             nodeManager.CollectSpice(X, Z);
             Debug.Log("Collected Spice!");
         }
-        else {
+        else
+        {
             Debug.Log("No Spice to collect!");
             return false;
         }
@@ -284,7 +285,7 @@ public class Character : MonoBehaviour
         }
 
 
-        
+
     }
 
     /*
@@ -292,7 +293,7 @@ public class Character : MonoBehaviour
     */
     public bool Attack_Atomic(Node node)
     {
-        if(characterType == CharTypeEnum.NOBLE)
+        if (characterType == CharTypeEnum.NOBLE)
         {
             //Check, if there are atomics left in House
 
@@ -346,8 +347,18 @@ public class Character : MonoBehaviour
         if (characterType == CharTypeEnum.MENTANT)
         {
 
-            Debug.Log("SpiceHoarding!");
-            //TODO Implement collection of Spice (after Spice is implemented)
+            for (int i = -1; i <= 1; i++)
+            {
+                for (int j = -1; j <= 1; j++)
+                {
+                    if (nodeManager.IsSpiceOn(X + i, Z + j))
+                    {
+                        nodeManager.CollectSpice(X + i, Z + j);
+                        Debug.Log("Collected Spice!");
+                    }
+                }
+            }
+
             //TODO Call spice-hoarding Socket-Message and animate (Vorschlag wäre den Unity-Animator zu benutzen und dann mit einer Coroutine nach Ablauf der Animationszeit die Stats zu aktualisieren)
             turnHandler.ResetSelection();
             return true;
@@ -367,7 +378,7 @@ public class Character : MonoBehaviour
     {
         if (characterType == CharTypeEnum.BENEGESSERIT)
         {
-            
+
             Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
             Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
             if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
@@ -375,7 +386,7 @@ public class Character : MonoBehaviour
                 Debug.Log("Voice!");
                 turnHandler.ResetSelection();
                 return true;
-            } 
+            }
             else
             {
                 Debug.Log("Enemy too far away!");

@@ -10,7 +10,7 @@ public class CharacterTurnHandler : MonoBehaviour
     public static bool CharSelected { get { return instance.selectedCharacter != null; } }
 
     private Character selectedCharacter;
-  //  private Character secondCharacter;
+    //  private Character secondCharacter;
     private Actions charState;
     public Actions CharState { get { return charState; } }
 
@@ -30,38 +30,38 @@ public class CharacterTurnHandler : MonoBehaviour
         instance = this;
     }
 
-    
+
     private void Start()
     {
         nodeManager = NodeManager.instance;
-       // ButtonToggles();
-      //  ConfirmDeactivate();
+        // ButtonToggles();
+        //  ConfirmDeactivate();
     }
 
     void Update()
     {
-        if(Input.GetKey("j"))
+        if (Input.GetKey("j"))
         {
             charState = Actions.MOVE;
         }
-      /*  else if(Input.GetKey("k"))
-        {
-            charState = Actions.ATTACK;
-        }
-        else if(Input.GetKeyDown("l"))
-        {
-            //charState = Actions.SWORD_SPIN;
-            selectedCharacter.Attack_SwordSpin();
-            ResetSelection();
-            
-        }
-        else if(Input.GetKey("n"))
-        {
-            charState = Actions.FAMILY_ATOMICS;
-        }*/
+        /*  else if(Input.GetKey("k"))
+          {
+              charState = Actions.ATTACK;
+          }
+          else if(Input.GetKeyDown("l"))
+          {
+              //charState = Actions.SWORD_SPIN;
+              selectedCharacter.Attack_SwordSpin();
+              ResetSelection();
+
+          }
+          else if(Input.GetKey("n"))
+          {
+              charState = Actions.FAMILY_ATOMICS;
+          }*/
     }
 
-    
+
 
     public void SelectCharacter(Character character)
     {
@@ -155,17 +155,17 @@ public class CharacterTurnHandler : MonoBehaviour
 
     public void confirmAction()
     {
-        if(this.charState == Actions.MOVE)
+        if (this.charState == Actions.MOVE)
         {
             MovementManager.instance.AnimateSelectedChar();
         }
         ResetSelection();
     }
-    
+
     //Button activation/deactivation
     public void ButtonToggles()
     {
-        if(selectedCharacter == null)
+        if (selectedCharacter == null)
         {
             //basics
             characterAttacksPanel.SetActive(false);
@@ -176,7 +176,7 @@ public class CharacterTurnHandler : MonoBehaviour
             voiceButton.SetActive(false);
             spiceHoardingButton.SetActive(false);
             return;
-        } 
+        }
         else
         {
             characterAttacksPanel.SetActive(true);

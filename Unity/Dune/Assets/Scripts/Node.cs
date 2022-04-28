@@ -13,7 +13,7 @@ public class Node : MonoBehaviour
     public int Z { get { return _Z; } }
 
     private float offsetSpiceLowY = 0.35f;
-    private float offsetSpiceHighY = 0.525f ;
+    private float offsetSpiceHighY = 0.525f;
 
     public HeightLevel heightLvl = HeightLevel.low;
 
@@ -45,7 +45,7 @@ public class Node : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
 
@@ -84,8 +84,8 @@ public class Node : MonoBehaviour
 
     void OnMouseExit()
     {
-        if(rend.material.color == hoverColor)
-        ResetColor();
+        if (rend.material.color == hoverColor)
+            ResetColor();
     }
 
 
@@ -96,7 +96,7 @@ public class Node : MonoBehaviour
     {
         if (!accessible) return;
 
-        if(CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.MOVE  && CharacterTurnHandler.CharSelected && NodeManager.instance.getObjectOnNode(this) == null)
+        if (CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.MOVE && CharacterTurnHandler.CharSelected && NodeManager.instance.getObjectOnNode(this) == null)
         {
             Vector3 point = new Vector3();
             point.x = transform.position.x;
@@ -104,12 +104,13 @@ public class Node : MonoBehaviour
             point.z = transform.position.z;
             MovementManager.instance.AddWaypoint(point);
             this.rend.material.color = Color.green;
-        } else if(CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.FAMILY_ATOMICS && CharacterTurnHandler.CharSelected)
+        }
+        else if (CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.FAMILY_ATOMICS && CharacterTurnHandler.CharSelected)
         {
             CharacterTurnHandler.instance.GetSelectedCharacter().Attack_Atomic(this);
         }
-      
- 
+
+
 
 
     }
