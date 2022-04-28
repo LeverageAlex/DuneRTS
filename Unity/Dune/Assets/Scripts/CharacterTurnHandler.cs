@@ -16,6 +16,7 @@ public class CharacterTurnHandler : MonoBehaviour
 
     public GameObject kanlyButton, voiceButton, swordSpinButton, atomicsButton, spiceHoardingButton;
     public GameObject characterAttacksPanel;
+    public GameObject confirmationPanel;
 
     private NodeManager nodeManager;
 
@@ -34,6 +35,7 @@ public class CharacterTurnHandler : MonoBehaviour
     {
         nodeManager = NodeManager.instance;
         ButtonToggles();
+        ConfirmDeactivate();
     }
 
     void Update()
@@ -77,12 +79,14 @@ public class CharacterTurnHandler : MonoBehaviour
     {
         selectedCharacter = null;
         charState = Actions.EMPTY;
+        ConfirmDeactivate();
         ButtonToggles();
     }
 
     public void ResetAction()
     {
         charState = Actions.EMPTY;
+        ConfirmDeactivate();
     }
 
 
@@ -91,53 +95,71 @@ public class CharacterTurnHandler : MonoBehaviour
     {
         //activation by node + press b
         this.charState = Actions.MOVE;
+        confirmationPanel.SetActive(true);
     }
 
     public void SetCharStateAttack()
     {
         //activation by enemyChar
         this.charState = Actions.ATTACK;
+        ConfirmDeactivate();
     }
 
     public void SetCharStateCollectSpice()
     {
         selectedCharacter.Action_CollectSpice();
         this.charState = Actions.COLLECT;
+        ConfirmDeactivate();
     }
 
     public void SetCharStateTransferSpice()
     {
         //activation by otherChar
         this.charState = Actions.TRANSFER;
+        ConfirmDeactivate();
     }
 
     public void SetCharStateKanly()
     {
         //activation by enemyChar
         this.charState = Actions.KANLY;
+        ConfirmDeactivate();
     }
 
     public void SetCharStateVoice()
     {
         //activation by enemyChar
         this.charState = Actions.VOICE;
+        ConfirmDeactivate();
     }
 
     public void SetCharStateSpiceHoarding()
     {
         selectedCharacter.Action_SpiceHoarding();
         this.charState = Actions.SPICE_HOARDING;
+        ConfirmDeactivate();
     }
 
     public void SetCharStateSwordSpin()
     {
         selectedCharacter.Attack_SwordSpin();
         ResetSelection();
+        ConfirmDeactivate();
     }
     public void SetCharStateAtomics()
     {
         //activation by node
         this.charState = Actions.FAMILY_ATOMICS;
+        ConfirmDeactivate();
+    }
+
+    public void confirmAction()
+    {
+        if(this.charState == Actions.MOVE)
+        {
+            MovementManager.instance.AnimateSelectedChar();
+        }
+        ResetSelection();
     }
     
     //Button activation/deactivation
@@ -198,5 +220,10 @@ public class CharacterTurnHandler : MonoBehaviour
                 spiceHoardingButton.SetActive(false);
                 break;
         }
+    }
+
+    public void ConfirmDeactivate()
+    {
+        confirmationPanel.SetActive(false);
     }
 }

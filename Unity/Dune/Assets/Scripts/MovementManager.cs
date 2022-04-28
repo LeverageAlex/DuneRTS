@@ -48,9 +48,11 @@ public class MovementManager : MonoBehaviour
 
         //Test code
         //Starts animation on key b
-        if (Input.GetKeyDown("b") && selCharPath.Count > 0) {
+        
+        if (Input.GetKeyDown(KeyCode.Return) && selCharPath.Count > 0) {
             AnimateSelectedChar();
         }
+        
     }
 
 
@@ -79,13 +81,16 @@ public class MovementManager : MonoBehaviour
 
     public void AnimateSelectedChar()
     {
-       // if (!isAnimating)
-       // {
+        // if (!isAnimating)
+        // {
+        if (selCharPath.Count > 0)
+        {
             Character selectedChar = CharacterTurnHandler.instance.GetSelectedCharacter();
             updateCharacters.AddLast(selectedChar);
             selectedChar.SetWalkPath(selCharPath);
             selCharPath = new LinkedList<Vector3>();
             CharacterTurnHandler.instance.ResetSelection();
+        }
        // }
     }
 
