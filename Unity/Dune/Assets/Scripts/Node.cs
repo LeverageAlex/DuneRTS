@@ -53,12 +53,16 @@ public class Node : MonoBehaviour
           {
               return;
           }*/
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+
 
         rend.material.color = hoverColor;
     }
 
     private void OnMouseDown()
     {
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+
         SelectNode();
     }
 
