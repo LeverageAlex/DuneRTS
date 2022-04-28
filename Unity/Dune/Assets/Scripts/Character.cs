@@ -29,8 +29,11 @@ public class Character : MonoBehaviour
 
     private int _x;
     private int _z;
+    private float _y;
 
     public int X { get { return _x; } }
+
+    public float BaseY { get { return _y; } }
     public int Z { get { return _z; } }
 
 
@@ -58,6 +61,7 @@ public class Character : MonoBehaviour
 
         _x = (int)Mathf.Round(transform.position.x);
         _z = (int)Mathf.Round(transform.position.z);
+        _y = transform.position.y;
 
         //SampleCode only
         initCharacter();

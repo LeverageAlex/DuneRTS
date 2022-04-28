@@ -102,7 +102,7 @@ public class Node : MonoBehaviour
         {
             Vector3 point = new Vector3();
             point.x = transform.position.x;
-            point.y = CharacterTurnHandler.instance.GetSelectedCharacter().transform.position.y + charHeightOffset;
+            point.y = CharacterTurnHandler.instance.GetSelectedCharacter().BaseY + charHeightOffset;
             point.z = transform.position.z;
             MovementManager.instance.AddWaypoint(point);
             this.rend.material.color = Color.green;
