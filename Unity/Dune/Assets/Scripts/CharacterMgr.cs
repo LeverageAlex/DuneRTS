@@ -12,8 +12,11 @@ public class CharacterMgr : MonoBehaviour
     public GameObject beneGesseritPrefab;
     public GameObject fighterPrefab;
 
+    private float charSpawnLowY = 0.35f;
+    private float charSpawnHighY = 0.525f;
 
- 
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -29,14 +32,14 @@ public class CharacterMgr : MonoBehaviour
 
     /*
      * To be filled after open question regarding standardDocument has ben resolved
-  */  public bool spawnCharacter(int characterID, string type,int x, int z,int HPcurrent, int healingHP, int MPcurrent, int APcurrent, int attackDamage, int inventoryLeft, bool killedBySandworm, bool loud)
+  */  public bool spawnCharacter(int characterID, CharTypeEnum type,int x, int z,int HPcurrent, int healingHP, int MPcurrent, int APcurrent, int attackDamage, int inventoryLeft, bool killedBySandworm, bool loud)
     {
         if (characterDict.ContainsKey(characterID))
             return false;
 
 
-
-        GameObject newChar = (GameObject) Instantiate(getCharTypeByString(type), new Vector3(x, 0f, z), Quaternion.identity);
+        float charSpawnY = NodeManager.instance.getNodeFromPos(x,z).heightLvl == Node.HeightLevel.low ? charSpawnHighY : charSpawnLowY;
+        GameObject newChar = (GameObject) Instantiate(getCharTypeByEnum(type), new Vector3(x, charSpawnY, z), Quaternion.identity);
         characterDict.Add(characterID, newChar);
         Character localChar = (Character) newChar.GetComponent(typeof(Character));
         localChar.UpdateCharStats(HPcurrent, healingHP, MPcurrent, APcurrent, attackDamage, inventoryLeft, loud, killedBySandworm);
@@ -59,17 +62,17 @@ public class CharacterMgr : MonoBehaviour
     }
 
 
-    GameObject getCharTypeByString(string type)
+    GameObject getCharTypeByEnum(CharTypeEnum type)
     {
         switch (type)
         {
-            case "NOBLE":
+            case CharTypeEnum.NOBLE:
                 return noblePrefab;
-            case "BENEGESSERIT":
+            case CharTypeEnum.BENEGESSERIT:
                 return beneGesseritPrefab;
-            case "MENTAT":
+            case CharTypeEnum.MENTANT:
                 return mentatPrefab;
-            case "FIGHTER":
+            case CharTypeEnum.FIGHTER:
                 return fighterPrefab;
             default:
                 Debug.Log("Error in CharacterMgr: CharType doesn't exist!");

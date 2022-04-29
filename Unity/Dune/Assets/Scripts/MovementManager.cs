@@ -76,7 +76,34 @@ public class MovementManager : MonoBehaviour
 
     public void AddWaypoint(Vector3 vec)
     {
-        selCharPath.AddLast(vec);
+        if (IsWaypointAttachable((int) vec.x, (int) vec.z))
+        {
+            selCharPath.AddLast(vec);
+        }
+        else
+        {
+            Debug.Log("Can not extend Path, due too low MP or Field out of range");
+        }
+    }
+
+
+    /*
+     * Will check whether the MP limit is reached and if point is in range.
+     * Currently deactivated for easier testing, but should be activated later
+     */
+    public bool IsWaypointAttachable(int x, int z)
+    {
+        /*if (selCharPath.Count == 0) { // distinction needed at the first node to select
+            return selCharPath.Count < CharacterTurnHandler.instance.GetSelectedCharacter().MP && NodeManager.instance.isNodeNeighbour(CharacterTurnHandler.instance.GetSelectedCharacter().X,
+                CharacterTurnHandler.instance.GetSelectedCharacter().Z, x, z);
+        }
+        else
+        {
+            return selCharPath.Count < CharacterTurnHandler.instance.GetSelectedCharacter().MP && NodeManager.instance.isNodeNeighbour((int)selCharPath.Last.Value.x, (int)selCharPath.Last.Value.z,
+               x, z);
+        }*/
+        
+        return true;
     }
 
     public void AnimateSelectedChar()
@@ -88,6 +115,7 @@ public class MovementManager : MonoBehaviour
             Character selectedChar = CharacterTurnHandler.instance.GetSelectedCharacter();
             updateCharacters.AddLast(selectedChar);
             selectedChar.SetWalkPath(selCharPath);
+            selectedChar.ReduceMP(selCharPath.Count);
             selCharPath = new LinkedList<Vector3>();
             CharacterTurnHandler.instance.ResetSelection();
         }

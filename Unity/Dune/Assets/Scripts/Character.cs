@@ -22,8 +22,9 @@ public class Character : MonoBehaviour
 
     private int HP;  //Health Points
     private int healingHP;
-    private int MP;  //Movement Points
-    private int AP;  //Attack Points
+    private int BaseAP;
+    private int _AP;  //Attack Points
+    private int _MP; //Movement Points
     private int AD;  //Attack-Damage
     private int spiceInv;
 
@@ -35,6 +36,10 @@ public class Character : MonoBehaviour
 
     public float BaseY { get { return _y; } }
     public int Z { get { return _z; } }
+
+    public int MP { get { return _MP; } }
+
+    public int AP { get { return _AP; } }
 
 
     private bool isLoud;
@@ -61,7 +66,7 @@ public class Character : MonoBehaviour
 
         _x = (int)Mathf.Round(transform.position.x);
         _z = (int)Mathf.Round(transform.position.z);
-        _y = transform.position.y;
+        _y = transform.position.y - nodeManager.getNodeFromPos(X, Z).charHeightOffset;
 
         //SampleCode only
         initCharacter();
@@ -71,6 +76,7 @@ public class Character : MonoBehaviour
         nodeManager.placeObjectOnNode(gameObject, (int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z));
         //Debug.Log("HP " + HP + ", AP " + AP);
         //Debug.Log("Object name: " + gameObject.name);
+        BaseAP = _AP;
     }
 
     /*
@@ -110,8 +116,8 @@ public class Character : MonoBehaviour
     {
         this.HP = HP;
         this.healingHP = HealHP;
-        this.MP = MP;
-        this.AP = AP;
+        this._AP = AP;
+        this._MP = MP;
         this.AD = AD;
         this.spiceInv = spiceInv;
         this.isLoud = isLoud;
@@ -129,7 +135,7 @@ public class Character : MonoBehaviour
     {
         Vector3 dir = walkPath.First.Value - transform.position;
         transform.Translate(dir.normalized * walkSpeed * Time.deltaTime, Space.World);
-
+       // ReduceMP(1);
         if (Vector3.Distance(transform.position, walkPath.First.Value) <= 0.06f)
         {
             walkPath.RemoveFirst();
@@ -151,6 +157,7 @@ public class Character : MonoBehaviour
     public void SetWalkPath(LinkedList<Vector3> way)
     {
         walkPath = way;
+        _AP -= way.Count;
     }
 
     public void OnMouseDown()
@@ -196,10 +203,12 @@ public class Character : MonoBehaviour
         //secondCharacter = character;
         Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
         Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
-
+        
 
         if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
         {
+            ReduceAP(1);
+            if (_AP <= 0) CharacterTurnHandler.EndTurn();
             //TODO execute attack
             Debug.Log("Attack");
 
@@ -221,7 +230,9 @@ public class Character : MonoBehaviour
         if (nodeManager.IsSpiceOn(X, Z))
         {
             nodeManager.CollectSpice(X, Z);
+            ReduceAP(1);
             Debug.Log("Collected Spice!");
+            if (_AP <= 0) CharacterTurnHandler.EndTurn();
         }
         else
         {
@@ -241,7 +252,8 @@ public class Character : MonoBehaviour
         {
             //TODO execute attack
             Debug.Log("Transfer!");
-
+            ReduceAP(1);
+            if (_AP <= 0) CharacterTurnHandler.EndTurn();
             //reset 
             // secondCharacter = null;
             turnHandler.ResetSelection();
@@ -265,6 +277,9 @@ public class Character : MonoBehaviour
             Debug.Log("Attack_SwordSpin");
             turnHandler.ResetSelection();
             //TODO: Send Attack to Server
+            ReduceAP(_AP); // Reduce AP to 0 | should be removed when server manages MP
+            if (_AP <= 0) CharacterTurnHandler.EndTurn();
+            CharacterTurnHandler.EndTurn();
             return true;
         }
         else
@@ -289,7 +304,9 @@ public class Character : MonoBehaviour
 
             Debug.Log("Atomic explosion at x: " + node.X.ToString() + ", z: " + node.Z.ToString());
             turnHandler.ResetSelection();
-
+            ReduceAP(_AP); // Reduce AP to 0 | should be removed when server manages MP
+            if (_AP <= 0) CharacterTurnHandler.EndTurn();
+            CharacterTurnHandler.EndTurn();
             return true;
         }
         else
@@ -314,6 +331,8 @@ public class Character : MonoBehaviour
             {
                 Debug.Log("Kanly fight!");
                 turnHandler.ResetSelection();
+                ReduceAP(_AP); //reduce AP to 0
+                if (_AP <= 0) CharacterTurnHandler.EndTurn();
                 return true;
             }
             else
@@ -345,6 +364,8 @@ public class Character : MonoBehaviour
                     {
                         nodeManager.CollectSpice(X + i, Z + j);
                         Debug.Log("Collected Spice!");
+                        ReduceAP(_AP); //Set AP to 0
+                        CharacterTurnHandler.EndTurn();
                     }
                 }
             }
@@ -375,6 +396,8 @@ public class Character : MonoBehaviour
             {
                 Debug.Log("Voice!");
                 turnHandler.ResetSelection();
+                ReduceAP(_AP); //reduce to MP to 0
+                CharacterTurnHandler.EndTurn();
                 return true;
             }
             else
@@ -396,6 +419,34 @@ public class Character : MonoBehaviour
     {
         return characterType;
     }
+
+    public bool isEligibleForSpecialAction()
+    {
+        return (BaseAP <= _AP);  
+    }
+
+    private void ReduceAP(int reduce)
+    {
+        if (_AP > 0)
+        {
+            _AP -= reduce;
+        }
+    }
+
+    public bool HasAP()
+    {
+        return _AP > 0;
+    }
+
+    public void ReduceMP(int reduce)
+    {
+        if(_MP > 0)
+        {
+            _MP -= reduce;
+        }
+    }
+
+ 
 
 
 

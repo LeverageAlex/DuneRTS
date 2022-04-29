@@ -143,7 +143,7 @@ public class CharacterTurnHandler : MonoBehaviour
     public void SetCharStateSwordSpin()
     {
         selectedCharacter.Attack_SwordSpin();
-        ResetSelection();
+        EndTurn();
         ConfirmDeactivate();
     }
     public void SetCharStateAtomics()
@@ -162,6 +162,12 @@ public class CharacterTurnHandler : MonoBehaviour
         ResetSelection();
     }
 
+    public static void EndTurn()
+    {
+        Debug.Log("Ended Turn!");
+        instance.ResetSelection();
+    }
+
     //Button activation/deactivation
     public void ButtonToggles()
     {
@@ -169,6 +175,16 @@ public class CharacterTurnHandler : MonoBehaviour
         {
             //basics
             characterAttacksPanel.SetActive(false);
+            return;
+           
+        }
+        else
+        {
+            characterAttacksPanel.SetActive(true);
+        }
+
+        if(!selectedCharacter.isEligibleForSpecialAction())
+        {
             //special
             atomicsButton.SetActive(false);
             swordSpinButton.SetActive(false);
@@ -176,10 +192,6 @@ public class CharacterTurnHandler : MonoBehaviour
             voiceButton.SetActive(false);
             spiceHoardingButton.SetActive(false);
             return;
-        }
-        else
-        {
-            characterAttacksPanel.SetActive(true);
         }
 
         switch (selectedCharacter.characterType)

@@ -68,6 +68,20 @@ public class NodeManager : MonoBehaviour
         return false;
     }
 
+    public bool isNodeNeighbour(int firstX, int firstZ, int secondX, int secondZ)
+    {
+        if (Mathf.Abs(firstX - secondX) == 1)
+        {
+            return (Mathf.Abs(firstZ - secondZ) <= 1);
+        }
+        else if (Mathf.Abs(firstX - secondX) == 0)
+        {
+            return (Mathf.Abs(firstZ - secondZ) == 1);
+        }
+
+        return false;
+    }
+
     //Getters
     public Node getNodeFromPos(int x, int z)
     {

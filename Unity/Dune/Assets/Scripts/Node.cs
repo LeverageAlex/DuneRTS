@@ -100,12 +100,16 @@ public class Node : MonoBehaviour
 
         if (CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.MOVE && CharacterTurnHandler.CharSelected && NodeManager.instance.getObjectOnNode(this) == null)
         {
+            if (MovementManager.instance.IsWaypointAttachable(X, Z))
+            {
+                this.rend.material.color = Color.green;
+            }
             Vector3 point = new Vector3();
             point.x = transform.position.x;
             point.y = CharacterTurnHandler.instance.GetSelectedCharacter().BaseY + charHeightOffset;
             point.z = transform.position.z;
             MovementManager.instance.AddWaypoint(point);
-            this.rend.material.color = Color.green;
+
         }
         else if (CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.FAMILY_ATOMICS && CharacterTurnHandler.CharSelected)
         {
