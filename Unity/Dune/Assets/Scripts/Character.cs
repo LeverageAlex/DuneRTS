@@ -15,6 +15,7 @@ public class Character : MonoBehaviour
     CharacterTurnHandler turnHandler;
 
     public CharTypeEnum characterType;
+    public HouseEnum house = HouseEnum.VERNIUS;
     //TODO
     //Wird nur während des erstellen von noch nicht selbstgenerierten Leveln benötigt (da so im UnityEditor gewählt werden kann).
     //Sollte später durch einfach durch eine direkte Referenz ersetzt
@@ -77,6 +78,7 @@ public class Character : MonoBehaviour
         //Debug.Log("HP " + HP + ", AP " + AP);
         //Debug.Log("Object name: " + gameObject.name);
         BaseAP = _AP;
+
     }
 
     /*
@@ -106,6 +108,8 @@ public class Character : MonoBehaviour
         {
             UpdateCharStats(150, 20, 3, 2, 20, 5, false, false);
         }
+
+        SetMatColorToHouse();
     }
 
 
@@ -205,7 +209,7 @@ public class Character : MonoBehaviour
         Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
         
 
-        if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
+        if (nodeManager.isNodeNeighbour(selectedNode, secondNode) && !character.IsMemberOfHouse(house))
         {
             ReduceAP(1);
             if (_AP <= 0) CharacterTurnHandler.EndTurn();
@@ -248,7 +252,7 @@ public class Character : MonoBehaviour
         Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
         Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
 
-        if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
+        if (nodeManager.isNodeNeighbour(selectedNode, secondNode) && character.IsMemberOfHouse(house))
         {
             //TODO execute attack
             Debug.Log("Transfer!");
@@ -323,7 +327,7 @@ public class Character : MonoBehaviour
     public bool Attack_Kanly(Character character)
     {
 
-        if (characterType == CharTypeEnum.NOBLE && character.GetCharType() == CharTypeEnum.NOBLE)
+        if (characterType == CharTypeEnum.NOBLE && character.GetCharType() == CharTypeEnum.NOBLE && !character.IsMemberOfHouse(house))
         {
             Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
             Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
@@ -338,7 +342,7 @@ public class Character : MonoBehaviour
             else
             {
                 turnHandler.ResetAction();
-                Debug.Log("Enemy too far away!");
+                Debug.Log("Enemy too far away or no Enemy!");
                 return false;
             }
         }
@@ -446,6 +450,37 @@ public class Character : MonoBehaviour
         }
     }
 
+    public void SetMatColorToHouse()
+    {
+        Color col = Color.gray;
+        switch(house)
+        {
+            case HouseEnum.CORRINO: //Gold
+                col = new Color(255, 215, 0);
+                break;
+            case HouseEnum.ATREIDES:
+                col = Color.green;
+                break;
+            case HouseEnum.HARKONNEN:
+                col = Color.red;
+                break;
+            case HouseEnum.ORDOS:
+                col = Color.blue;
+                break;
+            case HouseEnum.RICHESE: //Silver
+                col = new Color(192, 192, 192);
+                break;
+            case HouseEnum.VERNIUS:
+                col = new Color(128, 0, 128); //Purple
+                break;
+        }
+        GetComponent<Renderer>().material.color = col;
+    }
+
+    public bool IsMemberOfHouse(HouseEnum houseEnum)
+    {
+        return houseEnum == house;
+    }
  
 
 
