@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System;
 
-
+[Serializable]
 public class Character : MonoBehaviour
 {
     public string charName;
     public float walkSpeed = 3f;
-
-
+    //[SerializeField] this is used to serialize private fields in json format
     private int characterId;
 
     CharacterTurnHandler turnHandler;
@@ -128,7 +128,8 @@ public class Character : MonoBehaviour
         this.isSwallowed = isSwallowed;
 
         Debug.Log("Updated " + gameObject.name + "s stats.");
-
+        // Test SaveManager
+        SaveManager.Save(this);
     }
 
     /*

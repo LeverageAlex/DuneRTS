@@ -118,6 +118,12 @@ public class MovementManager : MonoBehaviour
             selectedChar.ReduceMP(selCharPath.Count);
             selCharPath = new LinkedList<Vector3>();
             CharacterTurnHandler.instance.ResetSelection();
+            Request request = new Request();
+            request.type = Request.RequestType.MOVEMENT_REQUEST;
+            SaveManager.SaveRequest(request);
+            // Create Json content for Movementrequest
+            // new Request
+            //SaveManager.SaveMovementRequest(Request);
         }
        // }
     }
