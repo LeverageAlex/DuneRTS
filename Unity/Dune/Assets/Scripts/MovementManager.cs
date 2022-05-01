@@ -13,6 +13,7 @@ using Newtonsoft.Json;
         public static MovementManager instance;
         // private Character selectedChar;
         private LinkedList<Character> updateCharacters;
+        private LinkedList<MoveAbles> OtherMoveAbles;
         [SerializeField]
         private LinkedList<Vector3> selCharPath;
 
@@ -31,6 +32,7 @@ using Newtonsoft.Json;
                 instance = this;
                 updateCharacters = new LinkedList<Character>();
                 selCharPath = new LinkedList<Vector3>();
+                OtherMoveAbles = new LinkedList<MoveAbles>();
             }
             else Debug.Log("MovementManager Error. Instance of updateCharacters already exist.");
 
@@ -53,10 +55,21 @@ using Newtonsoft.Json;
                 cluster = next;
             }
 
-            //Test code
-            //Starts animation on key b
+            //Every other Object to move, who is not a Character
+            for (var cluster = OtherMoveAbles.First; cluster != null;)
+            {
+                var next = cluster.Next;
+                if (!cluster.Value.calledUpdate())
+                {
+                    OtherMoveAbles.Remove(cluster);
+                }
+                cluster = next;
+            }
 
-            if (Input.GetKeyDown(KeyCode.Return) && selCharPath.Count > 0)
+        //Test code
+        //Starts animation on key b
+
+        if (Input.GetKeyDown(KeyCode.Return) && selCharPath.Count > 0)
             {
                 AnimateSelectedChar();
             }
@@ -76,8 +89,13 @@ using Newtonsoft.Json;
             CharacterTurnHandler.instance.GetSelectedCharacter().SetWalkPath(pathing);
         }
 
+    public void addOtherToAnimate(MoveAbles moveAble)
+    {
+        OtherMoveAbles.AddLast(moveAble);
+    }
 
-        public void unselectCharacter()
+
+    public void unselectCharacter()
         {
             selCharPath.Clear();
         }
