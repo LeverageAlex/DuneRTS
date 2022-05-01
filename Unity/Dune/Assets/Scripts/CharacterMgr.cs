@@ -15,6 +15,8 @@ public class CharacterMgr : MonoBehaviour
     private float charSpawnLowY = 0.35f;
     private float charSpawnHighY = 0.525f;
 
+    public int clientID;
+
 
 
 

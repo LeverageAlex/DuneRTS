@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 
+
 public static class FileHandler
 {
 
@@ -11,12 +12,30 @@ public static class FileHandler
     {
         Debug.Log(GetPath(filename));
         string content = JsonHelper.ToJson<T>(toSave.ToArray());
+        Debug.Log(content);
+        WriteFile(GetPath(filename), content);
+        
+    }
+
+    public static void SaveToJSON<T>(List<List<T>> toSave, String objectName,string filename)
+    {
+        Debug.Log(GetPath(filename));
+        
+        string content = "\"" + objectName + "\": [";
+        for (int i = 0; i < toSave.Count; i++) { 
+
+        content += JsonHelper.ToJson<T>(toSave.ElementAt(i).ToArray());
+            if (i + 1 < toSave.Count) content += ", ";
+    }
+        content += "]";
+        Debug.Log(content);
         WriteFile(GetPath(filename), content);
     }
 
     public static void SaveToJSON<T>(T toSave, string filename)
     {
         string content = JsonUtility.ToJson(toSave);
+        Debug.Log(content);
         WriteFile(GetPath(filename), content);
     }
 
@@ -89,9 +108,19 @@ public static class JsonHelper
 
     public static string ToJson<T>(T[] array)
     {
-        Wrapper<T> wrapper = new Wrapper<T>();
+        /*Wrapper<T> wrapper = new Wrapper<T>();
         wrapper.Items = array;
-        return JsonUtility.ToJson(wrapper);
+        return JsonUtility.ToJson(wrapper);*/
+        string content = "";
+        for (int i = 0; i < array.Length; i++)
+        {
+
+            content += JsonUtility.ToJson(array[i]);
+            if (i + 1 < array.Length) content += ", ";
+        }
+       // content += "}";
+
+        return content;
     }
 
     public static string ToJson<T>(T[] array, bool prettyPrint)
