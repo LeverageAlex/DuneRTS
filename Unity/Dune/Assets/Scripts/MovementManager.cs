@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
+[Serializable]
 public class MovementManager : MonoBehaviour
 {
 
     public static MovementManager instance;
    // private Character selectedChar;
     private LinkedList<Character> updateCharacters;
+    [SerializeField]
     private LinkedList<Vector3> selCharPath;
 
    // public static bool charSelected { get { return instance.selectedChar != null; } }
@@ -118,9 +121,27 @@ public class MovementManager : MonoBehaviour
             selectedChar.ReduceMP(selCharPath.Count);
             selCharPath = new LinkedList<Vector3>();
             CharacterTurnHandler.instance.ResetSelection();
+
             Request request = new Request();
             request.type = Request.RequestType.MOVEMENT_REQUEST;
-            SaveManager.SaveRequest(request);
+            request.version = "v1";
+            request.clientID = 1234;
+            request.characterID = selectedChar.GetInstanceID();
+            List<Vector3> selPath = new List<Vector3>(selCharPath);
+
+
+            List<List<Vector3>> specs = new List<List<Vector3>>();
+            specs.Add(selPath);
+            request.specs = specs;
+            FileHandler.SaveToJSON<Request>(request, "MyData.txt");
+
+            
+            //ListWrapper<Vector3> wrapper = new ListWrapper<Vector3>();
+            //request.path = wrapper;
+            Debug.Log(selCharPath);
+            //SaveManager.SaveRequest(request);
+
+
             // Create Json content for Movementrequest
             // new Request
             //SaveManager.SaveMovementRequest(Request);

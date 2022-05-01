@@ -10,6 +10,8 @@ public class Request
     public String version;
     public int clientID;
     public int characterID;
+    [SerializeField]
+    public List<List<Vector3>> specs;
 
     public enum RequestType
     {

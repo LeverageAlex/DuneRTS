@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System;
 
 public static class SaveManager
 {
@@ -28,6 +29,7 @@ public static class SaveManager
     public static void SaveRequest(Request request)
     {
         string dir = Application.persistentDataPath + directory;
+        Debug.Log(dir);
 
         if (!Directory.Exists(dir))
         {
@@ -51,7 +53,7 @@ public static class SaveManager
         {
             string json = File.ReadAllText(fullPath);
             character = JsonUtility.FromJson<Character>(json);
-        } 
+        }
         else
         {
             Debug.Log("Save File does not exist.");
