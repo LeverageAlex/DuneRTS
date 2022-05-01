@@ -142,7 +142,16 @@ using Newtonsoft.Json;
                 selPath.Add(new Vector3(5, 8, 99));
                 request.specs = specs;
                 FileHandler.SaveToJSON<Vector3>(specs, "path", "MyData.txt");
-              //  JsonConvert.SerializeObject("");
+            //  JsonConvert.SerializeObject("");
+
+            string data = JsonConvert.SerializeObject(specs, new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            }) ;
+
+
+
+            Debug.Log("Updated: " + data);
 ;               
            // Debug.Log("Converted: " + JsonConvert.SerializeObject(selPath));
 
