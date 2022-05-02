@@ -140,52 +140,32 @@ using Newtonsoft.Json;
             {
                 Character selectedChar = CharacterTurnHandler.instance.GetSelectedCharacter();
                 updateCharacters.AddLast(selectedChar);
-                selectedChar.SetWalkPath(selCharPath);
-                selectedChar.ReduceMP(selCharPath.Count);
-                selCharPath = new LinkedList<Vector3>();
 
-                CharacterTurnHandler.instance.ResetSelection();
-
-                Request request = new Request();
-                request.type = Request.RequestType.MOVEMENT_REQUEST;
+                Request request = new Request(Request.RequestType.MOVEMENT_REQUEST);
                 request.version = "v1";
                 request.clientID = 1234;
                 request.characterID = selectedChar.GetInstanceID();
-                List<Vector3> selPath = new List<Vector3>(selCharPath);
+                List<Vector> path = new List<Vector>();
 
 
-                List<List<Vector3>> specs = new List<List<Vector3>>();
-                selPath.Add(new Vector3(3, 2, 1));
-                specs.Add(selPath);
-                selPath.Add(new Vector3(5, 8, 99));
+                Specs specs = new Specs();
+                foreach(Vector3 vec in selCharPath)
+                {
+                    Vector v = new Vector(vec.x, vec.z);
+                    path.Add(v);
+                }
+                specs.path = path;
                 request.specs = specs;
-                FileHandler.SaveToJSON<Vector3>(specs, "path", "MyData.txt");
-            //  JsonConvert.SerializeObject("");
 
-            string data = JsonConvert.SerializeObject(specs, new JsonSerializerSettings()
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            }) ;
+                string data = JsonConvert.SerializeObject(request, new JsonSerializerSettings());
+                Debug.Log("Updated: " + data);
 
-
-
-            Debug.Log("Updated: " + data);
-;               
-           // Debug.Log("Converted: " + JsonConvert.SerializeObject(selPath));
-
-                //ListWrapper<Vector3> wrapper = new ListWrapper<Vector3>();
-                //request.path = wrapper;
-            Debug.Log(selCharPath);
-            
-                
-                //SaveManager.SaveRequest(request);
-
-
-                // Create Json content for Movementrequest
-                // new Request
-                //SaveManager.SaveMovementRequest(Request);
+                // Sollte erst ausgeführt werden, wenn die aktion ausgeführt werden darf.
+                selectedChar.SetWalkPath(selCharPath);
+                selectedChar.ReduceMP(selCharPath.Count);
+                selCharPath = new LinkedList<Vector3>();
+                CharacterTurnHandler.instance.ResetSelection();
             }
-            // }
         }
 
 

@@ -128,8 +128,6 @@ public class Character : MonoBehaviour
         this.isSwallowed = isSwallowed;
 
         Debug.Log("Updated " + gameObject.name + "s stats.");
-        // Test SaveManager
-        SaveManager.Save(this);
     }
 
     /*
