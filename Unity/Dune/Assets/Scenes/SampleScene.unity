@@ -13081,6 +13081,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 458466480192698828, guid: bd11aabe87bba1642a035f4c7eb20106, type: 3}
+      propertyPath: rotationOffset
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 458466480192698831, guid: bd11aabe87bba1642a035f4c7eb20106, type: 3}
       propertyPath: m_Name
       value: Sandworm

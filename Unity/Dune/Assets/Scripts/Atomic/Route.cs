@@ -15,6 +15,8 @@ public class Route : MonoBehaviour
 
     private Vector3 gizmosPosition;
 
+
+    //Not necessary but sometimes helpful
     private void OnDrawGizmos()
     {
         for (float t = 0; t <= 1; t += 0.05f)
