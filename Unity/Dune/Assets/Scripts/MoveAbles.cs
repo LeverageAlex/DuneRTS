@@ -29,8 +29,8 @@ public class MoveAbles : MonoBehaviour
     {
         if(Input.GetKeyDown("c"))
         {
-            walkPath.AddLast(new Vector3(7, transform.position.y, 7));
-            walkPath.AddLast(new Vector3(3, transform.position.y, 2));
+            walkPath.AddLast(new Vector3(7, transform.position.y + NodeManager.instance.getNodeFromPos(7,7).charHeightOffset, 7));
+            walkPath.AddLast(new Vector3(2, transform.position.y + NodeManager.instance.getNodeFromPos(2, 1).charHeightOffset, 1));
             MovementManager.instance.addOtherToAnimate(this);
         }
     }
@@ -56,9 +56,9 @@ public class MoveAbles : MonoBehaviour
         if (Vector3.Distance(transform.position, walkPath.First.Value) <= 0.06f)
         {
             walkPath.RemoveFirst();
-            NodeManager.instance.placeObjectOnNode(gameObject, (int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z));
+            //NodeManager.instance.placeObjectOnNode(gameObject, (int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z));
 
-            NodeManager.instance.RemoveObjectOnNode(X, Z);
+            //NodeManager.instance.RemoveObjectOnNode(X, Z);
 
             _x = (int)Mathf.Round(transform.position.x);
             _z = (int)Mathf.Round(transform.position.z);
