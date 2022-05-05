@@ -16,6 +16,7 @@ public class AtomicController : MonoBehaviour
     private int targetX;
     private int targetZ;
 
+    private GameObject route;
 
     // Start is called before the first frame update
     void Start()
@@ -26,7 +27,7 @@ public class AtomicController : MonoBehaviour
 
 
         //Set up Bezier curve points
-        GameObject route = Instantiate(routePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        route = Instantiate(routePrefab, new Vector3(0, 0, 0), Quaternion.identity);
 
         route.transform.GetChild(0).SetPositionAndRotation(new Vector3(_x, 0.5f, _z), Quaternion.identity);
         route.transform.GetChild(1).SetPositionAndRotation(new Vector3(_x, flightHeight, _z), Quaternion.identity);
@@ -36,6 +37,7 @@ public class AtomicController : MonoBehaviour
         //Start the movement
         follow.startRush(route.transform);
 
+
     }
 
     public void Destruction()
@@ -44,6 +46,7 @@ public class AtomicController : MonoBehaviour
         Debug.Log("Atomic explosion at x: " + targetX.ToString() + ", z: " + targetZ.ToString());
         Destroy(expl, 3.5f);
         Destroy(gameObject);
+        Destroy(route);
     }
 
     public void SetTargetPos(int x, int z)

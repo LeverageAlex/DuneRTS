@@ -312,7 +312,7 @@ public class Character : MonoBehaviour
             turnHandler.ResetSelection();
             ReduceAP(_AP); // Reduce AP to 0 | should be removed when server manages MP
             if (_AP <= 0) CharacterTurnHandler.EndTurn();
-            CharacterTurnHandler.EndTurn();
+            //CharacterTurnHandler.EndTurn();
             return true;
         }
         else
