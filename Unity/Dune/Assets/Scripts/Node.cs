@@ -96,9 +96,8 @@ public class Node : MonoBehaviour
      */
     public void SelectNode()
     {
-        if (!accessible) return;
 
-        if (CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.MOVE && CharacterTurnHandler.CharSelected && NodeManager.instance.getObjectOnNode(this) == null)
+        if (accessible && CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.MOVE && CharacterTurnHandler.CharSelected && NodeManager.instance.getObjectOnNode(this) == null)
         {
             if (MovementManager.instance.IsWaypointAttachable(X, Z))
             {
