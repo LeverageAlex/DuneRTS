@@ -24,6 +24,8 @@ public class AtomicController : MonoBehaviour
         _y = (int)Mathf.Round(transform.position.y);
         _z = (int)Mathf.Round(transform.position.z);
 
+
+        //Set up Bezier curve points
         GameObject route = Instantiate(routePrefab, new Vector3(0, 0, 0), Quaternion.identity);
 
         route.transform.GetChild(0).SetPositionAndRotation(new Vector3(_x, 0.5f, _z), Quaternion.identity);
@@ -31,11 +33,8 @@ public class AtomicController : MonoBehaviour
         route.transform.GetChild(2).SetPositionAndRotation(new Vector3(targetX, flightHeight, targetZ), Quaternion.identity);
         route.transform.GetChild(3).SetPositionAndRotation(new Vector3(targetX, 0.5f, targetZ), Quaternion.identity);
 
-
+        //Start the movement
         follow.startRush(route.transform);
-
-
-        Destroy(this, 15f);
 
     }
 
