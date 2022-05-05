@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7412499961909464194}
   - component: {fileID: 3993944794098733000}
   - component: {fileID: 7412499961909464195}
+  - component: {fileID: 414224601}
   m_Layer: 0
   m_Name: Atomic
   m_TagString: Untagged
@@ -111,7 +112,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionPrefab: {fileID: 100010, guid: 031d08f52af1daa4f929b85221519426, type: 3}
+  routePrefab: {fileID: 8213980984938693333, guid: 793116b80c6b12348b18a58c6c1c29f1, type: 3}
+  follow: {fileID: 414224601}
 --- !u!114 &7412499961909464195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7412499961909464192}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf8933330747bd4980aff5281966ac6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  walkSpeed: 3
+--- !u!114 &414224601
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -120,7 +136,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7412499961909464192}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbf8933330747bd4980aff5281966ac6, type: 3}
+  m_Script: {fileID: 11500000, guid: d03d61dfd55480a499ed95cf00d48643, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 3
+  controller: {fileID: 3993944794098733000}
+  routes:
+  - {fileID: 0}

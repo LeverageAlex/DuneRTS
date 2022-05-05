@@ -308,6 +308,7 @@ public class Character : MonoBehaviour
 
             GameObject atomicInst = Instantiate(CharacterMgr.instance.atomicPrefab, new Vector3(X, 0.5f, Z), Quaternion.identity);
             ((AtomicController)atomicInst.GetComponent(typeof(AtomicController))).SetTargetPos(node.X, node.Z);
+            Debug.Log("Created Atomic");
             turnHandler.ResetSelection();
             ReduceAP(_AP); // Reduce AP to 0 | should be removed when server manages MP
             if (_AP <= 0) CharacterTurnHandler.EndTurn();

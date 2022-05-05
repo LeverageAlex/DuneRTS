@@ -5,9 +5,13 @@ using UnityEngine;
 public class AtomicController : MonoBehaviour
 {
     public GameObject explosionPrefab;
+    public GameObject routePrefab;
+    public Follow follow;
     private int _x;
     private int _y;
     private int _z;
+
+    public float flightHeight = 7f;
 
     private int targetX;
     private int targetZ;
@@ -20,18 +24,27 @@ public class AtomicController : MonoBehaviour
         _y = (int)Mathf.Round(transform.position.y);
         _z = (int)Mathf.Round(transform.position.z);
 
+        GameObject route = Instantiate(routePrefab, new Vector3(0, 0, 0), Quaternion.identity);
 
-        
+        route.transform.GetChild(0).SetPositionAndRotation(new Vector3(_x, 0.5f, _z), Quaternion.identity);
+        route.transform.GetChild(1).SetPositionAndRotation(new Vector3(_x, flightHeight, _z), Quaternion.identity);
+        route.transform.GetChild(2).SetPositionAndRotation(new Vector3(targetX, flightHeight, targetZ), Quaternion.identity);
+        route.transform.GetChild(3).SetPositionAndRotation(new Vector3(targetX, 0.5f, targetZ), Quaternion.identity);
+
+
+        follow.startRush(route.transform);
+
+
+        Destroy(this, 15f);
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Destruction()
     {
-        GameObject obj = Instantiate(explosionPrefab, new Vector3(targetX, 0.5f, targetZ), Quaternion.identity);
+        GameObject expl = Instantiate(explosionPrefab, new Vector3(targetX, 0.5f, targetZ), Quaternion.identity);
         Debug.Log("Atomic explosion at x: " + targetX.ToString() + ", z: " + targetZ.ToString());
-        //ToDo Smooth animation via animator (turn down the light intensity)
-        Destroy(obj, 3.5f);
-        Destroy(this);
+        Destroy(expl, 3.5f);
+        Destroy(gameObject);
     }
 
     public void SetTargetPos(int x, int z)
