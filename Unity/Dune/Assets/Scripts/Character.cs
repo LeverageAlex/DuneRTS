@@ -307,11 +307,14 @@ public class Character : MonoBehaviour
         {
             //Check, if there are atomics left in House
 
-            Debug.Log("Atomic explosion at x: " + node.X.ToString() + ", z: " + node.Z.ToString());
+
+            GameObject atomicInst = Instantiate(CharacterMgr.instance.atomicPrefab, new Vector3(X, 0.5f, Z), Quaternion.identity);
+            ((AtomicController)atomicInst.GetComponent(typeof(AtomicController))).SetTargetPos(node.X, node.Z);
+            Debug.Log("Created Atomic");
             turnHandler.ResetSelection();
             ReduceAP(_AP); // Reduce AP to 0 | should be removed when server manages MP
             if (_AP <= 0) CharacterTurnHandler.EndTurn();
-            CharacterTurnHandler.EndTurn();
+            //CharacterTurnHandler.EndTurn();
             return true;
         }
         else

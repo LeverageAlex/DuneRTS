@@ -18,6 +18,7 @@ public class NodeManager : MonoBehaviour
     public GameObject spicePrefab;
 
 
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -164,6 +165,11 @@ public class NodeManager : MonoBehaviour
             Destroy(spiceCrumbs[z, x]);
             spiceCrumbs[z, x] = null;
         }
+    }
+
+    public void SetMap(Node[] nodes)
+    {
+        this.nodes = nodes;
     }
 
 

@@ -12,20 +12,27 @@ public class CharacterMgr : MonoBehaviour
     public GameObject beneGesseritPrefab;
     public GameObject fighterPrefab;
 
+    public GameObject atomicPrefab;
+
     private float charSpawnLowY = 0.35f;
     private float charSpawnHighY = 0.525f;
 
     public int clientID;
 
+    public static CharacterMgr instance;
+
 
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         //Example to show Method
         //spawnCharacter(175, "FIGHTER", 15, 15, 4, 10, 4, 4, 3, 6, false, false);
-   
+        if(instance == null)
+        {
+            instance = this;
+        }
     }
 
 
@@ -40,7 +47,7 @@ public class CharacterMgr : MonoBehaviour
             return false;
 
 
-        float charSpawnY = NodeManager.instance.getNodeFromPos(x,z).heightLvl == Node.HeightLevel.low ? charSpawnHighY : charSpawnLowY;
+        float charSpawnY = NodeManager.instance.getNodeFromPos(x,z).heightLvl == Node.HeightLevel.high ? charSpawnHighY : charSpawnLowY;
         GameObject newChar = (GameObject) Instantiate(getCharTypeByEnum(type), new Vector3(x, charSpawnY, z), Quaternion.identity);
         characterDict.Add(characterID, newChar);
         Character localChar = (Character) newChar.GetComponent(typeof(Character));
