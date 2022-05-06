@@ -141,24 +141,10 @@ using Newtonsoft.Json;
                 Character selectedChar = CharacterTurnHandler.instance.GetSelectedCharacter();
                 updateCharacters.AddLast(selectedChar);
 
-                Request request = new Request(Request.RequestType.MOVEMENT_REQUEST);
-                request.version = "v1";
-                request.clientID = 1234;
-                request.characterID = selectedChar.GetInstanceID();
-                List<Vector> path = new List<Vector>();
-
-
-                Specs specs = new Specs();
-                foreach(Vector3 vec in selCharPath)
-                {
-                    Vector v = new Vector(vec.x, vec.z);
-                    path.Add(v);
-                }
-                specs.path = path;
-                request.specs = specs;
-
-                string data = JsonConvert.SerializeObject(request, new JsonSerializerSettings());
-                Debug.Log("Updated: " + data);
+                // PlayerController.doRequestMovement(ClientID, CharacterId, path); 
+                PlayerController.DoRequestMovement(1234, selectedChar.GetInstanceID(), selCharPath);
+                
+                // Message = PlayerController.OnMovement((Movement)Message)
 
                 // Sollte erst ausgeführt werden, wenn die aktion ausgeführt werden darf.
                 selectedChar.SetWalkPath(selCharPath);
