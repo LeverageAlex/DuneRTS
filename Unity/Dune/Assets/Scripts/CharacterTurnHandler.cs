@@ -17,6 +17,7 @@ public class CharacterTurnHandler : MonoBehaviour
     public GameObject kanlyButton, voiceButton, swordSpinButton, atomicsButton, spiceHoardingButton;
     public GameObject characterAttacksPanel;
     public GameObject confirmationPanel;
+    public GameObject playerStatsPanel;
 
     private NodeManager nodeManager;
 
@@ -175,12 +176,14 @@ public class CharacterTurnHandler : MonoBehaviour
         {
             //basics
             characterAttacksPanel.SetActive(false);
+            playerStatsPanel.SetActive(true);
             return;
            
         }
         else
         {
             characterAttacksPanel.SetActive(true);
+            playerStatsPanel.SetActive(false);
         }
 
         if(!selectedCharacter.isEligibleForSpecialAction())
