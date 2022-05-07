@@ -14,10 +14,15 @@ public class CharacterTurnHandler : MonoBehaviour
     private Actions charState;
     public Actions CharState { get { return charState; } }
 
-    public GameObject kanlyButton, voiceButton, swordSpinButton, atomicsButton, spiceHoardingButton;
+    [Header("Actions:")]
     public GameObject characterAttacksPanel;
     public GameObject confirmationPanel;
+    public GameObject kanlyButton, voiceButton, swordSpinButton, atomicsButton, spiceHoardingButton;
+    
+
+    [Header("Stats:")]
     public GameObject playerStatsPanel;
+    public GameObject PlayerText, SpiceText, CharacterText ,HPText, APText, MPText, SpiceInventoryText; 
 
     private NodeManager nodeManager;
 
@@ -176,14 +181,30 @@ public class CharacterTurnHandler : MonoBehaviour
         {
             //basics
             characterAttacksPanel.SetActive(false);
-            playerStatsPanel.SetActive(true);
+            
+
+            PlayerText.SetActive(true);
+            SpiceText.SetActive(true);
+            CharacterText.SetActive(false);
+            HPText.SetActive(false);
+            MPText.SetActive(false);
+            APText.SetActive(false);
+            SpiceInventoryText.SetActive(false);
+
             return;
-           
         }
         else
         {
             characterAttacksPanel.SetActive(true);
-            playerStatsPanel.SetActive(false);
+           
+
+            PlayerText.SetActive(false);
+            SpiceText.SetActive(false);
+            CharacterText.SetActive(true);
+            HPText.SetActive(true);
+            MPText.SetActive(true);
+            APText.SetActive(true);
+            SpiceInventoryText.SetActive(true);
         }
 
         if(!selectedCharacter.isEligibleForSpecialAction())
