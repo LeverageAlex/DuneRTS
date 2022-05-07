@@ -160,4 +160,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1984599760000105778}
-  earthQuake: {fileID: 760085439421024995, guid: 9b76a1766e4393f40a1d032d97904994, type: 3}
+  particles: {fileID: 8228793303422144975, guid: 87f2dc456b0384842a04535cc7f42eb5, type: 3}

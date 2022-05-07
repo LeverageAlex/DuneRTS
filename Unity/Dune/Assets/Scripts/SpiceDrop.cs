@@ -23,7 +23,8 @@ public class SpiceDrop : MonoBehaviour
         }
         else 
         {
-            Instantiate(particles, transform.position, Quaternion.identity);
+            GameObject p = (GameObject) Instantiate(particles, transform.position, Quaternion.identity);
+            Destroy(p, 3);
             Destroy(this);
         }
     }
