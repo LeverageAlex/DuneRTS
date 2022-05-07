@@ -915,6 +915,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bbf45a918d3f8e47846ba37a5f8c7be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &102738357 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 551936641373566875, guid: 61a582edad066404c8652aadb9932940, type: 3}
+  m_PrefabInstance: {fileID: 1913965951}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &130079119 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6553240376138419769, guid: ed1cc5e2520fa4845b503399bfbe1d3a, type: 3}
@@ -3437,6 +3442,11 @@ Transform:
   m_Father: {fileID: 2011776793}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &506889131 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 551936641373566875, guid: 61a582edad066404c8652aadb9932940, type: 3}
+  m_PrefabInstance: {fileID: 2127770943}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &515003334
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8640,8 +8650,8 @@ MonoBehaviour:
   swordSpinButton: {fileID: 610014272}
   atomicsButton: {fileID: 381916848}
   spiceHoardingButton: {fileID: 130079119}
-  characterAttacksPanel: {fileID: 0}
-  confirmationPanel: {fileID: 0}
+  characterAttacksPanel: {fileID: 506889131}
+  confirmationPanel: {fileID: 102738357}
 --- !u!4 &1411527707
 Transform:
   m_ObjectHideFlags: 0
