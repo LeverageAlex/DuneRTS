@@ -116,6 +116,7 @@ public class CharacterTurnHandler : MonoBehaviour
     {
         //activation by otherChar
         this.charState = Actions.TRANSFER;
+        Debug.Log("transfer spice");
         ConfirmDeactivate();
     }
 

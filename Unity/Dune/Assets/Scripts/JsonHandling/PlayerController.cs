@@ -14,7 +14,7 @@ public static class PlayerController
     /// <param name="clientID">the id of the client</param>
     /// <param name="characterID">the id of the character</param>
     /// <param name="path">the path the character should take</param>
-   public static void DoRequestMovement(int clientID, int characterID, LinkedList<Vector3> path)
+   public static void DoMovementRequest(int clientID, int characterID, LinkedList<Vector3> path)
     {
         Specs specs = new Specs();
         specs.path = ConvertPath(path);
@@ -30,10 +30,28 @@ public static class PlayerController
 
     } 
 
-    public static void DoRequestAction()
+    /// <summary>
+    /// This method does the action request
+    /// </summary>
+    /// <param name="clientID">the id of the client</param>
+    /// <param name="characterID">the id of the character</param>
+    /// <param name="action">the action the character should use</param>
+    /// <param name="target">the target of the action</param>
+    public static void DoActionRequest(int clientID, int characterID, CharacterTurnHandler.Actions action, Node target /* missing target id param*/)
     {
         Request request = new Request(Request.RequestType.ACTION_REQUEST);
+        request.version = version;
+        request.clientID = clientID;
+        request.action = action;
+        Specs specs = new Specs();
+        Vector targ = new Vector(target.X, target.Z);
+        specs.target = targ;
+        request.specs = specs;
+        request.targetID = 1253;
 
+        // for testing perpeces only
+        string data = JsonConvert.SerializeObject(request, new JsonSerializerSettings());
+        Debug.Log("Updated: " + data);
     }
 
     /// <summary>

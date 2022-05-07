@@ -212,6 +212,8 @@ public class Character : MonoBehaviour
         {
             ReduceAP(1);
             if (_AP <= 0) CharacterTurnHandler.EndTurn();
+            PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.ATTACK, selectedNode);
+            // TODO wait for Server response.
             //TODO execute attack
             Debug.Log("Attack");
 
@@ -232,6 +234,9 @@ public class Character : MonoBehaviour
     {
         if (nodeManager.IsSpiceOn(X, Z))
         {
+            // just fill data the node should be available here.
+            Node n = new Node();
+            PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.COLLECT, n);
             nodeManager.CollectSpice(X, Z);
             ReduceAP(1);
             Debug.Log("Collected Spice!");
@@ -253,6 +258,7 @@ public class Character : MonoBehaviour
 
         if (nodeManager.isNodeNeighbour(selectedNode, secondNode) && character.IsMemberOfHouse(house))
         {
+            PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.TRANSFER, selectedNode);
             //TODO execute attack
             Debug.Log("Transfer!");
             ReduceAP(1);
@@ -279,9 +285,11 @@ public class Character : MonoBehaviour
             //Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
             Debug.Log("Attack_SwordSpin");
             turnHandler.ResetSelection();
-
-            PlayerController.DoRequestAction();
+            // just fill data the node has to be a parameter of Atack_SwordSpin
+            Node n = new Node();
+            PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.SWORD_SPIN, n);
             //TODO: Send Attack to Server
+            //TODO: wait for response from server
             ReduceAP(_AP); // Reduce AP to 0 | should be removed when server manages MP
             if (_AP <= 0) CharacterTurnHandler.EndTurn();
             CharacterTurnHandler.EndTurn();
@@ -307,6 +315,7 @@ public class Character : MonoBehaviour
         {
             //Check, if there are atomics left in House
 
+            PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.FAMILY_ATOMICS, node);
 
             GameObject atomicInst = Instantiate(CharacterMgr.instance.atomicPrefab, new Vector3(X, 0.5f, Z), Quaternion.identity);
             ((AtomicController)atomicInst.GetComponent(typeof(AtomicController))).SetTargetPos(node.X, node.Z);
@@ -337,6 +346,7 @@ public class Character : MonoBehaviour
             Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
             if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
             {
+                PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.KANLY, selectedNode);
                 Debug.Log("Kanly fight!");
                 turnHandler.ResetSelection();
                 ReduceAP(_AP); //reduce AP to 0
@@ -363,6 +373,10 @@ public class Character : MonoBehaviour
         //TODO Vorraussetzung zum aufsammeln prüfen?
         if (characterType == CharTypeEnum.MENTANT)
         {
+
+            // just fill data the selected node should be available here.
+            Node node = new Node();
+            PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.SPICE_HOARDING, node);
 
             for (int i = -1; i <= 1; i++)
             {
@@ -403,6 +417,8 @@ public class Character : MonoBehaviour
             if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
             {
                 Debug.Log("Voice!");
+                PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.VOICE, selectedNode);
+                //TODO: wait for response from server
                 turnHandler.ResetSelection();
                 ReduceAP(_AP); //reduce to MP to 0
                 CharacterTurnHandler.EndTurn();
