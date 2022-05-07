@@ -13,6 +13,7 @@ public class Character : MonoBehaviour
     private int characterId;
 
     CharacterTurnHandler turnHandler;
+    GUIHandler guiHandler;
 
     public CharTypeEnum characterType;
     public HouseEnum house = HouseEnum.VERNIUS;
@@ -160,7 +161,6 @@ public class Character : MonoBehaviour
     public void SetWalkPath(LinkedList<Vector3> way)
     {
         walkPath = way;
-        _AP -= way.Count;
     }
 
     public void OnMouseDown()
@@ -438,6 +438,8 @@ public class Character : MonoBehaviour
         if (_AP > 0)
         {
             _AP -= reduce;
+            GUIHandler.UpdateAP(_AP);
+
         }
     }
 
@@ -451,6 +453,7 @@ public class Character : MonoBehaviour
         if(_MP > 0)
         {
             _MP -= reduce;
+            GUIHandler.UpdateMP(_MP);
         }
     }
 
@@ -484,6 +487,14 @@ public class Character : MonoBehaviour
     public bool IsMemberOfHouse(HouseEnum houseEnum)
     {
         return houseEnum == house;
+    }
+
+    public void DrawStats()
+    {
+        GUIHandler.UpdateHP(HP);
+        GUIHandler.UpdateAP(_AP);
+        GUIHandler.UpdateMP(_MP);
+        GUIHandler.UpdateSpice(spiceInv);
     }
  
 

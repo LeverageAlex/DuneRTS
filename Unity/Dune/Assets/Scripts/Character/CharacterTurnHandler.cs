@@ -73,6 +73,7 @@ public class CharacterTurnHandler : MonoBehaviour
     {
         selectedCharacter = character;
         ButtonToggles();
+        selectedCharacter.DrawStats();
     }
 
 
