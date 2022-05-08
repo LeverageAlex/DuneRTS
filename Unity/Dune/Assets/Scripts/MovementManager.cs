@@ -129,7 +129,7 @@ using Newtonsoft.Json;
                    x, z);
             }
 
-            return true;
+           // return true;
         }
 
         public void AnimateSelectedChar()
