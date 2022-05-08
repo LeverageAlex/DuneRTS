@@ -40,6 +40,13 @@ public class MoveAbles : MonoBehaviour
         return MoveToPoint();
     }
 
+    public void WalkAlongPath(LinkedList<Vector3> walkPath)
+    {
+        this.walkPath = walkPath;
+        MovementManager.instance.addOtherToAnimate(this);
+    }
+
+
 
     /*
      * Will be called every frame to move towards points in walkpath

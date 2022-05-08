@@ -14,8 +14,14 @@ public class CharacterMgr : MonoBehaviour
 
     public GameObject atomicPrefab;
 
+    public GameObject sandwormPrefab;
+
+    private MoveAbles sandwormMoveScript;
+
     private float charSpawnLowY = 0.35f;
     private float charSpawnHighY = 0.525f;
+
+    private float wormHeightOffset = 0.35f;
 
     public int clientID;
 
@@ -35,15 +41,21 @@ public class CharacterMgr : MonoBehaviour
         {
             instance = this;
         }
+        
     }
 
+    private void Start()
+    {
+        SpawnSandworm(5, 5);
+    }
 
 
 
 
     /*
      * To be filled after open question regarding standardDocument has ben resolved
-  */  public bool spawnCharacter(int characterID, CharTypeEnum type,int x, int z,int HPcurrent, int healingHP, int MPcurrent, int APcurrent, int attackDamage, int inventoryLeft, bool killedBySandworm, bool loud)
+  */
+    public bool spawnCharacter(int characterID, CharTypeEnum type,int x, int z,int HPcurrent, int healingHP, int MPcurrent, int APcurrent, int attackDamage, int inventoryLeft, bool killedBySandworm, bool loud)
     {
         if (characterDict.ContainsKey(characterID))
             return false;
@@ -91,5 +103,19 @@ public class CharacterMgr : MonoBehaviour
         }
     }
 
+
+    public void SpawnSandworm(int x, int z)
+    {
+        if (sandwormMoveScript == null)
+        {
+            sandwormMoveScript = ((MoveAbles)Instantiate(sandwormPrefab, new Vector3(x, wormHeightOffset + MapManager.instance.getNodeFromPos(x, z).charHeightOffset, z), Quaternion.identity).GetComponent(typeof(MoveAbles)));
+        }
+        else Debug.Log("There is already a sandworm!");
+    }
+
+    public void SandwormMove(LinkedList<Vector3> path)
+    {
+        sandwormMoveScript.WalkAlongPath(path);
+    }
 
 }

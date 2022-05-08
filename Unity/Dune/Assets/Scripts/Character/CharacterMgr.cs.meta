@@ -8,6 +8,8 @@ MonoImporter:
   - mentatPrefab: {fileID: 801496496456891278, guid: d5c073ddf76b3c34083a1d4f2f555eae, type: 3}
   - beneGesseritPrefab: {fileID: 7174622334344385282, guid: 029901d7e2a42a64a9e1dd9bd98e2782, type: 3}
   - fighterPrefab: {fileID: 248485424704963574, guid: 87352ed578074554f87332f551b8dce6, type: 3}
+  - atomicPrefab: {fileID: 7412499961909464192, guid: 4e9abc8848524e642bee551042f3fc4b, type: 3}
+  - sandwormPrefab: {fileID: 7878245606837139554, guid: 5711f5435620ab14cbf6eedb2a1edf2d, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
