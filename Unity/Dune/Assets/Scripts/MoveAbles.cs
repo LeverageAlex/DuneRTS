@@ -20,7 +20,7 @@ public class MoveAbles : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _y = transform.position.y - NodeManager.instance.getNodeFromPos(X, Z).charHeightOffset;
+        _y = transform.position.y - MapManager.instance.getNodeFromPos(X, Z).charHeightOffset;
         walkPath = new LinkedList<Vector3>();
     }
 
@@ -29,8 +29,8 @@ public class MoveAbles : MonoBehaviour
     {
         if(Input.GetKeyDown("c"))
         {
-            walkPath.AddLast(new Vector3(7, transform.position.y + NodeManager.instance.getNodeFromPos(7,7).charHeightOffset, 7));
-            walkPath.AddLast(new Vector3(2, transform.position.y + NodeManager.instance.getNodeFromPos(2, 1).charHeightOffset, 1));
+            walkPath.AddLast(new Vector3(7, transform.position.y + MapManager.instance.getNodeFromPos(7,7).charHeightOffset, 7));
+            walkPath.AddLast(new Vector3(2, transform.position.y + MapManager.instance.getNodeFromPos(2, 1).charHeightOffset, 1));
             MovementManager.instance.addOtherToAnimate(this);
         }
     }

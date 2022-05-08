@@ -79,8 +79,8 @@ public class Node : MonoBehaviour
         if (Input.GetKeyDown("l"))
         {
             if (heightLvl == HeightLevel.high)
-                NodeManager.instance.SpawnSpiceCrumOn(_X, offsetSpiceHighY, _Z);
-            else NodeManager.instance.SpawnSpiceCrumOn(_X, offsetSpiceLowY, _Z);
+                MapManager.instance.SpawnSpiceCrumOn(_X, offsetSpiceHighY, _Z);
+            else MapManager.instance.SpawnSpiceCrumOn(_X, offsetSpiceLowY, _Z);
         }
     }
 
@@ -106,7 +106,7 @@ public class Node : MonoBehaviour
     public void SelectNode()
     {
 
-        if (accessible && CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.MOVE && CharacterTurnHandler.CharSelected && NodeManager.instance.getObjectOnNode(this) == null)
+        if (accessible && CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.MOVE && CharacterTurnHandler.CharSelected && MapManager.instance.getObjectOnNode(this) == null)
         {
             if (MovementManager.instance.IsWaypointAttachable(X, Z))
             {

@@ -24,7 +24,7 @@ public class CharacterTurnHandler : MonoBehaviour
     public GameObject playerStatsPanel;
     public GameObject PlayerText, SpiceText, CharacterText ,HPText, APText, MPText, SpiceInventoryText; 
 
-    private NodeManager nodeManager;
+    private MapManager nodeManager;
 
     public enum Actions
     {
@@ -39,7 +39,7 @@ public class CharacterTurnHandler : MonoBehaviour
 
     private void Start()
     {
-        nodeManager = NodeManager.instance;
+        nodeManager = MapManager.instance;
         // ButtonToggles();
         //  ConfirmDeactivate();
     }

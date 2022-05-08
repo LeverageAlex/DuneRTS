@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class NodeManager : MonoBehaviour
+public class MapManager : MonoBehaviour
 {
 
-    public static NodeManager instance;
+    public static MapManager instance;
 
     private int _gridSizeX = 11;
     private int _gridSizeZ = 11;

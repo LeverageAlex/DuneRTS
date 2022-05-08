@@ -49,7 +49,7 @@ using Newtonsoft.Json;
                 var next = cluster.Next;
                 if (!cluster.Value.calledUpdate())
                 {
-                    NodeManager.instance.getNodeFromPos(cluster.Value.X, cluster.Value.Z).ResetColor();
+                    MapManager.instance.getNodeFromPos(cluster.Value.X, cluster.Value.Z).ResetColor();
                     updateCharacters.Remove(cluster);
                 }
                 cluster = next;
@@ -120,12 +120,12 @@ using Newtonsoft.Json;
         public bool IsWaypointAttachable(int x, int z)
         {
             if (selCharPath.Count == 0) { // distinction needed at the first node to select
-                return selCharPath.Count < CharacterTurnHandler.instance.GetSelectedCharacter().MP && NodeManager.instance.isNodeNeighbour(CharacterTurnHandler.instance.GetSelectedCharacter().X,
+                return selCharPath.Count < CharacterTurnHandler.instance.GetSelectedCharacter().MP && MapManager.instance.isNodeNeighbour(CharacterTurnHandler.instance.GetSelectedCharacter().X,
                     CharacterTurnHandler.instance.GetSelectedCharacter().Z, x, z);
             }
             else
             {
-                return selCharPath.Count < CharacterTurnHandler.instance.GetSelectedCharacter().MP && NodeManager.instance.isNodeNeighbour((int)selCharPath.Last.Value.x, (int)selCharPath.Last.Value.z,
+                return selCharPath.Count < CharacterTurnHandler.instance.GetSelectedCharacter().MP && MapManager.instance.isNodeNeighbour((int)selCharPath.Last.Value.x, (int)selCharPath.Last.Value.z,
                    x, z);
             }
 

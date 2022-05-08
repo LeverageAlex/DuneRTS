@@ -19,7 +19,7 @@ public class SceneBuilder : MonoBehaviour
 
     public void initMap()
     {
-        NodeManager nodeManager = NodeManager.instance;
+        MapManager nodeManager = MapManager.instance;
         int gridSizeX = 11;
         int gridSizeZ = 11;
         nodeManager.setMapSize(gridSizeX, gridSizeZ);
