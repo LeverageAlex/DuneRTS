@@ -19,6 +19,10 @@ public class Node : MonoBehaviour
 
     public HeightLevel heightLvl = HeightLevel.low;
 
+    private bool marked = false;
+
+    private Color markedPathColor = Color.green;
+
 
 
     public enum HeightLevel
@@ -61,7 +65,8 @@ public class Node : MonoBehaviour
         if (EventSystem.current.IsPointerOverGameObject()) return;
 
 
-        rend.material.color = hoverColor;
+            rend.material.color = hoverColor;
+
 
 
     }
@@ -86,8 +91,9 @@ public class Node : MonoBehaviour
 
     void OnMouseExit()
     {
-        if (rend.material.color == hoverColor)
+        if (rend.material.color == hoverColor && !marked)
             ResetColor();
+        else this.rend.material.color = markedPathColor;
     }
 
 
@@ -101,7 +107,8 @@ public class Node : MonoBehaviour
         {
             if (MovementManager.instance.IsWaypointAttachable(X, Z))
             {
-                this.rend.material.color = Color.green;
+                this.rend.material.color = markedPathColor;
+                marked = true;
             }
             Vector3 point = new Vector3();
             point.x = transform.position.x;
@@ -124,6 +131,7 @@ public class Node : MonoBehaviour
     public void ResetColor()
     {
         rend.material.color = startColor;
+        marked = false;
     }
 
 

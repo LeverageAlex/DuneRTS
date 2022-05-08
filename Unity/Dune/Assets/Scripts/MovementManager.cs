@@ -119,7 +119,7 @@ using Newtonsoft.Json;
          */
         public bool IsWaypointAttachable(int x, int z)
         {
-            /*if (selCharPath.Count == 0) { // distinction needed at the first node to select
+            if (selCharPath.Count == 0) { // distinction needed at the first node to select
                 return selCharPath.Count < CharacterTurnHandler.instance.GetSelectedCharacter().MP && NodeManager.instance.isNodeNeighbour(CharacterTurnHandler.instance.GetSelectedCharacter().X,
                     CharacterTurnHandler.instance.GetSelectedCharacter().Z, x, z);
             }
@@ -127,7 +127,7 @@ using Newtonsoft.Json;
             {
                 return selCharPath.Count < CharacterTurnHandler.instance.GetSelectedCharacter().MP && NodeManager.instance.isNodeNeighbour((int)selCharPath.Last.Value.x, (int)selCharPath.Last.Value.z,
                    x, z);
-            }*/
+            }
 
             return true;
         }
