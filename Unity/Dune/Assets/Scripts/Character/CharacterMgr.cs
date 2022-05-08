@@ -46,7 +46,11 @@ public class CharacterMgr : MonoBehaviour
 
     private void Start()
     {
+        /*LinkedList<Vector3> path = new LinkedList<Vector3>();
+        path.AddLast(new Vector3(1, 0.6f, 1));
+        path.AddLast(new Vector3(8, 0.6f, 9));
         SpawnSandworm(5, 5);
+        SandwormMove(path);*/
     }
 
 
@@ -115,6 +119,7 @@ public class CharacterMgr : MonoBehaviour
 
     public void SandwormMove(LinkedList<Vector3> path)
     {
+        Debug.Log("It's about to happen: " + sandwormMoveScript.name);
         sandwormMoveScript.WalkAlongPath(path);
     }
 

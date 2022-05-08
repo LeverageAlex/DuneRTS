@@ -29,25 +29,25 @@ public class SceneBuilder : MonoBehaviour
             {
                 if(z + x * gridSizeZ == 7 || x*gridSizeZ + z == gridSizeZ * gridSizeX - 7)
                 {
-                    nodeManager.UpdateBoard(x, z, false, NodeTypeEnum.CITY);
+                    nodeManager.UpdateBoard(x, z, false, NodeTypeEnum.CITY, false);
                    
                 }
                 else if((z+x* gridSizeZ) % 5 == 0)
                 {
-                    nodeManager.UpdateBoard(x, z, false, NodeTypeEnum.ROCK);
+                    nodeManager.UpdateBoard(x, z, false, NodeTypeEnum.ROCK, false);
                 }
                 else if((z + x * gridSizeZ) % 7 == 0)
                 {
-                    nodeManager.UpdateBoard(x, z, false, NodeTypeEnum.DUNE);
+                    nodeManager.UpdateBoard(x, z, false, NodeTypeEnum.DUNE, false);
                 }
                 else if((z + x * gridSizeZ) % 3 == 0)
                 {
-                    nodeManager.UpdateBoard(x, z, false, NodeTypeEnum.FLATROCK);
+                    nodeManager.UpdateBoard(x, z, false, NodeTypeEnum.FLATROCK, false);
                 }
 
                 else
                 {
-                    nodeManager.UpdateBoard(x, z, false, NodeTypeEnum.FLATDUNE);
+                    nodeManager.UpdateBoard(x, z, false, NodeTypeEnum.FLATDUNE, false);
                 }
 
 

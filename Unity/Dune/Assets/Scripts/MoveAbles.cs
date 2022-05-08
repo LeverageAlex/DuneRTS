@@ -21,6 +21,7 @@ public class MoveAbles : MonoBehaviour
     void Start()
     {
         _y = transform.position.y - MapManager.instance.getNodeFromPos(X, Z).charHeightOffset;
+        if(walkPath == null)
         walkPath = new LinkedList<Vector3>();
     }
 
@@ -42,7 +43,7 @@ public class MoveAbles : MonoBehaviour
 
     public void WalkAlongPath(LinkedList<Vector3> walkPath)
     {
-        this.walkPath = walkPath;
+        this.walkPath = new LinkedList<Vector3>(walkPath);
         MovementManager.instance.addOtherToAnimate(this);
     }
 

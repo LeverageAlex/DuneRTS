@@ -20,6 +20,12 @@ public class MapManager : MonoBehaviour
     public GameObject[,] spiceCrumbs;
     public GameObject spicePrefab;
 
+    public GameObject SandstormEffectPrefab;
+    private GameObject SandstormEffect;
+
+
+
+
 
 
     // Start is called before the first frame update
@@ -34,7 +40,6 @@ public class MapManager : MonoBehaviour
         Debug.Log("Instance set");
         spiceCrumbs = new GameObject[_gridSizeZ, _gridSizeX];
         enemiesOnBoard = new GameObject[nodes.Length];
-
     }
 
 
@@ -176,7 +181,7 @@ public class MapManager : MonoBehaviour
         this.nodes = nodes;
     }
 
-    public void UpdateBoard(int x, int z, bool spiceOnNode, NodeTypeEnum nodeEnum)
+    public void UpdateBoard(int x, int z, bool spiceOnNode, NodeTypeEnum nodeEnum, bool isInStorm)
     {
         Node currentNode = getNodeFromPos(x, z);
         if (currentNode == null || currentNode.nodeTypeEnum != nodeEnum)
@@ -205,6 +210,7 @@ public class MapManager : MonoBehaviour
         {
             CollectSpice(x, z);
         }
+        currentNode.SetSandstorm(isInStorm);
     }
 
     public void setMapSize(int gridSizeX, int gridSizeZ)
@@ -216,8 +222,18 @@ public class MapManager : MonoBehaviour
         enemiesOnBoard = new GameObject[nodes.Length];
     }
 
+    public void SetStormEye(int x, int z)
+    {
+        if (SandstormEffect == null || ((int)Mathf.Round(SandstormEffect.transform.position.x)) != x || ((int)Mathf.Round(SandstormEffect.transform.position.z)) != z)
+        {
+            Destroy(SandstormEffect);
+            SandstormEffect = Instantiate(SandstormEffectPrefab, new Vector3(x, 0.2f, z), Quaternion.identity);
+        }
+    }
+
 
 
     public int GridSizeX { get { return _gridSizeX; } }
     public int GridSizeZ { get { return _gridSizeZ; } }
+
 }

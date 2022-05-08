@@ -26,6 +26,8 @@ public class Node : MonoBehaviour
 
     private Color markedPathColor = Color.green;
 
+    private bool isInSandstorm;
+
 
 
     public enum HeightLevel
@@ -135,6 +137,11 @@ public class Node : MonoBehaviour
     {
         rend.material.color = startColor;
         marked = false;
+    }
+
+    public bool IsInSandstorm { get { return isInSandstorm; } }
+    public void SetSandstorm(bool storm) {
+        isInSandstorm = storm;
     }
 
 
