@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine;
 
+
+/**
+ * Class is the functional representation of Nodes displayed on the board
+ * - Checks for mouse-interactions
+ * - stores informations bound to node
+ */
 public class Node : MonoBehaviour
 {
 

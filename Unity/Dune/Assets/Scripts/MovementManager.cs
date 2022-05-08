@@ -5,7 +5,11 @@ using System;
 using Newtonsoft.Json;
 
 
-
+/**
+ * This manages all Characters and Moveables, that shall be moved.
+ * - Helps creating the movement path of chars
+ * - Moves Characters according to path
+ */
 [Serializable]
     public class MovementManager : MonoBehaviour
     {

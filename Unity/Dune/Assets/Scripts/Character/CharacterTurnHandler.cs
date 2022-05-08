@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/**
+ * - stores in an state-machine the current state of selected char in turn
+ * - manages visibility available actions for character
+ */
 public class CharacterTurnHandler : MonoBehaviour
 {
 

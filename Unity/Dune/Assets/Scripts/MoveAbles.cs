@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/**
+ * This class can be bound to Objects in order to make them moveable along a given Path. Works in connection with the MovementManager
+ */
 public class MoveAbles : MonoBehaviour
 {
 

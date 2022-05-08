@@ -2,6 +2,11 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine;
 
+
+/**
+ * This class handles the HUDs were data is shown, so no Buttons, just stats
+ * 
+ */
 public class GUIHandler : MonoBehaviour
 {
 

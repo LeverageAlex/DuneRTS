@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/**
+ * This class provides functionality to maintain characters on the map:
+ * - Spawn Chars
+ * - Update CharStats
+ * - Spawn Sandworm
+ * - Move Worm
+ * 
+ */
 public class CharacterMgr : MonoBehaviour
 {
     //Connects CharacterID to CharacterObject
@@ -73,6 +82,9 @@ public class CharacterMgr : MonoBehaviour
         return true;
     }
 
+    /**
+     * Used to update data of a character (HP etc.)
+     */
     public bool characterStatChange(int characterID, int HP, int HealHP, int MP, int AP, int AD, int spiceInv, bool isLoud, bool isSwallowed)
     {
         if (!characterDict.ContainsKey(characterID))

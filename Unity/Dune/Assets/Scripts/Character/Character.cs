@@ -4,6 +4,14 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System;
 
+
+/**
+ * Functional representation of Character transforms:
+ * - Provides Data to visualize
+ * - Attack and other action-functions
+ * - selection of characters
+ * 
+ */
 [Serializable]
 public class Character : MonoBehaviour
 {
