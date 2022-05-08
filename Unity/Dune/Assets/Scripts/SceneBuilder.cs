@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/**
+* Builds the map according to the given configuration
+*/
 public class SceneBuilder : MonoBehaviour
 {
 

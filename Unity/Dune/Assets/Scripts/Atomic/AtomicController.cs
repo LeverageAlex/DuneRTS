@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/**
+* Used to:
+* - setup bezier curve to target atomic location
+* - on destroy
+*/
 public class AtomicController : MonoBehaviour
 {
     public GameObject explosionPrefab;

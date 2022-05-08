@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/**
+* Stores events of game for statistical purposes on end of game
+*/
 public class StatsLogger : MonoBehaviour
 {
     private static List<Statistic> stats = new List<Statistic>();
