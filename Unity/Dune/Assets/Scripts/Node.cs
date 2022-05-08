@@ -94,10 +94,9 @@ public class Node : MonoBehaviour
 
     void OnMouseExit()
     {
-        if (EventSystem.current.IsPointerOverGameObject()) return;
         if (rend.material.color == hoverColor && !marked)
             ResetColor();
-        else this.rend.material.color = markedPathColor;
+        else if(marked) this.rend.material.color = markedPathColor;
     }
 
 
