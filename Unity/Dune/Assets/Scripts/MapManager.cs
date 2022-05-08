@@ -3,6 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+
+
+/**
+ * This class handles:
+ *  - managment of Nodes (amount, type, updates)
+ *  - management of spice-objects on the map
+ *  - triggering of SandstormEffects (and setting it's position)
+ *  - triggering of EarthQuakeEffect
+ * 
+ */
 public class MapManager : MonoBehaviour
 {
 
@@ -22,6 +32,11 @@ public class MapManager : MonoBehaviour
 
     public GameObject SandstormEffectPrefab;
     private GameObject SandstormEffect;
+
+    public GameObject EarthQuakePrefab;
+
+    private float earthQuakeheight = 0.2f;
+    private float earthQuakeEffectDuration = 2f;
 
 
 
@@ -167,6 +182,9 @@ public class MapManager : MonoBehaviour
         else return false;
     }
 
+    /**
+     * Destroys spice-object on given position
+     */
     public void CollectSpice(int x, int z)
     {
         if (spiceCrumbs[z, x] != null)
@@ -181,6 +199,9 @@ public class MapManager : MonoBehaviour
         this.nodes = nodes;
     }
 
+    /**
+     * Updates given Node with the given values
+     */
     public void UpdateBoard(int x, int z, bool spiceOnNode, NodeTypeEnum nodeEnum, bool isInStorm)
     {
         Node currentNode = getNodeFromPos(x, z);
@@ -213,6 +234,9 @@ public class MapManager : MonoBehaviour
         currentNode.SetSandstorm(isInStorm);
     }
 
+    /**
+     * Sets and updates all attributes that are connected with the map-size
+     */
     public void setMapSize(int gridSizeX, int gridSizeZ)
     {
         _gridSizeX = gridSizeX;
@@ -229,6 +253,15 @@ public class MapManager : MonoBehaviour
             Destroy(SandstormEffect);
             SandstormEffect = Instantiate(SandstormEffectPrefab, new Vector3(x, 0.2f, z), Quaternion.identity);
         }
+    }
+
+    /**
+     * Will spawn the effect in the mid of map
+     */
+    public void TriggerEarthQuake()
+    {
+        GameObject quake = Instantiate(EarthQuakePrefab, new Vector3(GridSizeX/2, earthQuakeheight, GridSizeZ / 2), Quaternion.identity);
+        Destroy(quake, earthQuakeEffectDuration);
     }
 
 

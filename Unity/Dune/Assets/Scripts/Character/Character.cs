@@ -489,6 +489,10 @@ public class Character : MonoBehaviour
         return houseEnum == house;
     }
 
+
+    /*
+     * Is used to update and set the values of the Char-Stats HUD
+     */
     public void DrawStats()
     {
         GUIHandler.UpdateHP(HP);

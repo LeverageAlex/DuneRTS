@@ -108,6 +108,9 @@ public class CharacterMgr : MonoBehaviour
     }
 
 
+    /**
+     * Inits a Sandworm at given pos
+     */
     public void SpawnSandworm(int x, int z)
     {
         if (sandwormMoveScript == null)
@@ -117,6 +120,9 @@ public class CharacterMgr : MonoBehaviour
         else Debug.Log("There is already a sandworm!");
     }
 
+    /**
+     * Makes the worm move along the given path
+     */
     public void SandwormMove(LinkedList<Vector3> path)
     {
         Debug.Log("It's about to happen: " + sandwormMoveScript.name);

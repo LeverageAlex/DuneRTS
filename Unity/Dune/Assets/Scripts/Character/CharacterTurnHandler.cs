@@ -44,30 +44,6 @@ public class CharacterTurnHandler : MonoBehaviour
         //  ConfirmDeactivate();
     }
 
-    void Update()
-    {
-        if (Input.GetKey("j"))
-        {
-            charState = Actions.MOVE;
-        }
-        /*  else if(Input.GetKey("k"))
-          {
-              charState = Actions.ATTACK;
-          }
-          else if(Input.GetKeyDown("l"))
-          {
-              //charState = Actions.SWORD_SPIN;
-              selectedCharacter.Attack_SwordSpin();
-              ResetSelection();
-
-          }
-          else if(Input.GetKey("n"))
-          {
-              charState = Actions.FAMILY_ATOMICS;
-          }*/
-    }
-
-
 
     public void SelectCharacter(Character character)
     {
@@ -262,7 +238,6 @@ public class CharacterTurnHandler : MonoBehaviour
     public void ConfirmDeactivate()
     {
         MovementManager.instance.unselectCharacter();
-        //NodeManager.instance.ResetNodeColors();
         confirmationPanel.SetActive(false);
     }
 }
