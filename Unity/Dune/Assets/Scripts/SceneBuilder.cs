@@ -5,7 +5,7 @@ using UnityEngine;
 public class SceneBuilder : MonoBehaviour
 {
 
-    public GameObject cityNodePrefab, duneNodePrefab, FlatDuneNodePrefab, FlatRockNodePrefab, rockNodePrefab;
+    //public GameObject cityNodePrefab, duneNodePrefab, FlatDuneNodePrefab, FlatRockNodePrefab, rockNodePrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -19,33 +19,35 @@ public class SceneBuilder : MonoBehaviour
 
     public void initMap()
     {
+        NodeManager nodeManager = NodeManager.instance;
         int gridSizeX = 11;
         int gridSizeZ = 11;
-        Node[] nodes = new Node[gridSizeZ * gridSizeX];
+        nodeManager.setMapSize(gridSizeX, gridSizeZ);
         for (int x = 0; x < gridSizeZ; x++)
         {
             for (int z = 0; z < gridSizeX; z++)
             {
                 if(z + x * gridSizeZ == 7 || x*gridSizeZ + z == gridSizeZ * gridSizeX - 7)
                 {
-                    nodes[z + x * gridSizeZ] = (Node)(Instantiate(cityNodePrefab, new Vector3(x, 0, z), Quaternion.identity)).GetComponent(typeof(Node));
+                    nodeManager.UpdateBoard(x, z, false, NodeTypeEnum.CITY);
+                   
                 }
                 else if((z+x* gridSizeZ) % 5 == 0)
                 {
-                    nodes[z + x * gridSizeZ] = (Node)(Instantiate(rockNodePrefab, new Vector3(x, 0, z), Quaternion.identity)).GetComponent(typeof(Node));
+                    nodeManager.UpdateBoard(x, z, false, NodeTypeEnum.ROCK);
                 }
                 else if((z + x * gridSizeZ) % 7 == 0)
                 {
-                    nodes[z + x * gridSizeZ] = (Node)(Instantiate(duneNodePrefab, new Vector3(x, 0, z), Quaternion.identity)).GetComponent(typeof(Node));
+                    nodeManager.UpdateBoard(x, z, false, NodeTypeEnum.DUNE);
                 }
                 else if((z + x * gridSizeZ) % 3 == 0)
                 {
-                    nodes[z + x * gridSizeZ] = (Node)(Instantiate(FlatRockNodePrefab, new Vector3(x, 0, z), Quaternion.identity)).GetComponent(typeof(Node));
+                    nodeManager.UpdateBoard(x, z, false, NodeTypeEnum.FLATROCK);
                 }
 
                 else
                 {
-                    nodes[z + x * gridSizeZ] = (Node)(Instantiate(FlatDuneNodePrefab, new Vector3(x, 0, z), Quaternion.identity)).GetComponent(typeof(Node));
+                    nodeManager.UpdateBoard(x, z, false, NodeTypeEnum.FLATDUNE);
                 }
 
 
@@ -54,8 +56,6 @@ public class SceneBuilder : MonoBehaviour
 
 
         }
-
-        NodeManager.instance.SetMap(nodes);
 
 
     }

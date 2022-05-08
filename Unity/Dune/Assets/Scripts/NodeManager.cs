@@ -1,18 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class NodeManager : MonoBehaviour
 {
 
     public static NodeManager instance;
 
-    private static int _gridSizeX = 11;
-    private static int _gridSizeZ = 11;
+    private int _gridSizeX = 11;
+    private int _gridSizeZ = 11;
 
     public GameObject[] enemiesOnBoard;
 
     public Node[] nodes;
+
+    public GameObject cityNodePrefab, duneNodePrefab, FlatDuneNodePrefab, FlatRockNodePrefab, rockNodePrefab;
 
     public GameObject[,] spiceCrumbs;
     public GameObject spicePrefab;
@@ -28,8 +31,9 @@ public class NodeManager : MonoBehaviour
             return;
         }
         instance = this;
-        enemiesOnBoard = new GameObject[nodes.Length];
+        Debug.Log("Instance set");
         spiceCrumbs = new GameObject[_gridSizeZ, _gridSizeX];
+        enemiesOnBoard = new GameObject[nodes.Length];
 
     }
 
@@ -170,6 +174,46 @@ public class NodeManager : MonoBehaviour
     public void SetMap(Node[] nodes)
     {
         this.nodes = nodes;
+    }
+
+    public void UpdateBoard(int x, int z, bool spiceOnNode, NodeTypeEnum nodeEnum)
+    {
+        Node currentNode = getNodeFromPos(x, z);
+        if (currentNode == null || currentNode.nodeTypeEnum != nodeEnum)
+        {
+            if (currentNode != null)
+            {
+                Destroy(currentNode.gameObject);
+            }
+            GameObject nodePrefab = null;
+            switch(nodeEnum)
+            {
+                case NodeTypeEnum.DUNE: nodePrefab = duneNodePrefab; break;
+                case NodeTypeEnum.FLATDUNE: nodePrefab = FlatDuneNodePrefab; break;
+                case NodeTypeEnum.ROCK: nodePrefab = rockNodePrefab; break;
+                case NodeTypeEnum.FLATROCK: nodePrefab = FlatRockNodePrefab; break;
+                case NodeTypeEnum.CITY: nodePrefab = cityNodePrefab; break;
+            }
+            currentNode = (Node)Instantiate(nodePrefab, new Vector3(x, 0, z), Quaternion.identity).GetComponent(typeof(Node));
+            nodes[z + GridSizeZ * x] = currentNode;
+        }
+        if(spiceOnNode)
+        {
+            SpawnSpiceCrumOn(x, currentNode.charHeightOffset, z);
+        }
+        else
+        {
+            CollectSpice(x, z);
+        }
+    }
+
+    public void setMapSize(int gridSizeX, int gridSizeZ)
+    {
+        _gridSizeX = gridSizeX;
+        _gridSizeZ = gridSizeZ;
+        spiceCrumbs = new GameObject[_gridSizeZ, _gridSizeX];
+        nodes = new Node[gridSizeX * gridSizeZ];
+        enemiesOnBoard = new GameObject[nodes.Length];
     }
 
 

@@ -100,11 +100,11 @@ public class Character : MonoBehaviour
             UpdateCharStats(100, 10, 100, 2, 20, 5, false, false);
         } else if(characterType == CharTypeEnum.FIGHTER)
         {
-            UpdateCharStats(200, 20, 2, 100, 40, 3, false, false);
+            UpdateCharStats(200, 20, 100, 3, 40, 3, false, false);
 
         } else if(characterType== CharTypeEnum.MENTANT)
         {
-            UpdateCharStats(75, 10, 2, 100, 10, 10, false, false);
+            UpdateCharStats(75, 10, 100, 2, 10, 10, false, false);
         } else if(characterType==CharTypeEnum.BENEGESSERIT)
         {
             UpdateCharStats(150, 20, 100, 2, 20, 5, false, false);
