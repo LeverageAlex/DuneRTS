@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: b85f880a51d15654281e96096b87863b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - cityNodePrefab: {fileID: 4029880583875040592, guid: 40ba543dd20fbdf4b8dde1485aa0118c, type: 3}
+  - duneNodePrefab: {fileID: 8496841099580781242, guid: 3ea6efede37e6b743a86fffde062d5a6, type: 3}
+  - FlatDuneNodePrefab: {fileID: 8286822676461262659, guid: 247329e93289e0142812fd102e478994, type: 3}
+  - FlatRockNodePrefab: {fileID: 2841477226448814277, guid: 4768c0b39769c8c4dbfecd23f9cc22bc, type: 3}
+  - rockNodePrefab: {fileID: 3107263321164118083, guid: 4208559f8aceb8f41a5b29f5c05c769e, type: 3}
+  - spicePrefab: {fileID: 4714282301104811527, guid: 1361dd36a2141fe4587095399b603f7f, type: 3}
+  - SandstormEffectPrefab: {fileID: 100000, guid: a773c58f90888524fa92bed3a8b1bf9e, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

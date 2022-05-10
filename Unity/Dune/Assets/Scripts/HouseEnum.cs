@@ -1,0 +1,4 @@
+public enum HouseEnum
+{
+    CORRINO, ATREIDES, HARKONNEN, ORDOS, RICHESE, VERNIUS
+}
