@@ -1,0 +1,27 @@
+fileFormatVersion: 2
+guid: dc761d8acfe49e24ea79671185e84e9f
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Starzone
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: cce649eb195e72148a6eead5e09912b5, type: 3}
+  - {fileID: 12800000, guid: 13cda60761c977d43a859d812a9ecd92, type: 3}
+  - {fileID: 12800000, guid: 87ad33be18f6e0b4ea69ff5af2365416, type: 3}
+  - {fileID: 12800000, guid: 938f28be351f852448e9de3bf8a37dcd, type: 3}
+  - {fileID: 12800000, guid: 5b404fce455cdbc4bbe3b7100b1b33de, type: 3}
+  - {fileID: 12800000, guid: 99aeb1aa736b4614b9708b5cfe284703, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

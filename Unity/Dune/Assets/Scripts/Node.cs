@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine;
 
+
+/**
+ * Class is the functional representation of Nodes displayed on the board
+ * - Checks for mouse-interactions
+ * - stores informations bound to node
+ */
 public class Node : MonoBehaviour
 {
 
@@ -18,6 +24,15 @@ public class Node : MonoBehaviour
     public float charHeightOffset = 0f;
 
     public HeightLevel heightLvl = HeightLevel.low;
+    public NodeTypeEnum _nodeTypeEnum;
+
+    public NodeTypeEnum nodeTypeEnum { get { return _nodeTypeEnum; } }
+
+    private bool marked = false;
+
+    private Color markedPathColor = Color.green;
+
+    private bool isInSandstorm;
 
 
 
@@ -61,7 +76,8 @@ public class Node : MonoBehaviour
         if (EventSystem.current.IsPointerOverGameObject()) return;
 
 
-        rend.material.color = hoverColor;
+            rend.material.color = hoverColor;
+
 
 
     }
@@ -71,8 +87,8 @@ public class Node : MonoBehaviour
         if (Input.GetKeyDown("l"))
         {
             if (heightLvl == HeightLevel.high)
-                NodeManager.instance.SpawnSpiceCrumOn(_X, offsetSpiceHighY, _Z);
-            else NodeManager.instance.SpawnSpiceCrumOn(_X, offsetSpiceLowY, _Z);
+                MapManager.instance.SpawnSpiceCrumOn(_X, offsetSpiceHighY, _Z);
+            else MapManager.instance.SpawnSpiceCrumOn(_X, offsetSpiceLowY, _Z);
         }
     }
 
@@ -86,8 +102,9 @@ public class Node : MonoBehaviour
 
     void OnMouseExit()
     {
-        if (rend.material.color == hoverColor)
+        if (rend.material.color == hoverColor && !marked)
             ResetColor();
+        else if(marked) this.rend.material.color = markedPathColor;
     }
 
 
@@ -96,16 +113,20 @@ public class Node : MonoBehaviour
      */
     public void SelectNode()
     {
-        if (!accessible) return;
 
-        if (CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.MOVE && CharacterTurnHandler.CharSelected && NodeManager.instance.getObjectOnNode(this) == null)
+        if (accessible && CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.MOVE && CharacterTurnHandler.CharSelected && MapManager.instance.getObjectOnNode(this) == null)
         {
+            if (MovementManager.instance.IsWaypointAttachable(X, Z))
+            {
+                this.rend.material.color = markedPathColor;
+                marked = true;
+            }
             Vector3 point = new Vector3();
             point.x = transform.position.x;
             point.y = CharacterTurnHandler.instance.GetSelectedCharacter().BaseY + charHeightOffset;
             point.z = transform.position.z;
             MovementManager.instance.AddWaypoint(point);
-            this.rend.material.color = Color.green;
+
         }
         else if (CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.FAMILY_ATOMICS && CharacterTurnHandler.CharSelected)
         {
@@ -121,6 +142,12 @@ public class Node : MonoBehaviour
     public void ResetColor()
     {
         rend.material.color = startColor;
+        marked = false;
+    }
+
+    public bool IsInSandstorm { get { return isInSandstorm; } }
+    public void SetSandstorm(bool storm) {
+        isInSandstorm = storm;
     }
 
 
