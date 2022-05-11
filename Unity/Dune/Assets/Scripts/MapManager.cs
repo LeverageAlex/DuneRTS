@@ -55,7 +55,6 @@ public class MapManager : MonoBehaviour
         Debug.Log("Instance set");
         spiceCrumbs = new GameObject[_gridSizeZ, _gridSizeX];
         enemiesOnBoard = new GameObject[nodes.Length];
-        SetStormEye(5, 5);
     }
 
 
