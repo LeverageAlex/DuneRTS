@@ -115,6 +115,9 @@ MonoBehaviour:
   characterType: 3
   house: 5
   emblemLogo: {fileID: 5576080075626177687}
+  charModel: {fileID: 2195156727840660759}
+  charSex: 0
+  swordObject: {fileID: 2195377273899060073}
 --- !u!1 &4458348530802436340
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,7 +302,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1253086935255656, guid: 60e8218091f83244c9bf9c8c2569a009, type: 3}
       propertyPath: m_Name
-      value: Male C (Fighter)
+      value: Model
       objectReference: {fileID: 0}
     - target: {fileID: 4532250632830336, guid: 60e8218091f83244c9bf9c8c2569a009, type: 3}
       propertyPath: m_RootOrder
@@ -345,10 +348,24 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 95640976257318950, guid: 60e8218091f83244c9bf9c8c2569a009, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 60e8218091f83244c9bf9c8c2569a009, type: 3}
+--- !u!1 &2195156727840660759 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1253086935255656, guid: 60e8218091f83244c9bf9c8c2569a009, type: 3}
+  m_PrefabInstance: {fileID: 2194010327914796927}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2189500153447508735 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4532250632830336, guid: 60e8218091f83244c9bf9c8c2569a009, type: 3}
+  m_PrefabInstance: {fileID: 2194010327914796927}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2195377273899060073 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1472501257231382, guid: 60e8218091f83244c9bf9c8c2569a009, type: 3}
   m_PrefabInstance: {fileID: 2194010327914796927}
   m_PrefabAsset: {fileID: 0}

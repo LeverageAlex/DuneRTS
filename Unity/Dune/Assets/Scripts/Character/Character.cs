@@ -62,7 +62,27 @@ public class Character : MonoBehaviour
     private MapManager nodeManager;
 
     public GameObject emblemLogo;
+    public GameObject charModel;
+    public enum charSexEnum
+    {
+        MALE, FEMALE
+    }
+    public charSexEnum charSex = charSexEnum.MALE;
+
+    private Animator charAnim;
     Quaternion emblem_rotation;
+
+    private string animation_idle;
+    private string animation_attack;
+    private string animation_pickUpSpice;
+    private string animation_walk;
+    private string animation_voice;
+    private string animation_kanly;
+    private string animation_swordSpin;
+    private string animation_spiceHoarding;
+    private string animation_transferSpice;
+
+    public GameObject swordObject;
 
 
     // public Transform t;
@@ -94,6 +114,37 @@ public class Character : MonoBehaviour
         //Debug.Log("Object name: " + gameObject.name);
         BaseAP = _AP;
         emblem_rotation = emblemLogo.transform.rotation;
+
+        charAnim = charModel.GetComponent<Animator>();
+        initAnimations();
+    }
+
+    public void initAnimations()
+    {
+        if (charSex == charSexEnum.MALE) {
+            animation_idle = "Male Sword Stance";
+            animation_attack = "Male Attack 1";
+            animation_pickUpSpice = "Male Attack 3";
+            animation_walk = "Male_Walk";
+            animation_swordSpin = "";
+            animation_kanly = "Male Attack 3";
+            animation_spiceHoarding = "Male Sword Roll";
+            animation_transferSpice = "Male Attack 2";
+        }
+        else
+        {
+            animation_idle = "Female Sword Stance";
+            animation_attack = "Female Sword Attack 2";
+            animation_pickUpSpice = "Female Sword Attack 3";
+            animation_walk = "Female Sword Walk";
+            animation_voice = "Female Sword Attack 3";
+            animation_transferSpice = "Female Sword Attack 3";
+        }
+        
+
+
+
+
     }
 
     /*
@@ -153,7 +204,7 @@ public class Character : MonoBehaviour
     {
         Vector3 dir = walkPath.First.Value - transform.position;
         transform.Translate(dir.normalized * walkSpeed * Time.deltaTime, Space.World);
-
+        charAnim.Play(animation_walk);
         transform.rotation = Quaternion.LookRotation(dir);
         emblemLogo.transform.rotation = emblem_rotation;
         // ReduceMP(1);
@@ -170,7 +221,15 @@ public class Character : MonoBehaviour
             MapManager.instance.placeObjectOnNode(gameObject, _x, _z);
 
             //E. g. go To next Point
-            return walkPath.Count > 0;
+            if(walkPath.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                SetAnimationToIdle();
+                return false;
+            }
         }
         return true;
     }
@@ -227,6 +286,9 @@ public class Character : MonoBehaviour
 
         if (nodeManager.isNodeNeighbour(selectedNode, secondNode) && !character.IsMemberOfHouse(house))
         {
+            Vector3 dir = character.transform.position - transform.position;
+            transform.rotation = Quaternion.LookRotation(dir);
+            charAnim.Play(animation_attack);
             ReduceAP(1);
             if (_AP <= 0) CharacterTurnHandler.EndTurn();
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.ATTACK, selectedNode);
@@ -251,7 +313,10 @@ public class Character : MonoBehaviour
     {
         if (nodeManager.IsSpiceOn(X, Z))
         {
+
             // just fill data the node should be available here.
+            StartCoroutine(SwordDeAndActivation());
+            charAnim.Play(animation_pickUpSpice);
             Node n = new Node();
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.COLLECT, n);
             nodeManager.CollectSpice(X, Z);
@@ -278,6 +343,10 @@ public class Character : MonoBehaviour
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.TRANSFER, selectedNode);
             //TODO execute attack
             Debug.Log("Transfer!");
+            Vector3 dir = character.transform.position - transform.position;
+            transform.rotation = Quaternion.LookRotation(dir);
+            StartCoroutine(SwordDeAndActivation());
+            charAnim.Play(animation_transferSpice);
             ReduceAP(1);
             if (_AP <= 0) CharacterTurnHandler.EndTurn();
             //reset 
@@ -302,7 +371,7 @@ public class Character : MonoBehaviour
             //Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
             Debug.Log("Attack_SwordSpin");
             turnHandler.ResetSelection();
-
+            charAnim.Play(animation_swordSpin);
             // just fill data the node has to be a parameter of Atack_SwordSpin
 
             Node n = new Node();
@@ -368,6 +437,9 @@ public class Character : MonoBehaviour
             {
                 PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.KANLY, selectedNode);
                 Debug.Log("Kanly fight!");
+                Vector3 dir = character.transform.position - transform.position;
+                transform.rotation = Quaternion.LookRotation(dir);
+                charAnim.Play(animation_kanly);
                 turnHandler.ResetSelection();
                 ReduceAP(_AP); //reduce AP to 0
                 if (_AP <= 0) CharacterTurnHandler.EndTurn();
@@ -397,7 +469,7 @@ public class Character : MonoBehaviour
             // just fill data the selected node should be available here.
             Node node = new Node();
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.SPICE_HOARDING, node);
-
+            charAnim.Play(animation_spiceHoarding);
 
             for (int i = -1; i <= 1; i++)
             {
@@ -437,6 +509,9 @@ public class Character : MonoBehaviour
             Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
             if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
             {
+                Vector3 dir = character.transform.position - transform.position;
+                transform.rotation = Quaternion.LookRotation(dir);
+                charAnim.Play(animation_voice);
                 Debug.Log("Voice!");
                 PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.VOICE, selectedNode);
                 //TODO: wait for response from server
@@ -459,6 +534,17 @@ public class Character : MonoBehaviour
             turnHandler.ResetAction();
             return false;
         }
+    }
+
+    public IEnumerator SwordDeAndActivation()
+    {
+        swordObject.SetActive(false);
+        yield return new WaitForSeconds(1);
+        if (charSex == charSexEnum.MALE)
+        {
+            swordObject.SetActive(true);
+        }
+
     }
 
     public CharTypeEnum GetCharType()
@@ -548,7 +634,10 @@ public class Character : MonoBehaviour
     }
  
 
-
+    public void SetAnimationToIdle()
+    {
+        charAnim.Play(animation_idle);
+    }
 
 
 }
