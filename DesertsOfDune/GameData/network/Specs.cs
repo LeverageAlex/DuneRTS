@@ -7,5 +7,6 @@ using Newtonsoft.Json;
 public class Specs
 {
     public List<Vector> path;
+    public Vector target;
 
 }

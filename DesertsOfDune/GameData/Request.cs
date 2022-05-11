@@ -11,6 +11,9 @@ public class Request
     public int clientID;
     public int characterID;
     public Specs specs;
+    // TODO import characterturnhandler.Action out of unity to use it here.
+    //public CharacterTurnHandler.Actions action;
+    public int targetID;
 
     /// <summary>
     /// The constructor of the class Request
