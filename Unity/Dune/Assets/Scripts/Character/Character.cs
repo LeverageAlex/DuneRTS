@@ -62,6 +62,9 @@ public class Character : MonoBehaviour
     private MapManager nodeManager;
 
     public GameObject emblemLogo;
+    public GameObject charModel;
+    public string charSex = "Male";
+    private Animator charAnim;
     Quaternion emblem_rotation;
 
 
@@ -94,6 +97,9 @@ public class Character : MonoBehaviour
         //Debug.Log("Object name: " + gameObject.name);
         BaseAP = _AP;
         emblem_rotation = emblemLogo.transform.rotation;
+
+        charAnim = charModel.GetComponent<Animator>();
+
     }
 
     /*
@@ -227,6 +233,7 @@ public class Character : MonoBehaviour
 
         if (nodeManager.isNodeNeighbour(selectedNode, secondNode) && !character.IsMemberOfHouse(house))
         {
+            charAnim.Play(charSex + " Attack 1");
             ReduceAP(1);
             if (_AP <= 0) CharacterTurnHandler.EndTurn();
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.ATTACK, selectedNode);

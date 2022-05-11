@@ -290,6 +290,8 @@ MonoBehaviour:
   characterType: 2
   house: 5
   emblemLogo: {fileID: 2692574287032742791}
+  charModel: {fileID: 1467661906778424524}
+  charSex: Female Sword
 --- !u!1001 &1466083976841097130
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -299,11 +301,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1677338912023364, guid: a367f32b0351f2648a0e15f3444c6f86, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1896801731341158, guid: a367f32b0351f2648a0e15f3444c6f86, type: 3}
       propertyPath: m_Name
-      value: Female B
+      value: Model
       objectReference: {fileID: 0}
     - target: {fileID: 4080208459921836, guid: a367f32b0351f2648a0e15f3444c6f86, type: 3}
       propertyPath: m_RootOrder
@@ -349,8 +351,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 95152126842411956, guid: a367f32b0351f2648a0e15f3444c6f86, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a367f32b0351f2648a0e15f3444c6f86, type: 3}
+--- !u!1 &1467661906778424524 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1896801731341158, guid: a367f32b0351f2648a0e15f3444c6f86, type: 3}
+  m_PrefabInstance: {fileID: 1466083976841097130}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1465619821786666502 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4080208459921836, guid: a367f32b0351f2648a0e15f3444c6f86, type: 3}

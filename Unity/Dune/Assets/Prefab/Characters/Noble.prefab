@@ -115,6 +115,8 @@ MonoBehaviour:
   characterType: 0
   house: 5
   emblemLogo: {fileID: 3709811689709717307}
+  charModel: {fileID: 6147592722220831659}
+  charSex: Male
 --- !u!1 &3709811689709717307
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,7 +301,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1668188202801692, guid: 7e6e29f21a00d5f499e21eb93d6fabaa, type: 3}
       propertyPath: m_Name
-      value: Male A (Noble)
+      value: Model
       objectReference: {fileID: 0}
     - target: {fileID: 4927973787200604, guid: 7e6e29f21a00d5f499e21eb93d6fabaa, type: 3}
       propertyPath: m_RootOrder
@@ -345,10 +347,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 95844511793012932, guid: 7e6e29f21a00d5f499e21eb93d6fabaa, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e6e29f21a00d5f499e21eb93d6fabaa, type: 3}
+--- !u!1 &6147592722220831659 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1668188202801692, guid: 7e6e29f21a00d5f499e21eb93d6fabaa, type: 3}
+  m_PrefabInstance: {fileID: 6148906865355966903}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6144264217153021419 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4927973787200604, guid: 7e6e29f21a00d5f499e21eb93d6fabaa, type: 3}
   m_PrefabInstance: {fileID: 6148906865355966903}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9068298951374121326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6147592722220831659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d57f02ce378b30438fb2c42401d54b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
