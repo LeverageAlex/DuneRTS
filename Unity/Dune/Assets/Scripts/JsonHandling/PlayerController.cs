@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
+using GameData;
+
 /// <summary>
 /// This Class Handles all messages for the Client.
 /// </summary>
