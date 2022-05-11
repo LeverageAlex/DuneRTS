@@ -4,6 +4,14 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System;
 
+
+/**
+ * Functional representation of Character transforms:
+ * - Provides Data to visualize
+ * - Attack and other action-functions
+ * - selection of characters
+ * 
+ */
 [Serializable]
 public class Character : MonoBehaviour
 {
@@ -13,6 +21,7 @@ public class Character : MonoBehaviour
     private int characterId;
 
     CharacterTurnHandler turnHandler;
+    GUIHandler guiHandler;
 
     public CharTypeEnum characterType;
     public HouseEnum house = HouseEnum.VERNIUS;
@@ -49,7 +58,7 @@ public class Character : MonoBehaviour
     private LinkedList<Vector3> walkPath;
 
 
-    private NodeManager nodeManager;
+    private MapManager nodeManager;
     // public Transform t;
 
 
@@ -62,7 +71,7 @@ public class Character : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        nodeManager = NodeManager.instance;
+        nodeManager = MapManager.instance;
         turnHandler = CharacterTurnHandler.instance;
 
         _x = (int)Mathf.Round(transform.position.x);
@@ -96,17 +105,17 @@ public class Character : MonoBehaviour
     {
        if(characterType == CharTypeEnum.NOBLE)
         {
-            UpdateCharStats(100, 10, 2, 2, 20, 5, false, false);
+            UpdateCharStats(100, 10, 100, 2, 20, 5, false, false);
         } else if(characterType == CharTypeEnum.FIGHTER)
         {
-            UpdateCharStats(200, 20, 2, 2, 40, 3, false, false);
+            UpdateCharStats(200, 20, 100, 3, 40, 3, false, false);
 
         } else if(characterType== CharTypeEnum.MENTANT)
         {
-            UpdateCharStats(75, 10, 2, 3, 10, 10, false, false);
+            UpdateCharStats(75, 10, 100, 2, 10, 10, false, false);
         } else if(characterType==CharTypeEnum.BENEGESSERIT)
         {
-            UpdateCharStats(150, 20, 3, 2, 20, 5, false, false);
+            UpdateCharStats(150, 20, 100, 2, 20, 5, false, false);
         }
 
         SetMatColorToHouse();
@@ -142,14 +151,14 @@ public class Character : MonoBehaviour
         if (Vector3.Distance(transform.position, walkPath.First.Value) <= 0.06f)
         {
             walkPath.RemoveFirst();
-            NodeManager.instance.placeObjectOnNode(gameObject, (int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z));
+            MapManager.instance.placeObjectOnNode(gameObject, (int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z));
 
-            NodeManager.instance.RemoveObjectOnNode(X, Z);
+            MapManager.instance.RemoveObjectOnNode(X, Z);
 
             _x = (int)Mathf.Round(transform.position.x);
             _z = (int)Mathf.Round(transform.position.z);
             transform.position = new Vector3(X, transform.position.y, Z);
-            NodeManager.instance.placeObjectOnNode(gameObject, _x, _z);
+            MapManager.instance.placeObjectOnNode(gameObject, _x, _z);
 
             //E. g. go To next Point
             return walkPath.Count > 0;
@@ -160,7 +169,6 @@ public class Character : MonoBehaviour
     public void SetWalkPath(LinkedList<Vector3> way)
     {
         walkPath = way;
-        _AP -= way.Count;
     }
 
     public void OnMouseDown()
@@ -454,6 +462,8 @@ public class Character : MonoBehaviour
         if (_AP > 0)
         {
             _AP -= reduce;
+            GUIHandler.UpdateAP(_AP);
+
         }
     }
 
@@ -467,6 +477,7 @@ public class Character : MonoBehaviour
         if(_MP > 0)
         {
             _MP -= reduce;
+            GUIHandler.UpdateMP(_MP);
         }
     }
 
@@ -500,6 +511,18 @@ public class Character : MonoBehaviour
     public bool IsMemberOfHouse(HouseEnum houseEnum)
     {
         return houseEnum == house;
+    }
+
+
+    /*
+     * Is used to update and set the values of the Char-Stats HUD
+     */
+    public void DrawStats()
+    {
+        GUIHandler.UpdateHP(HP);
+        GUIHandler.UpdateAP(_AP);
+        GUIHandler.UpdateMP(_MP);
+        GUIHandler.UpdateSpice(spiceInv);
     }
  
 

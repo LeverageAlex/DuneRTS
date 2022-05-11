@@ -5,6 +5,7 @@ using UnityEngine;
 
 /*
  * Inspired by https://www.youtube.com/watch?v=11ofnLOE8pw
+ * Follows a bezier curve
  */
 public class Follow : MonoBehaviour
 {

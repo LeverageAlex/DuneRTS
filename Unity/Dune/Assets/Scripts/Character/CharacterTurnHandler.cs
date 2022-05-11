@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/**
+ * - stores in an state-machine the current state of selected char in turn
+ * - manages visibility available actions for character
+ */
 public class CharacterTurnHandler : MonoBehaviour
 {
 
@@ -14,11 +19,17 @@ public class CharacterTurnHandler : MonoBehaviour
     private Actions charState;
     public Actions CharState { get { return charState; } }
 
-    public GameObject kanlyButton, voiceButton, swordSpinButton, atomicsButton, spiceHoardingButton;
+    [Header("Actions:")]
     public GameObject characterAttacksPanel;
     public GameObject confirmationPanel;
+    public GameObject kanlyButton, voiceButton, swordSpinButton, atomicsButton, spiceHoardingButton;
+    
 
-    private NodeManager nodeManager;
+    [Header("Stats:")]
+    public GameObject playerStatsPanel;
+    public GameObject PlayerText, SpiceText, CharacterText ,HPText, APText, MPText, SpiceInventoryText; 
+
+    private MapManager nodeManager;
 
     public enum Actions
     {
@@ -33,40 +44,17 @@ public class CharacterTurnHandler : MonoBehaviour
 
     private void Start()
     {
-        nodeManager = NodeManager.instance;
+        nodeManager = MapManager.instance;
         // ButtonToggles();
         //  ConfirmDeactivate();
     }
-
-    void Update()
-    {
-        if (Input.GetKey("j"))
-        {
-            charState = Actions.MOVE;
-        }
-        /*  else if(Input.GetKey("k"))
-          {
-              charState = Actions.ATTACK;
-          }
-          else if(Input.GetKeyDown("l"))
-          {
-              //charState = Actions.SWORD_SPIN;
-              selectedCharacter.Attack_SwordSpin();
-              ResetSelection();
-
-          }
-          else if(Input.GetKey("n"))
-          {
-              charState = Actions.FAMILY_ATOMICS;
-          }*/
-    }
-
 
 
     public void SelectCharacter(Character character)
     {
         selectedCharacter = character;
         ButtonToggles();
+        selectedCharacter.DrawStats();
     }
 
 
@@ -176,12 +164,30 @@ public class CharacterTurnHandler : MonoBehaviour
         {
             //basics
             characterAttacksPanel.SetActive(false);
+            
+
+            PlayerText.SetActive(true);
+            SpiceText.SetActive(true);
+            CharacterText.SetActive(false);
+            HPText.SetActive(false);
+            MPText.SetActive(false);
+            APText.SetActive(false);
+            SpiceInventoryText.SetActive(false);
+
             return;
-           
         }
         else
         {
             characterAttacksPanel.SetActive(true);
+           
+
+            PlayerText.SetActive(false);
+            SpiceText.SetActive(false);
+            CharacterText.SetActive(true);
+            HPText.SetActive(true);
+            MPText.SetActive(true);
+            APText.SetActive(true);
+            SpiceInventoryText.SetActive(true);
         }
 
         if(!selectedCharacter.isEligibleForSpecialAction())
@@ -238,7 +244,6 @@ public class CharacterTurnHandler : MonoBehaviour
     public void ConfirmDeactivate()
     {
         MovementManager.instance.unselectCharacter();
-        NodeManager.instance.ResetNodeColors();
         confirmationPanel.SetActive(false);
     }
 }

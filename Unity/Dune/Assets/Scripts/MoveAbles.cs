@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/**
+ * This class can be bound to Objects in order to make them moveable along a given Path. Works in connection with the MovementManager
+ */
 public class MoveAbles : MonoBehaviour
 {
 
@@ -20,7 +24,8 @@ public class MoveAbles : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _y = transform.position.y - NodeManager.instance.getNodeFromPos(X, Z).charHeightOffset;
+        _y = transform.position.y - MapManager.instance.getNodeFromPos(X, Z).charHeightOffset;
+        if(walkPath == null)
         walkPath = new LinkedList<Vector3>();
     }
 
@@ -29,8 +34,8 @@ public class MoveAbles : MonoBehaviour
     {
         if(Input.GetKeyDown("c"))
         {
-            walkPath.AddLast(new Vector3(7, transform.position.y + NodeManager.instance.getNodeFromPos(7,7).charHeightOffset, 7));
-            walkPath.AddLast(new Vector3(2, transform.position.y + NodeManager.instance.getNodeFromPos(2, 1).charHeightOffset, 1));
+            walkPath.AddLast(new Vector3(7, transform.position.y + MapManager.instance.getNodeFromPos(7,7).charHeightOffset, 7));
+            walkPath.AddLast(new Vector3(2, transform.position.y + MapManager.instance.getNodeFromPos(2, 1).charHeightOffset, 1));
             MovementManager.instance.addOtherToAnimate(this);
         }
     }
@@ -39,6 +44,13 @@ public class MoveAbles : MonoBehaviour
     {
         return MoveToPoint();
     }
+
+    public void WalkAlongPath(LinkedList<Vector3> walkPath)
+    {
+        this.walkPath = new LinkedList<Vector3>(walkPath);
+        MovementManager.instance.addOtherToAnimate(this);
+    }
+
 
 
     /*
