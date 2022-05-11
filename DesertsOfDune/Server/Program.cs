@@ -1,4 +1,5 @@
 ﻿using System;
+using GameData;
 
 namespace Server
 {
@@ -7,6 +8,7 @@ namespace Server
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
+            // Request r = new Request(Request.RequestType.ACTION_REQUEST);
         }
     }
 }
