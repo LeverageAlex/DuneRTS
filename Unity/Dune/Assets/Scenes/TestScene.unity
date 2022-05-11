@@ -13620,7 +13620,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7174622334344385283, guid: 029901d7e2a42a64a9e1dd9bd98e2782, type: 3}
       propertyPath: charSex
-      value: Female Sword
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7174622334344385295, guid: 029901d7e2a42a64a9e1dd9bd98e2782, type: 3}
       propertyPath: m_RootOrder

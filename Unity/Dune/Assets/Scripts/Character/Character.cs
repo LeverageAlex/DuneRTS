@@ -63,9 +63,19 @@ public class Character : MonoBehaviour
 
     public GameObject emblemLogo;
     public GameObject charModel;
-    public string charSex = "Male";
+    public enum charSexEnum
+    {
+        MALE, FEMALE
+    }
+    public charSexEnum charSex = charSexEnum.MALE;
+
     private Animator charAnim;
     Quaternion emblem_rotation;
+
+    private string animation_idle;
+    private string animation_attack;
+    private string animation_pickUpSpice;
+    private string animation_walk;
 
 
     // public Transform t;
@@ -99,6 +109,24 @@ public class Character : MonoBehaviour
         emblem_rotation = emblemLogo.transform.rotation;
 
         charAnim = charModel.GetComponent<Animator>();
+        initAnimations();
+    }
+
+    public void initAnimations()
+    {
+        if (charSex == charSexEnum.MALE) {
+            animation_idle = "Male Sword Stance";
+            animation_attack = "Male Attack 1";
+            animation_pickUpSpice = "Male Attack 3";
+            animation_walk = "Male_Walk";
+        }
+        else
+        {
+            animation_idle = "Female Sword Stance";
+            animation_attack = "Female Sword Attack 2";
+            animation_pickUpSpice = "Female Sword Attack 3";
+            animation_walk = "Female Sword Walk";
+        }
 
     }
 
@@ -159,7 +187,7 @@ public class Character : MonoBehaviour
     {
         Vector3 dir = walkPath.First.Value - transform.position;
         transform.Translate(dir.normalized * walkSpeed * Time.deltaTime, Space.World);
-
+        charAnim.Play(animation_walk);
         transform.rotation = Quaternion.LookRotation(dir);
         emblemLogo.transform.rotation = emblem_rotation;
         // ReduceMP(1);
@@ -176,7 +204,15 @@ public class Character : MonoBehaviour
             MapManager.instance.placeObjectOnNode(gameObject, _x, _z);
 
             //E. g. go To next Point
-            return walkPath.Count > 0;
+            if(walkPath.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                SetAnimationToIdle();
+                return false;
+            }
         }
         return true;
     }
@@ -233,7 +269,7 @@ public class Character : MonoBehaviour
 
         if (nodeManager.isNodeNeighbour(selectedNode, secondNode) && !character.IsMemberOfHouse(house))
         {
-            charAnim.Play(charSex + " Attack 1");
+            charAnim.Play(animation_attack);
             ReduceAP(1);
             if (_AP <= 0) CharacterTurnHandler.EndTurn();
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.ATTACK, selectedNode);
@@ -258,7 +294,10 @@ public class Character : MonoBehaviour
     {
         if (nodeManager.IsSpiceOn(X, Z))
         {
+
             // just fill data the node should be available here.
+
+            charAnim.Play(animation_pickUpSpice);
             Node n = new Node();
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.COLLECT, n);
             nodeManager.CollectSpice(X, Z);
@@ -555,7 +594,10 @@ public class Character : MonoBehaviour
     }
  
 
-
+    public void SetAnimationToIdle()
+    {
+        charAnim.Play(animation_idle);
+    }
 
 
 }

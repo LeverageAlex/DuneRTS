@@ -291,7 +291,7 @@ MonoBehaviour:
   house: 5
   emblemLogo: {fileID: 2692574287032742791}
   charModel: {fileID: 1467661906778424524}
-  charSex: Female Sword
+  charSex: 1
 --- !u!1001 &1466083976841097130
 PrefabInstance:
   m_ObjectHideFlags: 0
