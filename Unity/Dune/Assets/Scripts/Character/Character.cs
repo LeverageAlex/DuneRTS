@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System;
+using UnityEngine.UI;
 
 
 /**
@@ -491,29 +492,37 @@ public class Character : MonoBehaviour
 
     public void SetMatColorToHouse()
     {
-        Color col = Color.gray;
+       // Color col = Color.gray;
+        Sprite img = null;
         switch(house)
         {
             case HouseEnum.CORRINO: //Gold
-                col = new Color(255, 215, 0);
+               // col = new Color(255, 215, 0);
+                img = CharacterMgr.instance.emblemCorinno;
                 break;
             case HouseEnum.ATREIDES:
-                col = Color.green;
+              //  col = Color.green;
+                img = CharacterMgr.instance.emblemAtreides;
                 break;
             case HouseEnum.HARKONNEN:
-                col = Color.red;
+               // col = Color.red;
+                img = CharacterMgr.instance.emblemHarkonnen;
                 break;
             case HouseEnum.ORDOS:
-                col = Color.blue;
+                //col = Color.blue;
+                img = CharacterMgr.instance.emblemOrdos;
                 break;
             case HouseEnum.RICHESE: //Silver
-                col = new Color(192, 192, 192);
+                //col = new Color(192, 192, 192);
+                img = CharacterMgr.instance.emblemRichese;
                 break;
             case HouseEnum.VERNIUS:
-                col = new Color(128, 0, 128); //Purple
+                //col = new Color(128, 0, 128); //Purple
+                img = CharacterMgr.instance.emblemVernius;
                 break;
         }
-        GetComponent<Renderer>().material.color = col;
+        //GetComponent<Renderer>().material.color = col;
+        ((Image)(emblemLogo.GetComponent(typeof(Image)))).sprite = img;
     }
 
     public bool IsMemberOfHouse(HouseEnum houseEnum)
