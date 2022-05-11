@@ -76,6 +76,11 @@ public class Character : MonoBehaviour
     private string animation_attack;
     private string animation_pickUpSpice;
     private string animation_walk;
+    private string animation_voice;
+    private string animation_kanly;
+    private string animation_swordSpin;
+    private string animation_spiceHoarding;
+    private string animation_transferSpice;
 
 
     // public Transform t;
@@ -119,6 +124,9 @@ public class Character : MonoBehaviour
             animation_attack = "Male Attack 1";
             animation_pickUpSpice = "Male Attack 3";
             animation_walk = "Male_Walk";
+            animation_swordSpin = "";
+            animation_kanly = "Male Attack 3";
+            animation_spiceHoarding = "Male Sword Roll";
         }
         else
         {
@@ -126,7 +134,11 @@ public class Character : MonoBehaviour
             animation_attack = "Female Sword Attack 2";
             animation_pickUpSpice = "Female Sword Attack 3";
             animation_walk = "Female Sword Walk";
+            animation_voice = "Female Sword Attack 3";
         }
+
+
+
 
     }
 
@@ -324,6 +336,7 @@ public class Character : MonoBehaviour
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.TRANSFER, selectedNode);
             //TODO execute attack
             Debug.Log("Transfer!");
+            charAnim.Play(animation_transferSpice);
             ReduceAP(1);
             if (_AP <= 0) CharacterTurnHandler.EndTurn();
             //reset 
@@ -348,7 +361,7 @@ public class Character : MonoBehaviour
             //Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
             Debug.Log("Attack_SwordSpin");
             turnHandler.ResetSelection();
-
+            charAnim.Play(animation_swordSpin);
             // just fill data the node has to be a parameter of Atack_SwordSpin
 
             Node n = new Node();
@@ -414,6 +427,7 @@ public class Character : MonoBehaviour
             {
                 PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.KANLY, selectedNode);
                 Debug.Log("Kanly fight!");
+                charAnim.Play(animation_kanly);
                 turnHandler.ResetSelection();
                 ReduceAP(_AP); //reduce AP to 0
                 if (_AP <= 0) CharacterTurnHandler.EndTurn();
@@ -443,7 +457,7 @@ public class Character : MonoBehaviour
             // just fill data the selected node should be available here.
             Node node = new Node();
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.SPICE_HOARDING, node);
-
+            charAnim.Play(animation_spiceHoarding);
 
             for (int i = -1; i <= 1; i++)
             {
@@ -483,6 +497,7 @@ public class Character : MonoBehaviour
             Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
             if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
             {
+                charAnim.Play(animation_voice);
                 Debug.Log("Voice!");
                 PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.VOICE, selectedNode);
                 //TODO: wait for response from server
