@@ -303,9 +303,13 @@ public class Character : MonoBehaviour
             Debug.Log("Attack_SwordSpin");
             turnHandler.ResetSelection();
 
+<<<<<<< HEAD
 
             // just fill data the node has to be a parameter of Atack_SwordSpin
 
+=======
+            // just fill data the node has to be a parameter of Atack_SwordSpin
+>>>>>>> 9756bdf208319e8d091164244ede708c454b14aa
             Node n = new Node();
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.SWORD_SPIN, n);
 
@@ -399,6 +403,10 @@ public class Character : MonoBehaviour
             Node node = new Node();
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.SPICE_HOARDING, node);
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9756bdf208319e8d091164244ede708c454b14aa
             for (int i = -1; i <= 1; i++)
             {
                 for (int j = -1; j <= 1; j++)
