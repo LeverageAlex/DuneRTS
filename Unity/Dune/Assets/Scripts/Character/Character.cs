@@ -82,6 +82,8 @@ public class Character : MonoBehaviour
     private string animation_spiceHoarding;
     private string animation_transferSpice;
 
+    public GameObject swordObject;
+
 
     // public Transform t;
 
@@ -127,6 +129,7 @@ public class Character : MonoBehaviour
             animation_swordSpin = "";
             animation_kanly = "Male Attack 3";
             animation_spiceHoarding = "Male Sword Roll";
+            animation_transferSpice = "Male Attack 2";
         }
         else
         {
@@ -135,7 +138,9 @@ public class Character : MonoBehaviour
             animation_pickUpSpice = "Female Sword Attack 3";
             animation_walk = "Female Sword Walk";
             animation_voice = "Female Sword Attack 3";
+            animation_transferSpice = "Female Sword Attack 3";
         }
+        
 
 
 
@@ -308,7 +313,7 @@ public class Character : MonoBehaviour
         {
 
             // just fill data the node should be available here.
-
+            StartCoroutine(SwordDeAndActivation());
             charAnim.Play(animation_pickUpSpice);
             Node n = new Node();
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.COLLECT, n);
@@ -336,6 +341,7 @@ public class Character : MonoBehaviour
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.TRANSFER, selectedNode);
             //TODO execute attack
             Debug.Log("Transfer!");
+            StartCoroutine(SwordDeAndActivation());
             charAnim.Play(animation_transferSpice);
             ReduceAP(1);
             if (_AP <= 0) CharacterTurnHandler.EndTurn();
@@ -520,6 +526,17 @@ public class Character : MonoBehaviour
             turnHandler.ResetAction();
             return false;
         }
+    }
+
+    public IEnumerator SwordDeAndActivation()
+    {
+        swordObject.SetActive(false);
+        yield return new WaitForSeconds(1);
+        if (charSex == charSexEnum.MALE)
+        {
+            swordObject.SetActive(true);
+        }
+
     }
 
     public CharTypeEnum GetCharType()

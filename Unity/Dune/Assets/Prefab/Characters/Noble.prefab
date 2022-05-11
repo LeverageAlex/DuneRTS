@@ -116,7 +116,8 @@ MonoBehaviour:
   house: 5
   emblemLogo: {fileID: 3709811689709717307}
   charModel: {fileID: 6147592722220831659}
-  charSex: Male
+  charSex: 0
+  swordObject: {fileID: 6147805779203897755}
 --- !u!1 &3709811689709717307
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,6 +362,11 @@ GameObject:
 --- !u!4 &6144264217153021419 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4927973787200604, guid: 7e6e29f21a00d5f499e21eb93d6fabaa, type: 3}
+  m_PrefabInstance: {fileID: 6148906865355966903}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6147805779203897755 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1173177213022252, guid: 7e6e29f21a00d5f499e21eb93d6fabaa, type: 3}
   m_PrefabInstance: {fileID: 6148906865355966903}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &9068298951374121326
