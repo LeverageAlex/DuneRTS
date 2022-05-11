@@ -21,6 +21,10 @@ public class SceneBuilder : MonoBehaviour
     }
 
 
+
+    /**
+     * Little Test Method
+     */
     public void initMap()
     {
         MapManager nodeManager = MapManager.instance;

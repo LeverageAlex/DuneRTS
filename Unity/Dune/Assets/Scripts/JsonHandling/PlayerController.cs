@@ -17,6 +17,7 @@ public static class PlayerController
     /// <param name="characterID">the id of the character</param>
     /// <param name="path">the path the character should take</param>
     public static void DoMovementRequest(int clientID, int characterID, LinkedList<Vector3> path)
+
     {
         Specs specs = new Specs();
         specs.path = ConvertPath(path);
@@ -46,6 +47,7 @@ public static class PlayerController
         request.clientID = clientID;
         // TODO habe to implement action i library...
        // request.action = action;
+
         Specs specs = new Specs();
         Vector targ = new Vector(target.X, target.Z);
         specs.target = targ;

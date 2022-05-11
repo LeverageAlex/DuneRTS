@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 /**
@@ -26,6 +27,15 @@ public class CharacterMgr : MonoBehaviour
     public GameObject sandwormPrefab;
 
     private MoveAbles sandwormMoveScript;
+
+    public Sprite emblemRichese;
+    public Sprite emblemVernius;
+    public Sprite emblemAtreides;
+    public Sprite emblemHarkonnen;
+    public Sprite emblemOrdos;
+    public Sprite emblemCorinno;
+
+
 
     private float charSpawnLowY = 0.35f;
     private float charSpawnHighY = 0.525f;

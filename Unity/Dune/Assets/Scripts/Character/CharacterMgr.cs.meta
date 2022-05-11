@@ -10,6 +10,12 @@ MonoImporter:
   - fighterPrefab: {fileID: 248485424704963574, guid: 87352ed578074554f87332f551b8dce6, type: 3}
   - atomicPrefab: {fileID: 7412499961909464192, guid: 4e9abc8848524e642bee551042f3fc4b, type: 3}
   - sandwormPrefab: {fileID: 7878245606837139554, guid: 5711f5435620ab14cbf6eedb2a1edf2d, type: 3}
+  - emblemRichese: {fileID: 21300000, guid: d4ab0e3b1e831e347a1ee38cb004c1be, type: 3}
+  - emblemVernius: {fileID: 21300000, guid: a879059f28b93654ca7a0261649874e7, type: 3}
+  - emblemAtreides: {fileID: 21300000, guid: 7ec2127c596765b42a6b43654d46c5b5, type: 3}
+  - emblemHarkonnen: {fileID: 21300000, guid: 940cd7355ee925748a6b73a0526504e7, type: 3}
+  - emblemOrdos: {fileID: 21300000, guid: c5159ee3ddf98724f8737867674713bd, type: 3}
+  - emblemCorinno: {fileID: 21300000, guid: 2acf0afb73b90fd47b69288273b139aa, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

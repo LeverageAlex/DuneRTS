@@ -104,6 +104,7 @@ public class CharacterTurnHandler : MonoBehaviour
     {
         //activation by otherChar
         this.charState = Actions.TRANSFER;
+        Debug.Log("transfer spice");
         ConfirmDeactivate();
     }
 
@@ -152,6 +153,7 @@ public class CharacterTurnHandler : MonoBehaviour
 
     public static void EndTurn()
     {
+        PlayerController.DoEndTurnRequest(1234,12);
         Debug.Log("Ended Turn!");
         instance.ResetSelection();
     }
