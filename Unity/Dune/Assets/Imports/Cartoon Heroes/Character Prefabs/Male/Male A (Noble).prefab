@@ -1228,7 +1228,7 @@ GameObject:
   - component: {fileID: 95844511793012932}
   - component: {fileID: 114380782822982968}
   m_Layer: 0
-  m_Name: Male A
+  m_Name: Male A (Noble)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

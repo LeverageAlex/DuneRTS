@@ -2054,7 +2054,7 @@ GameObject:
   - component: {fileID: 95878174872389186}
   - component: {fileID: 114131247499309610}
   m_Layer: 0
-  m_Name: Male B
+  m_Name: Male B (Mentat)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
