@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
+using GameData;
+
 /// <summary>
 /// This Class Handles all messages for the Client.
 /// </summary>
@@ -14,7 +16,11 @@ public static class PlayerController
     /// <param name="clientID">the id of the client</param>
     /// <param name="characterID">the id of the character</param>
     /// <param name="path">the path the character should take</param>
+<<<<<<< HEAD
    public static void DoMovementRequest(int clientID, int characterID, LinkedList<Vector3> path)
+=======
+    public static void DoMovementRequest(int clientID, int characterID, LinkedList<Vector3> path)
+>>>>>>> 9756bdf208319e8d091164244ede708c454b14aa
     {
         Specs specs = new Specs();
         specs.path = ConvertPath(path);
@@ -28,7 +34,7 @@ public static class PlayerController
         string data = JsonConvert.SerializeObject(request, new JsonSerializerSettings());
         Debug.Log("Updated: " + data);
 
-    } 
+    }
 
     /// <summary>
     /// This method does the action request
@@ -42,13 +48,24 @@ public static class PlayerController
         Request request = new Request(Request.RequestType.ACTION_REQUEST);
         request.version = version;
         request.clientID = clientID;
-        request.action = action;
+        // TODO habe to implement action i library...
+       // request.action = action;
+<<<<<<< HEAD
+
         Specs specs = new Specs();
         Vector targ = new Vector(target.X, target.Z);
         specs.target = targ;
         request.specs = specs;
         request.targetID = 1253;
 
+=======
+        Specs specs = new Specs();
+        Vector targ = new Vector(target.X, target.Z);
+        specs.target = targ;
+        request.specs = specs;
+        request.targetID = 1253;
+
+>>>>>>> 9756bdf208319e8d091164244ede708c454b14aa
         // for testing perpeces only
         string data = JsonConvert.SerializeObject(request, new JsonSerializerSettings());
         Debug.Log("Updated: " + data);

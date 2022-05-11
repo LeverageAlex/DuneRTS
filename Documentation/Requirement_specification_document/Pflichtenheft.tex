@@ -2168,6 +2168,27 @@ Diese Hilfs-Klasse repräsentiert eine Welt, in der Szenario und alle Charaktere
 
 \vspace{0.5cm}
 
+\subsection{Geteilte-Logik}
+
+\includegraphics[width=0.95\textwidth]{images/KlassendiagrammWelt&Charaktere}
+\label{fig:Geteilte-Logik-Klassendiagramm}
+\captionof{figure}{Klassendiagramm über Welt und Charaktere.}
+
+\subsection{Nutzer-Klient}
+
+\includegraphics[width=0.95\textwidth]{images/KlassendiagrammUserClient}
+\label{fig:Geteilte-Logik-Klassendiagramm}
+\captionof{figure}{Klassendiagramm über Nutzer-Klient.}
+
+\subsection{Statistik}
+\begin{center}
+
+\includegraphics[width=0.5\textwidth]{images/KlassendiagrammStatistik}
+\label{fig:Geteilte-Logik-Klassendiagramm}
+\captionof{figure}{Klassendiagramm über Statistik.}
+
+\end{center}
+
 \subsubsection{Netzwerk-Modul}
 Im Folgenden sind die Klassendiagramme zu sehen, die das Netzwerk-Modul umfasst. Diese Klassen müssen allen Komponenten zugänglich sein, jedoch werden manche Klassen spezifisch von jeder Komponente erweitert oder genauer implementiert. \\ 
 
@@ -2238,6 +2259,22 @@ Nachrichten an sich verwalten und auswerten. Mit der \method{handleSendingMessag
 \paragraph{MessageController}
 Die \class{MessageController} ist der Controller, der die Logik enthält, die beim Erhalt oder beim Senden einer Nachricht ausgeführt werden soll. Durch die Aufteilung in diesen Controller und die Nachrichten-Klassen (Model) wird das MVC-Pattern implementiert. Der \textit{MessageController} implementiert dann die Interfaces \textit{iReceivedMessageHandler} und \textit{iEmittedMessageHandler}, die alle Methoden enthalten, die die Controller für eingehende und zu sendende Nachrichten repräsentieren. \\ Der \textit{MessageController} wird von weiteren Controllern erweitert, um je nach Komponenten und Implementierung des Netzwerk-Moduls verschiedene Controller-Funktionalitäten umzusetzen. Jeder Controller muss jedoch Debug-Nachrichten versenden und handlen können, was durch die Methoden \textit{onDebugMessage} und \textit{doDebug} umgesetzt wird.
 \\ Generell sind die Methoden mit dem Namen \textit{on<Nachrichtenname>} dafür da, eingehende Nachrichten zu verarbeiten und die Logik zu implementieren, die bei Erhalt der entsprechenden Nachricht auszuführen ist. Die Methoden mit dem Namen \textit{do<Nachrichtenname>} beinhalten die Logik, die ausgeführt werden soll, wenn eine bestimmte Nachricht versendet werden soll. \\ Dabei gibt es weitere speziellere Controller, die den \textit{MessageController} erweitern. So verwendet der Server die \class{ServerMessageController}, welche alle Methoden beinhaltet, die notwendig sind um alle Nachrichten zu empfangen und zu versenden, die der Server laut dem Standardisierungsdokument verarbeiten muss. Die \class{ClientMessageController} umfasst alle Methoden, die jeder Client braucht, wobei diese einmal von der \class{SpectatorMessageController} erweitert wird (Klasse, die der Benutzer-Client des Zuschauers verwendet) und von der \class{PlayerMessageController}. Diese Klasse beinhaltet alle Methoden, die die Nachrichten verarbeiten, die die mitspielenden Clients versenden und empfangen müssen. Dabei gibt es weiterhin eine Unterteilung in die Klassen \textit{HumanPlayerMessageController} und \textit{AIPlayerMessageController}, die der Benutzer-Client für den Spieler und der KI-Client beinhalten. Diese Aufteilung besteht, da der menschliche Spieler mehr Nachrichten versenden kann (zum Beispiel Antrag auf Pausierung) als der KI-Client und somit auch einen erweiterten Controller benötigt, der diese zusätzliche Logik umsetzen kann. 
+
+\subsubsection{Konfiguration}
+
+\begin{center}
+\includegraphics[width=0.95\textwidth]{images/classdiagram_configuration}
+\label{fig:Konfiguration-Klassendiagramm}
+\captionof{figure}{Übersicht über die Klassen, die für die Konfiguration von Partie und Szenario nötig sind.}
+\end{center}
+
+\subsubsection{Runden-Handler}
+
+\begin{center}
+\includegraphics[width=0.95\textwidth]{images/Meilenstein6_RundenHandler}
+\label{fig:Runden-Handler-Klassendiagramm}
+\captionof{figure}{Übersicht über die Klassen, die für den korrekten Ablauf der einzelnen Runden zuständig sind. Während das Spiel läuft, also die Runden abgespielt werden, soll das Spiel pausiert werden können.}
+\end{center}
 
 \begin{tabularx}{\linewidth}{l|X}
 	\textbf{funktionale Anforderung} & \textbf{Methode(n), die diese umsetzt} \\ \hline
