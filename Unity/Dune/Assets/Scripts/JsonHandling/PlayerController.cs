@@ -54,6 +54,18 @@ public static class PlayerController
         Debug.Log("Updated: " + data);
     }
 
+    public static void DoEndTurnRequest(int clientID, int characterID)
+    {
+        Request request = new Request(Request.RequestType.END_TURN_REQEST);
+        request.version = version;
+        request.clientID = clientID;
+        request.characterID = characterID;
+
+        // for testing perpeces only
+        string data = JsonConvert.SerializeObject(request, new JsonSerializerSettings());
+        Debug.Log("Updated: " + data);
+    }
+
     /// <summary>
     /// This method is used to convert the Path from a list of Vector3 to a List of type Vector in oderer to convert this to JSON.
     /// </summary>
