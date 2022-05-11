@@ -286,6 +286,8 @@ public class Character : MonoBehaviour
 
         if (nodeManager.isNodeNeighbour(selectedNode, secondNode) && !character.IsMemberOfHouse(house))
         {
+            Vector3 dir = character.transform.position - transform.position;
+            transform.rotation = Quaternion.LookRotation(dir);
             charAnim.Play(animation_attack);
             ReduceAP(1);
             if (_AP <= 0) CharacterTurnHandler.EndTurn();
@@ -341,6 +343,8 @@ public class Character : MonoBehaviour
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.TRANSFER, selectedNode);
             //TODO execute attack
             Debug.Log("Transfer!");
+            Vector3 dir = character.transform.position - transform.position;
+            transform.rotation = Quaternion.LookRotation(dir);
             StartCoroutine(SwordDeAndActivation());
             charAnim.Play(animation_transferSpice);
             ReduceAP(1);
@@ -433,6 +437,8 @@ public class Character : MonoBehaviour
             {
                 PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.KANLY, selectedNode);
                 Debug.Log("Kanly fight!");
+                Vector3 dir = character.transform.position - transform.position;
+                transform.rotation = Quaternion.LookRotation(dir);
                 charAnim.Play(animation_kanly);
                 turnHandler.ResetSelection();
                 ReduceAP(_AP); //reduce AP to 0
@@ -503,6 +509,8 @@ public class Character : MonoBehaviour
             Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
             if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
             {
+                Vector3 dir = character.transform.position - transform.position;
+                transform.rotation = Quaternion.LookRotation(dir);
                 charAnim.Play(animation_voice);
                 Debug.Log("Voice!");
                 PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.VOICE, selectedNode);
