@@ -30,7 +30,7 @@ public static class PlayerController
         string data = JsonConvert.SerializeObject(request, new JsonSerializerSettings());
         Debug.Log("Updated: " + data);
 
-    } 
+    }
 
     /// <summary>
     /// This method does the action request
@@ -44,7 +44,9 @@ public static class PlayerController
         Request request = new Request(Request.RequestType.ACTION_REQUEST);
         request.version = version;
         request.clientID = clientID;
-        request.action = action;
+        // TODO habe to implement action i library...
+       // request.action = action;
+
         Specs specs = new Specs();
         Vector targ = new Vector(target.X, target.Z);
         specs.target = targ;

@@ -302,9 +302,10 @@ public class Character : MonoBehaviour
             //Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
             Debug.Log("Attack_SwordSpin");
             turnHandler.ResetSelection();
-            // just fill data the node has to be a parameter of Atack_SwordSpin
+
+            
             Node n = new Node();
-            PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.SWORD_SPIN, n);
+            PlayerController.DoActionRequest(1234,12,CharacterTurnHandler.Actions.SWORD_SPIN,n);
             //TODO: Send Attack to Server
             //TODO: wait for response from server
             ReduceAP(_AP); // Reduce AP to 0 | should be removed when server manages MP
