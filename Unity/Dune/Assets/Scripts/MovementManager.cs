@@ -5,7 +5,11 @@ using System;
 using Newtonsoft.Json;
 
 
-
+/**
+ * This manages all Characters and Moveables, that shall be moved.
+ * - Helps creating the movement path of chars
+ * - Moves Characters according to path
+ */
 [Serializable]
     public class MovementManager : MonoBehaviour
     {
@@ -49,7 +53,7 @@ using Newtonsoft.Json;
                 var next = cluster.Next;
                 if (!cluster.Value.calledUpdate())
                 {
-                    NodeManager.instance.getNodeFromPos(cluster.Value.X, cluster.Value.Z).ResetColor();
+                    MapManager.instance.getNodeFromPos(cluster.Value.X, cluster.Value.Z).ResetColor();
                     updateCharacters.Remove(cluster);
                 }
                 cluster = next;
@@ -119,17 +123,17 @@ using Newtonsoft.Json;
          */
         public bool IsWaypointAttachable(int x, int z)
         {
-            /*if (selCharPath.Count == 0) { // distinction needed at the first node to select
-                return selCharPath.Count < CharacterTurnHandler.instance.GetSelectedCharacter().MP && NodeManager.instance.isNodeNeighbour(CharacterTurnHandler.instance.GetSelectedCharacter().X,
+            if (selCharPath.Count == 0) { // distinction needed at the first node to select
+                return selCharPath.Count < CharacterTurnHandler.instance.GetSelectedCharacter().MP && MapManager.instance.isNodeNeighbour(CharacterTurnHandler.instance.GetSelectedCharacter().X,
                     CharacterTurnHandler.instance.GetSelectedCharacter().Z, x, z);
             }
             else
             {
-                return selCharPath.Count < CharacterTurnHandler.instance.GetSelectedCharacter().MP && NodeManager.instance.isNodeNeighbour((int)selCharPath.Last.Value.x, (int)selCharPath.Last.Value.z,
+                return selCharPath.Count < CharacterTurnHandler.instance.GetSelectedCharacter().MP && MapManager.instance.isNodeNeighbour((int)selCharPath.Last.Value.x, (int)selCharPath.Last.Value.z,
                    x, z);
-            }*/
+            }
 
-            return true;
+           // return true;
         }
 
         public void AnimateSelectedChar()
@@ -141,24 +145,10 @@ using Newtonsoft.Json;
                 Character selectedChar = CharacterTurnHandler.instance.GetSelectedCharacter();
                 updateCharacters.AddLast(selectedChar);
 
-                Request request = new Request(Request.RequestType.MOVEMENT_REQUEST);
-                request.version = "v1";
-                request.clientID = 1234;
-                request.characterID = selectedChar.GetInstanceID();
-                List<Vector> path = new List<Vector>();
-
-
-                Specs specs = new Specs();
-                foreach(Vector3 vec in selCharPath)
-                {
-                    Vector v = new Vector(vec.x, vec.z);
-                    path.Add(v);
-                }
-                specs.path = path;
-                request.specs = specs;
-
-                string data = JsonConvert.SerializeObject(request, new JsonSerializerSettings());
-                Debug.Log("Updated: " + data);
+                // PlayerController.doRequestMovement(ClientID, CharacterId, path); 
+                PlayerController.DoMovementRequest(1234, selectedChar.GetInstanceID(), selCharPath);
+                
+                // Message = PlayerController.OnMovement((Movement)Message)
 
                 // Sollte erst ausgeführt werden, wenn die aktion ausgeführt werden darf.
                 selectedChar.SetWalkPath(selCharPath);
