@@ -59,6 +59,11 @@ public class Character : MonoBehaviour
 
 
     private MapManager nodeManager;
+
+    public GameObject emblemLogo;
+    Quaternion emblem_rotation;
+
+
     // public Transform t;
 
 
@@ -87,7 +92,7 @@ public class Character : MonoBehaviour
         //Debug.Log("HP " + HP + ", AP " + AP);
         //Debug.Log("Object name: " + gameObject.name);
         BaseAP = _AP;
-
+        emblem_rotation = emblemLogo.transform.rotation;
     }
 
     /*
@@ -147,7 +152,10 @@ public class Character : MonoBehaviour
     {
         Vector3 dir = walkPath.First.Value - transform.position;
         transform.Translate(dir.normalized * walkSpeed * Time.deltaTime, Space.World);
-       // ReduceMP(1);
+
+        transform.rotation = Quaternion.LookRotation(dir);
+        emblemLogo.transform.rotation = emblem_rotation;
+        // ReduceMP(1);
         if (Vector3.Distance(transform.position, walkPath.First.Value) <= 0.06f)
         {
             walkPath.RemoveFirst();

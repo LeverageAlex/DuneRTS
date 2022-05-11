@@ -7858,6 +7858,11 @@ Transform:
   m_Father: {fileID: 2011776793}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1101198542 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2692574287032742791, guid: 029901d7e2a42a64a9e1dd9bd98e2782, type: 3}
+  m_PrefabInstance: {fileID: 7174622334227119014}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1108098907
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12639,6 +12644,8 @@ MonoBehaviour:
   FlatRockNodePrefab: {fileID: 2841477226448814277, guid: 4768c0b39769c8c4dbfecd23f9cc22bc, type: 3}
   rockNodePrefab: {fileID: 3107263321164118083, guid: 4208559f8aceb8f41a5b29f5c05c769e, type: 3}
   spicePrefab: {fileID: 4714282301104811527, guid: 1361dd36a2141fe4587095399b603f7f, type: 3}
+  SandstormEffectPrefab: {fileID: 0}
+  EarthQuakePrefab: {fileID: 0}
 --- !u!4 &1850260019
 Transform:
   m_ObjectHideFlags: 0
@@ -17357,6 +17364,10 @@ PrefabInstance:
       propertyPath: house
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 7174622334344385283, guid: 029901d7e2a42a64a9e1dd9bd98e2782, type: 3}
+      propertyPath: emblemLogo
+      value: 
+      objectReference: {fileID: 1101198542}
     - target: {fileID: 7174622334344385295, guid: 029901d7e2a42a64a9e1dd9bd98e2782, type: 3}
       propertyPath: m_RootOrder
       value: 10
