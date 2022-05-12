@@ -262,30 +262,30 @@ public class Character : MonoBehaviour
         }
         else if (turnHandler.CharState == CharacterTurnHandler.Actions.ATTACK)
         {
-            turnHandler.GetSelectedCharacter().Attack_Basic(this);
+            turnHandler.GetSelectedCharacter().Attack_BasicTrigger(this);
         }
         else if (turnHandler.CharState == CharacterTurnHandler.Actions.KANLY)
         {
-            turnHandler.GetSelectedCharacter().Attack_Kanly(this);
+            turnHandler.GetSelectedCharacter().Attack_KanlyTrigger(this);
         }
         else if (turnHandler.CharState == CharacterTurnHandler.Actions.VOICE)
         {
-            turnHandler.GetSelectedCharacter().Action_Voice(this);
+            turnHandler.GetSelectedCharacter().Action_VoiceTrigger(this);
         }
         else if (turnHandler.CharState == CharacterTurnHandler.Actions.TRANSFER)
         {
-            turnHandler.GetSelectedCharacter().Action_TransferSpice(this);
+            turnHandler.GetSelectedCharacter().Action_TransferSpiceTrigger(this);
         }
         else if (turnHandler.CharState == CharacterTurnHandler.Actions.FAMILY_ATOMICS)
         {
-            CharacterTurnHandler.instance.GetSelectedCharacter().Attack_Atomic(nodeManager.getNodeFromPos(X, Z));
+            CharacterTurnHandler.instance.GetSelectedCharacter().Attack_AtomicTrigger(nodeManager.getNodeFromPos(X, Z));
         }
 
 
         }
 
 
-    public bool Attack_Basic(Character character)
+    public bool Attack_BasicTrigger(Character character)
     {
         //secondCharacter = character;
         Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
@@ -294,20 +294,11 @@ public class Character : MonoBehaviour
 
         if (nodeManager.isNodeNeighbour(selectedNode, secondNode) && !character.IsMemberOfHouse(house))
         {
-            Vector3 dir = character.transform.position - transform.position;
-            RotateTowardsVector(dir);
-            charAnim.Play(animation_attack);
-            StartCoroutine(character.PlayDamageAnimation(this));
-            ReduceAP(1);
-            if (_AP <= 0) CharacterTurnHandler.EndTurn();
+            
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.ATTACK, selectedNode);
             // TODO wait for Server response.
             //TODO execute attack
-            Debug.Log("Attack");
-
-            //reset 
-            // secondCharacter = null;
-            turnHandler.ResetSelection();
+            Attack_BasicExecution(character);
             return true;
         }
         else
@@ -318,19 +309,31 @@ public class Character : MonoBehaviour
         }
     }
 
-    public bool Action_CollectSpice()
+    public void Attack_BasicExecution(Character character)
+    {
+        Vector3 dir = character.transform.position - transform.position;
+        RotateTowardsVector(dir);
+        charAnim.Play(animation_attack);
+        StartCoroutine(character.PlayDamageAnimation(this));
+        ReduceAP(1);
+        if (_AP <= 0) CharacterTurnHandler.EndTurn();
+
+        Debug.Log("Attack");
+
+        //reset 
+        // secondCharacter = null;
+        turnHandler.ResetSelection();
+
+    }
+
+    public bool Action_CollectSpiceTrigger()
     {
         if (nodeManager.IsSpiceOn(X, Z))
         {
-
-            // just fill data the node should be available here.
-            StartCoroutine(SwordDeAndActivation());
-            charAnim.Play(animation_pickUpSpice);
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.COLLECT, nodeManager.getNodeFromPos(X, Z));
-            nodeManager.CollectSpice(X, Z);
-            ReduceAP(1);
-            Debug.Log("Collected Spice!");
-            if (_AP <= 0) CharacterTurnHandler.EndTurn();
+            // just fill data the node should be available here.
+            Action_CollectSpiceExecution();
+
         }
         else
         {
@@ -341,7 +344,17 @@ public class Character : MonoBehaviour
         return true;
     }
 
-    public bool Action_TransferSpice(Character character)
+    public void Action_CollectSpiceExecution()
+    {
+        StartCoroutine(SwordDeAndActivation());
+        charAnim.Play(animation_pickUpSpice);
+        nodeManager.CollectSpice(X, Z);
+        ReduceAP(1);
+        Debug.Log("Collected Spice!");
+        if (_AP <= 0) CharacterTurnHandler.EndTurn();
+    }
+
+    public bool Action_TransferSpiceTrigger(Character character)
     {
         Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
         Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
@@ -350,16 +363,7 @@ public class Character : MonoBehaviour
         {
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.TRANSFER, selectedNode);
             //TODO execute attack
-            Debug.Log("Transfer!");
-            Vector3 dir = character.transform.position - transform.position;
-            RotateTowardsVector(dir);
-            StartCoroutine(SwordDeAndActivation());
-            charAnim.Play(animation_transferSpice);
-            ReduceAP(1);
-            if (_AP <= 0) CharacterTurnHandler.EndTurn();
-            //reset 
-            // secondCharacter = null;
-            turnHandler.ResetSelection();
+            Action_TransferSpiceExecution(character);
             return true;
         }
         else
@@ -370,25 +374,35 @@ public class Character : MonoBehaviour
         }
     }
 
+    public void Action_TransferSpiceExecution(Character character)
+    {
+        Debug.Log("Transfer!");
+        Vector3 dir = character.transform.position - transform.position;
+        RotateTowardsVector(dir);
+        StartCoroutine(SwordDeAndActivation());
+        charAnim.Play(animation_transferSpice);
+        ReduceAP(1);
+        if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        //reset 
+        // secondCharacter = null;
+        turnHandler.ResetSelection();
+    }
 
-    public bool Attack_SwordSpin()
+
+    public bool Attack_SwordSpinTrigger()
     {
         //secondCharacter = character;
         if (characterType == CharTypeEnum.FIGHTER)
         {
             //Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
-            Debug.Log("Attack_SwordSpin");
-            turnHandler.ResetSelection();
-            charAnim.Play(animation_swordSpin);
+           
             // just fill data the node has to be a parameter of Atack_SwordSpin
 
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.SWORD_SPIN, nodeManager.getNodeFromPos(X,Z));
-
+            Attack_SwordSpinExecution();
             //TODO: Send Attack to Server
             //TODO: wait for response from server
-            ReduceAP(_AP); // Reduce AP to 0 | should be removed when server manages MP
-            if (_AP <= 0) CharacterTurnHandler.EndTurn();
-            CharacterTurnHandler.EndTurn();
+           
             return true;
         }
         else
@@ -402,24 +416,28 @@ public class Character : MonoBehaviour
 
     }
 
+    public void Attack_SwordSpinExecution()
+    {
+        Debug.Log("Attack_SwordSpin");
+        turnHandler.ResetSelection();
+        charAnim.Play(animation_swordSpin);
+
+        ReduceAP(_AP); // Reduce AP to 0 | should be removed when server manages MP
+        if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        CharacterTurnHandler.EndTurn();
+    }
+
     /*
     * @param target node
     */
-    public bool Attack_Atomic(Node node)
+    public bool Attack_AtomicTrigger(Node node)
     {
         if (characterType == CharTypeEnum.NOBLE)
         {
             //Check, if there are atomics left in House
 
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.FAMILY_ATOMICS, node);
-
-            GameObject atomicInst = Instantiate(CharacterMgr.instance.atomicPrefab, new Vector3(X, 0.5f, Z), Quaternion.identity);
-            ((AtomicController)atomicInst.GetComponent(typeof(AtomicController))).SetTargetPos(node.X, node.Z);
-            Debug.Log("Created Atomic");
-            turnHandler.ResetSelection();
-            ReduceAP(_AP); // Reduce AP to 0 | should be removed when server manages MP
-            if (_AP <= 0) CharacterTurnHandler.EndTurn();
-            //CharacterTurnHandler.EndTurn();
+            Attack_AtomicExecution(node);
             return true;
         }
         else
@@ -430,10 +448,21 @@ public class Character : MonoBehaviour
         }
     }
 
+    public void Attack_AtomicExecution(Node node)
+    {
+        GameObject atomicInst = Instantiate(CharacterMgr.instance.atomicPrefab, new Vector3(X, 0.5f, Z), Quaternion.identity);
+        ((AtomicController)atomicInst.GetComponent(typeof(AtomicController))).SetTargetPos(node.X, node.Z);
+        Debug.Log("Created Atomic");
+        turnHandler.ResetSelection();
+        ReduceAP(_AP); // Reduce AP to 0 | should be removed when server manages MP
+        if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        //CharacterTurnHandler.EndTurn();
+    }
+
     /*
     * @param target of action
     */
-    public bool Attack_Kanly(Character character)
+    public bool Attack_KanlyTrigger(Character character)
     {
 
         if (characterType == CharTypeEnum.NOBLE && character.GetCharType() == CharTypeEnum.NOBLE && !character.IsMemberOfHouse(house))
@@ -443,14 +472,7 @@ public class Character : MonoBehaviour
             if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
             {
                 PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.KANLY, selectedNode);
-                Debug.Log("Kanly fight!");
-                Vector3 dir = character.transform.position - transform.position;
-                RotateTowardsVector(dir);
-                charAnim.Play(animation_kanly);
-                StartCoroutine(character.PlayDamageAnimation(this));
-                turnHandler.ResetSelection();
-                ReduceAP(_AP); //reduce AP to 0
-                if (_AP <= 0) CharacterTurnHandler.EndTurn();
+                Attack_KanlyExecution(character);
                 return true;
             }
             else
@@ -468,7 +490,19 @@ public class Character : MonoBehaviour
         }
     }
 
-    public bool Action_SpiceHoarding()
+    public void Attack_KanlyExecution(Character character)
+    {
+        Debug.Log("Kanly fight!");
+        Vector3 dir = character.transform.position - transform.position;
+        RotateTowardsVector(dir);
+        charAnim.Play(animation_kanly);
+        StartCoroutine(character.PlayDamageAnimation(this));
+        turnHandler.ResetSelection();
+        ReduceAP(_AP); //reduce AP to 0
+        if (_AP <= 0) CharacterTurnHandler.EndTurn();
+    }
+
+    public bool Action_SpiceHoardingTrigger()
     {
         //TODO Vorraussetzung zum aufsammeln prüfen?
         if (characterType == CharTypeEnum.MENTANT)
@@ -476,23 +510,7 @@ public class Character : MonoBehaviour
 
             // just fill data the selected node should be available here.
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.SPICE_HOARDING, nodeManager.getNodeFromPos(X, Z));
-            charAnim.Play(animation_spiceHoarding);
-
-            for (int i = -1; i <= 1; i++)
-            {
-                for (int j = -1; j <= 1; j++)
-                {
-                    if (nodeManager.IsSpiceOn(X + i, Z + j))
-                    {
-                        nodeManager.CollectSpice(X + i, Z + j);
-                        Debug.Log("Collected Spice!");
-                        ReduceAP(_AP); //Set AP to 0
-                        CharacterTurnHandler.EndTurn();
-                    }
-                }
-            }
-
-            turnHandler.ResetSelection();
+            Action_SpiceHoardingExecution();
             return true;
         }
         else
@@ -503,10 +521,31 @@ public class Character : MonoBehaviour
         }
     }
 
+    public void Action_SpiceHoardingExecution()
+    {
+        charAnim.Play(animation_spiceHoarding);
+
+        for (int i = -1; i <= 1; i++)
+        {
+            for (int j = -1; j <= 1; j++)
+            {
+                if (nodeManager.IsSpiceOn(X + i, Z + j))
+                {
+                    nodeManager.CollectSpice(X + i, Z + j);
+                    Debug.Log("Collected Spice!");
+                    ReduceAP(_AP); //Set AP to 0
+                    CharacterTurnHandler.EndTurn();
+                }
+            }
+        }
+
+        turnHandler.ResetSelection();
+    }
+
     /*
      * @param Target of Action
      */
-    public bool Action_Voice(Character character)
+    public bool Action_VoiceTrigger(Character character)
     {
         if (characterType == CharTypeEnum.BENEGESSERIT)
         {
@@ -515,16 +554,10 @@ public class Character : MonoBehaviour
             Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
             if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
             {
-                Vector3 dir = character.transform.position - transform.position;
-                RotateTowardsVector(dir);
-                charAnim.Play(animation_voice);
-                Debug.Log("Voice!");
+                
                 PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.VOICE, selectedNode);
                 //TODO: wait for response from server
-
-                turnHandler.ResetSelection();
-                ReduceAP(_AP); //reduce to MP to 0
-                CharacterTurnHandler.EndTurn();
+                Action_VoiceExecution(character);
                 return true;
             }
             else
@@ -540,6 +573,19 @@ public class Character : MonoBehaviour
             turnHandler.ResetAction();
             return false;
         }
+    }
+
+    public void Action_VoiceExecution(Character character)
+    {
+        Vector3 dir = character.transform.position - transform.position;
+        RotateTowardsVector(dir);
+        charAnim.Play(animation_voice);
+        Debug.Log("Voice!");
+
+
+        turnHandler.ResetSelection();
+        ReduceAP(_AP); //reduce to MP to 0
+        CharacterTurnHandler.EndTurn();
     }
 
     public IEnumerator SwordDeAndActivation()
