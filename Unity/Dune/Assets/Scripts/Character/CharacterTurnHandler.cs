@@ -89,13 +89,15 @@ public class CharacterTurnHandler : MonoBehaviour
     public void SetCharStateAttack()
     {
         //activation by enemyChar
+        if(charState == Actions.MOVE) nodeManager.ResetNodeColors();
         this.charState = Actions.ATTACK;
         ConfirmDeactivate();
     }
 
     public void SetCharStateCollectSpice()
     {
-        selectedCharacter.Action_CollectSpice();
+        if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
+        selectedCharacter.Action_CollectSpiceTrigger();
         this.charState = Actions.COLLECT;
         ConfirmDeactivate();
     }
@@ -103,13 +105,16 @@ public class CharacterTurnHandler : MonoBehaviour
     public void SetCharStateTransferSpice()
     {
         //activation by otherChar
+        if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
         this.charState = Actions.TRANSFER;
+        Debug.Log("transfer spice");
         ConfirmDeactivate();
     }
 
     public void SetCharStateKanly()
     {
         //activation by enemyChar
+        if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
         this.charState = Actions.KANLY;
         ConfirmDeactivate();
     }
@@ -117,25 +122,29 @@ public class CharacterTurnHandler : MonoBehaviour
     public void SetCharStateVoice()
     {
         //activation by enemyChar
+        if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
         this.charState = Actions.VOICE;
         ConfirmDeactivate();
     }
 
     public void SetCharStateSpiceHoarding()
     {
-        selectedCharacter.Action_SpiceHoarding();
+        if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
+        selectedCharacter.Action_SpiceHoardingTrigger();
         this.charState = Actions.SPICE_HOARDING;
         ConfirmDeactivate();
     }
 
     public void SetCharStateSwordSpin()
     {
-        selectedCharacter.Attack_SwordSpin();
+        if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
+        selectedCharacter.Attack_SwordSpinTrigger();
         EndTurn();
         ConfirmDeactivate();
     }
     public void SetCharStateAtomics()
     {
+        if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
         //activation by node
         this.charState = Actions.FAMILY_ATOMICS;
         ConfirmDeactivate();
@@ -152,6 +161,7 @@ public class CharacterTurnHandler : MonoBehaviour
 
     public static void EndTurn()
     {
+        PlayerController.DoEndTurnRequest(1234,12);
         Debug.Log("Ended Turn!");
         instance.ResetSelection();
     }
