@@ -10,7 +10,8 @@ namespace GameData.network.util.world
     public class MapField
     {
         private Position position;
-        private TileType tileType;
+        /*TODO: implement tiletype 
+         * private TileType tileType;*/
         private bool hasSpice;
         private bool isInSandstorm;
 
@@ -21,10 +22,10 @@ namespace GameData.network.util.world
         /// <param name="tt">the type of field</param>
         /// <param name="hasSpice">true, if it countains spice</param>
         /// <param name="isInSandstorm">true, if there is a sandstorm on the field.</param>
-        public MapField(Position pos, TileType tt, bool hasSpice, bool isInSandstorm)
+        public MapField(Position pos,/* TileType tt*/ bool hasSpice, bool isInSandstorm)
         {
             this.position = pos;
-            this.tileType = tt;
+            //this.tileType = tt;
             this.hasSpice = hasSpice;
             this.isInSandstorm = isInSandstorm;
         }

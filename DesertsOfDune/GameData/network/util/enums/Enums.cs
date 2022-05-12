@@ -84,5 +84,16 @@ namespace GameData.network.messages
             VOICE,
             SWORD_SPIN
         }
+
+        /// <summary>
+        /// This enum descibes the different types of characters.
+        /// </summary>
+        public enum CharacterType
+        {
+            NOBEL,
+            MENTAT,
+            BENEGESSERIT,
+            FIGHTER
+        }
     }
 }
