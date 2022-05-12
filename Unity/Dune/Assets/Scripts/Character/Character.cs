@@ -80,6 +80,7 @@ public class Character : MonoBehaviour
     private string animation_swordSpin;
     private string animation_spiceHoarding;
     private string animation_transferSpice;
+    private string animation_damage;
 
     public GameObject swordObject;
 
@@ -129,6 +130,7 @@ public class Character : MonoBehaviour
             animation_kanly = "Male Attack 3";
             animation_spiceHoarding = "Male Sword Roll";
             animation_transferSpice = "Male Attack 2";
+            animation_damage = "Male Damage Light";
         }
         else
         {
@@ -138,6 +140,7 @@ public class Character : MonoBehaviour
             animation_walk = "Female Sword Walk";
             animation_voice = "Female Sword Attack 3";
             animation_transferSpice = "Female Sword Attack 3";
+            animation_damage = "Female Damage Light";
         }
         
 
@@ -204,8 +207,7 @@ public class Character : MonoBehaviour
         Vector3 dir = walkPath.First.Value - transform.position;
         transform.Translate(dir.normalized * walkSpeed * Time.deltaTime, Space.World);
         charAnim.Play(animation_walk);
-        transform.rotation = Quaternion.LookRotation(dir);
-        emblemLogo.transform.rotation = emblem_rotation;
+        RotateTowardsVector(dir);
         // ReduceMP(1);
         if (Vector3.Distance(transform.position, walkPath.First.Value) <= 0.06f)
         {
@@ -290,8 +292,9 @@ public class Character : MonoBehaviour
         if (nodeManager.isNodeNeighbour(selectedNode, secondNode) && !character.IsMemberOfHouse(house))
         {
             Vector3 dir = character.transform.position - transform.position;
-            transform.rotation = Quaternion.LookRotation(dir);
+            RotateTowardsVector(dir);
             charAnim.Play(animation_attack);
+            StartCoroutine(character.PlayDamageAnimation(this));
             ReduceAP(1);
             if (_AP <= 0) CharacterTurnHandler.EndTurn();
             PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.ATTACK, selectedNode);
@@ -346,7 +349,7 @@ public class Character : MonoBehaviour
             //TODO execute attack
             Debug.Log("Transfer!");
             Vector3 dir = character.transform.position - transform.position;
-            transform.rotation = Quaternion.LookRotation(dir);
+            RotateTowardsVector(dir);
             StartCoroutine(SwordDeAndActivation());
             charAnim.Play(animation_transferSpice);
             ReduceAP(1);
@@ -439,8 +442,9 @@ public class Character : MonoBehaviour
                 PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.KANLY, selectedNode);
                 Debug.Log("Kanly fight!");
                 Vector3 dir = character.transform.position - transform.position;
-                transform.rotation = Quaternion.LookRotation(dir);
+                RotateTowardsVector(dir);
                 charAnim.Play(animation_kanly);
+                StartCoroutine(character.PlayDamageAnimation(this));
                 turnHandler.ResetSelection();
                 ReduceAP(_AP); //reduce AP to 0
                 if (_AP <= 0) CharacterTurnHandler.EndTurn();
@@ -509,7 +513,7 @@ public class Character : MonoBehaviour
             if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
             {
                 Vector3 dir = character.transform.position - transform.position;
-                transform.rotation = Quaternion.LookRotation(dir);
+                RotateTowardsVector(dir);
                 charAnim.Play(animation_voice);
                 Debug.Log("Voice!");
                 PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.VOICE, selectedNode);
@@ -620,6 +624,17 @@ public class Character : MonoBehaviour
         return houseEnum == house;
     }
 
+    /// <summary>
+    /// Plays Damage Animation and rotates against attacker
+    /// </summary>
+    /// <param name="character">Attacker</param>
+    public IEnumerator PlayDamageAnimation(Character character)
+    {
+        Vector3 dir = character.transform.position - transform.position;
+        yield return new WaitForSeconds(0.25f);
+        RotateTowardsVector(dir);
+        charAnim.Play(animation_damage);
+    }
 
     /*
      * Is used to update and set the values of the Char-Stats HUD
@@ -630,6 +645,12 @@ public class Character : MonoBehaviour
         GUIHandler.UpdateAP(_AP);
         GUIHandler.UpdateMP(_MP);
         GUIHandler.UpdateSpice(spiceInv);
+    }
+
+    public void RotateTowardsVector(Vector3 dir)
+    {
+        transform.rotation = Quaternion.LookRotation(dir);
+        emblemLogo.transform.rotation = emblem_rotation;
     }
  
 
