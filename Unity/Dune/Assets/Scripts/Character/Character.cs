@@ -81,6 +81,7 @@ public class Character : MonoBehaviour
     private string animation_spiceHoarding;
     private string animation_transferSpice;
     private string animation_damage;
+    private string animation_death;
 
     public GameObject swordObject;
 
@@ -131,6 +132,7 @@ public class Character : MonoBehaviour
             animation_spiceHoarding = "Male Sword Roll";
             animation_transferSpice = "Male Attack 2";
             animation_damage = "Male Damage Light";
+            animation_death = "Male Die";
         }
         else
         {
@@ -141,6 +143,7 @@ public class Character : MonoBehaviour
             animation_voice = "Female Sword Attack 3";
             animation_transferSpice = "Female Sword Attack 3";
             animation_damage = "Female Damage Light";
+            animation_death = "Female Die";
         }
         
 
@@ -634,6 +637,12 @@ public class Character : MonoBehaviour
         yield return new WaitForSeconds(0.25f);
         RotateTowardsVector(dir);
         charAnim.Play(animation_damage);
+    }
+
+    public void OnDeath()
+    {
+        charAnim.Play(animation_death);
+        Destroy(gameObject, 1f);
     }
 
     /*
