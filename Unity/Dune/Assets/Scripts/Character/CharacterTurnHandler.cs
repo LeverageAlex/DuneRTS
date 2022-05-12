@@ -84,6 +84,7 @@ public class CharacterTurnHandler : MonoBehaviour
         //activation by node + press b
         this.charState = Actions.MOVE;
         confirmationPanel.SetActive(true);
+        AudioManager.instance.Play("menuSelect");
     }
 
     public void SetCharStateAttack()
@@ -254,5 +255,6 @@ public class CharacterTurnHandler : MonoBehaviour
     {
         MovementManager.instance.unselectCharacter();
         confirmationPanel.SetActive(false);
+        AudioManager.instance.Play("menuSelect");
     }
 }

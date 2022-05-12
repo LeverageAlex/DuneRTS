@@ -59,6 +59,7 @@ public class Character : MonoBehaviour
 
 
     private MapManager nodeManager;
+    public AudioManager audioManager;
 
     public GameObject emblemLogo;
     public GameObject charModel;
@@ -118,6 +119,7 @@ public class Character : MonoBehaviour
 
         charAnim = charModel.GetComponent<Animator>();
         initAnimations();
+        audioManager = AudioManager.instance;
     }
 
     public void initAnimations()
@@ -232,6 +234,7 @@ public class Character : MonoBehaviour
             else
             {
                 SetAnimationToIdle();
+                audioManager.StopPlaying("CharWalk");
                 return false;
             }
         }
@@ -315,6 +318,7 @@ public class Character : MonoBehaviour
         RotateTowardsVector(dir);
         charAnim.Play(animation_attack);
         StartCoroutine(character.PlayDamageAnimation(this));
+        audioManager.Play("SwordStab");
         ReduceAP(1);
         if (_AP <= 0) CharacterTurnHandler.EndTurn();
 
@@ -349,6 +353,7 @@ public class Character : MonoBehaviour
         StartCoroutine(SwordDeAndActivation());
         charAnim.Play(animation_pickUpSpice);
         nodeManager.CollectSpice(X, Z);
+        audioManager.Play("SpicePickup");
         ReduceAP(1);
         Debug.Log("Collected Spice!");
         if (_AP <= 0) CharacterTurnHandler.EndTurn();
@@ -452,6 +457,7 @@ public class Character : MonoBehaviour
     {
         GameObject atomicInst = Instantiate(CharacterMgr.instance.atomicPrefab, new Vector3(X, 0.5f, Z), Quaternion.identity);
         ((AtomicController)atomicInst.GetComponent(typeof(AtomicController))).SetTargetPos(node.X, node.Z);
+        audioManager.Play("AtomicFly");
         Debug.Log("Created Atomic");
         turnHandler.ResetSelection();
         ReduceAP(_AP); // Reduce AP to 0 | should be removed when server manages MP
@@ -524,6 +530,7 @@ public class Character : MonoBehaviour
     public void Action_SpiceHoardingExecution()
     {
         charAnim.Play(animation_spiceHoarding);
+        audioManager.Play("SpiceHoarding");
 
         for (int i = -1; i <= 1; i++)
         {

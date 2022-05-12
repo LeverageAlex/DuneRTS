@@ -16,7 +16,7 @@ public class SpiceDrop : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        AudioManager.instance.Play("SpiceSpawn");
     }
 
     // Update is called once per frame
