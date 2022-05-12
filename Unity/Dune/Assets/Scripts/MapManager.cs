@@ -21,22 +21,26 @@ public class MapManager : MonoBehaviour
     private int _gridSizeX = 11;
     private int _gridSizeZ = 11;
 
+    [Header("Board:")]
     public GameObject[] enemiesOnBoard;
 
+    [Header("Nodes:")]
     public Node[] nodes;
-
     public GameObject cityNodePrefab, duneNodePrefab, FlatDuneNodePrefab, FlatRockNodePrefab, rockNodePrefab;
 
-    public GameObject[,] spiceCrumbs;
+    
+    [Header("Spice:")]
     public GameObject spicePrefab;
+    public GameObject[,] spiceCrumbs;
 
+    [Header("SandStorm:")]
     public GameObject SandstormEffectPrefab;
     private GameObject SandstormEffect;
 
+    [Header("EarthQuake:")]
     public GameObject EarthQuakePrefab;
-
-    private float earthQuakeheight = 0.2f;
-    private float earthQuakeEffectDuration = 2f;
+    public float earthQuakeheight = 0.2f;
+    public float earthQuakeEffectDuration = 2f;
 
 
 
@@ -48,7 +52,7 @@ public class MapManager : MonoBehaviour
     {
         if (instance != null)
         {
-            Debug.LogError("More than one GameManger in scene!");
+            Debug.LogError("More than one MapManger in scene!");
             return;
         }
         instance = this;

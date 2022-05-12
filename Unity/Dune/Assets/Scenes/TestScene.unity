@@ -12769,6 +12769,8 @@ MonoBehaviour:
   spicePrefab: {fileID: 4714282301104811527, guid: 1361dd36a2141fe4587095399b603f7f, type: 3}
   SandstormEffectPrefab: {fileID: 100000, guid: a773c58f90888524fa92bed3a8b1bf9e, type: 3}
   EarthQuakePrefab: {fileID: 760085439421024995, guid: 9b76a1766e4393f40a1d032d97904994, type: 3}
+  earthQuakeheight: 0.2
+  earthQuakeEffectDuration: 9
 --- !u!4 &1850260019
 Transform:
   m_ObjectHideFlags: 0
@@ -13462,89 +13464,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bb3fb4f60a6a814c9d249ab6d27fba7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mixerGroup: {fileID: 0}
-  sounds:
-  - name: SwordStab
-    clip: {fileID: 8300000, guid: 9d61353b9ac7ec74cbb50d98f2a19a32, type: 3}
-    volume: 0.334
-    volumeVariance: 0
-    pitch: 1
-    pitchVariance: 0
-    loop: 0
-    mixerGroup: {fileID: 0}
-    source: {fileID: 0}
-  - name: SpicePickup
-    clip: {fileID: 8300000, guid: 8ca609284e018ec47bb09fad4c8e4fbd, type: 3}
-    volume: 0.334
-    volumeVariance: 0
-    pitch: 1
-    pitchVariance: 0
-    loop: 0
-    mixerGroup: {fileID: 0}
-    source: {fileID: 0}
-  - name: AtomicExplosion
-    clip: {fileID: 8300000, guid: e8e2df21c4f5872459b87ee37c03d913, type: 3}
-    volume: 0.507
-    volumeVariance: 0
-    pitch: 1
-    pitchVariance: 0
-    loop: 0
-    mixerGroup: {fileID: 0}
-    source: {fileID: 0}
-  - name: AtomicFly
-    clip: {fileID: 8300000, guid: fe334b485ed07af44b39079438674bce, type: 3}
-    volume: 0.507
-    volumeVariance: 0
-    pitch: 1
-    pitchVariance: 0
-    loop: 0
-    mixerGroup: {fileID: 0}
-    source: {fileID: 0}
-  - name: SpiceHoarding
-    clip: {fileID: 8300000, guid: 3b42b3d76d041b14a9fbc809ba321249, type: 3}
-    volume: 0.507
-    volumeVariance: 0
-    pitch: 1
-    pitchVariance: 0
-    loop: 0
-    mixerGroup: {fileID: 0}
-    source: {fileID: 0}
-  - name: SpiceSpawn
-    clip: {fileID: 8300000, guid: 94bdd504b6ea6aa49b9c56467329a5f3, type: 3}
-    volume: 0.17
-    volumeVariance: 0
-    pitch: 1
-    pitchVariance: 0
-    loop: 0
-    mixerGroup: {fileID: 0}
-    source: {fileID: 0}
-  - name: CharWalk
-    clip: {fileID: 8300000, guid: 1744cb080f8282e4cb197b3406150cda, type: 3}
-    volume: 0.279
-    volumeVariance: 0
-    pitch: 1
-    pitchVariance: 0
-    loop: 0
-    mixerGroup: {fileID: 0}
-    source: {fileID: 0}
-  - name: menuSelect
-    clip: {fileID: 8300000, guid: 65e55439bc5bf504dbe07660ea3ee7b5, type: 3}
-    volume: 0.279
-    volumeVariance: 0
-    pitch: 1
-    pitchVariance: 0
-    loop: 0
-    mixerGroup: {fileID: 0}
-    source: {fileID: 0}
-  - name: background_theme
-    clip: {fileID: 8300000, guid: bbf8df8fe215d3f4b80b9a5d0a824865, type: 3}
-    volume: 0.06
-    volumeVariance: 0
-    pitch: 1
-    pitchVariance: 0
-    loop: 1
-    mixerGroup: {fileID: 0}
-    source: {fileID: 0}
 --- !u!4 &1929969710
 Transform:
   m_ObjectHideFlags: 0
