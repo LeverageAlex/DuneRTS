@@ -1,4 +1,5 @@
 ﻿using System;
+using GameData.network.messages;
 
 namespace GameData.network.util.parser
 { 

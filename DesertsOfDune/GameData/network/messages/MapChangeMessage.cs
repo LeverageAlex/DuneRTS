@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using GameData.network.util.world;
 
 namespace GameData.network.messages
 {
@@ -19,7 +20,7 @@ namespace GameData.network.messages
         /// <param name="reason">holds the reason for the Map change.</param>
         /// <param name="newMap">the new Map that is send.</param>
         /// <param name="stormEye">the position of the stormEye</param>
-        public MapChangeMessage(MapChangeMessage reason, MapField[][] newMap, Position stormEye) : base("v1", Enums.MessageType.MAP_CHANGE)
+        public MapChangeMessage(Enums.MapChangeReasons reason, MapField[][] newMap, Position stormEye) : base("v1", Enums.MessageType.MAP_CHANGE)
         {
             this.mapChangeReason = reason;
             this.newMap = newMap;
