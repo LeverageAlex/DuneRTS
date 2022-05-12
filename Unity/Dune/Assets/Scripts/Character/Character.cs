@@ -467,11 +467,11 @@ public class Character : MonoBehaviour
 
         if (characterType == CharTypeEnum.NOBLE && character.GetCharType() == CharTypeEnum.NOBLE && !character.IsMemberOfHouse(house))
         {
-            Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
+            Node selectedNode = nodeManager.getNodeFromPos(X, Z);
             Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
             if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
             {
-                PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.KANLY, selectedNode);
+                PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.KANLY, secondNode);
                 Attack_KanlyExecution(character);
                 return true;
             }
