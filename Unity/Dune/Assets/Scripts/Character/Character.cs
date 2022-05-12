@@ -11,7 +11,7 @@ using UnityEngine.UI;
  * - Provides Data to visualize
  * - Attack and other action-functions
  * - selection of characters
- * 
+ * - Toggle Animations (without moving the object)
  */
 [Serializable]
 public class Character : MonoBehaviour
@@ -22,7 +22,6 @@ public class Character : MonoBehaviour
     private int characterId;
 
     CharacterTurnHandler turnHandler;
-    GUIHandler guiHandler;
 
     public CharTypeEnum characterType;
     public HouseEnum house = HouseEnum.VERNIUS;
@@ -321,8 +320,7 @@ public class Character : MonoBehaviour
             // just fill data the node should be available here.
             StartCoroutine(SwordDeAndActivation());
             charAnim.Play(animation_pickUpSpice);
-            Node n = new Node();
-            PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.COLLECT, n);
+            PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.COLLECT, nodeManager.getNodeFromPos(X, Z));
             nodeManager.CollectSpice(X, Z);
             ReduceAP(1);
             Debug.Log("Collected Spice!");
@@ -378,8 +376,7 @@ public class Character : MonoBehaviour
             charAnim.Play(animation_swordSpin);
             // just fill data the node has to be a parameter of Atack_SwordSpin
 
-            Node n = new Node();
-            PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.SWORD_SPIN, n);
+            PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.SWORD_SPIN, nodeManager.getNodeFromPos(X,Z));
 
             //TODO: Send Attack to Server
             //TODO: wait for response from server
@@ -471,8 +468,7 @@ public class Character : MonoBehaviour
         {
 
             // just fill data the selected node should be available here.
-            Node node = new Node();
-            PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.SPICE_HOARDING, node);
+            PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.SPICE_HOARDING, nodeManager.getNodeFromPos(X, Z));
             charAnim.Play(animation_spiceHoarding);
 
             for (int i = -1; i <= 1; i++)
@@ -489,7 +485,6 @@ public class Character : MonoBehaviour
                 }
             }
 
-            //TODO Call spice-hoarding Socket-Message and animate (Vorschlag wäre den Unity-Animator zu benutzen und dann mit einer Coroutine nach Ablauf der Animationszeit die Stats zu aktualisieren)
             turnHandler.ResetSelection();
             return true;
         }
