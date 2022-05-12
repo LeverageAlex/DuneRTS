@@ -130,7 +130,7 @@ public class Node : MonoBehaviour
         }
         else if (CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.FAMILY_ATOMICS && CharacterTurnHandler.CharSelected)
         {
-            CharacterTurnHandler.instance.GetSelectedCharacter().Attack_Atomic(this);
+            CharacterTurnHandler.instance.GetSelectedCharacter().Attack_AtomicTrigger(this);
         }
 
 
