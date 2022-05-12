@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using GameData;
+using GameData.network.messages;
+using GameData.network.util.world;
+using GameData.network.util.parser;
 
 /// <summary>
 /// This Class Handles all messages for the Client.
@@ -42,6 +45,10 @@ public static class PlayerController
     /// <param name="target">the target of the action</param>
     public static void DoActionRequest(int clientID, int characterID, CharacterTurnHandler.Actions action, Node target /* missing target id param*/)
     {
+
+        ActionRequestMessage actionRequestMessage = new ActionRequestMessage(1234, 12, Enums.ActionType.SWORD_SPIN, new Position(), 1);
+        MessageConverter.FromMessage(actionRequestMessage);
+
         Request request = new Request(Request.RequestType.ACTION_REQUEST);
         request.version = version;
         request.clientID = clientID;
