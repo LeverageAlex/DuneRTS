@@ -272,9 +272,13 @@ public class Character : MonoBehaviour
         {
             turnHandler.GetSelectedCharacter().Action_TransferSpice(this);
         }
+        else if (turnHandler.CharState == CharacterTurnHandler.Actions.FAMILY_ATOMICS)
+        {
+            CharacterTurnHandler.instance.GetSelectedCharacter().Attack_Atomic(nodeManager.getNodeFromPos(X, Z));
+        }
 
 
-    }
+        }
 
 
     public bool Attack_Basic(Character character)
