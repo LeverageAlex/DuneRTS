@@ -896,7 +896,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 90
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -9136,11 +9136,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6682074575721881228, guid: 72bb88d6a0f1860489fa55cf2b5657d0, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6682074575721881228, guid: 72bb88d6a0f1860489fa55cf2b5657d0, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6682074575721881228, guid: 72bb88d6a0f1860489fa55cf2b5657d0, type: 3}
       propertyPath: m_SizeDelta.x
@@ -9156,7 +9156,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6682074575721881228, guid: 72bb88d6a0f1860489fa55cf2b5657d0, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -25
       objectReference: {fileID: 0}
     - target: {fileID: 7490896622817454399, guid: 72bb88d6a0f1860489fa55cf2b5657d0, type: 3}
       propertyPath: m_AnchorMax.y
@@ -10910,7 +10910,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 90
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -11666,7 +11666,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 90
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -13464,6 +13464,89 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bb3fb4f60a6a814c9d249ab6d27fba7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mixerGroup: {fileID: 0}
+  sounds:
+  - name: AtomicExplosion
+    clip: {fileID: 8300000, guid: e8e2df21c4f5872459b87ee37c03d913, type: 3}
+    volume: 0.724
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: AtomicFly
+    clip: {fileID: 8300000, guid: fe334b485ed07af44b39079438674bce, type: 3}
+    volume: 0.524
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: CharWalk
+    clip: {fileID: 8300000, guid: 1744cb080f8282e4cb197b3406150cda, type: 3}
+    volume: 0.49
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: background_theme
+    clip: {fileID: 8300000, guid: bbf8df8fe215d3f4b80b9a5d0a824865, type: 3}
+    volume: 0.07
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0
+    loop: 1
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: menuSelect
+    clip: {fileID: 8300000, guid: 65e55439bc5bf504dbe07660ea3ee7b5, type: 3}
+    volume: 0.168
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: SpicePickup
+    clip: {fileID: 8300000, guid: 8ca609284e018ec47bb09fad4c8e4fbd, type: 3}
+    volume: 0.505
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: SpiceBlow
+    clip: {fileID: 8300000, guid: 94bdd504b6ea6aa49b9c56467329a5f3, type: 3}
+    volume: 0.52
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: SpiceHoarding
+    clip: {fileID: 8300000, guid: 3b42b3d76d041b14a9fbc809ba321249, type: 3}
+    volume: 0.485
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: SwordStab
+    clip: {fileID: 8300000, guid: 9d61353b9ac7ec74cbb50d98f2a19a32, type: 3}
+    volume: 0.539
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
 --- !u!4 &1929969710
 Transform:
   m_ObjectHideFlags: 0
@@ -14913,7 +14996,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchorMin.x
@@ -14921,7 +15004,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_SizeDelta.x
@@ -14961,11 +15044,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 90
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
