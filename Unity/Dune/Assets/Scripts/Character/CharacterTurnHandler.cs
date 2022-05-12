@@ -89,12 +89,14 @@ public class CharacterTurnHandler : MonoBehaviour
     public void SetCharStateAttack()
     {
         //activation by enemyChar
+        if(charState == Actions.MOVE) nodeManager.ResetNodeColors();
         this.charState = Actions.ATTACK;
         ConfirmDeactivate();
     }
 
     public void SetCharStateCollectSpice()
     {
+        if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
         selectedCharacter.Action_CollectSpice();
         this.charState = Actions.COLLECT;
         ConfirmDeactivate();
@@ -103,6 +105,7 @@ public class CharacterTurnHandler : MonoBehaviour
     public void SetCharStateTransferSpice()
     {
         //activation by otherChar
+        if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
         this.charState = Actions.TRANSFER;
         Debug.Log("transfer spice");
         ConfirmDeactivate();
@@ -111,6 +114,7 @@ public class CharacterTurnHandler : MonoBehaviour
     public void SetCharStateKanly()
     {
         //activation by enemyChar
+        if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
         this.charState = Actions.KANLY;
         ConfirmDeactivate();
     }
@@ -118,12 +122,14 @@ public class CharacterTurnHandler : MonoBehaviour
     public void SetCharStateVoice()
     {
         //activation by enemyChar
+        if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
         this.charState = Actions.VOICE;
         ConfirmDeactivate();
     }
 
     public void SetCharStateSpiceHoarding()
     {
+        if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
         selectedCharacter.Action_SpiceHoarding();
         this.charState = Actions.SPICE_HOARDING;
         ConfirmDeactivate();
@@ -131,12 +137,14 @@ public class CharacterTurnHandler : MonoBehaviour
 
     public void SetCharStateSwordSpin()
     {
+        if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
         selectedCharacter.Attack_SwordSpin();
         EndTurn();
         ConfirmDeactivate();
     }
     public void SetCharStateAtomics()
     {
+        if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
         //activation by node
         this.charState = Actions.FAMILY_ATOMICS;
         ConfirmDeactivate();
