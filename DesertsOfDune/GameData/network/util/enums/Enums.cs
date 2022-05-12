@@ -39,7 +39,8 @@ namespace GameData.network.messages
             GAMESTATE,
             STRIKE,
             PAUSE_REQUEST,
-            PAUSE_GAME
+            PAUSE_GAME,
+            GAME_END
         }
 
         /// <summary>
