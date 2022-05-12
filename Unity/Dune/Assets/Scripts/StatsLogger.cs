@@ -5,9 +5,19 @@ using UnityEngine;
 /**
 * Stores events of game for statistical purposes on end of game
 */
-public class StatsLogger : MonoBehaviour
+public class StatsLogger
 {
     private static List<Statistic> stats = new List<Statistic>();
+    private static StatsLogger instance;
+
+    public static StatsLogger getInstance()
+    {
+        if(instance == null)
+        {
+            instance = new StatsLogger();
+        }
+        return instance;
+    }
 
     public void addStatistic(string player, int roundNbr, string actionText)
     {
