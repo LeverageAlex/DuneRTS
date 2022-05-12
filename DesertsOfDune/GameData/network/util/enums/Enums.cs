@@ -40,6 +40,7 @@ namespace GameData.network.messages
             STRIKE,
             PAUSE_REQUEST,
             PAUSE_GAME,
+            END_TURN_REQUEST,
             GAME_END
         }
 
