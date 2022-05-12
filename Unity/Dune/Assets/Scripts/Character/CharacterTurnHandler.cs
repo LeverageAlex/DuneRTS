@@ -97,7 +97,7 @@ public class CharacterTurnHandler : MonoBehaviour
     public void SetCharStateCollectSpice()
     {
         if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
-        selectedCharacter.Action_CollectSpice();
+        selectedCharacter.Action_CollectSpiceTrigger();
         this.charState = Actions.COLLECT;
         ConfirmDeactivate();
     }
@@ -130,7 +130,7 @@ public class CharacterTurnHandler : MonoBehaviour
     public void SetCharStateSpiceHoarding()
     {
         if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
-        selectedCharacter.Action_SpiceHoarding();
+        selectedCharacter.Action_SpiceHoardingTrigger();
         this.charState = Actions.SPICE_HOARDING;
         ConfirmDeactivate();
     }
@@ -138,7 +138,7 @@ public class CharacterTurnHandler : MonoBehaviour
     public void SetCharStateSwordSpin()
     {
         if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
-        selectedCharacter.Attack_SwordSpin();
+        selectedCharacter.Attack_SwordSpinTrigger();
         EndTurn();
         ConfirmDeactivate();
     }
