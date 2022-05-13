@@ -22,12 +22,12 @@ namespace GameData.network.controller
             return this.PROTOCOLL_SUFFIX + this.SERVER_ADDRESS + ":" + this.PORT;
         }
 
-        abstract protected internal void OnOpen();
+        abstract protected internal void OnOpen(String sessionID, String addressConnected);
 
-        abstract protected internal void OnClose(CloseEventArgs e);
+        abstract protected internal void OnClose(CloseEventArgs e, String sessionID);
 
-        abstract protected internal void OnError(ErrorEventArgs e);
+        abstract protected internal void OnError(ErrorEventArgs e, String sessionID);
 
-        abstract protected internal void OnMessage(MessageEventArgs e);
+        abstract protected internal void OnMessage(MessageEventArgs e, String sessionID);
     }
 }
