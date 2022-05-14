@@ -19,23 +19,22 @@ namespace GameData.network.controller
 
         protected override void OnClose(CloseEventArgs e)
         {
-            _connectionHandler.OnClose(e);
+            _connectionHandler.OnClose(e, this.ID);
         }
 
         protected override void OnError(ErrorEventArgs e)
         {
-            _connectionHandler.OnError(e);
+            _connectionHandler.OnError(e, this.ID);
         }
 
         protected override void OnMessage(MessageEventArgs e)
         {
-            _connectionHandler.OnMessage(e);
+            _connectionHandler.OnMessage(e, this.ID);
         }
 
         protected override void OnOpen()
         {
-            
-            _connectionHandler.OnOpen(Context.UserEndPoint.ToString(), Context.User.Identity.Name);
+            _connectionHandler.OnOpen(this.ID, Context.UserEndPoint.ToString());
         }
     }
 
@@ -72,25 +71,26 @@ namespace GameData.network.controller
             _webSocketServer.Stop();
         }
 
-        protected internal override void OnClose(CloseEventArgs e)
+        protected internal override void OnClose(CloseEventArgs e, String sessionID)
         {
-            Log.Information("The connection to the Websocket server was close by a client. The reason is: " + e.Reason);
+            Log.Information("The connection to the Websocket server was closed by a client. The reason is: " + e.Reason);
         }
 
-        protected internal override void OnError(ErrorEventArgs e)
+        protected internal override void OnError(ErrorEventArgs e, String sessionID)
         {
             Log.Error("Failed to establish connection to Websocket server on: " + base.GetURL());
             Log.Verbose("The reason for the failed try to connect is: " + e.Message);
         }
 
-        protected internal override void OnMessage(MessageEventArgs e)
+        protected internal override void OnMessage(MessageEventArgs e, String sessionID)
         {
             Log.Information("Received a message from client. The message is: " + e.Data);
         }
 
-        protected internal override void OnOpen(String userInfos, String name)
+        protected internal override void OnOpen(String sessionID, String addressConnected)
         {
-            Log.Information("Registred new connection to Websocket server");
+            Log.Information("Registred new connection from " + addressConnected + " to Websocket server");
+            
           
         }
     }
