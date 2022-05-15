@@ -49,6 +49,8 @@ public class AtomicController : MonoBehaviour
     {
         GameObject expl = Instantiate(explosionPrefab, new Vector3(targetX, 0.5f, targetZ), Quaternion.identity);
         Debug.Log("Atomic explosion at x: " + targetX.ToString() + ", z: " + targetZ.ToString());
+        AudioController.instance.StopPlaying("AtomicFly");
+        AudioController.instance.Play("AtomicExplosion");
         Destroy(expl, 3.5f);
         Destroy(gameObject);
         Destroy(route);
