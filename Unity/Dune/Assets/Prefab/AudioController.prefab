@@ -44,85 +44,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mixerGroup: {fileID: 24300002, guid: 52ffd8ad33e3ea741bd40c587b570c50, type: 2}
-  sounds:
-  - name: AtomicExplosion
-    clip: {fileID: 8300000, guid: e8e2df21c4f5872459b87ee37c03d913, type: 3}
-    volume: 0.5
-    volumeVariance: 0
-    pitch: 1
-    pitchVariance: 0
-    loop: 0
-    mixerGroup: {fileID: 0}
-    source: {fileID: 0}
-  - name: AtomicFly
-    clip: {fileID: 8300000, guid: fe334b485ed07af44b39079438674bce, type: 3}
-    volume: 0.5
-    volumeVariance: 0
-    pitch: 1
-    pitchVariance: 0
-    loop: 0
-    mixerGroup: {fileID: 0}
-    source: {fileID: 0}
-  - name: CharWalk
-    clip: {fileID: 8300000, guid: 1744cb080f8282e4cb197b3406150cda, type: 3}
-    volume: 0.5
-    volumeVariance: 0
-    pitch: 1
-    pitchVariance: 0
-    loop: 0
-    mixerGroup: {fileID: 0}
-    source: {fileID: 0}
-  - name: background_theme
-    clip: {fileID: 8300000, guid: bbf8df8fe215d3f4b80b9a5d0a824865, type: 3}
-    volume: 0.5
-    volumeVariance: 0
-    pitch: 1
-    pitchVariance: 0
-    loop: 1
-    mixerGroup: {fileID: 0}
-    source: {fileID: 0}
-  - name: menuSelect
-    clip: {fileID: 8300000, guid: 65e55439bc5bf504dbe07660ea3ee7b5, type: 3}
-    volume: 0.5
-    volumeVariance: 0
-    pitch: 1
-    pitchVariance: 0
-    loop: 0
-    mixerGroup: {fileID: 0}
-    source: {fileID: 0}
-  - name: SpicePickup
-    clip: {fileID: 8300000, guid: 8ca609284e018ec47bb09fad4c8e4fbd, type: 3}
-    volume: 0.5
-    volumeVariance: 0
-    pitch: 1
-    pitchVariance: 0
-    loop: 0
-    mixerGroup: {fileID: 0}
-    source: {fileID: 0}
-  - name: SpiceSpawn
-    clip: {fileID: 8300000, guid: 94bdd504b6ea6aa49b9c56467329a5f3, type: 3}
-    volume: 0.5
-    volumeVariance: 0
-    pitch: 1
-    pitchVariance: 0
-    loop: 0
-    mixerGroup: {fileID: 0}
-    source: {fileID: 0}
-  - name: SpiceHoarding
-    clip: {fileID: 8300000, guid: 3b42b3d76d041b14a9fbc809ba321249, type: 3}
-    volume: 0.5
-    volumeVariance: 0
-    pitch: 1
-    pitchVariance: 0
-    loop: 0
-    mixerGroup: {fileID: 0}
-    source: {fileID: 0}
-  - name: SwordStab
-    clip: {fileID: 8300000, guid: 9d61353b9ac7ec74cbb50d98f2a19a32, type: 3}
-    volume: 0.5
-    volumeVariance: 0
-    pitch: 1
-    pitchVariance: 0
-    loop: 0
-    mixerGroup: {fileID: 0}
-    source: {fileID: 0}
+  audioClip:
+  - {fileID: 8300000, guid: e8e2df21c4f5872459b87ee37c03d913, type: 3}
+  - {fileID: 8300000, guid: fe334b485ed07af44b39079438674bce, type: 3}
+  - {fileID: 8300000, guid: 1744cb080f8282e4cb197b3406150cda, type: 3}
+  - {fileID: 8300000, guid: bbf8df8fe215d3f4b80b9a5d0a824865, type: 3}
+  - {fileID: 8300000, guid: 65e55439bc5bf504dbe07660ea3ee7b5, type: 3}
+  - {fileID: 8300000, guid: 8ca609284e018ec47bb09fad4c8e4fbd, type: 3}
+  - {fileID: 8300000, guid: 94bdd504b6ea6aa49b9c56467329a5f3, type: 3}
+  - {fileID: 8300000, guid: 3b42b3d76d041b14a9fbc809ba321249, type: 3}
+  - {fileID: 8300000, guid: 9d61353b9ac7ec74cbb50d98f2a19a32, type: 3}
