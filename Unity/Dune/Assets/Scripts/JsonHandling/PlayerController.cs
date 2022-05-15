@@ -43,31 +43,12 @@ public static class PlayerController
     /// <param name="characterID">the id of the character</param>
     /// <param name="action">the action the character should use</param>
     /// <param name="target">the target of the action</param>
-    public static void DoActionRequest(int clientID, int characterID, CharacterTurnHandler.Actions action, Node target /* missing target id param*/)
+    public static void DoActionRequest(int clientID, int characterID, Enums.ActionType action, Node target /* missing target id param*/)
     {
-        ActionRequestMessage actionRequestMessage = new ActionRequestMessage(1234, 12, Enums.ActionType.SWORD_SPIN, new Position(1, 2), 1);
-
-        Debug.Log("Updated: " + System.Enum.GetName(typeof(Enums.ActionType), Enums.ActionType.SWORD_SPIN));
-
+        ActionRequestMessage actionRequestMessage = new ActionRequestMessage(1234, 12, action, new Position(1, 2), 1);
         MessageConverter.FromMessage(actionRequestMessage);
         string a = JsonConvert.SerializeObject(actionRequestMessage, new JsonSerializerSettings());
         Debug.Log("Updated: " + a);
-
-        Request request = new Request(Request.RequestType.ACTION_REQUEST);
-        request.version = version;
-        request.clientID = clientID;
-        // TODO habe to implement action i library...
-       // request.action = action;
-
-        Specs specs = new Specs();
-        //Vector targ = new Vector(target.X, target.Z);
-       // specs.target = targ;
-        request.specs = specs;
-        request.targetID = 1253;
-
-        // for testing perpeces only
-        string data = JsonConvert.SerializeObject(request, new JsonSerializerSettings());
-        Debug.Log("Updated: " + data);
     }
 
     public static void DoEndTurnRequest(int clientID, int characterID)

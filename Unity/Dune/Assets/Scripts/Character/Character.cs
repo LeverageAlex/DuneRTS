@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System;
 using UnityEngine.UI;
+using GameData.network.messages;
 
 
 /**
@@ -298,7 +299,7 @@ public class Character : MonoBehaviour
         if (nodeManager.isNodeNeighbour(selectedNode, secondNode) && !character.IsMemberOfHouse(house))
         {
             
-            PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.ATTACK, selectedNode);
+            PlayerController.DoActionRequest(1234, characterId, Enums.ActionType.ATTACK, selectedNode);
             // TODO wait for Server response.
             //TODO execute attack
             Attack_BasicExecution(character);
@@ -334,7 +335,7 @@ public class Character : MonoBehaviour
     {
         if (nodeManager.IsSpiceOn(X, Z))
         {
-            PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.COLLECT, nodeManager.getNodeFromPos(X, Z));
+            PlayerController.DoActionRequest(1234, characterId, Enums.ActionType.COLLECT, nodeManager.getNodeFromPos(X, Z));
             // just fill data the node should be available here.
             Action_CollectSpiceExecution();
 
@@ -366,7 +367,7 @@ public class Character : MonoBehaviour
 
         if (nodeManager.isNodeNeighbour(selectedNode, secondNode) && character.IsMemberOfHouse(house))
         {
-            PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.TRANSFER, selectedNode);
+            PlayerController.DoActionRequest(1234, characterId, Enums.ActionType.TRANSFER, selectedNode);
             //TODO execute attack
             Action_TransferSpiceExecution(character);
             return true;
@@ -403,7 +404,7 @@ public class Character : MonoBehaviour
            
             // just fill data the node has to be a parameter of Atack_SwordSpin
 
-            PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.SWORD_SPIN, nodeManager.getNodeFromPos(X,Z));
+            PlayerController.DoActionRequest(1234, characterId, Enums.ActionType.SWORD_SPIN, nodeManager.getNodeFromPos(X,Z));
             Attack_SwordSpinExecution();
             //TODO: Send Attack to Server
             //TODO: wait for response from server
@@ -441,7 +442,7 @@ public class Character : MonoBehaviour
         {
             //Check, if there are atomics left in House
 
-            PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.FAMILY_ATOMICS, node);
+            PlayerController.DoActionRequest(1234, characterId, Enums.ActionType.FAMILY_ATOMICS, node);
             Attack_AtomicExecution(node);
             return true;
         }
@@ -477,7 +478,7 @@ public class Character : MonoBehaviour
             Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
             if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
             {
-                PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.KANLY, secondNode);
+                PlayerController.DoActionRequest(1234, characterId, Enums.ActionType.KANLY, secondNode);
                 Attack_KanlyExecution(character);
                 return true;
             }
@@ -515,7 +516,7 @@ public class Character : MonoBehaviour
         {
 
             // just fill data the selected node should be available here.
-            PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.SPICE_HOARDING, nodeManager.getNodeFromPos(X, Z));
+            PlayerController.DoActionRequest(1234, characterId, Enums.ActionType.SPICE_HORDING, nodeManager.getNodeFromPos(X, Z));
             Action_SpiceHoardingExecution();
             return true;
         }
@@ -562,7 +563,7 @@ public class Character : MonoBehaviour
             if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
             {
                 
-                PlayerController.DoActionRequest(1234, characterId, CharacterTurnHandler.Actions.VOICE, selectedNode);
+                PlayerController.DoActionRequest(1234, characterId, Enums.ActionType.VOICE, selectedNode);
                 //TODO: wait for response from server
                 Action_VoiceExecution(character);
                 return true;
