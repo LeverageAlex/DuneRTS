@@ -59,7 +59,7 @@ public class Character : MonoBehaviour
 
 
     private MapManager nodeManager;
-    public AudioManager audioManager;
+    public AudioController audioManager;
 
     public GameObject emblemLogo;
     public GameObject charModel;
@@ -119,7 +119,7 @@ public class Character : MonoBehaviour
 
         charAnim = charModel.GetComponent<Animator>();
         initAnimations();
-        audioManager = AudioManager.instance;
+        audioManager = AudioController.instance;
     }
 
     public void initAnimations()
