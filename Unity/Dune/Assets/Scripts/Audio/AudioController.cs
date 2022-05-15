@@ -9,8 +9,9 @@ public class AudioController : MonoBehaviour
 
 	public AudioMixerGroup mixerGroup;
 
-	public Sound[] sounds;
+	public AudioClip[] audioClip;
 
+	private Sound[] sounds;
 
 
 	void Awake()
@@ -25,17 +26,27 @@ public class AudioController : MonoBehaviour
 			DontDestroyOnLoad(gameObject);
 		}
 
+		sounds = new Sound[audioClip.Length];
+		sounds[0] = new Sound("AtomicExplosion", audioClip[0], 0.75f, false);
+		sounds[1] = new Sound("AtomicFly", audioClip[1], 0.75f, false);
+		sounds[2] = new Sound("CharWalk", audioClip[2], 0.5f, false);
+		sounds[3] = new Sound("background_theme", audioClip[3], 0.14f, false);
+		sounds[4] = new Sound("menuSelect", audioClip[4], 0.75f, false);
+		sounds[5] = new Sound("SpicePickup", audioClip[5], 0.75f, false);
+		sounds[6] = new Sound("SpiceSpawn", audioClip[6], 0.75f, false);
+		sounds[7] = new Sound("SpiceHoarding", audioClip[7], 0.75f, false);
+		sounds[8] = new Sound("SwordStab", audioClip[8], 0.75f, false);
+
 		foreach (Sound s in sounds)
 		{
 			s.source = gameObject.AddComponent<AudioSource>();
 			s.source.clip = s.clip;
 			s.source.loop = s.loop;
-
 			s.source.outputAudioMixerGroup = mixerGroup;
 		}
 		Play("background_theme");
+	
 	}
-
 	public void Play(string sound)
 	{
 		Sound s = Array.Find(sounds, item => item.name == sound);
