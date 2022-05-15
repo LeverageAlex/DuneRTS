@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace GameData.network.messages
 {
@@ -9,8 +10,10 @@ namespace GameData.network.messages
     /// </summary>
     public abstract class Message
     {
+        [JsonProperty(Order = -4)]
         protected string version;
-        protected Enums.MessageType type;
+        [JsonProperty(Order = -5)]
+        protected string type;
 
         /// <summary>
         /// The base constructor of the class Message
@@ -20,13 +23,13 @@ namespace GameData.network.messages
         public Message(string version, Enums.MessageType type)
         {
             this.version = version;
-            this.type = type;
+            this.type = Enum.GetName(typeof(Enums.MessageType), type);
         }
         /// <summary>
         /// Getter forthe field type
         /// </summary>
         /// <returns>Messagetype</returns>
-        public Enums.MessageType getMessageType()
+        public string getMessageType()
         {
             return this.type;
         }

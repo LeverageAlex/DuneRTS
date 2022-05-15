@@ -1,13 +1,15 @@
 ﻿using System;
 using GameData.network.messages;
 using GameData.network.util.enums;
-using WebSocketSharp;
-using WebSocketSharp.Server;
+
+//using WebSocketSharp;
+//using WebSocketSharp.Server;
 
 namespace GameData.network.controller
 {
     public class MessageEmitter
     {
+        /*
         private readonly WebSocketTypes TYPE;
 
         public MessageEmitter(WebSocketTypes type)
@@ -23,5 +25,6 @@ namespace GameData.network.controller
         {
 
         }
+        */
     }
 }

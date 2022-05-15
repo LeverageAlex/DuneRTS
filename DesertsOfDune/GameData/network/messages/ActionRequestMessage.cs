@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using GameData.network.util.world;
+using Newtonsoft.Json;
 
 namespace GameData.network.messages
 {
@@ -10,8 +11,13 @@ namespace GameData.network.messages
     /// </summary>
     public class ActionRequestMessage : TurnMessage
     {
-        private Enums.ActionType action;
-        private Position target;
+        [JsonProperty]
+        private string action;
+       // [JsonProperty]
+        //private Position target;
+        [JsonProperty]
+        private Specs specs;
+        [JsonProperty]
         private int targetID;
 
         /// <summary>
@@ -24,8 +30,10 @@ namespace GameData.network.messages
         /// <param name="targetID">the id of the target</param>
         public ActionRequestMessage(int clientID, int characterID, Enums.ActionType action, Position target, int targetID) : base(characterID,clientID,Enums.MessageType.ACTION_REQUEST)
         {
-            this.action = action;
-            this.target = target;
+            this.action = Enum.GetName(typeof(Enums.ActionType), action);
+            Specs specs = new Specs();
+            specs.target = target;
+            this.specs = specs;
             this.targetID = targetID;
         }
     }

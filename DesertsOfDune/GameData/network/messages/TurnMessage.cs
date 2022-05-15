@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace GameData.network.messages
 {
@@ -9,6 +10,7 @@ namespace GameData.network.messages
     /// </summary>
     public abstract class TurnMessage : ClientServerMessage
     {
+        [JsonProperty(Order = -2)]
         private int characterID;
 
         /// <summary>

@@ -23,7 +23,7 @@ public static class PlayerController
 
     {
         Specs specs = new Specs();
-        specs.path = ConvertPath(path);
+       // specs.path = ConvertPath(path);
         Request request = new Request(Request.RequestType.MOVEMENT_REQUEST);
         request.version = version;
         request.clientID = 1234;
@@ -45,9 +45,13 @@ public static class PlayerController
     /// <param name="target">the target of the action</param>
     public static void DoActionRequest(int clientID, int characterID, CharacterTurnHandler.Actions action, Node target /* missing target id param*/)
     {
+        ActionRequestMessage actionRequestMessage = new ActionRequestMessage(1234, 12, Enums.ActionType.SWORD_SPIN, new Position(1, 2), 1);
 
-        ActionRequestMessage actionRequestMessage = new ActionRequestMessage(1234, 12, Enums.ActionType.SWORD_SPIN, new Position(), 1);
+        Debug.Log("Updated: " + System.Enum.GetName(typeof(Enums.ActionType), Enums.ActionType.SWORD_SPIN));
+
         MessageConverter.FromMessage(actionRequestMessage);
+        string a = JsonConvert.SerializeObject(actionRequestMessage, new JsonSerializerSettings());
+        Debug.Log("Updated: " + a);
 
         Request request = new Request(Request.RequestType.ACTION_REQUEST);
         request.version = version;
@@ -56,8 +60,8 @@ public static class PlayerController
        // request.action = action;
 
         Specs specs = new Specs();
-        Vector targ = new Vector(target.X, target.Z);
-        specs.target = targ;
+        //Vector targ = new Vector(target.X, target.Z);
+       // specs.target = targ;
         request.specs = specs;
         request.targetID = 1253;
 

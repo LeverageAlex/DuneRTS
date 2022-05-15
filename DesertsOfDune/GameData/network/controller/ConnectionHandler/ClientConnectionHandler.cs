@@ -1,13 +1,13 @@
 ﻿using System;
-using WebSocketSharp;
+//using WebSocketSharp;
 
-using Serilog;
+//using Serilog;
 
 namespace GameData.network.controller
 {
     public class ClientConnectionHandler : AConnectionHandler
     {
-
+        /*
         private WebSocket _webSocket;
 
         public ClientConnectionHandler(string ServerAddress, int Port) : base(ServerAddress, Port)
@@ -76,5 +76,6 @@ namespace GameData.network.controller
         {
             Log.Information("Connected to " + addressConnected);
         }
+        */
     }
 }

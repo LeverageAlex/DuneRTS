@@ -1,11 +1,11 @@
 ﻿using System;
 
-using WebSocketSharp;
+//using WebSocketSharp;
 
 namespace GameData.network.controller
 {
     abstract public class AConnectionHandler
-    {
+    {/*
         private String SERVER_ADDRESS { get; }
         private int PORT { get; }
 
@@ -29,5 +29,7 @@ namespace GameData.network.controller
         abstract protected internal void OnError(ErrorEventArgs e, String sessionID);
 
         abstract protected internal void OnMessage(MessageEventArgs e, String sessionID);
+        */
     }
+     
 }

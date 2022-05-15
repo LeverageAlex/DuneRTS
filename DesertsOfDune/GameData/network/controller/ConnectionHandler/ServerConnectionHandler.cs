@@ -1,15 +1,16 @@
 ﻿using System;
 
-using WebSocketSharp;
-using WebSocketSharp.Server;
-using WebSocketSharp.Net;
+///using WebSocketSharp;
+//using WebSocketSharp.Server;
+//using WebSocketSharp.Net;
 
-using Serilog;
+//using Serilog;
 
 namespace GameData.network.controller
 {
-    public class GameService : WebSocketBehavior
+    public class GameService// : WebSocketBehavior
     {
+        /*
         private ServerConnectionHandler _connectionHandler;
 
         public GameService(ServerConnectionHandler _serverConnectionHandler)
@@ -93,5 +94,6 @@ namespace GameData.network.controller
             
           
         }
+        */
     }
 }

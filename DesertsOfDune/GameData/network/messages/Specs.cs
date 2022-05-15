@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System;
 using Newtonsoft.Json;
+using GameData.network.util.world;
 
 [Serializable]
 public class Specs
 {
-    public List<Vector> path;
-    public Vector target;
-
+    //[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+    //private List<Vector> path;
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+    public Position target;
 }

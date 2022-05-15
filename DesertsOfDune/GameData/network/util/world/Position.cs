@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace GameData.network.util.world
 {
@@ -9,7 +10,9 @@ namespace GameData.network.util.world
     /// </summary>
     public class Position
     {
+        [JsonProperty]
         private int x;
+        [JsonProperty]
         private int y;
 
         /// <summary>
