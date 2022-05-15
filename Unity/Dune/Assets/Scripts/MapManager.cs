@@ -265,6 +265,10 @@ public class MapManager : MonoBehaviour
     public void TriggerEarthQuake()
     {
         GameObject quake = Instantiate(EarthQuakePrefab, new Vector3(GridSizeX/2, earthQuakeheight, GridSizeZ / 2), Quaternion.identity);
+        ParticleSystem ps = quake.GetComponent<ParticleSystem>();
+        ParticleSystem.ShapeModule sh = ps.shape;
+        sh.scale = new Vector3(GridSizeX, GridSizeZ, 1);//Z in Y-slot is intendet, because the shape is rotated
+
         Destroy(quake, earthQuakeEffectDuration);
     }
 
