@@ -1,17 +1,18 @@
 ﻿using System;
 
-///using WebSocketSharp;
-//using WebSocketSharp.Server;
-//using WebSocketSharp.Net;
+using WebSocketSharp;
+using WebSocketSharp.Server;
+using WebSocketSharp.Net;
 
-//using Serilog;
+using Serilog;
 
 namespace GameData.network.controller
 {
-    public class GameService// : WebSocketBehavior
+    public class GameService : WebSocketBehavior
     {
-        /*
+        
         private ServerConnectionHandler _connectionHandler;
+        public WebSocketSessionManager sessionManager { get; }
 
         public GameService(ServerConnectionHandler _serverConnectionHandler)
         {
@@ -35,13 +36,15 @@ namespace GameData.network.controller
 
         protected override void OnOpen()
         {
-            _connectionHandler.OnOpen(this.ID, Context.UserEndPoint.ToString());
+            _connectionHandler.OnOpen(Context.UserEndPoint.ToString(), this.ID);
         }
     }
 
     public class ServerConnectionHandler : AConnectionHandler
     {
         private WebSocketServer _webSocketServer;
+        public WebSocketServiceManager serviceManager { get; set; }
+        
 
         public ServerConnectionHandler(string ServerAddress, int Port) : base(ServerAddress, Port)
         {
@@ -86,14 +89,13 @@ namespace GameData.network.controller
         protected internal override void OnMessage(MessageEventArgs e, String sessionID)
         {
             Log.Information("Received a message from client. The message is: " + e.Data);
+            base.networkController.HandleReceivedMessage(e.Data);
         }
 
-        protected internal override void OnOpen(String sessionID, String addressConnected)
+        protected internal override void OnOpen(String addressConnected, String sessionID)
         {
             Log.Information("Registred new connection from " + addressConnected + " to Websocket server");
-            
-          
+            Log.Information("The ID of the new user is: " + sessionID);
         }
-        */
     }
 }

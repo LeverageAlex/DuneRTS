@@ -1,13 +1,12 @@
 ﻿using System;
-//using WebSocketSharp;
+using WebSocketSharp;
 
-//using Serilog;
+using Serilog;
 
 namespace GameData.network.controller
 {
     public class ClientConnectionHandler : AConnectionHandler
     {
-        /*
         private WebSocket _webSocket;
 
         public ClientConnectionHandler(string ServerAddress, int Port) : base(ServerAddress, Port)
@@ -37,7 +36,7 @@ namespace GameData.network.controller
 
             _webSocket.OnOpen += (sender, e) =>
             {
-                OnOpen("", base.GetURL());
+                OnOpen(base.GetURL(), "");
             };
         }
 
@@ -72,10 +71,9 @@ namespace GameData.network.controller
             Log.Information("Received new message from the Websocket server. The message is: " + e.Data);
         }
 
-        protected internal override void OnOpen(string sessionID, string addressConnected)
+        protected internal override void OnOpen(string addressConnected, string sessionID)
         {
             Log.Information("Connected to " + addressConnected);
         }
-        */
     }
 }
