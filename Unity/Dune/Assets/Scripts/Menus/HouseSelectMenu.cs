@@ -52,14 +52,14 @@ public class HouseSelectMenu : MonoBehaviour
         if (option1.isOn)
         {
             Debug.Log(option1.GetComponentInChildren<Text>().text + " was selected!");
-            //TODO send message to server
+            PlayerController.DoHouseRequest(option1.GetComponentInChildren<Text>().text);
 
             EndHouseSelection();
         } 
         else if(option2.isOn)
         {
             Debug.Log(option2.GetComponentInChildren<Text>().text + " was selected!");
-            //TODO send message to server
+            PlayerController.DoHouseRequest(option1.GetComponentInChildren<Text>().text);
 
             EndHouseSelection();
         }
