@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using GameData.network.util.world;
+using Newtonsoft.Json;
 
 namespace GameData.network.messages
 {
@@ -10,7 +11,9 @@ namespace GameData.network.messages
     /// </summary>
     public class MovementRequestMessage : TurnMessage
     {
-        private Position[] path;
+
+        [JsonProperty]
+        private Specs specs;
 
         /// <summary>
         /// Constructor of the class MovementRequestMessage
@@ -18,9 +21,11 @@ namespace GameData.network.messages
         /// <param name="clientID">the id of the client</param>
         /// <param name="characterID">the id of the character</param>
         /// <param name="path">the path the character requests to take</param>
-        public MovementRequestMessage(int clientID, int characterID, Position[] path) : base(characterID, clientID, Enums.MessageType.MOVEMENT_REQUEST)
+        public MovementRequestMessage(int clientID, int characterID, List<Position> path) : base(characterID, clientID, Enums.MessageType.MOVEMENT_REQUEST)
         {
-            this.path = path;
+            Specs specs = new Specs();
+            specs.path = path;
+            this.specs = specs;
         }
     }
 }

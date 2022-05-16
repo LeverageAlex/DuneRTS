@@ -11,16 +11,16 @@ namespace GameData.network.util.world
     public class Position
     {
         [JsonProperty]
-        private int x;
+        private float x;
         [JsonProperty]
-        private int y;
+        private float y;
 
         /// <summary>
         /// Constructor of the class Position
         /// </summary>
         /// <param name="x">the x coordinate on the map</param>
         /// <param name="y">the y coordinate on the map</param>
-        public Position(int x,int y)
+        public Position(float x, float y)
         {
             this.x = x;
             this.y = y;
