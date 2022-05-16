@@ -27,10 +27,6 @@ public static class PlayerController
 
         MessageConverter.FromMessage(movementRequestMessage);
 
-        // for testing perpeces only
-        string d = JsonConvert.SerializeObject(movementRequestMessage, new JsonSerializerSettings());
-        Debug.Log("Updated: " + d);
-
     }
 
     /// <summary>
@@ -44,9 +40,6 @@ public static class PlayerController
     {
         ActionRequestMessage actionRequestMessage = new ActionRequestMessage(1234, 12, action, new Position(1, 2), 1);
         MessageConverter.FromMessage(actionRequestMessage);
-        // for testing perpeces only
-        string a = JsonConvert.SerializeObject(actionRequestMessage, new JsonSerializerSettings());
-        Debug.Log("Updated: " + a);
     }
 
     /// <summary>
@@ -58,9 +51,6 @@ public static class PlayerController
     {
         EndTurnRequestMessage endTurnRequestMessage = new EndTurnRequestMessage(clientID, characterID);
         MessageConverter.FromMessage(endTurnRequestMessage);
-        // for testing perpeces only
-        string d = JsonConvert.SerializeObject(endTurnRequestMessage, new JsonSerializerSettings());
-        Debug.Log("Updated: " + d);
     }
 
     /// <summary>
@@ -71,9 +61,6 @@ public static class PlayerController
     {
         HouseRequestMessage houseRequestMessage = new HouseRequestMessage(houseName);
         MessageConverter.FromMessage(houseRequestMessage);
-        // for testing perpeces only
-        string d = JsonConvert.SerializeObject(houseRequestMessage, new JsonSerializerSettings());
-        Debug.Log("Updated: " + d);
     }
 
     /// <summary>
@@ -84,18 +71,12 @@ public static class PlayerController
     {
         GameStateRequestMessage gameStateRequestMessage = new GameStateRequestMessage(clientID);
         MessageConverter.FromMessage(gameStateRequestMessage);
-        // for testing perpeces only
-        string d = JsonConvert.SerializeObject(gameStateRequestMessage, new JsonSerializerSettings());
-        Debug.Log("Updated: " + d);
     }
 
     public static void DoPauseRequest(int clientID)
     {
         PauseGameRequestMessage pauseGameRequestMessage = new PauseGameRequestMessage(clientID);
         MessageConverter.FromMessage(pauseGameRequestMessage);
-        // for testing perpeces only
-        string d = JsonConvert.SerializeObject(pauseGameRequestMessage, new JsonSerializerSettings());
-        Debug.Log("Updated: " + d);
     }
 
     /// <summary>

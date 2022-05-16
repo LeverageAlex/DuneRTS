@@ -18,10 +18,7 @@ namespace GameData.network.util.parser
         {
             // test output
             string data = JsonConvert.SerializeObject(message, new JsonSerializerSettings());
-            Console.WriteLine(data);
-
-            // TODO: implement logic
-            return "";
+            return data;
         }
 
         /// <summary>
@@ -31,8 +28,8 @@ namespace GameData.network.util.parser
         /// <returns>the Message object to be created.</returns>
         static public Message ToMessage(String message)
         {
-            // TODO: implement logic
-            return null;
+            Message m = JsonConvert.DeserializeObject<Message>(message);
+            return m;
         }
     }
 }
