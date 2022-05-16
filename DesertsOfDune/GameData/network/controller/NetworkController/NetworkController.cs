@@ -1,6 +1,8 @@
 ﻿using System;
 using GameData.network.messages;
 using GameData.network.util.enums;
+using GameData.network.util.parser;
+using static GameData.network.messages.Enums;
 
 namespace GameData.network.controller
 {
@@ -19,6 +21,25 @@ namespace GameData.network.controller
 
         abstract public bool HandleSendingMessage(Message message);
 
-        abstract public bool HandleReceivedMessage(string message);
+        public bool HandleReceivedMessage(string message)
+        {
+            // get Message - object from message
+            Message receivedMessage = MessageConverter.ToMessage(message);
+
+            MessageType type = (MessageType)Enum.Parse(typeof(MessageType), receivedMessage.getMessageType());
+
+            switch (type)
+            {
+                case MessageType.DEBUG:
+                    messageController.OnDebugMessage((DebugMessage)receivedMessage);
+                    return true;
+
+                default:
+                    Console.WriteLine("Schade, hat nicht geklappt");
+                    break;
+            }
+
+            return false;
+        }
     }
 }

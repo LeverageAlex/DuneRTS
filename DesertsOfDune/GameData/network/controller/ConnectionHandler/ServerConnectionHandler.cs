@@ -58,21 +58,23 @@ namespace GameData.network.controller
         /// </summary>
         public void InitializeWebSocketServer() {
             // initialize the websocket on the given url
+            Console.WriteLine("Starting to initialize Websocket server");
             _webSocketServer = new WebSocketServer(base.GetURL());
 
             // add services
             _webSocketServer.AddWebSocketService<GameService>("/", () => new GameService(this));
+            serviceManager = _webSocketServer.WebSocketServices;
 
             // start the websocket server
             _webSocketServer.Start();
-            Log.Debug("The Websocket server was initilized");
+            Console.WriteLine("The Websocket server was initilized");
             
 
             // wait for the user to quit the websocket server by typing any key in the console
             // TODO: add logic, that the websocket server is closed, when the server is shut down
 
-            Console.ReadKey();
-            _webSocketServer.Stop();
+            // Console.ReadKey();
+            // _webSocketServer.Stop();
         }
 
         protected internal override void OnClose(CloseEventArgs e, String sessionID)

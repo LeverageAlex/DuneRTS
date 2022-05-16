@@ -7,10 +7,11 @@ namespace GameData.network.controller
 {
     public class ClientConnectionHandler : AConnectionHandler
     {
-        private WebSocket _webSocket;
+        public WebSocket webSocket { get; set; }
 
         public ClientConnectionHandler(string ServerAddress, int Port) : base(ServerAddress, Port)
         {
+            InitializeWebSocket();
         }
 
         /// <summary>
@@ -18,42 +19,44 @@ namespace GameData.network.controller
         /// </summary>
         public void InitializeWebSocket()
         {
-            _webSocket = new WebSocket(base.GetURL());
-            _webSocket.OnClose += (sender, e) =>
+            webSocket = new WebSocket(GetURL());
+            webSocket.OnClose += (sender, e) =>
             {
                 OnClose(e, "");
             };
 
-            _webSocket.OnError += (sender, e) =>
+            webSocket.OnError += (sender, e) =>
             {
                 OnError(e, "");
             };
 
-            _webSocket.OnMessage += (sender, e) =>
+            webSocket.OnMessage += (sender, e) =>
             {
                 OnMessage(e, "");
             };
 
-            _webSocket.OnOpen += (sender, e) =>
+            webSocket.OnOpen += (sender, e) =>
             {
                 OnOpen(base.GetURL(), "");
             };
+
+            ConnectToWebsocketServer();
         }
 
         public void ConnectToWebsocketServer()
         {
-            _webSocket.Connect();
+            webSocket.Connect();
         }
 
         // TODO: hide the CloseStatusCode and implement own variant, which can be exposed --> map own codes on CloseStatusCode
         public void CloseConnectionToWebsocketServer(CloseStatusCode statusCode)
         {
-            _webSocket.Close(statusCode);
+            webSocket.Close(statusCode);
         }
 
         public void CloseConnectionToWebsocketServer(CloseStatusCode statusCode, String reason)
         {
-            _webSocket.Close(statusCode, reason);
+            webSocket.Close(statusCode, reason);
         }
 
         protected internal override void OnClose(CloseEventArgs e, string sessionID)
@@ -69,6 +72,7 @@ namespace GameData.network.controller
         protected internal override void OnMessage(MessageEventArgs e, string sessionID)
         {
             Log.Information("Received new message from the Websocket server. The message is: " + e.Data);
+            networkController.HandleReceivedMessage(e.Data);
         }
 
         protected internal override void OnOpen(string addressConnected, string sessionID)

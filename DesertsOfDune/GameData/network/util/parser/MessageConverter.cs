@@ -28,7 +28,8 @@ namespace GameData.network.util.parser
         /// <returns>the Message object to be created.</returns>
         static public Message ToMessage(String message)
         {
-            Message m = JsonConvert.DeserializeObject<Message>(message);
+            
+            DebugMessage m = JsonConvert.DeserializeObject<DebugMessage>(message);
             return m;
         }
     }
