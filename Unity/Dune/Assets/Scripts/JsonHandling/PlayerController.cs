@@ -22,7 +22,7 @@ public static class PlayerController
 
     {
 
-        List<Position> positions = ConvertPath2(path);
+        List<Position> positions = ConvertPath(path);
         MovementRequestMessage movementRequestMessage = new MovementRequestMessage(clientID, characterID,positions);
 
         MessageConverter.FromMessage(movementRequestMessage);
@@ -60,21 +60,6 @@ public static class PlayerController
         MessageConverter.FromMessage(endTurnRequestMessage);
         // for testing perpeces only
         string d = JsonConvert.SerializeObject(endTurnRequestMessage, new JsonSerializerSettings());
-        Debug.Log("Updated: " + d);
-        DoTurnRequest(clientID,characterID);
-    }
-
-    /// <summary>
-    /// This method triggers the creation of a turnRequestMessage and forwards this message to the MessageConverter
-    /// </summary>
-    /// <param name="clientID">the id of the client</param>
-    /// <param name="characterID">the id of the character</param>
-    public static void DoTurnRequest(int clientID, int characterID)
-    {
-        TurnRequestMessage turnRequestMessage = new TurnRequestMessage(clientID, characterID);
-        MessageConverter.FromMessage(turnRequestMessage);
-        // for testing perpeces only
-        string d = JsonConvert.SerializeObject(turnRequestMessage, new JsonSerializerSettings());
         Debug.Log("Updated: " + d);
     }
 
@@ -118,23 +103,7 @@ public static class PlayerController
     /// </summary>
     /// <param name="selCharPath">the path to be converted.</param>
     /// <returns>The converted path</returns>
-    private static List<Vector> ConvertPath(LinkedList<Vector3> selCharPath)
-    {
-        List<Vector> path = new List<Vector>();
-        foreach (Vector3 vec in selCharPath)
-        {
-            Vector v = new Vector(vec.x, vec.z);
-            path.Add(v);
-        }
-        return path;
-    }
-
-    /// <summary>
-    /// This method is used to convert the Path from a list of Vector3 to a List of type Vector in oderer to convert this to JSON.
-    /// </summary>
-    /// <param name="selCharPath">the path to be converted.</param>
-    /// <returns>The converted path</returns>
-    private static List<Position> ConvertPath2(LinkedList<Vector3> selCharPath)
+    private static List<Position> ConvertPath(LinkedList<Vector3> selCharPath)
     {
         List<Position> path = new List<Position>();
         foreach (Vector3 vec in selCharPath)
