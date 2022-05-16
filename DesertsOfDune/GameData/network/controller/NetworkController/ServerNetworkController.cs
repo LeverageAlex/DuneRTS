@@ -41,10 +41,9 @@ namespace GameData.network.controller
             string parsedMessage = MessageConverter.FromMessage(message);
 
             //TODO: do not Broadcast every message, but check, whether it must be send to one single client
-            connectionHandler.
+            ((ServerConnectionHandler)base.connectionHandler).serviceManager.Broadcast(parsedMessage);
 
-
-
+            return true;
         }
     }
 }
