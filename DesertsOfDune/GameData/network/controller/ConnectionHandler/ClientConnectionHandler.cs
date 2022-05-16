@@ -32,12 +32,14 @@ namespace GameData.network.controller
 
             webSocket.OnMessage += (sender, e) =>
             {
+                Console.WriteLine(e.Data);
                 OnMessage(e, "");
             };
 
             webSocket.OnOpen += (sender, e) =>
             {
-                OnOpen(base.GetURL(), "");
+                Console.WriteLine("opened on client");
+                OnOpen(GetURL(), "");
             };
 
             ConnectToWebsocketServer();
@@ -46,6 +48,8 @@ namespace GameData.network.controller
         public void ConnectToWebsocketServer()
         {
             webSocket.Connect();
+            GameData.network.messages.DebugMessage dbm = new messages.DebugMessage("grund");
+            webSocket.Send(GameData.network.util.parser.MessageConverter.FromMessage(dbm));
         }
 
         // TODO: hide the CloseStatusCode and implement own variant, which can be exposed --> map own codes on CloseStatusCode
@@ -61,23 +65,23 @@ namespace GameData.network.controller
 
         protected internal override void OnClose(CloseEventArgs e, string sessionID)
         {
-            Log.Information("The connection to the Websocket server was close by the server. The reason is: " + e.Reason);
+            Console.WriteLine("The connection to the Websocket server was close by the server. The reason is: " + e.Reason);
         }
 
         protected internal override void OnError(ErrorEventArgs e, string sessionID)
         {
-            Log.Error("An error occured on the connection to the Websocket server. The error is: " + e.Message);
+            Console.WriteLine("An error occured on the connection to the Websocket server. The error is: " + e.Message);
         }
 
         protected internal override void OnMessage(MessageEventArgs e, string sessionID)
         {
-            Log.Information("Received new message from the Websocket server. The message is: " + e.Data);
+            Console.WriteLine("Received new message from the Websocket server. The message is: " + e.Data);
             networkController.HandleReceivedMessage(e.Data);
         }
 
         protected internal override void OnOpen(string addressConnected, string sessionID)
         {
-            Log.Information("Connected to " + addressConnected);
+            Console.WriteLine("Connected to " + addressConnected);
         }
     }
 }

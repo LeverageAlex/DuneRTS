@@ -43,7 +43,7 @@ namespace GameData.network.controller
     public class ServerConnectionHandler : AConnectionHandler
     {
         private WebSocketServer _webSocketServer;
-        public WebSocketServiceManager serviceManager { get; set; }
+        public WebSocketSessionManager sessionManager { get; set; }
         
 
         public ServerConnectionHandler(string ServerAddress, int Port) : base(ServerAddress, Port)
@@ -59,14 +59,14 @@ namespace GameData.network.controller
         public void InitializeWebSocketServer() {
             // initialize the websocket on the given url
             Console.WriteLine("Starting to initialize Websocket server");
-            _webSocketServer = new WebSocketServer(base.GetURL());
+            _webSocketServer = new WebSocketServer(GetURL());
 
             // add services
             _webSocketServer.AddWebSocketService<GameService>("/", () => new GameService(this));
-            serviceManager = _webSocketServer.WebSocketServices;
 
             // start the websocket server
             _webSocketServer.Start();
+            sessionManager = _webSocketServer.WebSocketServices["/"].Sessions;
             Console.WriteLine("The Websocket server was initilized");
             
 
@@ -79,25 +79,25 @@ namespace GameData.network.controller
 
         protected internal override void OnClose(CloseEventArgs e, String sessionID)
         {
-            Log.Information("The connection to the Websocket server was closed by a client. The reason is: " + e.Reason);
+            Console.WriteLine("The connection to the Websocket server was closed by a client. The reason is: " + e.Reason);
         }
 
         protected internal override void OnError(ErrorEventArgs e, String sessionID)
         {
-            Log.Error("Failed to establish connection to Websocket server on: " + base.GetURL());
-            Log.Verbose("The reason for the failed try to connect is: " + e.Message);
+            Console.WriteLine("Failed to establish connection to Websocket server on: " + GetURL());
+            Console.WriteLine("The reason for the failed try to connect is: " + e.Message);
         }
 
         protected internal override void OnMessage(MessageEventArgs e, String sessionID)
         {
-            Log.Information("Received a message from client. The message is: " + e.Data);
-            base.networkController.HandleReceivedMessage(e.Data);
+            Console.WriteLine("Received a message from client. The message is: " + e.Data);
+            networkController.HandleReceivedMessage(e.Data);
         }
 
         protected internal override void OnOpen(String addressConnected, String sessionID)
         {
-            Log.Information("Registred new connection from " + addressConnected + " to Websocket server");
-            Log.Information("The ID of the new user is: " + sessionID);
+            Console.WriteLine("Registred new connection from " + addressConnected + " to Websocket server");
+            Console.WriteLine("The ID of the new user is: " + sessionID);
         }
     }
 }

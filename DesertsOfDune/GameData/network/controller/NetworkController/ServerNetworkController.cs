@@ -21,7 +21,8 @@ namespace GameData.network.controller
 
             //TODO: do not Broadcast every message, but check, whether it must be send to one single client
             Console.WriteLine("Broadcast message from server");
-            ((ServerConnectionHandler)connectionHandler).serviceManager.Broadcast(parsedMessage);
+            Console.WriteLine(((ServerConnectionHandler)connectionHandler).sessionManager.Count);
+            ((ServerConnectionHandler)connectionHandler).sessionManager.Broadcast(parsedMessage);
 
             return true;
         }
