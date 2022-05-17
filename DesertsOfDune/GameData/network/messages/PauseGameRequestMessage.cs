@@ -6,9 +6,9 @@ using Newtonsoft.Json;
 namespace GameData.network.messages
 {
     /// <summary>
-    /// This Class is used as a message to request a pause of the game
+    /// This Class is used as a message to request a pause of or to request continuation of the game
     /// </summary>
-    public class PauseGameRequestMessage : ClientServerMessage
+    public class PauseGameRequestMessage : Message
     {
         [JsonProperty]
         private bool pause;
@@ -17,9 +17,10 @@ namespace GameData.network.messages
         /// Constructor of the class PauseGameRequestMessage
         /// </summary>
         /// <param name="clientID">the id of the client</param>
-        public PauseGameRequestMessage(int clientID) : base(clientID, MessageType.PAUSE_REQUEST)
+        /// <param name="pause">true, if client wishes to pause the game if he wishes to continue false</param>
+        public PauseGameRequestMessage(bool pause) : base("v1",MessageType.PAUSE_REQUEST)
         {
-            this.pause = true;
+            this.pause = pause;
         }
     }
 }

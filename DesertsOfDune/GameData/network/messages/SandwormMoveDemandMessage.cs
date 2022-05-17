@@ -2,23 +2,25 @@
 using System.Collections.Generic;
 using System.Text;
 using GameData.network.util.world;
+using Newtonsoft.Json;
 
 namespace GameData.network.messages
 {
     /// <summary>
     /// This class is used to comunicate Sandworm movement.
     /// </summary>
-    public class SandwormMoveMessage : Message
+    public class SandwormMoveDemandMessage : Message
     {
-        private Position[] fields;
+        [JsonProperty]
+        private List<Position> path;
 
         /// <summary>
         /// Constructor of the class SandwormMoveMessage
         /// </summary>
-        /// <param name="fields">takes a array of Position to represent the sandworm movement.</param>
-        public SandwormMoveMessage(Position[] fields) : base("v1", MessageType.SANDWORM_MOVE)
+        /// <param name="path">takes a List of Position to represent the sandworm movement.</param>
+        public SandwormMoveDemandMessage(List<Position> path) : base("v1", MessageType.SANDWORM_MOVE_DEMAND)
         {
-            this.fields = fields;
+            this.path = path;
         }
      }
 }

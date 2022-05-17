@@ -9,7 +9,7 @@ namespace GameData.network.messages
     /// <summary>
     /// This class is used to comunicate actions.
     /// </summary>
-    public class ActionMessage : TurnMessage
+    public class ActionDemandMessage : TurnMessage
     {
         [JsonProperty]
         private string action;
@@ -26,7 +26,7 @@ namespace GameData.network.messages
         /// <param name="action">the action that is triggered</param>
         /// <param name="target">the target of the action</param>
         /// <param name="targetID">the id of the target</param>
-        public ActionMessage(int clientID, int characterID, ActionType action, Position target, int targetID) : base(characterID,clientID,MessageType.ACTION)
+        public ActionDemandMessage(int clientID, int characterID, ActionType action, Position target, int targetID) : base(characterID,clientID,MessageType.ACTION_DEMAND)
         {
             this.action = Enum.GetName(typeof(ActionType), action);
             this.target = target;
