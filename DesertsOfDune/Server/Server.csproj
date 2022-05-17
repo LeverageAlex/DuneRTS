@@ -12,4 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\GameData\GameData.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Clients\" />
+  </ItemGroup>
 </Project>
