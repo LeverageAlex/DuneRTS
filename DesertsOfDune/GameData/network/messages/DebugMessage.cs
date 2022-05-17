@@ -11,9 +11,9 @@ namespace GameData.network.messages
     public class DebugMessage : Message
     {
         [JsonProperty]
-        private int code;
+        public int code { get; }
         [JsonProperty]
-        private string explanation;
+        public string explanation { get; }
 
         /// <summary>
         /// Constructor of the Class DebugMessage

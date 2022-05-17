@@ -36,8 +36,8 @@ namespace GameData.network.controller
 
             switch (type)
             {
-                case MessageType.END_TURN_REQUEST:
-                    messageController.OnDebugMessage((EndTurnRequestMessage)receivedMessage);
+                case MessageType.DEBUG:
+                    messageController.OnDebugMessage((DebugMessage)receivedMessage);
                     return true;
 
                 default:
