@@ -17,8 +17,9 @@ namespace GameData.network.controller
         {
             // parsing message
             string parsedMessage = MessageConverter.FromMessage(message);
+            ((ClientConnectionHandler)connectionHandler).webSocket.Send(parsedMessage);
 
-            ((ClientConnectionHandler)base.connectionHandler).webSocket.Send(parsedMessage);
+            Console.WriteLine("Send: " + parsedMessage);
 
             return true;
         }

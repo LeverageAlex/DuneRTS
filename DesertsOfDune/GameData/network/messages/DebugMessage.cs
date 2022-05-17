@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace GameData.network.messages
 {
@@ -9,7 +10,9 @@ namespace GameData.network.messages
     /// </summary>
     public class DebugMessage : Message
     {
+        [JsonProperty]
         private int code;
+        [JsonProperty]
         private string explanation;
 
         /// <summary>

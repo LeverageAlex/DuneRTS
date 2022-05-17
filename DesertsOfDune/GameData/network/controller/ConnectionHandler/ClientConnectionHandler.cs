@@ -2,6 +2,7 @@
 using WebSocketSharp;
 
 using Serilog;
+using System.Threading;
 
 namespace GameData.network.controller
 {
@@ -11,7 +12,8 @@ namespace GameData.network.controller
 
         public ClientConnectionHandler(string ServerAddress, int Port) : base(ServerAddress, Port)
         {
-            InitializeWebSocket();
+            Thread t = new Thread(InitializeWebSocket);
+            t.Start();
         }
 
         /// <summary>
@@ -20,6 +22,7 @@ namespace GameData.network.controller
         public void InitializeWebSocket()
         {
             webSocket = new WebSocket(GetURL());
+
             webSocket.OnClose += (sender, e) =>
             {
                 OnClose(e, "");
@@ -32,6 +35,7 @@ namespace GameData.network.controller
 
             webSocket.OnMessage += (sender, e) =>
             {
+                Console.WriteLine("got new message: " + e.Data);
                 OnMessage(e, "");
             };
 
@@ -41,6 +45,9 @@ namespace GameData.network.controller
             };
 
             ConnectToWebsocketServer();
+
+            Console.ReadKey();
+            CloseConnectionToWebsocketServer(CloseStatusCode.Away, "Interrupted by user");
         }
 
         public void ConnectToWebsocketServer()
@@ -61,23 +68,23 @@ namespace GameData.network.controller
 
         protected internal override void OnClose(CloseEventArgs e, string sessionID)
         {
-            Log.Information("The connection to the Websocket server was close by the server. The reason is: " + e.Reason);
+            Console.WriteLine("The connection to the Websocket server was close by the server. The reason is: " + e.Reason);
         }
 
         protected internal override void OnError(ErrorEventArgs e, string sessionID)
         {
-            Log.Error("An error occured on the connection to the Websocket server. The error is: " + e.Message);
+            Console.WriteLine("An error occured on the connection to the Websocket server. The error is: " + e.Message);
         }
 
         protected internal override void OnMessage(MessageEventArgs e, string sessionID)
         {
-            Log.Information("Received new message from the Websocket server. The message is: " + e.Data);
-            networkController.HandleReceivedMessage(e.Data);
+            Console.WriteLine("Received new message from the Websocket server. The message is: " + e.Data);
+            Console.WriteLine("Handled received message");
         }
 
         protected internal override void OnOpen(string addressConnected, string sessionID)
         {
-            Log.Information("Connected to " + addressConnected);
+            Console.WriteLine("Connected to " + addressConnected);
         }
     }
 }

@@ -5,6 +5,7 @@ using WebSocketSharp.Server;
 using WebSocketSharp.Net;
 
 using Serilog;
+using System.Threading;
 
 namespace GameData.network.controller
 {
@@ -12,7 +13,6 @@ namespace GameData.network.controller
     {
         
         private ServerConnectionHandler _connectionHandler;
-        public WebSocketSessionManager sessionManager { get; }
 
         public GameService(ServerConnectionHandler _serverConnectionHandler)
         {
@@ -30,7 +30,7 @@ namespace GameData.network.controller
         }
 
         protected override void OnMessage(MessageEventArgs e)
-        {
+        { 
             _connectionHandler.OnMessage(e, this.ID);
         }
 
@@ -43,13 +43,14 @@ namespace GameData.network.controller
     public class ServerConnectionHandler : AConnectionHandler
     {
         private WebSocketServer _webSocketServer;
-        public WebSocketServiceManager serviceManager { get; set; }
+        public WebSocketSessionManager sessionManager { get; set; }
         
 
         public ServerConnectionHandler(string ServerAddress, int Port) : base(ServerAddress, Port)
         {
             // initialize the websocket server
-            InitializeWebSocketServer();
+            Thread t = new Thread(InitializeWebSocketServer);
+            t.Start();
         }
 
         /// <summary>
@@ -63,7 +64,7 @@ namespace GameData.network.controller
 
             // add services
             _webSocketServer.AddWebSocketService<GameService>("/", () => new GameService(this));
-            serviceManager = _webSocketServer.WebSocketServices;
+            sessionManager = _webSocketServer.WebSocketServices["/"].Sessions;
 
             // start the websocket server
             _webSocketServer.Start();
@@ -73,30 +74,33 @@ namespace GameData.network.controller
             // wait for the user to quit the websocket server by typing any key in the console
             // TODO: add logic, that the websocket server is closed, when the server is shut down
 
-            // Console.ReadKey();
-            // _webSocketServer.Stop();
+            Console.ReadKey();
+            _webSocketServer.Stop();
+            Console.WriteLine("Shutdown the Websocket server");
         }
 
         protected internal override void OnClose(CloseEventArgs e, String sessionID)
         {
-            Log.Information("The connection to the Websocket server was closed by a client. The reason is: " + e.Reason);
+            Console.WriteLine("The connection to the Websocket server was closed by a client. The reason is: " + e.Reason);
         }
 
         protected internal override void OnError(ErrorEventArgs e, String sessionID)
         {
-            Log.Error("Failed to establish connection to Websocket server on: " + base.GetURL());
+            Console.WriteLine("Failed to establish connection to Websocket server on: " + base.GetURL());
             Log.Verbose("The reason for the failed try to connect is: " + e.Message);
         }
 
         protected internal override void OnMessage(MessageEventArgs e, String sessionID)
         {
-            Log.Information("Received a message from client. The message is: " + e.Data);
-            base.networkController.HandleReceivedMessage(e.Data);
+            Console.WriteLine("Received a message from client. The message is: " + e.Data);
+            Console.WriteLine(((ServerNetworkController)networkController).GetType());
+            ((ServerNetworkController)networkController).HandleReceivedMessage(e.Data);
+            // base.networkController.HandleReceivedMessage(e.Data);
         }
 
         protected internal override void OnOpen(String addressConnected, String sessionID)
         {
-            Log.Information("Registred new connection from " + addressConnected + " to Websocket server");
+            Console.WriteLine("Registred new connection from " + addressConnected + " to Websocket server");
             Log.Information("The ID of the new user is: " + sessionID);
         }
     }

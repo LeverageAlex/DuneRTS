@@ -17,7 +17,17 @@ namespace GameData.network.util.parser
         static public String FromMessage(Message message)
         {
             // test output
-            string data = JsonConvert.SerializeObject(message, new JsonSerializerSettings());
+            string data;
+
+            if (message.getMessageType().Equals("END_TURN_REQUEST"))
+            {
+                EndTurnRequestMessage debugMessage = (EndTurnRequestMessage)message;
+                data = JsonConvert.SerializeObject(debugMessage);
+            } else
+            {
+                data = JsonConvert.SerializeObject(message, new JsonSerializerSettings());
+            }
+            
             return data;
         }
 
@@ -29,7 +39,8 @@ namespace GameData.network.util.parser
         static public Message ToMessage(String message)
         {
             
-            DebugMessage m = JsonConvert.DeserializeObject<DebugMessage>(message);
+            EndTurnRequestMessage m = JsonConvert.DeserializeObject<EndTurnRequestMessage>(message);
+            Console.WriteLine(m.ToString());
             return m;
         }
     }

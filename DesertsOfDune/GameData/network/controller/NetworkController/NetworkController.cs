@@ -23,15 +23,21 @@ namespace GameData.network.controller
 
         public bool HandleReceivedMessage(string message)
         {
+            Console.WriteLine("Parsing incoming message at " + webSocketType);
+
             // get Message - object from message
             Message receivedMessage = MessageConverter.ToMessage(message);
 
+            Console.WriteLine("Parsed received message");
+
             MessageType type = (MessageType)Enum.Parse(typeof(MessageType), receivedMessage.getMessageType());
+
+            Console.WriteLine(type);
 
             switch (type)
             {
-                case MessageType.DEBUG:
-                    messageController.OnDebugMessage((DebugMessage)receivedMessage);
+                case MessageType.END_TURN_REQUEST:
+                    messageController.OnDebugMessage((EndTurnRequestMessage)receivedMessage);
                     return true;
 
                 default:
