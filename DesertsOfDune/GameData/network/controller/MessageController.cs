@@ -16,8 +16,6 @@ namespace GameData.network.controller
         {
             string messageContent = MessageConverter.FromMessage(msg);
             Console.WriteLine("Received debug message is: " + messageContent);
-            DoDebug("Ich antworte hiermit auf " + msg);
-            Console.WriteLine("Send answer");
         }
 
         public void DoDebug(string explanation)
