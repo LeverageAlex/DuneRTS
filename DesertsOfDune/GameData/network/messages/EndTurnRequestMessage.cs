@@ -14,7 +14,7 @@ namespace GameData.network.messages
         /// </summary>
         /// <param name="clientID">the id of the client</param>
         /// <param name="characterID">the id of the character</param>
-        public EndTurnRequestMessage(int clientID, int characterID) : base(characterID, clientID,Enums.MessageType.END_TURN_REQUEST)
+        public EndTurnRequestMessage(int clientID, int characterID) : base(characterID, clientID,ActionType.MessageType.END_TURN_REQUEST)
         {
 
         }

@@ -17,7 +17,7 @@ namespace GameData.network.messages
         /// </summary>
         /// <param name="clientID">the id of the client</param>
         /// <param name="offeredHouses">the houses that the server offers the client.</param>
-        public HouseOfferMessage(int clientID, GreatHouse[] offeredHouses) : base(clientID,Enums.MessageType.HOUSE_OFFER)
+        public HouseOfferMessage(int clientID, GreatHouse[] offeredHouses) : base(clientID,ActionType.MessageType.HOUSE_OFFER)
         {
             this.offeredHouses = offeredHouses;
         }

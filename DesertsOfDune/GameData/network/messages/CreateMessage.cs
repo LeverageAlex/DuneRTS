@@ -9,13 +9,13 @@ namespace GameData.network.messages
         private string lobbyCode;
         private int CPUCount;
 
-        public CreateMessage(string lobbyCode,int CPUCount) : base("v1", Enums.MessageType.CREATE)
+        public CreateMessage(string lobbyCode,int CPUCount) : base("v1", ActionType.MessageType.CREATE)
         {
             this.lobbyCode = lobbyCode;
             this.CPUCount = CPUCount;
         }
 
-        public CreateMessage(string lobbyCode) : base("v1", Enums.MessageType.CREATE)
+        public CreateMessage(string lobbyCode) : base("v1", ActionType.MessageType.CREATE)
         {
             this.lobbyCode = lobbyCode;
         }

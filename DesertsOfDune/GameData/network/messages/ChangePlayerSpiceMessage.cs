@@ -16,7 +16,7 @@ namespace GameData.network.messages
         /// </summary>
         /// <param name="newSpiceValue">the new amount of spice the player has</param>
         /// <param name="clientID">the client id</param>
-        public ChangePlayerSpiceMessage(int newSpiceValue, int clientID) : base(clientID, Enums.MessageType.CHANGE_PLAYER_SPICE)
+        public ChangePlayerSpiceMessage(int newSpiceValue, int clientID) : base(clientID, ActionType.MessageType.CHANGE_PLAYER_SPICE)
         {
             this.newSpiceValue = newSpiceValue;
         }

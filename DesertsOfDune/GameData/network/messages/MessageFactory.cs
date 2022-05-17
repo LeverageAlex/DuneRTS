@@ -22,7 +22,7 @@ namespace GameData.network.messages
         /// <param name="type">type of Message that should be created</param>
         /// <param name="args">arguments of for the message</param>
         /// <returns></returns>
-        public Message createMessage(Enums.MessageType type, string[] args)
+        public Message createMessage(ActionType.MessageType type, string[] args)
         {
             return null;
         }

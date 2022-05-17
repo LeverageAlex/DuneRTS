@@ -2,7 +2,7 @@
 using GameData.network.messages;
 using GameData.network.util.enums;
 using GameData.network.util.parser;
-using static GameData.network.messages.Enums;
+using static GameData.network.messages.ActionType;
 
 namespace GameData.network.controller
 {

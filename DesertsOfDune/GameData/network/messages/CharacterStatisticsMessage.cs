@@ -9,7 +9,7 @@ namespace GameData.network.messages
     {
         private CharacterStatistics statistics;
 
-        public CharacterStatisticsMessage(int clientID, int characterID, CharacterStatistics statistics) : base(characterID,clientID,Enums.MessageType.CHARACTER_STAT_CHANGE)
+        public CharacterStatisticsMessage(int clientID, int characterID, CharacterStatistics statistics) : base(characterID,clientID,ActionType.MessageType.CHARACTER_STAT_CHANGE)
         {
             this.statistics = statistics;
         }

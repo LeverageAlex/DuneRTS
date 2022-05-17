@@ -20,7 +20,7 @@ namespace GameData.network.messages
         /// <param name="winner">the winner of the game</param>
         /// <param name="loser">the loser of the game</param>
         /// <param name="statistics">the statistics of the game</param>
-        public GameEndMessage(int winner, int loser, Statistics statistics) : base("v1",Enums.MessageType.GAME_END)
+        public GameEndMessage(int winner, int loser, Statistics statistics) : base("v1",ActionType.MessageType.GAME_END)
         {
             this.winner = winner;
             this.loser = loser;

@@ -13,7 +13,7 @@ namespace GameData.network.messages
         /// <summary>
         /// Constructor of the class SandwormDespawnMessage
         /// </summary>
-        public SandwormDespawnMessage() : base("v1",Enums.MessageType.SANDWORM_DESPAWN)
+        public SandwormDespawnMessage() : base("v1",ActionType.MessageType.SANDWORM_DESPAWN)
         {
 
         }

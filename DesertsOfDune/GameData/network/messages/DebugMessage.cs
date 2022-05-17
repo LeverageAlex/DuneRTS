@@ -20,7 +20,7 @@ namespace GameData.network.messages
         /// </summary>
         /// <param name="code">the code of the DebugMessage</param>
         /// <param name="explanation">the explanation for the DebugMessage</param>
-        public DebugMessage(int code, string explanation) : base("v1", Enums.MessageType.DEBUG)
+        public DebugMessage(int code, string explanation) : base("v1", ActionType.MessageType.DEBUG)
         {
             this.code = code;
             this.explanation = explanation;
@@ -30,7 +30,7 @@ namespace GameData.network.messages
         /// Constructof of the class DebugMessage that only take the explanation
         /// </summary>
         /// <param name="explanation">The explanation for the DebugMessage</param>
-        public DebugMessage(string explanation) : base("v1", Enums.MessageType.DEBUG)
+        public DebugMessage(string explanation) : base("v1", ActionType.MessageType.DEBUG)
         {
             this.explanation=explanation;
         }

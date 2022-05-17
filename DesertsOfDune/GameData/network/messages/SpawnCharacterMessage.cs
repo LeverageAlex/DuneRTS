@@ -12,7 +12,7 @@ namespace GameData.network.messages
     {
         private Position position;
         private Character character;
-        private Enums.CharacterType characterType;
+        private ActionType.CharacterType characterType;
 
         /// <summary>
         /// Constructor of the class SpawnCharacterMessage
@@ -22,14 +22,14 @@ namespace GameData.network.messages
         /// <param name="position">the position of the character</param>
         /// <param name="character">the character</param>
         /// <param name="characterType">the type of the character</param>
-        public SpawnCharacterMessage(int clientID, int characterID, Position position, Character character, Enums.CharacterType characterType) : base(characterID,clientID,Enums.MessageType.SPAWN_CHARACTER)
+        public SpawnCharacterMessage(int clientID, int characterID, Position position, Character character, ActionType.CharacterType characterType) : base(characterID,clientID,ActionType.MessageType.SPAWN_CHARACTER)
         {
             this.position = position;
             this.character = character;
             this.characterType = characterType;
         }
 
-        public Enums.CharacterType GetCharacterTypeFromCharacter()
+        public ActionType.CharacterType GetCharacterTypeFromCharacter()
         {
             return this.characterType;
         }

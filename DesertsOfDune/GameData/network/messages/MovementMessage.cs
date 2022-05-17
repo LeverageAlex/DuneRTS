@@ -18,7 +18,7 @@ namespace GameData.network.messages
         /// <param name="clientID">the id of the client</param>
         /// <param name="characterID">the id of the character</param>
         /// <param name="path">the path the character takes</param>
-        public MovementMessage(int clientID, int characterID, Position[] path) : base(characterID,clientID,Enums.MessageType.MOVEMENT)
+        public MovementMessage(int clientID, int characterID, Position[] path) : base(characterID,clientID,ActionType.MessageType.MOVEMENT)
         {
             this.path = path;
         }

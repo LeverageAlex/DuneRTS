@@ -12,7 +12,7 @@ namespace GameData.network.messages
         /// <summary>
         /// Constructor of the class EndGameMessage
         /// </summary>
-        public EndGameMessage() : base("v1", Enums.MessageType.ENDGAME)
+        public EndGameMessage() : base("v1", ActionType.MessageType.ENDGAME)
         {
 
         }
