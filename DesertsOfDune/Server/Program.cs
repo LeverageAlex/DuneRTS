@@ -18,7 +18,7 @@ namespace Server
             ServerNetworkController serverNetworkController = new ServerNetworkController(serverConnectionHandler, messageController);
 
             // server
-            // messageController.DoDebug("Hallo hier ist Günther");
+            messageController.DoDebug("Hallo hier ist Günther");
 
 
             // server

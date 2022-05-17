@@ -60,14 +60,14 @@ namespace GameData.network.controller
         public void InitializeWebSocketServer() {
             // initialize the websocket on the given url
             Console.WriteLine("Starting to initialize Websocket server");
-            _webSocketServer = new WebSocketServer(base.GetURL());
+            _webSocketServer = new WebSocketServer(GetURL());
 
             // add services
             _webSocketServer.AddWebSocketService<GameService>("/", () => new GameService(this));
-            sessionManager = _webSocketServer.WebSocketServices["/"].Sessions;
 
             // start the websocket server
             _webSocketServer.Start();
+            sessionManager = _webSocketServer.WebSocketServices["/"].Sessions;
             Console.WriteLine("The Websocket server was initilized");
             
 
@@ -86,8 +86,8 @@ namespace GameData.network.controller
 
         protected internal override void OnError(ErrorEventArgs e, String sessionID)
         {
-            Console.WriteLine("Failed to establish connection to Websocket server on: " + base.GetURL());
-            Log.Verbose("The reason for the failed try to connect is: " + e.Message);
+            Console.WriteLine("Failed to establish connection to Websocket server on: " + GetURL());
+            Console.WriteLine("The reason for the failed try to connect is: " + e.Message);
         }
 
         protected internal override void OnMessage(MessageEventArgs e, String sessionID)
@@ -95,13 +95,13 @@ namespace GameData.network.controller
             Console.WriteLine("Received a message from client. The message is: " + e.Data);
             Console.WriteLine(((ServerNetworkController)networkController).GetType());
             ((ServerNetworkController)networkController).HandleReceivedMessage(e.Data);
-            // base.networkController.HandleReceivedMessage(e.Data);
+            base.networkController.HandleReceivedMessage(e.Data);
         }
 
         protected internal override void OnOpen(String addressConnected, String sessionID)
         {
             Console.WriteLine("Registred new connection from " + addressConnected + " to Websocket server");
-            Log.Information("The ID of the new user is: " + sessionID);
+            Console.WriteLine("The ID of the new user is: " + sessionID);
         }
     }
 }
