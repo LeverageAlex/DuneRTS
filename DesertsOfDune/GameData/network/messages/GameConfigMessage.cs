@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace GameData.network.messages
 {
@@ -9,18 +10,24 @@ namespace GameData.network.messages
     /// </summary>
     public class GameConfigMessage : Message
     {
-        private string scenario;
-        private string partyConfig;
+        [JsonProperty]
+        private List<string[]> scenario;
+        [JsonProperty]
+        private string party;
+        [JsonProperty]
+        private string[] houseOffer;
 
         /// <summary>
         /// Constructor of the class GameConfigMessage
         /// </summary>
         /// <param name="scenario">the scenario configuration</param>
         /// <param name="partyConfig">the party configuration</param>
-        public GameConfigMessage(string scenario, string partyConfig) : base("v1", MessageType.GAMECFG)
+        /// <param name="partyConfig">array of houses that are offered to the client</param>
+        public GameConfigMessage(List<string[]> scenario, string party, string[] houseOffer) : base("v1", MessageType.GAMECFG)
         {
             this.scenario = scenario;
-            this.partyConfig = partyConfig;
+            this.party = party;
+            this.houseOffer = houseOffer;
         }
     }
 }

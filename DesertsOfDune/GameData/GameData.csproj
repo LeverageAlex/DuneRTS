@@ -27,7 +27,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="network\util\" />
     <Folder Include="network\util\parser\" />
     <Folder Include="network\controller\" />
     <Folder Include="network\controller\ConnectionHandler\" />

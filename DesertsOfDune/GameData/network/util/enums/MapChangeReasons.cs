@@ -6,6 +6,8 @@
     public enum MapChangeReasons
     {
         SANDSTORM,
+        ROUND_PHASE,
+        FAMILY_ATOMICS,
         DUNEWALKING,
         ENDGAME
     }

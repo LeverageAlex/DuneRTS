@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using GameData.network.util.world;
+using Newtonsoft.Json;
 
 namespace GameData.network.messages
 {
@@ -10,8 +11,11 @@ namespace GameData.network.messages
     /// </summary>
     public class GameEndMessage : Message
     {
-        private int winner;
-        private int loser;
+        [JsonProperty]
+        private int winnerID;
+        [JsonProperty]
+        private int loserID;
+        [JsonProperty]
         private Statistics statistics;
 
         /// <summary>
@@ -20,10 +24,10 @@ namespace GameData.network.messages
         /// <param name="winner">the winner of the game</param>
         /// <param name="loser">the loser of the game</param>
         /// <param name="statistics">the statistics of the game</param>
-        public GameEndMessage(int winner, int loser, Statistics statistics) : base("v1",MessageType.GAME_END)
+        public GameEndMessage(int winnerID, int loserID, Statistics statistics) : base("v1",MessageType.GAME_END)
         {
-            this.winner = winner;
-            this.loser = loser;
+            this.winnerID = winnerID;
+            this.loserID = loserID;
             this.statistics = statistics;
         }
     }
