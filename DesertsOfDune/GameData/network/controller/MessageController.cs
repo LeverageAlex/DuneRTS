@@ -21,7 +21,8 @@ namespace GameData.network.controller
         public void DoDebug(string explanation)
         {
             // create Debug message
-            EndTurnRequestMessage message = new EndTurnRequestMessage(123, 1234);
+            //EndTurnRequestMessage message = new EndTurnRequestMessage(123, 1234);
+            CreateMessage message = new CreateMessage("some lobbyCode");
 
             // send message
             controller.HandleSendingMessage(message);

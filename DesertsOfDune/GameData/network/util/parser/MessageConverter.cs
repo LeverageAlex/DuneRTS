@@ -16,20 +16,32 @@ namespace GameData.network.util.parser
         /// <returns>the json string</returns>
         static public String FromMessage(Message message)
         {
-            // test output
-            string data = "";
             switch (message.getMessageType())
             {
+                case "ACTION":
+                    // TODO: ActionMessage right?
+                    ActionMessage actionMessage = (ActionMessage)message;
+                    return JsonConvert.SerializeObject(actionMessage);
+                case "ACTION_REQUEST":
+                    ActionRequestMessage actionRequestMessage = (ActionRequestMessage)message;
+                    return JsonConvert.SerializeObject(actionRequestMessage);
+                case "CHANGE_PLAYER_SPICE_DEMAND":
+                    ChangePlayerSpiceDemandMessage changePlayerSpiceMessage = (ChangePlayerSpiceDemandMessage)message;
+                    return JsonConvert.SerializeObject(changePlayerSpiceMessage);
+                case "CHARACTER_STAT_CHANGE_DEMAND":
+                    ChangeCharacterStatisticsDemandMessage characterStatisticsMessage = (ChangeCharacterStatisticsDemandMessage)message;
+                    return JsonConvert.SerializeObject(characterStatisticsMessage);
+                case "CREATE":
+                    CreateMessage createMessage = (CreateMessage)message;
+                    return JsonConvert.SerializeObject(createMessage);
                 case "DEBUG":
                     DebugMessage debugMessage = (DebugMessage)message;
-                    data = JsonConvert.SerializeObject(debugMessage);
-                    break;
+                    return JsonConvert.SerializeObject(debugMessage);
                 case "END_TURN_REQUEST":
                     EndTurnRequestMessage endTurnRequestMessage = (EndTurnRequestMessage)message;
-                    data = JsonConvert.SerializeObject(endTurnRequestMessage);
-                    break;
+                    return JsonConvert.SerializeObject(endTurnRequestMessage);
             }
-            return data;
+            return "";
 
             /*
             if (message.getMessageType().Equals("END_TURN_REQUEST"))

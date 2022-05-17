@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace GameData.network.util.world
 {
@@ -9,11 +10,17 @@ namespace GameData.network.util.world
     /// </summary>
     public class CharacterStatistics
     {
+        [JsonProperty]
         private int healthPoints;
+        [JsonProperty]
         private int actionPoints;
+        [JsonProperty]
         private int movementPoints;
+        [JsonProperty]
         private int spice;
+        [JsonProperty]
         private bool isLoud;
+        [JsonProperty]
         private bool isSwallowed;
 
         /// <summary>
