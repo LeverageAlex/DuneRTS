@@ -23,7 +23,7 @@ public class Follow : MonoBehaviour
 
     private float speedModifier;
 
-    private int rotationOffset = 90;
+  //  private int rotationOffset = 90;
 
 
 
@@ -51,7 +51,7 @@ public class Follow : MonoBehaviour
 
             Vector3 move = transform.position - objectPosition;
             transform.rotation = Quaternion.LookRotation(move);
-            transform.Rotate(Vector3.right, rotationOffset);
+           // transform.Rotate(Vector3.right, rotationOffset);
             transform.position = objectPosition;
             yield return new WaitForEndOfFrame();
         }

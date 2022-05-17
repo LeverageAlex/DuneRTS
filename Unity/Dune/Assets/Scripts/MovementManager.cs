@@ -155,6 +155,7 @@ using Newtonsoft.Json;
                 selectedChar.ReduceMP(selCharPath.Count);
                 selCharPath = new LinkedList<Vector3>();
                 CharacterTurnHandler.instance.ResetSelection();
+            AudioController.instance.Play("CharWalk");
             }
         }
 

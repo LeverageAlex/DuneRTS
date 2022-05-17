@@ -1,5 +1,7 @@
 ﻿using System;
 
+using GameData.network.controller;
+
 namespace Server
 {
     class Program
@@ -7,7 +9,20 @@ namespace Server
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-            // Request r = new Request(Request.RequestType.ACTION_REQUEST);
+
+            MessageController messageController = new MessageController();
+            
+
+            ServerConnectionHandler serverConnectionHandler = new ServerConnectionHandler("127.0.0.1", 7890);
+
+            ServerNetworkController serverNetworkController = new ServerNetworkController(serverConnectionHandler, messageController);
+
+            // server
+            messageController.DoDebug("Hallo hier ist Günther");
+
+
+            // server
+            // messageController.DoDebug("Alex ist sehr fleißig");
         }
     }
 }

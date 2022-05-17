@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Newtonsoft.Json" />
+    <None Remove="network\util\" />
+    <None Remove="network\util\parse\" />
+    <None Remove="network\controller\" />
+    <None Remove="WebSocketSharp-netstandard" />
+    <None Remove="network\controller\ConnectionHandler\" />
+    <None Remove="Serilog" />
+    <None Remove="Serilog.Sinks.File" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="WebSocketSharp-netstandard" Version="1.0.1" />
+    <PackageReference Include="Serilog" Version="2.11.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="WebSocketSharp-NonPreRelease" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="network\util\" />
+    <Folder Include="network\util\parser\" />
+    <Folder Include="network\controller\" />
+    <Folder Include="network\controller\ConnectionHandler\" />
+  </ItemGroup>
+</Project>
