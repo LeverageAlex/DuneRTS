@@ -17,7 +17,7 @@ namespace GameData.network.messages
         /// </summary>
         /// <param name="scenario">the scenario configuration</param>
         /// <param name="partyConfig">the party configuration</param>
-        public GameConfigMessage(string scenario, string partyConfig) : base("v1", ActionType.MessageType.GAMECFG)
+        public GameConfigMessage(string scenario, string partyConfig) : base("v1", MessageType.GAMECFG)
         {
             this.scenario = scenario;
             this.partyConfig = partyConfig;

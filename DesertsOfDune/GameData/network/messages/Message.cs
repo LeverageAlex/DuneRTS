@@ -20,10 +20,10 @@ namespace GameData.network.messages
         /// </summary>
         /// <param name="version">version of the Message</param>
         /// <param name="type">the Messagetype of the Message</param>
-        public Message(string version, ActionType.MessageType type)
+        public Message(string version, MessageType type)
         {
             this.version = version;
-            this.type = Enum.GetName(typeof(ActionType.MessageType), type);
+            this.type = Enum.GetName(typeof(MessageType), type);
         }
         /// <summary>
         /// Getter forthe field type

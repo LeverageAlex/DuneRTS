@@ -9,7 +9,7 @@ namespace GameData.network.messages
         private string wrongMessage;
         private int count;
 
-        public StrikeMessage(string wrongMessage, int count) : base("v1", ActionType.MessageType.STRIKE)
+        public StrikeMessage(string wrongMessage, int count) : base("v1", MessageType.STRIKE)
         {
             this.wrongMessage = wrongMessage;
             this.count = count;

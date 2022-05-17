@@ -17,7 +17,7 @@ namespace GameData.network.messages
         /// Constructor of the class PauseGameRequestMessage
         /// </summary>
         /// <param name="clientID">the id of the client</param>
-        public PauseGameRequestMessage(int clientID) : base(clientID, ActionType.MessageType.PAUSE_REQUEST)
+        public PauseGameRequestMessage(int clientID) : base(clientID, MessageType.PAUSE_REQUEST)
         {
             this.pause = true;
         }

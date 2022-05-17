@@ -26,9 +26,9 @@ namespace GameData.network.messages
         /// <param name="action">the action that is triggered</param>
         /// <param name="target">the target of the action</param>
         /// <param name="targetID">the id of the target</param>
-        public ActionMessage(int clientID, int characterID, ActionType.ActionType action, Position target, int targetID) : base(characterID,clientID,ActionType.MessageType.ACTION)
+        public ActionMessage(int clientID, int characterID, ActionType action, Position target, int targetID) : base(characterID,clientID,MessageType.ACTION)
         {
-            this.action = Enum.GetName(typeof(ActionType.ActionType), action);
+            this.action = Enum.GetName(typeof(ActionType), action);
             this.target = target;
             this.targetID = targetID;
         }

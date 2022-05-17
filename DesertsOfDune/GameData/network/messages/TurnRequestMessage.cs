@@ -14,7 +14,7 @@ namespace GameData.network.messages
         /// </summary>
         /// <param name="clientID">the id of the client</param>
         /// <param name="characterID">the id of the character</param>
-        public TurnRequestMessage(int clientID, int characterID) : base(characterID, clientID,ActionType.MessageType.TURN_REQUEST) 
+        public TurnRequestMessage(int clientID, int characterID) : base(characterID, clientID,MessageType.TURN_REQUEST) 
         {
 
         }

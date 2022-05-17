@@ -16,7 +16,7 @@ namespace GameData.network.messages
         /// Constructor of the class SandwormMoveMessage
         /// </summary>
         /// <param name="fields">takes a array of Position to represent the sandworm movement.</param>
-        public SandwormMoveMessage(Position[] fields) : base("v1", ActionType.MessageType.SANDWORM_MOVE)
+        public SandwormMoveMessage(Position[] fields) : base("v1", MessageType.SANDWORM_MOVE)
         {
             this.fields = fields;
         }

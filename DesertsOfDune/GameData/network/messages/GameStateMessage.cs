@@ -16,7 +16,7 @@ namespace GameData.network.messages
         /// </summary>
         /// <param name="history">the history of the Game</param>
         /// <param name="history">the client id</param>
-        public GameStateMessage(string[] history, int clientID) : base(clientID,ActionType.MessageType.GAMESTATE)
+        public GameStateMessage(string[] history, int clientID) : base(clientID,MessageType.GAMESTATE)
         {
             this.history = history;
         }

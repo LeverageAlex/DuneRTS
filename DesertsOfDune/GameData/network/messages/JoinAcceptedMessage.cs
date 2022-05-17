@@ -15,7 +15,7 @@ namespace GameData.network.messages
         /// Constructor of the class JoinAcceptedMessage
         /// </summary>
         /// <param name="clientSecret">the used to identify the client</param>
-        public JoinAcceptedMessage(string clientSecret) : base("v1",ActionType.MessageType.JOINACCEPTED)
+        public JoinAcceptedMessage(string clientSecret) : base("v1",MessageType.JOINACCEPTED)
         {
             this.clientSecret = clientSecret;
         }

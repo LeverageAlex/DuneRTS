@@ -13,7 +13,7 @@ namespace GameData.network.messages
         /// Constructor of the class RequestGameStateMessage
         /// </summary>
         /// <param name="clientID">the id of the client</param>
-        public RequestGameStateMessage(int clientID) : base(clientID,ActionType.MessageType.REQUEST_GAMESTATE)
+        public RequestGameStateMessage(int clientID) : base(clientID,MessageType.REQUEST_GAMESTATE)
         {
 
         }
