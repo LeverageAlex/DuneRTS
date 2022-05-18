@@ -25,14 +25,5 @@ namespace GameData.network.messages
             this.code = code;
             this.explanation = explanation;
         }
-
-        /// <summary>
-        /// Constructof of the class DebugMessage that only take the explanation
-        /// </summary>
-        /// <param name="explanation">The explanation for the DebugMessage</param>
-        public DebugMessage(string explanation) : base("v1", MessageType.DEBUG)
-        {
-            this.explanation=explanation;
-        }
     }
 }

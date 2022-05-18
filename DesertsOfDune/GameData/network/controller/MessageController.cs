@@ -70,11 +70,11 @@ namespace GameData.network.controller
         {
 
 
-          //  ActionRequestMessage message = new ActionRequestMessage(1, 2, ActionType.ATTACK, new Position(1, 2), 4);
-            
+            ChangeCharacterStatisticsDemandMessage message = new ChangeCharacterStatisticsDemandMessage(1, 2, null);
+
             // send message
-           // controller.HandleSendingMessage(message);
-            controller.HandleReceivedMessage("{\"type\":\"ACTION_REQUEST\",\"version\":\"v1\",\"clientID\":1,\"characterID\":2,\"action\":\"ATTACK\",\"specs\":{\"target\":{\"x\":1,\"y\":2},\"targetID\":0},\"targetID\":4}");
+            controller.HandleSendingMessage(message);
+            
         }
     }
 }

@@ -14,7 +14,7 @@ namespace GameData.network.util.parser
         /// This method converts a Message Object to a Json string
         /// </summary>
         /// <param name="message">the message object</param>
-        /// <returns>the parsed json string</returns>
+        /// <returns>the parsed json string if this was not possible return null</returns>
         static public String FromMessage(Message message)
         {
             switch (message.getMessageType())
@@ -115,10 +115,10 @@ namespace GameData.network.util.parser
         /// This method converts a json String to a Message object
         /// </summary>
         /// <param name="message">the json string to be converted</param>
-        /// <returns>the Message object to be created.</returns>
+        /// <returns>the Message object to be created. If string does not resamble a message return null</returns>
         static public Message ToMessage(String message)
         {
-            string pattern = "{\"type\":\"([A-Z]*_*[A-Z]*)";
+            string pattern = "{\"type\":\"([A-Z]*_*[A-Z]*_*[A-Z]*_*[A-Z]*)";
             Regex rg = new Regex(pattern);
             MatchCollection matchedContent = rg.Matches(message);
             string messageType = matchedContent[0].Value.Substring(9);
@@ -129,6 +129,60 @@ namespace GameData.network.util.parser
                     return JsonConvert.DeserializeObject<ActionDemandMessage>(message);
                 case "ACTION_REQUEST":
                     return JsonConvert.DeserializeObject<ActionRequestMessage>(message);
+                case "CHARACTER_STAT_CHANGE_DEMAND":
+                      return JsonConvert.DeserializeObject<ChangeCharacterStatisticsDemandMessage>(message);
+                case "CHANGE_PLAYER_SPICE_DEMAND":
+                      return JsonConvert.DeserializeObject<ChangePlayerSpiceDemandMessage>(message);
+                case "CREATE":
+                    return JsonConvert.DeserializeObject<CreateMessage>(message);
+                case "DEBUG":
+                    return JsonConvert.DeserializeObject<DebugMessage>(message);
+                case "ENDGAME":
+                    return JsonConvert.DeserializeObject<EndGameMessage>(message);
+                case "END_TURN_REQUEST":
+                    return JsonConvert.DeserializeObject<EndTurnRequestMessage>(message);
+                case "GAMECFG":
+                    return JsonConvert.DeserializeObject<GameConfigMessage>(message);
+                case "GAME_END":
+                    return JsonConvert.DeserializeObject<GameEndMessage>(message);
+                case "GAMESTATE":
+                    return JsonConvert.DeserializeObject<GameStateMessage>(message);
+                case "REQUEST_GAMESTATE":
+                    return JsonConvert.DeserializeObject<GameStateRequestMessage>(message);
+                case "HOUSE_ACKNOWLEGDEMENT":
+                    return JsonConvert.DeserializeObject<HouseAcknowledgementMessage>(message);
+                case "HOUSE_OFFER":
+                    return JsonConvert.DeserializeObject<HouseOfferMessage>(message);
+                case "HOUSE_REQUEST":
+                    return JsonConvert.DeserializeObject<HouseRequestMessage>(message);
+                case "JOINACCEPTED":
+                    return JsonConvert.DeserializeObject<JoinAcceptedMessage>(message);
+                case "JOIN":
+                    return JsonConvert.DeserializeObject<JoinMessage>(message);
+                case "MAP_CHANGE_DEMAND":
+                    return JsonConvert.DeserializeObject<MapChangeDemandMessage>(message);
+                case "MOVEMENT_DEMAND":
+                    return JsonConvert.DeserializeObject<MovementDemandMessage>(message);
+                case "MOVEMENT_REQUEST":
+                    return JsonConvert.DeserializeObject<MovementRequestMessage>(message);
+                case "PAUSE_GAME":
+                    return JsonConvert.DeserializeObject<PauseGameMessage>(message);
+                case "PAUSE_REQUEST":
+                    return JsonConvert.DeserializeObject<PauseGameRequestMessage>(message);
+                case "SANDWORM_DESPAWN_DEMAND":
+                    return JsonConvert.DeserializeObject<SandwormDespawnDemandMessage>(message);
+                case "SANDWORM_MOVE_DEMAND":
+                    return JsonConvert.DeserializeObject<SandwormMoveDemandMessage>(message);
+                case "SANDWORM_SPAWN_DEMAND":
+                    return JsonConvert.DeserializeObject<SandwormSpawnDemandMessage>(message);
+                case "SPAWN_CHARACTER_DEMAND":
+                    return JsonConvert.DeserializeObject<SpawnCharacterDemandMessage>(message);
+                case "STRIKE":
+                    return JsonConvert.DeserializeObject<StrikeMessage>(message);
+                case "TURN_DEMAND":
+                    return JsonConvert.DeserializeObject<TurnDemandMessage>(message);
+                case "TURN_REQUEST":
+                    return JsonConvert.DeserializeObject<TurnRequestMessage>(message);
                 default:
                     return null;
             }
