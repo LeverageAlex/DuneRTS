@@ -128,6 +128,9 @@ namespace Server.commandLineParser
                 case "-n":
                     Console.WriteLine("case alias -n");
                     break;
+                default:
+                    Console.WriteLine("no case catched.");
+                    break;
             }
         }
     }
