@@ -2,7 +2,7 @@
 using GameData.network.messages;
 using GameData.network.util.enums;
 using GameData.network.util.parser;
-using static GameData.network.messages.Enums;
+using static GameData.network.messages.ActionType;
 
 namespace GameData.network.controller
 {
@@ -36,8 +36,14 @@ namespace GameData.network.controller
 
             switch (type)
             {
-                case MessageType.END_TURN_REQUEST:
-                    messageController.OnDebugMessage((EndTurnRequestMessage)receivedMessage);
+                case MessageType.DEBUG:
+                    messageController.OnDebugMessage((DebugMessage)receivedMessage);
+                    return true;
+                case MessageType.ACTION_DEMAND:
+                    Console.WriteLine(receivedMessage);
+                    return true;
+                case MessageType.ACTION_REQUEST:
+                    Console.WriteLine(receivedMessage);
                     return true;
 
                 default:

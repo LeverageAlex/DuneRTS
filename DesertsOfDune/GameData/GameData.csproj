@@ -13,6 +13,9 @@
     <None Remove="network\controller\ConnectionHandler\" />
     <None Remove="Serilog" />
     <None Remove="Serilog.Sinks.File" />
+    <None Remove="SonarAnalyzer.CSharp" />
+    <None Remove="Doxygen" />
+    <None Remove="Serilog.Sinks.Console" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -20,9 +23,13 @@
     <PackageReference Include="Serilog" Version="2.11.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="WebSocketSharp-NonPreRelease" Version="1.0.0" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.39.0.47922">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="network\util\" />
     <Folder Include="network\util\parser\" />
     <Folder Include="network\controller\" />
     <Folder Include="network\controller\ConnectionHandler\" />

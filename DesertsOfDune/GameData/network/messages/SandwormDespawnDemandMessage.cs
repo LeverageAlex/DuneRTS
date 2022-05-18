@@ -7,13 +7,13 @@ namespace GameData.network.messages
     /// <summary>
     /// This message is used to comunicate the despawn of a sandworm.
     /// </summary>
-    public class SandwormDespawnMessage : Message
+    public class SandwormDespawnDemandMessage : Message
     {
 
         /// <summary>
         /// Constructor of the class SandwormDespawnMessage
         /// </summary>
-        public SandwormDespawnMessage() : base("v1",Enums.MessageType.SANDWORM_DESPAWN)
+        public SandwormDespawnDemandMessage() : base("v1",MessageType.SANDWORM_DESPAWN_DEMAND)
         {
 
         }

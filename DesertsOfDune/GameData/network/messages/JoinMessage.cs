@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace GameData.network.messages
 {
@@ -9,8 +10,11 @@ namespace GameData.network.messages
     /// </summary>
     public class JoinMessage : Message
     {
+        [JsonProperty]
         private string clientName;
+        [JsonProperty]
         private string connectionCode;
+        [JsonProperty]
         private bool active;
 
         /// <summary>
@@ -19,7 +23,7 @@ namespace GameData.network.messages
         /// <param name="clientName">the name of the client</param>
         /// <param name="connectionCode">the code of the connection</param>
         /// <param name="active">weather of not the connection is active</param>
-        public JoinMessage (string clientName, string connectionCode, bool active) : base("v1", Enums.MessageType.JOIN)
+        public JoinMessage (string clientName, string connectionCode, bool active) : base("v1", MessageType.JOIN)
         {
             this.clientName = clientName;
             this.connectionCode = connectionCode;

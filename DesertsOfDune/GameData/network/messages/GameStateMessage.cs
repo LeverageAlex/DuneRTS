@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace GameData.network.messages
 {
@@ -9,6 +10,7 @@ namespace GameData.network.messages
     /// </summary>
     public class GameStateMessage : ClientServerMessage
     {
+        [JsonProperty]
         private string[] history;
 
         /// <summary>
@@ -16,7 +18,7 @@ namespace GameData.network.messages
         /// </summary>
         /// <param name="history">the history of the Game</param>
         /// <param name="history">the client id</param>
-        public GameStateMessage(string[] history, int clientID) : base(clientID,Enums.MessageType.GAMESTATE)
+        public GameStateMessage(string[] history, int clientID) : base(clientID,MessageType.GAMESTATE)
         {
             this.history = history;
         }

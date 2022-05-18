@@ -4,13 +4,16 @@ using WebSocketSharp;
 
 namespace GameData.network.controller
 {
-    abstract public class AConnectionHandler
+    /// <summary>
+    /// abstract 
+    /// </summary>
+    public abstract class AConnectionHandler
     {
         private String SERVER_ADDRESS { get; }
         private int PORT { get; }
 
         private String PROTOCOLL_SUFFIX = "ws://";
-
+        
         public NetworkController networkController { get; set; }
 
         protected AConnectionHandler(string ServerAddress, int Port)

@@ -11,4 +11,6 @@ public class Specs
     public List<Position> path;
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public Position target;
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+    public int targetID;
 }
