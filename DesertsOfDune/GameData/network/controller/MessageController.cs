@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using GameData.network.messages;
-<<<<<<< HEAD
 using Serilog;
-=======
-using GameData.network.util.parser;
-using GameData.network.util.world;
->>>>>>> 3026f989021c8257983544d9e3eb6e7e1775660d
 
 namespace GameData.network.controller
 {
@@ -64,6 +58,7 @@ namespace GameData.network.controller
         /// <param name="code">code number for categorization of the event</param>
         /// <param name="explanation">further explanation of the event / code number</param>
         /// <example>
+        /// For instance, the variables could have the following values for describing a debug message
         /// <code>
         /// code = 404
         /// explanation = service is not avaible
@@ -72,17 +67,7 @@ namespace GameData.network.controller
         public void DoDebug(int code, string explanation)
         {
             // create Debug message
-<<<<<<< HEAD
             DebugMessage message = new DebugMessage(code, explanation);
-=======
-            //EndTurnRequestMessage message = new EndTurnRequestMessage(123, 1234);
-            //  MapField mapfield = new MapField(true, true, 12, new Position(1, 2));
-            //MapField[][] arr = new MapField[1][];
-            //arr[0][0] = mapfield;
-            // MapChangeMessage message = new MapChangeMessage(new MapChangeReasons(), null);
-            MapField[][] a = new MapField[2][];
-            MapChangeDemandMessage message = new MapChangeDemandMessage(new MapChangeReasons(), a);
->>>>>>> 3026f989021c8257983544d9e3eb6e7e1775660d
 
             // send message
             controller.HandleSendingMessage(message);
