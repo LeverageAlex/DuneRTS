@@ -26,14 +26,5 @@ namespace GameData.network.messages
             this.cpuCount = cpuCount;
         }
 
-        /// <summary>
-        /// Constructor of the class CreateMessage
-        /// </summary>
-        /// <param name="lobbyCode">the lobbyCode of the game lobby</param>
-        public CreateMessage(string lobbyCode) : base("v1", MessageType.CREATE)
-        {
-            this.lobbyCode = lobbyCode;
-        }
-
     }
 }

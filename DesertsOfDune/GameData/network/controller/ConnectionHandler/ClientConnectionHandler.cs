@@ -53,7 +53,7 @@ namespace GameData.network.controller
         public void ConnectToWebsocketServer()
         {
             webSocket.Connect();
-            GameData.network.messages.DebugMessage dbm = new messages.DebugMessage("grund");
+            GameData.network.messages.DebugMessage dbm = new messages.DebugMessage(1,"grund");
             webSocket.Send(GameData.network.util.parser.MessageConverter.FromMessage(dbm));
         }
 
