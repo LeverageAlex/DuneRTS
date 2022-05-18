@@ -1,6 +1,8 @@
 ﻿using System;
 using GameData.network.messages;
 using GameData.network.util.parser;
+using GameData.server;
+using Server.commandLineParser;
 
 namespace GameData.network.controller
 {
@@ -23,10 +25,12 @@ namespace GameData.network.controller
         public void DoDebug(string explanation)
         {
             // create Debug message
-            EndTurnRequestMessage message = new EndTurnRequestMessage(123, 1234);
+            //EndTurnRequestMessage message = new EndTurnRequestMessage(123, 1234);
 
             // send message
-            controller.HandleSendingMessage(message);
+            //controller.HandleSendingMessage(message);
+
+            CommandLineParser.ParseArgument("-- name");
 
         }
 
