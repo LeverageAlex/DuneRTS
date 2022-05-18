@@ -18,8 +18,7 @@ namespace GameData.network.util.parser
         {
             switch (message.getMessageType())
             {
-                case "ACTION":
-                    // TODO: ActionMessage does not work atm.
+                case "ACTION_DEMAND":
                     ActionDemandMessage actionDemandMessage = (ActionDemandMessage)message;
                     return JsonConvert.SerializeObject(actionDemandMessage);
                 case "ACTION_REQUEST":
@@ -71,7 +70,6 @@ namespace GameData.network.util.parser
                     JoinMessage joinMessage = (JoinMessage)message;
                     return JsonConvert.SerializeObject(joinMessage);
                 case "MAP_CHANGE_DEMAND":
-                    // TODO: ActionMessage does not work atm.
                     MapChangeDemandMessage mapChangeMessage = (MapChangeDemandMessage)message;
                     return JsonConvert.SerializeObject(mapChangeMessage);
                 case "MOVEMENT_DEMAND":
