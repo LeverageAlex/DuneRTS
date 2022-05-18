@@ -5,7 +5,7 @@ using System.Text;
 namespace GameData.network.util.enums
 {
     /// <summary>
-    /// This Enum defines the type of a Flayingfield.
+    /// This Enum defines the type of a playingfield.
     /// </summary>
     public enum TileType
     {
