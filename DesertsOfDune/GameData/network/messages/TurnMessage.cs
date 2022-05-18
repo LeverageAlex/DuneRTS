@@ -19,7 +19,7 @@ namespace GameData.network.messages
         /// <param name="characterID">the id of the character</param>
         /// <param name="clientID">the id of the client</param>
         /// <param name="messageType">the type of message</param>
-        public TurnMessage(int characterID, int clientID, Enums.MessageType messageType) : base(clientID, messageType)
+        public TurnMessage(int characterID, int clientID, MessageType messageType) : base(clientID, messageType)
         {
             this.characterID = characterID;
         }

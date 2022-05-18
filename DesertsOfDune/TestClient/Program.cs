@@ -20,7 +20,7 @@ namespace TestClient
 
             // client
 
-            messageController2.DoDebug("Hallo emil, hier ist Alex");
+            messageController2.DoDebug(123, "Hallo emil, hier ist Alex");
         }
     }
 }

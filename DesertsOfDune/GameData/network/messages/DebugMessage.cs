@@ -11,28 +11,19 @@ namespace GameData.network.messages
     public class DebugMessage : Message
     {
         [JsonProperty]
-        private int code;
+        public int code { get; }
         [JsonProperty]
-        private string explanation;
+        public string explanation { get; }
 
         /// <summary>
         /// Constructor of the Class DebugMessage
         /// </summary>
         /// <param name="code">the code of the DebugMessage</param>
         /// <param name="explanation">the explanation for the DebugMessage</param>
-        public DebugMessage(int code, string explanation) : base("v1", Enums.MessageType.DEBUG)
+        public DebugMessage(int code, string explanation) : base("v1", MessageType.DEBUG)
         {
             this.code = code;
             this.explanation = explanation;
-        }
-
-        /// <summary>
-        /// Constructof of the class DebugMessage that only take the explanation
-        /// </summary>
-        /// <param name="explanation">The explanation for the DebugMessage</param>
-        public DebugMessage(string explanation) : base("v1", Enums.MessageType.DEBUG)
-        {
-            this.explanation=explanation;
         }
     }
 }

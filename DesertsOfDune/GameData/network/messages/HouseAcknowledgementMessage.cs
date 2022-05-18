@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace GameData.network.messages
 {
@@ -9,6 +10,7 @@ namespace GameData.network.messages
     /// </summary>
     public class HouseAcknowledgementMessage : ClientServerMessage
     {
+        [JsonProperty]
         private string houseName;
 
         /// <summary>
@@ -16,7 +18,7 @@ namespace GameData.network.messages
         /// </summary>
         /// <param name="clientID">the id of the client</param>
         /// <param name="houseName">the name of the acknowlaged house for the client</param>
-        public HouseAcknowledgementMessage(int clientID, string houseName) : base(clientID,Enums.MessageType.HOUSE_ACKNOWLEGDEMENT)
+        public HouseAcknowledgementMessage(int clientID, string houseName) : base(clientID,MessageType.HOUSE_ACKNOWLEGDEMENT)
         {
             this.houseName = houseName;
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace GameData.network.messages
 {
@@ -9,7 +10,9 @@ namespace GameData.network.messages
     /// </summary>
     public class PauseGameMessage : Message
     {
+        [JsonProperty]
         private int requestedByClientID;
+        [JsonProperty]
         private bool pause;
 
         /// <summary>
@@ -17,7 +20,7 @@ namespace GameData.network.messages
         /// </summary>
         /// <param name="requestedByClientID">the client id</param>
         /// <param name="pause">true if the game is paused.</param>
-        public PauseGameMessage(int requestedByClientID, bool pause) : base("v1", Enums.MessageType.PAUSE_GAME)
+        public PauseGameMessage(int requestedByClientID, bool pause) : base("v1", MessageType.PAUSE_GAME)
         {
             this.pause = pause;
             this.requestedByClientID = requestedByClientID;
