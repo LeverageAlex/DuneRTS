@@ -14,7 +14,7 @@ namespace GameData.network.controller
 
         private String PROTOCOLL_SUFFIX = "ws://";
         
-        public NetworkController networkController { get; set; }
+        public NetworkController NetworkController { get; set; }
 
         protected AConnectionHandler(string ServerAddress, int Port)
         {

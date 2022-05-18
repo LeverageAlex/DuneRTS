@@ -27,7 +27,7 @@ namespace GameData.network.controller
         /// parent network controller, that contains this message controller (ref. needed so give the message, which need
         /// to be send, to the fitting network controller)
         /// </summary>
-        public NetworkController controller { get; set; }
+        public NetworkController NetworkController { get; set; }
 
         /// <summary>
         /// creates a new message controller
@@ -72,7 +72,7 @@ namespace GameData.network.controller
             DebugMessage message = new DebugMessage(code, explanation);
 
             // send message
-            controller.HandleSendingMessage(message);
+            NetworkController.HandleSendingMessage(message);
             
         }
     }
