@@ -44,7 +44,7 @@ namespace GameData.network.controller
             if (parsedMessage != null)
             {
                 // broadcast parsed message to all active sessions so clients
-                ((ClientConnectionHandler)connectionHandler).webSocket.Send(parsedMessage);
+                ((ClientConnectionHandler)connectionHandler).WebSocket.Send(parsedMessage);
                 return true;
             }
             else
