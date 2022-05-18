@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using GameData.network.messages;
 using Newtonsoft.Json;
 
@@ -105,8 +106,9 @@ namespace GameData.network.util.parser
                 case "TURN_DEMAND":
                     TurnDemandMessage turnDemandMessage = (TurnDemandMessage)message;
                     return JsonConvert.SerializeObject(turnDemandMessage);
+                default:
+                    return null;
             }
-            return "";
         }
 
         /// <summary>
@@ -116,10 +118,20 @@ namespace GameData.network.util.parser
         /// <returns>the Message object to be created.</returns>
         static public Message ToMessage(String message)
         {
-            
-            EndTurnRequestMessage m = JsonConvert.DeserializeObject<EndTurnRequestMessage>(message);
-            Console.WriteLine(m.ToString());
-            return m;
+            string pattern = "{\"type\":\"([A-Z]*_*[A-Z]*)";
+            Regex rg = new Regex(pattern);
+            MatchCollection matchedContent = rg.Matches(message);
+            string messageType = matchedContent[0].Value.Substring(9);
+            Console.WriteLine("the match: " + messageType);
+            switch (messageType)
+            {
+                case "ACTION_DEMAND":
+                    return JsonConvert.DeserializeObject<ActionDemandMessage>(message);
+                case "ACTION_REQUEST":
+                    return JsonConvert.DeserializeObject<ActionRequestMessage>(message);
+                default:
+                    return null;
+            }
         }
     }
 }

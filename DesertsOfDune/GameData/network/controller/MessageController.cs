@@ -69,18 +69,12 @@ namespace GameData.network.controller
         public void DoDebug(int code, string explanation)
         {
 
-            MapField mapField = new MapField(false, false, 12, null);
-            MapField[][] mapFields = new MapField[4][];
-            MapField[] fields = new MapField[] { mapField };
-            for (int i = 0; i < mapFields.Length; i++)
-            {
-                mapFields[i] = fields;
-            }
 
-            MapChangeDemandMessage message = new MapChangeDemandMessage(new MapChangeReasons(), mapFields);
+          //  ActionRequestMessage message = new ActionRequestMessage(1, 2, ActionType.ATTACK, new Position(1, 2), 4);
             
             // send message
-            controller.HandleSendingMessage(message);
+           // controller.HandleSendingMessage(message);
+            controller.HandleReceivedMessage("{\"type\":\"ACTION_REQUEST\",\"version\":\"v1\",\"clientID\":1,\"characterID\":2,\"action\":\"ATTACK\",\"specs\":{\"target\":{\"x\":1,\"y\":2},\"targetID\":0},\"targetID\":4}");
         }
     }
 }

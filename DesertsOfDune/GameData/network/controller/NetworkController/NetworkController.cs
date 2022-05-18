@@ -39,6 +39,12 @@ namespace GameData.network.controller
                 case MessageType.DEBUG:
                     messageController.OnDebugMessage((DebugMessage)receivedMessage);
                     return true;
+                case MessageType.ACTION_DEMAND:
+                    Console.WriteLine(receivedMessage);
+                    return true;
+                case MessageType.ACTION_REQUEST:
+                    Console.WriteLine(receivedMessage);
+                    return true;
 
                 default:
                     Console.WriteLine("Schade, hat nicht geklappt");
