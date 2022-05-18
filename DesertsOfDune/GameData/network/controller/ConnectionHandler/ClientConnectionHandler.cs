@@ -6,87 +6,153 @@ using System.Threading;
 
 namespace GameData.network.controller
 {
+    /// <summary>
+    /// connection handler for websocket (client), which handles the connection to the websocket server
+    /// </summary>
+    /// <remarks>
+    /// This concrete connection handler implementation for the client inherit the abstract connection handler (<see cref="AConnectionHandler"/>).
+    /// Therefore it needs to implement the callbacks for the different events, which can occur in a websocket connection and add them to the internal event handler.
+    /// Furthermore this class create a new websocket on creation and connect to it, until it will be closed.
+    /// </remarks>
     public class ClientConnectionHandler : AConnectionHandler
     {
-        public WebSocket webSocket { get; set; }
+        /// <summary>
+        /// the reference to the websocket
+        /// </summary>
+        public WebSocket WebSocket { get; set; }
 
+        /// <summary>
+        /// creates a new client connection handler and initializes the connection to the websocket server,
+        /// which is identified by the given address
+        /// </summary>
+        /// <param name="ServerAddress">hostname or IPv4 address of the websocket server, to connect to</param>
+        /// <param name="Port">the port of the websocket server opened for a new websocket connection</param>
         public ClientConnectionHandler(string ServerAddress, int Port) : base(ServerAddress, Port)
         {
+            // initialize the websocket and connect it to the server (but not block the programm because to waiting for websocket to be closed
             Thread t = new Thread(InitializeWebSocket);
             t.Start();
         }
 
         /// <summary>
-        /// Initializes the websocket at the given address (see Constructor)
+        /// creates a new websocket with the given server address, set the event callbacks and connect to the websocket server
         /// </summary>
         public void InitializeWebSocket()
         {
-            webSocket = new WebSocket(GetURL());
+            WebSocket = new WebSocket(GetURL());
+            Log.Debug("Created new websocket, which will connect to " + GetURL());
 
-            webSocket.OnClose += (sender, e) =>
+            SetCallbackFunctionsToInternalEventHandler();
+
+            // connect to websocket server
+            ConnectToWebsocketServer();
+
+            // wait for a signal from the user, to close the connection to the server
+            // TODO: implement logic, which holds the websocket alive and close it by user client
+            Console.ReadKey();
+            CloseConnectionToWebsocketServer(CloseStatusCode.Away, "User closed the connection via the command line");
+        }
+
+        /// <summary>
+        /// set the callbacks functions (onOpen, ...) for the internal event handler to the implementation from abstract connection handler
+        /// </summary>
+        private void SetCallbackFunctionsToInternalEventHandler()
+        {
+            WebSocket.OnClose += (sender, e) =>
             {
                 OnClose(e, "");
             };
 
-            webSocket.OnError += (sender, e) =>
+            WebSocket.OnError += (sender, e) =>
             {
                 OnError(e, "");
             };
 
-            webSocket.OnMessage += (sender, e) =>
+            WebSocket.OnMessage += (sender, e) =>
             {
                 OnMessage(e, "");
             };
 
-            webSocket.OnOpen += (sender, e) =>
+            WebSocket.OnOpen += (sender, e) =>
             {
-                Console.WriteLine("opened on client");
                 OnOpen(GetURL(), "");
             };
-
-            ConnectToWebsocketServer();
-
-            Console.ReadKey();
-            CloseConnectionToWebsocketServer(CloseStatusCode.Away, "Interrupted by user");
         }
 
+        /// <summary>
+        /// connects to the websocket server
+        /// </summary>
         public void ConnectToWebsocketServer()
         {
-            webSocket.Connect();
-            GameData.network.messages.DebugMessage dbm = new messages.DebugMessage(1,"grund");
-            webSocket.Send(GameData.network.util.parser.MessageConverter.FromMessage(dbm));
+            WebSocket.Connect();
+            Log.Information("The client " + WebSocket.Credentials.Domain + " connect to the websocket server at " + GetURL());
         }
 
         // TODO: hide the CloseStatusCode and implement own variant, which can be exposed --> map own codes on CloseStatusCode
+        /// <summary>
+        /// closes the connection to the websocket server and provide a close code
+        /// </summary>
+        /// <param name="statusCode">code of the reason, why the connection was closed</param>
         public void CloseConnectionToWebsocketServer(CloseStatusCode statusCode)
         {
-            webSocket.Close(statusCode);
+            WebSocket.Close(statusCode);
         }
 
+        /// <summary>
+        /// closes the connection to the websocket server and provide a close code
+        /// </summary>
+        /// <param name="statusCode">code of the reason, why the connection was closed</param>
+        /// <param name="reason">detailed explanation of the reason, why the connection was closed</param>
         public void CloseConnectionToWebsocketServer(CloseStatusCode statusCode, String reason)
         {
-            webSocket.Close(statusCode, reason);
+            WebSocket.Close(statusCode, reason);
         }
 
+        // TODO: finish the implementation of the callback functions
+
+        /// <summary>
+        /// callback, which is triggered, if the connection to the server was closed.
+        /// It prints the reason, why the connection was closed
+        /// </summary>
+        /// <param name="e">close arguments which contain the reason for the closing</param>
+        /// <param name="sessionID">not necessary, because every websocket server is unique</param>
         protected internal override void OnClose(CloseEventArgs e, string sessionID)
         {
-            Console.WriteLine("The connection to the Websocket server was close by the server. The reason is: " + e.Reason);
+            Log.Warning("The connection to the websocket server was closed by the server. The reason is: " + e.Reason);
         }
 
+        /// <summary>
+        /// callback, which is triggered, if an error occur related with the websocket connection
+        /// It prints the error.
+        /// </summary>
+        /// <param name="e">error arguments which contain the error message</param>
+        /// <param name="sessionID">not necessary, because every websocket server is unique</param>
         protected internal override void OnError(ErrorEventArgs e, string sessionID)
         {
-            Console.WriteLine("An error occured on the connection to the Websocket server. The error is: " + e.Message);
+            Log.Error("An error occured on the connection to the Websocket server. The error is: " + e.Message);
         }
 
+        /// <summary>
+        /// callback, which is triggered, if the websocket notice a message from the server.
+        /// It forwards this message string to the network controller, which handles it.
+        /// </summary>
+        /// <param name="e">message arguments which contain the message string</param>
+        /// <param name="sessionID">not necessary, because every websocket server is unique</param>
         protected internal override void OnMessage(MessageEventArgs e, string sessionID)
         {
-            Console.WriteLine("Received new message from the Websocket server. The message is: " + e.Data);
-            networkController.HandleReceivedMessage(e.Data);
+            Log.Debug("Received new message from the Websocket server. The message is: " + e.Data);
+            NetworkController.HandleReceivedMessage(e.Data);
         }
 
+        /// <summary>
+        /// callback, which is triggered, if the connection to the server was opened.
+        /// It prints the server, the connection was established to.
+        /// </summary>
+        /// <param name="addressConnected">the address of the websocket server connected to</param>
+        /// <param name="sessionID">not necessary, because every websocket server is unique</param>
         protected internal override void OnOpen(string addressConnected, string sessionID)
         {
-            Console.WriteLine("Connected to " + addressConnected);
+            Log.Information("Connected to websocket server with address: " + addressConnected);
         }
     }
 }
