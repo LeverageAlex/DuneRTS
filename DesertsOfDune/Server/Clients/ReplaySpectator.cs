@@ -3,9 +3,11 @@ namespace Server
 {
     public class ReplaySpectator
     {
-        public ReplaySpectator()
-        {
+        private string _clientName;
 
+        public ReplaySpectator(string clientName)
+        {
+            _clientName = clientName;
         }
     }
 }

@@ -3,8 +3,11 @@ namespace Server
 {
     public class Spectator
     {
-        public Spectator()
+        private string _clientName;
+
+        public Spectator(string clientName)
         {
+            _clientName = clientName;
         }
     }
 }

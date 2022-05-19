@@ -1,10 +1,15 @@
 ﻿using System;
+using Server.Clients;
+
 namespace Server
 {
-    public class HumanPlayer
+    public class HumanPlayer : Player
     {
-        public HumanPlayer()
+        private string _clientName;
+
+        public HumanPlayer(string clientName)
         {
+            _clientName = clientName;
         }
     }
 }
