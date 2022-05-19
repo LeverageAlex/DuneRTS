@@ -17,10 +17,40 @@ namespace GameData.network.util.world
         private int clientID;
         [JsonProperty]
         private bool hasSpice;
+        [JsonIgnore]
+        public bool HasSpice
+        {
+            get { return hasSpice; }
+            set { hasSpice = value; }
+        }
         [JsonProperty]
         private bool isInSandstorm;
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         private Position stormEye;
+        private Elevation elevation;
+        [JsonIgnore]
+        public Elevation Elevation
+        {
+            get { return elevation; }  
+            set { elevation = value; }  
+        }
+        private bool isAprochable;
+
+        [JsonIgnore]
+        public bool IsAproachable
+        {
+            set { isAprochable = value; }
+            get { return isAprochable; }
+        }
+        private readonly int xCoordinate;
+        [JsonIgnore]
+        public int XCoordinate { get { return xCoordinate; } }
+
+        private readonly int zCoordinate;
+        [JsonIgnore]
+        public int ZCoordinate { get { return zCoordinate; } }
+
+        private bool isCityField;
 
         /// <summary>
         /// Constructor of the class MapField for a City MapField
@@ -46,12 +76,22 @@ namespace GameData.network.util.world
         /// <param name="hasSpice">true, if the MapField has spice on it</param>
         /// <param name="isInSandstorm">true, if there is a sandstorm on the MapField</param>
         /// <param name="stormEye">the Position of the Sandstorm can also be null</param>
-        public MapField(TileType tt, bool hasSpice, bool isInSandstorm, Position stormEye)
+        public MapField(TileType tt, Elevation heightLevel, bool hasSpice, bool isInSandstorm, Position stormEye)
         {
             this.tileType = Enum.GetName(typeof(TileType), tt);
+            this.elevation = heightLevel;
             this.hasSpice = hasSpice;
             this.isInSandstorm = isInSandstorm;
             this.stormEye = stormEye;
+        }
+
+        /// <summary>
+        /// This method changes the elevation of the map field
+        /// </summary>
+        /// <param name="elevation">the elevation to set the field to</param>
+        public void ChangeElevation(Elevation elevation)
+        {
+            this.elevation = elevation;
         }
     }
 }

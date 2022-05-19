@@ -18,6 +18,7 @@ namespace GameData.network.util.world
         private bool illegalAtomicUsage;
         [JsonProperty]
         private Character[] characters;
+        private City city;
 
         /// <summary>
         /// Constructor of the Class GreatHouse

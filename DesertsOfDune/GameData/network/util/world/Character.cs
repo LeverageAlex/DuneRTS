@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using GameData.network.messages;
 using Newtonsoft.Json;
+using GameData.network.util.enums;
 
 namespace GameData.network.util.world
 {
@@ -37,9 +38,10 @@ namespace GameData.network.util.world
         private bool killedBySandworm;
         [JsonProperty]
         private bool isLoud;
-
-        //[JsonProperty]
-        //private MapField mapField;
+        private bool isDead;
+        private MapField currentMapfield;
+        private int characterId;
+        private GreatHouse greatHouse;
 
         // TODO: add Class Inventory and reference it as a field.
 
@@ -79,54 +81,78 @@ namespace GameData.network.util.world
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="hp"></param>
-        /// <returns></returns>
-        public bool DecreaseHP(float hp)
+        /// <param name="hp">the healthpoints to decrease the current healthpoints by.</param>
+        /// <returns>true, if decreasing the hp was possible</returns>
+        public bool DecreaseHP(int hp)
         {
-            // TODO: implement logic
-            return false;
+            if (healthCurrent > hp)
+            {
+                healthCurrent = healthCurrent - hp;
+                return true;
+            } else
+            {
+                this.isDead = true;
+                return false;
+            }
         }
 
         /// <summary>
-        /// 
+        /// this method heals the character if is has not moved this round.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true, if character was healed</returns>
         public bool HealIfHasntMoved()
         {
-            // TODO: implement logic
-            return false;
+            // TODO: add if moved this round clause
+            if (healthCurrent + healingHP < healthMax)
+            {
+                this.healthCurrent = healthCurrent + healingHP;
+                return true;
+            } else
+            {
+                this.healthCurrent = healthMax;
+                return false;
+            }
         }
 
         /// <summary>
-        /// 
+        /// this method is used to spent movementpoints
         /// </summary>
-        /// <param name="mp"></param>
-        /// <returns></returns>
+        /// <param name="mp">the movement points to substract</param>
+        /// <returns>true, if substraction was possible</returns>
         public bool SpentMP(int mp)
         {
-            // TODO: implement logic
+            if (mp <= MPcurrent)
+            {
+                this.MPcurrent -= mp;
+                return true;
+            }
             return false;
         }
 
         /// <summary>
-        /// 
+        /// this method reduces the player abilty points by a certain amount
         /// </summary>
-        /// <param name="ap"></param>
-        /// <returns></returns>
+        /// <param name="ap">the amount of ability points to reduce by</param>
+        /// <returns>true, if ap reduction was possible</returns>
         public bool SpentAp(int ap)
         {
-            // TODO: implement logic
+            if (APcurrent >= ap)
+            {
+                this.APcurrent -= ap;
+                return true;
+            }
             return false;
         }
 
         /// <summary>
-        /// 
+        /// this method resets the movement and action points
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true</returns>
         public bool resetMPandAp()
         {
-            // TODO: implement logic
-            return false;
+            this.MPcurrent = MPmax;
+            this.APcurrent = APmax;
+            return true;
         }
 
         /// <summary>
@@ -135,7 +161,10 @@ namespace GameData.network.util.world
         /// <returns>true, if healthpoints are equal to zero</returns>
         public bool IsDead()
         {
-            if(healthCurrent == 0) return true;
+            if (isDead)
+            {
+                return true;
+            }
             return false;
         }
 
@@ -146,6 +175,14 @@ namespace GameData.network.util.world
         public bool IsLoud()
         {
             return isLoud;
+        }
+        
+        /// <summary>
+        /// This method is used to set a character to loud
+        /// </summary>
+        public void SetLoud()
+        {
+            isLoud = true;
         }
 
         /// <summary>
@@ -159,43 +196,60 @@ namespace GameData.network.util.world
         }
 
         /// <summary>
-        /// 
+        /// This method handles the movement of a character
         /// </summary>
-        /// <param name="startField"></param>
-        /// <param name="mapField"></param>
+        /// <param name="startField">the start field of the character</param>
+        /// <param name="goalField">the goal field of the character</param>
         /// <returns></returns>
-        public bool Movement(MapField startField,MapField mapField)
+        public bool Movement(MapField startField,MapField goalField)
         {
             // TODO: implement logic
-            return false;
+            int dist = Math.Abs(startField.XCoordinate - goalField.XCoordinate) + Math.Abs(startField.ZCoordinate - goalField.ZCoordinate);
+            if (dist > 2)
+            {
+                return false;
+            }
+            currentMapfield = goalField;
+            return true;
         }
 
         /// <summary>
-        /// 
+        /// this method contains the logic for a atack from one character to a nother character.
         /// </summary>
-        /// <param name="target"></param>
-        /// <returns></returns>
+        /// <param name="target">the character targeted by the atack</param>
+        /// <returns>true, if atack was possible</returns>
         public bool Atack(Character target)
         {
-            // TODO: implement logic
+            int dist = Math.Abs(target.currentMapfield.XCoordinate - currentMapfield.XCoordinate) + Math.Abs(target.currentMapfield.ZCoordinate - currentMapfield.ZCoordinate);
+            if (APcurrent > 0 && dist <= 2 && target.greatHouse != greatHouse)
+            {
+                APcurrent--;
+                target.DecreaseHP(attackDamage);
+                return true;
+            }
             return false;
         }
 
         /// <summary>
-        /// 
+        /// This method holds the logic for the action collect spice
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true, if the action was possible else false</returns>
         public bool CollectSpice()
         {
-            // TODO: implement logic
+            if (APcurrent > 0 && currentMapfield.HasSpice && inventoryUsed < inventorySize)
+            {
+                APcurrent--;
+                inventoryUsed++;
+                return true;
+            }
             return false;
         }
 
         /// <summary>
-        /// 
+        /// This method holds the logic for converting spice from a player to his city.
         /// </summary>
-        /// <returns></returns>
-        public bool GiftSpice()
+        /// <returns>true, if action was possible</returns>
+        public bool GiftSpiceToCity()
         {
             // TODO: implement logic
             return false;
