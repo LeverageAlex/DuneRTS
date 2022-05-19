@@ -9,6 +9,9 @@ namespace GameData.network.util.world.mapField
     /// </summary>
     public class City : MapField
     {
+
+        private int spiceCount;
+
         /// <summary>
         /// Constructor of the class City
         /// </summary>
@@ -18,6 +21,17 @@ namespace GameData.network.util.world.mapField
         public City(bool hasSpice, bool isInSandstorm, Position stormEye) : base(enums.TileType.CITY, enums.Elevation.low, hasSpice, isInSandstorm, stormEye)
         {
 
+        }
+
+        /// <summary>
+        /// this method is used to add spice to the spice of the city
+        /// </summary>
+        /// <param name="amount">the amount of spice to be added</param>
+        /// <returns>true, if action was succesfull</returns>
+        public bool AddSpice(int amount)
+        {
+            this.spiceCount = spiceCount + amount;
+            return true;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
+using GameData.network.util.world.mapField;
 
 namespace GameData.network.util.world
 {
@@ -19,6 +20,12 @@ namespace GameData.network.util.world
         [JsonProperty]
         private Character[] characters;
         private City city;
+        [JsonIgnore]
+        public City City
+        {
+            get { return city; }
+        }
+
 
         /// <summary>
         /// Constructor of the Class GreatHouse

@@ -43,8 +43,6 @@ namespace GameData.network.util.world
         private int characterId;
         private GreatHouse greatHouse;
 
-        // TODO: add Class Inventory and reference it as a field.
-
         /// <summary>
         /// This is the Constructor of the Class Character
         /// </summary>
@@ -79,7 +77,7 @@ namespace GameData.network.util.world
         }
 
         /// <summary>
-        /// 
+        /// This method decreases the hp of the character by a specific amount.
         /// </summary>
         /// <param name="hp">the healthpoints to decrease the current healthpoints by.</param>
         /// <returns>true, if decreasing the hp was possible</returns>
@@ -186,12 +184,18 @@ namespace GameData.network.util.world
         }
 
         /// <summary>
-        /// 
+        /// this method tells weather the character stands next to his city.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true, if the character stands next to his city</returns>
         public bool StandingNextToCityField()
         {
-            // TODO: implement logic
+            if (Math.Abs(this.greatHouse.City.XCoordinate - this.currentMapfield.XCoordinate) <= 1)
+            {
+                if (Math.Abs(this.greatHouse.City.ZCoordinate - this.currentMapfield.ZCoordinate) <= 1)
+                {
+                    return true;
+                }
+            }
             return false;
         }
 
@@ -249,9 +253,9 @@ namespace GameData.network.util.world
         /// This method holds the logic for converting spice from a player to his city.
         /// </summary>
         /// <returns>true, if action was possible</returns>
-        public bool GiftSpiceToCity()
+        public bool GiftSpice(Character targetCharacter, int amount)
         {
-            // TODO: implement logic
+            targetCharacter.inventoryUsed += amount;
             return false;
         }
     }
