@@ -2,7 +2,6 @@
 using GameData.network.messages;
 using Serilog;
 using GameData.network.util.parser;
-using Server.commandLineParser;
 using GameData.network.util.world;
 
 namespace GameData.network.controller

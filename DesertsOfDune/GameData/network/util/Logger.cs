@@ -30,5 +30,13 @@ namespace GameData.network.util
                  .WriteTo.Console()
                  .CreateLogger();
         }
+
+        public static void CreateDebugLogger()
+        {
+            Log.Logger = new LoggerConfiguration()
+                 .MinimumLevel.Debug()
+                 .WriteTo.Console()
+                 .CreateLogger();
+        }
     }
 }
