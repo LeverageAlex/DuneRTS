@@ -11,9 +11,9 @@ namespace GameData.network.messages
     public class CreateMessage : Message
     {
         [JsonProperty]
-        private string lobbyCode;
+        public string lobbyCode { get; }
         [JsonProperty]
-        private int cpuCount;
+        public int cpuCount { get; }
 
         /// <summary>
         /// Constructor of the class CreateMessage
@@ -25,6 +25,5 @@ namespace GameData.network.messages
             this.lobbyCode = lobbyCode;
             this.cpuCount = cpuCount;
         }
-
     }
 }

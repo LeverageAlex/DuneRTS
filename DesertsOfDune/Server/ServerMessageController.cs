@@ -2,68 +2,128 @@
 using System.Collections.Generic;
 using GameData.network.controller;
 using GameData.network.messages;
-using GameData.network.util.parser;
 using GameData.network.util.world;
+using Server.Clients;
 
 namespace Server
 {
     public class ServerMessageController : MessageController
     {
+        private readonly Dictionary<string, Party> _parties;
 
         public ServerMessageController()
         {
+            _parties = new Dictionary<string, Party>();
         }
 
+        /// <summary>
+        /// Client sends a CreateMessage if he wants to create a new party.
+        /// Therefore the client has to send a lobby for a unique identification of the party
+        /// and the cpuCount which specifies how many AIPlayer participate.
+        /// </summary>
+        /// <param name="msg">CreateMessage with the info of lobbyCode and cpuCount</param>
         public void OnCreateMessage(CreateMessage msg)
         {
-            throw new NotImplementedException("not implemented");
-            //Client sendet CreateMsg wenn er eine neue Partie erstellen möchte
+            _parties.Add(msg.lobbyCode, new Party(msg.lobbyCode, msg.cpuCount));
+            Console.WriteLine("- Party created");
 
-            //Party party = new Party();
-
-            //string lobbyCode
-            //int cpuCount
+            //send back accepted message (not here)
         }
 
+        /// <summary>
+        /// Client requests to join a party with a clintName and a flag if he is player or spectator.
+        /// To join to the party, the connectionCode from the JoinMessage has to be equal to the lobbyCode of the created party.
+        /// </summary>
+        /// <param name="msg">JoinMessage with the value clientName, connectionCode and active flag if he is a player.</param>
         public void OnJoinMessage(JoinMessage msg)
         {
-            throw new NotImplementedException("not implemented");
-            //Server erwartet Registrierung von Client
-            //wird auch beim reconnect verwendet
+            string clientName = msg.clientName;
 
-            //string clientName
-            //string connectionCode
-            //bool active
+            foreach (var party in _parties)
+            {
+                if(party.Key == msg.connectionCode)
+                {
+                    if (msg.active) //client is a player
+                    {
+                        Player player = new Player(clientName, party.Key);
+                        party.Value.AddPlayer(player);
+                        Console.WriteLine($"- Player {clientName} joined"); //test
+                    }
+                    else //client is spectator
+                    {
+                        //create spectator
+                    }
+                }
+                else
+                {
+                    //errorMessage
+                }
+            }
         }
 
         public void OnHouseRequestMessage(HouseRequestMessage msg)
         {
             throw new NotImplementedException("not implemented");
+
+            //receiving of chosen house of Player
+
+            //string houseName
+
+            //create  great house
         }
 
         public void OnMovementRequestMessage(MovementRequestMessage msg)
         {
             throw new NotImplementedException("not implemented");
+
+            //request from client to move a character
+
+            //int clientID
+            //int characterID
+            //Specs
+            //path
         }
 
         public void OnActionRequestMessage(ActionRequestMessage msg)
         {
             throw new NotImplementedException("not implemented");
+
+            //request from client to run an action
+
+            //int clientID
+            //int characterID
+            //Action
+            //Specs
+            //target
+            //int targetID
         }
 
         public void OnEndTurnRequestMessage(EndTurnRequestMessage msg)
         {
             throw new NotImplementedException("not implemented");
+
+            //End move phase prematurely
+
+            //int clientID
+            //int characterID
         }
 
         public void OnGameStateRequestMessage(GameStateRequestMessage msg)
         {
             throw new NotImplementedException("not implemented");
+
+            //Requirement complete game state
+
+            //int clientID
         }
 
         public void OnPauseGameRequestMessage(PauseGameRequestMessage msg)
         {
             throw new NotImplementedException("not implemented");
+
+            //request for pause from client
+
+            //bool pause
         }
 
 
@@ -77,6 +137,7 @@ namespace Server
         {
             JoinAcceptedMessage joinAcceptedMessage = new JoinAcceptedMessage(clientSecret);
             controller.HandleSendingMessage(joinAcceptedMessage);
+            Console.WriteLine("- Join accepted");
         }
 
         public void DoSendGameConfig(List<string[]> scenario, string party, string[] houseOffer)
@@ -127,7 +188,7 @@ namespace Server
             controller.HandleSendingMessage(changeCharacterStatisticsDemandMessage);
         }
 
-        public void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons, MapField[][] newMap)
+        public void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons, MapField[,] newMap)
         {
             MapChangeDemandMessage mapChangeDemandMessage = new MapChangeDemandMessage(mapChangeReasons, newMap);
             controller.HandleSendingMessage(mapChangeDemandMessage);

@@ -6,15 +6,19 @@ namespace Server
 {
     public class Party
     {
-        private string _lobbyCode;
-        private int _cpuCount;
-
-        private List<Player> _connectedPlayers;
+        public string _lobbyCode { get; }
+        public int _cpuCount { get; } //amount of AIPlayer
+        private readonly List<Player> _connectedPlayers;
+        //List for spectator ?
 
         public Party(string lobbyCode, int cpuCount)
         {
             _lobbyCode = lobbyCode;
             _cpuCount = cpuCount;
+
+            _connectedPlayers = new List<Player>();
+
+            //Console.WriteLine($"Party created with lobbycode: {lobbyCode} and cpucount: {cpuCount}");
         }
 
         public void AddPlayer(Player player)

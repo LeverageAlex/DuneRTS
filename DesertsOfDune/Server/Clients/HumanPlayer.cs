@@ -5,11 +5,10 @@ namespace Server
 {
     public class HumanPlayer : Player
     {
-        private string _clientName;
 
-        public HumanPlayer(string clientName)
+        public HumanPlayer()
         {
-            _clientName = clientName;
+
         }
     }
 }
