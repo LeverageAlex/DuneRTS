@@ -15,6 +15,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,5 +24,12 @@
   <ItemGroup>
     <None Remove="SonarAnalyzer.CSharp" />
     <None Remove="SonarAnalyzer.VisualBasic" />
+    <None Remove="parser\" />
+    <None Remove="parser\commandLinePra\" />
+    <None Remove="CommandLineParser" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="parser\" />
+    <Folder Include="parser\commandLineParser\" />
   </ItemGroup>
 </Project>
