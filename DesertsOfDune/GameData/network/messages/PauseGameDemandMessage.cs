@@ -8,7 +8,7 @@ namespace GameData.network.messages
     /// <summary>
     /// This class is used to communicate the paus of the game.
     /// </summary>
-    public class PauseGameMessage : Message
+    public class PauseGameDemandMessage : Message
     {
         [JsonProperty]
         private int requestedByClientID;
@@ -20,7 +20,7 @@ namespace GameData.network.messages
         /// </summary>
         /// <param name="requestedByClientID">the client id</param>
         /// <param name="pause">true if the game is paused.</param>
-        public PauseGameMessage(int requestedByClientID, bool pause) : base("v1", MessageType.PAUSE_GAME)
+        public PauseGameDemandMessage(int requestedByClientID, bool pause) : base("v1", MessageType.GAME_PAUSE_DEMAND)
         {
             this.pause = pause;
             this.requestedByClientID = requestedByClientID;

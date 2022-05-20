@@ -33,7 +33,8 @@
         GAMESTATE,
         STRIKE,
         PAUSE_REQUEST,
-        PAUSE_GAME,
+        GAME_PAUSE_DEMAND,
+        UNPAUSE_GAME_OFFER,
         END_TURN_REQUEST,
         GAME_END
     }

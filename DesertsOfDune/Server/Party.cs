@@ -11,10 +11,10 @@ namespace Server
         private readonly List<Player> _connectedPlayers;
         //List for spectator ?
 
-        public Party(string lobbyCode, int cpuCount)
+        public Party(string lobbyCode)
         {
             _lobbyCode = lobbyCode;
-            _cpuCount = cpuCount;
+            //_cpuCount = cpuCount;
 
             _connectedPlayers = new List<Player>();
 

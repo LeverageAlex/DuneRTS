@@ -24,7 +24,8 @@ namespace Server
         /// <param name="msg">CreateMessage with the info of lobbyCode and cpuCount</param>
         public void OnCreateMessage(CreateMessage msg)
         {
-            _parties.Add(msg.lobbyCode, new Party(msg.lobbyCode, msg.cpuCount));
+            //msg.Spectate
+            _parties.Add(msg.LobbyCode, new Party(msg.LobbyCode));
             Console.WriteLine("- Party created");
 
             //send back accepted message (not here)
@@ -37,15 +38,16 @@ namespace Server
         /// <param name="msg">JoinMessage with the value clientName, connectionCode and active flag if he is a player.</param>
         public void OnJoinMessage(JoinMessage msg)
         {
-            string clientName = msg.clientName;
+            var clientName = msg.ClientName;
 
             foreach (var party in _parties)
             {
-                if(party.Key == msg.connectionCode)
+                if(party.Key == msg.ConnectionCode)
                 {
-                    if (msg.active) //client is a player
+                    if (msg.Active) //client is a player
                     {
-                        Player player = new Player(clientName, party.Key);
+                        //distinction between AI and Human
+                        var player = new Player(clientName, party.Key);
                         party.Value.AddPlayer(player);
                         Console.WriteLine($"- Player {clientName} joined"); //test
                     }
@@ -133,16 +135,16 @@ namespace Server
         /// TODO: what is sending back if a exception is thrown?
         /// </summary>
         /// <param name="clientSecret">Unique identifikator for the client, which is just known between the affected parties</param>
-        public void DoAcceptJoin(string clientSecret)
+        public void DoAcceptJoin(string clientSecret, int clientID)
         {
-            JoinAcceptedMessage joinAcceptedMessage = new JoinAcceptedMessage(clientSecret);
+            JoinAcceptedMessage joinAcceptedMessage = new JoinAcceptedMessage(clientSecret, clientID);
             controller.HandleSendingMessage(joinAcceptedMessage);
             Console.WriteLine("- Join accepted");
         }
 
-        public void DoSendGameConfig(List<string[]> scenario, string party, string[] houseOffer)
+        public void DoSendGameConfig(List<string[]> scenario, string party, int client0ID, int client1ID)
         {
-            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, party, houseOffer);
+            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, party, client0ID, client1ID);
             controller.HandleSendingMessage(gameConfigMessage);
         }
 
@@ -238,7 +240,7 @@ namespace Server
 
         public void DoPauseGame(int requestedByClientID, bool pause)
         {
-            PauseGameMessage pauseGameMessage = new PauseGameMessage(requestedByClientID, pause);
+            PauseGameDemandMessage pauseGameMessage = new PauseGameDemandMessage(requestedByClientID, pause);
             controller.HandleSendingMessage(pauseGameMessage);
         }
     }

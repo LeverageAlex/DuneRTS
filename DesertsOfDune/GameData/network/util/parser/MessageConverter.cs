@@ -79,12 +79,15 @@ namespace GameData.network.util.parser
                 case "MOVEMENT_REQUEST":
                     MovementRequestMessage movementRequestMessage = (MovementRequestMessage)message;
                     return JsonConvert.SerializeObject(movementRequestMessage);
-                case "PAUSE_GAME":
-                    PauseGameMessage pauseGameMessage = (PauseGameMessage)message;
+                case "GAME_PAUSE_DEMAND":
+                    PauseGameDemandMessage pauseGameMessage = (PauseGameDemandMessage)message;
                     return JsonConvert.SerializeObject(pauseGameMessage);
                 case "PAUSE_REQUEST":
                     PauseGameRequestMessage pauseGameRequestMessage = (PauseGameRequestMessage)message;
                     return JsonConvert.SerializeObject(pauseGameRequestMessage);
+                case "UNPAUSE_GAME_OFFER":
+                    UnpauseGameOfferMessage unpauseGameOfferMessage = (UnpauseGameOfferMessage)message;
+                    return JsonConvert.SerializeObject(unpauseGameOfferMessage);
                 case "SANDWORM_DESPAWN_DEMAND":
                     SandwormDespawnDemandMessage sandwormDespawnMessage = (SandwormDespawnDemandMessage)message;
                     return JsonConvert.SerializeObject(sandwormDespawnMessage);
@@ -113,7 +116,7 @@ namespace GameData.network.util.parser
                     ErrorMessage errorMessage = (ErrorMessage)message;
                     return JsonConvert.SerializeObject(errorMessage);
                 default:
-                    return null;
+                    throw new ArgumentException($"The given message type: {message.getMessageType()} is not implemented");
             }
         }
 
@@ -171,10 +174,12 @@ namespace GameData.network.util.parser
                     return JsonConvert.DeserializeObject<MovementDemandMessage>(message);
                 case "MOVEMENT_REQUEST":
                     return JsonConvert.DeserializeObject<MovementRequestMessage>(message);
-                case "PAUSE_GAME":
-                    return JsonConvert.DeserializeObject<PauseGameMessage>(message);
+                case "GAME_PAUSE_DEMAND":
+                    return JsonConvert.DeserializeObject<PauseGameDemandMessage>(message);
                 case "PAUSE_REQUEST":
                     return JsonConvert.DeserializeObject<PauseGameRequestMessage>(message);
+                case "UNPAUSE_GAME_OFFER":
+                    return JsonConvert.DeserializeObject<UnpauseGameOfferMessage>(message);
                 case "SANDWORM_DESPAWN_DEMAND":
                     return JsonConvert.DeserializeObject<SandwormDespawnDemandMessage>(message);
                 case "SANDWORM_MOVE_DEMAND":
@@ -194,7 +199,7 @@ namespace GameData.network.util.parser
                 case "ERROR":
                     return JsonConvert.DeserializeObject<ErrorMessage>(message);
                 default:
-                    return null;
+                    throw new ArgumentException($"The given message type: {messageType} is not implemented");
             }
         }
     }
