@@ -5,6 +5,8 @@
     /// </summary>
     public enum MessageType
     {
+        ACK,
+        ERROR,
         DEBUG,
         CREATE,
         JOIN,

@@ -13,12 +13,10 @@ namespace GameData.network.messages
     {
         [JsonProperty]
         private string action;
-       // [JsonProperty]
-        //private Position target;
         [JsonProperty]
-        private Specs specs;
-        [JsonProperty]
-        private int targetID;
+        private Specs Specs;
+        //[JsonProperty]
+        //private int targetID;
 
         /// <summary>
         /// Constructor of the class ActionRequestMessage
@@ -27,14 +25,12 @@ namespace GameData.network.messages
         /// <param name="characterID">the id of the character</param>
         /// <param name="action">the action the client requests</param>
         /// <param name="target">the target the client wants to effect</param>
-        /// <param name="targetID">the id of the target</param>
-        public ActionRequestMessage(int clientID, int characterID, ActionType action, Position target, int targetID) : base(characterID,clientID,MessageType.ACTION_REQUEST)
+        public ActionRequestMessage(int clientID, int characterID, ActionType action, Position target) : base(characterID,clientID,MessageType.ACTION_REQUEST)
         {
             this.action = Enum.GetName(typeof(ActionType), action);
             Specs specs = new Specs();
             specs.target = target;
-            this.specs = specs;
-            this.targetID = targetID;
+            this.Specs = specs;
         }
     }
 }

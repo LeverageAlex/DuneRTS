@@ -106,6 +106,12 @@ namespace GameData.network.util.parser
                 case "TURN_DEMAND":
                     TurnDemandMessage turnDemandMessage = (TurnDemandMessage)message;
                     return JsonConvert.SerializeObject(turnDemandMessage);
+                case "ACK":
+                    AckMessage ackMessage = (AckMessage)message;
+                    return JsonConvert.SerializeObject(ackMessage);
+                case "ERROR":
+                    ErrorMessage errorMessage = (ErrorMessage)message;
+                    return JsonConvert.SerializeObject(errorMessage);
                 default:
                     return null;
             }
@@ -183,6 +189,10 @@ namespace GameData.network.util.parser
                     return JsonConvert.DeserializeObject<TurnDemandMessage>(message);
                 case "TURN_REQUEST":
                     return JsonConvert.DeserializeObject<TurnRequestMessage>(message);
+                case "ACK":
+                    return JsonConvert.DeserializeObject<AckMessage>(message);
+                case "ERROR":
+                    return JsonConvert.DeserializeObject<ErrorMessage>(message);
                 default:
                     return null;
             }
