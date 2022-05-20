@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5738320622534970096}
   m_Layer: 5
-  m_Name: HelpButton
+  m_Name: HelpElem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70,7 +70,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2289498299712738696, guid: 5773f067c6a30e2409db70f06acadfd1, type: 3}
       propertyPath: m_Name
-      value: HelpTextElem
+      value: HelpText
       objectReference: {fileID: 0}
     - target: {fileID: 2289498299712738696, guid: 5773f067c6a30e2409db70f06acadfd1, type: 3}
       propertyPath: m_IsActive
@@ -466,7 +466,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8577282768059458855, guid: 500f59663c3edc84da24948b25e5a4f5, type: 3}
       propertyPath: m_Name
-      value: HelpElem
+      value: HelpButton
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 500f59663c3edc84da24948b25e5a4f5, type: 3}
