@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
@@ -25,5 +25,6 @@ namespace GameData.network.messages
             this.LobbyCode = lobbyCode;
             this.Spectate = spectate;
         }
+
     }
 }

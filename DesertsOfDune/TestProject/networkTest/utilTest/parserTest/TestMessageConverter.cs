@@ -248,7 +248,7 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromPauseGameMessage()
         {
-            PauseGameMessage message = new PauseGameMessage(2, true);
+            GamePauseDemandMessage message = new GamePauseDemandMessage(2, true);
             string serializedMessage = MessageConverter.FromMessage(message);
             Assert.AreEqual("", serializedMessage);
         }

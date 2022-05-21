@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using GameData.network.util.world;
@@ -13,6 +13,8 @@ namespace GameData.network.messages
     {
         [JsonProperty]
         private string action;
+        [JsonProperty]
+        private Position target;
         [JsonProperty]
         private Specs specs;
 

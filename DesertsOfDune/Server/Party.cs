@@ -6,14 +6,14 @@ namespace Server
 {
     public class Party
     {
-        public string _lobbyCode { get; }
-        public int _cpuCount { get; } //amount of AIPlayer
+        public string LobbyCode { get; }
+        public int CpuCount { get; } //amount of AIPlayer
         private readonly List<Player> _connectedPlayers;
         //List for spectator ?
 
         public Party(string lobbyCode)
         {
-            _lobbyCode = lobbyCode;
+            LobbyCode = lobbyCode;
             //_cpuCount = cpuCount;
 
             _connectedPlayers = new List<Player>();
