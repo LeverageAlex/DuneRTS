@@ -11,11 +11,11 @@ namespace GameData.network.util.world
     public class CharacterStatistics
     {
         [JsonProperty]
-        private int healthPoints;
+        private int HP;
         [JsonProperty]
-        private int actionPoints;
+        private int AP;
         [JsonProperty]
-        private int movementPoints;
+        private int MP;
         [JsonProperty]
         private int spice;
         [JsonProperty]
@@ -34,9 +34,9 @@ namespace GameData.network.util.world
         /// <param name="isSwallowed">true, if the character got swallowed</param>
         public CharacterStatistics(int hp, int ap, int mp, int spice, bool isLoud, bool isSwallowed)
         {
-            this.healthPoints = hp;
-            this.actionPoints = ap;
-            this.movementPoints = mp;
+            this.HP = hp;
+            this.AP = ap;
+            this.MP = mp;
             this.spice = spice;
             this.isLoud = isLoud;
             this.isSwallowed = isSwallowed;

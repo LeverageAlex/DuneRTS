@@ -13,17 +13,17 @@ namespace GameData.network.messages
         [JsonProperty]
         private string lobbyCode;
         [JsonProperty]
-        private int cpuCount;
+        private bool spectate;
 
         /// <summary>
         /// Constructor of the class CreateMessage
         /// </summary>
         /// <param name="lobbyCode">the lobbyCode of the game lobby</param>
-        /// <param name="cpuCount">the amount of cpu's</param>
-        public CreateMessage(string lobbyCode,int cpuCount) : base("v1", MessageType.CREATE)
+        /// <param name="spectate">true, if the client wants to spectate the game</param>
+        public CreateMessage(string lobbyCode,bool spectate) : base("1.0", MessageType.CREATE)
         {
             this.lobbyCode = lobbyCode;
-            this.cpuCount = cpuCount;
+            this.spectate = spectate;
         }
 
     }
