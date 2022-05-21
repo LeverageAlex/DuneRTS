@@ -57,14 +57,38 @@ namespace Server.parser.commandLineParser
             return sucessfullySetMatchConfigFilePath && sucessfullySetScenarioConfigFilePath && sucessfullySetPort;
         }
 
+        /// <summary>
+        /// handles the filepath to the match configuration file, so checks whether is filepath is valid and set the filepath in the server configuration if so
+        /// </summary>
+        /// <param name="filepath">path to the match configuration file</param>
+        /// <returns>true, if the filepath is valid and was set to the server configuration</returns>
         private bool HandleMatchConfigurationFilePath(string filepath)
         {
+            if (validator.IsMatchConfigFilePathValid(filepath))
+            {
+                configuration.FilePathMatchConfiguration = filepath;
 
+                Log.Debug("The filepath " + filepath + " is valid and the match config will tried to be load.");
+                return true;
+            }
+            return false;
         }
 
+        /// <summary>
+        /// handles the filepath to the scenario configuration file, so checks whether is filepath is valid and set the filepath in the server configuration if so
+        /// </summary>
+        /// <param name="filepath">path to the scenario configuration file</param>
+        /// <returns>true, if the filepath is valid and was set to the server configuration</returns>
         private bool HandleScenarioConfigurationFilePath(string filepath)
         {
+            if (validator.IsScenarioConfigFilePathValid(filepath))
+            {
+                configuration.FilePathScenarioConfiguration = filepath;
 
+                Log.Debug("The filepath " + filepath + " is valid and the scenario config will tried to be load.");
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -78,15 +102,15 @@ namespace Server.parser.commandLineParser
             if (port == ServerConfiguration.DEFAULT_PORT)
             {
                 Log.Information("The default port " + ServerConfiguration.DEFAULT_PORT + " is used");
-                configuration.port = ServerConfiguration.DEFAULT_PORT;
+                configuration.Port = ServerConfiguration.DEFAULT_PORT;
                 return true;
             }
             else
             {
                 // check, whether the port is valid
-                if (validator.isPortValid(port))
+                if (validator.IsPortValid(port))
                 {
-                    configuration.port = port;
+                    configuration.Port = port;
                     return true;
                 }
             }

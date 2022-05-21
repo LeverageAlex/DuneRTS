@@ -11,9 +11,9 @@ namespace Server.Configuration
         public static int DEFAULT_PORT { get; } = 10191;
         public static string DEFAULT_SERVER_ADDRESS { get; } = "127.0.0.1";
 
-        public int port { get; set; }
-        public string filePathMatchConfiguration { get; set; }
-        public string filePathScenarioConfiguration { get; set; }
+        public int Port { get; set; }
+        public string FilePathMatchConfiguration { get; set; }
+        public string FilePathScenarioConfiguration { get; set; }
 
         public ServerConfiguration()
         {

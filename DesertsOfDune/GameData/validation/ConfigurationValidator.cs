@@ -18,7 +18,7 @@ namespace GameData.validation
         /// </summary>
         /// <param name="port"></param>
         /// <returns></returns>
-        public bool isPortValid(int port)
+        public bool IsPortValid(int port)
         {
             if (port < 0)
             {
