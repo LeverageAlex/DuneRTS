@@ -28,10 +28,7 @@ namespace GameData.network.messages
             this.action = Enum.GetName(typeof(ActionType), action);
             Specs s = new Specs();
             s.target = target;
-<<<<<<< HEAD
             this.specs = s;
-=======
->>>>>>> feature/clientConnectionToServer
         }
 
     }

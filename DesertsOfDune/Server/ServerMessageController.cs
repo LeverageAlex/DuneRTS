@@ -138,110 +138,110 @@ namespace Server
         public void DoAcceptJoin(string clientSecret, int clientID)
         {
             JoinAcceptedMessage joinAcceptedMessage = new JoinAcceptedMessage(clientSecret, clientID);
-            controller.HandleSendingMessage(joinAcceptedMessage);
+            NetworkController.HandleSendingMessage(joinAcceptedMessage);
             Console.WriteLine("- Join accepted");
         }
 
         public void DoSendGameConfig(List<string[]> scenario, string party, int client0ID, int client1ID)
         {
             GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, party, client0ID, client1ID);
-            controller.HandleSendingMessage(gameConfigMessage);
+            NetworkController.HandleSendingMessage(gameConfigMessage);
         }
 
         public void DoSendHouseOffer(int clientID, GreatHouse[] houses)
         {
             HouseOfferMessage houseOfferMessage = new HouseOfferMessage(clientID, houses);
-            controller.HandleSendingMessage(houseOfferMessage);
+            NetworkController.HandleSendingMessage(houseOfferMessage);
         }
 
         public void DoSendHouseAck(int clientID, string houseName)
         {
             HouseAcknowledgementMessage houseACKMessage = new HouseAcknowledgementMessage(clientID, houseName);
-            controller.HandleSendingMessage(houseACKMessage);
+            NetworkController.HandleSendingMessage(houseACKMessage);
         }
 
         public void DoSendTurnDemand(int clientID, int characterID)
         {
             TurnDemandMessage turnDemandMessage = new TurnDemandMessage(clientID, characterID);
-            controller.HandleSendingMessage(turnDemandMessage);
+            NetworkController.HandleSendingMessage(turnDemandMessage);
         }
 
         public void DoSendStrike(int clientID, string wrongMessage, int count)
         {
             StrikeMessage strikeMessage = new StrikeMessage(clientID, wrongMessage, count);
-            controller.HandleSendingMessage(strikeMessage);
+            NetworkController.HandleSendingMessage(strikeMessage);
         }
 
         public void DoSendMovementDemand(int clientID, int characterID, List<Position> path)
         {
             MovementDemandMessage movementDemandMessage = new MovementDemandMessage(clientID, characterID, path);
-            controller.HandleSendingMessage(movementDemandMessage);
+            NetworkController.HandleSendingMessage(movementDemandMessage);
         }
 
-        public void DoSendActionDemand(int clientID, int characterID, ActionType action, Position target, int targetID)
+        public void DoSendActionDemand(int clientID, int characterID, ActionType action, Position target)
         {
-            ActionDemandMessage actionDemandMessage = new ActionDemandMessage(clientID, characterID, action, target, targetID);
-            controller.HandleSendingMessage(actionDemandMessage);
+            ActionDemandMessage actionDemandMessage = new ActionDemandMessage(clientID, characterID, action, target);
+            NetworkController.HandleSendingMessage(actionDemandMessage);
         }
 
         public void DoSendChangeCharacterStatsDemand(int clientID, int characterID, CharacterStatistics stats)
         {
             ChangeCharacterStatisticsDemandMessage changeCharacterStatisticsDemandMessage = new ChangeCharacterStatisticsDemandMessage(clientID, characterID, stats);
-            controller.HandleSendingMessage(changeCharacterStatisticsDemandMessage);
+            NetworkController.HandleSendingMessage(changeCharacterStatisticsDemandMessage);
         }
 
         public void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons, MapField[,] newMap)
         {
             MapChangeDemandMessage mapChangeDemandMessage = new MapChangeDemandMessage(mapChangeReasons, newMap);
-            controller.HandleSendingMessage(mapChangeDemandMessage);
+            NetworkController.HandleSendingMessage(mapChangeDemandMessage);
         }
 
-        public void DoSpawnCharacterDemand(int clientID, int characterID, string characterName, Position pos, Character attributes, CharacterType characterType)
+        public void DoSpawnCharacterDemand(int clientID, int characterID, string characterName, Position pos, Character attributes)
         {
-            SpawnCharacterDemandMessage spawnCharacterDemandMessage = new SpawnCharacterDemandMessage(clientID, characterID, characterName, pos, attributes, characterType);
-            controller.HandleSendingMessage(spawnCharacterDemandMessage);
+            SpawnCharacterDemandMessage spawnCharacterDemandMessage = new SpawnCharacterDemandMessage(clientID, characterID, characterName, pos, attributes);
+            NetworkController.HandleSendingMessage(spawnCharacterDemandMessage);
         }
 
         public void DoChangePlayerSpiceDemand(int clientID, int newSpiceVal)
         {
             ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage = new ChangePlayerSpiceDemandMessage(clientID, newSpiceVal);
-            controller.HandleSendingMessage(changePlayerSpiceDemandMessage);
+            NetworkController.HandleSendingMessage(changePlayerSpiceDemandMessage);
         }
 
         public void DoSpawnSandwormDemand(int clientID, int characterID, Position pos)
         {
             SandwormSpawnDemandMessage sandwormSpawnDemandMessage = new SandwormSpawnDemandMessage(clientID, characterID, pos);
-            controller.HandleSendingMessage(sandwormSpawnDemandMessage);
+            NetworkController.HandleSendingMessage(sandwormSpawnDemandMessage);
         }
 
         public void DoMoveSandwormDemand(List<Position> path)
         {
             SandwormMoveDemandMessage sandwormMoveDemandMessage = new SandwormMoveDemandMessage(path);
-            controller.HandleSendingMessage(sandwormMoveDemandMessage);
+            NetworkController.HandleSendingMessage(sandwormMoveDemandMessage);
         }
 
         public void DoDespawnSandwormDemand()
         {
             SandwormDespawnDemandMessage sandwormDespawnDemandMessage = new SandwormDespawnDemandMessage();
-            controller.HandleSendingMessage(sandwormDespawnDemandMessage);
+            NetworkController.HandleSendingMessage(sandwormDespawnDemandMessage);
         }
 
         public void DoEndGame(int winnerID, int loserID, Statistics stats)
         {
             GameEndMessage gameEndMessage = new GameEndMessage(winnerID, loserID, stats);
-            controller.HandleSendingMessage(gameEndMessage);
+            NetworkController.HandleSendingMessage(gameEndMessage);
         }
 
         public void DoSendGameState(int clientID, String[] history)
         {
-            GameStateMessage gameStateMessage = new GameStateMessage(history, clientID);
-            controller.HandleSendingMessage(gameStateMessage);
+            //GameStateMessage gameStateMessage = new GameStateMessage(history, clientID);
+            //NetworkController.HandleSendingMessage(gameStateMessage);
         }
 
         public void DoPauseGame(int requestedByClientID, bool pause)
         {
-            PauseGameDemandMessage pauseGameMessage = new PauseGameDemandMessage(requestedByClientID, pause);
-            controller.HandleSendingMessage(pauseGameMessage);
+            //PauseGameDemandMessage pauseGameMessage = new PauseGameDemandMessage(requestedByClientID, pause);
+            //NetworkController.HandleSendingMessage(pauseGameMessage);
         }
     }
 }
