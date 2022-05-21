@@ -1,5 +1,8 @@
 ﻿using System;
 using Serilog;
+using Serilog.Configuration;
+using Serilog.Core;
+using Serilog.Events;
 
 namespace GameData.network.util
 {
@@ -14,8 +17,14 @@ namespace GameData.network.util
     /// </remarks>
     public class Logger
     {
-        protected Logger()
+        private readonly LoggingLevelSwitch levelSwitch;
+
+        /// <summary>
+        /// create a new logger instance, that can be used to create and configure the global used serilog logger
+        /// </summary>
+        public Logger()
         {
+            levelSwitch = new LoggingLevelSwitch();
         }
 
         /// <summary>
@@ -24,19 +33,30 @@ namespace GameData.network.util
         /// <item> write the log information to the console</item>
         /// </list>  
         /// </summary>
-        public static void CreateDefaultLogger()
+        public void CreateDefaultLogger()
         {
             Log.Logger = new LoggerConfiguration()
+                 .MinimumLevel.ControlledBy(levelSwitch)
                  .WriteTo.Console()
                  .CreateLogger();
         }
 
-        public static void CreateDebugLogger()
+        public void CreateDebugLogger()
         {
+            levelSwitch.MinimumLevel = LogEventLevel.Debug;
             Log.Logger = new LoggerConfiguration()
-                 .MinimumLevel.Debug()
+                 .MinimumLevel.ControlledBy(levelSwitch)
                  .WriteTo.Console()
                  .CreateLogger();
+        }
+
+        /// <summary>
+        /// change the minimum level for logging to a given level (at runtime)
+        /// </summary>
+        /// <param name="level">the new minimum level, the logger should be set to</param>
+        public void SetMinimumLevel(LogEventLevel level)
+        {
+            levelSwitch.MinimumLevel = level;
         }
     }
 }

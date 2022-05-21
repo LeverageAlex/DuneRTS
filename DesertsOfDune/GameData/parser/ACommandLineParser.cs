@@ -7,7 +7,7 @@ using Serilog;
 namespace GameData.network.util.parser
 {
     /// <summary>
-    /// Parser for the command line arguments given, if the server or ai client is started
+    /// Base class for a command line arguments parser
     /// </summary>
     abstract public class ACommandLineParser<T>
     {
