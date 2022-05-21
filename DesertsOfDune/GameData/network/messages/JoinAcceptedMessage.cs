@@ -11,19 +11,15 @@ namespace GameData.network.messages
     public class JoinAcceptedMessage : Message
     {
         [JsonProperty]
-        private string ClientSecret;
-        [JsonProperty]
-        private int ClientID;
+        private string clientSecret;
 
         /// <summary>
         /// Constructor of the class JoinAcceptedMessage
         /// </summary>
-        /// <param name="clientSecret">used to identify the client</param>
-        /// <param name="clientID">ID of the client</param>
-        public JoinAcceptedMessage(string clientSecret, int clientID) : base("v1",MessageType.JOINACCEPTED)
+        /// <param name="clientSecret">the used to identify the client</param>
+        public JoinAcceptedMessage(string clientSecret) : base("v1",MessageType.JOINACCEPTED)
         {
-            this.ClientSecret = clientSecret;
-            this.ClientID = clientID;
+            this.clientSecret = clientSecret;
         }
     }
 }

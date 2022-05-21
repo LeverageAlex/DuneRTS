@@ -5,17 +5,16 @@ using System.Text;
 namespace GameData.network.messages
 {
     /// <summary>
-    /// This class is used by the client to demand a specific Turn
+    /// This class is used to communicate a turn request.
     /// </summary>
-    public class TurnDemandMessage : TurnMessage
+    public class TurnRequestMessage : TurnMessage
     {
-
         /// <summary>
-        /// Constructor of the class TurnDemandMessage
+        /// Constructor of the class TurnRequestMessage
         /// </summary>
         /// <param name="clientID">the id of the client</param>
         /// <param name="characterID">the id of the character</param>
-        public TurnDemandMessage(int clientID, int characterID) : base(characterID, clientID, MessageType.TURN_DEMAND)
+        public TurnRequestMessage(int clientID, int characterID) : base(characterID, clientID,MessageType.TURN_REQUEST) 
         {
 
         }

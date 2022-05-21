@@ -11,27 +11,23 @@ namespace GameData.network.messages
     public class JoinMessage : Message
     {
         [JsonProperty]
-        public string ClientName { get; }
+        private string clientName;
         [JsonProperty]
-        public string ConnectionCode { get; }
+        private string connectionCode;
         [JsonProperty]
-        public bool Active { get; }
-        [JsonProperty]
-        public bool IsCpu { get; }
+        private bool active;
 
         /// <summary>
         /// Constuctor of the class JoinMessage
         /// </summary>
         /// <param name="clientName">the name of the client</param>
         /// <param name="connectionCode">the code of the connection</param>
-        /// <param name="active">notification if the client is player or participate</param>
-        /// <param name="isCpu">notification if the client is humanPlayer or AIPlayer</param>
-        public JoinMessage (string clientName, string connectionCode, bool active, bool isCpu) : base("v1", MessageType.JOIN)
+        /// <param name="active">weather of not the connection is active</param>
+        public JoinMessage (string clientName, string connectionCode, bool active) : base("v1", MessageType.JOIN)
         {
-            this.ClientName = clientName;
-            this.ConnectionCode = connectionCode;
-            this.Active = active;
-            this.IsCpu = isCpu;
+            this.clientName = clientName;
+            this.connectionCode = connectionCode;
+            this.active = active;
         }
     }
 }
