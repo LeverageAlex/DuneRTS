@@ -24,14 +24,14 @@ namespace GameData.parser
         /// the command line argument option for the path to the party configuration file
         /// </summary>
         [Option('m', "config-match", Required = true, HelpText = "The absolute or relative path to the party / match configuration file. ")]
-        public bool ConfigurationFileMatch {get; set;}
+        public string ConfigurationFileMatch {get; set;}
 
 
         /// <summary>
         /// the command line argument option for the path to the scenario configuration file
         /// </summary>
         [Option('m', "config-scenario", Required = true, HelpText = "The absolute or relative path to the scenario configuration file. ")]
-        public bool ConfigurationFileScenario { get; set; }
+        public string ConfigurationFileScenario { get; set; }
 
 
         /// <summary>

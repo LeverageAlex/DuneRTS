@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Transactions;
 using CommandLine;
 using CommandLine.Text;
 using Serilog;
@@ -33,17 +34,18 @@ namespace GameData.network.util.parser
         /// parsing the arguments 
         /// </summary>
         /// <param name="args"></param>
-        public void ParseCommandLineArguments(string[] args)
+        /// <returns>true, if the command line arguments were parsed completely or the help / version was requested</returns>
+        public bool ParseCommandLineArguments(string[] args)
         {
             ParserResult<T> result = this.parser.ParseArguments<T>(args);
 
             if (result.Tag == ParserResultType.NotParsed)
             {
-                HandleErrors(result.Errors, result);
+                return HandleErrors(result.Errors, result);
             }
             else
             {
-                HandleParsedArguments(result.Value);
+                return HandleParsedArguments(result.Value);
             }
         }
 
@@ -57,11 +59,13 @@ namespace GameData.network.util.parser
         /// </summary>
         /// <param name="errors"></param>
         /// <param name="result"></param>
-        private void HandleErrors(IEnumerable<Error> errors, ParserResult<T> result)
+        /// <returns>true, if the help was requested and false, if there were any errors</returns>
+        private bool HandleErrors(IEnumerable<Error> errors, ParserResult<T> result)
         {
             if (errors.IsHelp())
             {
                 Log.Information(HelpText.AutoBuild(result, _ => _, _ => _));
+                return true;
             }
             else
             {
@@ -71,8 +75,9 @@ namespace GameData.network.util.parser
                     Log.Error(err.ToString());
                 }
             }
+            return false;
         }
 
-        abstract protected void HandleParsedArguments(T options);
+        abstract protected bool HandleParsedArguments(T options);
     }
 }

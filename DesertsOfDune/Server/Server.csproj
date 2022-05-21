@@ -27,9 +27,11 @@
     <None Remove="parser\" />
     <None Remove="parser\commandLinePra\" />
     <None Remove="CommandLineParser" />
+    <None Remove="Configuration\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="parser\" />
     <Folder Include="parser\commandLineParser\" />
+    <Folder Include="Configuration\" />
   </ItemGroup>
 </Project>
