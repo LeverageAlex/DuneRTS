@@ -353,7 +353,7 @@ namespace TestProject.networkTest.utilTest.parserTest
             Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
             Assert.IsNotNull(deserializedMessage);
             Assert.IsInstanceOf<ActionDemandMessage>(deserializedMessage);
-            deserializedMessage.getMessageType();
+            ((ActionDemandMessage)deserializedMessage).getMessageType();
         }
     }
 }
