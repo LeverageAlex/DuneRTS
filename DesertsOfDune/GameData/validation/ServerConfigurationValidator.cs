@@ -11,6 +11,7 @@ namespace GameData.validation
         public ServerConfigurationValidator()
         {
         }
+        // TODO: try to load the files and check, whether they really exist at the filepath
 
         /// <summary>
         /// checks, whether the given filepath is valid as a absolut or relative filepath to the match configuration file

@@ -65,7 +65,8 @@ namespace GameData.network.util.parser
             if (errors.IsHelp())
             {
                 Log.Information(HelpText.AutoBuild(result, _ => _, _ => _));
-                return true;
+                // TODO: change behaviour, if help text is requested
+                return false;
             }
             else
             {

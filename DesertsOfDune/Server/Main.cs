@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.Generic;
 using GameData.network.controller;
 using GameData.network.util;
 using Serilog;
@@ -36,7 +36,10 @@ namespace Server
             Log.Debug("Parsed the command line arguments and configuring the server");
 
             CreateNetworkModule();
-            Log.Debug("Create network module in server");
+            Log.Debug("Created network module in server");
+
+            LoadConfigurationFiles();
+            Log.Debug("Loaded configuration files");
         }
 
         /// <summary>
@@ -81,6 +84,20 @@ namespace Server
                 Log.Fatal("The given command line arguments contains errors and cannot be processed. So restart the server with correct arguments.");
                 Environment.Exit(0);
             }
+        }
+
+        /// <summary>
+        /// loads the configuration files and process the information in it
+        /// </summary>
+        private static void LoadConfigurationFiles()
+        {
+            ConfigurationFileLoader loader = new ConfigurationFileLoader();
+
+            // get instance of scenario configuration and set the scenario
+            ScenarioConfiguration scenarioConfiguration = ScenarioConfiguration.GetInstance();
+            scenarioConfiguration.scenario = loader.LoadScenarioConfiguration(configuration.FilePathScenarioConfiguration).scenario;
+
+            List<List<string>> scenario = ScenarioConfiguration.GetInstance().scenario;
         }
     }
 }
