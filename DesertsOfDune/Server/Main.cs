@@ -29,9 +29,8 @@ namespace Server
             InitiliazeLogger();
             Log.Information("Starting server... Everything will be created and configured.");
 
-
             ParseCommandLineArguments(args);
-            Log.Debug("Parsing the command line arguments and configuring the server");
+            Log.Debug("Parsed the command line arguments and configuring the server");
 
             CreateNetworkModule();
             Log.Debug("Create network module in server");
@@ -42,8 +41,8 @@ namespace Server
         /// </summary>
         private static void InitiliazeLogger()
         {
-            // Logger.CreateDefaultLogger();
-            Logger.CreateDebugLogger();
+            Logger logger = new Logger();
+            logger.CreateDebugLogger();
         }
 
         /// <summary>
@@ -64,7 +63,14 @@ namespace Server
         private static void ParseCommandLineArguments(String[] args)
         {
             CommandLineParser parser = new CommandLineParser();
-            parser.ParseCommandLineArguments(args);
+            bool wasSuccessfullyParsed = parser.ParseCommandLineArguments(args);
+            if (wasSuccessfullyParsed)
+            {
+                Log.Debug("The command line arguments of the server were parsed sucessfully");
+            } else
+            {
+                Log.Fatal("The given command line arguments contains errors and cannot be processed. So restart the server with correct arguments.");
+            }
         }
     }
 }

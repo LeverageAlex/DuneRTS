@@ -30,7 +30,7 @@ namespace GameData.parser
         /// <summary>
         /// the command line argument option for the path to the scenario configuration file
         /// </summary>
-        [Option('m', "config-scenario", Required = true, HelpText = "The absolute or relative path to the scenario configuration file. ")]
+        [Option('s', "config-scenario", Required = true, HelpText = "The absolute or relative path to the scenario configuration file. ")]
         public string ConfigurationFileScenario { get; set; }
 
 

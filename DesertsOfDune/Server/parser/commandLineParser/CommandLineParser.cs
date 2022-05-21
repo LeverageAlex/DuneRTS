@@ -110,6 +110,7 @@ namespace Server.parser.commandLineParser
                 // check, whether the port is valid
                 if (validator.IsPortValid(port))
                 {
+                    Log.Debug("The port " + port + " is valid and will be used to start the websocket server");
                     configuration.Port = port;
                     return true;
                 }
