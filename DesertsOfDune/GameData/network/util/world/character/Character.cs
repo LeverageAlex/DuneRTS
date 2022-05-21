@@ -13,7 +13,7 @@ namespace GameData.network.util.world
     public class Character
     {
         [JsonProperty]
-        string characterType;
+        CharacterType CharacterType;
         [JsonProperty]
         private int healthMax;
         [JsonProperty]
@@ -61,7 +61,7 @@ namespace GameData.network.util.world
         /// <param name="isLoud">true, if the character is loud</param>
         public Character(CharacterType characterType, int healthMax, int healthCurrent, int healingHP, int MPmax, int MPcurrent, int APmax, int APcurrent, int attackDamage, int inventorySize, int inventoryUsed, bool killedBySandworm, bool isLoud)
         {
-            this.characterType = Enum.GetName(typeof(CharacterType), characterType);
+            this.CharacterType = characterType;
             this.healthMax = healthMax;
             this.healthCurrent = healthCurrent;
             this.healingHP = healingHP;

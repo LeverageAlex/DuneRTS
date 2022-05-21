@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using GameData.network.util.world;
@@ -23,13 +23,15 @@ namespace GameData.network.messages
         /// <param name="characterID">the id of the character</param>
         /// <param name="action">the action that is triggered</param>
         /// <param name="target">the target of the action</param>
-        /// <param name="targetID">the id of the target</param>
-        public ActionDemandMessage(int clientID, int characterID, ActionType action, Position target, int targetID) : base(characterID,clientID,MessageType.ACTION_DEMAND)
+        public ActionDemandMessage(int clientID, int characterID, ActionType action, Position target) : base(characterID,clientID,MessageType.ACTION_DEMAND)
         {
             this.action = Enum.GetName(typeof(ActionType), action);
-            Specs specs = new Specs();
-            specs.target = target;
-            this.specs = specs;
+            Specs s = new Specs();
+            s.target = target;
+<<<<<<< HEAD
+            this.specs = s;
+=======
+>>>>>>> feature/clientConnectionToServer
         }
 
     }
