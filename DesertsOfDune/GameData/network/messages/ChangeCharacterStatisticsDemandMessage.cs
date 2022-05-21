@@ -12,17 +12,17 @@ namespace GameData.network.messages
     public class ChangeCharacterStatisticsDemandMessage : TurnMessage
     {
         [JsonProperty]
-        private CharacterStatistics statistics;
+        private CharacterStatistics stats;
 
         /// <summary>
         /// Constructor of the Class CharacterStatisticsMessageDemand
         /// </summary>
         /// <param name="clientID">the id of the client</param>
         /// <param name="characterID">the id of the character</param>
-        /// <param name="statistics">the statistics of the client</param>
-        public ChangeCharacterStatisticsDemandMessage(int clientID, int characterID, CharacterStatistics statistics) : base(characterID,clientID,MessageType.CHARACTER_STAT_CHANGE_DEMAND)
+        /// <param name="stats">the statistics of the client</param>
+        public ChangeCharacterStatisticsDemandMessage(int clientID, int characterID, CharacterStatistics stats) : base(characterID,clientID,MessageType.CHARACTER_STAT_CHANGE_DEMAND)
         {
-            this.statistics = statistics;
+            this.stats = stats;
         }
     }
 }

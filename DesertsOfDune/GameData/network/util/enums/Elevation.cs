@@ -5,14 +5,10 @@ using System.Text;
 namespace GameData.network.util.enums
 {
     /// <summary>
-    /// This Enum defines the type of a playingfield.
+    /// This enum represents the hight levels of MapFields
     /// </summary>
-    public enum TileType
+    public enum Elevation
     {
-        CITY,
-        FLAT,
-        DUNE,
-        PLATEAU,
-        MOUNTAIN
+        high, low
     }
 }

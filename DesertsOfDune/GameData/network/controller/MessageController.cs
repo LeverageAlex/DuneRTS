@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using GameData.network.messages;
 using Serilog;
 using GameData.network.util.parser;
+using Server.commandLineParser;
 using GameData.network.util.world;
 
 namespace GameData.network.controller
@@ -28,7 +28,7 @@ namespace GameData.network.controller
         /// parent network controller, that contains this message controller (ref. needed so give the message, which need
         /// to be send, to the fitting network controller)
         /// </summary>
-        public NetworkController controller { get; set; }
+        public NetworkController NetworkController { get; set; }
 
         /// <summary>
         /// creates a new message controller
@@ -61,6 +61,7 @@ namespace GameData.network.controller
         /// <param name="code">code number for categorization of the event</param>
         /// <param name="explanation">further explanation of the event / code number</param>
         /// <example>
+        /// For instance, the variables could have the following values for describing a debug message
         /// <code>
         /// code = 404
         /// explanation = service is not avaible
@@ -68,13 +69,11 @@ namespace GameData.network.controller
         /// </example>
         public void DoDebug(int code, string explanation)
         {
-
-
-            ChangeCharacterStatisticsDemandMessage message = new ChangeCharacterStatisticsDemandMessage(1, 2, null);
+            // create Debug message
+            DebugMessage message = new DebugMessage(code, explanation);
 
             // send message
-            controller.HandleSendingMessage(message);
-            
+            NetworkController.HandleSendingMessage(message);
         }
     }
 }
