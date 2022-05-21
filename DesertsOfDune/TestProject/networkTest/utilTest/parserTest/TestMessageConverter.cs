@@ -355,5 +355,86 @@ namespace TestProject.networkTest.utilTest.parserTest
             Assert.IsInstanceOf<ActionDemandMessage>(deserializedMessage);
             ((ActionDemandMessage)deserializedMessage).getMessageType();
         }
+
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message ActionRequestMessage
+        /// </summary>
+        [Test]
+        public void TestToActionRequestMessage()
+        {
+            string serializedMessage = "{\"type\":\"ACTION_REQUEST\",\"version\":\"0.1\",\"clientID\":1234,\"characterID\":12,\"action\":\"VOICE\",\"specs\":{\"target\":{\"x\":2,\"y\":3}}}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+            Assert.IsNotNull(deserializedMessage);
+            Assert.IsInstanceOf<ActionDemandMessage>(deserializedMessage);
+            ((ActionRequestMessage)deserializedMessage).getMessageType();
+        }
+
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message ChangeCharacterStatisticsDemandMessage
+        /// </summary>
+        [Test]
+        public void TestToChangeCharacterStatisticsDemandMessage()
+        {
+            string serializedMessage = "";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+            Assert.IsNotNull(deserializedMessage);
+            Assert.IsInstanceOf<ActionDemandMessage>(deserializedMessage);
+            ((ChangeCharacterStatisticsDemandMessage)deserializedMessage).getMessageType();
+        }
+
+        // TODO: implement tests for these messages..
+
+        //ChangePlayerSpiceDemandMessage
+
+        //CreateMessage
+
+        //DebugMessage
+
+        //EndGameMessage
+
+        // EndTurnRequestMessage
+
+        // GameConfigMessage
+
+        // GameEndMessage
+
+        //GameStateMessage
+
+        //GameStateRequestMessage
+
+        //HouseAcknowledgementMessage
+
+        //HouseOfferMessage
+
+        //HouseRequestMessage
+
+        //JoinAcceptedMessage
+
+        //JoinMessage
+
+        //MapChangeDemandMessage
+
+        //MovementDemandMessage
+
+        //MovementRequestMessage
+
+        //PauseGameMessage
+
+        //PauseGameRequestMessage
+
+        //SandwormDespawnDemandMessage
+
+        //SandwormMoveDemandMessage
+
+        // SandwormSpawnDemandMessage
+
+        // SpawnCharacterDemandMessage
+
+        // StrikeMessage
+
+        // TurnDemandMessage
+
+        // TurnRequestMessage
+
     }
 }

@@ -18,7 +18,6 @@
   <ItemGroup>
     <Folder Include="networkTest\controllerTest\" />
     <Folder Include="networkTest\messagesTest\" />
-    <Folder Include="networkTest\utilTest\worldTest\" />
     <Folder Include="serverTest\roundHandlerTest\" />
   </ItemGroup>
 
