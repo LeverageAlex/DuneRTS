@@ -15,7 +15,7 @@ namespace GameData.network.util.world.mapField
         /// <param name="hasSpice">tells weather there is spice on the MapField or not</param>
         /// <param name="isInSandstorm">tells weather the field is in a Sandstorm or not</param>
         /// <param name="stormEye">tells weather the field is in the storm eye or not</param>
-        public FlatSand(bool hasSpice, bool isInSandstorm, Position stormEye) : base(enums.TileType.MOUNTAIN, enums.Elevation.high, hasSpice, isInSandstorm, stormEye)
+        public FlatSand(bool hasSpice, bool isInSandstorm, Position stormEye) : base(enums.TileType.FLAT, enums.Elevation.high, hasSpice, isInSandstorm, stormEye)
         {
 
         }

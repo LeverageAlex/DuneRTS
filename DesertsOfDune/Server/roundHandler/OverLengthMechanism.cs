@@ -8,7 +8,7 @@ namespace GameData.network.util.world
     public class OverLengthMechanism : SandstormPhase
     {
         private bool firstOverleghtRound;
-        private Earthquake earthQuake;
+        private EarthQuake earthQuake;
         private ShaiHuludPhase shaiHuludPhase;
 
     }

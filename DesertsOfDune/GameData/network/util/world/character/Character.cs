@@ -38,10 +38,15 @@ namespace GameData.network.util.world
         private bool killedBySandworm;
         [JsonProperty]
         private bool isLoud;
-        private bool isDead;
         private MapField currentMapfield;
         private int characterId;
         private GreatHouse greatHouse;
+        [JsonIgnore]
+        public bool KilledBySandworm
+        {
+            get { return killedBySandworm; }
+        }
+
 
         /// <summary>
         /// This is the Constructor of the Class Character
@@ -89,7 +94,6 @@ namespace GameData.network.util.world
                 return true;
             } else
             {
-                this.isDead = true;
                 return false;
             }
         }
@@ -159,7 +163,7 @@ namespace GameData.network.util.world
         /// <returns>true, if healthpoints are equal to zero</returns>
         public bool IsDead()
         {
-            if (isDead)
+            if (healthCurrent == 0)
             {
                 return true;
             }

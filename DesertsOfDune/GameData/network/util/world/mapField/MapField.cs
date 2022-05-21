@@ -51,6 +51,8 @@ namespace GameData.network.util.world
         public int ZCoordinate { get { return zCoordinate; } }
 
         private bool isCityField;
+        [JsonIgnore]
+        public string TileType { get { return tileType; }  set { tileType = value; } }
 
         /// <summary>
         /// Constructor of the class MapField for a City MapField
@@ -62,7 +64,7 @@ namespace GameData.network.util.world
         /// <param name="stormEye">the center position of the storm can be null</param>
         public MapField(bool hasSpice, bool isInSandstorm, int clientID, Position stormEye)
         {
-            this.tileType = Enum.GetName(typeof(TileType),TileType.CITY);
+            this.tileType = Enum.GetName(typeof(TileType),enums.TileType.CITY);
             this.hasSpice = hasSpice;
             this.isInSandstorm = isInSandstorm;
             this.clientID = clientID;

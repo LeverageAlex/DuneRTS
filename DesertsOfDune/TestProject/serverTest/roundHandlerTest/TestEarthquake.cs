@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using GameData.server.roundHandler;
+using GameData.network.util.world;
+using GameData.network.util.world.mapField;
 
 namespace UnitTestSuite.serverTest.roundHandlerTest
 {
@@ -24,7 +27,25 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
         [Test]
         public void TestTransformRockPlanes()
         {
-            // implement logic
+            MapField[,] fields = new MapField[4, 2];
+            RockPlateau field = new RockPlateau(false, false, null);
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 2; j++)
+                {
+                    fields[i, j] = field;
+                }
+            }
+
+            EarthQuake e = new EarthQuake(fields);
+            e.TransformRockPlanes();
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 2; j++)
+                {
+                    Assert.AreEqual("DUNE", fields[i, j].TileType);
+                }
+            }
         }
 
         /// <summary>

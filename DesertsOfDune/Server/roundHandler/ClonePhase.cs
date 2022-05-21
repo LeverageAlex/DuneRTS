@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using GameData.network.util.world;
+using GameData.gameObjects;
 
 namespace GameData.server.roundHandler
 {
@@ -9,18 +11,25 @@ namespace GameData.server.roundHandler
     /// </summary>
     public class ClonePhase
     {
-
-        // TODO: implement class Character
-        // List<Character> clonableCharacters;
-        private GameData.gameObjects.RoundHandler parent;
+        List<Character> clonableCharacters;
+        private RoundHandler parent;
+        private double cloneProbability = 0.5;
 
         /// <summary>
-        /// This method handles the cloning by chance.
+        /// This method triggers the cloning of a character by chance.
         /// </summary>
-        /// <returns>true, if a character was cloned</returns>
-        public bool CalculateCloning(/* Character character*/)
+        /// <returns>true, if the cloning is triggered</returns>
+        public bool CalculateCloning(Character character)
         {
-            // todo implement logic
+            if (character.IsDead() && !(character.KilledBySandworm))
+            {
+                Random random = new Random();
+                if (cloneProbability + random.NextDouble() >= 1.0)
+                {
+                    CloneCharacter(character);
+                    return true;
+                }
+            }
             return false;
         }
 
@@ -28,7 +37,7 @@ namespace GameData.server.roundHandler
         /// This method clones a specific character
         /// </summary>
         /// <returns>true, if the character was cloned</returns>
-        public bool CloneCharacter(/* Character character*/)
+        public bool CloneCharacter(Character character)
         {
             // todo implement logic
             return false;

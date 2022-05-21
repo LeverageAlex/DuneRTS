@@ -13,12 +13,12 @@
     <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
     <PackageReference Include="coverlet.collector" Version="3.1.0" />
 	<ProjectReference Include="..\GameData\GameData.csproj" />
+	<ProjectReference Include="..\Server\Server.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="networkTest\controllerTest\" />
     <Folder Include="networkTest\messagesTest\" />
-    <Folder Include="serverTest\roundHandlerTest\" />
   </ItemGroup>
 
 </Project>
