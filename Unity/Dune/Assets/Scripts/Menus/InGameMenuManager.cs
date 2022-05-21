@@ -11,27 +11,6 @@ public class InGameMenuManager : MonoBehaviour
     public GameObject PauseScreenWithButton;
     public GameObject PauseScreenNoButton;
 
-    public void SwitchToInGameMenu()
-    {
-        InGameMenu.SetActive(true);
-        InGameUI.SetActive(false);
-        OptionsMenu.SetActive(false);
-    }
-
-    public void SwitchToInGameUI()
-    {
-        InGameMenu.SetActive(false);
-        InGameUI.SetActive(true);
-        OptionsMenu.SetActive(false);
-    }
-
-    public void SwitchToOptionsMenu()
-    {
-        InGameMenu.SetActive(false);
-        InGameUI.SetActive(false);
-        OptionsMenu.SetActive(true);
-    }
-
     public void ExitToMainMenu()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
@@ -53,9 +32,8 @@ public class InGameMenuManager : MonoBehaviour
     /// </summary>
     public void ForcedPauseGame()
     {
-        InGameMenu.SetActive(false);
-        InGameUI.SetActive(false);
-        OptionsMenu.SetActive(false);
+        ActivateMenu(null);//deactivate all menus
+
         if (!PauseScreenWithButton.activeSelf)
         {
             PauseScreenNoButton.SetActive(true);
@@ -78,12 +56,53 @@ public class InGameMenuManager : MonoBehaviour
     /// </summary>
     public void ForcedUnpauseGame()
     {
-        InGameMenu.SetActive(false);
-        InGameUI.SetActive(true);
-        OptionsMenu.SetActive(false);
+        ActivateMenu(InGameUI);
+
         PauseScreenWithButton.SetActive(false);
         PauseScreenNoButton.SetActive(false);
 
         Time.timeScale = 1f;
+    }
+
+    /// <summary>
+    /// this method is a HELPER-METHOD to change the .isActive trade of the menus
+    /// </summary>
+    /// <param name="menuToActivate">maybe null</param>
+    private void ActivateMenu(GameObject menuToActivate)
+    {
+        InGameMenu.SetActive(false);
+        InGameUI.SetActive(false);
+        OptionsMenu.SetActive(false);
+
+        if(menuToActivate != null)
+        {
+            menuToActivate.SetActive(true);
+        }
+    }
+
+    //BUTTON SWITCH MENU METHODS ------------
+
+    /// <summary>
+    /// this method is called by a BUTTON to switch to the MainMenu
+    /// </summary>
+    public void SwitchToInGameMenu()
+    {
+        ActivateMenu(InGameMenu);
+    }
+
+    /// <summary>
+    /// this method is called by a BUTTON to switch to the InGameUi
+    /// </summary>
+    public void SwitchToInGameUI()
+    {
+        ActivateMenu(InGameUI);
+    }
+
+    /// <summary>
+    /// this method is called by a BUTTON to switch to the OptionsMenu
+    /// </summary>
+    public void SwitchToOptionsMenu()
+    {
+        ActivateMenu(OptionsMenu);
     }
 }

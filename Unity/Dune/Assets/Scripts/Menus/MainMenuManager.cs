@@ -10,30 +10,16 @@ public class MainMenuManager : MonoBehaviour
     public GameObject MainMenu;
     public GameObject OptionsMenu;
     public GameObject HouseSelectionMenu;
+    public GameObject PlayOptionsMenu;
 
     [Header("HouseSelection:")]
     public Toggle option1;
     public Toggle option2;
     public GameObject confirmButton;
 
-    /// <summary>
-    /// this method is called by a BUTTON to switch to the MainMenu
-    /// </summary>
-    public void SwitchToMainMenu()
+    void Start()
     {
-        MainMenu.SetActive(true);
-        HouseSelectionMenu.SetActive(false);
-        OptionsMenu.SetActive(false);
-    }
-
-    /// <summary>
-    /// this method is called by a BUTTON to switch to the OptionsMenu
-    /// </summary>
-    public void SwitchToOptionsMenu()
-    {
-        MainMenu.SetActive(false);
-        HouseSelectionMenu.SetActive(false);
-        OptionsMenu.SetActive(true);
+        ActivateMenu(MainMenu);
     }
 
     /// <summary>
@@ -46,20 +32,13 @@ public class MainMenuManager : MonoBehaviour
         SetOptionText(1, houseName1);
         SetOptionText(2, houseName2);
 
-        MainMenu.SetActive(false);
-        HouseSelectionMenu.SetActive(true);
-        OptionsMenu.SetActive(false);
+        ActivateMenu(HouseSelectionMenu);
     }
 
     //THIS METHOD IS TEMPORARY AND ONLY MENT FOR THE BUTTON ACTIVATION OF THE HOUSE SELECTEION ToDo delete
     public void StartHouseSelection()
     {
-        SetOptionText(1, "option1");
-        SetOptionText(2, "option2");
-
-        MainMenu.SetActive(false);
-        HouseSelectionMenu.SetActive(true);
-        OptionsMenu.SetActive(false);
+        StartHouseSelection("option 1", "option 2");
     }
 
     /// <summary>
@@ -67,9 +46,7 @@ public class MainMenuManager : MonoBehaviour
     /// </summary>
     public void EndHouseSelection()
     {
-        MainMenu.SetActive(true);
-        HouseSelectionMenu.SetActive(false);
-        OptionsMenu.SetActive(false);
+        ActivateMenu(MainMenu);
     }
 
     /// <summary>
@@ -139,5 +116,49 @@ public class MainMenuManager : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    /// <summary>
+    /// this method is a HELPER-METHOD to change the .isActive trade of the menus
+    /// </summary>
+    /// <param name="menuToActivate">maybe null</param>
+    private void ActivateMenu(GameObject menuToActivate)
+    {
+        MainMenu.SetActive(false);
+        HouseSelectionMenu.SetActive(false);
+        OptionsMenu.SetActive(false);
+        PlayOptionsMenu.SetActive(false);
+
+        if (menuToActivate != null)
+        {
+            menuToActivate.SetActive(true);
+        }
+    }
+
+
+    //BUTTON SWITCH MENU METHODS ------------
+
+    /// <summary>
+    /// this method is called by a BUTTON to switch to the MainMenu
+    /// </summary>
+    public void SwitchToMainMenu()
+    {
+        ActivateMenu(MainMenu);
+    }
+
+    /// <summary>
+    /// this method is called by a BUTTON to switch to the OptionsMenu
+    /// </summary>
+    public void SwitchToOptionsMenu()
+    {
+        ActivateMenu(OptionsMenu);
+    }
+
+    /// <summary>
+    /// this method is called by a BUTTON to switch to the PlayOptionsMenu
+    /// </summary>
+    public void SwitchToPlayOptionsMenu()
+    {
+        ActivateMenu(PlayOptionsMenu);
     }
 }
