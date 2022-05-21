@@ -22,7 +22,7 @@ namespace Server.parser.commandLineParser
         /// </summary>
         private readonly ServerConfigurationValidator validator;
 
-        public ServerConfiguration configuration { get; }
+        public ServerConfiguration Configuration { get; }
 
         /// <summary>
         /// creates a command line parser for the server and initializes the parser
@@ -30,7 +30,7 @@ namespace Server.parser.commandLineParser
         public CommandLineParser() : base()
         {
             validator = new ServerConfigurationValidator();
-            configuration = new ServerConfiguration();
+            Configuration = new ServerConfiguration();
 
             InitializeParser();
         }
@@ -66,7 +66,7 @@ namespace Server.parser.commandLineParser
         {
             if (validator.IsMatchConfigFilePathValid(filepath))
             {
-                configuration.FilePathMatchConfiguration = filepath;
+                Configuration.FilePathMatchConfiguration = filepath;
 
                 Log.Debug("The filepath " + filepath + " is valid and the match config will tried to be load.");
                 return true;
@@ -83,7 +83,7 @@ namespace Server.parser.commandLineParser
         {
             if (validator.IsScenarioConfigFilePathValid(filepath))
             {
-                configuration.FilePathScenarioConfiguration = filepath;
+                Configuration.FilePathScenarioConfiguration = filepath;
 
                 Log.Debug("The filepath " + filepath + " is valid and the scenario config will tried to be load.");
                 return true;
@@ -102,7 +102,7 @@ namespace Server.parser.commandLineParser
             if (port == ServerConfiguration.DEFAULT_PORT)
             {
                 Log.Information("The default port " + ServerConfiguration.DEFAULT_PORT + " is used");
-                configuration.Port = ServerConfiguration.DEFAULT_PORT;
+                Configuration.Port = ServerConfiguration.DEFAULT_PORT;
                 return true;
             }
             else
@@ -111,7 +111,7 @@ namespace Server.parser.commandLineParser
                 if (validator.IsPortValid(port))
                 {
                     Log.Debug("The port " + port + " is valid and will be used to start the websocket server");
-                    configuration.Port = port;
+                    Configuration.Port = port;
                     return true;
                 }
             }

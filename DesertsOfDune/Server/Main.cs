@@ -3,6 +3,7 @@
 using GameData.network.controller;
 using GameData.network.util;
 using Serilog;
+using Server.Configuration;
 using Server.parser.commandLineParser;
 
 namespace Server
@@ -13,6 +14,8 @@ namespace Server
     /// expected to be syntactically and semantically correct. For further information see <see cref="Main(string[])"/>
     /// </summary>
     static class Programm {
+
+        private static ServerConfiguration configuration;
 
         /// <summary>
         /// main method, which is executed when the server was started / executed
@@ -52,7 +55,10 @@ namespace Server
         {
             MessageController messageController = new MessageController();
 
-            ServerConnectionHandler serverConnectionHandler = new ServerConnectionHandler("127.0.0.1", 7890);
+            string serverAddress = ServerConfiguration.DEFAULT_SERVER_ADDRESS;
+            int port = configuration.Port;
+
+            ServerConnectionHandler serverConnectionHandler = new ServerConnectionHandler(serverAddress, port);
             _ = new ServerNetworkController(serverConnectionHandler, messageController);
         }
 
@@ -67,9 +73,13 @@ namespace Server
             if (wasSuccessfullyParsed)
             {
                 Log.Debug("The command line arguments of the server were parsed sucessfully");
+
+                // get the configuration data
+                configuration = parser.Configuration;
             } else
             {
                 Log.Fatal("The given command line arguments contains errors and cannot be processed. So restart the server with correct arguments.");
+                Environment.Exit(0);
             }
         }
     }

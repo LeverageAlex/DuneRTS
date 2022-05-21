@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Transactions;
 using CommandLine;
 using CommandLine.Text;
+using GameData.validation;
 using Serilog;
 
 namespace GameData.network.util.parser
@@ -13,7 +14,6 @@ namespace GameData.network.util.parser
     abstract public class ACommandLineParser<T>
     {
         private Parser parser;
-        private readonly T typeOfParser;
 
         /// <summary>
         /// creates a new command line parser and trigger the initialization of the parser
