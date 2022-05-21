@@ -12,7 +12,7 @@ namespace Server.Clients
         public int ClientID { get; }
         public string ClientName { get; }
         public string ClientSecret { get; }
-        public string LobbyCode { get;}
+        public string LobbyCode { get; }
 
         public Player()
         {

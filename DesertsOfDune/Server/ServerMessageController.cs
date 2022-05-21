@@ -9,7 +9,7 @@ namespace Server
 {
     public class ServerMessageController : MessageController
     {
-        private readonly Dictionary<string, Party> _parties;
+        private readonly Dictionary<string, Party> _parties; //Dictionary of all created parties
 
         public ServerMessageController()
         {
@@ -24,11 +24,11 @@ namespace Server
         /// <param name="msg">CreateMessage with the info of lobbyCode and cpuCount</param>
         public void OnCreateMessage(CreateMessage msg)
         {
-            //msg.Spectate
+            //TODO: msg.Spectate?
             _parties.Add(msg.LobbyCode, new Party(msg.LobbyCode));
-            Console.WriteLine("- Party created");
+            //Console.WriteLine("- Party created");
 
-            //send back accepted message (not here)
+            //send back ack or error message
         }
 
         /// <summary>
@@ -44,16 +44,20 @@ namespace Server
             {
                 if(party.Key == msg.ConnectionCode)
                 {
-                    if (msg.Active) //client is a player
+                    if (!msg.IsCpu && msg.Active) //client is a HumanPlayer
                     {
                         //distinction between AI and Human
                         var player = new Player(clientName, party.Key);
                         party.Value.AddPlayer(player);
-                        Console.WriteLine($"- Player {clientName} joined"); //test
+                        //Console.WriteLine($"- Player {clientName} joined"); //test
+                    }
+                    else if(msg.IsCpu && msg.Active) //client is AIPlayer
+                    {
+                        
                     }
                     else //client is spectator
                     {
-                        //create spectator
+
                     }
                 }
                 else
@@ -100,6 +104,11 @@ namespace Server
             //int targetID
         }
 
+        public void OnTransferRequestMessage(TransferReuqestMessage msg)
+        {
+            throw new NotImplementedException("not implemented");
+        }
+
         public void OnEndTurnRequestMessage(EndTurnRequestMessage msg)
         {
             throw new NotImplementedException("not implemented");
@@ -142,6 +151,18 @@ namespace Server
             Console.WriteLine("- Join accepted");
         }
 
+        public void DoSendAck()
+        {
+            AckMessage ackMessage = new AckMessage();
+            NetworkController.HandleSendingMessage(ackMessage);
+        }
+
+        public void DoSendError(int errorCode, string errorDescription)
+        {
+            ErrorMessage errorMessage = new ErrorMessage(errorCode, errorDescription);
+            NetworkController.HandleSendingMessage(errorMessage);
+        }
+
         public void DoSendGameConfig(List<string[]> scenario, string party, int client0ID, int client1ID)
         {
             GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, party, client0ID, client1ID);
@@ -166,12 +187,6 @@ namespace Server
             NetworkController.HandleSendingMessage(turnDemandMessage);
         }
 
-        public void DoSendStrike(int clientID, string wrongMessage, int count)
-        {
-            StrikeMessage strikeMessage = new StrikeMessage(clientID, wrongMessage, count);
-            NetworkController.HandleSendingMessage(strikeMessage);
-        }
-
         public void DoSendMovementDemand(int clientID, int characterID, List<Position> path)
         {
             MovementDemandMessage movementDemandMessage = new MovementDemandMessage(clientID, characterID, path);
@@ -182,6 +197,12 @@ namespace Server
         {
             ActionDemandMessage actionDemandMessage = new ActionDemandMessage(clientID, characterID, action, target);
             NetworkController.HandleSendingMessage(actionDemandMessage);
+        }
+
+        public void DoSendTransferDemand(int clientID, int characterID, int targetID)
+        {
+            TransferDemandMessage transferDemandMessage = new TransferDemandMessage(clientID, characterID, targetID);
+            NetworkController.HandleSendingMessage(transferDemandMessage);
         }
 
         public void DoSendChangeCharacterStatsDemand(int clientID, int characterID, CharacterStatistics stats)
@@ -226,22 +247,40 @@ namespace Server
             NetworkController.HandleSendingMessage(sandwormDespawnDemandMessage);
         }
 
-        public void DoEndGame(int winnerID, int loserID, Statistics stats)
+        public void DoEndGame()
+        {
+            EndGameMessage endGameMessage = new EndGameMessage();
+            NetworkController.HandleSendingMessage(endGameMessage);
+        }
+
+        public void DoGameEndMessage(int winnerID, int loserID, Statistics stats)
         {
             GameEndMessage gameEndMessage = new GameEndMessage(winnerID, loserID, stats);
             NetworkController.HandleSendingMessage(gameEndMessage);
         }
 
-        public void DoSendGameState(int clientID, String[] history)
+        public void DoSendGameState(int clientID, int[] activlyPlayingIDs, String[] history)
         {
-            //GameStateMessage gameStateMessage = new GameStateMessage(history, clientID);
-            //NetworkController.HandleSendingMessage(gameStateMessage);
+            GameStateMessage gameStateMessage = new GameStateMessage(clientID, activlyPlayingIDs, history);
+            NetworkController.HandleSendingMessage(gameStateMessage);
         }
 
-        public void DoPauseGame(int requestedByClientID, bool pause)
+        public void DoSendStrike(int clientID, string wrongMessage, int count)
         {
-            //PauseGameDemandMessage pauseGameMessage = new PauseGameDemandMessage(requestedByClientID, pause);
-            //NetworkController.HandleSendingMessage(pauseGameMessage);
+            StrikeMessage strikeMessage = new StrikeMessage(clientID, wrongMessage, count);
+            NetworkController.HandleSendingMessage(strikeMessage);
+        }
+
+        public void DoGamePauseDemand(int requestedByClientID, bool pause)
+        {
+            GamePauseDemandMessage gamePauseDemandMessage = new GamePauseDemandMessage(requestedByClientID, pause);
+            NetworkController.HandleSendingMessage(gamePauseDemandMessage);
+        }
+
+        public void OnUnpauseGameOffer(int requestedByClientID)
+        {
+            UnpauseGameOfferMessage unpauseGameOfferMessage = new UnpauseGameOfferMessage(requestedByClientID);
+            NetworkController.HandleSendingMessage(unpauseGameOfferMessage);
         }
     }
 }

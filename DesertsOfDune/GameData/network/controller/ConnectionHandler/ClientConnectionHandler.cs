@@ -85,7 +85,7 @@ namespace GameData.network.controller
         public void ConnectToWebsocketServer()
         {
             WebSocket.Connect();
-            Log.Information("The client " + WebSocket.Credentials.Domain + " connect to the websocket server at " + GetURL());
+            //Log.Information("The client " + WebSocket.Credentials.Domain + " connect to the websocket server at " + GetURL());
         }
 
         // TODO: hide the CloseStatusCode and implement own variant, which can be exposed --> map own codes on CloseStatusCode
