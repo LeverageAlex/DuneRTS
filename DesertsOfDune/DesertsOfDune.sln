@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestClient", "TestClient\Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameData", "GameData\GameData.csproj", "{3E8E5328-DA7B-4F00-8B4E-EF1F27D37086}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{BB1B873A-4B86-43B1-AD5B-DD2E99000685}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestSuite", "TestProject\UnitTestSuite.csproj", "{BB1B873A-4B86-43B1-AD5B-DD2E99000685}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

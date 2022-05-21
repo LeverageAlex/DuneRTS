@@ -3,7 +3,7 @@ using GameData.network.util.parser;
 using GameData.network.messages;
 using GameData.network.util.world;
 
-namespace TestProject
+namespace TestProject.networkTest.utilTest.parserTest
 {
     /// <summary>
     /// This Class is used to Test the MessageConverter
@@ -33,7 +33,7 @@ namespace TestProject
         [Test]
         public void TestFromActionRequestMessage()
         {
-            ActionRequestMessage message = new ActionRequestMessage(1234, 12, ActionType.VOICE, new Position(2,3));
+            ActionRequestMessage message = new ActionRequestMessage(1234, 12, ActionType.VOICE, new Position(2, 3));
             string serializedMessage = MessageConverter.FromMessage(message);
             Assert.AreEqual("{\"type\":\"ACTION_REQUEST\",\"version\":\"0.1\",\"clientID\":1234,\"characterID\":12,\"action\":\"VOICE\",\"specs\":{\"target\":{\"x\":2,\"y\":3}}}", serializedMessage);
         }
