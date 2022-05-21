@@ -58,7 +58,7 @@ namespace GameData.gameObjects
         public bool PauseGame()
         {
             // TODO implement logic
-            PauseGameMessage pauseGameMessage = new PauseGameMessage(1234, true);
+            GamePauseDemandMessage pauseGameMessage = new GamePauseDemandMessage(1234, true);
             return false;
         }
 

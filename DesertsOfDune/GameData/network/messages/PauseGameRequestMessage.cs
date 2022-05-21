@@ -16,7 +16,6 @@ namespace GameData.network.messages
         /// <summary>
         /// Constructor of the class PauseGameRequestMessage
         /// </summary>
-        /// <param name="clientID">the id of the client</param>
         /// <param name="pause">true, if client wishes to pause the game if he wishes to continue false</param>
         public PauseGameRequestMessage(bool pause) : base("v1",MessageType.PAUSE_REQUEST)
         {
