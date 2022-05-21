@@ -15,8 +15,6 @@ namespace GameData.network.messages
         private string action;
         [JsonProperty]
         private Specs Specs;
-        //[JsonProperty]
-        //private int targetID;
 
         /// <summary>
         /// Constructor of the class ActionRequestMessage

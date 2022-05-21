@@ -5,23 +5,25 @@
     /// </summary>
     public enum MessageType
     {
-        ACK,
-        ERROR,
         DEBUG,
         CREATE,
         JOIN,
         JOINACCEPTED,
+        ACK,
+        ERROR,
         GAMECFG,
         HOUSE_OFFER,
         HOUSE_REQUEST,
-        HOUSE_ACKNOWLEGDEMENT,
-        TURN_REQUEST,
+        HOUSE_ACKNOLEDGEMENT,
+        TURN_DEMAND,
         MOVEMENT_REQUEST,
         ACTION_REQUEST,
+        TRANSFER_REQUEST,
         MOVEMENT_DEMAND,
-        TURN_DEMAND,
         ACTION_DEMAND,
+        TRANSFER_DEMAND,
         CHARACTER_STAT_CHANGE_DEMAND,
+        END_TURN_REQUEST,
         MAP_CHANGE_DEMAND,
         SPAWN_CHARACTER_DEMAND,
         CHANGE_PLAYER_SPICE_DEMAND,
@@ -29,13 +31,12 @@
         SANDWORM_MOVE_DEMAND,
         SANDWORM_DESPAWN_DEMAND,
         ENDGAME,
-        REQUEST_GAMESTATE,
+        GAME_END,
+        GAMESTATE_REQUEST,
         GAMESTATE,
         STRIKE,
         PAUSE_REQUEST,
         GAME_PAUSE_DEMAND,
-        UNPAUSE_GAME_OFFER,
-        END_TURN_REQUEST,
-        GAME_END
+        UNPAUSE_GAME_OFFER
     }
 }
