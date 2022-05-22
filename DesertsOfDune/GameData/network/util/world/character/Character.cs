@@ -44,7 +44,7 @@ namespace GameData.network.util.world
         [JsonIgnore]
         public bool KilledBySandworm
         {
-            get { return killedBySandworm; }
+            get { return killedBySandworm; } set { killedBySandworm = value; } 
         }
 
 

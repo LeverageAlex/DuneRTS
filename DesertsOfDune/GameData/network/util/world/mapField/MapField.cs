@@ -31,8 +31,8 @@ namespace GameData.network.util.world
         [JsonIgnore]
         public Elevation Elevation
         {
-            get { return elevation; }  
-            set { elevation = value; }  
+            get { return elevation; }
+            set { elevation = value; }
         }
         private bool isAprochable;
 
@@ -52,7 +52,11 @@ namespace GameData.network.util.world
 
         private bool isCityField;
         [JsonIgnore]
-        public string TileType { get { return tileType; }  set { tileType = value; } }
+        public string TileType { get { return tileType; } set { tileType = value; } }
+
+        private Character character;
+        [JsonIgnore]
+        public Character Character { get { return character; } set { character = value; } }
 
         /// <summary>
         /// Constructor of the class MapField for a City MapField

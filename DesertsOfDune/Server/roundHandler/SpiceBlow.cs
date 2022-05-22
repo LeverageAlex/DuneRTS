@@ -13,27 +13,31 @@ namespace GameData.server.roundHandler
     /// </summary>
     public class SpiceBlow
     {
-        private RoundHandler parent;
-
-        public SpiceBlow(RoundHandler parent)
+        private MapField[,] mapFields;
+       
+        /// <summary>
+        /// Constructor of the Class SpiceBlow
+        /// </summary>
+        /// <param name="mapFields">the map of the game</param>
+        public SpiceBlow(MapField[,] mapFields)
         {
-            this.parent = parent;
+            this.mapFields = mapFields;
         }
         /// <summary>
         /// This method does the SpiceBlow.
         /// </summary>
         /// <returns>true, if the spiceblow was possible</returns>
-        public bool RandomSpiceBlow()
+        public bool RandomSpiceBlow(int spiceMinimum, int currentSpice)
         {
-            if (SpiceBlowIsApplicable())
+            if (SpiceBlowIsApplicable(spiceMinimum,currentSpice))
             {
                 int indexX;
                 int indexZ;
                 while (true)
                 {
-                    indexX = ChoosRandomMapFieldIndxX();
-                    indexZ = ChoosRandomMapFieldIndxZ();
-                    if (parent.Map[indexX, indexZ].TileType ==  "DUNE")
+                    indexX = ChoosRandomMapFieldIndexX();
+                    indexZ = ChoosRandomMapFieldIndexZ();
+                    if (mapFields[indexX, indexZ].TileType ==  "DUNE")
                     {
                         break;
                     }
@@ -49,23 +53,22 @@ namespace GameData.server.roundHandler
         /// This method chooses one random x-coordinate on the map
         /// </summary>
         /// <returns>the coordinate on the map</returns>
-        private int ChoosRandomMapFieldIndxX()
+        public int ChoosRandomMapFieldIndexX()
         {
-            int mapLengthX = parent.Map.GetLength(0);
+            int mapLengthX = mapFields.GetLength(0);
             Random random = new Random();
-            return random.Next(0, mapLengthX-1);
-
+            return random.Next(0, mapLengthX);
         }
 
         /// <summary>
         /// This method chooses one random z-coordinate on the map
         /// </summary>
         /// <returns>the coordinate on the map</returns>
-        private int ChoosRandomMapFieldIndxZ()
+        public int ChoosRandomMapFieldIndexZ()
         {
-            int mapLengthZ = parent.Map.GetLength(1);
+            int mapLengthZ = mapFields.GetLength(1);
             Random random = new Random();
-            return random.Next(0, mapLengthZ-1);
+            return random.Next(0, mapLengthZ);
         }
 
         /// <summary>
@@ -73,21 +76,21 @@ namespace GameData.server.roundHandler
         /// </summary>
         /// <param name="indexX">the x-coordinate of the selcted field</param>
         /// <param name="indexZ">the z-coordinate of the selected field</param>
-        private void ChangeFieldAndNeighborsRandomly(int indexX, int indexZ)
+        public void ChangeFieldAndNeighborsRandomly(int indexX, int indexZ)
         {
-            for(int i = indexX-1; i < indexX+1; i++)
+            for(int i = indexX-1; i < indexX+2; i++)
             {
-                for(int j = indexZ-1; j < indexZ+1; j++)
+                for(int j = indexZ-1; j < indexZ+2; j++)
                 {
-                    if (parent.Map[i,j] != null)
+                    if (i < mapFields.GetLength(0) && i >= 0 && j < mapFields.GetLength(1) && j >= 0)
                     {
                         Random random = new Random();
                         if (random.NextDouble() > 0.5)
                         {
-                            parent.Map[i, j].TileType = Enum.GetName(typeof(TileType), network.util.enums.TileType.DUNE);
+                            mapFields[i, j].TileType = Enum.GetName(typeof(TileType), network.util.enums.TileType.DUNE);
                         } else
                         {
-                            parent.Map[i, j].TileType = Enum.GetName(typeof(TileType), network.util.enums.TileType.FLAT);
+                            mapFields[i, j].TileType = Enum.GetName(typeof(TileType), network.util.enums.TileType.FLAT);
                         }
                     }
                 }
@@ -95,24 +98,33 @@ namespace GameData.server.roundHandler
         }
 
         /// <summary>
-        /// this method places spice by chance on the specified fields and ist
+        /// this method places spice by chance on the specified fields and its neighbours
         /// </summary>
-        /// <param name="indexX"></param>
-        /// <param name="indexZ"></param>
-        private void placeSpiceOnFields(int indexX, int indexZ)
+        /// <param name="indexX">the x coordinate</param>
+        /// <param name="indexZ">the z coordinate</param>
+        public void placeSpiceOnFields(int indexX, int indexZ)
         {
+            //TODO determine count neigthbors to break loop if necessary
             Random random = new Random();
             int amountOfSpice = random.Next(3, 6);
-            for (int i = indexX - 1; i < indexX + 1; i++)
+            Console.WriteLine("random number: " + amountOfSpice);
+            while (amountOfSpice > 0)
             {
-                for (int j = indexZ - 1; j < indexZ + 1; j++)
+                for (int i = indexX - 1; i < indexX + 2; i++)
                 {
-                    if (random.NextDouble() > 0.5)
+                    for (int j = indexZ - 1; j < indexZ + 2; j++)
                     {
-                        if(! (parent.Map[i,j].HasSpice) && amountOfSpice > 0)
+                        if (i < mapFields.GetLength(0) && i >= 0 && j < mapFields.GetLength(1) && j >= 0)
                         {
-                            parent.Map[i, j].HasSpice = true;
-                            amountOfSpice--;
+
+                            if (random.NextDouble() > 0.5)
+                            {
+                                if (/*!(parent.Map[i, j].HasSpice) &&*/ amountOfSpice > 0)
+                                {
+                                    mapFields[i, j].HasSpice = true;
+                                    amountOfSpice--;
+                                }
+                            }
                         }
                     }
                 }
@@ -123,9 +135,9 @@ namespace GameData.server.roundHandler
         /// This method determines weather the SpiceBlow is applicable
         /// </summary>
         /// <returns>true, if the SpiceBlow should be done</returns>
-        public bool SpiceBlowIsApplicable()
+        public bool SpiceBlowIsApplicable(int spiceMinimum, int currentSpice)
         {
-            if (parent.SpiceMinimum > parent.CurrentSpice)
+            if (spiceMinimum > currentSpice)
             {
                 return true;
             }
