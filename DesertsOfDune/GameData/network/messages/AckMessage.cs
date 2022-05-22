@@ -4,8 +4,6 @@ using System.Text;
 
 namespace GameData.network.messages
 {
-    public class AckMessage : Message
-    {
     /// <summary>
     /// This class is used to comunicate actions.
     /// </summary>
