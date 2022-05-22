@@ -21,6 +21,18 @@ namespace GameData.network.util.parser
         {
                 switch (message.getMessageType())
                 {
+                    case "TRANSFER_REQUEST":
+                        TransferRequestMessage transferRequestMessage = (TransferRequestMessage)message;
+                        return JsonConvert.SerializeObject(transferRequestMessage);
+                    case "TRANSFER_DEMAND":
+                        TransferDemandMessage transferDemandMessage = (TransferDemandMessage)message;
+                        return JsonConvert.SerializeObject(transferDemandMessage);
+                    case "GAME_PAUSE_DEMAND":
+                        PausGameDemandMessage pausGameDemandMessage = (PausGameDemandMessage)message;
+                        return JsonConvert.SerializeObject(pausGameDemandMessage);
+                    case "ACK":
+                        AckMessage ackMessage = (AckMessage)message;
+                        return JsonConvert.SerializeObject(ackMessage);
                     case "ACTION_DEMAND":
                         ActionDemandMessage actionDemandMessage = (ActionDemandMessage)message;
                         return JsonConvert.SerializeObject(actionDemandMessage);
@@ -81,9 +93,6 @@ namespace GameData.network.util.parser
                     case "MOVEMENT_REQUEST":
                         MovementRequestMessage movementRequestMessage = (MovementRequestMessage)message;
                         return JsonConvert.SerializeObject(movementRequestMessage);
-                    case "PAUSE_GAME":
-                        PauseGameMessage pauseGameMessage = (PauseGameMessage)message;
-                        return JsonConvert.SerializeObject(pauseGameMessage);
                     case "PAUSE_REQUEST":
                         PauseGameRequestMessage pauseGameRequestMessage = (PauseGameRequestMessage)message;
                         return JsonConvert.SerializeObject(pauseGameRequestMessage);
@@ -102,9 +111,6 @@ namespace GameData.network.util.parser
                     case "STRIKE":
                         StrikeMessage strikeMessage = (StrikeMessage)message;
                         return JsonConvert.SerializeObject(strikeMessage);
-                    case "TURN_REQUEST":
-                        TurnRequestMessage turnRequestMessage = (TurnRequestMessage)message;
-                        return JsonConvert.SerializeObject(turnRequestMessage);
                     case "TURN_DEMAND":
                         TurnDemandMessage turnDemandMessage = (TurnDemandMessage)message;
                         return JsonConvert.SerializeObject(turnDemandMessage);
@@ -135,6 +141,14 @@ namespace GameData.network.util.parser
             // deserialize JSON-String depending on the message type found in the message
             switch (messageType)
             {
+                case "TRANSFER_REQUEST":
+                    return JsonConvert.DeserializeObject<TransferRequestMessage>(message);
+                case "TRANSFER_DEMAND":
+                    return JsonConvert.DeserializeObject<TransferDemandMessage>(message);
+                case "GAME_PAUSE_DEMAND":
+                    return JsonConvert.DeserializeObject<PausGameDemandMessage>(message);
+                case "ACK":
+                    return JsonConvert.DeserializeObject<AckMessage>(message);
                 case "ACTION_DEMAND":
                     return JsonConvert.DeserializeObject<ActionDemandMessage>(message);
                 case "ACTION_REQUEST":
@@ -175,8 +189,6 @@ namespace GameData.network.util.parser
                     return JsonConvert.DeserializeObject<MovementDemandMessage>(message);
                 case "MOVEMENT_REQUEST":
                     return JsonConvert.DeserializeObject<MovementRequestMessage>(message);
-                case "PAUSE_GAME":
-                    return JsonConvert.DeserializeObject<PauseGameMessage>(message);
                 case "PAUSE_REQUEST":
                     return JsonConvert.DeserializeObject<PauseGameRequestMessage>(message);
                 case "SANDWORM_DESPAWN_DEMAND":
@@ -191,8 +203,6 @@ namespace GameData.network.util.parser
                     return JsonConvert.DeserializeObject<StrikeMessage>(message);
                 case "TURN_DEMAND":
                     return JsonConvert.DeserializeObject<TurnDemandMessage>(message);
-                case "TURN_REQUEST":
-                    return JsonConvert.DeserializeObject<TurnRequestMessage>(message);
                 default:
                     return null;
             }

@@ -23,7 +23,7 @@ namespace GameData.network.messages
         /// <param name="scenario">the scenario configuration</param>
         /// <param name="partyConfig">the party configuration</param>
         /// <param name="partyConfig">array of houses that are offered to the client</param>
-        public GameConfigMessage(List<string[]> scenario, string party, string[] houseOffer) : base("1.0", MessageType.GAMECFG)
+        public GameConfigMessage(List<string[]> scenario, string party, string[] houseOffer) : base("0.1", MessageType.GAMECFG)
         {
             this.scenario = scenario;
             this.party = party;

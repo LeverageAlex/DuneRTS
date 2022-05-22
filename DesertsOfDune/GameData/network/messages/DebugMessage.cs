@@ -20,7 +20,7 @@ namespace GameData.network.messages
         /// </summary>
         /// <param name="code">the code of the DebugMessage</param>
         /// <param name="explanation">the explanation for the DebugMessage</param>
-        public DebugMessage(int code, string explanation) : base("1.0", MessageType.DEBUG)
+        public DebugMessage(int code, string explanation) : base("0.1", MessageType.DEBUG)
         {
             this.code = code;
             this.explanation = explanation;

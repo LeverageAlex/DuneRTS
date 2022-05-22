@@ -268,18 +268,6 @@ namespace TestProject.networkTest.utilTest.parserTest
         }
 
         /// <summary>
-        /// This Testcase validates the serialization of the Message PauseGameMessage
-        /// </summary>
-        [Test]
-        public void TestFromPauseGameMessage()
-        {
-            // todo: gibt es dieses message überhaupt ich denke nicht.
-            PauseGameMessage message = new PauseGameMessage(2, true);
-            string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("", serializedMessage);
-        }
-
-        /// <summary>
         /// This Testcase validates the serialization of the Message PauseGameRequestMessage
         /// </summary>
         [Test]
@@ -345,20 +333,9 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromStrikeMessage()
         {
-            StrikeMessage message = new StrikeMessage(1, "asd", 2);
+            StrikeMessage message = new StrikeMessage(1234, "*fehlerhafte Message als String*", 4);
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("", serializedMessage);
-        }
-
-        /// <summary>
-        /// This Testcase validates the serialization of the Message TurnRequestMessage
-        /// </summary>
-        [Test]
-        public void TestFromTurnRequestMessage()
-        {
-            TurnRequestMessage message = new TurnRequestMessage(1, 2);
-            string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("", serializedMessage);
+            Assert.AreEqual("{\"type\":\"STRIKE\",\"version\":\"0.1\",\"clientID\":1234,\"wrongMessage\":\"*fehlerhafte Message als String*\",\"count\":4}", serializedMessage);
         }
 
         /// <summary>
@@ -367,9 +344,52 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromTurnDemandMessage()
         {
-            TurnDemandMessage message = new TurnDemandMessage(1, 2);
+            TurnDemandMessage message = new TurnDemandMessage(1234, 12);
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("", serializedMessage);
+            Assert.AreEqual("{\"type\":\"TURN_DEMAND\",\"version\":\"0.1\",\"clientID\":1234,\"characterID\":12}", serializedMessage);
+        }
+
+        /// <summary>
+        /// This Testcase validates the serialization of the Message AckMessage
+        /// </summary>
+        [Test]
+        public void TestFromAckMessage()
+        {
+            AckMessage message = new AckMessage();
+            string serializedMessage = MessageConverter.FromMessage(message);
+            Assert.AreEqual("{\"type\":\"ACK\",\"version\":\"0.1\"}", serializedMessage);
+        }
+
+        /// <summary>
+        /// This Testcase validates the serialization of the Message PausGameDemandMessage
+        /// </summary>
+        [Test]
+        public void TestFromPausGameDemandMessage()
+        {
+            PausGameDemandMessage message = new PausGameDemandMessage(12, true);
+            string serializedMessage = MessageConverter.FromMessage(message);
+            Assert.AreEqual("{\"type\":\"GAME_PAUSE_DEMAND\",\"version\":\"0.1\",\"requestedByClientID\":12,\"pause\":true}", serializedMessage);
+        }
+
+
+        /// <summary>
+        /// This Testcase validates the serialization of the Message TransferDemandMessage
+        /// </summary>
+        public void TestFromTransferDemandMessage()
+        {
+            TransferDemandMessage message = new TransferDemandMessage(1234, 12, 13);
+            string serializedMessage = MessageConverter.FromMessage(message);
+            Assert.AreEqual("{\"type\":\"TRANSFER_DEMAND\",\"version\":\"0.1\",\"clientID\":1234,\"characterID\":12,\"targetID\":13}", serializedMessage);
+        }
+
+        /// <summary>
+        /// This Testcase validates the serialization of the Message TransferRequestMessage
+        /// </summary>
+        public void TestFromTransferRequestMessage()
+        {
+            TransferRequestMessage message = new TransferRequestMessage(1234, 12, 13, 10);
+            string serializedMessage = MessageConverter.FromMessage(message);
+            Assert.AreEqual("{\"type\":\"TRANSFER_REQUEST\",\"version\":\"0.1\",\"clientID\":1234,\"characterID\":12,\"targetID\":13,\"amount\":10}", serializedMessage);
         }
 
         // The following tests are validating the ToMessage Method
