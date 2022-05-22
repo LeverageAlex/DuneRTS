@@ -1,22 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using Newtonsoft.Json;
 
 namespace GameData.network.messages
 {
-    public class TransferDemandMessage : Message
+    /// <summary>
+    /// This message is send by the server to demand a Transfer
+    /// </summary>
+    public class TransferDemandMessage : ClientServerMessage
     {
         [JsonProperty]
-        private int ClientID;
+        private int characterID;
         [JsonProperty]
-        private int CharacterID;
-        [JsonProperty]
-        private int TargetID;
+        private int targetID;
 
-        public TransferDemandMessage(int clientID, int characterID, int targetID) : base("v1", MessageType.TRANSFER_DEMAND)
+        /// <summary>
+        /// Constructor of the class TransferDemandMessage
+        /// </summary>
+        /// <param name="clientID">the id of the client</param>
+        /// <param name="characterID">the id of the character</param>
+        /// <param name="targetID">the id of the target character</param>
+        public TransferDemandMessage(int clientID, int characterID, int targetID) : base(clientID, MessageType.TRANSFER_DEMAND)
         {
-            this.ClientID = clientID;
-            this.CharacterID = characterID;
-            this.TargetID = targetID;
+            this.characterID = characterID;
+            this.targetID = targetID;
         }
     }
 }

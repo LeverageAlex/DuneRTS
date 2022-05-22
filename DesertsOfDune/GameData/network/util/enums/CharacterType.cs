@@ -8,6 +8,6 @@
         NOBEL,
         MENTAT,
         BENEGESSERIT,
-        FIGHTER
+        FIGHTHER
     }
 }

@@ -10,13 +10,12 @@
         JOIN,
         JOINACCEPTED,
         ACK,
-        ERROR,
         GAMECFG,
         HOUSE_OFFER,
         HOUSE_REQUEST,
         HOUSE_ACKNOWLEDGEMENT,
-        TURN_DEMAND,
         MOVEMENT_REQUEST,
+        TRANSFER_REQUEST,
         ACTION_REQUEST,
         TRANSFER_REQUEST,
         MOVEMENT_DEMAND,
@@ -31,12 +30,13 @@
         SANDWORM_MOVE_DEMAND,
         SANDWORM_DESPAWN_DEMAND,
         ENDGAME,
-        GAME_END,
         GAMESTATE_REQUEST,
         GAMESTATE,
         STRIKE,
         PAUSE_REQUEST,
         GAME_PAUSE_DEMAND,
-        UNPAUSE_GAME_OFFER
+        UNPAUSE_GAME_OFFER,
+        END_TURN_REQUEST,
+        GAME_END
     }
 }

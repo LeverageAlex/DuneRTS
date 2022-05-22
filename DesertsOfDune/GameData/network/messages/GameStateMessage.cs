@@ -11,7 +11,7 @@ namespace GameData.network.messages
     public class GameStateMessage : ClientServerMessage
     {
         [JsonProperty]
-        private int[] ActivlyPlayingIDs;
+        private int[] activelyPlayingIDs;
         [JsonProperty]
         private string[] history;
 
@@ -21,10 +21,13 @@ namespace GameData.network.messages
         /// <param name="clientID">The ID of the client</param>
         /// <param name="activlyPlayingIDs">IDs of the activly playing players</param>
         /// <param name="history">the history of the Game</param>
-        public GameStateMessage(int clientID, int[] activlyPlayingIDs, string[] history) : base(clientID,MessageType.GAMESTATE)
+        /// <param name="activelyPlayingIDs">list of activlyplaying ids</param>
+        /// <param name="history">the client id</param>
+        public GameStateMessage(string[] history, int[] activelyPlayingIDs, int clientID) : base(clientID,MessageType.GAMESTATE)
         {
             this.ActivlyPlayingIDs = activlyPlayingIDs;
             this.history = history;
+            this.activelyPlayingIDs = activelyPlayingIDs;
         }
     }
 }

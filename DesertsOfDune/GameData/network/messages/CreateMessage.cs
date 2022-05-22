@@ -20,7 +20,7 @@ namespace GameData.network.messages
         /// </summary>
         /// <param name="lobbyCode">the lobbyCode of the game lobby</param>
         /// <param name="spectate">true, if the client wants to spectate the game</param>
-        public CreateMessage(string lobbyCode,bool spectate) : base("v1", MessageType.CREATE)
+        public CreateMessage(string lobbyCode,bool spectate) : base("0.1", MessageType.CREATE)
         {
             this.LobbyCode = lobbyCode;
             this.Spectate = spectate;

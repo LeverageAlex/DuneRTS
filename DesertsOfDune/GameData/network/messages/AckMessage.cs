@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
 namespace GameData.network.messages
 {
     public class AckMessage : Message
     {
-        /// <summary>
-        /// Acknowledgement message, if a lobby was succesful created by a client.
-        /// </summary>
-        public AckMessage() : base("v1", MessageType.ACK)
+    /// <summary>
+    /// This class is used to comunicate actions.
+    /// </summary>
+    public class AckMessage : Message
+    {
+        public AckMessage() : base("0.1", MessageType.ACK)
         {
-            
+
         }
     }
 }

@@ -23,10 +23,9 @@ namespace GameData.network.messages
         /// Constructor of the class GameConfigMessage
         /// </summary>
         /// <param name="scenario">the scenario configuration</param>
-        /// <param name="party">The reference to the saved party configuration</param>
-        /// <param name="client0ID">ID of the first player</param>
-        /// <param name="client1ID">ID of the second player</param>
-        public GameConfigMessage(List<string[]> scenario, string party, int client0ID, int client1ID) : base("v1", MessageType.GAMECFG)
+        /// <param name="partyConfig">the party configuration</param>
+        /// <param name="partyConfig">array of houses that are offered to the client</param>
+        public GameConfigMessage(List<string[]> scenario, string party, string[] houseOffer) : base("0.1", MessageType.GAMECFG)
         {
             this.scenario = scenario;
             this.party = party;
