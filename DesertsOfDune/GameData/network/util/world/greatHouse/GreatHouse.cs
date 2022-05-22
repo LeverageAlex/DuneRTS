@@ -12,13 +12,13 @@ namespace GameData.network.util.world
     public class GreatHouse
     {
         [JsonProperty]
-        private string name;
+        private string houseName;
         [JsonProperty]
-        private float color;
+        private string houseColor;
         [JsonProperty]
         private bool illegalAtomicUsage;
         [JsonProperty]
-        private Character[] characters;
+        private Character[] houseCharacters;
         private City city;
         [JsonIgnore]
         public City City
@@ -30,15 +30,15 @@ namespace GameData.network.util.world
         /// <summary>
         /// Constructor of the Class GreatHouse
         /// </summary>
-        /// <param name="name">the name of the Greathouse</param>
-        /// <param name="color">the color of the house</param>
-        /// <param name="characters">the characters of the house</param>
-        public GreatHouse(string name, float color, Character[] characters)
+        /// <param name="houseName">the name of the Greathouse</param>
+        /// <param name="houseColor">the color of the house</param>
+        /// <param name="houseCharacters">the characters of the house</param>
+        public GreatHouse(string houseName, string houseColor, Character[] houseCharacters)
         {
-            this.name = name;
-            this.color = color;
+            this.houseName = houseName;
+            this.houseColor = houseColor;
             this.illegalAtomicUsage = false;
-            this.characters = characters;
+            this.houseCharacters = houseCharacters;
         }
 
         /// <summary>

@@ -15,7 +15,7 @@ namespace GameData.network.util.world
         /// <param name="name">the name of the house</param>
         /// <param name="color">the color of the house</param>
         /// <param name="characters">the characters of the house</param>
-        public Atreides (string name, float color, Character[] characters) : base(name,color,characters)
+        public Atreides (string name, string color, Character[] characters) : base(name,color,characters)
         {
 
         }

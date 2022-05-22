@@ -16,6 +16,8 @@ namespace GameData.network.messages
         private string connectionCode;
         [JsonProperty]
         private bool active;
+        [JsonProperty]
+        private bool isCpu;
 
         /// <summary>
         /// Constuctor of the class JoinMessage
@@ -23,11 +25,13 @@ namespace GameData.network.messages
         /// <param name="clientName">the name of the client</param>
         /// <param name="connectionCode">the code of the connection</param>
         /// <param name="active">weather of not the connection is active</param>
-        public JoinMessage (string clientName, string connectionCode, bool active) : base("v1", MessageType.JOIN)
+        /// <param name="isCpu">true, if the client is a cpu</param>
+        public JoinMessage (string clientName, string connectionCode, bool active, bool isCpu) : base("0.1", MessageType.JOIN)
         {
             this.clientName = clientName;
             this.connectionCode = connectionCode;
             this.active = active;
+            this.isCpu = isCpu;
         }
     }
 }

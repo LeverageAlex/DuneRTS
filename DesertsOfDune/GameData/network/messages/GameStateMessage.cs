@@ -11,16 +11,20 @@ namespace GameData.network.messages
     public class GameStateMessage : ClientServerMessage
     {
         [JsonProperty]
+        private int[] activelyPlayingIDs;
+        [JsonProperty]
         private string[] history;
 
         /// <summary>
         /// Constructor of the class GameStateMessage
         /// </summary>
         /// <param name="history">the history of the Game</param>
+        /// <param name="activelyPlayingIDs">list of activlyplaying ids</param>
         /// <param name="history">the client id</param>
-        public GameStateMessage(string[] history, int clientID) : base(clientID,MessageType.GAMESTATE)
+        public GameStateMessage(string[] history, int[] activelyPlayingIDs, int clientID) : base(clientID,MessageType.GAMESTATE)
         {
             this.history = history;
+            this.activelyPlayingIDs = activelyPlayingIDs;
         }
     }
 }

@@ -2,6 +2,7 @@ using NUnit.Framework;
 using GameData.network.util.parser;
 using GameData.network.messages;
 using GameData.network.util.world;
+using System.Collections.Generic;
 
 namespace TestProject.networkTest.utilTest.parserTest
 {
@@ -71,7 +72,7 @@ namespace TestProject.networkTest.utilTest.parserTest
         {
             CreateMessage message = new CreateMessage("SecretArena123", false);
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("{\"type\":\"CREATE\",\"version\":\"1.0\",\"lobbyCode\":\"SecretArena123\",\"spectate\":false}", serializedMessage);
+            Assert.AreEqual("{\"type\":\"CREATE\",\"version\":\"0.1\",\"lobbyCode\":\"SecretArena123\",\"spectate\":false}", serializedMessage);
         }
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace TestProject.networkTest.utilTest.parserTest
         {
             DebugMessage message = new DebugMessage(1, "explenation");
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("\"code\":\"1\",\"explanation\":\"explenation\"", serializedMessage);
+            Assert.AreEqual("{\"type\":\"DEBUG\",\"version\":\"0.1\",\"code\":1,\"explanation\":\"explenation\"}", serializedMessage);
         }
 
         /// <summary>
@@ -93,7 +94,7 @@ namespace TestProject.networkTest.utilTest.parserTest
         {
             EndGameMessage message = new EndGameMessage();
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("{\"type\": \"ENDGAME\",\"version\":\"0.1\"}", serializedMessage);
+            Assert.AreEqual("{\"type\":\"ENDGAME\",\"version\":\"0.1\"}", serializedMessage);
         }
 
         /// <summary>
@@ -113,9 +114,15 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromGameConfigMessage()
         {
-            GameConfigMessage message = new GameConfigMessage(null, "", null);
+            string[] arr1 = { "String", "String" };
+            string[] arr2 = { "String", "String" };
+            List<string[]> scenario = new List<string[]>();
+            scenario.Add(arr1);
+            scenario.Add(arr2);
+            string[] houseOffer = null;
+            GameConfigMessage message = new GameConfigMessage(scenario, "party", houseOffer);
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("\"scenario\":[[\"String\",\"String\"],[\"String\",\"String\"]],\"party\": {\"$ref\": \"#/definitions/partiekonfigschema\"},\"client0ID\":\"2\",\"client1ID\":\"3\"", serializedMessage);
+            Assert.AreEqual("{\"type\":\"GAMECFG\",\"version\":\"0.1\",\"scenario\":[[\"String\",\"String\"],[\"String\",\"String\"]],\"party\":\"party\",\"houseOffer\":null}", serializedMessage);
         }
 
         /// <summary>
@@ -124,9 +131,10 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromGameEndMessage()
         {
-            GameEndMessage message = new GameEndMessage(1, 2, null);
+            Statistics statistics = new Statistics();
+            GameEndMessage message = new GameEndMessage(1234, 1235, statistics);
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("{\"type\":\"GAME_END\",\"version\":\"0.1\",\"winnerID\":1234,\"loserID\":1235,\"statistics\":{ }}", serializedMessage);
+            Assert.AreEqual("{\"type\":\"GAME_END\",\"version\":\"0.1\",\"winnerID\":1234,\"loserID\":1235,\"statistics\":{}}", serializedMessage);
         }
 
         /// <summary>
@@ -135,9 +143,11 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromGameStateMessage()
         {
-            GameStateMessage message = new GameStateMessage(null, 1);
+            string[] history = { "*MAP_CHANGE als String*", "*Mehrere SPAWN_CHARACTER als String*" };
+            int[] activelyPlayingIDs = { 1235, 1345 };
+            GameStateMessage message = new GameStateMessage(history, activelyPlayingIDs, 1);
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("{\"type\":\"GAMESTATE\",\"version\":\"0.1\",\"clientID\":1234,\"activelyPlayingIDs\":[1235,1345],\"history\":[\" * MAP_CHANGE als String * "," * Mehrere SPAWN_CHARACTER als String * \",", serializedMessage);
+            Assert.AreEqual("{\"type\":\"GAMESTATE\",\"version\":\"0.1\",\"clientID\":1,\"activelyPlayingIDs\":[1235,1345],\"history\":[\"*MAP_CHANGE als String*\",\"*Mehrere SPAWN_CHARACTER als String*\"]}", serializedMessage);
         }
 
 
@@ -159,7 +169,7 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromHouseAcknowledgementMessage()
         {
-            HouseAcknowledgementMessage message = new HouseAcknowledgementMessage(1, "test");
+            HouseAcknowledgementMessage message = new HouseAcknowledgementMessage(1234, "ATREIDES");
             string serializedMessage = MessageConverter.FromMessage(message);
             Assert.AreEqual("{\"type\":\"HOUSE_ACKNOWLEDGEMENT\",\"version\":\"0.1\",\"clientID\":1234,\"houseName\":\"ATREIDES\"}", serializedMessage);
         }
@@ -171,7 +181,11 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromHouseOfferMessage()
         {
-            HouseOfferMessage message = new HouseOfferMessage(1, null);
+            GreatHouse[] houses = new GreatHouse[2];
+            Character[] characters = new Character[2];
+            characters[0] = new Character(CharacterType.NOBEL, 1, 2, 3, 4, 5, 6, 7, 6, 5, 4, false, false);
+            houses[0] = new GreatHouse("CORRINO","GOLD", characters);
+            HouseOfferMessage message = new HouseOfferMessage(1234, houses);
             string serializedMessage = MessageConverter.FromMessage(message);
             Assert.AreEqual("{\"type\":\"HOUSE_OFFER\",\"version\":\"0.1\",\"clientID\":1234,\"houses\":[{\"houseName\":\"CORRINO\",\"houseColor\":\"GOLD\",\"houseCharacters\":[{\"characterName\":\"Emperor Shaddam IV Corrino\",\"characterClass\":\"NOBLE\"},{\"characterName\":\"Princess Irulan Corrino\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Count Hasimir Fenring\",\"characterClass\":\"MENTAT\"},{\"characterName\":\"Lady Margot Fenring\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Reverend Mother Gaius Helen Mohiam\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Captain Aramsham\",", serializedMessage);
         }
@@ -182,9 +196,9 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromHouseRequestMessage()
         {
-            HouseRequestMessage message = new HouseRequestMessage("");
+            HouseRequestMessage message = new HouseRequestMessage("ATREIDES");
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("", serializedMessage);
+            Assert.AreEqual("{\"type\":\"HOUSE_REQUEST\",\"version\":\"0.1\",\"houseName\":\"ATREIDES\"}", serializedMessage);
         }
 
         /// <summary>
@@ -193,9 +207,9 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromJoinAcceptedMessage()
         {
-            JoinAcceptedMessage message = new JoinAcceptedMessage("");
+            JoinAcceptedMessage message = new JoinAcceptedMessage("secret1234",1234);
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("", serializedMessage);
+            Assert.AreEqual("{\"type\":\"JOINACCEPTED\",\"version\":\"0.1\",\"clientSecret\":\"secret1234\",\"clientID\":1234}", serializedMessage);
         }
 
         /// <summary>
@@ -204,9 +218,9 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromJoinMessage()
         {
-            JoinMessage message = new JoinMessage("", "", true);
+            JoinMessage message = new JoinMessage("name", "SecretArena123", true, false);
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("", serializedMessage);
+            Assert.AreEqual("{\"type\":\"JOIN\",\"version\":\"0.1\",\"clientName\":\"name\",\"connectionCode\":\"SecretArena123\",\"active\":true,\"isCpu\":false}", serializedMessage);
         }
 
         /// <summary>
@@ -215,9 +229,12 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromMapChangeDemandMessage()
         {
-            MapChangeDemandMessage message = new MapChangeDemandMessage(MapChangeReasons.ROUND_PHASE, null);
+            MapField[,] map = new MapField[1, 2];
+            map[0, 0] = new MapField(false, false, 1234, null);
+            map[0, 1] = new MapField(false, false, 4321, null);
+            MapChangeDemandMessage message = new MapChangeDemandMessage(MapChangeReasons.FAMILY_ATOMICS, map);
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("", serializedMessage);
+            Assert.AreEqual("{\"type\":\"MAP_CHANGE_DEMAND\",\"version\":\"0.1\",\"changeReason\":\"FAMILY_ATOMICS\",\"newMap\":[[{\"tileType\":\"CITY\",\"clientID\":1234,\"hasSpice\":false,\"isInSandstorm\":false},{\"tileType\":\"CITY\",\"clientID\":4321,\"hasSpice\":false,\"isInSandstorm\":false}]]}", serializedMessage);
         }
 
         /// <summary>
@@ -226,9 +243,13 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromMovementDemandMessage()
         {
-            MovementDemandMessage message = new MovementDemandMessage(1, 2, null);
+            List<Position> path = new List<Position>();
+            path.Add(new Position(1, 2));
+            path.Add(new Position(2, 2));
+            path.Add(new Position(2, 3));
+            MovementDemandMessage message = new MovementDemandMessage(1234, 12, path);
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("", serializedMessage);
+            Assert.AreEqual("{\"type\":\"MOVEMENT_DEMAND\",\"version\":\"0.1\",\"clientID\":1234,\"characterID\":12,\"specs\":{\"path\":[{\"x\":1,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":3}]}}", serializedMessage);
         }
 
         /// <summary>
@@ -237,9 +258,13 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromMovementRequestMessage()
         {
-            MovementRequestMessage message = new MovementRequestMessage(1, 2, null);
+            List<Position> path = new List<Position>();
+            path.Add(new Position(1, 2));
+            path.Add(new Position(2, 2));
+            path.Add(new Position(2, 3));
+            MovementRequestMessage message = new MovementRequestMessage(1234, 12, path);
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("", serializedMessage);
+            Assert.AreEqual("{\"type\":\"MOVEMENT_REQUEST\",\"version\":\"0.1\",\"clientID\":1234,\"characterID\":12,\"specs\":{\"path\":[{\"x\":1,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":3}]}}", serializedMessage);
         }
 
         /// <summary>
@@ -248,6 +273,7 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromPauseGameMessage()
         {
+            // todo: gibt es dieses message überhaupt ich denke nicht.
             PauseGameMessage message = new PauseGameMessage(2, true);
             string serializedMessage = MessageConverter.FromMessage(message);
             Assert.AreEqual("", serializedMessage);
@@ -261,7 +287,7 @@ namespace TestProject.networkTest.utilTest.parserTest
         {
             PauseGameRequestMessage message = new PauseGameRequestMessage(true);
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("", serializedMessage);
+            Assert.AreEqual("{\"type\":\"PAUSE_REQUEST\",\"version\":\"0.1\",\"pause\":true}", serializedMessage);
         }
 
         /// <summary>
@@ -272,7 +298,7 @@ namespace TestProject.networkTest.utilTest.parserTest
         {
             SandwormDespawnDemandMessage message = new SandwormDespawnDemandMessage();
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("", serializedMessage);
+            Assert.AreEqual("{\"type\":\"SANDWORM_DESPAWN_DEMAND\",\"version\":\"0.1\"}", serializedMessage);
         }
 
         /// <summary>
@@ -281,9 +307,13 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromSandwormMoveDemandMessage()
         {
-            SandwormMoveDemandMessage message = new SandwormMoveDemandMessage(null);
+            List<Position> path = new List<Position>();
+            path.Add(new Position(2, 3));
+            path.Add(new Position(3, 3));
+            path.Add(new Position(4, 3));
+            SandwormMoveDemandMessage message = new SandwormMoveDemandMessage(path);
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("", serializedMessage);
+            Assert.AreEqual("{\"type\":\"SANDWORM_MOVE_DEMAND\",\"version\":\"0.1\",\"path\":[{\"x\":2,\"y\":3},{\"x\":3,\"y\":3},{\"x\":4,\"y\":3}]}", serializedMessage);
         }
 
         /// <summary>
@@ -292,9 +322,9 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromSandwormSpawnDemandMessage()
         {
-            SandwormSpawnDemandMessage message = new SandwormSpawnDemandMessage(1, 2, new Position(2, 3));
+            SandwormSpawnDemandMessage message = new SandwormSpawnDemandMessage(1234, 1236, new Position(2, 3));
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("", serializedMessage);
+            Assert.AreEqual("{\"type\":\"SANDWORM_SPAWN_DEMAND\",\"version\":\"0.1\",\"clientID\":1234,\"characterID\":1236,\"position\":{\"x\":2,\"y\":3}}", serializedMessage);
         }
 
         /// <summary>
@@ -303,9 +333,10 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromSpawnCharacterDemandMessage()
         {
-            SpawnCharacterDemandMessage message = new SpawnCharacterDemandMessage(1, 2, "", new Position(2, 3), null, CharacterType.NOBEL);
+            Character attributes = new Character(CharacterType.FIGHTHER, 100, 75, 10, 3, 1, 4, 2, 10, 5, 3, false, true);
+            SpawnCharacterDemandMessage message = new SpawnCharacterDemandMessage(1234, 12, "Vorname Nachname", new Position(0, 1), attributes, CharacterType.NOBEL);
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("", serializedMessage);
+            Assert.AreEqual("{\"type\":\"SPAWN_CHARACTER_DEMAND\",\"version\":\"0.1\",\"clientID\":1234,\"characterID\":12,\"characterName\":\"Vorname Nachname\",\"position\":{\"x\":0,\"y\":1},\"attributes\":{\"characterType\":\"FIGHTHER\",\"healthMax\":100,\"healthCurrent\":75,\"healingHP\":10,\"MPmax\":3,\"MPcurrent\":1,\"APmax\":4,\"APcurrent\":2,\"attackDamage\":10,\"inventorySize\":5,\"inventoryUsed\":3,\"killedBySandworm\":false,\"isLoud\":true}}", serializedMessage);
         }
 
         /// <summary>
