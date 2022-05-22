@@ -17,7 +17,6 @@ namespace GameData.network.messages
         private Position position;
         [JsonProperty]
         private Character attributes;
-        private CharacterType characterType;
 
         /// <summary>
         /// Constructor of the class SpawnCharacterMessage
@@ -28,22 +27,16 @@ namespace GameData.network.messages
         /// <param name="position">the position of the character</param>
         /// <param name="attributes">the character that should be created</param>
         /// <param name="characterType">the type of the character</param>
-        public SpawnCharacterDemandMessage(int clientID, int characterID, string characterName, Position position, Character attributes, CharacterType characterType) : base(characterID,clientID,MessageType.SPAWN_CHARACTER_DEMAND)
+        public SpawnCharacterDemandMessage(int clientID, int characterID, string characterName, Position position, Character attributes) : base(characterID,clientID,MessageType.SPAWN_CHARACTER_DEMAND)
         {
             this.characterName = characterName;
             this.position = position;
             this.attributes = attributes;
-            this.characterType = characterType;
-        }
-
-        public CharacterType GetCharacterTypeFromCharacter()
-        {
-            return this.characterType;
         }
 
         public string[] GetAttributesFromCharacter()
         {
-            return null;
+            return null; //TODO
         }
     }
 }
