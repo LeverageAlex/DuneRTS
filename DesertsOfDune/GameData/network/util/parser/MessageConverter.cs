@@ -66,7 +66,7 @@ namespace GameData.network.util.parser
                     case "GAMESTATE":
                         GameStateMessage gameStateMessage = (GameStateMessage)message;
                         return JsonConvert.SerializeObject(gameStateMessage);
-                    case "REQUEST_GAMESTATE":
+                    case "GAMESTATE_REQUEST":
                         GameStateRequestMessage gameStateRequestMessage = (GameStateRequestMessage)message;
                         return JsonConvert.SerializeObject(gameStateRequestMessage);
                     case "HOUSE_ACKNOWLEDGEMENT":
@@ -171,7 +171,7 @@ namespace GameData.network.util.parser
                     return JsonConvert.DeserializeObject<GameEndMessage>(message);
                 case "GAMESTATE":
                     return JsonConvert.DeserializeObject<GameStateMessage>(message);
-                case "REQUEST_GAMESTATE":
+                case "GAMESTATE_REQUEST":
                     return JsonConvert.DeserializeObject<GameStateRequestMessage>(message);
                 case "HOUSE_ACKNOWLEGDEMENT":
                     return JsonConvert.DeserializeObject<HouseAcknowledgementMessage>(message);
