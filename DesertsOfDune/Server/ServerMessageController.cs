@@ -25,7 +25,7 @@ namespace Server
         public void OnCreateMessage(CreateMessage msg)
         {
             //TODO: msg.Spectate?
-            _parties.Add(msg.LobbyCode, new Party(msg.LobbyCode));
+            _parties.Add(msg.lobbyCode, new Party(msg.lobbyCode));
             //Console.WriteLine("- Party created");
 
             //send back ack or error message
@@ -38,22 +38,21 @@ namespace Server
         /// <param name="msg">JoinMessage with the value clientName, connectionCode and active flag if he is a player.</param>
         public void OnJoinMessage(JoinMessage msg)
         {
-            var clientName = msg.ClientName;
+            var clientName = msg.clientName;
 
             foreach (var party in _parties)
             {
-                if(party.Key == msg.ConnectionCode)
+                if(party.Key == msg.connectionCode)
                 {
-                    if (!msg.IsCpu && msg.Active) //client is a HumanPlayer
+                    if (!msg.isCpu && msg.active) //client is a HumanPlayer
                     {
                         //distinction between AI and Human
                         var player = new Player(clientName, party.Key);
                         party.Value.AddPlayer(player);
                         //Console.WriteLine($"- Player {clientName} joined"); //test
                     }
-                    else if(msg.IsCpu && msg.Active) //client is AIPlayer
+                    else if(msg.isCpu && msg.active) //client is AIPlayer
                     {
-                        
                     }
                     else //client is spectator
                     {
@@ -261,7 +260,7 @@ namespace Server
 
         public void DoSendGameState(int clientID, int[] activlyPlayingIDs, String[] history)
         {
-            GameStateMessage gameStateMessage = new GameStateMessage(clientID, activlyPlayingIDs, history);
+            GameStateMessage gameStateMessage = new GameStateMessage(history, activlyPlayingIDs, clientID);
             NetworkController.HandleSendingMessage(gameStateMessage);
         }
 
@@ -273,7 +272,7 @@ namespace Server
 
         public void DoGamePauseDemand(int requestedByClientID, bool pause)
         {
-            GamePauseDemandMessage gamePauseDemandMessage = new GamePauseDemandMessage(requestedByClientID, pause);
+            PausGameDemandMessage gamePauseDemandMessage = new PausGameDemandMessage(requestedByClientID, pause);
             NetworkController.HandleSendingMessage(gamePauseDemandMessage);
         }
 

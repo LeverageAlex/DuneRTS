@@ -15,9 +15,9 @@ namespace GameData.network.messages
         [JsonProperty]
         private string party;
         [JsonProperty]
-        private int Client0Id;
+        private int client0ID;
         [JsonProperty]
-        private int Client1Id;
+        private int client1ID;
 
         /// <summary>
         /// Constructor of the class GameConfigMessage
@@ -25,12 +25,12 @@ namespace GameData.network.messages
         /// <param name="scenario">the scenario configuration</param>
         /// <param name="partyConfig">the party configuration</param>
         /// <param name="partyConfig">array of houses that are offered to the client</param>
-        public GameConfigMessage(List<string[]> scenario, string party, string[] houseOffer) : base("0.1", MessageType.GAMECFG)
+        public GameConfigMessage(List<string[]> scenario, string party, int client0ID, int client1ID) : base("0.1", MessageType.GAMECFG)
         {
             this.scenario = scenario;
             this.party = party;
-            this.Client0Id = client0ID;
-            this.Client1Id = client1ID;
+            this.client0ID = client0ID;
+            this.client1ID = client1ID;
         }
     }
 }

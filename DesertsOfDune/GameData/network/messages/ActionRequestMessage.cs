@@ -14,8 +14,6 @@ namespace GameData.network.messages
         [JsonProperty]
         private string action;
         [JsonProperty]
-        private Position target;
-        [JsonProperty]
         private Specs specs;
 
         /// <summary>

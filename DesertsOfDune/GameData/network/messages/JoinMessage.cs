@@ -11,13 +11,13 @@ namespace GameData.network.messages
     public class JoinMessage : Message
     {
         [JsonProperty]
-        public string ClientName { get; }
+        public string clientName { get; }
         [JsonProperty]
-        public string ConnectionCode { get; }
+        public string connectionCode { get; }
         [JsonProperty]
-        private bool active;
+        public bool active { get; }
         [JsonProperty]
-        private bool isCpu;
+        public bool isCpu { get; }
 
         /// <summary>
         /// Constuctor of the class JoinMessage

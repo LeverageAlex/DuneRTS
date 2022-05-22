@@ -11,9 +11,9 @@ namespace GameData.network.messages
     public class CreateMessage : Message
     {
         [JsonProperty]
-        public string LobbyCode { get; }
+        public string lobbyCode { get; }
         [JsonProperty]
-        public bool Spectate { get; }
+        public bool spectate { get; }
 
         /// <summary>
         /// Constructor of the class CreateMessage
@@ -22,8 +22,8 @@ namespace GameData.network.messages
         /// <param name="spectate">true, if the client wants to spectate the game</param>
         public CreateMessage(string lobbyCode,bool spectate) : base("0.1", MessageType.CREATE)
         {
-            this.LobbyCode = lobbyCode;
-            this.Spectate = spectate;
+            this.lobbyCode = lobbyCode;
+            this.spectate = spectate;
         }
 
     }

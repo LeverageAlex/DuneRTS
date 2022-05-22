@@ -25,7 +25,6 @@ namespace GameData.network.messages
         /// <param name="history">the client id</param>
         public GameStateMessage(string[] history, int[] activelyPlayingIDs, int clientID) : base(clientID,MessageType.GAMESTATE)
         {
-            this.ActivlyPlayingIDs = activlyPlayingIDs;
             this.history = history;
             this.activelyPlayingIDs = activelyPlayingIDs;
         }

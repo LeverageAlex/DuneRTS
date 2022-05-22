@@ -24,7 +24,7 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromActionDemandMessage()
         {
-            ActionDemandMessage message = new ActionDemandMessage(1234, 12, ActionType.ATTACK, new Position(2, 3), 4);
+            ActionDemandMessage message = new ActionDemandMessage(1234, 12, ActionType.ATTACK, new Position(2, 3));
             string serializedMessage = MessageConverter.FromMessage(message);
             Assert.AreEqual("{\"type\":\"ACTION_DEMAND\",\"version\":\"0.1\",\"clientID\":1234,\"characterID\":12,\"action\":\"ATTACK\",\"specs\":{\"target\":{\"x\":2,\"y\":3}}}", serializedMessage);
         }
@@ -49,7 +49,7 @@ namespace TestProject.networkTest.utilTest.parserTest
         {
             ChangePlayerSpiceDemandMessage message = new ChangePlayerSpiceDemandMessage(5, 123123);
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("{\"type\":\"CHANGE_PLAYER_SPICE_DEMAND\",\"version\":\"0.1\",\"clientID\":123123,\"newSpiceValue\":5}", serializedMessage);
+            Assert.AreEqual("{\"type\":\"CHANGE_PLAYER_SPICE_DEMAND\",\"version\":\"0.1\",\"clientID\":5,\"newSpiceValue\":123123}", serializedMessage);
         }
 
         /// <summary>
@@ -119,10 +119,9 @@ namespace TestProject.networkTest.utilTest.parserTest
             List<string[]> scenario = new List<string[]>();
             scenario.Add(arr1);
             scenario.Add(arr2);
-            string[] houseOffer = null;
-            GameConfigMessage message = new GameConfigMessage(scenario, "party", houseOffer);
+            GameConfigMessage message = new GameConfigMessage(scenario, "party", 0, 0);
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("{\"type\":\"GAMECFG\",\"version\":\"0.1\",\"scenario\":[[\"String\",\"String\"],[\"String\",\"String\"]],\"party\":\"party\",\"houseOffer\":null}", serializedMessage);
+            Assert.AreEqual("{\"type\":\"GAMECFG\",\"version\":\"0.1\",\"scenario\":[[\"String\",\"String\"],[\"String\",\"String\"]],\"party\":\"party\",\"client0ID\":0,\"client1ID\":0}", serializedMessage);
         }
 
         /// <summary>
@@ -326,7 +325,7 @@ namespace TestProject.networkTest.utilTest.parserTest
         public void TestFromSpawnCharacterDemandMessage()
         {
             Character attributes = new Character(CharacterType.FIGHTHER, 100, 75, 10, 3, 1, 4, 2, 10, 5, 3, false, true);
-            SpawnCharacterDemandMessage message = new SpawnCharacterDemandMessage(1234, 12, "Vorname Nachname", new Position(0, 1), attributes, CharacterType.NOBEL);
+            SpawnCharacterDemandMessage message = new SpawnCharacterDemandMessage(1234, 12, "Vorname Nachname", new Position(0, 1), attributes);
             string serializedMessage = MessageConverter.FromMessage(message);
             Assert.AreEqual("{\"type\":\"SPAWN_CHARACTER_DEMAND\",\"version\":\"0.1\",\"clientID\":1234,\"characterID\":12,\"characterName\":\"Vorname Nachname\",\"position\":{\"x\":0,\"y\":1},\"attributes\":{\"characterType\":\"FIGHTHER\",\"healthMax\":100,\"healthCurrent\":75,\"healingHP\":10,\"MPmax\":3,\"MPcurrent\":1,\"APmax\":4,\"APcurrent\":2,\"attackDamage\":10,\"inventorySize\":5,\"inventoryUsed\":3,\"killedBySandworm\":false,\"isLoud\":true}}", serializedMessage);
         }

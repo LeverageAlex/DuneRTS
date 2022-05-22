@@ -17,7 +17,6 @@
         MOVEMENT_REQUEST,
         TRANSFER_REQUEST,
         ACTION_REQUEST,
-        TRANSFER_REQUEST,
         MOVEMENT_DEMAND,
         ACTION_DEMAND,
         TRANSFER_DEMAND,
@@ -36,7 +35,8 @@
         PAUSE_REQUEST,
         GAME_PAUSE_DEMAND,
         UNPAUSE_GAME_OFFER,
-        END_TURN_REQUEST,
-        GAME_END
+        GAME_END,
+        TURN_DEMAND,
+        ERROR
     }
 }

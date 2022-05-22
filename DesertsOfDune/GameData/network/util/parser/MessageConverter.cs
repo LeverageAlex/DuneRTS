@@ -141,8 +141,6 @@ namespace GameData.network.util.parser
                     return JsonConvert.DeserializeObject<AckMessage>(message);
                 case "ACTION_DEMAND":
                     return JsonConvert.DeserializeObject<ActionDemandMessage>(message);
-                case "TRANSFER_DEMAND":
-                    return JsonConvert.DeserializeObject<TransferDemandMessage>(message);
                 case "CHARACTER_STAT_CHANGE_DEMAND":
                     return JsonConvert.DeserializeObject<ChangeCharacterStatisticsDemandMessage>(message);
                 case "END_TURN_REQUEST":
@@ -179,22 +177,12 @@ namespace GameData.network.util.parser
                     return JsonConvert.DeserializeObject<JoinAcceptedMessage>(message);
                 case "JOIN":
                     return JsonConvert.DeserializeObject<JoinMessage>(message);
-                case "MAP_CHANGE_DEMAND":
-                    return JsonConvert.DeserializeObject<MapChangeDemandMessage>(message);
                 case "MOVEMENT_DEMAND":
                     return JsonConvert.DeserializeObject<MovementDemandMessage>(message);
                 case "MOVEMENT_REQUEST":
                     return JsonConvert.DeserializeObject<MovementRequestMessage>(message);
                 case "PAUSE_REQUEST":
                     return JsonConvert.DeserializeObject<PauseGameRequestMessage>(message);
-                case "SANDWORM_DESPAWN_DEMAND":
-                    return JsonConvert.DeserializeObject<SandwormDespawnDemandMessage>(message);
-                case "SANDWORM_MOVE_DEMAND":
-                    return JsonConvert.DeserializeObject<SandwormMoveDemandMessage>(message);
-                case "SANDWORM_SPAWN_DEMAND":
-                    return JsonConvert.DeserializeObject<SandwormSpawnDemandMessage>(message);
-                case "SPAWN_CHARACTER_DEMAND":
-                    return JsonConvert.DeserializeObject<SpawnCharacterDemandMessage>(message);
                 case "STRIKE":
                     return JsonConvert.DeserializeObject<StrikeMessage>(message);
                 case "TURN_DEMAND":

@@ -19,8 +19,7 @@ namespace GameData.network.messages
         /// <param name="clientSecret">the used to identify the client</param>
         public JoinAcceptedMessage(string clientSecret, int clientID) : base(clientID,MessageType.JOINACCEPTED)
         {
-            this.ClientSecret = clientSecret;
-            this.ClientID = clientID;
+            this.clientSecret = clientSecret;
         }
     }
 }
