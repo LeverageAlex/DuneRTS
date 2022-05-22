@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using GameData.gameObjects;
 
 namespace UnitTestSuite.serverTest.roundHandlerTest
 {
@@ -23,7 +24,13 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
         [Test]
         public void TestCheckOverLength()
         {
-            // implement logic
+            RoundHandler roundHandler = new RoundHandler(0,10);
+            bool overLength = roundHandler.CheckOverLength();
+            Assert.IsTrue(overLength);
+
+            RoundHandler r2 = new RoundHandler(1,10);
+            bool overL = r2.CheckOverLength();
+            Assert.IsFalse(overL);
         }
 
         /// <summary>
