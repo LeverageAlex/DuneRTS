@@ -4,6 +4,8 @@ using Server.Clients;
 using GameData.gameObjects;
 using Server.ClientManagement.Clients;
 using Serilog;
+using System.Runtime.CompilerServices;
+using GameData.network.util.world;
 
 namespace Server
 {
@@ -15,9 +17,11 @@ namespace Server
     /// If two players are connected, the party can be prepared and started with this class. Afterwards it executes all game phases via the <see cref="RoundHandler"/>.
     /// Furthermore this class regularly check for the winning condition and can end the party or launch the end game phase.
     /// </remarks>
+    /// TODO: do not work with singleton and references on both sides (message controller)
     public class Party
     {
         private static Party singleton;
+        public ServerMessageController messageController { get;  set; }
 
         /// <summary>
         /// the identifier of this party / lobby
@@ -70,6 +74,21 @@ namespace Server
         public bool AreTwoPlayersRegistred()
         {
             return connectedClients.FindAll(client => client.IsActivePlayer).Count == 2;
+        }
+
+        /// <summary>
+        /// starts a new party, so prepare it and execute it until a winning condition becomes true or an error occur
+        /// </summary>
+        public void Start()
+        {
+
+        }
+
+        public void PrepareGame()
+        {
+            // get two disjoint sets of each two great houses and offer them to the client
+            GreatHouse[] firstSet;
+            GreatHouse[] secondSet;
         }
     }
 }

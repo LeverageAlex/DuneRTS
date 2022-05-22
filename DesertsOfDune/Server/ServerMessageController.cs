@@ -6,6 +6,7 @@ using GameData.network.util.world;
 using Server.Clients;
 using Server;
 using Serilog;
+using Server.ClientManagement.Clients;
 
 namespace Server
 {
@@ -28,6 +29,7 @@ namespace Server
         {
             //TODO: check creation
             party = Party.GetInstance(msg.lobbyCode);
+            party.messageController = this;
         }
 
         /// <summary>
@@ -37,6 +39,7 @@ namespace Server
         /// <param name="msg">JoinMessage with the value clientName, connectionCode and active flag if he is a player.</param>
         /// <param name="sessionID">the session id of the client, who wants to join</param>
         /// TODO: handle reconnect
+        /// TODO: send game config message
         public void OnJoinMessage(JoinMessage msg, string sessionID)
         {
             // check, whether the connection code is correct
@@ -47,41 +50,44 @@ namespace Server
                 DoSendError(005, "The lobby with the code " + msg.connectionCode + " doesn't exist", sessionID);
                 return;
             }
+            Client client;
 
             // check, whether the new client is a player or spectator
             if (msg.active)
             {
                 // check, whether there are already two active player
-                if (party.AreAlreadyTwoPlayersRegistred)
+                if (party.AreTwoPlayersRegistred())
                 {
                     // already two players are registred, so send error
-                    DoSendError(003, "There are already two players registred");
+                    DoSendError(003, "There are already two players registred", sessionID);
+                    return;
                 }
 
                 // check, whether active player is a human or an ai
                 if (msg.isCpu)
                 {
                     // client is an ai
-                    AIPlayer client = new AIPlayer(msg.clientName, sessionID);
-                    party.AddClient(client);
-                    // send join accepted
-                    DoAcceptJoin(client.ClientSecret, client.ClientID, client.SessionID);
+                    client = new AIPlayer(msg.clientName, sessionID);
                 }
                 else
                 {
                     // client is a human player
-                    HumanPlayer client = new HumanPlayer(msg.clientName, sessionID);
-                    party.AddClient(client);
-                    // send join accepted
-                    DoAcceptJoin(client.ClientSecret, client.ClientID, client.SessionID);
+                    client = new HumanPlayer(msg.clientName, sessionID);
                 }
             }
             else
             {
-                Spectator client = new Spectator(msg.clientName, sessionID);
-                party.AddClient(client);
-                // send join accepted
-                DoAcceptJoin(client.ClientSecret, client.ClientID, client.SessionID);
+                client = new Spectator(msg.clientName, sessionID);
+               
+            }
+            party.AddClient(client);
+            // send join accept
+            DoAcceptJoin(client.ClientSecret, client.ClientID, sessionID);
+
+            // check, if with new client two players are registred and start party
+            if (party.AreTwoPlayersRegistred())
+            {
+                party.PrepareGame();
             }
         }
 
@@ -180,11 +186,11 @@ namespace Server
         /// </summary>
         /// <param name="errorCode">the error code (see "Standardisierungsdokument")</param>
         /// <param name="errorDescription">a further description of the error</param>
-        /// <param name="clientID">the session id of the client, the message need to be send to</param>
-        public void DoSendError(int errorCode, string errorDescription, string clientID)
+        /// <param name="sessionID">the session id of the client, the message need to be send to</param>
+        public void DoSendError(int errorCode, string errorDescription, string sessionID)
         {
             ErrorMessage errorMessage = new ErrorMessage(errorCode, errorDescription);
-            NetworkController.HandleSendingMessage(errorMessage, clientID);
+            NetworkController.HandleSendingMessage(errorMessage, sessionID);
             Log.Debug("An error (code = " + errorCode + " occured: " + errorDescription);
         }
 
