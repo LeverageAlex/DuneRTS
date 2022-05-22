@@ -56,7 +56,6 @@ namespace GameData.network.controller
         /// <param name="message">message, which was received</param>
         /// <returns>true, if the message could successfully parsed and forwarded to the message controller</returns>
         /// TODO: make the method abstract and implement in the concrete instances because, they will have different message controller
-        /// TODO: throw ex
         public bool HandleReceivedMessage(string message)
         {
             Log.Debug("Parsing the received message: " + message);

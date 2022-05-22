@@ -16,6 +16,9 @@
     <None Remove="SonarAnalyzer.CSharp" />
     <None Remove="Doxygen" />
     <None Remove="Serilog.Sinks.Console" />
+    <None Remove="parser\" />
+    <None Remove="CommandLineParser" />
+    <None Remove="validation\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -28,10 +31,13 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="network\util\parser\" />
     <Folder Include="network\controller\" />
     <Folder Include="network\controller\ConnectionHandler\" />
+    <Folder Include="parser\" />
+    <Folder Include="validation\" />
   </ItemGroup>
 </Project>
