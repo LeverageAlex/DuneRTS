@@ -160,4 +160,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1984599760000105778}
-  particles: {fileID: 8228793303422144975, guid: 55e1b15a0e672dd409ce665f1a95bd7d, type: 3}
+  particles: {fileID: 8228793303422144975, guid: 7d68b02d21db9bd428d487810d157501, type: 3}
