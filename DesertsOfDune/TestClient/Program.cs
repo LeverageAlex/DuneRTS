@@ -14,7 +14,7 @@ namespace TestClient
 
             MessageController messageController2 = new MessageController();
 
-            ClientConnectionHandler clientConnectionHandler = new ClientConnectionHandler("127.0.0.1", 7890);
+            ClientConnectionHandler clientConnectionHandler = new ClientConnectionHandler("127.0.0.1", 10101);
 
             ClientNetworkController clientNetworkController = new ClientNetworkController(clientConnectionHandler, messageController2);
 

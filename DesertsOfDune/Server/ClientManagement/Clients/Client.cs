@@ -30,11 +30,23 @@ namespace Server.ClientManagement.Clients
         /// </summary>
         public bool IsActivePlayer { get; }
 
-        protected Client(string clientName, bool isActivePlayer)
+        /// <summary>
+        /// the client id used for identifying the client
+        /// </summary>
+        public int ClientID { get; }
+
+        /// <summary>
+        /// the session id of the connection of the client
+        /// </summary>
+        public string SessionID { get; }
+
+        protected Client(string clientName, bool isActivePlayer, string sessionID)
         {
             ClientName = clientName;
             ClientSecret = CreateClientSecret();
             IsActivePlayer = isActivePlayer;
+            ClientID = CreateClientID();
+            SessionID = sessionID;
         }
 
         /// <summary>
@@ -42,10 +54,20 @@ namespace Server.ClientManagement.Clients
         /// </summary>
         /// <remarks>
         /// For further information see Guid.NewGuid in the System namespace</remarks>
-        /// <returns></returns>
+        /// <returns>the client secret</returns>
         private string CreateClientSecret()
         {
             return Guid.NewGuid().ToString().ToUpper();
+        }
+
+        /// <summary>
+        /// creates a random integer number, with is used as a client ID
+        /// </summary>
+        /// <returns>the client id </returns>
+        private int CreateClientID()
+        {
+            // TODO: check, that it is unique
+            return new Random().Next(Int32.MaxValue);
         }
     }
 }

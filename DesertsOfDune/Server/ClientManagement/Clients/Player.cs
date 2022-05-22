@@ -7,14 +7,7 @@ namespace Server.Clients
 {
     abstract public class Player : Client
     {
-
-        /// <summary>
-        /// the client ID, in this case the session id from the websocket is used
-        /// </summary>
-        public int ClientID { get; }
-
-
-        protected Player(string clientName, int sessionID) : base(clientName, true)
+        protected Player(string clientName, string sessionID) : base(clientName, true, sessionID)
         {
                         
         }

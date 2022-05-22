@@ -1,29 +1,75 @@
 ﻿using System;
 using System.Collections.Generic;
 using Server.Clients;
+using GameData.gameObjects;
+using Server.ClientManagement.Clients;
+using Serilog;
 
 namespace Server
 {
+    /// <summary>
+    /// Represents a "Deserts of Dune"-Party, which is used for playing the game, so executing the game logic as well as the game start and ending.
+    /// </summary>
+    /// <remarks>
+    /// Therefore this class stores all information about the party (identifier of this party) and the connected clients to this party.
+    /// If two players are connected, the party can be prepared and started with this class. Afterwards it executes all game phases via the <see cref="RoundHandler"/>.
+    /// Furthermore this class regularly check for the winning condition and can end the party or launch the end game phase.
+    /// </remarks>
     public class Party
     {
-        public string LobbyCode { get; }
-        public int CpuCount { get; } //amount of AIPlayer
-        private readonly List<Player> _connectedPlayers;
-        //List for spectator ?
+        private static Party singleton;
 
-        public Party(string lobbyCode)
+        /// <summary>
+        /// the identifier of this party / lobby
+        /// </summary>
+        public string LobbyCode { get; }
+
+        /// <summary>
+        /// the amount of ai clients joined to this party
+        /// </summary>
+        public int CpuCount { get; }
+
+        /// <summary>
+        /// list of all players connected to this party
+        /// </summary>
+        private readonly List<Client> connectedClients;
+
+        /// <summary>
+        /// hides the constructor for implementing the singleton pattern
+        /// </summary>
+        /// <param name="lobbyCode">the unique identifier of this party</param>
+        private Party(string lobbyCode)
         {
             LobbyCode = lobbyCode;
-            //_cpuCount = cpuCount;
+            connectedClients = new List<Client>();
 
-            _connectedPlayers = new List<Player>();
-
-            //Console.WriteLine($"Party created with lobbycode: {lobbyCode} and cpucount: {cpuCount}");
+            Log.Debug("A new party was created with the code: " + lobbyCode);
         }
 
-        public void AddPlayer(Player player)
+        public static Party GetInstance(string lobbyCode)
         {
-            _connectedPlayers.Add(player);
+            if (singleton == null) {
+                singleton = new Party(lobbyCode);
+            }
+            return singleton;
+        }
+
+        /// <summary>
+        /// adds a new Client to the party
+        /// </summary>
+        /// <param name="client"></param>
+        public void AddClient(Client client)
+        {
+            connectedClients.Add(client);
+        }
+
+        /// <summary>
+        /// checks, whether there are already two players registred in the party
+        /// </summary>
+        /// <returns>true, if there are already two players registred</returns>
+        public bool AreTwoPlayersRegistred()
+        {
+            return connectedClients.FindAll(client => client.IsActivePlayer).Count == 2;
         }
     }
 }

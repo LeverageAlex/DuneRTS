@@ -4,14 +4,18 @@ using GameData.network.controller;
 using GameData.network.messages;
 using GameData.network.util.world;
 using Server.Clients;
+using Server;
+using Serilog;
 
 namespace Server
 {
     public class ServerMessageController : MessageController
     {
+        private Party party;
+
         public ServerMessageController()
         {
-            
+
         }
 
         /// <summary>
@@ -22,11 +26,8 @@ namespace Server
         /// <param name="msg">CreateMessage with the info of lobbyCode and cpuCount</param>
         public void OnCreateMessage(CreateMessage msg)
         {
-            //TODO: msg.Spectate?
-            _parties.Add(msg.lobbyCode, new Party(msg.lobbyCode));
-            //Console.WriteLine("- Party created");
-
-            //send back ack or error message
+            //TODO: check creation
+            party = Party.GetInstance(msg.lobbyCode);
         }
 
         /// <summary>
@@ -34,33 +35,53 @@ namespace Server
         /// To join to the party, the connectionCode from the JoinMessage has to be equal to the lobbyCode of the created party.
         /// </summary>
         /// <param name="msg">JoinMessage with the value clientName, connectionCode and active flag if he is a player.</param>
-        public void OnJoinMessage(JoinMessage msg)
+        /// <param name="sessionID">the session id of the client, who wants to join</param>
+        /// TODO: handle reconnect
+        public void OnJoinMessage(JoinMessage msg, string sessionID)
         {
-            var clientName = msg.clientName;
-
-            foreach (var party in _parties)
+            // check, whether the connection code is correct
+            if (msg.connectionCode != party.LobbyCode)
             {
-                if(party.Key == msg.connectionCode)
-                {
-                    if (!msg.isCpu && msg.active) //client is a HumanPlayer
-                    {
-                        //distinction between AI and Human
-                        var player = new Player(clientName, party.Key);
-                        party.Value.AddPlayer(player);
-                        //Console.WriteLine($"- Player {clientName} joined"); //test
-                    }
-                    else if(msg.isCpu && msg.active) //client is AIPlayer
-                    {
-                    }
-                    else //client is spectator
-                    {
+                // not a valid connection code, so send error
+                Log.Debug("The client " + msg.clientName + " with the ID = " + sessionID + " requested to join the server with a wrong lobby code");
+                DoSendError(005, "The lobby with the code " + msg.connectionCode + " doesn't exist", sessionID);
+                return;
+            }
 
-                    }
+            // check, whether the new client is a player or spectator
+            if (msg.active)
+            {
+                // check, whether there are already two active player
+                if (party.AreAlreadyTwoPlayersRegistred)
+                {
+                    // already two players are registred, so send error
+                    DoSendError(003, "There are already two players registred");
+                }
+
+                // check, whether active player is a human or an ai
+                if (msg.isCpu)
+                {
+                    // client is an ai
+                    AIPlayer client = new AIPlayer(msg.clientName, sessionID);
+                    party.AddClient(client);
+                    // send join accepted
+                    DoAcceptJoin(client.ClientSecret, client.ClientID, client.SessionID);
                 }
                 else
                 {
-                    //errorMessage
+                    // client is a human player
+                    HumanPlayer client = new HumanPlayer(msg.clientName, sessionID);
+                    party.AddClient(client);
+                    // send join accepted
+                    DoAcceptJoin(client.ClientSecret, client.ClientID, client.SessionID);
                 }
+            }
+            else
+            {
+                Spectator client = new Spectator(msg.clientName, sessionID);
+                party.AddClient(client);
+                // send join accepted
+                DoAcceptJoin(client.ClientSecret, client.ClientID, client.SessionID);
             }
         }
 
@@ -141,11 +162,11 @@ namespace Server
         /// TODO: what is sending back if a exception is thrown?
         /// </summary>
         /// <param name="clientSecret">Unique identifikator for the client, which is just known between the affected parties</param>
-        public void DoAcceptJoin(string clientSecret, int clientID)
+        public void DoAcceptJoin(string clientSecret, int clientID, string sessionID)
         {
             JoinAcceptedMessage joinAcceptedMessage = new JoinAcceptedMessage(clientSecret, clientID);
-            NetworkController.HandleSendingMessage(joinAcceptedMessage);
-            Console.WriteLine("- Join accepted");
+            NetworkController.HandleSendingMessage(joinAcceptedMessage, sessionID);
+            Log.Information("Join request of " + clientID + " was accepted");
         }
 
         public void DoSendAck()
@@ -154,10 +175,17 @@ namespace Server
             NetworkController.HandleSendingMessage(ackMessage);
         }
 
-        public void DoSendError(int errorCode, string errorDescription)
+        /// <summary>
+        /// sends the an error message to the client
+        /// </summary>
+        /// <param name="errorCode">the error code (see "Standardisierungsdokument")</param>
+        /// <param name="errorDescription">a further description of the error</param>
+        /// <param name="clientID">the session id of the client, the message need to be send to</param>
+        public void DoSendError(int errorCode, string errorDescription, string clientID)
         {
             ErrorMessage errorMessage = new ErrorMessage(errorCode, errorDescription);
-            NetworkController.HandleSendingMessage(errorMessage);
+            NetworkController.HandleSendingMessage(errorMessage, clientID);
+            Log.Debug("An error (code = " + errorCode + " occured: " + errorDescription);
         }
 
         public void DoSendGameConfig(List<string[]> scenario, string party, int client0ID, int client1ID)
