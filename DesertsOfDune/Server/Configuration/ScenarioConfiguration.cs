@@ -17,6 +17,7 @@ namespace Server.Configuration
         /// <summary>
         /// hide default constructor for implementing the singleton pattern
         /// </summary>
+        /// TODO: set default values, if a new instance is created
         private ScenarioConfiguration()
         {
         }
@@ -32,6 +33,15 @@ namespace Server.Configuration
                 singleton = new ScenarioConfiguration();
             }
             return singleton;
+        }
+
+        /// <summary>
+        /// creates a new (singleton) instance based on an existing ScenarioConfiguration-Object
+        /// </summary>
+        /// <param name="partyConfigObject">the object to "copy"</param>
+        public static void CreateInstance(ScenarioConfiguration scenarioConfigObject)
+        {
+            singleton = (ScenarioConfiguration)scenarioConfigObject.MemberwiseClone();
         }
     }
 }

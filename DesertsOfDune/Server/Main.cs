@@ -93,11 +93,13 @@ namespace Server
         {
             ConfigurationFileLoader loader = new ConfigurationFileLoader();
 
-            // get instance of scenario configuration and set the scenario
-            ScenarioConfiguration scenarioConfiguration = ScenarioConfiguration.GetInstance();
-            scenarioConfiguration.scenario = loader.LoadScenarioConfiguration(configuration.FilePathScenarioConfiguration).scenario;
+            // load scenario and create a new scenario configuration
+            ScenarioConfiguration scenarioConfiguration = loader.LoadScenarioConfiguration(configuration.FilePathScenarioConfiguration);
+            ScenarioConfiguration.CreateInstance(scenarioConfiguration);
 
-            List<List<string>> scenario = ScenarioConfiguration.GetInstance().scenario;
+            // load the party configuration and create a new party configuration class
+            PartyConfiguration partyConfiguration = loader.LoadPartyConfiguration(configuration.FilePathMatchConfiguration);
+            PartyConfiguration.CreateInstance(partyConfiguration);
         }
     }
 }

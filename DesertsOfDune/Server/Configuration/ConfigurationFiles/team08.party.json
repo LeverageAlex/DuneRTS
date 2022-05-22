@@ -32,7 +32,8 @@
     "healingHP": 6
   },
   "numbOfRounds": 10,
-  "actionTime": 0.5,
+  "actionTimeUserClient": 5000,
+  "actionTimeAiClient": 1000,
   "highGroundBonusRatio": 0.5,
   "lowerGroundMalusRatio": 0.5,
   "kanlySuccessProbability": 0.5,
