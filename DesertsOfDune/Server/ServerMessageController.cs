@@ -9,11 +9,9 @@ namespace Server
 {
     public class ServerMessageController : MessageController
     {
-        private readonly Dictionary<string, Party> _parties; //Dictionary of all created parties
-
         public ServerMessageController()
         {
-            _parties = new Dictionary<string, Party>();
+            
         }
 
         /// <summary>

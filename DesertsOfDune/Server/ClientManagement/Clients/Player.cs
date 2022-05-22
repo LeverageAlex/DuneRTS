@@ -1,37 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Server.ClientManagement.Clients;
 
 namespace Server.Clients
 {
-    public class Player
+    abstract public class Player : Client
     {
-        private static List<string> _clientSecrets;
-        private static List<int> _clientIDs;
 
+        /// <summary>
+        /// the client ID, in this case the session id from the websocket is used
+        /// </summary>
         public int ClientID { get; }
-        public string ClientName { get; }
-        public string ClientSecret { get; }
-        public string LobbyCode { get; }
 
-        public Player()
-        {
-            
-        }
 
-        public Player(string clientName, string lobbyCode)
+        protected Player(string clientName, int sessionID) : base(clientName, true)
         {
-            ClientName = clientName;
-            ClientID = GenerateClientID();
-            ClientSecret = GenerateClientSecret();
-            LobbyCode = lobbyCode;
+                        
         }
 
         /// <summary>
         /// Generate a random string for identification of the client
         /// </summary>
         /// <returns>Random generated string for clientSecret</returns>
-        private string GenerateClientSecret()
+        [Obsolete("Not used anymore, because the Client class has the oppurtunity to create a UUID, when a new client is created")]
+        public string GenerateClientSecret()
         {
             //todo: check if clientSecret already available
             int length = 12;
@@ -46,13 +39,6 @@ namespace Server.Clients
                 stringBuilder.Append(letter);
             }
             return stringBuilder.ToString();
-        }
-
-        private int GenerateClientID()
-        {
-            //TODO: generate clientID
-            //TODO: check if clientID already available
-            return 1234;
         }
     }
 }
