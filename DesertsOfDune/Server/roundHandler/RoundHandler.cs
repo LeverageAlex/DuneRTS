@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using GameData.network.messages;
+using GameData.network.util.world;
 using GameData.server.roundHandler;
 
 namespace GameData.gameObjects
@@ -12,6 +13,13 @@ namespace GameData.gameObjects
     public class RoundHandler
     {
         private int roundCounter;
+        private int currentSpice;
+        public int CurrentSpice { get { return currentSpice; } set { currentSpice = value; } }
+        private readonly int numbOfRounds;
+        private readonly int spiceMinimum;
+        private MapField[,] map;
+        public MapField[,] Map { get { return map; } set { map = value; } }
+        public int SpiceMinimum { get { return spiceMinimum; } }
         private GreatHouseSelection greatHouseSelection;
         private SpiceBlow spiceBlow;
         private DuneMovementPhase duneMovementPhase;
@@ -20,6 +28,16 @@ namespace GameData.gameObjects
         private List<ClonePhase> clonePhaseList;
         private CharacterTraitPhase characterTraitPhase;
 
+        /// <summary>
+        /// Constructor of the class RoundHandler
+        /// </summary>
+        /// <param name="numbOfRounds">the maximum number of rounds specified in the pary config</param>
+        public RoundHandler(int numbOfRounds, int spiceMinimum)
+        {
+            this.numbOfRounds = numbOfRounds;
+            this.spiceMinimum = spiceMinimum;
+        }
+
 
         /// <summary>
         /// This method checks weather the game is in overlenth
@@ -27,7 +45,10 @@ namespace GameData.gameObjects
         /// <returns>true, if the game has overlength</returns>
         public bool CheckOverLength()
         {
-            // TODO implement logic
+            if (roundCounter >= numbOfRounds)
+            {
+                return true;
+            }
             return false;
         }
 
