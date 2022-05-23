@@ -27,7 +27,8 @@ namespace GameData.network.util.world
         [JsonIgnore]
         public List<Character> Characters { get; }
 
-        protected static readonly int AMOUNT_OF_CHARACTERS_PER_GREAT_HOUSE = 6;
+        public static readonly int AMOUNT_OF_CHARACTERS_PER_GREAT_HOUSE = 6;
+        public static readonly string[] 
 
 
         /// <summary>
