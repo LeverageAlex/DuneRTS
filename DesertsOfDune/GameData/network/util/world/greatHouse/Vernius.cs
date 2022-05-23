@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using GameData.network.messages;
 
 namespace GameData.network.util.world
 {
@@ -9,15 +10,22 @@ namespace GameData.network.util.world
     /// </summary>
     public class Vernius : GreatHouse
     {
-        /// <summary>
-        /// Constructor of the class Vernius
-        /// </summary>
-        /// <param name="name">the name of the house</param>
-        /// <param name="color">the color of the house</param>
-        /// <param name="characters">the characters of the house</param>
-        public Vernius(string name, string color, Character[] characters) : base(name, color, characters)
+        public Vernius() : base("VERNIUS", "VIOLETT", GetHouseCharacters())
         {
+        }
 
+        private static HouseCharacter[] GetHouseCharacters()
+        {
+            HouseCharacter[] characters = new HouseCharacter[GreatHouse.AMOUNT_OF_CHARACTERS_PER_GREAT_HOUSE];
+            characters[0] = new HouseCharacter("Earl Dominic Vernius", CharacterType.NOBEL.ToString());
+            characters[1] = new HouseCharacter("Lady Shando Vernius", CharacterType.NOBEL.ToString());
+            characters[2] = new HouseCharacter("Kailea Vernius", CharacterType.NOBEL.ToString());
+            characters[3] = new HouseCharacter("Tessia Vernius", CharacterType.BENEGESSERIT.ToString());
+            characters[4] = new HouseCharacter("Rhombur Vernius", CharacterType.FIGHTHER.ToString());
+            characters[5] = new HouseCharacter("Bronso Vernius", CharacterType.MENTAT.ToString());
+
+            return characters;
         }
     }
+}
 }

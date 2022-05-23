@@ -181,13 +181,13 @@ namespace TestProject.networkTest.utilTest.parserTest
         public void TestFromHouseOfferMessage()
         {
             GreatHouse[] houses = new GreatHouse[1];
-            HouseCharacters[] houseCharacters = new HouseCharacters[2];
-            HouseCharacters houseCharacter1 = new HouseCharacters("Emperor Shaddam IV Corrino", "NOBLE");
-            HouseCharacters houseCharacter2 = new HouseCharacters("Princess Irulan Corrino", "BENE_GESSERIT");
+            HouseCharacter[] houseCharacters = new HouseCharacter[2];
+            HouseCharacter houseCharacter1 = new HouseCharacter("Emperor Shaddam IV Corrino", "NOBLE");
+            HouseCharacter houseCharacter2 = new HouseCharacter("Princess Irulan Corrino", "BENE_GESSERIT");
             houseCharacters[0] = houseCharacter1;
             houseCharacters[1] = houseCharacter2;
 
-            houses[0] = new GreatHouse("CORRINO","GOLD", houseCharacters);
+            houses[0] = new Corrino();
             HouseOfferMessage message = new HouseOfferMessage(1234, houses);
             string serializedMessage = MessageConverter.FromMessage(message);
             Assert.AreEqual("{\"type\":\"HOUSE_OFFER\",\"version\":\"0.1\",\"clientID\":1234,\"houses\":[{\"houseName\":\"CORRINO\",\"houseColor\":\"GOLD\",\"houseCharacters\":[{\"characterName\":\"Emperor Shaddam IV Corrino\",\"characterClass\":\"NOBLE\"},{\"characterName\":\"Princess Irulan Corrino\",\"characterClass\":\"BENE_GESSERIT\"}]}]}", serializedMessage);

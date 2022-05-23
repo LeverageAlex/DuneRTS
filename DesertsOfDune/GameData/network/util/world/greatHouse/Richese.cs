@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using GameData.network.messages;
 
 namespace GameData.network.util.world
 {
@@ -9,15 +10,22 @@ namespace GameData.network.util.world
     /// </summary>
     public class Richese : GreatHouse
     {
-        /// <summary>
-        /// Constructor of the class Richese
-        /// </summary>
-        /// <param name="name">the name of the house</param>
-        /// <param name="color">the color of the house</param>
-        /// <param name="characters">the characters of the house</param>
-        public Richese(string name, string color, Character[] characters) : base(name, color, characters)
+        public Richese() : base("RICHESE", "SILBER", GetHouseCharacters())
         {
+        }
 
+        private static HouseCharacter[] GetHouseCharacters()
+        {
+            HouseCharacter[] characters = new HouseCharacter[GreatHouse.AMOUNT_OF_CHARACTERS_PER_GREAT_HOUSE];
+            characters[0] = new HouseCharacter("Count Ilban Richese", CharacterType.NOBEL.ToString());
+            characters[1] = new HouseCharacter("Helena Richese", CharacterType.NOBEL.ToString());
+            characters[2] = new HouseCharacter("Haloa Rund", CharacterType.MENTAT.ToString());
+            characters[3] = new HouseCharacter("Flinto Kinnis", CharacterType.MENTAT.ToString());
+            characters[4] = new HouseCharacter("Tenu Chobyn", CharacterType.MENTAT.ToString());
+            characters[5] = new HouseCharacter("Yresk", CharacterType.FIGHTHER.ToString());
+
+            return characters;
         }
     }
+}
 }

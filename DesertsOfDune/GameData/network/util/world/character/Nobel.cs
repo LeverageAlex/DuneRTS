@@ -29,6 +29,7 @@ namespace GameData.network.util.world.character
         {
 
         }
+
         /// <summary>
         /// This method represents the action Kanly for the Character type Nobel
         /// </summary>

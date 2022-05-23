@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using GameData.network.messages;
 
 namespace GameData.network.util.world
 {
@@ -9,15 +10,22 @@ namespace GameData.network.util.world
     /// </summary>
     public class Ordos : GreatHouse
     {
-        /// <summary>
-        /// Constructor of the class Ordos
-        /// </summary>
-        /// <param name="name">the name of the house</param>
-        /// <param name="color">the color of the house</param>
-        /// <param name="characters">the characters of the house</param>
-        public Ordos(string name, string color, Character[] characters) : base(name, color, characters)
+        public Ordos() : base("ORDOS", "BLAU", GetHouseCharacters())
         {
+        }
 
+        private static HouseCharacter[] GetHouseCharacters()
+        {
+            HouseCharacter[] characters = new HouseCharacter[GreatHouse.AMOUNT_OF_CHARACTERS_PER_GREAT_HOUSE];
+            characters[0] = new HouseCharacter("Executrix", CharacterType.NOBEL.ToString());
+            characters[1] = new HouseCharacter("The Speaker", CharacterType.NOBEL.ToString());
+            characters[2] = new HouseCharacter("Ammon", CharacterType.MENTAT.ToString());
+            characters[3] = new HouseCharacter("Edric", CharacterType.MENTAT.ToString());
+            characters[4] = new HouseCharacter("Roma Atani", CharacterType.MENTAT.ToString());
+            characters[5] = new HouseCharacter("Robot", CharacterType.FIGHTHER.ToString());
+
+            return characters;
         }
     }
+}
 }

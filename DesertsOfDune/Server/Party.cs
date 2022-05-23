@@ -21,7 +21,7 @@ namespace Server
     public class Party
     {
         private static Party singleton;
-        public ServerMessageController messageController { get;  set; }
+        public ServerMessageController messageController { get; set; }
 
         /// <summary>
         /// the identifier of this party / lobby
@@ -76,6 +76,11 @@ namespace Server
             return connectedClients.FindAll(client => client.IsActivePlayer).Count == 2;
         }
 
+        private List<Client> GetActivePlayers()
+        {
+            return connectedClients.FindAll(client => client.IsActivePlayer);
+        }
+
         /// <summary>
         /// starts a new party, so prepare it and execute it until a winning condition becomes true or an error occur
         /// </summary>
@@ -89,6 +94,11 @@ namespace Server
             // get two disjoint sets of each two great houses and offer them to the client
             GreatHouse[] firstSet;
             GreatHouse[] secondSet;
+
+            List<Client> activePlayers = GetActivePlayers();
+
+            messageController.DoSendHouseOffer(activePlayers[0].ClientID, firstSet);
+            messageController.DoSendHouseOffer(activePlayers[1].ClientID, secondSet);
         }
     }
 }
