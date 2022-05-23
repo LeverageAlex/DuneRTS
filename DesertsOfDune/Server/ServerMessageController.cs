@@ -9,6 +9,9 @@ using Serilog;
 using Server.ClientManagement.Clients;
 using GameData.network.util.enums;
 using GameData.network.util.world.greatHouse;
+using System.Linq;
+using Serilog.Sinks.SystemConsole.Themes;
+using GameData.network.util.parser;
 
 namespace Server
 {
@@ -80,7 +83,7 @@ namespace Server
             else
             {
                 client = new Spectator(msg.clientName, sessionID);
-               
+
             }
             party.AddClient(client);
             // send join accept
@@ -93,15 +96,43 @@ namespace Server
             }
         }
 
-        public void OnHouseRequestMessage(HouseRequestMessage msg)
+        /// <summary>
+        /// executed, if the clients requested a certain great house
+        /// </summary>
+        /// <param name="msg">the HouseRequestMessage, which contains the house name</param>
+        /// <param name="sessionID">the session id of the requesting client</param>
+        public void OnHouseRequestMessage(HouseRequestMessage msg, string sessionID)
         {
-            throw new NotImplementedException("not implemented");
+            GreatHouseType chosenGreatHouse = (GreatHouseType)Enum.Parse(typeof(GreatHouseType), msg.houseName);
 
-            //receiving of chosen house of Player
+            // get the player, who send this request
+            Player requestingPlayer = party.GetPlayerBySessionID(sessionID);
 
-            //string houseName
+            if (requestingPlayer != null)
+            {
+                // check, whether this decision is valid, if not resend house offer and strike
+                if (requestingPlayer.OfferedGreatHouses.Contains(chosenGreatHouse))
+                {
+                    requestingPlayer.UsedGreatHouse = GreatHouseFactory.CreateNewGreatHouse(chosenGreatHouse);
+                    Log.Information("The player with the session id: " + sessionID + " chose the great house " + chosenGreatHouse.ToString());
+                }
+                else
+                {
+                    Log.Error("The player with the session id: " + sessionID + " requested " + chosenGreatHouse.ToString() + ", but the server didn't offered this greathouse");
 
-            //create  great house
+                    // resend house offer:
+                    DoSendHouseOffer(requestingPlayer.ClientID, requestingPlayer.OfferedGreatHouses);
+
+                    // send a strike
+                    DoSendStrike(requestingPlayer, msg);
+                }
+
+            }
+            else
+            {
+                Log.Error("There is no player with the session id: " + sessionID);
+            }
+
         }
 
         public void OnMovementRequestMessage(MovementRequestMessage msg)
@@ -204,7 +235,7 @@ namespace Server
 
         public void DoSendHouseOffer(int clientID, GreatHouseType[] houses)
         {
-            GreatHouse[] greatHouses = { GreatHouseFactory.CreateNewGreatHouse(houses[0]), GreatHouseFactory.CreateNewGreatHouse(houses[1])};
+            GreatHouse[] greatHouses = { GreatHouseFactory.CreateNewGreatHouse(houses[0]), GreatHouseFactory.CreateNewGreatHouse(houses[1]) };
             HouseOfferMessage houseOfferMessage = new HouseOfferMessage(clientID, greatHouses);
             NetworkController.HandleSendingMessage(houseOfferMessage);
         }
@@ -299,9 +330,16 @@ namespace Server
             NetworkController.HandleSendingMessage(gameStateMessage);
         }
 
-        public void DoSendStrike(int clientID, string wrongMessage, int count)
+        /// <summary>
+        /// increases the amount of strikes of a client and sends a strike message
+        /// </summary>
+        /// <param name="player">the player, who gets a strike</param>
+        /// <param name="wrongMessage">the wrong message, who was send by the client</param>
+        public void DoSendStrike(Player player, Message wrongMessage)
         {
-            StrikeMessage strikeMessage = new StrikeMessage(clientID, wrongMessage, count);
+            string wrongMessageAsString = MessageConverter.FromMessage(wrongMessage);
+            player.AddStrike();
+            StrikeMessage strikeMessage = new StrikeMessage(player.ClientID, wrongMessageAsString, player.AmountOfStrikes);
             NetworkController.HandleSendingMessage(strikeMessage);
         }
 

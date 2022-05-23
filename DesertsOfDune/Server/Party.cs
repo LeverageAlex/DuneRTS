@@ -10,6 +10,7 @@ using GameData.network.util.enums;
 using System.Runtime.ExceptionServices;
 using System.Linq;
 using WebSocketSharp;
+using CommandLine;
 
 namespace Server
 {
@@ -80,9 +81,23 @@ namespace Server
             return connectedClients.FindAll(client => client.IsActivePlayer).Count == 2;
         }
 
-        private List<Client> GetActivePlayers()
+        /// <summary>
+        /// return all active client, so all players
+        /// </summary>
+        /// <returns>a list of all players or an empty list, if there are no players</returns>
+        private List<Player> GetActivePlayers()
         {
-            return connectedClients.FindAll(client => client.IsActivePlayer);
+            List<Client> foundActiveClients = connectedClients.FindAll(client => client.IsActivePlayer);
+
+            if (foundActiveClients.Count == 0)
+            {
+                // there are no players
+                Log.Debug("There were no active clients, so player found");
+                return new List<Player>();
+            } else
+            {
+                return (List<Player>)foundActiveClients.Cast<Player>();
+            }
         }
 
         /// <summary>
@@ -102,7 +117,7 @@ namespace Server
             GreatHouseType[] firstSet;
             GreatHouseType[] secondSet;
 
-            List<Client> activePlayers = GetActivePlayers();
+            List<Player> activePlayers = GetActivePlayers();
 
             GreatHouseType[] possibleGreatHousesForFirstSet = { GreatHouseType.ATREIDES, GreatHouseType.CORRINO, GreatHouseType.HARKONNEN, GreatHouseType.ORDOS, GreatHouseType.RICHESE, GreatHouseType.VERNIUS };
             firstSet = GetTwoRandomGreatHouses(possibleGreatHousesForFirstSet);
@@ -112,6 +127,10 @@ namespace Server
 
             messageController.DoSendHouseOffer(activePlayers[0].ClientID, firstSet);
             messageController.DoSendHouseOffer(activePlayers[1].ClientID, secondSet);
+
+            // set the choice sets as offered great house sets in the player, so later can be checked, whether they chose a possble great house
+            activePlayers[0].OfferedGreatHouses = firstSet;
+            activePlayers[1].OfferedGreatHouses = secondSet;
         }
 
         /// <summary>
@@ -122,6 +141,40 @@ namespace Server
         private GreatHouseType[] GetTwoRandomGreatHouses(GreatHouseType[] possibleGreatHouses)
         {
             return possibleGreatHouses.OrderBy(n => Guid.NewGuid()).ToArray().SubArray(0, 2);
+        }
+
+        /// <summary>
+        /// gets a client from the list of all connected clients by its session id
+        /// </summary>
+        /// <param name="sessionID">the session id of the client</param>
+        /// <returns>the reference to the client or null, if the client was not found</returns>
+        public Client GetClientBySessionID(string sessionID)
+        {
+            return connectedClients.Find(client => client.SessionID == sessionID);
+        }
+
+
+        /// <summary>
+        /// gets a player from the list of all connected clients by its session id
+        /// </summary>
+        /// <param name="sessionID">the session id of the player</param>
+        /// <returns>the reference to the client or null, if the player was not found</returns>
+        public Player GetPlayerBySessionID(string sessionID)
+        {
+            Client foundClient = GetClientBySessionID(sessionID);
+
+            if (foundClient != null)
+            {
+                if (foundClient.IsActivePlayer)
+                {
+                    return (Player)foundClient;
+                }
+                else
+                {
+                    Log.Error("There is no player with the session ID " + sessionID);
+                }
+            }
+            return null;
         }
     }
 }

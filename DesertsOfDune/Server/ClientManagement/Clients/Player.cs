@@ -1,15 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using GameData.network.util.enums;
+using GameData.network.util.world;
 using Server.ClientManagement.Clients;
 
 namespace Server.Clients
 {
     abstract public class Player : Client
     {
+
+        /// <summary>
+        /// the great house, so especially the list of characters, the player can use
+        /// </summary>
+        public GreatHouse UsedGreatHouse { get; set; }
+
+        /// <summary>
+        /// the array of the two great houses, which were offered to the player
+        /// </summary>
+        public GreatHouseType[] OfferedGreatHouses { get; set; }
+
+        public int AmountOfStrikes { get; set; }
+
         protected Player(string clientName, string sessionID) : base(clientName, true, sessionID)
         {
-                        
+            this.AmountOfStrikes = 0;          
         }
 
         /// <summary>
@@ -32,6 +47,14 @@ namespace Server.Clients
                 stringBuilder.Append(letter);
             }
             return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// adds a new strike for this player
+        /// </summary>
+        public void AddStrike()
+        {
+            this.AmountOfStrikes++;
         }
     }
 }

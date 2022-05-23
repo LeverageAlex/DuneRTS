@@ -43,6 +43,7 @@ namespace Server
             Log.Debug("Loaded configuration files");
 
             Party.GetInstance("123").PrepareGame();
+            Log.Information(Party.GetInstance("123").GetClientBySessionID("123").ToString());
         }
 
         /// <summary>
