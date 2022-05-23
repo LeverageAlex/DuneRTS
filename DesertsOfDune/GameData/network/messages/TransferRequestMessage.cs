@@ -1,34 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Newtonsoft.Json;
 
 namespace GameData.network.messages
 {
-    /// <summary>
-    /// This class is used to request a spice transfer
-    /// </summary>
-    public class TransferRequestMessage : ClientServerMessage
+    public class TransferRequestMessage : Message
     {
         [JsonProperty]
-        private int characterID;
+        private int ClientID;
         [JsonProperty]
-        private int targetID;
+        private int CharacterID;
         [JsonProperty]
-        private int amount;
+        private int TargetID;
+        [JsonProperty]
+        private int Amount;
 
-        /// <summary>
-        /// Constructor of the class TransferRequestMessage
-        /// </summary>
-        /// <param name="clientID">the id of the client</param>
-        /// <param name="characterID">the id of the character</param>
-        /// <param name="targetID">the id of the target chracter</param>
-        /// <param name="amount">the amount of spice to be transfered</param>
-        public TransferRequestMessage(int clientID, int characterID, int targetID, int amount) : base(clientID, MessageType.TRANSFER_REQUEST)
+        public TransferRequestMessage(int clientID, int characterID, int targetID, int amount) : base("v1", MessageType.TRANSFER_REQUEST)
         {
-            this.clientID = clientID;
-            this.characterID = characterID;
-            this.amount = amount;
+            this.ClientID = clientID;
+            this.CharacterID = characterID;
+            this.TargetID = targetID;
+            this.Amount = amount;
         }
     }
 }

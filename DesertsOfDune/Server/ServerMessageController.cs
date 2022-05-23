@@ -103,7 +103,7 @@ namespace Server
             //int targetID
         }
 
-        public void OnTransferRequestMessage(TransferReuqestMessage msg)
+        public void OnTransferRequestMessage(TransferRequestMessage msg)
         {
             throw new NotImplementedException("not implemented");
         }
