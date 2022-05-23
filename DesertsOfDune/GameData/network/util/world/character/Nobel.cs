@@ -1,4 +1,5 @@
-﻿using GameData.network.messages;
+﻿using GameData.Configuration;
+using GameData.network.messages;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,6 +29,12 @@ namespace GameData.network.util.world.character
         public Nobel(int healthMax, int healthCurrent, int healingHP, int MPmax, int MPcurrent, int APmax, int APcurrent, int attackDamage, int inventorySize, int inventoryUsed, bool killedBySandworm, bool isLoud) : base(CharacterType.NOBEL, healthMax, healthCurrent, healingHP,  MPmax, MPcurrent, APmax, APcurrent, attackDamage, inventorySize, inventoryUsed, killedBySandworm, isLoud)
         {
 
+        }
+
+        /// <summary>
+        /// creates a new nobel 
+        /// </summary>
+        public Nobel() : base(CharacterType.NOBEL, CharacterConfiguration.Noble.maxHP, CharacterConfiguration.Noble.maxMP, CharacterConfiguration.Noble.maxAP, CharacterConfiguration.Noble.damage, CharacterConfiguration.Noble.inventorySize, CharacterConfiguration.Noble.healingHP) {
         }
 
         /// <summary>

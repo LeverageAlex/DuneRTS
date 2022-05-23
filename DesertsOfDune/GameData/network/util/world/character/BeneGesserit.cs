@@ -1,4 +1,5 @@
-﻿using GameData.network.messages;
+﻿using GameData.Configuration;
+using GameData.network.messages;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -29,6 +30,13 @@ namespace GameData.network.util.world.character
         public BeneGesserit(int healthMax, int healthCurrent, int healingHP, int MPmax, int MPcurrent, int APmax, int APcurrent, int attackDamage, int inventorySize, int inventoryUsed, bool killedBySandworm, bool isLoud) : base(CharacterType.BENEGESSERIT, healthMax, healthCurrent, healingHP, MPmax, MPcurrent, APmax, APcurrent, attackDamage, inventorySize, inventoryUsed, killedBySandworm, isLoud)
         {
 
+        }
+
+        /// <summary>
+        /// creates a new bene gesserit 
+        /// </summary>
+        public BeneGesserit() : base(CharacterType.BENEGESSERIT, CharacterConfiguration.BeneGesserit.maxHP, CharacterConfiguration.BeneGesserit.maxMP, CharacterConfiguration.BeneGesserit.maxAP, CharacterConfiguration.BeneGesserit.damage, CharacterConfiguration.BeneGesserit.inventorySize, CharacterConfiguration.BeneGesserit.healingHP)
+        {
         }
 
         /// <summary>

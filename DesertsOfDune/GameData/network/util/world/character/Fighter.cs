@@ -1,4 +1,5 @@
-﻿using GameData.network.messages;
+﻿using GameData.Configuration;
+using GameData.network.messages;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,6 +27,8 @@ namespace GameData.network.util.world.character
         {
 
         }
+
+        public Figther() : base(PartyConfiguration)
 
         /// <summary>
         /// This method represents the action SwordSpin of the character type fighter

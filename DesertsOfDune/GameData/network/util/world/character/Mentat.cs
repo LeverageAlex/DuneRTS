@@ -1,4 +1,5 @@
-﻿using GameData.network.messages;
+﻿using GameData.Configuration;
+using GameData.network.messages;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,6 +29,13 @@ namespace GameData.network.util.world.character
         public Mentat(int healthMax, int healthCurrent, int healingHP, int MPmax, int MPcurrent, int APmax, int APcurrent, int attackDamage, int inventorySize, int inventoryUsed, bool killedBySandworm, bool isLoud) : base(CharacterType.MENTAT, healthMax, healthCurrent, healingHP, MPmax, MPcurrent, APmax, APcurrent, attackDamage, inventorySize, inventoryUsed, killedBySandworm, isLoud)
         {
 
+        }
+
+        /// <summary>
+        /// creates a new mentat 
+        /// </summary>
+        public Mentat() : base(CharacterType.MENTAT, CharacterConfiguration.Mentat.maxHP, CharacterConfiguration.Mentat.maxMP, CharacterConfiguration.Mentat.maxAP, CharacterConfiguration.Mentat.damage, CharacterConfiguration.Mentat.inventorySize, CharacterConfiguration.Mentat.healingHP)
+        {
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using GameData.network.util.world;
 using Newtonsoft.Json;
 
@@ -7,72 +8,40 @@ namespace Server.Configuration
     /// <summary>
     /// This class stores the party configuration and is used for loading the match configuration file.
     /// </summary>
-    public class PartyConfiguration
+    public static class PartyConfiguration
     {
         [JsonProperty]
-        public CharacterProperties noble { get; set; }
+        public static CharacterProperties noble { get; }
         [JsonProperty]
-        public CharacterProperties mentat { get; set; }
+        public static CharacterProperties mentat { get; }
         [JsonProperty]
-        public CharacterProperties beneGesserit { get; set; }
+        public static CharacterProperties beneGesserit { get; }
         [JsonProperty]
-        public CharacterProperties fighter { get; set; }
+        public static CharacterProperties fighter { get; }
 
         [JsonProperty]
-        public int numbOfRounds { get; set; }
+        public static int numbOfRounds { get; }
         [JsonProperty]
-        public int actionTimeUserClient { get; set; }
+        public static int actionTimeUserClient { get; }
         [JsonProperty]
-        public int actionTimeAiClient { get; set; }
+        public static int actionTimeAiClient { get; }
         [JsonProperty]
-        public double highGroundBonusRatio { get; set; }
+        public static double highGroundBonusRatio { get;}
         [JsonProperty]
-        public double lowerGroundMalusRatio { get; set; }
+        public static double lowerGroundMalusRatio { get; }
         [JsonProperty]
-        public double kanlySuccessProbability { get; set; }
+        public static double kanlySuccessProbability { get; }
         [JsonProperty]
-        public int spiceMinimum { get; set; }
+        public static int spiceMinimum { get; set; }
         [JsonProperty]
-        public string cellularAutomaton { get; set; }
+        public static string cellularAutomaton { get; }
         [JsonProperty]
-        public int sandWormSpeed { get; set; }
+        public static int sandWormSpeed { get; }
         [JsonProperty]
-        public int sandWormSpawnDistance { get; set; }
+        public static int sandWormSpawnDistance { get; }
         [JsonProperty]
-        public double cloneProbability { get; set; }
+        public static double cloneProbability { get; }
         [JsonProperty]
-        public int minPauseTime { get; set; }
-
-        private static PartyConfiguration singleton;
-
-        /// <summary>
-        /// hide default constructor for implementing the singleton pattern
-        /// </summary>
-        /// TODO: set default values, if a new instance is created
-        private PartyConfiguration()
-        {
-        }
-
-        /// <summary>
-        /// get the reference to the party configuration class (implementation of the singleton pattern)
-        /// </summary>
-        /// <returns>reference to this class</returns>
-        public static PartyConfiguration GetInstance()
-        {
-            if (singleton == null)
-            {
-                singleton = new PartyConfiguration();
-            }
-            return singleton;
-        }
-
-        /// <summary>
-        /// creates a new (singleton) instance based on an existing PartyConfiguration-Object
-        /// </summary>
-        /// <param name="partyConfigObject">the object to "copy"</param>
-        public static void CreateInstance(PartyConfiguration partyConfigObject)
-        {
-            singleton = (PartyConfiguration)partyConfigObject.MemberwiseClone();
-        }
+        public static int minPauseTime { get; }
     }
 }
