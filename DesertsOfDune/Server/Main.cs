@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GameData.Configuration;
 using GameData.network.controller;
 using GameData.network.util;
 using Serilog;
@@ -40,6 +41,8 @@ namespace Server
 
             LoadConfigurationFiles();
             Log.Debug("Loaded configuration files");
+
+            Party.GetInstance("123").PrepareGame();
         }
 
         /// <summary>
@@ -99,7 +102,13 @@ namespace Server
 
             // load the party configuration and create a new party configuration class
             PartyConfiguration partyConfiguration = loader.LoadPartyConfiguration(configuration.FilePathMatchConfiguration);
-            PartyConfiguration.CreateInstance(partyConfiguration);
+            PartyConfiguration.SetInstance(partyConfiguration);
+
+            // set the character configurations
+            CharacterConfiguration.Noble = PartyConfiguration.GetInstance().noble;
+            CharacterConfiguration.Mentat = PartyConfiguration.GetInstance().mentat;
+            CharacterConfiguration.BeneGesserit = PartyConfiguration.GetInstance().beneGesserit;
+            CharacterConfiguration.Fighter = PartyConfiguration.GetInstance().fighter;
         }
     }
 }

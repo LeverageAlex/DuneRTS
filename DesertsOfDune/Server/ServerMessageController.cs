@@ -7,6 +7,8 @@ using Server.Clients;
 using Server;
 using Serilog;
 using Server.ClientManagement.Clients;
+using GameData.network.util.enums;
+using GameData.network.util.world.greatHouse;
 
 namespace Server
 {
@@ -200,9 +202,10 @@ namespace Server
             NetworkController.HandleSendingMessage(gameConfigMessage);
         }
 
-        public void DoSendHouseOffer(int clientID, GreatHouse[] houses)
+        public void DoSendHouseOffer(int clientID, GreatHouseType[] houses)
         {
-            HouseOfferMessage houseOfferMessage = new HouseOfferMessage(clientID, houses);
+            GreatHouse[] greatHouses = { GreatHouseFactory.CreateNewGreatHouse(houses[0]), GreatHouseFactory.CreateNewGreatHouse(houses[1])};
+            HouseOfferMessage houseOfferMessage = new HouseOfferMessage(clientID, greatHouses);
             NetworkController.HandleSendingMessage(houseOfferMessage);
         }
 

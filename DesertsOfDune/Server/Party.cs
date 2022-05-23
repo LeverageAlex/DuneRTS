@@ -6,6 +6,10 @@ using Server.ClientManagement.Clients;
 using Serilog;
 using System.Runtime.CompilerServices;
 using GameData.network.util.world;
+using GameData.network.util.enums;
+using System.Runtime.ExceptionServices;
+using System.Linq;
+using WebSocketSharp;
 
 namespace Server
 {
@@ -89,16 +93,35 @@ namespace Server
 
         }
 
+        /// <summary>
+        /// execute the preparation of the game, so create to disjoint sets of great houses and offer them to the clients
+        /// </summary>
         public void PrepareGame()
         {
             // get two disjoint sets of each two great houses and offer them to the client
-            GreatHouse[] firstSet;
-            GreatHouse[] secondSet;
+            GreatHouseType[] firstSet;
+            GreatHouseType[] secondSet;
 
             List<Client> activePlayers = GetActivePlayers();
 
+            GreatHouseType[] possibleGreatHousesForFirstSet = { GreatHouseType.ATREIDES, GreatHouseType.CORRINO, GreatHouseType.HARKONNEN, GreatHouseType.ORDOS, GreatHouseType.RICHESE, GreatHouseType.VERNIUS };
+            firstSet = GetTwoRandomGreatHouses(possibleGreatHousesForFirstSet);
+
+            GreatHouseType[] possibleGreatHousesForSecondSet = possibleGreatHousesForFirstSet.Except(firstSet).ToArray();
+            secondSet = GetTwoRandomGreatHouses(possibleGreatHousesForSecondSet);
+
             messageController.DoSendHouseOffer(activePlayers[0].ClientID, firstSet);
             messageController.DoSendHouseOffer(activePlayers[1].ClientID, secondSet);
+        }
+
+        /// <summary>
+        /// get two random great house (types) from a set, with possible great houses (types)
+        /// </summary>
+        /// <param name="possibleGreatHouses">set of possible great house types</param>
+        /// <returns>an array with two entries, which contain to different great house types</returns>
+        private GreatHouseType[] GetTwoRandomGreatHouses(GreatHouseType[] possibleGreatHouses)
+        {
+            return possibleGreatHouses.OrderBy(n => Guid.NewGuid()).ToArray().SubArray(0, 2);
         }
     }
 }

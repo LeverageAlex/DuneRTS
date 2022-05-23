@@ -29,8 +29,6 @@ namespace GameData.network.util.world
         public List<Character> Characters { get; }
 
         public static readonly int AMOUNT_OF_CHARACTERS_PER_GREAT_HOUSE = 6;
-        public static readonly GreatHouseType[] greatHouses = { GreatHouseType.ATREIDES, GreatHouseType.CORRINO, GreatHouseType.HARKONNEN, GreatHouseType.ORDOS, GreatHouseType.RICHESE, GreatHouseType.VERNIUS };
-
 
         /// <summary>
         /// Constructor of the Class GreatHouse

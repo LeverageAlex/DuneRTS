@@ -8,40 +8,73 @@ namespace Server.Configuration
     /// <summary>
     /// This class stores the party configuration and is used for loading the match configuration file.
     /// </summary>
-    public static class PartyConfiguration
+    public class PartyConfiguration
     {
         [JsonProperty]
-        public static CharacterProperties noble { get; }
+        public CharacterProperties noble { get; }
         [JsonProperty]
-        public static CharacterProperties mentat { get; }
+        public CharacterProperties mentat { get; }
         [JsonProperty]
-        public static CharacterProperties beneGesserit { get; }
+        public CharacterProperties beneGesserit { get; }
         [JsonProperty]
-        public static CharacterProperties fighter { get; }
+        public CharacterProperties fighter { get; }
 
         [JsonProperty]
-        public static int numbOfRounds { get; }
+        public int numbOfRounds { get; }
         [JsonProperty]
-        public static int actionTimeUserClient { get; }
+        public int actionTimeUserClient { get; }
         [JsonProperty]
-        public static int actionTimeAiClient { get; }
+        public int actionTimeAiClient { get; }
         [JsonProperty]
-        public static double highGroundBonusRatio { get;}
+        public double highGroundBonusRatio { get; }
         [JsonProperty]
-        public static double lowerGroundMalusRatio { get; }
+        public double lowerGroundMalusRatio { get; }
         [JsonProperty]
-        public static double kanlySuccessProbability { get; }
+        public double kanlySuccessProbability { get; }
         [JsonProperty]
-        public static int spiceMinimum { get; set; }
+        public int spiceMinimum { get; set; }
         [JsonProperty]
-        public static string cellularAutomaton { get; }
+        public string cellularAutomaton { get; }
         [JsonProperty]
-        public static int sandWormSpeed { get; }
+        public int sandWormSpeed { get; }
         [JsonProperty]
-        public static int sandWormSpawnDistance { get; }
+        public int sandWormSpawnDistance { get; }
         [JsonProperty]
-        public static double cloneProbability { get; }
+        public double cloneProbability { get; }
         [JsonProperty]
-        public static int minPauseTime { get; }
+        public int minPauseTime { get; }
+
+        private static PartyConfiguration singleton;
+
+        /// <summary>
+        /// hide default constructor for implementing the singleton pattern
+        /// </summary>
+        private PartyConfiguration()
+        {
+
+        }
+
+        /// <summary>
+        /// get a reference to this instance
+        /// </summary>
+        /// <returns></returns>
+        public static PartyConfiguration GetInstance()
+        {
+            if (singleton == null)
+            {
+                singleton = new PartyConfiguration();
+            }
+
+            return singleton;
+        }
+
+        /// <summary>
+        /// sets a reference of a PartyConfiguration-object to this singleton reference
+        /// </summary>
+        /// <param name="configuration">the reference to a party configuration object</param>
+        public static void SetInstance(PartyConfiguration configuration)
+        {
+            singleton = configuration;
+        }
     }
 }
