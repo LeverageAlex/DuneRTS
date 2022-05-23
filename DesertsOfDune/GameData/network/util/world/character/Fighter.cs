@@ -28,8 +28,12 @@ namespace GameData.network.util.world.character
 
         }
 
-        public Figther() : base(PartyConfiguration)
-
+        /// <summary>
+        /// creates a new fighter 
+        /// </summary>
+        public Fighter() : base(CharacterType.FIGHTHER, CharacterConfiguration.Fighter.maxHP, CharacterConfiguration.Fighter.maxMP, CharacterConfiguration.Fighter.maxAP, CharacterConfiguration.Fighter.damage, CharacterConfiguration.Fighter.inventorySize, CharacterConfiguration.Fighter.healingHP)
+        {
+        }
         /// <summary>
         /// This method represents the action SwordSpin of the character type fighter
         /// </summary>

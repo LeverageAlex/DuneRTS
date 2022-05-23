@@ -6,6 +6,7 @@ using GameData.network.util.world.mapField;
 using GameData.network.messages;
 using WebSocketSharp;
 using GameData.network.util.world.character;
+using GameData.network.util.enums;
 
 namespace GameData.network.util.world
 {
@@ -28,7 +29,7 @@ namespace GameData.network.util.world
         public List<Character> Characters { get; }
 
         public static readonly int AMOUNT_OF_CHARACTERS_PER_GREAT_HOUSE = 6;
-        public static readonly string[] 
+        public static readonly GreatHouseType[] greatHouses = { GreatHouseType.ATREIDES, GreatHouseType.CORRINO, GreatHouseType.HARKONNEN, GreatHouseType.ORDOS, GreatHouseType.RICHESE, GreatHouseType.VERNIUS };
 
 
         /// <summary>
@@ -55,13 +56,21 @@ namespace GameData.network.util.world
             return illegalAtomicUsage;
         }
 
+        /// <summary>
+        /// creates a list of the character objects based on the house characters list
+        /// </summary>
+        /// <remarks>
+        /// The house characters list only contains the types and names of the characters and not further properties,
+        /// so there should be created another list of characters (with complete properties and behaviour)
+        /// </remarks>
+        /// <returns>a list of characters with complete, initial properties</returns>
         private List<Character> GetCharactersForHouse()
         {
             List<Character> characters = new List<Character>();
 
             foreach (HouseCharacter houseCharacter in this.houseCharacters)
             {
-                Character newCharacter;
+                Character newCharacter = null;
 
                 switch ((CharacterType) Enum.Parse(typeof(CharacterType), houseCharacter.characterClass)) {
                     case CharacterType.NOBEL:
