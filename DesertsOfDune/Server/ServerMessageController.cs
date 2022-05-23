@@ -19,9 +19,11 @@ namespace Server
     {
         private Party party;
 
+        private bool firstPlayerGotGreatHousesAndGotRequestAck;
+
         public ServerMessageController()
         {
-
+            this.firstPlayerGotGreatHousesAndGotRequestAck = false;
         }
 
         /// <summary>
@@ -114,7 +116,18 @@ namespace Server
                 if (requestingPlayer.OfferedGreatHouses.Contains(chosenGreatHouse))
                 {
                     requestingPlayer.UsedGreatHouse = GreatHouseFactory.CreateNewGreatHouse(chosenGreatHouse);
+                    DoSendHouseAck(requestingPlayer.ClientID, chosenGreatHouse.ToString());
                     Log.Information("The player with the session id: " + sessionID + " chose the great house " + chosenGreatHouse.ToString());
+
+                    // check, whether the other player already got confirmation
+                    if (!firstPlayerGotGreatHousesAndGotRequestAck)
+                    {
+                        firstPlayerGotGreatHousesAndGotRequestAck = true;
+                    } else
+                    {
+                        // first player already has great house, so start the game
+                        party.Start();
+                    }
                 }
                 else
                 {
