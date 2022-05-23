@@ -4,13 +4,14 @@ using System.Text;
 using GameData.network.util.world;
 using GameData.gameObjects;
 using GameData.network.util.world.mapField;
+using Server.roundHandler;
 
 namespace GameData.server.roundHandler
 {
     /// <summary>
     /// This class handles the ClonePhase.
     /// </summary>
-    public class ClonePhase
+    public class ClonePhase : GamePhase
     {
         List<Character> clonableCharacters;
         private RoundHandler parent;
@@ -152,5 +153,9 @@ namespace GameData.server.roundHandler
             return random.Next(start, end);
         }
 
+        public void Execut()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

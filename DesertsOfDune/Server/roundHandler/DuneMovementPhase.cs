@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using GameData.network.util.world;
+using Server.roundHandler;
 
 namespace GameData.server.roundHandler
 {
     /// <summary>
     /// This class is responsible for the DuneMovement.
     /// </summary>
-    public class DuneMovementPhase
+    public class DuneMovementPhase : GamePhase
     {
         private MapField[][] fields;
         private GameData.gameObjects.RoundHandler parent;
@@ -24,5 +25,9 @@ namespace GameData.server.roundHandler
             return false;
         }
 
+        public void Execut()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

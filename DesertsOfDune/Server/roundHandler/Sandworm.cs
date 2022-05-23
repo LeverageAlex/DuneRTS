@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using GameData.network.messages;
 using GameData.network.util.world;
+using GameData.network.util.world.character;
+using GameData.network.util.world.mapField;
 
 namespace GameData.server.roundHandler
 {
@@ -16,6 +19,25 @@ namespace GameData.server.roundHandler
         private MapField currentField;
         private int sandWormSpeed;
         private static SandWorm sandWorm;
+        private MapField[,] mapFields;
+
+
+        public void Execute()
+        {
+            mapFields = new MapField[5, 5];
+            mapFields[0, 0] = new FlatSand(false, false, null);
+            for(int i = 0; i < 5; i++)
+            {
+                for(int j = 0; j < 5; j++)
+                {
+                    mapFields[i, j] = new FlatSand(false, false, null);
+                }
+            }
+
+            Graph graph = Graph.DetermineSandWormGraph(mapFields);
+            Nobel targetCharacter = new Nobel(1, 2, 3, 4, 5, 6, 7, 8, 9, 7, false, false);
+            MoveSandWormByOneField(targetCharacter, graph);
+        }
 
         /// <summary>
         /// This method spawns a sandworm if no sandworm exists
@@ -59,12 +81,12 @@ namespace GameData.server.roundHandler
         /// This method handles the Sandworm movement.
         /// </summary>
         /// <returns>true, if sandworm was moved</returns>
-        public void MoveSandworm(Character target)
+        public void MoveSandworm(Character target, Graph graph)
         {
             // TODO: implement pathfinding
             for(int i = 0; i < sandWormSpeed; i++)
             {
-                MoveSandWormByOneField();
+                MoveSandWormByOneField(target, graph);
                 if (currentField.Character != null)
                 {
                     currentField.Character.KilledBySandworm = true;
@@ -77,9 +99,21 @@ namespace GameData.server.roundHandler
         /// <summary>
         /// This method moves the sandworm one field towards his target
         /// </summary>
-        public void MoveSandWormByOneField()
+        public void MoveSandWormByOneField(Character target, Graph graph)
         {
-            // todo: implement logic
+            int xCoordinateTarget = 3;//target.CurrentMapfield.XCoordinate;
+            int zCoordinateTarget = 3; // target.CurrentMapfield.ZCoordinate;
+            int xCoordinateCurrent = 1;// currentField.XCoordinate;
+            int zCoordinateCurrent = 2; // currentField.ZCoordinate;
+            int startVertex = Graph.ConvertArrayIndexToVertex(xCoordinateCurrent, zCoordinateCurrent, mapFields);
+            int targetVertex = Graph.ConvertArrayIndexToVertex(xCoordinateTarget, zCoordinateTarget, mapFields);
+            int[] parent = DijkstrasAlgorithm.Dijkstra(graph.Node, startVertex);
+            int nextVertex = DijkstrasAlgorithm.GetFirstStep(parent, targetVertex);
+            Console.WriteLine("nextVertex: " + nextVertex);
+            int indexX = Graph.ConvertVertexToXArrayIndex(5, mapFields);
+            int indexZ = Graph.ConvertVertexToZArrayIndex(5, mapFields);
+            currentField = mapFields[indexX, indexZ];
+
         }
 
         /// <summary>

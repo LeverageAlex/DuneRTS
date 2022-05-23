@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using GameData.network.util.world;
+using Server.roundHandler;
 
 namespace GameData.server.roundHandler
 {
     /// <summary>
     /// This class handles the SandstormPhase.
     /// </summary>
-    public class SandstormPhase
+    public class SandstormPhase : GamePhase
     {
         private MapField eyeOfStorm;
         private MapField[][] strom;
@@ -33,6 +34,11 @@ namespace GameData.server.roundHandler
         {
             // TODO implement logic
             return false;
+        }
+
+        public void Execut()
+        {
+            throw new NotImplementedException();
         }
     }
 }

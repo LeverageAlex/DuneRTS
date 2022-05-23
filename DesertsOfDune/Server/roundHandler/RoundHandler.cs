@@ -25,8 +25,9 @@ namespace GameData.gameObjects
         private DuneMovementPhase duneMovementPhase;
         private SandstormPhase sandstormPhase;
         private SandwormPhase sandwormPhase;
-        private List<ClonePhase> clonePhaseList;
+        private ClonePhase clonePhase;
         private CharacterTraitPhase characterTraitPhase;
+        private OverLengthMechanism overLengthMechanism;
 
         /// <summary>
         /// Constructor of the class RoundHandler
@@ -38,6 +39,21 @@ namespace GameData.gameObjects
             this.spiceMinimum = spiceMinimum;
         }
 
+        /// <summary>
+        /// This method Handles the Rounds of the game Dessert of Dune.
+        /// </summary>
+        public void HandleRounds()
+        {
+            for (int i = 0; i < numbOfRounds; i++)
+            {
+                duneMovementPhase.Execut();
+                sandstormPhase.Execut();
+                ((SandWorm)sandwormPhase).Execut();
+                clonePhase.Execut();
+                characterTraitPhase.Execut();
+            }
+            overLengthMechanism.Execut();
+        }
 
         /// <summary>
         /// This method checks weather the game is in overlenth

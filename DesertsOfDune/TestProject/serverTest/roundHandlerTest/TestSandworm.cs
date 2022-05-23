@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using GameData.server.roundHandler;
 
 namespace UnitTestSuite.serverTest.roundHandlerTest
 {
@@ -15,6 +16,14 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
         [SetUp]
         public void Setup()
         {
+        }
+
+        [Test]
+        public void TestExecute()
+        {
+            SandWorm sandWorm = SandWorm.Spawn(0,0);
+            sandWorm.Execute();
+
         }
     }
 }

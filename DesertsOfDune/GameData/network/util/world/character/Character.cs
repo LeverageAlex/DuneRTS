@@ -38,14 +38,15 @@ namespace GameData.network.util.world
         private bool killedBySandworm;
         [JsonProperty]
         private bool isLoud;
+        [JsonIgnore]
         private MapField currentMapfield;
+        [JsonIgnore]
+        public MapField CurrentMapfield { get{return currentMapfield; }set{ currentMapfield = value;}}
         private int characterId;
         private GreatHouse greatHouse;
         [JsonIgnore]
         public bool KilledBySandworm
-        {
-            get { return killedBySandworm; } set { killedBySandworm = value; } 
-        }
+        {get { return killedBySandworm; } set { killedBySandworm = value; } }
 
 
         /// <summary>
