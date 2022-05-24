@@ -1,4 +1,5 @@
-﻿using GameData.network.messages;
+﻿using GameData.Configuration;
+using GameData.network.messages;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,6 +28,12 @@ namespace GameData.network.util.world.character
 
         }
 
+        /// <summary>
+        /// creates a new fighter 
+        /// </summary>
+        public Fighter() : base(CharacterType.FIGHTHER, CharacterConfiguration.Fighter.maxHP, CharacterConfiguration.Fighter.maxMP, CharacterConfiguration.Fighter.maxAP, CharacterConfiguration.Fighter.damage, CharacterConfiguration.Fighter.inventorySize, CharacterConfiguration.Fighter.healingHP)
+        {
+        }
         /// <summary>
         /// This method represents the action SwordSpin of the character type fighter
         /// </summary>

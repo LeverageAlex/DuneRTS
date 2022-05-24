@@ -11,7 +11,7 @@ namespace GameData.network.messages
     public class GameConfigMessage : Message
     {
         [JsonProperty]
-        private List<string[]> scenario;
+        private List<List<string>> scenario;
         [JsonProperty]
         private string party;
         [JsonProperty]
@@ -25,7 +25,7 @@ namespace GameData.network.messages
         /// <param name="scenario">the scenario configuration</param>
         /// <param name="partyConfig">the party configuration</param>
         /// <param name="partyConfig">array of houses that are offered to the client</param>
-        public GameConfigMessage(List<string[]> scenario, string party, int client0ID, int client1ID) : base("0.1", MessageType.GAMECFG)
+        public GameConfigMessage(List<List<string>> scenario, string party, int client0ID, int client1ID) : base("0.1", MessageType.GAMECFG)
         {
             this.scenario = scenario;
             this.party = party;

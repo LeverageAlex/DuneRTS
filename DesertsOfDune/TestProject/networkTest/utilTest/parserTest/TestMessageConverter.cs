@@ -3,6 +3,8 @@ using GameData.network.util.parser;
 using GameData.network.messages;
 using GameData.network.util.world;
 using System.Collections.Generic;
+using Server.Configuration;
+using GameData.Configuration;
 
 namespace TestProject.networkTest.utilTest.parserTest
 {
@@ -116,9 +118,9 @@ namespace TestProject.networkTest.utilTest.parserTest
         {
             string[] arr1 = { "String", "String" };
             string[] arr2 = { "String", "String" };
-            List<string[]> scenario = new List<string[]>();
-            scenario.Add(arr1);
-            scenario.Add(arr2);
+            List<List<string>> scenario = new List<List<string>>();
+            scenario.Add(new List<string>(arr1));
+            scenario.Add(new List<string>(arr2));
             GameConfigMessage message = new GameConfigMessage(scenario, "party", 0, 0);
             string serializedMessage = MessageConverter.FromMessage(message);
             Assert.AreEqual("{\"type\":\"GAMECFG\",\"version\":\"0.1\",\"scenario\":[[\"String\",\"String\"],[\"String\",\"String\"]],\"party\":\"party\",\"client0ID\":0,\"client1ID\":0}", serializedMessage);
@@ -180,14 +182,10 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromHouseOfferMessage()
         {
-            GreatHouse[] houses = new GreatHouse[1];
-            HouseCharacters[] houseCharacters = new HouseCharacters[2];
-            HouseCharacters houseCharacter1 = new HouseCharacters("Emperor Shaddam IV Corrino", "NOBLE");
-            HouseCharacters houseCharacter2 = new HouseCharacters("Princess Irulan Corrino", "BENE_GESSERIT");
-            houseCharacters[0] = houseCharacter1;
-            houseCharacters[1] = houseCharacter2;
+            GreatHouse[] houses = new GreatHouse[2];
 
-            houses[0] = new GreatHouse("CORRINO","GOLD", houseCharacters);
+            houses[0] = new Corrino();
+            houses[1] = new Atreides(); 
             HouseOfferMessage message = new HouseOfferMessage(1234, houses);
             string serializedMessage = MessageConverter.FromMessage(message);
             Assert.AreEqual("{\"type\":\"HOUSE_OFFER\",\"version\":\"0.1\",\"clientID\":1234,\"houses\":[{\"houseName\":\"CORRINO\",\"houseColor\":\"GOLD\",\"houseCharacters\":[{\"characterName\":\"Emperor Shaddam IV Corrino\",\"characterClass\":\"NOBLE\"},{\"characterName\":\"Princess Irulan Corrino\",\"characterClass\":\"BENE_GESSERIT\"}]}]}", serializedMessage);

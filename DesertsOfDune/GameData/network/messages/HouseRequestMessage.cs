@@ -11,7 +11,7 @@ namespace GameData.network.messages
     public class HouseRequestMessage : Message
     {
         [JsonProperty]
-        private string houseName;
+        public string houseName { get; }
 
         /// <summary>
         /// Constructor of the class HouseRequestMessage

@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using GameData.Configuration;
+using GameData.network.messages;
 
 namespace GameData.network.util.world
 {
     /// <summary>
-    /// This class represents the GreatHouse Corrino
+    /// Represents the Great house "Corrino"
     /// </summary>
     public class Corrino : GreatHouse
     {
         /// <summary>
-        /// Constructor of the class Corrino
+        /// create a new Great house of type "Corrino" with the characters from the "Standisierungsdokument"
         /// </summary>
-        /// <param name="name">the name of the house</param>
-        /// <param name="color">the color of the house</param>
-        /// <param name="characters">the characters of the house</param>
-        public Corrino(string name, string color, Character[] characters) :base(name,color,characters)
+        public Corrino() : base("CORRINO", "GOLD", GreatHouseConfiguration.HouseCharactersCorrino)
         {
-
         }
     }
 }

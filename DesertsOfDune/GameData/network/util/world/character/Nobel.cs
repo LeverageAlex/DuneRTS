@@ -1,4 +1,5 @@
-﻿using GameData.network.messages;
+﻿using GameData.Configuration;
+using GameData.network.messages;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -29,6 +30,13 @@ namespace GameData.network.util.world.character
         {
 
         }
+
+        /// <summary>
+        /// creates a new nobel 
+        /// </summary>
+        public Nobel() : base(CharacterType.NOBEL, CharacterConfiguration.Noble.maxHP, CharacterConfiguration.Noble.maxMP, CharacterConfiguration.Noble.maxAP, CharacterConfiguration.Noble.damage, CharacterConfiguration.Noble.inventorySize, CharacterConfiguration.Noble.healingHP) {
+        }
+
         /// <summary>
         /// This method represents the action Kanly for the Character type Nobel
         /// </summary>

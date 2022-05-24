@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using GameData.Configuration;
+using GameData.network.messages;
 
 namespace GameData.network.util.world
 {
     /// <summary>
-    /// This class represents the GreatHouse Atreides
+    /// Represents the Great house "Atreides"
     /// </summary>
     public class Atreides : GreatHouse
     {
         /// <summary>
-        /// Constructor of the class Atreides
+        /// create a new Great house of type "Atreides" with the characters from the "Standisierungsdokument"
         /// </summary>
-        /// <param name="name">the name of the house</param>
-        /// <param name="color">the color of the house</param>
-        /// <param name="characters">the characters of the house</param>
-        public Atreides (string name, string color, Character[] characters) : base(name,color,characters)
+        public Atreides() : base("ATREIDES", "GRÜN", GreatHouseConfiguration.HouseCharactersAtreides)
         {
-
         }
     }
 }

@@ -53,5 +53,13 @@ namespace GameData.network.controller
                 return false;
             }
         }
+
+        /// <summary>
+        /// implemententation not necessary, because the client can only send to one server
+        /// </summary>
+        public override bool HandleSendingMessage(Message message, string clientID)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

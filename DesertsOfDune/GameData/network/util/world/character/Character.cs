@@ -83,6 +83,28 @@ namespace GameData.network.util.world
         }
 
         /// <summary>
+        /// create a new character (initially for adding to the great house)
+        /// TODO: set parameters, set other values
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="maxHP"></param>
+        /// <param name="maxMP"></param>
+        /// <param name="maxAP"></param>
+        /// <param name="damage"></param>
+        /// <param name="inventorySize"></param>
+        /// <param name="healingHP"></param>
+        public Character(CharacterType type, int maxHP, int maxMP, int maxAP, int damage, int inventorySize, int healingHP)
+        {
+            this.characterType = Enum.GetName(characterType.GetType(), characterType);
+            this.healthMax = maxHP;
+            this.MPmax = maxMP;
+            this.APmax = maxAP;
+            this.attackDamage = damage;
+            this.inventorySize = inventorySize;
+            this.healingHP = healingHP;
+        }
+
+        /// <summary>
         /// This method decreases the hp of the character by a specific amount.
         /// </summary>
         /// <param name="hp">the healthpoints to decrease the current healthpoints by.</param>

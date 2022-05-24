@@ -29,11 +29,15 @@
     <None Remove="CommandLineParser" />
     <None Remove="Configuration\" />
     <None Remove="Configuration\ConfigurationFiles\" />
+    <None Remove="ClientManagement\" />
+    <None Remove="ClientManagement\Clients\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="parser\" />
     <Folder Include="parser\commandLineParser\" />
     <Folder Include="Configuration\" />
     <Folder Include="Configuration\ConfigurationFiles\" />
+    <Folder Include="ClientManagement\" />
+    <Folder Include="ClientManagement\Clients\" />
   </ItemGroup>
 </Project>

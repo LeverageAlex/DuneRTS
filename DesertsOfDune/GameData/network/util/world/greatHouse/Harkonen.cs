@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using GameData.Configuration;
+using GameData.network.messages;
 
 namespace GameData.network.util.world
 {
     /// <summary>
-    /// This class represents the GreatHouse Harkonen
+    /// Represents the Great house "Harkonnen"
     /// </summary>
-    public class Harkonen : GreatHouse
+    public class Harkonnen : GreatHouse
     {
         /// <summary>
-        /// Constructor of the class Harkonen
+        /// create a new Great house of type "Harkonnen" with the characters from the "Standisierungsdokument"
         /// </summary>
-        /// <param name="name">the name of the house</param>
-        /// <param name="color">the color of the house</param>
-        /// <param name="characters">the characters of the house</param>
-        public Harkonen(string name, string color, Character[] characters) : base(name, color, characters)
+        public Harkonnen() : base("HARKONNEN", "ROT", GreatHouseConfiguration.HouseCharactersHarkonnen)
         {
-
         }
     }
 }
