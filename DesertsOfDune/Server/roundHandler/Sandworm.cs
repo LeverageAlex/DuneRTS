@@ -5,6 +5,8 @@ using GameData.network.messages;
 using GameData.network.util.world;
 using GameData.network.util.world.character;
 using GameData.network.util.world.mapField;
+using Server;
+using Server.Configuration;
 
 namespace GameData.server.roundHandler
 {
@@ -22,21 +24,21 @@ namespace GameData.server.roundHandler
         private MapField[,] mapFields;
 
 
-        public void Execute()
+        public void Execute(MapField[,] mapFields, List<Character> loudCharacters)
         {
-            mapFields = new MapField[5, 5];
-            mapFields[0, 0] = new FlatSand(false, false, null);
-            for(int i = 0; i < 5; i++)
-            {
-                for(int j = 0; j < 5; j++)
-                {
-                    mapFields[i, j] = new FlatSand(false, false, null);
-                }
-            }
+            //should be called:
+            Spawn(PartyConfiguration.GetInstance().sandWormSpeed, PartyConfiguration.GetInstance().sandWormSpawnDistance, mapFields);
+            //Party.GetInstance().serverMessageController.DoSpawnSandwormDemand();
+
+            Character target = ChooseTargetCharacter(loudCharacters);
 
             Graph graph = Graph.DetermineSandWormGraph(mapFields);
-            Nobel targetCharacter = new Nobel(1, 2, 3, 4, 5, 6, 7, 8, 9, 7, false, false);
-            MoveSandWormByOneField(targetCharacter, graph);
+            currentField = new MapField(false, false, 0, null);
+            this.currentField.XCoordinate = 0;
+            this.currentField.ZCoordinate = 0;
+            List<MapField> list =  MoveSandworm(target, graph);
+            // TODO: call ServerMessageController
+           // ServerMessageController.DoMoveSandwormDemand(list);
         }
 
         /// <summary>
@@ -45,12 +47,12 @@ namespace GameData.server.roundHandler
         /// <param name="sandWormSpeed">defines the speed the sandworm has</param>
         /// <param name="sandWormSpawnDistance">defines the minimal spawn distance from characters</param>
         /// <returns></returns>
-        public static SandWorm Spawn(int sandWormSpeed, int sandWormSpawnDistance)
+        public static SandWorm Spawn(int sandWormSpeed, int sandWormSpawnDistance, MapField[,] map)
         {
             if (sandWorm == null)
             {
-                sandWorm = new SandWorm(sandWormSpeed, sandWormSpawnDistance);
-                return sandWorm;
+                sandWorm = new SandWorm(sandWormSpeed, sandWormSpawnDistance, map);
+               // Party.GetInstance().serverMessageController.DoSpawnSandwormDemand(0, targetCharacter.CharacterId, sandWorm.currentField);
             }
             return sandWorm;
         }
@@ -60,10 +62,11 @@ namespace GameData.server.roundHandler
         /// </summary>
         /// <param name="sandWormSpeed">defines the speed the sandworm has</param>
         /// <param name="sandWormSpawnDistance">defines the minimal spawn distance from characters</param>
-        private SandWorm(int sandWormSpeed, int sandWormSpawnDistance)
+        private SandWorm(int sandWormSpeed, int sandWormSpawnDistance, MapField[,] map)
         {
             this.sandWormSpeed = sandWormSpeed;
-            this.currentField = DetermindField(sandWormSpawnDistance);
+            this.mapFields = map;
+            this.currentField = DetermineField(sandWormSpawnDistance);
         }
 
         /// <summary>
@@ -71,9 +74,16 @@ namespace GameData.server.roundHandler
         /// </summary>
         /// <param name="sandWormSpawnDistance">the minimum distance the sandworm should be spawned in.</param>
         /// <returns>the spawn position of the SandWorm</returns>
-        private MapField DetermindField(int sandWormSpawnDistance)
+        private static MapField DetermineField(int sandWormSpawnDistance)
         {
             // todo determine sand field that is in specified distance to all characters
+            for(int i = 0; i < sandWormSpawnDistance; i++)
+            {
+                for(int j = 0; j < sandWormSpawnDistance; j++)
+                {
+
+                }
+            }
             return null;
         }
 
@@ -81,59 +91,63 @@ namespace GameData.server.roundHandler
         /// This method handles the Sandworm movement.
         /// </summary>
         /// <returns>true, if sandworm was moved</returns>
-        public void MoveSandworm(Character target, Graph graph)
+        public List<MapField> MoveSandworm(Character target, Graph graph)
         {
-            // TODO: implement pathfinding
+            List<MapField> mapFields = new List<MapField>();
             for(int i = 0; i < sandWormSpeed; i++)
             {
-                MoveSandWormByOneField(target, graph);
+                MapField mapfield = MoveSandWormByOneField(target, graph);
+                mapFields.Add(mapfield);
                 if (currentField.Character != null)
                 {
                     currentField.Character.KilledBySandworm = true;
                     currentField.Character = null;
-                    Disapear();
+                    Despawn();
+                    return mapFields;
+                }
+                if (mapfield.XCoordinate == target.CurrentMapfield.XCoordinate && mapfield.ZCoordinate == target.CurrentMapfield.ZCoordinate)
+                {
+                    return mapFields;
                 }
             }
+            return mapFields;
         }
 
         /// <summary>
-        /// This method moves the sandworm one field towards his target
+        ///  This method moves the sandworm one field towards his target
         /// </summary>
-        public void MoveSandWormByOneField(Character target, Graph graph)
+        /// <param name="target"></param>
+        /// <param name="graph"></param>
+        /// <returns></returns>
+        public MapField MoveSandWormByOneField(Character target, Graph graph)
         {
-            int xCoordinateTarget = 3;//target.CurrentMapfield.XCoordinate;
-            int zCoordinateTarget = 3; // target.CurrentMapfield.ZCoordinate;
-            int xCoordinateCurrent = 1;// currentField.XCoordinate;
-            int zCoordinateCurrent = 2; // currentField.ZCoordinate;
-            int startVertex = Graph.ConvertArrayIndexToVertex(xCoordinateCurrent, zCoordinateCurrent, mapFields);
-            int targetVertex = Graph.ConvertArrayIndexToVertex(xCoordinateTarget, zCoordinateTarget, mapFields);
+            int startVertex = Graph.ConvertArrayIndexToVertex(this.currentField.XCoordinate, this.currentField.ZCoordinate, mapFields);
+            int targetVertex = Graph.ConvertArrayIndexToVertex(target.CurrentMapfield.XCoordinate, target.CurrentMapfield.ZCoordinate, mapFields);
+            Console.WriteLine("startVertex: " + startVertex);
+            Console.WriteLine("targetVertex: " + targetVertex);
             int[] parent = DijkstrasAlgorithm.Dijkstra(graph.Node, startVertex);
             int nextVertex = DijkstrasAlgorithm.GetFirstStep(parent, targetVertex);
+            if (nextVertex == startVertex)
+            {
+                nextVertex = targetVertex;
+            } 
             Console.WriteLine("nextVertex: " + nextVertex);
-            int indexX = Graph.ConvertVertexToXArrayIndex(5, mapFields);
-            int indexZ = Graph.ConvertVertexToZArrayIndex(5, mapFields);
-            currentField = mapFields[indexX, indexZ];
-
+            int indexX = Graph.ConvertVertexToXArrayIndex(nextVertex, mapFields);
+            int indexZ = Graph.ConvertVertexToZArrayIndex(nextVertex, mapFields);
+            this.currentField = mapFields[indexX, indexZ];
+            this.currentField.XCoordinate = indexX;
+            this.currentField.ZCoordinate = indexZ;
+            return mapFields[indexX, indexZ];
         }
 
         /// <summary>
         /// Removes the sandWorm instance from the map.
         /// </summary>
-        public static void Disapear()
+        public static void Despawn()
         {
+            //TODO: call ServerMessageController.DoDespawnSandwormDemand()
             sandWorm = null;
             // implement end of Sandworm Round
-        }
-
-
-        /// <summary>
-        /// This method checks the path of the sandworm.
-        /// </summary>
-        /// <returns>true, if</returns>
-        public bool DetermineSandwormPath()
-        {
-            // TODO: implement logic
-            return false;
         }
 
         /// <summary>

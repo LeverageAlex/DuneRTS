@@ -26,23 +26,35 @@ public class Graph
 	/// <summary>
 	/// This method converts mapfield Indizes to a vertex
 	/// </summary>
-	/// <param name="xCoordinate"></param>
-	/// <param name="zCoordinate"></param>
-	/// <param name="mapFields"></param>
-	/// <returns></returns>
+	/// <param name="xCoordinate">the xCoordinate</param>
+	/// <param name="zCoordinate">the zCoordinate</param>
+	/// <param name="mapFields">the whole map</param>
+	/// <returns>the position represented as a vertex</returns>
 	public static int ConvertArrayIndexToVertex(int xCoordinate, int zCoordinate, MapField[,] mapFields)
     {
-		return xCoordinate + zCoordinate*mapFields.GetLength(1);
+		return xCoordinate * mapFields.GetLength(1) + zCoordinate;
     }
 
+	/// <summary>
+	/// This method determines the fitting x-coordinate to the vertex
+	/// </summary>
+	/// <param name="vertex">the vertex to determine the coordinate to</param>
+	/// <param name="mapFields">the whole map</param>
+	/// <returns>the determined x-coordinate</returns>
 	public static int ConvertVertexToXArrayIndex(int vertex, MapField[,] mapFields)
     {
-		return vertex % mapFields.GetLength(1);
-    }
+		return vertex / mapFields.GetLength(1);
+	}
 
+	/// <summary>
+	/// This method determines the fitting z-coordinate to the vertex
+	/// </summary>
+	/// <param name="vertex">the vertex to determine the coordinate to</param>
+	/// <param name="mapFields">the whole map</param>
+	/// <returns>the determined z-coordinate</returns>
 	public static int ConvertVertexToZArrayIndex(int vertex, MapField[,] mapFields)
 	{
-		return vertex / mapFields.GetLength(1);
+		return vertex % mapFields.GetLength(1);
 	}
 
 

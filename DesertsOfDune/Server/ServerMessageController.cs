@@ -228,14 +228,24 @@ namespace Server
             NetworkController.HandleSendingMessage(changePlayerSpiceDemandMessage);
         }
 
-        public void DoSpawnSandwormDemand(int clientID, int characterID, Position pos)
+        public void DoSpawnSandwormDemand(int characterID, MapField mapField)
         {
-            SandwormSpawnDemandMessage sandwormSpawnDemandMessage = new SandwormSpawnDemandMessage(clientID, characterID, pos);
+            int x = mapField.XCoordinate;
+            int z = mapField.ZCoordinate;
+            Position position = new Position(x,z);
+
+            SandwormSpawnDemandMessage sandwormSpawnDemandMessage = new SandwormSpawnDemandMessage(/*Party.GetInstance().GetClientID()*/1, characterID, position);
             NetworkController.HandleSendingMessage(sandwormSpawnDemandMessage);
         }
 
-        public void DoMoveSandwormDemand(List<Position> path)
+        public void DoMoveSandwormDemand(List<MapField> list)
         {
+            List<Position> path = new List<Position>();
+            foreach (MapField mapField in list)
+            {
+                Position position = new Position(mapField.XCoordinate, mapField.ZCoordinate);
+                path.Add(position);
+            }
             SandwormMoveDemandMessage sandwormMoveDemandMessage = new SandwormMoveDemandMessage(path);
             NetworkController.HandleSendingMessage(sandwormMoveDemandMessage);
         }

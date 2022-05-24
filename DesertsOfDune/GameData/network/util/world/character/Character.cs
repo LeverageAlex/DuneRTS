@@ -43,6 +43,8 @@ namespace GameData.network.util.world
         [JsonIgnore]
         public MapField CurrentMapfield { get{return currentMapfield; }set{ currentMapfield = value;}}
         private int characterId;
+        [JsonIgnore]
+        public int CharacterId { get{return characterId;}}
         private GreatHouse greatHouse;
         [JsonIgnore]
         public bool KilledBySandworm

@@ -68,10 +68,10 @@ public class DijkstrasAlgorithm
         {
             if (vertexIndex != startVertex)
             {
-                Console.Write("\n" + startVertex + " -> ");
-                Console.Write(vertexIndex + " \t\t ");
-                Console.Write(distances[vertexIndex] + "\t\t");
-                printPath(vertexIndex, parents);
+               // Console.Write("\n" + startVertex + " -> ");
+                //Console.Write(vertexIndex + " \t\t ");
+                //Console.Write(distances[vertexIndex] + "\t\t");
+                //printPath(vertexIndex, parents);
             }
         }
     }
@@ -105,7 +105,12 @@ public class DijkstrasAlgorithm
                 break;
             }
         }
-        //Console.WriteLine("first element: " + list[list.Count - 2]);
-        return list[list.Count - 2];
+        if (list.Count - 2 >= 0)
+        {
+            Console.WriteLine("next vertex: " + list[list.Count - 2]);
+            return list[list.Count - 2];
+        }
+        Console.WriteLine("next vertex: " + list[list.Count - 1]);
+        return list[list.Count - 1];
     }
 }

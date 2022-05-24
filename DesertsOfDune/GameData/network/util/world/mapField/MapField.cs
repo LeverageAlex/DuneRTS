@@ -42,13 +42,13 @@ namespace GameData.network.util.world
             set { isAprochable = value; }
             get { return isAprochable; }
         }
-        private readonly int xCoordinate;
+        private int xCoordinate;
         [JsonIgnore]
-        public int XCoordinate { get { return xCoordinate; } }
+        public int XCoordinate { get { return xCoordinate; } set { xCoordinate = value; } }
 
-        private readonly int zCoordinate;
+        private int zCoordinate;
         [JsonIgnore]
-        public int ZCoordinate { get { return zCoordinate; } }
+        public int ZCoordinate { get { return zCoordinate; } set { zCoordinate = value; } }
 
         private bool isCityField;
         [JsonIgnore]
