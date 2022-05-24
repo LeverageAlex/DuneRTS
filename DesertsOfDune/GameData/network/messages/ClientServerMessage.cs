@@ -11,7 +11,7 @@ namespace GameData.network.messages
     public abstract class ClientServerMessage : Message
     {
         [JsonProperty(Order = -3)]
-        protected int clientID;
+        public int clientID { get; }
 
         /// <summary>
         /// Constructor of the class ClientServerMessage

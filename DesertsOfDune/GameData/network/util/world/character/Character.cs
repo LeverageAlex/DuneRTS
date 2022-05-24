@@ -23,7 +23,7 @@ namespace GameData.network.util.world
         [JsonProperty]
         protected int MPmax;
         [JsonProperty]
-        protected int MPcurrent;
+        public int MPcurrent { get; }
         [JsonProperty]
         protected int APmax;
         [JsonProperty]

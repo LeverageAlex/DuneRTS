@@ -11,9 +11,9 @@ namespace GameData.network.util.world
     public class Position
     {
         [JsonProperty]
-        private int x;
+        public int x { get; }
         [JsonProperty]
-        private int y;
+        public int y { get; }
 
         /// <summary>
         /// Constructor of the class Position

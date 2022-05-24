@@ -153,9 +153,50 @@ namespace Server
 
         public void OnMovementRequestMessage(MovementRequestMessage msg)
         {
-            throw new NotImplementedException("not implemented");
+            throw new NotImplementedException("not implemented completely");
+
+        //TODO: get the scenario of the party to get its width and height
 
             //request from client to move a character
+
+            //get the player who wants to move his character
+            Player activePlayer;
+            foreach (var player in party.GetActivePlayers())
+            {
+                if(player.ClientID == msg.clientID)
+                {
+                    activePlayer = player;
+                }
+            }
+
+            //get the character which should be moved
+            Character movingCharacter;
+            foreach (var character in activePlayer.UsedGreatHouse.Characters)
+            {
+                if (character.CharacterId == msg.characterID)
+                {
+                    movingCharacter = character;
+                }
+            }
+
+            foreach (var position in msg.specs.path)
+            {
+                //check if Character has enough Movement Points
+                if (movingCharacter.MPcurrent > 0)
+                {
+                    //check if movement is in bounds of the map
+                    /**
+                    if (position.x >= 0 && position.x < scenario.width && position.y >= 0 && position.y < scenario.height)
+                    {
+                        //check if movement is on walkable terrain
+                        if (scenario[position.x, position.y].tileType != "Mountain" && scenario[position.x, position.y].tileType != "City") //check needed and not implemented utils
+                        {
+                            movingCharacter.Movement(movingCharacter.CurrentMapfield, scenario[position.x, position.y]); //move character 1 field along its path
+                        }
+                    }
+                    **/
+                }
+            }
 
             //int clientID
             //int characterID

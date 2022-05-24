@@ -11,7 +11,7 @@ namespace GameData.network.messages
     public abstract class TurnMessage : ClientServerMessage
     {
         [JsonProperty(Order = -2)]
-        private int characterID;
+        public int characterID { get; }
 
         /// <summary>
         /// Constructor of the class TurnMessage
