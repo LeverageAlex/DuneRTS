@@ -3,6 +3,8 @@ using GameData.network.util.parser;
 using GameData.network.messages;
 using GameData.network.util.world;
 using System.Collections.Generic;
+using Server.Configuration;
+using GameData.Configuration;
 
 namespace TestProject.networkTest.utilTest.parserTest
 {
@@ -116,9 +118,9 @@ namespace TestProject.networkTest.utilTest.parserTest
         {
             string[] arr1 = { "String", "String" };
             string[] arr2 = { "String", "String" };
-            List<string[]> scenario = new List<string[]>();
-            scenario.Add(arr1);
-            scenario.Add(arr2);
+            List<List<string>> scenario = new List<List<string>>();
+            scenario.Add(new List<string>(arr1));
+            scenario.Add(new List<string>(arr2));
             GameConfigMessage message = new GameConfigMessage(scenario, "party", 0, 0);
             string serializedMessage = MessageConverter.FromMessage(message);
             Assert.AreEqual("{\"type\":\"GAMECFG\",\"version\":\"0.1\",\"scenario\":[[\"String\",\"String\"],[\"String\",\"String\"]],\"party\":\"party\",\"client0ID\":0,\"client1ID\":0}", serializedMessage);

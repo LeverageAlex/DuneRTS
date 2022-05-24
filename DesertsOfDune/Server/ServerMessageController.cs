@@ -12,6 +12,8 @@ using GameData.network.util.world.greatHouse;
 using System.Linq;
 using Serilog.Sinks.SystemConsole.Themes;
 using GameData.network.util.parser;
+using Server.Configuration;
+using Newtonsoft.Json;
 
 namespace Server
 {
@@ -95,6 +97,7 @@ namespace Server
             if (party.AreTwoPlayersRegistred())
             {
                 party.PrepareGame();
+                DoSendGameConfig();
             }
         }
 
@@ -237,12 +240,18 @@ namespace Server
         {
             ErrorMessage errorMessage = new ErrorMessage(errorCode, errorDescription);
             NetworkController.HandleSendingMessage(errorMessage, sessionID);
-            Log.Debug("An error (code = " + errorCode + " occured: " + errorDescription);
+            Log.Debug("An error (code = " + errorCode + " ) occured: " + errorDescription);
         }
 
-        public void DoSendGameConfig(List<string[]> scenario, string party, int client0ID, int client1ID)
+        public void DoSendGameConfig()
         {
-            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, party, client0ID, client1ID);
+            int client0ID = party.GetActivePlayers()[0].ClientID;
+            int client1ID = party.GetActivePlayers()[0].ClientID;
+
+            List<List<string>> scenario = ScenarioConfiguration.GetInstance().scenario;
+            string partyConfiguration = JsonConvert.SerializeObject(PartyConfiguration.GetInstance());
+
+            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, partyConfiguration, client0ID, client1ID);
             NetworkController.HandleSendingMessage(gameConfigMessage);
         }
 

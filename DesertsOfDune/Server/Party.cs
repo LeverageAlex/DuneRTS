@@ -85,7 +85,7 @@ namespace Server
         /// return all active client, so all players
         /// </summary>
         /// <returns>a list of all players or an empty list, if there are no players</returns>
-        private List<Player> GetActivePlayers()
+        public List<Player> GetActivePlayers()
         {
             List<Client> foundActiveClients = connectedClients.FindAll(client => client.IsActivePlayer);
 
