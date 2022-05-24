@@ -19,6 +19,7 @@
     <None Remove="parser\" />
     <None Remove="CommandLineParser" />
     <None Remove="validation\" />
+    <None Remove="Configuration\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -39,5 +40,6 @@
     <Folder Include="network\controller\ConnectionHandler\" />
     <Folder Include="parser\" />
     <Folder Include="validation\" />
+    <Folder Include="Configuration\" />
   </ItemGroup>
 </Project>

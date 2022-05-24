@@ -4,13 +4,16 @@ using System.Text;
 using Newtonsoft.Json;
 using GameData.network.util.world.mapField;
 using GameData.network.messages;
+using WebSocketSharp;
+using GameData.network.util.world.character;
+using GameData.network.util.enums;
 
 namespace GameData.network.util.world
 {
     /// <summary>
-    /// This class Holds the Data of a GreatHouse
+    /// Base class for the Great Houses
     /// </summary>
-    public class GreatHouse
+    public abstract class GreatHouse
     {
         [JsonProperty]
         private string houseName;
@@ -19,15 +22,13 @@ namespace GameData.network.util.world
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         private bool illegalAtomicUsage;
         [JsonProperty]
-        private HouseCharacters[] houseCharacters;
-        private City city;
+        private HouseCharacter[] houseCharacters;
         [JsonIgnore]
-        public City City
-        {
-            get { return city; }
-        }
-        private Character[] characters;
+        public City City { get; }
+        [JsonIgnore]
+        public List<Character> Characters { get; }
 
+        public static readonly int AMOUNT_OF_CHARACTERS_PER_GREAT_HOUSE = 6;
 
         /// <summary>
         /// Constructor of the Class GreatHouse
@@ -35,26 +36,13 @@ namespace GameData.network.util.world
         /// <param name="houseName">the name of the Greathouse</param>
         /// <param name="houseColor">the color of the house</param>
         /// <param name="houseCharacters">the characters of the house</param>
-        public GreatHouse(string houseName, string houseColor, HouseCharacters[] houseCharacters)
+        protected GreatHouse(string houseName, string houseColor, HouseCharacter[] houseCharacters)
         {
             this.houseName = houseName;
             this.houseColor = houseColor;
             this.illegalAtomicUsage = false;
             this.houseCharacters = houseCharacters;
-        }
-
-        /// <summary>
-        /// Constructor of the class GreatHouse
-        /// </summary>
-        /// <param name="houseName">the name of the GreatHouse</param>
-        /// <param name="houseColor">the color of the GreatHouse</param>
-        /// <param name="characters">the Characters of the GreatHouse</param>
-        public GreatHouse(string houseName, string houseColor, Character[] characters)
-        {
-            this.houseName = houseName;
-            this.houseColor = houseColor;
-            this.illegalAtomicUsage = false;
-            this.characters = characters;
+            this.Characters = GetCharactersForHouse();
         }
 
         /// <summary>
@@ -64,6 +52,46 @@ namespace GameData.network.util.world
         public bool GetIllegalAtomicUsage()
         {
             return illegalAtomicUsage;
+        }
+
+        /// <summary>
+        /// creates a list of the character objects based on the house characters list
+        /// </summary>
+        /// <remarks>
+        /// The house characters list only contains the types and names of the characters and not further properties,
+        /// so there should be created another list of characters (with complete properties and behaviour)
+        /// </remarks>
+        /// <returns>a list of characters with complete, initial properties</returns>
+        private List<Character> GetCharactersForHouse()
+        {
+            List<Character> characters = new List<Character>();
+
+            foreach (HouseCharacter houseCharacter in this.houseCharacters)
+            {
+                Character newCharacter = null;
+
+                switch ((CharacterType) Enum.Parse(typeof(CharacterType), houseCharacter.characterClass)) {
+                    case CharacterType.NOBEL:
+                        newCharacter = new Nobel();
+                        break;
+                    case CharacterType.BENEGESSERIT:
+                        newCharacter = new BeneGesserit();
+                        break;
+                    case CharacterType.MENTAT:
+                        newCharacter = new Mentat();
+                        break;
+                    case CharacterType.FIGHTHER:
+                        newCharacter = new Fighter();
+                        break;
+                    default:
+                        // TODO: print error or throw exception, if type of character is not valid
+                        break;
+                }
+
+                characters.Add(newCharacter);
+            }
+
+            return characters;
         }
     }
 }

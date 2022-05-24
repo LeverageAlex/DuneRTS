@@ -50,6 +50,8 @@ namespace GameData.network.controller
         /// <returns>true, if the messages could be sucessfully forwareded to the connection handler and send</returns>
         abstract public bool HandleSendingMessage(Message message);
 
+        abstract public bool HandleSendingMessage(Message message, string clientID);
+
         /// <summary>
         /// template method for handling the received messages and forward them to message controller
         /// </summary>

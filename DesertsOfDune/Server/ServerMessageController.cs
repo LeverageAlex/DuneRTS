@@ -4,16 +4,28 @@ using GameData.network.controller;
 using GameData.network.messages;
 using GameData.network.util.world;
 using Server.Clients;
+using Server;
+using Serilog;
+using Server.ClientManagement.Clients;
+using GameData.network.util.enums;
+using GameData.network.util.world.greatHouse;
+using System.Linq;
+using Serilog.Sinks.SystemConsole.Themes;
+using GameData.network.util.parser;
+using Server.Configuration;
+using Newtonsoft.Json;
 
 namespace Server
 {
     public class ServerMessageController : MessageController
     {
-        private readonly Dictionary<string, Party> _parties; //Dictionary of all created parties
+        private Party party;
+
+        private bool firstPlayerGotGreatHousesAndGotRequestAck;
 
         public ServerMessageController()
         {
-            _parties = new Dictionary<string, Party>();
+            this.firstPlayerGotGreatHousesAndGotRequestAck = false;
         }
 
         /// <summary>
@@ -24,11 +36,9 @@ namespace Server
         /// <param name="msg">CreateMessage with the info of lobbyCode and cpuCount</param>
         public void OnCreateMessage(CreateMessage msg)
         {
-            //TODO: msg.Spectate?
-            _parties.Add(msg.lobbyCode, new Party(msg.lobbyCode));
-            //Console.WriteLine("- Party created");
-
-            //send back ack or error message
+            //TODO: check creation
+            party = Party.GetInstance(msg.lobbyCode);
+            party.messageController = this;
         }
 
         /// <summary>
@@ -36,45 +46,109 @@ namespace Server
         /// To join to the party, the connectionCode from the JoinMessage has to be equal to the lobbyCode of the created party.
         /// </summary>
         /// <param name="msg">JoinMessage with the value clientName, connectionCode and active flag if he is a player.</param>
-        public void OnJoinMessage(JoinMessage msg)
+        /// <param name="sessionID">the session id of the client, who wants to join</param>
+        /// TODO: handle reconnect
+        /// TODO: send game config message
+        public void OnJoinMessage(JoinMessage msg, string sessionID)
         {
-            var clientName = msg.clientName;
-
-            foreach (var party in _parties)
+            // check, whether the connection code is correct
+            if (msg.connectionCode != party.LobbyCode)
             {
-                if(party.Key == msg.connectionCode)
-                {
-                    if (!msg.isCpu && msg.active) //client is a HumanPlayer
-                    {
-                        //distinction between AI and Human
-                        var player = new Player(clientName, party.Key);
-                        party.Value.AddPlayer(player);
-                        //Console.WriteLine($"- Player {clientName} joined"); //test
-                    }
-                    else if(msg.isCpu && msg.active) //client is AIPlayer
-                    {
-                    }
-                    else //client is spectator
-                    {
+                // not a valid connection code, so send error
+                Log.Debug("The client " + msg.clientName + " with the ID = " + sessionID + " requested to join the server with a wrong lobby code");
+                DoSendError(005, "The lobby with the code " + msg.connectionCode + " doesn't exist", sessionID);
+                return;
+            }
+            Client client;
 
+            // check, whether the new client is a player or spectator
+            if (msg.active)
+            {
+                // check, whether there are already two active player
+                if (party.AreTwoPlayersRegistred())
+                {
+                    // already two players are registred, so send error
+                    DoSendError(003, "There are already two players registred", sessionID);
+                    return;
+                }
+
+                // check, whether active player is a human or an ai
+                if (msg.isCpu)
+                {
+                    // client is an ai
+                    client = new AIPlayer(msg.clientName, sessionID);
+                }
+                else
+                {
+                    // client is a human player
+                    client = new HumanPlayer(msg.clientName, sessionID);
+                }
+            }
+            else
+            {
+                client = new Spectator(msg.clientName, sessionID);
+
+            }
+            party.AddClient(client);
+            // send join accept
+            DoAcceptJoin(client.ClientSecret, client.ClientID, sessionID);
+
+            // check, if with new client two players are registred and start party
+            if (party.AreTwoPlayersRegistred())
+            {
+                party.PrepareGame();
+                DoSendGameConfig();
+            }
+        }
+
+        /// <summary>
+        /// executed, if the clients requested a certain great house
+        /// </summary>
+        /// <param name="msg">the HouseRequestMessage, which contains the house name</param>
+        /// <param name="sessionID">the session id of the requesting client</param>
+        public void OnHouseRequestMessage(HouseRequestMessage msg, string sessionID)
+        {
+            GreatHouseType chosenGreatHouse = (GreatHouseType)Enum.Parse(typeof(GreatHouseType), msg.houseName);
+
+            // get the player, who send this request
+            Player requestingPlayer = party.GetPlayerBySessionID(sessionID);
+
+            if (requestingPlayer != null)
+            {
+                // check, whether this decision is valid, if not resend house offer and strike
+                if (requestingPlayer.OfferedGreatHouses.Contains(chosenGreatHouse))
+                {
+                    requestingPlayer.UsedGreatHouse = GreatHouseFactory.CreateNewGreatHouse(chosenGreatHouse);
+                    DoSendHouseAck(requestingPlayer.ClientID, chosenGreatHouse.ToString());
+                    Log.Information("The player with the session id: " + sessionID + " chose the great house " + chosenGreatHouse.ToString());
+
+                    // check, whether the other player already got confirmation
+                    if (!firstPlayerGotGreatHousesAndGotRequestAck)
+                    {
+                        firstPlayerGotGreatHousesAndGotRequestAck = true;
+                    } else
+                    {
+                        // first player already has great house, so start the game
+                        party.Start();
                     }
                 }
                 else
                 {
-                    //errorMessage
+                    Log.Error("The player with the session id: " + sessionID + " requested " + chosenGreatHouse.ToString() + ", but the server didn't offered this greathouse");
+
+                    // resend house offer:
+                    DoSendHouseOffer(requestingPlayer.ClientID, requestingPlayer.OfferedGreatHouses);
+
+                    // send a strike
+                    DoSendStrike(requestingPlayer, msg);
                 }
+
             }
-        }
+            else
+            {
+                Log.Error("There is no player with the session id: " + sessionID);
+            }
 
-        public void OnHouseRequestMessage(HouseRequestMessage msg)
-        {
-            throw new NotImplementedException("not implemented");
-
-            //receiving of chosen house of Player
-
-            //string houseName
-
-            //create  great house
         }
 
         public void OnMovementRequestMessage(MovementRequestMessage msg)
@@ -143,11 +217,11 @@ namespace Server
         /// TODO: what is sending back if a exception is thrown?
         /// </summary>
         /// <param name="clientSecret">Unique identifikator for the client, which is just known between the affected parties</param>
-        public void DoAcceptJoin(string clientSecret, int clientID)
+        public void DoAcceptJoin(string clientSecret, int clientID, string sessionID)
         {
             JoinAcceptedMessage joinAcceptedMessage = new JoinAcceptedMessage(clientSecret, clientID);
-            NetworkController.HandleSendingMessage(joinAcceptedMessage);
-            Console.WriteLine("- Join accepted");
+            NetworkController.HandleSendingMessage(joinAcceptedMessage, sessionID);
+            Log.Information("Join request of " + clientID + " was accepted");
         }
 
         public void DoSendAck()
@@ -156,21 +230,35 @@ namespace Server
             NetworkController.HandleSendingMessage(ackMessage);
         }
 
-        public void DoSendError(int errorCode, string errorDescription)
+        /// <summary>
+        /// sends the an error message to the client
+        /// </summary>
+        /// <param name="errorCode">the error code (see "Standardisierungsdokument")</param>
+        /// <param name="errorDescription">a further description of the error</param>
+        /// <param name="sessionID">the session id of the client, the message need to be send to</param>
+        public void DoSendError(int errorCode, string errorDescription, string sessionID)
         {
             ErrorMessage errorMessage = new ErrorMessage(errorCode, errorDescription);
-            NetworkController.HandleSendingMessage(errorMessage);
+            NetworkController.HandleSendingMessage(errorMessage, sessionID);
+            Log.Debug("An error (code = " + errorCode + " ) occured: " + errorDescription);
         }
 
-        public void DoSendGameConfig(List<string[]> scenario, string party, int client0ID, int client1ID)
+        public void DoSendGameConfig()
         {
-            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, party, client0ID, client1ID);
+            int client0ID = party.GetActivePlayers()[0].ClientID;
+            int client1ID = party.GetActivePlayers()[0].ClientID;
+
+            List<List<string>> scenario = ScenarioConfiguration.GetInstance().scenario;
+            string partyConfiguration = JsonConvert.SerializeObject(PartyConfiguration.GetInstance());
+
+            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, partyConfiguration, client0ID, client1ID);
             NetworkController.HandleSendingMessage(gameConfigMessage);
         }
 
-        public void DoSendHouseOffer(int clientID, GreatHouse[] houses)
+        public void DoSendHouseOffer(int clientID, GreatHouseType[] houses)
         {
-            HouseOfferMessage houseOfferMessage = new HouseOfferMessage(clientID, houses);
+            GreatHouse[] greatHouses = { GreatHouseFactory.CreateNewGreatHouse(houses[0]), GreatHouseFactory.CreateNewGreatHouse(houses[1]) };
+            HouseOfferMessage houseOfferMessage = new HouseOfferMessage(clientID, greatHouses);
             NetworkController.HandleSendingMessage(houseOfferMessage);
         }
 
@@ -274,9 +362,16 @@ namespace Server
             NetworkController.HandleSendingMessage(gameStateMessage);
         }
 
-        public void DoSendStrike(int clientID, string wrongMessage, int count)
+        /// <summary>
+        /// increases the amount of strikes of a client and sends a strike message
+        /// </summary>
+        /// <param name="player">the player, who gets a strike</param>
+        /// <param name="wrongMessage">the wrong message, who was send by the client</param>
+        public void DoSendStrike(Player player, Message wrongMessage)
         {
-            StrikeMessage strikeMessage = new StrikeMessage(clientID, wrongMessage, count);
+            string wrongMessageAsString = MessageConverter.FromMessage(wrongMessage);
+            player.AddStrike();
+            StrikeMessage strikeMessage = new StrikeMessage(player.ClientID, wrongMessageAsString, player.AmountOfStrikes);
             NetworkController.HandleSendingMessage(strikeMessage);
         }
 

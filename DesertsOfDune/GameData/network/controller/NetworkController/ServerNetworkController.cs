@@ -30,12 +30,13 @@ namespace GameData.network.controller
             base.connectionHandler.NetworkController = this;
         }
 
+        // TODO: check, if message could be send (especially to a certain client)
+
         /// <summary>
         /// handles messages, that need to be send and send them to all corresponding clients
         /// </summary>
         /// <param name="message">message, which should be send</param>
         /// <returns>true, if the message could successfully send</returns>
-        /// TODO: do not broadcast every message, but check, whether is needed to be send to a certain client and send it only to this client
         public override bool HandleSendingMessage(Message message)
         {
             // parsing the message
@@ -51,6 +52,31 @@ namespace GameData.network.controller
             else
             {
                 Log.Warning("Could not send message " + message.ToString() + " from " + webSocketType.ToString() + " because it could not be converted to a JSON-String");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// handles messages, that need to be send to a certain client
+        /// </summary>
+        /// <param name="message">message, which should be send</param>
+        /// <param name="clientID">the session ID of the user, who should receive this message</param>
+        /// <returns></returns>
+        public override bool HandleSendingMessage(Message message, string clientID)
+        {
+            // parsing the message
+            string parsedMessage = MessageConverter.FromMessage(message);
+
+            // check, whether the parsing was successful
+            if (parsedMessage != null)
+            {
+                // broadcast parsed message to all active sessions so clients
+                ((ServerConnectionHandler)connectionHandler).sessionManager.SendTo(parsedMessage, clientID);
+                return true;
+            }
+            else
+            {
+                Log.Warning("Could not send message " + message.ToString() + " from " + webSocketType.ToString() + " to " + clientID + " because it could not be converted to a JSON-String");
                 return false;
             }
         }

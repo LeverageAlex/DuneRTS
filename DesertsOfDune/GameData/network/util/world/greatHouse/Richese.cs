@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using GameData.Configuration;
+using GameData.network.messages;
 
 namespace GameData.network.util.world
 {
     /// <summary>
-    /// This class represents the GreatHouse Richese
+    /// Represents the Great house "Richese
     /// </summary>
     public class Richese : GreatHouse
     {
         /// <summary>
-        /// Constructor of the class Richese
+        /// create a new Great house of type "Richese" with the characters from the "Standisierungsdokument"
         /// </summary>
-        /// <param name="name">the name of the house</param>
-        /// <param name="color">the color of the house</param>
-        /// <param name="characters">the characters of the house</param>
-        public Richese(string name, string color, Character[] characters) : base(name, color, characters)
+        public Richese() : base("RICHESE", "SILBER", GreatHouseConfiguration.HouseCharactersRichese)
         {
-
         }
     }
 }
+

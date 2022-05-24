@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using GameData.network.util.world;
 using Newtonsoft.Json;
 
@@ -10,69 +11,70 @@ namespace Server.Configuration
     public class PartyConfiguration
     {
         [JsonProperty]
-        public CharacterProperties noble { get; set; }
+        public CharacterProperties noble { get; }
         [JsonProperty]
-        public CharacterProperties mentat { get; set; }
+        public CharacterProperties mentat { get; }
         [JsonProperty]
-        public CharacterProperties beneGesserit { get; set; }
+        public CharacterProperties beneGesserit { get; }
         [JsonProperty]
-        public CharacterProperties fighter { get; set; }
+        public CharacterProperties fighter { get; }
 
         [JsonProperty]
-        public int numbOfRounds { get; set; }
+        public int numbOfRounds { get; }
         [JsonProperty]
-        public int actionTimeUserClient { get; set; }
+        public int actionTimeUserClient { get; }
         [JsonProperty]
-        public int actionTimeAiClient { get; set; }
+        public int actionTimeAiClient { get; }
         [JsonProperty]
-        public double highGroundBonusRatio { get; set; }
+        public double highGroundBonusRatio { get; }
         [JsonProperty]
-        public double lowerGroundMalusRatio { get; set; }
+        public double lowerGroundMalusRatio { get; }
         [JsonProperty]
-        public double kanlySuccessProbability { get; set; }
+        public double kanlySuccessProbability { get; }
         [JsonProperty]
         public int spiceMinimum { get; set; }
         [JsonProperty]
-        public string cellularAutomaton { get; set; }
+        public string cellularAutomaton { get; }
         [JsonProperty]
-        public int sandWormSpeed { get; set; }
+        public int sandWormSpeed { get; }
         [JsonProperty]
-        public int sandWormSpawnDistance { get; set; }
+        public int sandWormSpawnDistance { get; }
         [JsonProperty]
-        public double cloneProbability { get; set; }
+        public double cloneProbability { get; }
         [JsonProperty]
-        public int minPauseTime { get; set; }
+        public int minPauseTime { get; }
 
         private static PartyConfiguration singleton;
 
         /// <summary>
         /// hide default constructor for implementing the singleton pattern
         /// </summary>
-        /// TODO: set default values, if a new instance is created
         private PartyConfiguration()
         {
+
         }
 
         /// <summary>
-        /// get the reference to the party configuration class (implementation of the singleton pattern)
+        /// get a reference to this instance
         /// </summary>
-        /// <returns>reference to this class</returns>
+        /// <returns></returns>
         public static PartyConfiguration GetInstance()
         {
             if (singleton == null)
             {
                 singleton = new PartyConfiguration();
             }
+
             return singleton;
         }
 
         /// <summary>
-        /// creates a new (singleton) instance based on an existing PartyConfiguration-Object
+        /// sets a reference of a PartyConfiguration-object to this singleton reference
         /// </summary>
-        /// <param name="partyConfigObject">the object to "copy"</param>
-        public static void CreateInstance(PartyConfiguration partyConfigObject)
+        /// <param name="configuration">the reference to a party configuration object</param>
+        public static void SetInstance(PartyConfiguration configuration)
         {
-            singleton = (PartyConfiguration)partyConfigObject.MemberwiseClone();
+            singleton = configuration;
         }
     }
 }
