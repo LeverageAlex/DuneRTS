@@ -11,7 +11,7 @@ namespace GameData.network.messages
     public class HouseCharacter
     {
         [JsonProperty]
-        private string characterName;
+        public string characterName { get; }
         [JsonProperty]
         public string characterClass { get; }
 

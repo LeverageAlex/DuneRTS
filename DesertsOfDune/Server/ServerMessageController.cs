@@ -304,9 +304,13 @@ namespace Server
             NetworkController.HandleSendingMessage(mapChangeDemandMessage);
         }
 
-        public void DoSpawnCharacterDemand(int clientID, int characterID, string characterName, Position pos, Character attributes)
+        public void DoSpawnCharacterDemand(Character attributes)
         {
-            SpawnCharacterDemandMessage spawnCharacterDemandMessage = new SpawnCharacterDemandMessage(clientID, characterID, characterName, pos, attributes);
+            string characterName = attributes.HouseCharacter.characterName;
+            Position pos = new Position(attributes.CurrentMapfield.XCoordinate, attributes.CurrentMapfield.ZCoordinate);
+
+            // todo set clientid reasonable.
+            SpawnCharacterDemandMessage spawnCharacterDemandMessage = new SpawnCharacterDemandMessage(1234, attributes.CharacterId, characterName, pos, attributes);
             NetworkController.HandleSendingMessage(spawnCharacterDemandMessage);
         }
 

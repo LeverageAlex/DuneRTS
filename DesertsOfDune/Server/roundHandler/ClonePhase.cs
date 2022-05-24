@@ -6,6 +6,7 @@ using GameData.gameObjects;
 using GameData.network.util.world.mapField;
 using Server.roundHandler;
 using Server.Configuration;
+using Server;
 
 namespace GameData.server.roundHandler
 {
@@ -69,6 +70,7 @@ namespace GameData.server.roundHandler
             MapField mapField =  DetermineCloneSpawnPosition(city);
             mapField.Character = character;
             character.ResetData();
+            Party.GetInstance("lobbycode").messageController.DoSpawnCharacterDemand(character);
         }
 
         /// <summary>

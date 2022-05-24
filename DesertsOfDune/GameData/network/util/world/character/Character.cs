@@ -42,13 +42,16 @@ namespace GameData.network.util.world
         protected MapField currentMapfield;
         [JsonIgnore]
         public MapField CurrentMapfield { get{return currentMapfield; }set{ currentMapfield = value;}}
-        private int characterId;
         [JsonIgnore]
-        public int CharacterId { get{return characterId;}}
+        public int CharacterId { get; }
+
         private GreatHouse greatHouse;
         [JsonIgnore]
         public bool KilledBySandworm
         {get { return killedBySandworm; } set { killedBySandworm = value; } }
+        
+        [JsonIgnore]
+        public HouseCharacter HouseCharacter { get; }
 
 
         /// <summary>
@@ -109,7 +112,7 @@ namespace GameData.network.util.world
         /// <summary>
         /// This method sets the character data to default values.
         /// </summary>
-        public abstract void ResetData()
+        public void ResetData()
         {
             // this method should be extended by different character types
         }
