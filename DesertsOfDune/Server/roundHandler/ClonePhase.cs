@@ -5,6 +5,7 @@ using GameData.network.util.world;
 using GameData.gameObjects;
 using GameData.network.util.world.mapField;
 using Server.roundHandler;
+using Server.Configuration;
 
 namespace GameData.server.roundHandler
 {
@@ -13,29 +14,50 @@ namespace GameData.server.roundHandler
     /// </summary>
     public class ClonePhase : GamePhase
     {
-        List<Character> clonableCharacters;
-        private RoundHandler parent;
-        private double cloneProbability = 0.5;
+        private double cloneProbability;
         private MapField[,] map;
+
+        /// <summary>
+        /// Constructor of the class ClonPhase
+        /// </summary>
+        public ClonePhase()
+        {
+            this.cloneProbability = PartyConfiguration.GetInstance().cloneProbability;
+        }
 
         /// <summary>
         /// This method triggers the cloning of a character by chance.
         /// </summary>
         /// <returns>true, if the cloning is triggered</returns>
-        public void CloneCharacters(List<Character> clonableCharacters, City city)
+        public void CloneCharacters(GreatHouse greatHouse)
         {
+            List<Character> clonableCharacters = DetermineClonableCharacters(greatHouse.Characters);
             foreach (Character character in clonableCharacters)
             {
-
-                if (character.IsDead() && !(character.KilledBySandworm))
+                Random random = new Random();
+                if (cloneProbability + random.NextDouble() >= 1.0)
                 {
-                    Random random = new Random();
-                    if (cloneProbability + random.NextDouble() >= 1.0)
-                    {
-                        CloneCharacter(character,city);
-                    }
+                    CloneCharacter(character, greatHouse.City);
                 }
             }
+        }
+        
+        /// <summary>
+        /// This method determines the clonable characters out of all characters of a house
+        /// </summary>
+        /// <param name="characters">all characters of a House</param>
+        /// <returns>all clonable characters of a House</returns>
+        private List<Character> DetermineClonableCharacters(List<Character> characters)
+        {
+            List<Character> clonableCharacters = new List<Character>();
+            foreach (Character character in characters)
+            {
+                if (character.IsDead() && !character.KilledBySandworm)
+                {
+                    clonableCharacters.Add(character);
+                }
+            }
+            return clonableCharacters;
         }
 
         /// <summary>
@@ -46,7 +68,7 @@ namespace GameData.server.roundHandler
         {
             MapField mapField =  DetermineCloneSpawnPosition(city);
             mapField.Character = character;
-            character.resetMPandAp();
+            character.ResetData();
         }
 
         /// <summary>

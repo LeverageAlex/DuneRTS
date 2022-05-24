@@ -38,6 +38,27 @@ namespace GameData.network.util.world.character
         }
 
         /// <summary>
+        /// This method resets the data of the character
+        /// </summary>
+        override
+        public void ResetData()
+        {
+            this.characterType = Enum.GetName(characterType.GetType(), characterType);
+            this.healthMax = CharacterConfiguration.Noble.maxHP;
+            this.healthCurrent = CharacterConfiguration.Noble.maxHP;
+            this.healingHP = CharacterConfiguration.Noble.healingHP;
+            this.MPmax = CharacterConfiguration.Noble.maxMP;
+            this.MPcurrent = CharacterConfiguration.Noble.maxMP;
+            this.APmax = CharacterConfiguration.Noble.maxAP;
+            this.APcurrent = CharacterConfiguration.Noble.maxAP;
+            this.attackDamage = CharacterConfiguration.Noble.damage;
+            this.inventorySize = CharacterConfiguration.Noble.inventorySize;
+            this.inventoryUsed = 0;
+            this.killedBySandworm = false;
+            this.isLoud = false;
+        }
+
+        /// <summary>
         /// This method represents the action Kanly for the Character type Nobel
         /// </summary>
         /// <param name="target">the Nobel that is targeted by the atack</param>

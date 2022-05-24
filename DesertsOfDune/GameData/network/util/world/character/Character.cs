@@ -13,33 +13,33 @@ namespace GameData.network.util.world
     public class Character
     {
         [JsonProperty]
-        string characterType;
+        protected string characterType;
         [JsonProperty]
-        private int healthMax;
+        protected int healthMax;
         [JsonProperty]
-        private int healthCurrent;
+        protected int healthCurrent;
         [JsonProperty]
-        private int healingHP;
+        protected int healingHP;
         [JsonProperty]
-        private int MPmax;
+        protected int MPmax;
         [JsonProperty]
-        private int MPcurrent;
+        protected int MPcurrent;
         [JsonProperty]
-        private int APmax;
+        protected int APmax;
         [JsonProperty]
-        private int APcurrent;
+        protected int APcurrent;
         [JsonProperty]
-        private int attackDamage;
+        protected int attackDamage;
         [JsonProperty]
-        private int inventorySize;
+        protected int inventorySize;
         [JsonProperty]
-        private int inventoryUsed;
+        protected int inventoryUsed;
         [JsonProperty]
-        private bool killedBySandworm;
+        protected bool killedBySandworm;
         [JsonProperty]
-        private bool isLoud;
+        protected bool isLoud;
         [JsonIgnore]
-        private MapField currentMapfield;
+        protected MapField currentMapfield;
         [JsonIgnore]
         public MapField CurrentMapfield { get{return currentMapfield; }set{ currentMapfield = value;}}
         private int characterId;
@@ -104,6 +104,14 @@ namespace GameData.network.util.world
             this.attackDamage = damage;
             this.inventorySize = inventorySize;
             this.healingHP = healingHP;
+        }
+
+        /// <summary>
+        /// This method sets the character data to default values.
+        /// </summary>
+        public abstract void ResetData()
+        {
+            // this method should be extended by different character types
         }
 
         /// <summary>

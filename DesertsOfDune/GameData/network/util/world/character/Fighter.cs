@@ -34,6 +34,28 @@ namespace GameData.network.util.world.character
         public Fighter() : base(CharacterType.FIGHTHER, CharacterConfiguration.Fighter.maxHP, CharacterConfiguration.Fighter.maxMP, CharacterConfiguration.Fighter.maxAP, CharacterConfiguration.Fighter.damage, CharacterConfiguration.Fighter.inventorySize, CharacterConfiguration.Fighter.healingHP)
         {
         }
+
+        /// <summary>
+        /// This method resets the data of the character
+        /// </summary>
+        override
+        public void ResetData()
+        {
+            this.characterType = Enum.GetName(characterType.GetType(), characterType);
+            this.healthMax = CharacterConfiguration.Fighter.maxHP;
+            this.healthCurrent = CharacterConfiguration.Fighter.maxHP;
+            this.healingHP = CharacterConfiguration.Fighter.healingHP;
+            this.MPmax = CharacterConfiguration.Fighter.maxMP;
+            this.MPcurrent = CharacterConfiguration.Fighter.maxMP;
+            this.APmax = CharacterConfiguration.Fighter.maxAP;
+            this.APcurrent = CharacterConfiguration.Fighter.maxAP;
+            this.attackDamage = CharacterConfiguration.Fighter.damage;
+            this.inventorySize = CharacterConfiguration.Fighter.inventorySize;
+            this.inventoryUsed = 0;
+            this.killedBySandworm = false;
+            this.isLoud = false;
+        }
+
         /// <summary>
         /// This method represents the action SwordSpin of the character type fighter
         /// </summary>

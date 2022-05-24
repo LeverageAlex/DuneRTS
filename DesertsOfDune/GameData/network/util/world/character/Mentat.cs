@@ -39,6 +39,27 @@ namespace GameData.network.util.world.character
         }
 
         /// <summary>
+        /// This method resets the data of the character
+        /// </summary>
+        override
+        public void ResetData()
+        {
+            this.characterType = Enum.GetName(characterType.GetType(), characterType);
+            this.healthMax = CharacterConfiguration.Mentat.maxHP;
+            this.healthCurrent = CharacterConfiguration.Mentat.maxHP;
+            this.healingHP = CharacterConfiguration.Mentat.healingHP;
+            this.MPmax = CharacterConfiguration.Mentat.maxMP;
+            this.MPcurrent = CharacterConfiguration.Mentat.maxMP;
+            this.APmax = CharacterConfiguration.Mentat.maxAP;
+            this.APcurrent = CharacterConfiguration.Mentat.maxAP;
+            this.attackDamage = CharacterConfiguration.Mentat.damage;
+            this.inventorySize = CharacterConfiguration.Mentat.inventorySize;
+            this.inventoryUsed = 0;
+            this.killedBySandworm = false;
+            this.isLoud = false;
+        }
+
+        /// <summary>
         /// This method represents the action SpiceHoarding of the characterType Mentat
         /// </summary>
         /// <returns>true, if action was successful</returns>

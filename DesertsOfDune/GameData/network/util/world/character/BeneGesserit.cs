@@ -40,6 +40,27 @@ namespace GameData.network.util.world.character
         }
 
         /// <summary>
+        /// This method resets the data of the character
+        /// </summary>
+        override
+        public void ResetData()
+        {
+            this.characterType = Enum.GetName(characterType.GetType(), characterType);
+            this.healthMax = CharacterConfiguration.BeneGesserit.maxHP;
+            this.healthCurrent = CharacterConfiguration.BeneGesserit.maxHP;
+            this.healingHP = CharacterConfiguration.BeneGesserit.healingHP;
+            this.MPmax = CharacterConfiguration.BeneGesserit.maxMP;
+            this.MPcurrent = CharacterConfiguration.BeneGesserit.maxMP;
+            this.APmax = CharacterConfiguration.BeneGesserit.maxAP;
+            this.APcurrent = CharacterConfiguration.BeneGesserit.maxAP;
+            this.attackDamage = CharacterConfiguration.BeneGesserit.damage;
+            this.inventorySize = CharacterConfiguration.BeneGesserit.inventorySize;
+            this.inventoryUsed = 0;
+            this.killedBySandworm = false;
+            this.isLoud = false;
+        }
+
+        /// <summary>
         /// This method represents the action Voice for the Character type BeneGesserit
         /// </summary>
         /// <param name="target">the character targeted by the action</param>
