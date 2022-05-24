@@ -22,6 +22,8 @@ namespace Server.Clients
 
         public int AmountOfStrikes { get; set; }
 
+        public Statistics statistics { get; set; }
+
         protected Player(string clientName, string sessionID) : base(clientName, true, sessionID)
         {
             this.AmountOfStrikes = 0;          

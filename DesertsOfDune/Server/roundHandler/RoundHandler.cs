@@ -103,7 +103,7 @@ namespace GameData.gameObjects
                     {
                         int loserID = player.ClientID;
                         int winnerID = party.GetActivePlayers().Find(c => c.ClientID != player.ClientID).ClientID;
-                        serverMessageController.DoGameEndMessage(winnerID, loserID, new Statistics()); //TODO: get stats
+                        serverMessageController.DoGameEndMessage(winnerID, loserID, new Statistics()); //TODO: get stats for both players
                         partyFinished = true;
                         return true;
                     }
@@ -131,15 +131,18 @@ namespace GameData.gameObjects
         /// <returns>Return the player with the bigger stock of spice. If the stock is of both player is equal it will return null.</returns>
         private Player CheckFirstVictoryMetric(Player player1, Player player2)
         {
-            if (player1.UsedGreatHouse.City.GetSpiceCount() > player2.UsedGreatHouse.City.GetSpiceCount())
+            if (player1.statistics.GetHouseSpiceStorage() > player2.statistics.GetHouseSpiceStorage())
             {
                 return player1;
             }
-            else if (player1.UsedGreatHouse.City.GetSpiceCount() < player2.UsedGreatHouse.City.GetSpiceCount())
+            else if (player1.statistics.GetHouseSpiceStorage() < player2.statistics.GetHouseSpiceStorage())
             {
                 return player2;
             }
-            return CheckSecondVictoryMetric(player1, player2);
+            else
+            {
+                return CheckSecondVictoryMetric(player1, player2);
+            }
         }
 
         /// <summary>
@@ -150,8 +153,18 @@ namespace GameData.gameObjects
         /// <returns>Return the player more recorded spice. If the recorded spice of both player is equal it will return null.</returns>
         private Player CheckSecondVictoryMetric(Player player1, Player player2)
         {
-            throw new NotImplementedException("not impelmented");
-            //return CheckThirdVictoryMetric(player1, player2);
+            if (player1.statistics.GetTotalSpiceCollected() > player2.statistics.GetTotalSpiceCollected())
+            {
+                return player1;
+            }
+            else if(player1.statistics.GetTotalSpiceCollected() < player2.statistics.GetTotalSpiceCollected())
+            {
+                return player2;
+            }
+            else
+            {
+                return CheckThirdVictoryMetric(player1, player2);
+            }
         }
 
         /// <summary>
@@ -162,8 +175,18 @@ namespace GameData.gameObjects
         /// <returns>Return the player who defeated more enemy characters of the other house. If the amount of defeated enemy characters of both player is equal it will return null.</returns>
         private Player CheckThirdVictoryMetric(Player player1, Player player2)
         {
-            throw new NotImplementedException("not impelmented");
-            //return Check4thVictoryMetric(player1, player2);
+            if (player1.statistics.GetEnemiesDefeated() > player2.statistics.GetEnemiesDefeated())
+            {
+                return player1;
+            }
+            else if (player1.statistics.GetEnemiesDefeated() < player2.statistics.GetEnemiesDefeated())
+            {
+                return player2;
+            }
+            else
+            {
+                return Check4thVictoryMetric(player1, player2);
+            }
         }
 
         /// <summary>
@@ -174,8 +197,18 @@ namespace GameData.gameObjects
         /// <returns>Return the player where less characters were swallowed by the usual sandworm. If the amount of both player is equal it will return null.</returns>
         private Player Check4thVictoryMetric(Player player1, Player player2)
         {
-            throw new NotImplementedException("not impelmented");
-            //return Check5thVictoryMetric(player1, player2);
+            if (player1.statistics.GetCharactersSwallowed() < player2.statistics.GetCharactersSwallowed())
+            {
+                return player1;
+            }
+            else if (player1.statistics.GetCharactersSwallowed() > player2.statistics.GetCharactersSwallowed())
+            {
+                return player2;
+            }
+            else
+            {
+                return Check5thVictoryMetric(player1, player2);
+            }
         }
 
         /// <summary>
