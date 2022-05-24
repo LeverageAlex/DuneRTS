@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using GameData.network.messages;
 using GameData.network.util.world;
@@ -108,6 +109,108 @@ namespace GameData.gameObjects
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Determines the winner if the game goes to the overlengthMechanism with the victory metrics.
+        /// </summary>
+        /// <returns>Returns the winner of the game</returns>
+        public Player CheckWinnerVictoryMetric()
+        {
+            Player winner;
+            Player p1 = party.GetActivePlayers()[0];
+            Player p2 = party.GetActivePlayers()[1];
+
+            winner = CheckFirstVictoryMetric(p1, p2);
+            if (winner != null)
+            {
+                return winner;
+            }
+            winner = CheckSecondVictoryMetric(p1, p2);
+            if (winner != null)
+            {
+                return winner;
+            }
+            winner = CheckThirdVictoryMetric(p1, p2);
+            if (winner != null)
+            {
+                return winner;
+            }
+            winner = Check4thVictoryMetric(p1, p2);
+            if (winner != null)
+            {
+                return winner;
+            }
+            winner = Check5thVictoryMetric(p1, p2);
+            if(winner != null)
+            {
+                return winner;
+            }
+            return null; //should not come to this part
+            //nobody has won, TODO: InfoMessage
+        }
+
+        /// <summary>
+        /// Checks, which house has the bigger stock of spice.
+        /// </summary>
+        /// <param name="player1">The first active player of the party.</param>
+        /// <param name="player2">The second active player of the party.</param>
+        /// <returns>Return the player with the bigger stock of spice. If the stock is of both player is equal it will return null.</returns>
+        private Player CheckFirstVictoryMetric(Player player1, Player player2)
+        {
+            if (player1.UsedGreatHouse.City.GetSpiceCount() > player2.UsedGreatHouse.City.GetSpiceCount())
+            {
+                return player1;
+            }
+            else if (player1.UsedGreatHouse.City.GetSpiceCount() < player2.UsedGreatHouse.City.GetSpiceCount())
+            {
+                return player2;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Checks, which player's house recorded more spice during the party.
+        /// </summary>
+        /// <param name="player1">The first active player of the party.</param>
+        /// <param name="player2">The second active player of the party.</param>
+        /// <returns>Return the player more recorded spice. If the recorded spice of both player is equal it will return null.</returns>
+        private Player CheckSecondVictoryMetric(Player player1, Player player2)
+        {
+            throw new NotImplementedException("not impelmented");
+        }
+
+        /// <summary>
+        /// Checks, which house has defeated more enemy characters.
+        /// </summary>
+        /// <param name="player1">The first active player of the party.</param>
+        /// <param name="player2">The second active player of the party.</param>
+        /// <returns>Return the player who defeated more enemy characters of the other house. If the amount of defeated enemy characters of both player is equal it will return null.</returns>
+        private Player CheckThirdVictoryMetric(Player player1, Player player2)
+        {
+            throw new NotImplementedException("not impelmented");
+        }
+
+        /// <summary>
+        /// Checks, at which house less characters were swallowed by the usual sandworm.
+        /// </summary>
+        /// <param name="player1">The first active player of the party.</param>
+        /// <param name="player2">The second active player of the party.</param>
+        /// <returns>Return the player where less characters were swallowed by the usual sandworm. If the amount of both player is equal it will return null.</returns>
+        private Player Check4thVictoryMetric(Player player1, Player player2)
+        {
+            throw new NotImplementedException("not impelmented");
+        }
+
+        /// <summary>
+        /// Checks, at which house the last character standing is..
+        /// </summary>
+        /// <param name="player1">The first active player of the party.</param>
+        /// <param name="player2">The second active player of the party.</param>
+        /// <returns>Returns the player with the LastCharacterStanding.</returns>
+        private Player Check5thVictoryMetric(Player player1, Player player2)
+        {
+            throw new NotImplementedException("not impelmented");
         }
 
         /// <summary>

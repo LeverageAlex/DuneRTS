@@ -33,5 +33,10 @@ namespace GameData.network.util.world.mapField
             this.spiceCount = spiceCount + amount;
             return true;
         }
+
+        public int GetSpiceCount()
+        {
+            return this.spiceCount;
+        }
     }
 }
