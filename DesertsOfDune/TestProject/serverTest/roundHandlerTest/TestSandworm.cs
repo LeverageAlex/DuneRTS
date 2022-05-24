@@ -21,10 +21,12 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Test]
-        public void TestExecute()
+        public void TestExecuteWithSandwormInstance()
         {
-
             MapField[,] mapFields = new MapField[5, 5];
             for (int i = 0; i < 5; i++)
             {
@@ -33,20 +35,76 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
                     mapFields[i, j] = new FlatSand(false, false, null);
                 }
             }
-            SandWorm sandWorm = SandWorm.Spawn(10,0, mapFields);
-            List<Character> loudCharacters = new List<Character>();
+            List<Character> characters = new List<Character>();
             Nobel nobel1 = new Nobel(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true);
             MapField mapField = new MapField(false, false, 0, null);
             mapField.XCoordinate = 0;
             mapField.ZCoordinate = 2;
             nobel1.CurrentMapfield = mapField;
-           /* Nobel nobel2 = new Nobel(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true);
-            MapField mapField2 = new MapField(false, false, 0, null);
-            mapField.XCoordinate = 1;
+            characters.Add(nobel1);
+            SandWorm sandWorm = new SandWorm();
+            sandWorm = sandWorm.Execute(mapFields, characters);
+            sandWorm.Execute(mapFields, characters);
+        }
+
+        [Test]
+        public void TestExecuteWithOutSandwormInstance()
+        {
+            MapField[,] mapFields = new MapField[5, 5];
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    mapFields[i, j] = new FlatSand(false, false, null);
+                }
+            }
+            List<Character> characters = new List<Character>();
+            Nobel nobel1 = new Nobel(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true);
+            MapField mapField = new MapField(false, false, 0, null);
+            mapField.XCoordinate = 0;
             mapField.ZCoordinate = 2;
-            nobel1.CurrentMapfield = mapField2; */
-            loudCharacters.Add(nobel1);
-            sandWorm.Execute(mapFields, loudCharacters);
+            nobel1.CurrentMapfield = mapField;
+            characters.Add(nobel1);
+            SandWorm sandWorm = new SandWorm();
+            sandWorm.Execute(mapFields, characters);
+        }
+
+        [Test]
+        public void TestChooseTargetCharacter()
+        {
+            List<Character> characters = new List<Character>();
+            Nobel nobel1 = new Nobel(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true);
+            Nobel nobel2 = new Nobel(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true);
+            Nobel nobel3 = new Nobel(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, false);
+            SandWorm sandWorm = SandWorm.Spawn(10, 0, null, null);
+            Character target = sandWorm.ChooseTargetCharacter(characters);
+            Assert.IsNull(target);
+            characters.Add(nobel1);
+            target = sandWorm.ChooseTargetCharacter(characters);
+            Assert.AreEqual(target, nobel1);
+            characters.Add(nobel2);
+            target = sandWorm.ChooseTargetCharacter(characters);
+            Assert.True((target == nobel1 || target == nobel2));
+            characters.Add(nobel3);
+            target = sandWorm.ChooseTargetCharacter(characters);
+            Assert.False(target == nobel3);
+        }
+
+        [Test]
+        public void TestMoveSandWormByOneField()
+        {
+            MapField[,] mapFields = new MapField[5, 5];
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    mapFields[i, j] = new FlatSand(false, false, null);
+                }
+            }
+            SandWorm sandWorm = SandWorm.Spawn(10, 0, mapFields, null);
+
+            // TODO: implement test
+
         }
     }
 }
