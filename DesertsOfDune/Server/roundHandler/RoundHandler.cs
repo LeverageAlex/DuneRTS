@@ -4,6 +4,8 @@ using System.Text;
 using GameData.network.messages;
 using GameData.network.util.world;
 using GameData.server.roundHandler;
+using Server;
+using Server.Clients;
 
 namespace GameData.gameObjects
 {
@@ -12,6 +14,8 @@ namespace GameData.gameObjects
     /// </summary>
     public class RoundHandler
     {
+        private ServerMessageController serverMessageController;
+        private Party party;
         private int roundCounter;
         private int currentSpice;
         public int CurrentSpice { get { return currentSpice; } set { currentSpice = value; } }
@@ -28,6 +32,8 @@ namespace GameData.gameObjects
         private ClonePhase clonePhase;
         private CharacterTraitPhase characterTraitPhase;
         private OverLengthMechanism overLengthMechanism;
+        private bool overLengthMechanismActive = false;
+        private bool partyFinished = false;
 
         /// <summary>
         /// Constructor of the class RoundHandler
@@ -37,6 +43,16 @@ namespace GameData.gameObjects
         {
             this.numbOfRounds = numbOfRounds;
             this.spiceMinimum = spiceMinimum;
+        }
+
+        public void SetParty(Party party)
+        {
+            this.party = party;
+        }
+
+        public void SetServerMessageController(ServerMessageController serverMessageController)
+        {
+            this.serverMessageController = serverMessageController;
         }
 
         /// <summary>
@@ -49,6 +65,7 @@ namespace GameData.gameObjects
                 duneMovementPhase.Execut();
                 sandstormPhase.Execut();
                 ((SandWorm)sandwormPhase).Execut();
+                //call CheckVictory to check if after sandworm phase the last character of one house is gone and the the other player has won
                 clonePhase.Execut();
                 characterTraitPhase.Execut();
             }
@@ -63,18 +80,33 @@ namespace GameData.gameObjects
         {
             if (roundCounter >= numbOfRounds)
             {
+                serverMessageController.DoEndGame();
+                overLengthMechanismActive = true;
                 return true;
             }
             return false;
         }
 
         /// <summary>
-        /// This method checks weather one Client has won the game
+        /// This method checks whether one Client has won the game
         /// </summary>
         /// <returns>true, if one client won the game</returns>
         public bool CheckVictory()
         {
-            // TODO implement logic
+            if (party.AreTwoPlayersRegistred())
+            {
+                foreach (var player in party.GetActivePlayers())
+                {
+                    if (player.UsedGreatHouse.Characters.Count == 0)
+                    {
+                        int loserID = player.ClientID;
+                        int winnerID = party.GetActivePlayers().Find(c => c.ClientID != player.ClientID).ClientID;
+                        serverMessageController.DoGameEndMessage(winnerID, loserID, new Statistics()); //TODO: get stats
+                        partyFinished = true;
+                        return true;
+                    }
+                }
+            }
             return false;
         }
 
