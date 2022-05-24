@@ -83,6 +83,7 @@ namespace GameData.gameObjects
             {
                 serverMessageController.DoEndGame();
                 overLengthMechanismActive = true;
+                //TODO: start mechanism for overlength
                 return true;
             }
             return false;
@@ -115,39 +116,11 @@ namespace GameData.gameObjects
         /// Determines the winner if the game goes to the overlengthMechanism with the victory metrics.
         /// </summary>
         /// <returns>Returns the winner of the game</returns>
-        public Player CheckWinnerVictoryMetric()
+        public Player CheckWinnerByVictoryMetric()
         {
-            Player winner;
             Player p1 = party.GetActivePlayers()[0];
             Player p2 = party.GetActivePlayers()[1];
-
-            winner = CheckFirstVictoryMetric(p1, p2);
-            if (winner != null)
-            {
-                return winner;
-            }
-            winner = CheckSecondVictoryMetric(p1, p2);
-            if (winner != null)
-            {
-                return winner;
-            }
-            winner = CheckThirdVictoryMetric(p1, p2);
-            if (winner != null)
-            {
-                return winner;
-            }
-            winner = Check4thVictoryMetric(p1, p2);
-            if (winner != null)
-            {
-                return winner;
-            }
-            winner = Check5thVictoryMetric(p1, p2);
-            if(winner != null)
-            {
-                return winner;
-            }
-            return null; //should not come to this part
-            //nobody has won, TODO: InfoMessage
+            return CheckFirstVictoryMetric(p1, p2);
         }
 
         /// <summary>
@@ -166,7 +139,7 @@ namespace GameData.gameObjects
             {
                 return player2;
             }
-            return null;
+            return CheckSecondVictoryMetric(player1, player2);
         }
 
         /// <summary>
@@ -178,6 +151,7 @@ namespace GameData.gameObjects
         private Player CheckSecondVictoryMetric(Player player1, Player player2)
         {
             throw new NotImplementedException("not impelmented");
+            //return CheckThirdVictoryMetric(player1, player2);
         }
 
         /// <summary>
@@ -189,6 +163,7 @@ namespace GameData.gameObjects
         private Player CheckThirdVictoryMetric(Player player1, Player player2)
         {
             throw new NotImplementedException("not impelmented");
+            //return Check4thVictoryMetric(player1, player2);
         }
 
         /// <summary>
@@ -200,6 +175,7 @@ namespace GameData.gameObjects
         private Player Check4thVictoryMetric(Player player1, Player player2)
         {
             throw new NotImplementedException("not impelmented");
+            //return Check5thVictoryMetric(player1, player2);
         }
 
         /// <summary>
@@ -211,6 +187,7 @@ namespace GameData.gameObjects
         private Player Check5thVictoryMetric(Player player1, Player player2)
         {
             throw new NotImplementedException("not impelmented");
+            //return the winner with last character standing
         }
 
         /// <summary>
