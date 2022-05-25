@@ -348,12 +348,21 @@ namespace Server
             NetworkController.HandleSendingMessage(sandwormDespawnDemandMessage);
         }
 
+        /// <summary>
+        /// This method will be called, when the overlengthmechanism is aktive.
+        /// </summary>
         public void DoEndGame()
         {
             EndGameMessage endGameMessage = new EndGameMessage();
             NetworkController.HandleSendingMessage(endGameMessage);
         }
 
+        /// <summary>
+        /// This message will be sent to the clients when the game ends.
+        /// </summary>
+        /// <param name="winnerID">ID of the winner of the party</param>
+        /// <param name="loserID">ID of the loser of the party</param>
+        /// <param name="stats">Repräsentation of the statistics of the Game</param>
         public void DoGameEndMessage(int winnerID, int loserID, Statistics stats)
         {
             GameEndMessage gameEndMessage = new GameEndMessage(winnerID, loserID, stats);
