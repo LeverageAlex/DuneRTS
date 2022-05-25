@@ -5,6 +5,7 @@ using GameData.network.util.world;
 using System.Collections.Generic;
 using Server.Configuration;
 using GameData.Configuration;
+using GameData.network.util.world.character;
 
 namespace TestProject.networkTest.utilTest.parserTest
 {
@@ -322,7 +323,7 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromSpawnCharacterDemandMessage()
         {
-            Character attributes = new Character(CharacterType.FIGHTHER, 100, 75, 10, 3, 1, 4, 2, 10, 5, 3, false, true);
+            Character attributes = new Fighter(100, 75, 10, 3, 1, 4, 2, 10, 5, 3, false, true);
             SpawnCharacterDemandMessage message = new SpawnCharacterDemandMessage(1234, 12, "Vorname Nachname", new Position(0, 1), attributes);
             string serializedMessage = MessageConverter.FromMessage(message);
             Assert.AreEqual("{\"type\":\"SPAWN_CHARACTER_DEMAND\",\"version\":\"0.1\",\"clientID\":1234,\"characterID\":12,\"characterName\":\"Vorname Nachname\",\"position\":{\"x\":0,\"y\":1},\"attributes\":{\"characterType\":\"FIGHTHER\",\"healthMax\":100,\"healthCurrent\":75,\"healingHP\":10,\"MPmax\":3,\"MPcurrent\":1,\"APmax\":4,\"APcurrent\":2,\"attackDamage\":10,\"inventorySize\":5,\"inventoryUsed\":3,\"killedBySandworm\":false,\"isLoud\":true}}", serializedMessage);
