@@ -10,7 +10,7 @@ namespace GameData.network.util.world
     /// <summary>
     /// This is the base class for all Characterstypes to inherit from
     /// </summary>
-    public class Character
+    public abstract class Character
     {
         [JsonProperty]
         protected string characterType;
@@ -70,7 +70,7 @@ namespace GameData.network.util.world
         /// <param name="inventoryUsed">the usedup InventorySpace of the Character</param>
         /// <param name="killedBySandworm">true, if the Character was killed by the sandworm</param>
         /// <param name="isLoud">true, if the character is loud</param>
-        public Character(CharacterType characterType, int healthMax, int healthCurrent, int healingHP, int MPmax, int MPcurrent, int APmax, int APcurrent, int attackDamage, int inventorySize, int inventoryUsed, bool killedBySandworm, bool isLoud)
+        protected Character(CharacterType characterType, int healthMax, int healthCurrent, int healingHP, int MPmax, int MPcurrent, int APmax, int APcurrent, int attackDamage, int inventorySize, int inventoryUsed, bool killedBySandworm, bool isLoud)
         {
             this.characterType = Enum.GetName(characterType.GetType(), characterType);
             this.healthMax = healthMax;
@@ -98,7 +98,7 @@ namespace GameData.network.util.world
         /// <param name="damage"></param>
         /// <param name="inventorySize"></param>
         /// <param name="healingHP"></param>
-        public Character(CharacterType type, int maxHP, int maxMP, int maxAP, int damage, int inventorySize, int healingHP)
+        protected Character(CharacterType type, int maxHP, int maxMP, int maxAP, int damage, int inventorySize, int healingHP)
         {
             this.characterType = Enum.GetName(characterType.GetType(), characterType);
             this.healthMax = maxHP;
@@ -110,12 +110,9 @@ namespace GameData.network.util.world
         }
 
         /// <summary>
-        /// This method sets the character data to default values.
+        /// This method sets the character data to default values in the in the respective inherited classes.
         /// </summary>
-        public void ResetData()
-        {
-            // this method should be extended by different character types
-        }
+        public abstract void ResetData();
 
         /// <summary>
         /// This method decreases the hp of the character by a specific amount.
@@ -126,7 +123,7 @@ namespace GameData.network.util.world
         {
             if (healthCurrent > hp)
             {
-                healthCurrent = healthCurrent - hp;
+                healthCurrent -= hp;
                 return true;
             } else
             {

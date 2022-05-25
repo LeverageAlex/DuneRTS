@@ -13,7 +13,7 @@ namespace GameData.network.util.world
         private int totalSpiceCollected;
         private int enemiesDefeated;
         private int charactersSwallowed;
-        List<String> charactersAlive;
+        private List<String> charactersAlive;
 
         /// <summary>
         /// This method returns the statistics in a specific format.
@@ -81,6 +81,26 @@ namespace GameData.network.util.world
         public bool RemoveFromCharactersAlive(string name)
         {
             return false;
+        }
+
+        public int GetHouseSpiceStorage()
+        {
+            return this.houseSpiceStorage;
+        }
+
+        public int GetTotalSpiceCollected()
+        {
+            return this.totalSpiceCollected;
+        }
+
+        public int GetEnemiesDefeated()
+        {
+            return this.enemiesDefeated;
+        }
+
+        public int GetCharactersSwallowed()
+        {
+            return this.charactersSwallowed;
         }
     }
 }
