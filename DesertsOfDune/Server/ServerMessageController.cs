@@ -206,9 +206,100 @@ namespace Server
 
         public void OnActionRequestMessage(ActionRequestMessage msg)
         {
-            throw new NotImplementedException("not implemented");
+            throw new NotImplementedException("not implemented completely");
 
             //request from client to run an action
+            Player activePlayer;
+            foreach (var player in party.GetActivePlayers())
+            {
+                if (player.ClientID == msg.clientID)
+                {
+                    activePlayer = player;
+                }
+            }
+
+            //get the character which should do the action
+            Character actionCharacter;
+            Character targetCharacter;
+            foreach (var character in activePlayer.UsedGreatHouse.Characters)
+            {
+                if (character.CharacterId == msg.characterID)
+                {
+                    actionCharacter = character;
+                }
+                if (character.CurrentMapfield.stormEye == msg.specs.target)
+                {
+                    targetCharacter = character;
+                }
+            }
+
+            if (actionCharacter.APcurrent > 0)
+            {
+                switch (Enum.Parse(typeof(ActionType), msg.action))
+                {
+                    case ActionType.ATTACK:
+                        actionCharacter.Atack(targetCharacter);
+                        break;
+
+                    case ActionType.COLLECT:
+                        actionCharacter.CollectSpice();
+                        break;
+
+                    case ActionType.TRANSFER:
+                      //  actionCharacter.GiftSpice(targetCharacter, amount);
+                        break;
+
+                    /**case ActionType.KANLY:
+                        if (actionCharacter.APcurrent == actionCharacter.APmax)
+                        {
+                            if (actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBEL) && targetCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBEL))
+                            {
+                               actionCharacter.Kanly(targetCharacter);
+                            }
+                        }
+                        break;
+
+                    case ActionType.FAMILY_ATOMICS:
+                        if (actionCharacter.APcurrent == actionCharacter.APmax)
+                        {
+                            if (actionCharacter.characterType == CharacterType.NOBEL)
+                            {
+                                actionCharacter.AtomicBomb(msg.position);
+                            }
+                        }
+                        break;
+
+                    case ActionType.SPICE_HORDING:
+                        if (actionCharacter.APcurrent == actionCharacter.APmax)
+                        {
+                            if (actionCharacter.characterType == CharacterType.MENTAT)
+                            {
+                                actionCharacter.SpiceHoarding();
+                            }
+                        }
+                        break;
+
+                    case ActionType.VOICE:
+                        if (actionCharacter.APcurrent == actionCharacter.APmax)
+                        {
+                            if (actionCharacter.characterType == CharacterType.BENEGESSERIT)
+                            {
+                                actionCharacter.Voice(targetCharacter);
+                            }
+                        }
+                        break;
+
+                    case ActionType.SWORD_SPIN:
+                        if (actionCharacter.APcurrent == actionCharacter.APmax)
+                        {
+                            if (actionCharacter.characterType == CharacterType.FIGHTER)
+                            {
+                                actionCharacter.SwordSpin();
+                            }
+                        }
+                        break;**/
+                }
+            }
 
             //int clientID
             //int characterID

@@ -26,7 +26,7 @@ namespace GameData.network.util.world
         [JsonProperty]
         private bool isInSandstorm;
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        private Position stormEye;
+        public Position stormEye { get; }
         private Elevation elevation;
         [JsonIgnore]
         public Elevation Elevation
