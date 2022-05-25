@@ -90,7 +90,7 @@ namespace GameData.gameObjects
         }
 
         /// <summary>
-        /// This method checks whether one Client has won the game
+        /// This method checks whether one Client has won the game and if one has, send GameEndMessage to the client.
         /// </summary>
         /// <returns>true, if one client won the game</returns>
         public bool CheckVictory()
@@ -99,7 +99,7 @@ namespace GameData.gameObjects
             {
                 foreach (var player in party.GetActivePlayers())
                 {
-                    if (player.UsedGreatHouse.Characters.Count == 0)
+                    if (player.UsedGreatHouse.Characters.Count == 0) //TODO: check, if in Characters.count are also defeated characters which are not cloned again yet
                     {
                         int loserID = player.ClientID;
                         int winnerID = party.GetActivePlayers().Find(c => c.ClientID != player.ClientID).ClientID;
@@ -116,11 +116,11 @@ namespace GameData.gameObjects
         /// Determines the winner if the game goes to the overlengthMechanism with the victory metrics.
         /// </summary>
         /// <returns>Returns the winner of the game</returns>
-        public Player CheckWinnerByVictoryMetric()
+        public Player GetWinnerByCheckWinnerVictoryMetric()
         {
-            Player p1 = party.GetActivePlayers()[0];
-            Player p2 = party.GetActivePlayers()[1];
-            return CheckFirstVictoryMetric(p1, p2);
+            var player1 = party.GetActivePlayers()[0];
+            var player2 = party.GetActivePlayers()[1];
+            return CheckFirstVictoryMetric(player1, player2);
         }
 
         /// <summary>
