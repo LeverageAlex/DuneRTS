@@ -25,9 +25,9 @@ namespace GameData.network.util.world
             set { hasSpice = value; }
         }
         [JsonProperty]
-        private bool isInSandstorm;
+        public bool isInSandstorm { get; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        private Position stormEye;
+        public Position stormEye { get; }
         private Elevation elevation;
         [JsonIgnore]
         public Elevation Elevation
@@ -92,9 +92,11 @@ namespace GameData.network.util.world
             this.stormEye = stormEye;
         }
 
-        public MapField(string tileType)
+        public MapField(string tileType, int x, int y)
         {
             this.tileType = tileType;
+            this.XCoordinate = x;
+            this.ZCoordinate = y;
         }
 
         /// <summary>

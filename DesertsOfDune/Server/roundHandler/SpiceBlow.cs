@@ -90,7 +90,7 @@ namespace GameData.server.roundHandler
                             mapFields[i, j].TileType = Enum.GetName(typeof(TileType), network.util.enums.TileType.DUNE);
                         } else
                         {
-                            mapFields[i, j].TileType = Enum.GetName(typeof(TileType), network.util.enums.TileType.FLAT);
+                            mapFields[i, j].TileType = Enum.GetName(typeof(TileType), network.util.enums.TileType.FLAT_SAND);
                         }
                     }
                 }

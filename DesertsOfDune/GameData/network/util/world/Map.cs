@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using GameData.network.util.enums;
 using GameData.network.util.world.mapField;
+using Serilog;
 
 namespace GameData.network.util.world
 {
@@ -13,8 +15,8 @@ namespace GameData.network.util.world
     {
         private MapField[,] fields;
 
-        private readonly int MAP_WIDTH;
-        private readonly int MAP_HEIGHT;
+        public int MAP_WIDTH { get; }
+        public int MAP_HEIGHT { get; }
 
         public Map(int mapWidth, int mapHeight, List<List<string>> scenarioConfiguration)
         {
@@ -25,6 +27,10 @@ namespace GameData.network.util.world
             CreateMapFromScenario(scenarioConfiguration);
         }
 
+        /// <summary>
+        /// create a map with detailed information based on the given scenario (only field types)
+        /// </summary>
+        /// <param name="scenarioConfiguration">the "array" of the field types of the map / scenario</param>
         private void CreateMapFromScenario(List<List<string>> scenarioConfiguration)
         {
             fields = new MapField[MAP_HEIGHT, MAP_WIDTH];
@@ -32,7 +38,7 @@ namespace GameData.network.util.world
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    fields[y, x] = new MapField(scenarioConfiguration[y][x]);
+                    fields[y, x] = new MapField(scenarioConfiguration[x][(MAP_HEIGHT-1)-y], x, y);
                 }
             }
         }
@@ -49,9 +55,9 @@ namespace GameData.network.util.world
         {
             List<MapField> neighbors = new List<MapField>();
 
-            for (int dx = -1; dx <= -1; dx++)
+            for (int dx = -1; dx <= 1; dx++)
             {
-                for (int dy = -1; dy <= -1; dy++)
+                for (int dy = -1; dy <= 1; dy++)
                 {
                     // if dx = dy = 0, the field is the field itself and not a neighbor
                     if (dx != 0 || dy != 0)
@@ -93,10 +99,32 @@ namespace GameData.network.util.world
         {
             if (IsFieldOnMap(x, y))
             {
-                return this.fields[y,x];
+                return this.fields[(MAP_HEIGHT-1)-y,x];
             } else
             {
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// sets a new field at a given position in the map and override the existing map tile at this position
+        /// </summary>
+        /// <param name="newField">the new map field</param>
+        /// <param name="x">x-coordinate of the new map field</param>
+        /// <param name="y">y-coordinate of the new map field</param>
+        /// <returns>true, if the given position was valid, else return false</returns>
+        public bool SetMapFieldAtPosition(MapField newField, int x, int y)
+        {
+            if (IsFieldOnMap(x, y))
+            {
+                this.fields[(MAP_HEIGHT-1)-y, x] = newField;
+                newField.XCoordinate = x;
+                newField.ZCoordinate = y;
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -119,6 +147,29 @@ namespace GameData.network.util.world
             }
 
             return cities;
+        }
+
+        /// <summary>
+        /// prints a map to the console for debugging purpose
+        /// </summary>
+        public void DrawMapToConsole()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            builder.Append("------------------------------------- \n");
+
+            for (int x = 0; x < MAP_WIDTH; x++)
+            {
+                for (int y = 0; y < MAP_HEIGHT; y++)
+                {
+                    builder.Append(GetMapFieldAtPosition(x, y).TileType.ToString() + ", ");
+                }
+                builder.Append("\n");
+            }
+
+            builder.Append("\n");
+
+            Log.Debug(builder.ToString());
         }
     }
 }
