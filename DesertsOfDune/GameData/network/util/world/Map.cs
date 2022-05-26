@@ -18,6 +18,8 @@ namespace GameData.network.util.world
         public int MAP_WIDTH { get; }
         public int MAP_HEIGHT { get; }
 
+        public Position positionOfEyeOfStorm { get; set; }
+
         public Map(int mapWidth, int mapHeight, List<List<string>> scenarioConfiguration)
         {
             this.MAP_WIDTH = mapWidth;
@@ -149,6 +151,12 @@ namespace GameData.network.util.world
             return cities;
         }
 
+
+        public bool IsMapFieldADesertField(MapField mapField)
+        {
+            return mapField.TileType.Equals(TileType.FLAT_SAND.ToString()) || mapField.TileType.Equals(TileType.DUNE.ToString());
+        }
+
         /// <summary>
         /// prints a map to the console for debugging purpose
         /// </summary>
@@ -162,7 +170,13 @@ namespace GameData.network.util.world
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    builder.Append(GetMapFieldAtPosition(x, y).TileType.ToString() + ", ");
+                    builder.Append(GetMapFieldAtPosition(x, y).TileType.ToString());
+
+                    if (GetMapFieldAtPosition(x,y).isInSandstorm)
+                    {
+                        builder.Append(" x ");
+                    }
+                    builder.Append(", ");
                 }
                 builder.Append("\n");
             }

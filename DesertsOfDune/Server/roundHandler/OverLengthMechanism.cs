@@ -5,7 +5,7 @@ using GameData.server.roundHandler;
 
 namespace GameData.network.util.world
 {
-    public class OverLengthMechanism : SandstormPhase
+    public class OverLengthMechanism
     {
         private bool firstOverleghtRound;
         private EarthQuake earthQuake;
