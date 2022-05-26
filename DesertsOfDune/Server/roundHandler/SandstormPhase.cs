@@ -35,7 +35,13 @@ namespace GameData.server.roundHandler
         /// </summary>
         private void MoveStormToRandomNeighborField()
         {
-            
+            List<MapField> neighbors = this.map.GetNeighborFields(eyeOfStorm);
+
+            // chose a random neighbor
+            Random random = new Random();
+            int neighborIndex = random.Next(neighbors.Count);
+
+            eyeOfStorm = neighbors[neighborIndex];
         }
 
         private MapField GetRandomStartField()
