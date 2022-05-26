@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using GameData.Configuration;
 using GameData.network.controller;
 using GameData.network.util;
+using GameData.network.util.world;
 using Serilog;
 using Server.Configuration;
 using Server.parser.commandLineParser;
+using Server.roundHandler.duneMovementHandler;
 
 namespace Server
 {
@@ -41,6 +43,16 @@ namespace Server
 
             LoadConfigurationFiles();
             Log.Debug("Loaded configuration files");
+
+            Map map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
+            map.DrawMapToConsole();
+
+            DuneMovementPhase handler = new DuneMovementPhase(map);
+            for (int i = 0; i < 10; i++)
+            {
+                handler.Execute();
+                map.DrawMapToConsole();
+            }
         }
 
         /// <summary>

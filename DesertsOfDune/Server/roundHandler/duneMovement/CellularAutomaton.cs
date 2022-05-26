@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CommandLine;
 using GameData.network.util.enums;
 using GameData.network.util.world;
 using GameData.network.util.world.mapField;
+using Serilog;
 
 namespace Server.roundHandler.duneMovementHandler
 {
@@ -18,7 +20,7 @@ namespace Server.roundHandler.duneMovementHandler
         /// <example>
         /// born = {2, 3} means, that a cell need 2 or 3 neighbor cells, that are alive, to spawn
         /// </example>
-        private readonly List<int> born;
+        private List<int> born;
 
 
         /// <summary>
@@ -27,7 +29,7 @@ namespace Server.roundHandler.duneMovementHandler
         /// <example>
         /// born = {2, 3} means, that a cell need 2 or 3 neighbor cells, that are alive, to survive
         /// </example>
-        private readonly List<int> surive;
+        private List<int> survive;
 
         private Map map;
 
@@ -53,8 +55,8 @@ namespace Server.roundHandler.duneMovementHandler
             string bornRule = transitionRule.Split("/")[0].Substring(1);
             string surviveRule = transitionRule.Split("/")[1].Substring(1);
 
-            bornRule.ToCharArray().Cast<int>();
-            surviveRule.ToCharArray().Cast<int>();
+            born = Array.ConvertAll(bornRule.ToCharArray(), c => (int)Char.GetNumericValue(c)).ToList();
+            survive = Array.ConvertAll(surviveRule.ToCharArray(), c => (int)Char.GetNumericValue(c)).ToList();
         }
 
         /// <summary>
@@ -102,7 +104,7 @@ namespace Server.roundHandler.duneMovementHandler
                     MapField cell = map.GetMapFieldAtPosition(x, y);
 
                     // checks, if the cell is a desert field, which can changed and is not constant.
-                    if (cell.GetType().Equals(TileType.FLAT.ToString()) || cell.GetType().Equals(TileType.DUNE.ToString()))
+                    if (cell.TileType.Equals(TileType.FLAT_SAND.ToString()) || cell.TileType.Equals(TileType.DUNE.ToString()))
                     {
                         // get the number of alive cells
                         int numberOfAliveNeighborCells = GetNumberOfAliveNeighborCells(cell);
@@ -114,21 +116,23 @@ namespace Server.roundHandler.duneMovementHandler
                             newDune.Character = cell.Character;
 
                             map.SetMapFieldAtPosition(newDune, x, y);
+                            Log.Debug("Cell at {x}, {y} spawned", x, y);
                             continue;
                         }
 
-                        if (surive.Contains(numberOfAliveNeighborCells))
+                        if (survive.Contains(numberOfAliveNeighborCells))
                         {
                             // cell survives, so nothing changes
                             continue;
                         }
                         
                         // cell will die, so will be a flat sand
-                        MapField newFlatSand= new FlatSand(cell.HasSpice, cell.isInSandstorm, cell.stormEye);
+                        MapField newFlatSand = new FlatSand(cell.HasSpice, cell.isInSandstorm, cell.stormEye);
                         newFlatSand.Character = cell.Character;
+                        Log.Debug("Cell at {x}, {y} died", x, y);
 
                         map.SetMapFieldAtPosition(newFlatSand, x, y);
-                        
+
                     }
                 }
             }

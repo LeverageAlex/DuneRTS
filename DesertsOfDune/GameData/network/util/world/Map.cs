@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using GameData.network.util.enums;
 using GameData.network.util.world.mapField;
+using Serilog;
 
 namespace GameData.network.util.world
 {
@@ -25,6 +27,10 @@ namespace GameData.network.util.world
             CreateMapFromScenario(scenarioConfiguration);
         }
 
+        /// <summary>
+        /// create a map with detailed information based on the given scenario (only field types)
+        /// </summary>
+        /// <param name="scenarioConfiguration">the "array" of the field types of the map / scenario</param>
         private void CreateMapFromScenario(List<List<string>> scenarioConfiguration)
         {
             fields = new MapField[MAP_HEIGHT, MAP_WIDTH];
@@ -32,7 +38,7 @@ namespace GameData.network.util.world
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    fields[y, x] = new MapField(scenarioConfiguration[y][x], x, y);
+                    fields[y, x] = new MapField(scenarioConfiguration[x][(MAP_HEIGHT-1)-y], x, y);
                 }
             }
         }
@@ -93,7 +99,7 @@ namespace GameData.network.util.world
         {
             if (IsFieldOnMap(x, y))
             {
-                return this.fields[y,x];
+                return this.fields[(MAP_HEIGHT-1)-y,x];
             } else
             {
                 return null;
@@ -111,7 +117,7 @@ namespace GameData.network.util.world
         {
             if (IsFieldOnMap(x, y))
             {
-                this.fields[y, x] = newField;
+                this.fields[(MAP_HEIGHT-1)-y, x] = newField;
                 newField.XCoordinate = x;
                 newField.ZCoordinate = y;
                 return true;
@@ -141,6 +147,29 @@ namespace GameData.network.util.world
             }
 
             return cities;
+        }
+
+        /// <summary>
+        /// prints a map to the console for debugging purpose
+        /// </summary>
+        public void DrawMapToConsole()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            builder.Append("------------------------------------- \n");
+
+            for (int x = 0; x < MAP_WIDTH; x++)
+            {
+                for (int y = 0; y < MAP_HEIGHT; y++)
+                {
+                    builder.Append(GetMapFieldAtPosition(x, y).TileType.ToString() + ", ");
+                }
+                builder.Append("\n");
+            }
+
+            builder.Append("\n");
+
+            Log.Debug(builder.ToString());
         }
     }
 }

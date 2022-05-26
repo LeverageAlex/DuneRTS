@@ -10,7 +10,7 @@ namespace GameData.network.util.enums
     public enum TileType
     {
         CITY,
-        FLAT,
+        FLAT_SAND,
         DUNE,
         PLATEAU,
         MOUNTAIN
