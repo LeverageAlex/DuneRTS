@@ -29,11 +29,6 @@ namespace Server
         public ServerMessageController messageController { get; set; }
 
         /// <summary>
-        /// the identifier of this party / lobby
-        /// </summary>
-        public string LobbyCode { get; }
-
-        /// <summary>
         /// the amount of ai clients joined to this party
         /// </summary>
         public int CpuCount { get; }
@@ -46,19 +41,21 @@ namespace Server
         /// <summary>
         /// hides the constructor for implementing the singleton pattern
         /// </summary>
-        /// <param name="lobbyCode">the unique identifier of this party</param>
-        private Party(string lobbyCode)
+        private Party()
         {
-            LobbyCode = lobbyCode;
             connectedClients = new List<Client>();
 
-            Log.Debug("A new party was created with the code: " + lobbyCode);
+            Log.Debug("A new party was created!");
         }
 
-        public static Party GetInstance(string lobbyCode)
+        /// <summary>
+        /// get the reference to the current instance for implementing the singleton pattern
+        /// </summary>
+        /// <returns></returns>
+        public static Party GetInstance()
         {
             if (singleton == null) {
-                singleton = new Party(lobbyCode);
+                singleton = new Party();
             }
             return singleton;
         }

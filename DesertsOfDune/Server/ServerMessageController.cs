@@ -29,36 +29,14 @@ namespace Server
         }
 
         /// <summary>
-        /// Client sends a CreateMessage if he wants to create a new party.
-        /// Therefore the client has to send a lobby for a unique identification of the party
-        /// and the cpuCount which specifies how many AIPlayer participate.
-        /// </summary>
-        /// <param name="msg">CreateMessage with the info of lobbyCode and cpuCount</param>
-        public void OnCreateMessage(CreateMessage msg)
-        {
-            //TODO: check creation
-            party = Party.GetInstance(msg.lobbyCode);
-            party.messageController = this;
-        }
-
-        /// <summary>
         /// Client requests to join a party with a clintName and a flag if he is player or spectator.
         /// To join to the party, the connectionCode from the JoinMessage has to be equal to the lobbyCode of the created party.
         /// </summary>
         /// <param name="msg">JoinMessage with the value clientName, connectionCode and active flag if he is a player.</param>
         /// <param name="sessionID">the session id of the client, who wants to join</param>
         /// TODO: handle reconnect
-        /// TODO: send game config message
         public void OnJoinMessage(JoinMessage msg, string sessionID)
         {
-            // check, whether the connection code is correct
-            if (msg.connectionCode != party.LobbyCode)
-            {
-                // not a valid connection code, so send error
-                Log.Debug("The client " + msg.clientName + " with the ID = " + sessionID + " requested to join the server with a wrong lobby code");
-                DoSendError(005, "The lobby with the code " + msg.connectionCode + " doesn't exist", sessionID);
-                return;
-            }
             Client client;
 
             // check, whether the new client is a player or spectator
