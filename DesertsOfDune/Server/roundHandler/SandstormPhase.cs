@@ -7,34 +7,47 @@ using Server.roundHandler;
 namespace GameData.server.roundHandler
 {
     /// <summary>
-    /// This class handles the SandstormPhase.
+    /// Represents the game phase, which handles the sandstorm
     /// </summary>
     public class SandstormPhase : IGamePhase
     {
+        /// <summary>
+        /// the central field of the storm
+        /// </summary>
         private MapField eyeOfStorm;
-        private MapField[][] strom;
-        private MapField field;
-        private GameData.gameObjects.RoundHandler parent;
+
+        private Map map;
 
         /// <summary>
-        /// This method handles the walk for the Sandstorm
+        /// create a new sandworm phase object and set the eye of the storm to a random start field
         /// </summary>
-        /// <returns>true, if movement was possible</returns>
-        public bool RandomWalk()
+        /// <param name="map"></param>
+        public SandstormPhase(Map map)
         {
-            // TODO implement logic
-            return false;
+            this.map = map;
+            this.eyeOfStorm = GetRandomStartField();
         }
 
+
+
         /// <summary>
-        /// This method creates a new Storm if 
+        /// moves the eye of the storm to a random neighbor field
         /// </summary>
-        /// <returns></returns>
-        public bool CalculateNewStrom()
+        private void MoveStormToRandomNeighborField()
         {
-            // TODO implement logic
-            return false;
+            
         }
+
+        private MapField GetRandomStartField()
+        {
+            Random random = new Random();
+            int randomX = random.Next(this.map.MAP_WIDTH);
+            int randomY = random.Next(this.map.MAP_HEIGHT);
+
+            return this.map.GetMapFieldAtPosition(randomX, randomY);
+        }
+
+        
 
         public void Execute()
         {
