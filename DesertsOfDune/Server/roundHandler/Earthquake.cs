@@ -31,7 +31,7 @@ namespace GameData.server.roundHandler
             RemoveSandworm();
             foreach (MapField field in fields)
             {
-                if (field.TileType == Enum.GetName(typeof(TileType), TileType.MOUNTAIN) || field.TileType == Enum.GetName(typeof(TileType), TileType.PLATEAU))
+                if (field.TileType == Enum.GetName(typeof(TileType), TileType.MOUNTAINS) || field.TileType == Enum.GetName(typeof(TileType), TileType.PLATEAU))
                 {
                     field.TileType = Enum.GetName(typeof(TileType), TileType.DUNE);
                 }

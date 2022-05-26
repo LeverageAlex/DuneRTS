@@ -55,9 +55,9 @@ namespace GameData.network.util.world
         {
             List<MapField> neighbors = new List<MapField>();
 
-            for (int dx = -1; dx <= -1; dx++)
+            for (int dx = -1; dx <= 1; dx++)
             {
-                for (int dy = -1; dy <= -1; dy++)
+                for (int dy = -1; dy <= 1; dy++)
                 {
                     // if dx = dy = 0, the field is the field itself and not a neighbor
                     if (dx != 0 || dy != 0)

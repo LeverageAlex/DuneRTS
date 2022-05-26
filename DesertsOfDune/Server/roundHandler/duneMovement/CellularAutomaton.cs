@@ -89,7 +89,7 @@ namespace Server.roundHandler.duneMovementHandler
         /// <returns></returns>
         private bool CellIsAlive(MapField field)
         {
-            return field.TileType.Equals(TileType.DUNE.ToString()) || field.TileType.Equals(TileType.MOUNTAIN.ToString()) || field.TileType.Equals(TileType.CITY.ToString());
+            return field.TileType.Equals(TileType.DUNE.ToString()) || field.TileType.Equals(TileType.MOUNTAINS.ToString()) || field.TileType.Equals(TileType.CITY.ToString());
         }
 
         /// <summary>
@@ -116,7 +116,6 @@ namespace Server.roundHandler.duneMovementHandler
                             newDune.Character = cell.Character;
 
                             map.SetMapFieldAtPosition(newDune, x, y);
-                            Log.Debug("Cell at {x}, {y} spawned", x, y);
                             continue;
                         }
 
@@ -129,7 +128,6 @@ namespace Server.roundHandler.duneMovementHandler
                         // cell will die, so will be a flat sand
                         MapField newFlatSand = new FlatSand(cell.HasSpice, cell.isInSandstorm, cell.stormEye);
                         newFlatSand.Character = cell.Character;
-                        Log.Debug("Cell at {x}, {y} died", x, y);
 
                         map.SetMapFieldAtPosition(newFlatSand, x, y);
 
