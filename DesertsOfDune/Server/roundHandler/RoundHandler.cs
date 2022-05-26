@@ -93,6 +93,10 @@ namespace GameData.gameObjects
             {
                 // execute the server side rounds
                 duneMovementPhase.Execute();
+                sandstormPhase.Execute();
+                sandwormPhase.Execute();
+                clonePhase.Execute();
+                characterTraitPhase.Execute();
             }
         }
 
