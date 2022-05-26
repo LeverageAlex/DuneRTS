@@ -44,5 +44,7 @@ namespace GameData.network.util.world
         {
             return false;
         }
+
+        public Position[] GetNeighborFields
     }
 }

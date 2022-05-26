@@ -20,7 +20,7 @@ namespace GameData.network.util.world.mapField
         /// <param name="stormEye">tells weather the field is in the storm eye or not</param>
         public City(bool hasSpice, bool isInSandstorm, Position stormEye) : base(enums.TileType.CITY, enums.Elevation.low, hasSpice, isInSandstorm, stormEye)
         {
-
+            IsCityField = true;
         }
 
         /// <summary>

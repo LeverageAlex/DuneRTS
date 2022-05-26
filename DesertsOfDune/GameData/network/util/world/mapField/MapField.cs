@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using GameData.network.util.enums;
 using Newtonsoft.Json;
@@ -50,7 +51,7 @@ namespace GameData.network.util.world
         [JsonIgnore]
         public int ZCoordinate { get { return zCoordinate; } set { zCoordinate = value; } }
 
-        private bool isCityField;
+        protected bool IsCityField;
         [JsonIgnore]
         public string TileType { get { return tileType; } set { tileType = value; } }
 
