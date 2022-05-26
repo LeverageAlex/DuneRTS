@@ -92,6 +92,11 @@ namespace GameData.network.util.world
             this.stormEye = stormEye;
         }
 
+        public MapField(string tileType)
+        {
+            this.tileType = tileType;
+        }
+
         /// <summary>
         /// This method changes the elevation of the map field
         /// </summary>

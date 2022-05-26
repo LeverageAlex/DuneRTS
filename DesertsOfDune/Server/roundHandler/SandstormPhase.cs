@@ -9,7 +9,7 @@ namespace GameData.server.roundHandler
     /// <summary>
     /// This class handles the SandstormPhase.
     /// </summary>
-    public class SandstormPhase : GamePhase
+    public class SandstormPhase : IGamePhase
     {
         private MapField eyeOfStorm;
         private MapField[][] strom;
@@ -36,7 +36,7 @@ namespace GameData.server.roundHandler
             return false;
         }
 
-        public void Execut()
+        public void Execute()
         {
             throw new NotImplementedException();
         }

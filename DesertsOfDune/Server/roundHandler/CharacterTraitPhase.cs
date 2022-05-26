@@ -9,7 +9,7 @@ namespace GameData.server.roundHandler
     /// <summary>
     /// This class handles the character trait phase.
     /// </summary>
-    public class CharacterTraitPhase : GamePhase
+    public class CharacterTraitPhase : IGamePhase
     {
         // todo implement class character
         // private List<Character> charactersAlive;
@@ -17,7 +17,7 @@ namespace GameData.server.roundHandler
         private RoundHandler parent;
 
 
-        public void Execut()
+        public void Execute()
         {
             throw new NotImplementedException();
         }

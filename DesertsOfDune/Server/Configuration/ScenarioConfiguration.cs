@@ -12,6 +12,12 @@ namespace Server.Configuration
         [JsonProperty]
         public List<List<string>> scenario { get; set; }
 
+        [JsonIgnore]
+        public static int SCENARIO_WIDTH;
+
+        [JsonIgnore]
+        public static int SCENARIO_HEIGHT;
+
         private static ScenarioConfiguration singleton;
 
         /// <summary>
@@ -42,6 +48,9 @@ namespace Server.Configuration
         public static void CreateInstance(ScenarioConfiguration scenarioConfigObject)
         {
             singleton = (ScenarioConfiguration)scenarioConfigObject.MemberwiseClone();
+
+            SCENARIO_WIDTH = scenarioConfigObject.scenario[0].Count;
+            SCENARIO_HEIGHT = scenarioConfigObject.scenario.Count;
         }
     }
 }

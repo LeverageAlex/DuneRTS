@@ -9,7 +9,7 @@ namespace GameData.server.roundHandler
     /// <summary>
     /// This class is responsible for the DuneMovement.
     /// </summary>
-    public class DuneMovementPhase : GamePhase
+    public class DuneMovementPhase : IGamePhase
     {
         private MapField[][] fields;
         private GameData.gameObjects.RoundHandler parent;
@@ -25,7 +25,7 @@ namespace GameData.server.roundHandler
             return false;
         }
 
-        public void Execut()
+        public void Execute()
         {
             throw new NotImplementedException();
         }

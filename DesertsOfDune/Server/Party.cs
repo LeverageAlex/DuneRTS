@@ -11,6 +11,8 @@ using System.Runtime.ExceptionServices;
 using System.Linq;
 using WebSocketSharp;
 using CommandLine;
+using Server.Configuration;
+using GameData.network.util.world.mapField;
 
 namespace Server
 {
@@ -39,11 +41,27 @@ namespace Server
         private readonly List<Client> connectedClients;
 
         /// <summary>
-        /// hides the constructor for implementing the singleton pattern
+        /// the round handler for this party, which execute the rounds in the correct order and handles the user input
         /// </summary>
+        private readonly RoundHandler roundHandler;
+
+        /// <summary>
+        /// the map of this game / party
+        /// </summary>
+        private readonly Map map;
+
+        /// <summary>
+        /// hides the constructor for implementing the singleton pattern and create all necessary instances
+        /// </summary>
+        /// <remarks>
+        /// creats a new round handler, with the configuration values from the the party configuration.
+        /// So ensure, that the party configuration is properly loaded!
+        /// </remarks>
         private Party()
         {
             connectedClients = new List<Client>();
+            map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
+            roundHandler = new RoundHandler(PartyConfiguration.GetInstance().numbOfRounds, PartyConfiguration.GetInstance().spiceMinimum, map);
 
             Log.Debug("A new party was created!");
         }
@@ -54,7 +72,8 @@ namespace Server
         /// <returns></returns>
         public static Party GetInstance()
         {
-            if (singleton == null) {
+            if (singleton == null)
+            {
                 singleton = new Party();
             }
             return singleton;
@@ -91,18 +110,27 @@ namespace Server
                 // there are no players
                 Log.Debug("There were no active clients, so player found");
                 return new List<Player>();
-            } else
+            }
+            else
             {
                 return (List<Player>)foundActiveClients.Cast<Player>();
             }
         }
 
         /// <summary>
-        /// starts a new party, so prepare it and execute it until a winning condition becomes true or an error occur
+        /// starts a new game, so place the characters of the players around their cities and trigger the first round
         /// </summary>
         public void Start()
         {
+            Log.Debug("Matching the cities to the players...");
+            MatchGreatHouseToCity();
 
+            Log.Debug("Place the characters of each player around it's city...");
+            PlaceCharactersAroundCity();
+
+            Log.Information("The party was prepared, so both player chose their Greathouse. The party now will start ... ");
+            roundHandler.NextRound();
+            Log.Debug("Triggered first round by round handler");
         }
 
         /// <summary>
@@ -172,6 +200,60 @@ namespace Server
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// decide for each city, which player will use this city and match the city to the player
+        /// </summary>
+        public void MatchGreatHouseToCity()
+        {
+            List<City> cities = map.GetCitiesOnMap();
+            List<Player> players = GetActivePlayers();
+
+            // pick the city for the first player and the second player
+            Random random = new Random();
+            if (random.NextDouble() < 0.5)
+            {
+                players[0].City = cities[0];
+                players[1].City = cities[1];
+            }
+            else
+            {
+                players[0].City = cities[1];
+                players[1].City = cities[0];
+            }
+
+        }
+
+        /// <summary>
+        /// places all characters of all players randomly around their cities
+        /// </summary>
+        public void PlaceCharactersAroundCity()
+        {
+            List<Player> players = GetActivePlayers();
+
+            foreach (Player player in players)
+            {
+                // get city and place the characters from the great house around
+                List<MapField> neighborFieldsOfCity = map.GetNeighborFields(player.City);
+
+                // place the characters around the city
+                foreach (Character character in player.UsedGreatHouse.Characters)
+                {
+                    MapField fieldForCharacter = GetRandomField(neighborFieldsOfCity);
+                    fieldForCharacter.Character = character;
+                    character.CurrentMapfield = fieldForCharacter;
+
+                    neighborFieldsOfCity.Remove(fieldForCharacter);
+                }
+                
+            }
+        }
+
+        private MapField GetRandomField(List<MapField> fields)
+        {
+            Random random = new Random();
+            return fields[random.Next(fields.Count)];
         }
     }
 }

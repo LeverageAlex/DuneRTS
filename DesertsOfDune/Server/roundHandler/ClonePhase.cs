@@ -13,7 +13,7 @@ namespace GameData.server.roundHandler
     /// <summary>
     /// This class handles the ClonePhase.
     /// </summary>
-    public class ClonePhase : GamePhase
+    public class ClonePhase : IGamePhase
     {
         private double cloneProbability;
         private MapField[,] map;
@@ -70,7 +70,7 @@ namespace GameData.server.roundHandler
             MapField mapField =  DetermineCloneSpawnPosition(city);
             mapField.Character = character;
             character.ResetData();
-            Party.GetInstance("lobbycode").messageController.DoSpawnCharacterDemand(character);
+            Party.GetInstance().messageController.DoSpawnCharacterDemand(character);
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace GameData.server.roundHandler
             return random.Next(start, end);
         }
 
-        public void Execut()
+        public void Execute()
         {
             throw new NotImplementedException();
         }

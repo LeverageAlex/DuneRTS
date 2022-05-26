@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using GameData.network.util.enums;
+using GameData.network.util.world.mapField;
 
 namespace GameData.network.util.world
 {
@@ -13,10 +16,25 @@ namespace GameData.network.util.world
         private readonly int MAP_WIDTH;
         private readonly int MAP_HEIGHT;
 
-        public Map(int mapWidth, int mapHeight)
+        public Map(int mapWidth, int mapHeight, List<List<string>> scenarioConfiguration)
         {
             this.MAP_WIDTH = mapWidth;
             this.MAP_HEIGHT = mapHeight;
+
+            // check, that the scenarionConfiguration has the correct sizes
+            CreateMapFromScenario(scenarioConfiguration);
+        }
+
+        private void CreateMapFromScenario(List<List<string>> scenarioConfiguration)
+        {
+            fields = new MapField[MAP_HEIGHT, MAP_WIDTH];
+            for (int x = 0; x < MAP_WIDTH; x++)
+            {
+                for (int y = 0; y < MAP_HEIGHT; y++)
+                {
+                    fields[y, x] = new MapField(scenarioConfiguration[y][x]);
+                }
+            }
         }
 
         /// <summary>
@@ -80,6 +98,27 @@ namespace GameData.network.util.world
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// gets a list of all cities on the map
+        /// </summary>
+        /// <returns>a list of all cities on the map</returns>
+        public List<City> GetCitiesOnMap()
+        {
+            List<City> cities = new List<City>();
+            for (int x = 0; x < MAP_WIDTH; x++)
+            {
+                for (int y = 0; y < MAP_HEIGHT; y++)
+                {
+                    if (fields[y, x].TileType == TileType.CITY.ToString())
+                    {
+                        cities.Add((City)fields[y, x]);
+                    }
+                }
+            }
+
+            return cities;
         }
     }
 }
