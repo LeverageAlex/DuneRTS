@@ -18,6 +18,8 @@ namespace GameData.network.util.world
         public int MAP_WIDTH { get; }
         public int MAP_HEIGHT { get; }
 
+        public Position positionOfEyeOfStorm { get; set; }
+
         public Map(int mapWidth, int mapHeight, List<List<string>> scenarioConfiguration)
         {
             this.MAP_WIDTH = mapWidth;
@@ -147,6 +149,12 @@ namespace GameData.network.util.world
             }
 
             return cities;
+        }
+
+
+        public bool IsMapFieldADesertField(MapField mapField)
+        {
+            return mapField.TileType.Equals(TileType.FLAT_SAND.ToString()) || mapField.TileType.Equals(TileType.DUNE.ToString());
         }
 
         /// <summary>

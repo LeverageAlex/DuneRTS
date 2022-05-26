@@ -25,7 +25,7 @@ namespace GameData.network.util.world
             set { hasSpice = value; }
         }
         [JsonProperty]
-        public bool isInSandstorm { get; }
+        public bool isInSandstorm { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public Position stormEye { get; }
         private Elevation elevation;

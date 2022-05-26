@@ -104,7 +104,7 @@ namespace Server.roundHandler.duneMovementHandler
                     MapField cell = map.GetMapFieldAtPosition(x, y);
 
                     // checks, if the cell is a desert field, which can changed and is not constant.
-                    if (cell.TileType.Equals(TileType.FLAT_SAND.ToString()) || cell.TileType.Equals(TileType.DUNE.ToString()))
+                    if (this.map.IsMapFieldADesertField(cell))
                     {
                         // get the number of alive cells
                         int numberOfAliveNeighborCells = GetNumberOfAliveNeighborCells(cell);
