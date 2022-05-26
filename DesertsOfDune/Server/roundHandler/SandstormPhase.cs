@@ -28,6 +28,8 @@ namespace GameData.server.roundHandler
         {
             this.map = map;
             this.eyeOfStorm = GetRandomStartField();
+
+            ChangeStatusOfMapFields();
         }
 
         /// <summary>
@@ -48,7 +50,7 @@ namespace GameData.server.roundHandler
         /// <summary>
         /// updates the "isInSandstorm"-Status of every map field
         /// </summary>
-        private void changeStatusOfMapFields()
+        private void ChangeStatusOfMapFields()
         {
             List<MapField> neighbors = this.map.GetNeighborFields(eyeOfStorm);
 
@@ -92,30 +94,21 @@ namespace GameData.server.roundHandler
         {
             List<MapField> mapFieldsInStorm = this.map.GetNeighborFields(eyeOfStorm);
 
-            Random random = new Random();
-
             // change the evelation of the eye of the storm, if it is a desert field
             if (this.map.IsMapFieldADesertField(eyeOfStorm))
             {
-                if (random.Next() < 0.5)
-                {
-                    MapField newDune = new Dune(eyeOfStorm.HasSpice, eyeOfStorm.isInSandstorm, eyeOfStorm.stormEye);
-                    newDune.Character = eyeOfStorm.Character;
-
-                    map.SetMapFieldAtPosition(newDune, eyeOfStorm.XCoordinate, eyeOfStorm.ZCoordinate);
-                }
-                else
-                {
-                    MapField newFlatSand = new FlatSand(eyeOfStorm.HasSpice, eyeOfStorm.isInSandstorm, eyeOfStorm.stormEye);
-                    newFlatSand.Character = eyeOfStorm.Character;
-
-                    map.SetMapFieldAtPosition(newFlatSand, eyeOfStorm.XCoordinate, eyeOfStorm.ZCoordinate);
-                }
+                ChangeDesertField(eyeOfStorm);
             }
 
             // change the evelation of the neighbor fields of the eye of the storm, if they are a desert field
 
-            foreach ()
+            foreach (MapField field in mapFieldsInStorm)
+            {
+                if (this.map.IsMapFieldADesertField(field))
+                {
+                    ChangeDesertField(field);
+                }
+            }
         }
 
         /// <summary>
@@ -146,7 +139,9 @@ namespace GameData.server.roundHandler
 
         public void Execute()
         {
-            throw new NotImplementedException();
+            MoveStormToRandomNeighborField();
+            ChangeStatusOfMapFields();
+            RandomlyChangeDesertFieldsInStorm();
         }
     }
 }

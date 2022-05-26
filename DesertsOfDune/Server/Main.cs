@@ -4,6 +4,7 @@ using GameData.Configuration;
 using GameData.network.controller;
 using GameData.network.util;
 using GameData.network.util.world;
+using GameData.server.roundHandler;
 using Serilog;
 using Server.Configuration;
 using Server.parser.commandLineParser;
@@ -48,9 +49,12 @@ namespace Server
             map.DrawMapToConsole();
 
             DuneMovementPhase handler = new DuneMovementPhase(map);
+            SandstormPhase handler2 = new SandstormPhase(map);
+
             for (int i = 0; i < 10; i++)
             {
                 handler.Execute();
+                handler2.Execute();
                 map.DrawMapToConsole();
             }
         }

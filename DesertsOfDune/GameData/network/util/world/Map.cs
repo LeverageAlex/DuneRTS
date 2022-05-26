@@ -170,7 +170,13 @@ namespace GameData.network.util.world
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    builder.Append(GetMapFieldAtPosition(x, y).TileType.ToString() + ", ");
+                    builder.Append(GetMapFieldAtPosition(x, y).TileType.ToString());
+
+                    if (GetMapFieldAtPosition(x,y).isInSandstorm)
+                    {
+                        builder.Append(" x ");
+                    }
+                    builder.Append(", ");
                 }
                 builder.Append("\n");
             }
