@@ -31,6 +31,7 @@
     <None Remove="Configuration\ConfigurationFiles\" />
     <None Remove="ClientManagement\" />
     <None Remove="ClientManagement\Clients\" />
+    <None Remove="roundHandler\duneMovement\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="parser\" />
@@ -39,5 +40,6 @@
     <Folder Include="Configuration\ConfigurationFiles\" />
     <Folder Include="ClientManagement\" />
     <Folder Include="ClientManagement\Clients\" />
+    <Folder Include="roundHandler\duneMovement\" />
   </ItemGroup>
 </Project>

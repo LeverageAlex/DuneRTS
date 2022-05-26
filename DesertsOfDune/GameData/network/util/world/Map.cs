@@ -13,8 +13,8 @@ namespace GameData.network.util.world
     {
         private MapField[,] fields;
 
-        private readonly int MAP_WIDTH;
-        private readonly int MAP_HEIGHT;
+        public int MAP_WIDTH { get; }
+        public int MAP_HEIGHT { get; }
 
         public Map(int mapWidth, int mapHeight, List<List<string>> scenarioConfiguration)
         {
@@ -32,7 +32,7 @@ namespace GameData.network.util.world
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    fields[y, x] = new MapField(scenarioConfiguration[y][x]);
+                    fields[y, x] = new MapField(scenarioConfiguration[y][x], x, y);
                 }
             }
         }
@@ -97,6 +97,28 @@ namespace GameData.network.util.world
             } else
             {
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// sets a new field at a given position in the map and override the existing map tile at this position
+        /// </summary>
+        /// <param name="newField">the new map field</param>
+        /// <param name="x">x-coordinate of the new map field</param>
+        /// <param name="y">y-coordinate of the new map field</param>
+        /// <returns>true, if the given position was valid, else return false</returns>
+        public bool SetMapFieldAtPosition(MapField newField, int x, int y)
+        {
+            if (IsFieldOnMap(x, y))
+            {
+                this.fields[y, x] = newField;
+                newField.XCoordinate = x;
+                newField.ZCoordinate = y;
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
