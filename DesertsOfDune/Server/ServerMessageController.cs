@@ -129,11 +129,14 @@ namespace Server
 
         }
 
+        /// <summary>
+        /// executed, when a player wants to move his character along a path while it's his turn
+        /// </summary>
+        /// <param name="msg">contains informations about the player, the character he wants to move and the path he wants to move his character along</param>
+        /// <exception cref="NotImplementedException"></exception>
         public void OnMovementRequestMessage(MovementRequestMessage msg)
         {
             throw new NotImplementedException("not implemented completely");
-
-        //TODO: get the scenario of the party to get its width and height
 
             //request from client to move a character
 
@@ -157,7 +160,8 @@ namespace Server
                 }
             }
 
-            foreach (var position in msg.specs.path)
+            List<Position> path = new List<Position>();
+            foreach (var position in path)
             {
                 //check if Character has enough Movement Points
                 if (movingCharacter.MPcurrent > 0)
@@ -169,20 +173,28 @@ namespace Server
                         if (party.map.fields[position.x, position.y].tileType != "Mountain" && party.map.fields[position.x, position.y].tileType != "City") //check needed and not implemented utils
                         {
                             movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.x, position.y]); //move character 1 field along its path
+                            path.Add(position);
                         }
                     }
+                    else
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    break;
                 }
             }
-
-            //int clientID
-            //int characterID
-            //Specs
-            //path
+            DoSendMovementDemand(msg.clientID, msg.characterID, path);
         }
 
+        /// <summary>
+        /// executed, when a player want to do a action with his character while it's his turn
+        /// </summary>
+        /// <param name="msg">contains informations about the player, the character he wants to do a action with and the action he wants his character to do</param>
         public void OnActionRequestMessage(ActionRequestMessage msg)
         {
-            throw new NotImplementedException("not implemented completely");
 
             //request from client to run an action
             Player activePlayer = null;
@@ -209,23 +221,33 @@ namespace Server
                 }
             }
 
+            //set Attack as standard enum and change it if needed
+            ActionType action = ActionType.ATTACK;
+
             if (actionCharacter.APcurrent > 0)
             {
-                switch (Enum.Parse(typeof(ActionType), msg.action))
+                //check which action the player wants to do with his character
+                switch (action)
                 {
                     case ActionType.ATTACK:
+                        action = ActionType.ATTACK;
                         actionCharacter.Atack(targetCharacter);
                         break;
 
                     case ActionType.COLLECT:
+                        action = ActionType.COLLECT;
                         actionCharacter.CollectSpice();
                         break;
 
                     case ActionType.TRANSFER:
+                        action = ActionType.TRANSFER;
+                        throw new NotImplementedException("not implemented");
                         //actionCharacter.GiftSpice(targetCharacter, amount);
                         break;
 
+                        //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
                     case ActionType.KANLY:
+                        action = ActionType.KANLY;
                         if (actionCharacter.APcurrent == actionCharacter.APmax)
                         {
                             if (actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBEL) && targetCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBEL))
@@ -236,6 +258,7 @@ namespace Server
                         break;
 
                     case ActionType.FAMILY_ATOMICS:
+                        action = ActionType.FAMILY_ATOMICS;
                         if (actionCharacter.APcurrent == actionCharacter.APmax)
                         {
                             if (actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBEL))
@@ -256,6 +279,7 @@ namespace Server
                         break;
 
                     case ActionType.SPICE_HORDING:
+                        action = ActionType.SPICE_HORDING;
                         if (actionCharacter.APcurrent == actionCharacter.APmax)
                         {
                             if (actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.MENTAT))
@@ -266,6 +290,7 @@ namespace Server
                         break;
 
                     case ActionType.VOICE:
+                        action = ActionType.VOICE;
                         if (actionCharacter.APcurrent == actionCharacter.APmax)
                         {
                             if (actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.BENEGESSERIT))
@@ -276,6 +301,7 @@ namespace Server
                         break;
 
                     case ActionType.SWORD_SPIN:
+                        action = ActionType.SWORD_SPIN;
                         if (actionCharacter.APcurrent == actionCharacter.APmax)
                         {
                             if (actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.FIGHTHER))
@@ -286,13 +312,7 @@ namespace Server
                         break;
                 }
             }
-
-            //int clientID
-            //int characterID
-            //Action
-            //Specs
-            //target
-            //int targetID
+            DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
         }
 
         public void OnTransferRequestMessage(TransferRequestMessage msg)
