@@ -65,6 +65,7 @@ namespace GameData.network.util.world.character
         /// </summary>
         /// <param name="target">the character targeted by the action</param>
         /// <returns>true, if the action was successful</returns>
+        override
         public bool Voice(Character target)
         {
             // TODO: implement logic

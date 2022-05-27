@@ -63,7 +63,8 @@ namespace GameData.network.util.world.character
         /// </summary>
         /// <param name="target">the Nobel that is targeted by the atack</param>
         /// <returns>true, if action was successful</returns>
-        public bool Kanly(Nobel target)
+        override
+        public bool Kanly(Character target)
         {
             // TODO: implement logic.
             return false;
@@ -74,6 +75,7 @@ namespace GameData.network.util.world.character
         /// </summary>
         /// <param name="target">The target Field for the Atack</param>
         /// <returns>true, if the action was successful</returns>
+        override
         public bool AtomicBomb(MapField target)
         {
             // TODO: implement logic.

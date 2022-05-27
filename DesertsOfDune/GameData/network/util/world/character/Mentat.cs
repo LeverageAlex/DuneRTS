@@ -63,6 +63,7 @@ namespace GameData.network.util.world.character
         /// This method represents the action SpiceHoarding of the characterType Mentat
         /// </summary>
         /// <returns>true, if action was successful</returns>
+        override
         public bool SpiceHoarding()
         {
             // TODO: implement logic

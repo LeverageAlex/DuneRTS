@@ -209,7 +209,7 @@ namespace Server
             throw new NotImplementedException("not implemented completely");
 
             //request from client to run an action
-            Player activePlayer;
+            Player activePlayer = null;
             foreach (var player in party.GetActivePlayers())
             {
                 if (player.ClientID == msg.clientID)
@@ -219,8 +219,8 @@ namespace Server
             }
 
             //get the character which should do the action
-            Character actionCharacter;
-            Character targetCharacter;
+            Character actionCharacter = null;
+            Character targetCharacter = null;
             foreach (var character in activePlayer.UsedGreatHouse.Characters)
             {
                 if (character.CharacterId == msg.characterID)
@@ -246,10 +246,10 @@ namespace Server
                         break;
 
                     case ActionType.TRANSFER:
-                      //  actionCharacter.GiftSpice(targetCharacter, amount);
+                        //actionCharacter.GiftSpice(targetCharacter, amount);
                         break;
 
-                    /**case ActionType.KANLY:
+                    case ActionType.KANLY:
                         if (actionCharacter.APcurrent == actionCharacter.APmax)
                         {
                             if (actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBEL) && targetCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBEL))
@@ -262,9 +262,16 @@ namespace Server
                     case ActionType.FAMILY_ATOMICS:
                         if (actionCharacter.APcurrent == actionCharacter.APmax)
                         {
-                            if (actionCharacter.characterType == CharacterType.NOBEL)
+                            if (actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBEL))
                             {
-                                actionCharacter.AtomicBomb(msg.position);
+                                //get the mapfield where the active Character aims to
+                                MapField targetMapField = null;
+                                /*foreach (var mapfield in party.map)
+                                {
+
+                                }*/
+                                
+                                actionCharacter.AtomicBomb(targetMapField);
                             }
                         }
                         break;
@@ -272,7 +279,7 @@ namespace Server
                     case ActionType.SPICE_HORDING:
                         if (actionCharacter.APcurrent == actionCharacter.APmax)
                         {
-                            if (actionCharacter.characterType == CharacterType.MENTAT)
+                            if (actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.MENTAT))
                             {
                                 actionCharacter.SpiceHoarding();
                             }
@@ -282,7 +289,7 @@ namespace Server
                     case ActionType.VOICE:
                         if (actionCharacter.APcurrent == actionCharacter.APmax)
                         {
-                            if (actionCharacter.characterType == CharacterType.BENEGESSERIT)
+                            if (actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.BENEGESSERIT))
                             {
                                 actionCharacter.Voice(targetCharacter);
                             }
@@ -292,12 +299,12 @@ namespace Server
                     case ActionType.SWORD_SPIN:
                         if (actionCharacter.APcurrent == actionCharacter.APmax)
                         {
-                            if (actionCharacter.characterType == CharacterType.FIGHTER)
+                            if (actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.FIGHTHER))
                             {
                                 actionCharacter.SwordSpin();
                             }
                         }
-                        break;**/
+                        break;
                 }
             }
 

@@ -13,7 +13,7 @@ namespace GameData.network.util.world
     public abstract class Character
     {
         [JsonProperty]
-        protected string characterType;
+        public string characterType { get; set; }
         [JsonProperty]
         protected int healthMax;
         [JsonProperty]
@@ -23,11 +23,11 @@ namespace GameData.network.util.world
         [JsonProperty]
         protected int MPmax;
         [JsonProperty]
-        public int MPcurrent { get; }
+        public int MPcurrent { get; set; }
         [JsonProperty]
-        protected int APmax;
+        public int APmax { get; set; }
         [JsonProperty]
-        protected int APcurrent;
+        public int APcurrent { get; set; }
         [JsonProperty]
         protected int attackDamage;
         [JsonProperty]
@@ -293,6 +293,64 @@ namespace GameData.network.util.world
         public bool GiftSpice(Character targetCharacter, int amount)
         {
             targetCharacter.inventoryUsed += amount;
+            return false;
+        }
+
+        /// <summary>
+        /// This method is needed to get overridden by the Noble class to perform the Kanly special aciton
+        /// </summary>
+        /// <param name="targetCharacter"> this is the Character who gets Attacked by the active noble character; needs to be a noble </param>
+        /// <returns></returns>
+        virtual
+        public bool Kanly(Character targetCharacter) 
+        {
+            //Do nothing because only Nobles can perform this move
+            return false;
+        }
+
+        /// <summary>
+        /// This method is needed to get overriden by the Nobel class to perform the AtomicBomb special action
+        /// </summary>
+        /// <param name="target"> this is the Field on the Map where the active Noble character aims its atomic bomb to </param>
+        /// <returns></returns>
+        virtual
+        public bool AtomicBomb(MapField target)
+        {
+            //Do nothing because only Nobles can perform this move
+            return false;
+        }
+
+        /// <summary>
+        /// This method is needed to get overridden by the Mentat class to perform the SpiceHoarding special action
+        /// </summary>
+        /// <returns></returns>
+        virtual
+        public bool SpiceHoarding()
+        {
+            //Do nothing beacuse only Mentats can perform this move
+            return false;
+        }
+
+        /// <summary>
+        /// This method is needed to get overridden by the BeneGesserit class to perform the Voice special action
+        /// </summary>
+        /// <param name="target"> this is the character who gets focused by the active Bene Gesserit character </param>
+        /// <returns></returns>
+        virtual
+        public bool Voice(Character target)
+        {
+            //Do nothing because only BeneGesserits can perform this move
+            return false;
+        }
+
+        /// <summary>
+        /// This method is needed to get overridden by the Fighter class to perform the SwordSpin special attack
+        /// </summary>
+        /// <returns></returns>
+        virtual
+        public bool SwordSpin()
+        {
+            //Do nothing because only Fighters can perform this move
             return false;
         }
     }

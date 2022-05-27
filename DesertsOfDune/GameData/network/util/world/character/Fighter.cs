@@ -60,6 +60,7 @@ namespace GameData.network.util.world.character
         /// This method represents the action SwordSpin of the character type fighter
         /// </summary>
         /// <returns>true, if the action was successful</returns>
+        override
         public bool SwordSpin()
         {
             //TODO: implement logic
