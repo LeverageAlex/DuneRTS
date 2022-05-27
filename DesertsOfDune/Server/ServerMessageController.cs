@@ -163,16 +163,14 @@ namespace Server
                 if (movingCharacter.MPcurrent > 0)
                 {
                     //check if movement is in bounds of the map
-                    /**
-                    if (position.x >= 0 && position.x < scenario.width && position.y >= 0 && position.y < scenario.height)
+                    if (position.x >= 0 && position.x < party.map.MAP_WIDTH && position.y >= 0 && position.y < party.map.MAP_HEIGHT)
                     {
                         //check if movement is on walkable terrain
-                        if (scenario[position.x, position.y].tileType != "Mountain" && scenario[position.x, position.y].tileType != "City") //check needed and not implemented utils
+                        if (party.map.fields[position.x, position.y].tileType != "Mountain" && party.map.fields[position.x, position.y].tileType != "City") //check needed and not implemented utils
                         {
-                            movingCharacter.Movement(movingCharacter.CurrentMapfield, scenario[position.x, position.y]); //move character 1 field along its path
+                            movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.x, position.y]); //move character 1 field along its path
                         }
                     }
-                    **/
                 }
             }
 

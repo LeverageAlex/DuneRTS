@@ -13,7 +13,7 @@ namespace GameData.network.util.world
     public class MapField
     {
         [JsonProperty]
-        private string tileType;
+        public string tileType { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         private int clientID;
         [JsonProperty]
