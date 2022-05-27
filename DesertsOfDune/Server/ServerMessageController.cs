@@ -244,10 +244,13 @@ namespace Server
                             {
                                 //get the mapfield where the active Character aims to
                                 MapField targetMapField = null;
-                                /*foreach (var mapfield in party.map)
+                                foreach (var mapfield in party.map.fields)
                                 {
-
-                                }*/
+                                    if(mapfield.stormEye == msg.specs.target)
+                                    {
+                                        targetMapField = mapfield;
+                                    }
+                                }
                                 
                                 actionCharacter.AtomicBomb(targetMapField);
                             }

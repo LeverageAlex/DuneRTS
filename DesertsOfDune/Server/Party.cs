@@ -48,7 +48,7 @@ namespace Server
         /// <summary>
         /// the map of this game / party
         /// </summary>
-        private readonly Map map;
+        public readonly Map map;
 
         /// <summary>
         /// hides the constructor for implementing the singleton pattern and create all necessary instances

@@ -13,7 +13,7 @@ namespace GameData.network.util.world
     /// </summary>
     public class Map
     {
-        private MapField[,] fields;
+        public MapField[,] fields { get; set; }
 
         public int MAP_WIDTH { get; }
         public int MAP_HEIGHT { get; }
