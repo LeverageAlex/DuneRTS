@@ -6,13 +6,13 @@ namespace GameData.network.messages
     public class TransferRequestMessage : Message
     {
         [JsonProperty]
-        private int ClientID;
+        public int ClientID { get; set; }
         [JsonProperty]
-        private int CharacterID;
+        public int CharacterID { get; set; }
         [JsonProperty]
-        private int TargetID;
+        public int TargetID { get; set; }
         [JsonProperty]
-        private int Amount;
+        public int Amount { get; set; }
 
         public TransferRequestMessage(int clientID, int characterID, int targetID, int amount) : base("v1", MessageType.TRANSFER_REQUEST)
         {

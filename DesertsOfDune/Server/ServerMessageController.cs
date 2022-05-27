@@ -197,6 +197,8 @@ namespace Server
         {
 
             //request from client to run an action
+
+            //get the player who wants to do the action
             Player activePlayer = null;
             foreach (var player in party.GetActivePlayers())
             {
@@ -206,7 +208,7 @@ namespace Server
                 }
             }
 
-            //get the character which should do the action
+            //get the characters which are involved in the action
             Character actionCharacter = null;
             Character targetCharacter = null;
             foreach (var character in activePlayer.UsedGreatHouse.Characters)
@@ -237,12 +239,6 @@ namespace Server
                     case ActionType.COLLECT:
                         action = ActionType.COLLECT;
                         actionCharacter.CollectSpice();
-                        break;
-
-                    case ActionType.TRANSFER:
-                        action = ActionType.TRANSFER;
-                        throw new NotImplementedException("not implemented");
-                        //actionCharacter.GiftSpice(targetCharacter, amount);
                         break;
 
                         //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
@@ -315,9 +311,46 @@ namespace Server
             DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
         }
 
+        /// <summary>
+        /// executed if the player wants to transfer spice from one character to another
+        /// </summary>
+        /// <param name="msg">contains information about the player who wants to transfer spice, the character who already has the spice, the character who should get the spice and the amount of spice he wants to transfer</param>
         public void OnTransferRequestMessage(TransferRequestMessage msg)
         {
-            throw new NotImplementedException("not implemented");
+            //get the player who wants to do the transfer
+            Player activePlayer = null;
+            foreach (var player in party.GetActivePlayers())
+            {
+                if (player.ClientID == msg.ClientID)
+                {
+                    activePlayer = player;
+                }
+            }
+
+            //get the characters which are involved in the transfer
+            Character activeCharacter = null;
+            Character targetCharacter = null;
+            foreach (var character in activePlayer.UsedGreatHouse.Characters)
+            {
+                if (character.CharacterId == msg.CharacterID)
+                {
+                    activeCharacter = character;
+                }
+                if (character.CharacterId == msg.TargetID)
+                {
+                    targetCharacter = character;
+                }
+            }
+
+            //get the postion of the characters and check if they stand next to each other
+            int activeCharacterX = activeCharacter.CurrentMapfield.stormEye.x;
+            int activeCharacterY = activeCharacter.CurrentMapfield.stormEye.y;
+            int targetCharacterX = targetCharacter.CurrentMapfield.stormEye.x;
+            int targetCharacterY = targetCharacter.CurrentMapfield.stormEye.y;
+            if ((activeCharacterX == targetCharacterX && (activeCharacterY == (targetCharacterY + 1)) || (activeCharacterY == targetCharacterY - 1)) || (activeCharacterY == targetCharacterY && ((activeCharacterX == targetCharacterX + 1) || (activeCharacterX == targetCharacterX - 1)))) {
+                activeCharacter.GiftSpice(targetCharacter, msg.Amount);
+                DoSendTransferDemand(msg.ClientID, msg.CharacterID, msg.TargetID);
+            }
         }
 
         public void OnEndTurnRequestMessage(EndTurnRequestMessage msg)
