@@ -11,38 +11,38 @@ namespace Server.Configuration
     public class PartyConfiguration
     {
         [JsonProperty]
-        public CharacterProperties noble { get; }
+        public CharacterProperties noble { get; set; }
         [JsonProperty]
-        public CharacterProperties mentat { get; }
+        public CharacterProperties mentat { get; set; }
         [JsonProperty]
-        public CharacterProperties beneGesserit { get; }
+        public CharacterProperties beneGesserit { get; set; }
         [JsonProperty]
-        public CharacterProperties fighter { get; }
+        public CharacterProperties fighter { get; set; }
 
         [JsonProperty]
-        public int numbOfRounds { get; }
+        public int numbOfRounds { get; set; }
         [JsonProperty]
-        public int actionTimeUserClient { get; }
+        public int actionTimeUserClient { get; set; }
         [JsonProperty]
-        public int actionTimeAiClient { get; }
+        public int actionTimeAiClient { get; set; }
         [JsonProperty]
-        public double highGroundBonusRatio { get; }
+        public double highGroundBonusRatio { get; set; }
         [JsonProperty]
-        public double lowerGroundMalusRatio { get; }
+        public double lowerGroundMalusRatio { get; set; }
         [JsonProperty]
-        public double kanlySuccessProbability { get; }
+        public double kanlySuccessProbability { get; set; }
         [JsonProperty]
         public int spiceMinimum { get; set; }
         [JsonProperty]
-        public string cellularAutomaton { get; }
+        public string cellularAutomaton { get; set; }
         [JsonProperty]
-        public int sandWormSpeed { get; }
+        public int sandWormSpeed { get; set; }
         [JsonProperty]
-        public int sandWormSpawnDistance { get; }
+        public int sandWormSpawnDistance { get; set; }
         [JsonProperty]
-        public double cloneProbability { get; }
+        public double cloneProbability { get; set; }
         [JsonProperty]
-        public int minPauseTime { get; }
+        public int minPauseTime { get; set; }
 
         private static PartyConfiguration singleton;
 

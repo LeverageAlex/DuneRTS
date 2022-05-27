@@ -25,11 +25,11 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
         public void TestCheckOverLength()
         {
             RoundHandler roundHandler = new RoundHandler(0,10);
-            bool overLength = roundHandler.CheckOverLength();
+            bool overLength = roundHandler.IsLastRoundOver();
             Assert.IsTrue(overLength);
 
             RoundHandler r2 = new RoundHandler(1,10);
-            bool overL = r2.CheckOverLength();
+            bool overL = r2.IsLastRoundOver();
             Assert.IsFalse(overL);
         }
 

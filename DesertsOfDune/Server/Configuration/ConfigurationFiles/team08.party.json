@@ -38,7 +38,7 @@
   "lowerGroundMalusRatio": 0.5,
   "kanlySuccessProbability": 0.5,
   "spiceMinimum": 10,
-  "cellularAutomaton": "S2/B3",
+  "cellularAutomaton": "B2/S23",
   "sandWormSpeed": 10,
   "sandWormSpawnDistance": 10,
   "cloneProbability": 0.5,

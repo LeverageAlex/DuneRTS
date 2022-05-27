@@ -7,11 +7,11 @@ namespace Server.roundHandler
     /// <summary>
     /// This interface demands the contract for the GamePhases
     /// </summary>
-    public interface GamePhase
+    public interface IGamePhase
     {
         /// <summary>
-        /// This method is used to execute a RoundPhase
+        /// execute a round phase
         /// </summary>
-        public void Execut();
+        public void Execute();
     }
 }

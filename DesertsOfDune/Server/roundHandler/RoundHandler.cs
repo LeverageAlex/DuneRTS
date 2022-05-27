@@ -7,6 +7,7 @@ using GameData.network.util.world;
 using GameData.server.roundHandler;
 using Server;
 using Server.Clients;
+using Server.roundHandler.duneMovementHandler;
 
 namespace GameData.gameObjects
 {
@@ -17,13 +18,35 @@ namespace GameData.gameObjects
     {
         private ServerMessageController serverMessageController;
         private Party party;
-        private int roundCounter;
+
+        /// <summary>
+        /// the counter, which state the current round number
+        /// </summary>
+        private int RoundCounter;
+
+        /// <summary>
+        /// the maximum number of rounds, that should be played.
+        /// If this number is reached, trigger the overlength mechanism
+        /// </summary>
+        private readonly int MAXIMUM_NUMBER_OF_ROUNDS;
+
+        /// <summary>
+        /// the implementation of the overlength mechanism
+        /// </summary>
+        private OverLengthMechanism OverLengthMechanism;
+
+        private bool IsOverlengthMechanismActive = false;
+
+        /// <summary>
+        /// the map reference of the game, the round handler execute the phases on
+        /// </summary>
+        private readonly Map map;
+
+
         private int currentSpice;
         public int CurrentSpice { get { return currentSpice; } set { currentSpice = value; } }
-        private readonly int numbOfRounds;
+        
         private readonly int spiceMinimum;
-        private MapField[,] map;
-        public MapField[,] Map { get { return map; } set { map = value; } }
         public int SpiceMinimum { get { return spiceMinimum; } }
         private GreatHouseSelection greatHouseSelection;
         private SpiceBlow spiceBlow;
@@ -32,18 +55,20 @@ namespace GameData.gameObjects
         private SandwormPhase sandwormPhase;
         private ClonePhase clonePhase;
         private CharacterTraitPhase characterTraitPhase;
-        private OverLengthMechanism overLengthMechanism;
-        private bool overLengthMechanismActive = false;
         private bool partyFinished = false;
 
         /// <summary>
         /// Constructor of the class RoundHandler
         /// </summary>
         /// <param name="numbOfRounds">the maximum number of rounds specified in the pary config</param>
-        public RoundHandler(int numbOfRounds, int spiceMinimum)
+        public RoundHandler(int numbOfRounds, int spiceMinimum, Map map)
         {
-            this.numbOfRounds = numbOfRounds;
+            this.MAXIMUM_NUMBER_OF_ROUNDS = numbOfRounds;
             this.spiceMinimum = spiceMinimum;
+            this.map = map;
+
+            // initialize variables
+            this.RoundCounter = 0;
         }
 
         public void SetParty(Party party)
@@ -57,32 +82,52 @@ namespace GameData.gameObjects
         }
 
         /// <summary>
+        /// triggers the next round, so the execution of all phases and the check, whether this is the last round
+        /// </summary>
+        public void NextRound()
+        {
+            // check, whether the round limit is exceeded
+            if (IsLastRoundOver())
+            {
+                OverLengthMechanism.Execut();
+            } else
+            {
+                // execute the server side rounds
+                duneMovementPhase.Execute();
+                sandstormPhase.Execute();
+                sandwormPhase.Execute();
+                clonePhase.Execute();
+                characterTraitPhase.Execute();
+            }
+        }
+
+        /// <summary>
         /// This method Handles the Rounds of the game Dessert of Dune.
         /// </summary>
         public void HandleRounds()
         {
-            for (int i = 0; i < numbOfRounds; i++)
+            for (int i = 0; i < MAXIMUM_NUMBER_OF_ROUNDS; i++)
             {
-                duneMovementPhase.Execut();
-                sandstormPhase.Execut();
-                ((SandWorm)sandwormPhase).Execut();
+                duneMovementPhase.Execute();
+                sandstormPhase.Execute();
+                ((SandWorm)sandwormPhase).Execute();
                 //call CheckVictory to check if after sandworm phase the last character of one house is gone and the the other player has won
-                clonePhase.Execut();
-                characterTraitPhase.Execut();
+                clonePhase.Execute();
+                characterTraitPhase.Execute();
             }
-            overLengthMechanism.Execut();
+            OverLengthMechanism.Execut();
         }
 
         /// <summary>
-        /// This method checks weather the game is in overlenth
+        /// checks, whether the game reached the last round
         /// </summary>
-        /// <returns>true, if the game has overlength</returns>
-        public bool CheckOverLength()
+        /// <returns>true, if the game has reached the last round and need to enter the overlength mechanism</returns>
+        public bool IsLastRoundOver()
         {
-            if (roundCounter >= numbOfRounds)
+            if (RoundCounter >= MAXIMUM_NUMBER_OF_ROUNDS)
             {
                 serverMessageController.DoEndGame();
-                overLengthMechanismActive = true;
+                IsOverlengthMechanismActive = true;
                 //TODO: start mechanism for overlength
                 return true;
             }

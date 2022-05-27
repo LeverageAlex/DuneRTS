@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using GameData.network.util.enums;
 using Newtonsoft.Json;
@@ -24,7 +25,7 @@ namespace GameData.network.util.world
             set { hasSpice = value; }
         }
         [JsonProperty]
-        private bool isInSandstorm;
+        public bool isInSandstorm { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public Position stormEye { get; }
         private Elevation elevation;
@@ -50,7 +51,7 @@ namespace GameData.network.util.world
         [JsonIgnore]
         public int ZCoordinate { get { return zCoordinate; } set { zCoordinate = value; } }
 
-        private bool isCityField;
+        protected bool IsCityField;
         [JsonIgnore]
         public string TileType { get { return tileType; } set { tileType = value; } }
 
@@ -89,6 +90,13 @@ namespace GameData.network.util.world
             this.hasSpice = hasSpice;
             this.isInSandstorm = isInSandstorm;
             this.stormEye = stormEye;
+        }
+
+        public MapField(string tileType, int x, int y)
+        {
+            this.tileType = tileType;
+            this.XCoordinate = x;
+            this.ZCoordinate = y;
         }
 
         /// <summary>

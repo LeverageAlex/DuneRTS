@@ -9,7 +9,7 @@ namespace GameData.server.roundHandler
     /// <summary>
     /// This class defines the SandwormPhase for extending classes.
     /// </summary>
-    public abstract class SandwormPhase : GamePhase
+    public abstract class SandwormPhase : IGamePhase
     {
         private bool overLenght;
         private GameData.gameObjects.RoundHandler parent;
@@ -19,7 +19,7 @@ namespace GameData.server.roundHandler
             return null;
         }
 
-        public void Execut()
+        public void Execute()
         {
             throw new NotImplementedException();
         }

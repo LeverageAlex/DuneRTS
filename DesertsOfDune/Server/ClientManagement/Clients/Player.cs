@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using GameData.network.util.enums;
 using GameData.network.util.world;
+using GameData.network.util.world.mapField;
 using Server.ClientManagement.Clients;
 
 namespace Server.Clients
@@ -23,6 +24,8 @@ namespace Server.Clients
         public int AmountOfStrikes { get; set; }
 
         public Statistics statistics { get; set; }
+
+        public City City { get; set; }
 
         protected Player(string clientName, string sessionID) : base(clientName, true, sessionID)
         {
