@@ -93,5 +93,18 @@ namespace GameData.network.util.world
 
             return characters;
         }
+
+        public List<Character> GetCharactersAlive()
+        {
+            List<Character> charactersAlive = new List<Character>();
+            foreach (var character in this.Characters)
+            {
+                if (!character.IsDead())
+                {
+                    charactersAlive.Add(character);
+                }
+            }
+            return charactersAlive;
+        }
     }
 }

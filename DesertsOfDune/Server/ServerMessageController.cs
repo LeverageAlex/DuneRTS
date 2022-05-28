@@ -155,14 +155,14 @@ namespace Server
 
             //get the character which should be moved
             Character movingCharacter = null;
-            foreach (var character in activePlayer.UsedGreatHouse.Characters)
+            foreach (var character in activePlayer.UsedGreatHouse.GetCharactersAlive())
             {
                 if (character.CharacterId == msg.characterID)
                 {
                     movingCharacter = character;
                 }
             }
-            /**if(movinCharacter == null)
+            /**if(movingCharacter == null)
             {
                 DoSendError(005, $"Moving character is null", sessionID);
                 return;
@@ -208,18 +208,30 @@ namespace Server
 
             //get the player who wants to do the action
             Player activePlayer = null;
+            Player enemyPlayer = null;
             foreach (var player in party.GetActivePlayers())
             {
                 if (player.ClientID == msg.clientID)
                 {
                     activePlayer = player;
                 }
+                if(player.ClientID == msg.clientID)
+                {
+                    enemyPlayer = player;
+                }
+
             }
+
+            /**if(activePlayer == null)
+            {
+                DoSendError(005, $"No Player with clientID = {msg.clientID} known.", sessionID);
+                return;
+            }*/
 
             //get the characters which are involved in the action
             Character actionCharacter = null;
             Character targetCharacter = null;
-            foreach (var character in activePlayer.UsedGreatHouse.Characters)
+            foreach (var character in activePlayer.UsedGreatHouse.GetCharactersAlive())
             {
                 if (character.CharacterId == msg.characterID)
                 {
@@ -228,6 +240,16 @@ namespace Server
                 if (character.CurrentMapfield.stormEye == msg.specs.target)
                 {
                     targetCharacter = character;
+                }
+            }
+            if(targetCharacter == null)
+            {
+                foreach(var character in enemyPlayer.UsedGreatHouse.GetCharactersAlive())
+                {
+                    if(character.CurrentMapfield.stormEye == msg.specs.target)
+                    {
+                        targetCharacter = character;
+                    }
                 }
             }
 
