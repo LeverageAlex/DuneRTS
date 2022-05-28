@@ -231,6 +231,7 @@ namespace Server
             //get the characters which are involved in the action
             Character actionCharacter = null;
             Character targetCharacter = null;
+            bool friendlyFire = false;
             foreach (var character in activePlayer.UsedGreatHouse.GetCharactersAlive())
             {
                 if (character.CharacterId == msg.characterID)
@@ -240,8 +241,10 @@ namespace Server
                 if (character.CurrentMapfield.stormEye == msg.specs.target)
                 {
                     targetCharacter = character;
+                    friendlyFire = true;            //characters can not attack their allys
                 }
             }
+            //get the target character from enemy player if the target character is not an ally
             if(targetCharacter == null)
             {
                 foreach(var character in enemyPlayer.UsedGreatHouse.GetCharactersAlive())
@@ -268,7 +271,10 @@ namespace Server
                 {
                     case ActionType.ATTACK:
                         action = ActionType.ATTACK;
-                        actionCharacter.Atack(targetCharacter);
+                        if (!friendlyFire)
+                        {
+                            actionCharacter.Atack(targetCharacter);
+                        }
                         break;
                     case ActionType.COLLECT:
                         action = ActionType.COLLECT;
@@ -279,7 +285,8 @@ namespace Server
                         action = ActionType.KANLY;
                         if (actionCharacter.APcurrent == actionCharacter.APmax
                             && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBEL)
-                            && targetCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBEL))
+                            && targetCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBEL)
+                            && !friendlyFire)
                         {
                             actionCharacter.Kanly(targetCharacter);
                         }
