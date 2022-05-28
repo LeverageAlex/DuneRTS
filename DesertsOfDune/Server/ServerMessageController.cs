@@ -136,12 +136,10 @@ namespace Server
         /// <exception cref="NotImplementedException"></exception>
         public void OnMovementRequestMessage(MovementRequestMessage msg)
         {
-            throw new NotImplementedException("not implemented completely");
-
             //request from client to move a character
 
             //get the player who wants to move his character
-            Player activePlayer;
+            Player activePlayer = null;
             foreach (var player in party.GetActivePlayers())
             {
                 if(player.ClientID == msg.clientID)
@@ -149,9 +147,14 @@ namespace Server
                     activePlayer = player;
                 }
             }
+            /**if(activePlayer == null)
+            {
+                DoSendError(005, $"No Player with clientID = {msg.clientID} known.", sessionID);
+                return;
+            }*/
 
             //get the character which should be moved
-            Character movingCharacter;
+            Character movingCharacter = null;
             foreach (var character in activePlayer.UsedGreatHouse.Characters)
             {
                 if (character.CharacterId == msg.characterID)
@@ -159,6 +162,11 @@ namespace Server
                     movingCharacter = character;
                 }
             }
+            /**if(movinCharacter == null)
+            {
+                DoSendError(005, $"Moving character is null", sessionID);
+                return;
+            }*/
 
             List<Position> path = new List<Position>();
             foreach (var position in path)
@@ -223,89 +231,81 @@ namespace Server
                 }
             }
 
+            /**if (actionCharacter == null)
+            {
+                DoSendError(005, "ActionCharacter is null", sessionID)
+            }*/
+
             //set Attack as standard enum and change it if needed
             ActionType action = ActionType.ATTACK;
 
             if (actionCharacter.APcurrent > 0)
             {
                 //check which action the player wants to do with his character
-                switch (action)
+                switch (Enum.Parse(typeof(ActionType), msg.action))
                 {
                     case ActionType.ATTACK:
                         action = ActionType.ATTACK;
                         actionCharacter.Atack(targetCharacter);
                         break;
-
                     case ActionType.COLLECT:
                         action = ActionType.COLLECT;
                         actionCharacter.CollectSpice();
                         break;
-
                         //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
                     case ActionType.KANLY:
                         action = ActionType.KANLY;
-                        if (actionCharacter.APcurrent == actionCharacter.APmax)
+                        if (actionCharacter.APcurrent == actionCharacter.APmax
+                            && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBEL)
+                            && targetCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBEL))
                         {
-                            if (actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBEL) && targetCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBEL))
-                            {
-                               actionCharacter.Kanly(targetCharacter);
-                            }
+                            actionCharacter.Kanly(targetCharacter);
                         }
                         break;
-
                     case ActionType.FAMILY_ATOMICS:
                         action = ActionType.FAMILY_ATOMICS;
-                        if (actionCharacter.APcurrent == actionCharacter.APmax)
+                        if (actionCharacter.APcurrent == actionCharacter.APmax
+                            && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBEL))
                         {
-                            if (actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBEL))
+                            //get the mapfield where the active Character aims to
+                            MapField targetMapField = null;
+                            foreach (var mapfield in party.map.fields)
                             {
-                                //get the mapfield where the active Character aims to
-                                MapField targetMapField = null;
-                                foreach (var mapfield in party.map.fields)
+                                if (mapfield.stormEye == msg.specs.target)
                                 {
-                                    if(mapfield.stormEye == msg.specs.target)
-                                    {
-                                        targetMapField = mapfield;
-                                    }
+                                    targetMapField = mapfield;
                                 }
-                                
-                                actionCharacter.AtomicBomb(targetMapField);
                             }
+
+                            actionCharacter.AtomicBomb(targetMapField);
                         }
                         break;
-
                     case ActionType.SPICE_HORDING:
                         action = ActionType.SPICE_HORDING;
-                        if (actionCharacter.APcurrent == actionCharacter.APmax)
+                        if (actionCharacter.APcurrent == actionCharacter.APmax
+                            && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.MENTAT))
                         {
-                            if (actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.MENTAT))
-                            {
-                                actionCharacter.SpiceHoarding();
-                            }
+                            actionCharacter.SpiceHoarding();
                         }
                         break;
-
                     case ActionType.VOICE:
                         action = ActionType.VOICE;
-                        if (actionCharacter.APcurrent == actionCharacter.APmax)
+                        if (actionCharacter.APcurrent == actionCharacter.APmax
+                            && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.BENEGESSERIT))
                         {
-                            if (actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.BENEGESSERIT))
-                            {
-                                actionCharacter.Voice(targetCharacter);
-                            }
+                            actionCharacter.Voice(targetCharacter);
                         }
                         break;
-
                     case ActionType.SWORD_SPIN:
                         action = ActionType.SWORD_SPIN;
-                        if (actionCharacter.APcurrent == actionCharacter.APmax)
+                        if (actionCharacter.APcurrent == actionCharacter.APmax
+                            && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.FIGHTHER))
                         {
-                            if (actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.FIGHTHER))
-                            {
                                 actionCharacter.SwordSpin();
-                            }
                         }
                         break;
+                    default:
+                        throw new ArgumentException($"Actiontype {msg.action} not supoorted here.");
                 }
             }
             DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);

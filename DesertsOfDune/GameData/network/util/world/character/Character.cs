@@ -127,6 +127,7 @@ namespace GameData.network.util.world
                 return true;
             } else
             {
+                //TODO: set hp to 0
                 return false;
             }
         }
