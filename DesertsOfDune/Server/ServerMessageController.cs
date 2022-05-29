@@ -168,7 +168,8 @@ namespace Server
                 return;
             }*/
 
-            List<Position> path = new List<Position>();
+            //List<Position> path = new List<Position>();
+            List<Position> path = msg.specs.path;
             foreach (var position in path)
             {
                 //check if Character has enough Movement Points

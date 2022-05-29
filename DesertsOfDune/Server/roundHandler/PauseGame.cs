@@ -15,7 +15,7 @@ namespace GameData.server.roundHandler
         /// This method pauses the game
         /// </summary>
         /// <returns>true, if the game was paused</returns>
-        public bool PausetheGame()
+        public bool PauseTheGame()
         {
             // todo implement logic
             return false;

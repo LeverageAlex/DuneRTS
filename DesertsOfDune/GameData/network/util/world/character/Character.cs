@@ -127,7 +127,7 @@ namespace GameData.network.util.world
                 return true;
             } else
             {
-                //TODO: set hp to 0
+                healthCurrent = 0;
                 return false;
             }
         }
@@ -197,7 +197,7 @@ namespace GameData.network.util.world
         /// <returns>true, if healthpoints are equal to zero</returns>
         public bool IsDead()
         {
-            if (healthCurrent == 0)
+            if (healthCurrent <= 0)
             {
                 return true;
             }

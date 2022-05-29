@@ -96,7 +96,7 @@ namespace GameData.network.util.world
 
         public List<Character> GetCharactersAlive()
         {
-            List<Character> charactersAlive = new List<Character>();
+            var charactersAlive = new List<Character>();
             foreach (var character in this.Characters)
             {
                 if (!character.IsDead())

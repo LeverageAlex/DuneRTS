@@ -67,7 +67,7 @@ namespace GameData.server.roundHandler
         /// <returns>true, if the character was cloned</returns>
         public void CloneCharacter(Character character, City city)
         {
-            MapField mapField =  DetermineCloneSpawnPosition(city);
+            MapField mapField = DetermineCloneSpawnPosition(city);
             mapField.Character = character;
             character.ResetData();
             Party.GetInstance().messageController.DoSpawnCharacterDemand(character);
@@ -84,8 +84,8 @@ namespace GameData.server.roundHandler
             {
                 while(true)
                 {
-                    int indexX = ChoosRandomNeighborIndexX(city);
-                    int indexZ = ChoosRandomNeighborIndexZ(city);
+                    int indexX = ChooseRandomNeighborIndexX(city);
+                    int indexZ = ChooseRandomNeighborIndexZ(city);
                     if (map[indexX,indexZ].IsAproachable)
                     {
                         return map[indexX,indexZ];
@@ -140,7 +140,7 @@ namespace GameData.server.roundHandler
         /// </summary>
         /// <param name="city">the city of the GreatHouse</param>
         /// <returns>the randomly selected coordinate</returns>
-        private int ChoosRandomNeighborIndexX(City city)
+        private int ChooseRandomNeighborIndexX(City city)
         {
             Random random = new Random();
             int start = city.XCoordinate - 2;
@@ -161,7 +161,7 @@ namespace GameData.server.roundHandler
         /// </summary>
         /// <param name="city">the city of the GreatHouse</param>
         /// <returns>the randomly selected coordinate</returns>
-        private int ChoosRandomNeighborIndexZ(City city)
+        private int ChooseRandomNeighborIndexZ(City city)
         {
             Random random = new Random();
             int start = city.ZCoordinate - 2;

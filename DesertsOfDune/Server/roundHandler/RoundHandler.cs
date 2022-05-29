@@ -16,9 +16,6 @@ namespace GameData.gameObjects
     /// </summary>
     public class RoundHandler
     {
-        private ServerMessageController serverMessageController;
-        private Party party;
-
         /// <summary>
         /// the counter, which state the current round number
         /// </summary>
@@ -71,16 +68,6 @@ namespace GameData.gameObjects
             this.RoundCounter = 0;
         }
 
-        public void SetParty(Party party)
-        {
-            this.party = party;
-        }
-
-        public void SetServerMessageController(ServerMessageController serverMessageController)
-        {
-            this.serverMessageController = serverMessageController;
-        }
-
         /// <summary>
         /// triggers the next round, so the execution of all phases and the check, whether this is the last round
         /// </summary>
@@ -127,7 +114,7 @@ namespace GameData.gameObjects
         {
             if (RoundCounter >= MAXIMUM_NUMBER_OF_ROUNDS)
             {
-                serverMessageController.DoEndGame();
+                Party.GetInstance().messageController.DoEndGame();
                 IsOverlengthMechanismActive = true;
                 //TODO: start mechanism for overlength
                 return true;
@@ -141,15 +128,15 @@ namespace GameData.gameObjects
         /// <returns>true, if one client won the game</returns>
         public bool CheckVictory()
         {
-            if (party.AreTwoPlayersRegistred())
+            if (Party.GetInstance().AreTwoPlayersRegistred())
             {
-                foreach (var player in party.GetActivePlayers())
+                foreach (var player in Party.GetInstance().GetActivePlayers())
                 {
                     if (player.UsedGreatHouse.Characters.Count == 0) //TODO: check, if in Characters.count are also defeated characters which are not cloned again yet
                     {
                         int loserID = player.ClientID;
-                        int winnerID = party.GetActivePlayers().Find(c => c.ClientID != player.ClientID).ClientID;
-                        serverMessageController.DoGameEndMessage(winnerID, loserID, new Statistics()); //TODO: get stats for both players
+                        int winnerID = Party.GetInstance().GetActivePlayers().Find(c => c.ClientID != player.ClientID).ClientID;
+                        Party.GetInstance().messageController.DoGameEndMessage(winnerID, loserID, new Statistics()); //TODO: get stats for both players
                         partyFinished = true;
                         return true;
                     }
@@ -164,8 +151,8 @@ namespace GameData.gameObjects
         /// <returns>Returns the winner of the game</returns>
         public Player GetWinnerByCheckWinnerVictoryMetric()
         {
-            var player1 = party.GetActivePlayers()[0];
-            var player2 = party.GetActivePlayers()[1];
+            var player1 = Party.GetInstance().GetActivePlayers()[0];
+            var player2 = Party.GetInstance().GetActivePlayers()[1];
             return CheckFirstVictoryMetric(player1, player2);
         }
 
