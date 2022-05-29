@@ -68,17 +68,6 @@ namespace TestProject.networkTest.utilTest.parserTest
         }
 
         /// <summary>
-        /// This Testcase validates the serialization of the Message CreateMessage
-        /// </summary>
-        [Test]
-        public void TestFromCreateMessage()
-        {
-            CreateMessage message = new CreateMessage("SecretArena123", false);
-            string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("{\"type\":\"CREATE\",\"version\":\"0.1\",\"lobbyCode\":\"SecretArena123\",\"spectate\":false}", serializedMessage);
-        }
-
-        /// <summary>
         /// This Testcase validates the serialization of the Message DebugMessage
         /// </summary>
         [Test]
@@ -351,16 +340,6 @@ namespace TestProject.networkTest.utilTest.parserTest
             Assert.AreEqual("{\"type\":\"TURN_DEMAND\",\"version\":\"0.1\",\"clientID\":1234,\"characterID\":12}", serializedMessage);
         }
 
-        /// <summary>
-        /// This Testcase validates the serialization of the Message AckMessage
-        /// </summary>
-        [Test]
-        public void TestFromAckMessage()
-        {
-            AckMessage message = new AckMessage();
-            string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("{\"type\":\"ACK\",\"version\":\"0.1\"}", serializedMessage);
-        }
 
         /// <summary>
         /// This Testcase validates the serialization of the Message PausGameDemandMessage
@@ -406,7 +385,7 @@ namespace TestProject.networkTest.utilTest.parserTest
             Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
             Assert.IsNotNull(deserializedMessage);
             Assert.IsInstanceOf<ActionDemandMessage>(deserializedMessage);
-            ((ActionDemandMessage)deserializedMessage).getMessageType();
+            ((ActionDemandMessage)deserializedMessage).GetMessageTypeAsString();
         }
 
         /// <summary>
@@ -491,6 +470,10 @@ namespace TestProject.networkTest.utilTest.parserTest
         // TurnDemandMessage
 
         // TurnRequestMessage
+
+        // RejoinMessage
+
+        // AtomicsUpdateDemandMessage
 
     }
 }

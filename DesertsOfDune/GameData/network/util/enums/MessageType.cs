@@ -6,10 +6,10 @@
     public enum MessageType
     {
         DEBUG,
-        CREATE,
+        ERROR,
         JOIN,
+        REJOIN,
         JOINACCEPTED,
-        ACK,
         GAMECFG,
         HOUSE_OFFER,
         HOUSE_REQUEST,
@@ -23,6 +23,7 @@
         CHARACTER_STAT_CHANGE_DEMAND,
         END_TURN_REQUEST,
         MAP_CHANGE_DEMAND,
+        ATOMICS_UPDATE_DEMAND,
         SPAWN_CHARACTER_DEMAND,
         CHANGE_PLAYER_SPICE_DEMAND,
         SANDWORM_SPAWN_DEMAND,
@@ -36,7 +37,6 @@
         GAME_PAUSE_DEMAND,
         UNPAUSE_GAME_OFFER,
         GAME_END,
-        TURN_DEMAND,
-        ERROR
+        TURN_DEMAND
     }
 }

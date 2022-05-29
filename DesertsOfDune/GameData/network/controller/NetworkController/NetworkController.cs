@@ -66,7 +66,7 @@ namespace GameData.network.controller
             Message receivedMessage = MessageConverter.ToMessage(message);
 
             // get the type of the message for determine the controller methods needed to handle this message
-            MessageType type = (MessageType)Enum.Parse(typeof(MessageType), receivedMessage.getMessageType());
+            MessageType type = (MessageType)Enum.Parse(typeof(MessageType), receivedMessage.GetMessageTypeAsString());
 
             switch (type)
             {

@@ -15,21 +15,30 @@ namespace GameData.network.messages
         [JsonProperty(Order = -5)]
         protected string type;
 
+        [JsonIgnore]
+        protected MessageType messageType;
+
         /// <summary>
         /// The base constructor of the class Message
         /// </summary>
         /// <param name="version">version of the Message</param>
         /// <param name="type">the Messagetype of the Message</param>
-        public Message(string version, MessageType type)
+        protected Message(string version, MessageType type)
         {
             this.version = version;
             this.type = Enum.GetName(typeof(MessageType), type);
+            this.messageType = type;
         }
         /// <summary>
-        /// Getter forthe field type
+        /// Getter for the field type
         /// </summary>
         /// <returns>Messagetype</returns>
-        public string getMessageType()
+        public MessageType GetMessageType()
+        {
+            return this.messageType;
+        }
+
+        public string GetMessageTypeAsString()
         {
             return this.type;
         }

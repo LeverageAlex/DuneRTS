@@ -80,6 +80,16 @@ namespace Server
         }
 
         /// <summary>
+        /// If a client loose connection to the server, he can rejoin to the game with the clientSecret from the JoinAcceptedMessage.
+        /// </summary>
+        /// <param name="msg">RejoinMessage with clientSecretParameter.</param>
+        public void OnRejoinMessage(RejoinMessage msg)
+        {
+            //TODO: implement this method
+            throw new NotImplementedException("not implemented");
+        }
+
+        /// <summary>
         /// executed, if the clients requested a certain great house
         /// </summary>
         /// <param name="msg">the HouseRequestMessage, which contains the house name</param>
@@ -425,12 +435,6 @@ namespace Server
             Log.Information("Join request of " + clientID + " was accepted");
         }
 
-        public void DoSendAck()
-        {
-            AckMessage ackMessage = new AckMessage();
-            NetworkController.HandleSendingMessage(ackMessage);
-        }
-
         /// <summary>
         /// sends the an error message to the client
         /// </summary>
@@ -503,6 +507,12 @@ namespace Server
         {
             MapChangeDemandMessage mapChangeDemandMessage = new MapChangeDemandMessage(mapChangeReasons, newMap);
             NetworkController.HandleSendingMessage(mapChangeDemandMessage);
+        }
+
+        public void DoSendAtomicsUpdateDemand(int clientID, bool shunned, int atomicsLeft)
+        {
+            AtomicsUpdateDemandMessage atomicsUpdateDemandMessage = new AtomicsUpdateDemandMessage(clientID, shunned, atomicsLeft);
+            NetworkController.HandleSendingMessage(atomicsUpdateDemandMessage);
         }
 
         public void DoSpawnCharacterDemand(Character attributes)
