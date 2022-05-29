@@ -4,13 +4,11 @@ using GameData.network.controller;
 using GameData.network.messages;
 using GameData.network.util.world;
 using Server.Clients;
-using Server;
 using Serilog;
 using Server.ClientManagement.Clients;
 using GameData.network.util.enums;
 using GameData.network.util.world.greatHouse;
 using System.Linq;
-using Serilog.Sinks.SystemConsole.Themes;
 using GameData.network.util.parser;
 using Server.Configuration;
 using Newtonsoft.Json;
@@ -19,8 +17,6 @@ namespace Server
 {
     public class ServerMessageController : MessageController
     {
-        private Party party;
-
         private bool firstPlayerGotGreatHousesAndGotRequestAck;
 
         public ServerMessageController()
@@ -43,7 +39,7 @@ namespace Server
             if (msg.active)
             {
                 // check, whether there are already two active player
-                if (party.AreTwoPlayersRegistred())
+                if (Party.GetInstance().AreTwoPlayersRegistred())
                 {
                     // already two players are registred, so send error
                     DoSendError(003, "There are already two players registred", sessionID);
@@ -67,14 +63,14 @@ namespace Server
                 client = new Spectator(msg.clientName, sessionID);
 
             }
-            party.AddClient(client);
+            Party.GetInstance().AddClient(client);
             // send join accept
             DoAcceptJoin(client.ClientSecret, client.ClientID, sessionID);
 
             // check, if with new client two players are registred and start party
-            if (party.AreTwoPlayersRegistred())
+            if (Party.GetInstance().AreTwoPlayersRegistred())
             {
-                party.PrepareGame();
+                Party.GetInstance().PrepareGame();
                 DoSendGameConfig();
             }
         }
@@ -99,7 +95,7 @@ namespace Server
             GreatHouseType chosenGreatHouse = (GreatHouseType)Enum.Parse(typeof(GreatHouseType), msg.houseName);
 
             // get the player, who send this request
-            Player requestingPlayer = party.GetPlayerBySessionID(sessionID);
+            Player requestingPlayer = Party.GetInstance().GetPlayerBySessionID(sessionID);
 
             if (requestingPlayer != null)
             {
@@ -117,7 +113,7 @@ namespace Server
                     } else
                     {
                         // first player already has great house, so start the game
-                        party.Start();
+                        Party.GetInstance().Start();
                     }
                 }
                 else
@@ -150,7 +146,7 @@ namespace Server
 
             //get the player who wants to move his character
             Player activePlayer = null;
-            foreach (var player in party.GetActivePlayers())
+            foreach (var player in Party.GetInstance().GetActivePlayers())
             {
                 if(player.ClientID == msg.clientID)
                 {
@@ -182,6 +178,7 @@ namespace Server
             List<Position> path = msg.specs.path;
             foreach (var position in path)
             {
+                var party = Party.GetInstance();
                 //check if Character has enough Movement Points
                 if (movingCharacter.MPcurrent > 0)
                 {
@@ -220,7 +217,7 @@ namespace Server
             //get the player who wants to do the action
             Player activePlayer = null;
             Player enemyPlayer = null;
-            foreach (var player in party.GetActivePlayers())
+            foreach (var player in Party.GetInstance().GetActivePlayers())
             {
                 if (player.ClientID == msg.clientID)
                 {
@@ -309,7 +306,7 @@ namespace Server
                         {
                             //get the mapfield where the active Character aims to
                             MapField targetMapField = null;
-                            foreach (var mapfield in party.map.fields)
+                            foreach (var mapfield in Party.GetInstance().map.fields)
                             {
                                 if (mapfield.stormEye == msg.specs.target)
                                 {
@@ -359,7 +356,7 @@ namespace Server
         {
             //get the player who wants to do the transfer
             Player activePlayer = null;
-            foreach (var player in party.GetActivePlayers())
+            foreach (var player in Party.GetInstance().GetActivePlayers())
             {
                 if (player.ClientID == msg.ClientID)
                 {
@@ -450,8 +447,8 @@ namespace Server
 
         public void DoSendGameConfig()
         {
-            int client0ID = party.GetActivePlayers()[0].ClientID;
-            int client1ID = party.GetActivePlayers()[0].ClientID;
+            int client0ID = Party.GetInstance().GetActivePlayers()[0].ClientID;
+            int client1ID = Party.GetInstance().GetActivePlayers()[0].ClientID;
 
             List<List<string>> scenario = ScenarioConfiguration.GetInstance().scenario;
             string partyConfiguration = JsonConvert.SerializeObject(PartyConfiguration.GetInstance());
