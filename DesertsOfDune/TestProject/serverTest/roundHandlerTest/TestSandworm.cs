@@ -42,7 +42,7 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
             mapField.ZCoordinate = 2;
             nobel1.CurrentMapfield = mapField;
             characters.Add(nobel1);
-            SandWorm sandWorm = new SandWorm();
+            UsualSandWormPhase sandWorm = new UsualSandWormPhase();
             sandWorm = sandWorm.Execute(mapFields, characters);
             sandWorm.Execute(mapFields, characters);
         }
@@ -65,7 +65,7 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
             mapField.ZCoordinate = 2;
             nobel1.CurrentMapfield = mapField;
             characters.Add(nobel1);
-            SandWorm sandWorm = new SandWorm();
+            UsualSandWormPhase sandWorm = new UsualSandWormPhase();
             sandWorm.Execute(mapFields, characters);
         }
 
@@ -76,7 +76,7 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
             Nobel nobel1 = new Nobel(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true);
             Nobel nobel2 = new Nobel(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true);
             Nobel nobel3 = new Nobel(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, false);
-            SandWorm sandWorm = SandWorm.Spawn(10, 0, null, null);
+            UsualSandWormPhase sandWorm = UsualSandWormPhase.Spawn(10, 0, null, null);
             Character target = sandWorm.ChooseTargetCharacter(characters);
             Assert.IsNull(target);
             characters.Add(nobel1);
@@ -101,7 +101,7 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
                     mapFields[i, j] = new FlatSand(false, false, null);
                 }
             }
-            SandWorm sandWorm = SandWorm.Spawn(10, 0, mapFields, null);
+            UsualSandWormPhase sandWorm = UsualSandWormPhase.Spawn(10, 0, mapFields, null);
 
             // TODO: implement test
 

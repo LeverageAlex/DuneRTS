@@ -18,7 +18,7 @@ namespace GameData.network.util.world
         public int MAP_WIDTH { get; }
         public int MAP_HEIGHT { get; }
 
-        public Position positionOfEyeOfStorm { get; set; }
+        public Position PositionOfEyeOfStorm { get; set; }
 
         public Map(int mapWidth, int mapHeight, List<List<string>> scenarioConfiguration)
         {

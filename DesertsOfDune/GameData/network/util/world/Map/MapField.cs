@@ -37,7 +37,7 @@ namespace GameData.network.util.world
         }
        
         [JsonIgnore]
-        public bool IsAproachable { get; set; }
+        public bool IsApproachable { get; set; }
 
         private int xCoordinate;
         [JsonIgnore]

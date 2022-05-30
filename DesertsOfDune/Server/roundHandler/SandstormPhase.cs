@@ -44,7 +44,7 @@ namespace GameData.server.roundHandler
             int neighborIndex = random.Next(neighbors.Count);
 
             eyeOfStorm = neighbors[neighborIndex];
-            this.map.positionOfEyeOfStorm = new Position(eyeOfStorm.XCoordinate, eyeOfStorm.ZCoordinate);
+            this.map.PositionOfEyeOfStorm = new Position(eyeOfStorm.XCoordinate, eyeOfStorm.ZCoordinate);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace GameData.server.roundHandler
             int randomX = random.Next(this.map.MAP_WIDTH);
             int randomY = random.Next(this.map.MAP_HEIGHT);
 
-            this.map.positionOfEyeOfStorm = new Position(this.map.GetMapFieldAtPosition(randomX, randomY).XCoordinate, this.map.GetMapFieldAtPosition(randomX, randomY).ZCoordinate);
+            this.map.PositionOfEyeOfStorm = new Position(this.map.GetMapFieldAtPosition(randomX, randomY).XCoordinate, this.map.GetMapFieldAtPosition(randomX, randomY).ZCoordinate);
 
             return this.map.GetMapFieldAtPosition(randomX, randomY);
         }

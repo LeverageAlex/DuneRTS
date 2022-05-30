@@ -7,6 +7,7 @@ using GameData.network.util.world;
 using GameData.server.roundHandler;
 using Server;
 using Server.Clients;
+using Server.Configuration;
 using Server.roundHandler.duneMovementHandler;
 using Server.roundHandler.endOfGame;
 
@@ -90,6 +91,7 @@ namespace GameData.gameObjects
             // initialize game phases
             this._duneMovementPhase = new DuneMovementPhase(map);
             this._sandstormPhase = new SandstormPhase(map);
+            this._clonePhase = new ClonePhase(map, PartyConfiguration.GetInstance().cloneProbability);
         }
 
         /// <summary>
@@ -132,7 +134,7 @@ namespace GameData.gameObjects
             {
                 _duneMovementPhase.Execute();
                 _sandstormPhase.Execute();
-                ((SandWorm)_sandwormPhase).Execute();
+                ((UsualSandWormPhase)_sandwormPhase).Execute();
                 //call CheckVictory to check if after sandworm phase the last character of one house is gone and the the other player has won
                 _clonePhase.Execute();
                 characterTraitPhase.Execute();

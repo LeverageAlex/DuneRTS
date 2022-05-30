@@ -12,13 +12,13 @@ using Server.Configuration;
 namespace GameData.server.roundHandler
 {
     /// <summary>
-    /// This Class is responsible for handling Sandworm in normal mode.
+    /// Handles the sandworm in usual "mode"
     /// </summary>
-    public class SandWorm : SandwormPhase
+    public class UsualSandWormPhase : SandwormPhase
     {
         private MapField currentField;
         private int sandWormSpeed;
-        private static SandWorm sandWorm;
+        private static UsualSandWormPhase sandWorm;
         private MapField[,] mapFields;
         private Character targetCharacter;
 
@@ -26,16 +26,16 @@ namespace GameData.server.roundHandler
         /// Public constructor just used to creat a sandworm to call the Execute method for the first time.
         /// This Constructor should not be used for other usecases.
         /// </summary>
-        public SandWorm()
+        public UsualSandWormPhase()
         {
 
         }
 
-        public SandWorm Execute(MapField[,] mapFields, List<Character> characters)
+        public UsualSandWormPhase Execute(MapField[,] mapFields, List<Character> characters)
         {
             if (sandWorm == null && CheckLoudness(characters))
             {
-                SandWorm sandWorm = Spawn(PartyConfiguration.GetInstance().sandWormSpeed, PartyConfiguration.GetInstance().sandWormSpawnDistance, mapFields, characters);
+                UsualSandWormPhase sandWorm = Spawn(PartyConfiguration.GetInstance().sandWormSpeed, PartyConfiguration.GetInstance().sandWormSpawnDistance, mapFields, characters);
                 sandWorm.targetCharacter = ChooseTargetCharacter(characters);
                 return sandWorm;
                 // end round
@@ -59,11 +59,11 @@ namespace GameData.server.roundHandler
         /// <param name="sandWormSpeed">defines the speed the sandworm has</param>
         /// <param name="sandWormSpawnDistance">defines the minimal spawn distance from characters</param>
         /// <returns></returns>
-        public static SandWorm Spawn(int sandWormSpeed, int sandWormSpawnDistance, MapField[,] map, List<Character> characters)
+        public static UsualSandWormPhase Spawn(int sandWormSpeed, int sandWormSpawnDistance, MapField[,] map, List<Character> characters)
         {
             if (sandWorm == null)
             {
-                sandWorm = new SandWorm(sandWormSpeed, sandWormSpawnDistance, map, characters);
+                sandWorm = new UsualSandWormPhase(sandWormSpeed, sandWormSpawnDistance, map, characters);
                // Party.GetInstance().serverMessageController.DoSpawnSandwormDemand(0, targetCharacter.CharacterId, sandWorm.currentField);
             }
             return sandWorm;
@@ -74,7 +74,7 @@ namespace GameData.server.roundHandler
         /// </summary>
         /// <param name="sandWormSpeed">defines the speed the sandworm has</param>
         /// <param name="sandWormSpawnDistance">defines the minimal spawn distance from characters</param>
-        private SandWorm(int sandWormSpeed, int sandWormSpawnDistance, MapField[,] map, List<Character> characters)
+        private UsualSandWormPhase(int sandWormSpeed, int sandWormSpawnDistance, MapField[,] map, List<Character> characters)
         {
             // set sandwormspeed to constant value for testing
             this.sandWormSpeed = 2;

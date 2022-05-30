@@ -7,13 +7,10 @@ using System.Text;
 namespace GameData.server.roundHandler
 {
     /// <summary>
-    /// This class defines the SandwormPhase for extending classes.
+    /// Represents the phase, which handles the sandworm
     /// </summary>
     public abstract class SandwormPhase : IGamePhase
     {
-        private bool overLenght;
-        private GameData.gameObjects.RoundHandler parent;
-
         public List<MapField> MoveSandWorm()
         {
             return null;
