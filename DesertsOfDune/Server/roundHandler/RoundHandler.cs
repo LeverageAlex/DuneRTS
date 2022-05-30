@@ -8,6 +8,7 @@ using GameData.server.roundHandler;
 using Server;
 using Server.Clients;
 using Server.roundHandler.duneMovementHandler;
+using Server.roundHandler.endOfGame;
 
 namespace GameData.gameObjects
 {
@@ -19,39 +20,58 @@ namespace GameData.gameObjects
         /// <summary>
         /// the counter, which state the current round number
         /// </summary>
-        private int RoundCounter;
+        private int _roundCounter;
 
         /// <summary>
         /// the maximum number of rounds, that should be played.
         /// If this number is reached, trigger the overlength mechanism
         /// </summary>
-        private readonly int MAXIMUM_NUMBER_OF_ROUNDS;
+        private readonly int _maximumNumberOfRounds;
 
         /// <summary>
         /// the implementation of the overlength mechanism
         /// </summary>
-        private OverLengthMechanism OverLengthMechanism;
+        private readonly OverLengthMechanism _overLengthMechanism;
 
         private bool IsOverlengthMechanismActive = false;
 
         /// <summary>
+        /// checker, which determines the winner of the party after the overlength mechanism
+        /// </summary>
+        private readonly VictoryChecker _victoryChecker;
+
+        /// <summary>
         /// the map reference of the game, the round handler execute the phases on
         /// </summary>
-        private readonly Map map;
+        private readonly Map _map;
 
+        /// <summary>
+        /// game phases, handled only by the server (dune movement, sandstorm, sandworm, cloning, overlength mechanism)
+        /// </summary>
+        private readonly DuneMovementPhase _duneMovementPhase;
+        private readonly SandstormPhase _sandstormPhase;
+        private readonly SandwormPhase _sandwormPhase;
+        private readonly ClonePhase _clonePhase;
 
-        private int currentSpice;
-        public int CurrentSpice { get { return currentSpice; } set { currentSpice = value; } }
-        
-        private readonly int spiceMinimum;
-        public int SpiceMinimum { get { return spiceMinimum; } }
-        private GreatHouseSelection greatHouseSelection;
-        private SpiceBlow spiceBlow;
-        private DuneMovementPhase duneMovementPhase;
-        private SandstormPhase sandstormPhase;
-        private SandwormPhase sandwormPhase;
-        private ClonePhase clonePhase;
+        /// <summary>
+        /// game phase for the trait phase
+        /// </summary>
         private CharacterTraitPhase characterTraitPhase;
+
+        /// <summary>
+        /// game phase for the (optional) spice blow
+        /// </summary>
+        private readonly SpiceBlow _spiceBlow;
+
+        /// <summary>
+        /// the minimum of spice, needed on the map.
+        /// </summary>
+        /// <remarks>
+        /// if this current spice is falls below this limit, a spice blow happens
+        /// </remarks>
+        private readonly int _spiceMinimum;
+
+
         private bool partyFinished = false;
 
         /// <summary>
@@ -60,12 +80,16 @@ namespace GameData.gameObjects
         /// <param name="numbOfRounds">the maximum number of rounds specified in the pary config</param>
         public RoundHandler(int numbOfRounds, int spiceMinimum, Map map)
         {
-            this.MAXIMUM_NUMBER_OF_ROUNDS = numbOfRounds;
-            this.spiceMinimum = spiceMinimum;
-            this.map = map;
+            this._maximumNumberOfRounds = numbOfRounds;
+            this._spiceMinimum = spiceMinimum;
+            this._map = map;
 
             // initialize variables
-            this.RoundCounter = 0;
+            this._roundCounter = 0;
+
+            // initialize game phases
+            this._duneMovementPhase = new DuneMovementPhase(map);
+            this._sandstormPhase = new SandstormPhase(map);
         }
 
         /// <summary>
@@ -73,19 +97,29 @@ namespace GameData.gameObjects
         /// </summary>
         public void NextRound()
         {
+            // check, whether a spice blow is necessary
+            if (_spiceBlow.IsSpiceBlowNecessary(this._spiceMinimum, this._map.GetAmountOfSpiceOnMap()))
+            {
+                _spiceBlow.Execute();
+            }
+
             // check, whether the round limit is exceeded
             if (IsLastRoundOver())
             {
-                OverLengthMechanism.Execut();
-            } else
+                _overLengthMechanism.Execute();
+            }
+            else
             {
                 // execute the server side rounds
-                duneMovementPhase.Execute();
-                sandstormPhase.Execute();
-                sandwormPhase.Execute();
+                _duneMovementPhase.Execute();
+                _sandstormPhase.Execute();
+                _sandwormPhase.Execute();
                 //call CheckVictory to check if after sandworm phase the last character of one house is gone and the the other player has won
-                clonePhase.Execute();
+                _clonePhase.Execute();
                 characterTraitPhase.Execute();
+
+                // increase round counter, because the round was finished
+                _roundCounter++;
             }
         }
 
@@ -94,16 +128,16 @@ namespace GameData.gameObjects
         /// </summary>
         public void HandleRounds()
         {
-            for (int i = 0; i < MAXIMUM_NUMBER_OF_ROUNDS; i++)
+            for (int i = 0; i < _maximumNumberOfRounds; i++)
             {
-                duneMovementPhase.Execute();
-                sandstormPhase.Execute();
-                ((SandWorm)sandwormPhase).Execute();
+                _duneMovementPhase.Execute();
+                _sandstormPhase.Execute();
+                ((SandWorm)_sandwormPhase).Execute();
                 //call CheckVictory to check if after sandworm phase the last character of one house is gone and the the other player has won
-                clonePhase.Execute();
+                _clonePhase.Execute();
                 characterTraitPhase.Execute();
             }
-            OverLengthMechanism.Execut();
+            _overLengthMechanism.Execute();
         }
 
         /// <summary>
@@ -112,11 +146,10 @@ namespace GameData.gameObjects
         /// <returns>true, if the game has reached the last round and need to enter the overlength mechanism</returns>
         public bool IsLastRoundOver()
         {
-            if (RoundCounter >= MAXIMUM_NUMBER_OF_ROUNDS)
+            if (this._roundCounter >= this._maximumNumberOfRounds)
             {
                 Party.GetInstance().messageController.DoEndGame();
                 IsOverlengthMechanismActive = true;
-                //TODO: start mechanism for overlength
                 return true;
             }
             return false;
@@ -143,128 +176,7 @@ namespace GameData.gameObjects
                 }
             }
             return false;
-        }
-
-        /// <summary>
-        /// Determines the winner if the game goes to the overlengthMechanism with the victory metrics.
-        /// </summary>
-        /// <returns>Returns the winner of the game</returns>
-        public Player GetWinnerByCheckWinnerVictoryMetric()
-        {
-            var player1 = Party.GetInstance().GetActivePlayers()[0];
-            var player2 = Party.GetInstance().GetActivePlayers()[1];
-            return CheckFirstVictoryMetric(player1, player2);
-        }
-
-        /// <summary>
-        /// Checks, which house has the bigger stock of spice.
-        /// </summary>
-        /// <param name="player1">The first active player of the party.</param>
-        /// <param name="player2">The second active player of the party.</param>
-        /// <returns>Return the player with the bigger stock of spice. If the stock is of both player is equal it will return null.</returns>
-        private Player CheckFirstVictoryMetric(Player player1, Player player2)
-        {
-            if (player1.statistics.GetHouseSpiceStorage() > player2.statistics.GetHouseSpiceStorage())
-            {
-                return player1;
-            }
-            else if (player1.statistics.GetHouseSpiceStorage() < player2.statistics.GetHouseSpiceStorage())
-            {
-                return player2;
-            }
-            else
-            {
-                return CheckSecondVictoryMetric(player1, player2);
-            }
-        }
-
-        /// <summary>
-        /// Checks, which player's house recorded more spice during the party.
-        /// </summary>
-        /// <param name="player1">The first active player of the party.</param>
-        /// <param name="player2">The second active player of the party.</param>
-        /// <returns>Return the player more recorded spice. If the recorded spice of both player is equal it will return null.</returns>
-        private Player CheckSecondVictoryMetric(Player player1, Player player2)
-        {
-            if (player1.statistics.GetTotalSpiceCollected() > player2.statistics.GetTotalSpiceCollected())
-            {
-                return player1;
-            }
-            else if(player1.statistics.GetTotalSpiceCollected() < player2.statistics.GetTotalSpiceCollected())
-            {
-                return player2;
-            }
-            else
-            {
-                return CheckThirdVictoryMetric(player1, player2);
-            }
-        }
-
-        /// <summary>
-        /// Checks, which house has defeated more enemy characters.
-        /// </summary>
-        /// <param name="player1">The first active player of the party.</param>
-        /// <param name="player2">The second active player of the party.</param>
-        /// <returns>Return the player who defeated more enemy characters of the other house. If the amount of defeated enemy characters of both player is equal it will return null.</returns>
-        private Player CheckThirdVictoryMetric(Player player1, Player player2)
-        {
-            if (player1.statistics.GetEnemiesDefeated() > player2.statistics.GetEnemiesDefeated())
-            {
-                return player1;
-            }
-            else if (player1.statistics.GetEnemiesDefeated() < player2.statistics.GetEnemiesDefeated())
-            {
-                return player2;
-            }
-            else
-            {
-                return Check4thVictoryMetric(player1, player2);
-            }
-        }
-
-        /// <summary>
-        /// Checks, at which house less characters were swallowed by the usual sandworm.
-        /// </summary>
-        /// <param name="player1">The first active player of the party.</param>
-        /// <param name="player2">The second active player of the party.</param>
-        /// <returns>Return the player where less characters were swallowed by the usual sandworm. If the amount of both player is equal it will return null.</returns>
-        private Player Check4thVictoryMetric(Player player1, Player player2)
-        {
-            if (player1.statistics.GetCharactersSwallowed() < player2.statistics.GetCharactersSwallowed())
-            {
-                return player1;
-            }
-            else if (player1.statistics.GetCharactersSwallowed() > player2.statistics.GetCharactersSwallowed())
-            {
-                return player2;
-            }
-            else
-            {
-                return Check5thVictoryMetric(player1, player2);
-            }
-        }
-
-        /// <summary>
-        /// Checks, at which house the last character standing is..
-        /// </summary>
-        /// <param name="player1">The first active player of the party.</param>
-        /// <param name="player2">The second active player of the party.</param>
-        /// <returns>Returns the player with the LastCharacterStanding.</returns>
-        private Player Check5thVictoryMetric(Player player1, Player player2)
-        {
-            throw new NotImplementedException("not impelmented");
-            //return the winner with last character standing
-        }
-
-        /// <summary>
-        /// This method checks weather the spice threshold is reached
-        /// </summary>
-        /// <returns>true, if the spice threshold is reached.</returns>
-        public bool CheckSpiceThreshold()
-        {
-            // TODO implement logic
-            return false;
-        }
+        } 
 
         /// <summary>
         /// This method is responsible for pausing the game.

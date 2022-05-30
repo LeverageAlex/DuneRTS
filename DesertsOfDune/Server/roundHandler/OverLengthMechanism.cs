@@ -11,7 +11,7 @@ namespace GameData.network.util.world
         private EarthQuake earthQuake;
         private ShaiHuludPhase shaiHuludPhase;
 
-        public void Execut()
+        public void Execute()
         {
             throw new NotImplementedException();
         }

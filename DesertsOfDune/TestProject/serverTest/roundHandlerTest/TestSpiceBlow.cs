@@ -86,7 +86,7 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
             mapFields[2, 2] = new MapField(false, false, 0, null);
             roundHandler.Map = mapFields;
             SpiceBlow spiceBlow = new SpiceBlow(roundHandler.Map);
-            spiceBlow.placeSpiceOnFields(0, 0);
+            spiceBlow.PlaceSpiceOnFields(0, 0);
             int counter = 0;
             for(int i = 0; i < 3; i++)
             {

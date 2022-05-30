@@ -40,7 +40,7 @@ namespace GameData.network.util.world
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    fields[y, x] = new MapField(scenarioConfiguration[x][(MAP_HEIGHT-1)-y], x, y);
+                    fields[y, x] = new MapField(scenarioConfiguration[x][(MAP_HEIGHT - 1) - y], x, y);
                 }
             }
         }
@@ -80,6 +80,31 @@ namespace GameData.network.util.world
         }
 
         /// <summary>
+        /// retrieves a random, approachble neighbor field of a given map field
+        /// </summary>
+        /// <param name="field">the field, of which a random approachble neighbor field should be determined</param>
+        /// <returns>the random neighbor field or null, if there doesn't exist such a field</returns>
+        /// TODO: do not return null
+        public MapField GetRandomApproachableNeighborField(MapField field)
+        {
+            Random random = new Random();
+            List<MapField> neighbors = GetNeighborFields(field);
+
+            neighbors.RemoveAll(neighbor => !neighbor.IsApproachable);
+
+            int amountOfNeighbors = neighbors.Count;
+
+            if (amountOfNeighbors == 0)
+            {
+                return null;
+            } else
+            {
+                int index = random.Next(amountOfNeighbors);
+                return neighbors[index];
+            }
+        }
+
+        /// <summary>
         /// checks, wether a field specified through its x- and y-coordinate on the map, so whether the coordinates are x,y > 0 and x,y < maxX, maxY
         /// </summary>
         /// <param name="x"><the x-coordinate of the mapfield/param>
@@ -101,8 +126,9 @@ namespace GameData.network.util.world
         {
             if (IsFieldOnMap(x, y))
             {
-                return this.fields[(MAP_HEIGHT-1)-y,x];
-            } else
+                return this.fields[(MAP_HEIGHT - 1) - y, x];
+            }
+            else
             {
                 return null;
             }
@@ -119,7 +145,7 @@ namespace GameData.network.util.world
         {
             if (IsFieldOnMap(x, y))
             {
-                this.fields[(MAP_HEIGHT-1)-y, x] = newField;
+                this.fields[(MAP_HEIGHT - 1) - y, x] = newField;
                 newField.XCoordinate = x;
                 newField.ZCoordinate = y;
                 return true;
@@ -151,10 +177,41 @@ namespace GameData.network.util.world
             return cities;
         }
 
-
+        /// <summary>
+        /// checks, whether a given map field is a desert field, so of type "DUNE" or "FLAT_SAND"
+        /// </summary>
+        /// <param name="mapField">the map field, to check</param>
+        /// <returns>true, if the given map field is a desert field</returns>
         public bool IsMapFieldADesertField(MapField mapField)
         {
             return mapField.TileType.Equals(TileType.FLAT_SAND.ToString()) || mapField.TileType.Equals(TileType.DUNE.ToString());
+        }
+
+        /// <summary>
+        /// retrieves a random desert field from the map
+        /// </summary>
+        /// <remarks>
+        /// Be cautious when using this method, because it uses a while (true)-loop, so theoretically it is possible, that this method never return,
+        /// if there is no desert field on the map
+        /// </remarks>
+        /// <returns>the random desert field on the map</returns>
+        public MapField GetRandomDesertField()
+        {
+            // as long, as the chosen map field is not a desert field, choose a random field
+
+            while (true)
+            {
+                // get a random map field on the map
+                Random random = new Random();
+                int randomX = random.Next(MAP_WIDTH);
+                int randomY = random.Next(MAP_HEIGHT);
+
+                MapField chosenField = GetMapFieldAtPosition(randomX, randomY);
+                if (IsMapFieldADesertField(chosenField))
+                {
+                    return chosenField;
+                }
+            }
         }
 
         /// <summary>
@@ -172,7 +229,7 @@ namespace GameData.network.util.world
                 {
                     builder.Append(GetMapFieldAtPosition(x, y).TileType.ToString());
 
-                    if (GetMapFieldAtPosition(x,y).isInSandstorm)
+                    if (GetMapFieldAtPosition(x, y).isInSandstorm)
                     {
                         builder.Append(" x ");
                     }
@@ -185,5 +242,27 @@ namespace GameData.network.util.world
 
             Log.Debug(builder.ToString());
         }
+
+        /// <summary>
+        /// determines the amount of spice, which is on the map by counting the map fields, which has spice on them
+        /// </summary>
+        /// <returns>the amount of spice on the map</returns>
+        public int GetAmountOfSpiceOnMap()
+        {
+            int spiceAmount = 0;
+            for (int x = 0; x < MAP_WIDTH; x++)
+            {
+                for (int y = 0; y < MAP_HEIGHT; y++)
+                {
+                    if (GetMapFieldAtPosition(x, y).HasSpice)
+                    {
+                        spiceAmount++;
+                    }
+                }
+            }
+            return spiceAmount;
+        }
+
+
     }
 }

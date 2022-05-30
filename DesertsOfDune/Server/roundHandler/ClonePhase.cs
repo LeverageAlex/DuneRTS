@@ -86,7 +86,7 @@ namespace GameData.server.roundHandler
                 {
                     int indexX = ChooseRandomNeighborIndexX(city);
                     int indexZ = ChooseRandomNeighborIndexZ(city);
-                    if (map[indexX,indexZ].IsAproachable)
+                    if (map[indexX,indexZ].IsApproachable)
                     {
                         return map[indexX,indexZ];
                     }
@@ -126,7 +126,7 @@ namespace GameData.server.roundHandler
             {
                 for(int j = zStart; j < zEnd; j++)
                 {
-                    if (map[i,j].IsAproachable)
+                    if (map[i,j].IsApproachable)
                     {
                         return true;
                     }

@@ -5,15 +5,16 @@ using System.Text;
 namespace GameData.network.util.world
 {
     /// <summary>
-    /// This class is responsible for holding the data of the game statistics
+    /// Holds the data of the game statistics for a player
     /// </summary>
     public class Statistics
     {
-        private int houseSpiceStorage;
-        private int totalSpiceCollected;
-        private int enemiesDefeated;
-        private int charactersSwallowed;
-        private List<String> charactersAlive;
+        public int HouseSpiceStorage { get; set; }
+        public int TotalSpiceCollected { get; set; }
+        public int EnemiesDefeated { get; set; }
+        public int CharactersSwallowed { get; set; }
+        public List<String> CharactersAlive { get; set; }
+        public bool LastCharacterStanding { get; set; }
 
         /// <summary>
         /// This method returns the statistics in a specific format.
@@ -25,82 +26,63 @@ namespace GameData.network.util.world
         }
 
         /// <summary>
-        /// This method is used to reset the statistics
+        /// resets the statistics, so set every value to 0 and empty the list for the characters
         /// </summary>
-        public void resetStatistics()
+        public void ResetStatistics()
         {
-            this.houseSpiceStorage = 0;
-            this.totalSpiceCollected = 0;
-            this.enemiesDefeated = 0;
-            this.charactersSwallowed = 0;
-            charactersAlive.Clear();
+            this.HouseSpiceStorage = 0;
+            this.TotalSpiceCollected = 0;
+            this.EnemiesDefeated = 0;
+            this.CharactersSwallowed = 0;
+            this.CharactersAlive.Clear();
+            this.LastCharacterStanding = false;
         }
 
         /// <summary>
-        /// This method is used to increase the house spice by a certain amount
-        /// </summary>
-        /// <param name="amount">the amount used to increase by</param>
-        public void addToHouseSpiceStorage(int amount)
-        {
-            this.houseSpiceStorage = houseSpiceStorage + amount;
-        }
-
-
-        /// <summary>
-        /// This method is used to increase the total collected Spice by a certain amount
+        /// increases the house spice by a certain amount
         /// </summary>
         /// <param name="amount">the amount used to increase by</param>
-        public void addToTotalSpiceCollected(int amount)
+        public void AddToHouseSpiceStorage(int amount)
         {
-            this.totalSpiceCollected = totalSpiceCollected + amount;
+            this.HouseSpiceStorage += amount;
+        }
+
+
+        /// <summary>
+        /// increases the total collected spice by a certain amount
+        /// </summary>
+        /// <param name="amount">the amount used to increase by</param>
+        public void AddToTotalSpiceCollected(int amount)
+        {
+            this.TotalSpiceCollected += amount;
         }
 
         /// <summary>
-        /// This method is used to increase the total defeated enemies by a certain amount
+        /// increases the total defeated enemies by a certain amount
         /// </summary>
         /// <param name="amount">the amount used to increase by</param>
         public void AddToEnemiesDefeated(int amount)
         {
-            this.enemiesDefeated = enemiesDefeated + amount;
+            this.EnemiesDefeated += amount;
         }
 
         /// <summary>
-        /// This method is used to increase the swallowed characters by a certain amount
+        /// increases the amount of swallowed characters (by a ordinary sandworm) by a certain amount
         /// </summary>
         /// <param name="amount">the amount used to increase by</param>
-        public void addToCharactersSwallowed(int amount)
+        public void AddToCharactersSwallowed(int amount)
         {
-            this.charactersSwallowed = charactersSwallowed + amount;
+            this.CharactersSwallowed += amount;
         }
 
         /// <summary>
-        /// 
+        /// removes a 
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
         public bool RemoveFromCharactersAlive(string name)
         {
             return false;
-        }
-
-        public int GetHouseSpiceStorage()
-        {
-            return this.houseSpiceStorage;
-        }
-
-        public int GetTotalSpiceCollected()
-        {
-            return this.totalSpiceCollected;
-        }
-
-        public int GetEnemiesDefeated()
-        {
-            return this.enemiesDefeated;
-        }
-
-        public int GetCharactersSwallowed()
-        {
-            return this.charactersSwallowed;
         }
     }
 }

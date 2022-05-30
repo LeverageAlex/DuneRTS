@@ -35,14 +35,10 @@ namespace GameData.network.util.world
             get { return elevation; }
             set { elevation = value; }
         }
-        private bool isAprochable;
-
+       
         [JsonIgnore]
-        public bool IsAproachable
-        {
-            set { isAprochable = value; }
-            get { return isAprochable; }
-        }
+        public bool IsAproachable { get; set; }
+
         private int xCoordinate;
         [JsonIgnore]
         public int XCoordinate { get { return xCoordinate; } set { xCoordinate = value; } }
