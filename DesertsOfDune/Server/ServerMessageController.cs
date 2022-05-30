@@ -79,7 +79,7 @@ namespace Server
         /// If a client loose connection to the server, he can rejoin to the game with the clientSecret from the JoinAcceptedMessage.
         /// </summary>
         /// <param name="msg">RejoinMessage with clientSecretParameter.</param>
-        public override void OnRejoinMessage(RejoinMessage msg)
+        public override void OnRejoinMessage(RejoinMessage msg, string sessionID)
         {
             //TODO: implement this method
             //throw new NotImplementedException("not implemented completely");
@@ -90,7 +90,7 @@ namespace Server
             {
                 if (client.ClientSecret == msg.ClientSecret)
                 {
-                    //set sessionID
+                    client.SessionID = sessionID; //new sessionID for the rejoined client
                     //check if player, if yes send gamestate
                     rejoinSuccessful = true;
                     Log.Information($"Rejoin of client: {client.ClientName} was successful.");

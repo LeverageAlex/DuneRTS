@@ -38,7 +38,7 @@ namespace Server.ClientManagement.Clients
         /// <summary>
         /// the session id of the connection of the client
         /// </summary>
-        public string SessionID { get; }
+        public string SessionID { get; set; }
 
         protected Client(string clientName, bool isActivePlayer, string sessionID)
         {

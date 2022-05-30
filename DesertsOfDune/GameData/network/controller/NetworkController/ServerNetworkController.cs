@@ -82,12 +82,12 @@ namespace GameData.network.controller
         }
 
         /// <summary>
-        /// template method for handling the received messages and forward them to message controller
+        /// template method for handling the received messages for the server and forward them to message controller
         /// </summary>
         /// <param name="message">message, which was received</param>
+        /// <param name="sessionID">ID of the session.</param>
         /// <returns>true, if the message could successfully parsed and forwarded to the message controller</returns>
-        /// TODO: make the method abstract and implement in the concrete instances because, they will have different message controller
-        public override bool HandleReceivedMessage(string message) //todo: sessionID in parameter
+        public override bool HandleReceivedMessage(string message, string sessionID)
         {
             Log.Debug("Server parsing the received message: " + message);
 
@@ -103,13 +103,13 @@ namespace GameData.network.controller
                     messageController.OnDebugMessage((DebugMessage)receivedMessage);
                     return true;
                 case MessageType.JOIN:
-                    messageController.OnJoinMessage((JoinMessage)receivedMessage, "");
+                    messageController.OnJoinMessage((JoinMessage)receivedMessage, sessionID);
                     return true;
                 case MessageType.REJOIN:
-                    messageController.OnRejoinMessage((RejoinMessage)receivedMessage);
+                    messageController.OnRejoinMessage((RejoinMessage)receivedMessage, sessionID);
                     return true;
                 case MessageType.HOUSE_REQUEST:
-                    messageController.OnHouseRequestMessage((HouseRequestMessage)receivedMessage, "");
+                    messageController.OnHouseRequestMessage((HouseRequestMessage)receivedMessage, sessionID);
                     return true;
                 case MessageType.MOVEMENT_REQUEST:
                     messageController.OnMovementRequestMessage((MovementRequestMessage)receivedMessage);

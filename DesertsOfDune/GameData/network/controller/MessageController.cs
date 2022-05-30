@@ -80,7 +80,7 @@ namespace GameData.network.controller
 
         public abstract void OnJoinMessage(JoinMessage msg, string sessionID);
 
-        public abstract void OnRejoinMessage(RejoinMessage msg);
+        public abstract void OnRejoinMessage(RejoinMessage msg, string sessionID);
 
         public abstract void OnHouseRequestMessage(HouseRequestMessage msg, string sessionID);
 

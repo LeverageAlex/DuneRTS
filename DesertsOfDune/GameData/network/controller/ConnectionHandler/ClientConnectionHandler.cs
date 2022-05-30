@@ -141,7 +141,7 @@ namespace GameData.network.controller
         protected internal override void OnMessage(MessageEventArgs e, string sessionID)
         {
             Log.Debug("Received new message from the Websocket server. The message is: " + e.Data);
-            NetworkController.HandleReceivedMessage(e.Data);
+            NetworkController.HandleReceivedMessage(e.Data, sessionID);
         }
 
         /// <summary>

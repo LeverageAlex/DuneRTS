@@ -56,8 +56,9 @@ namespace GameData.network.controller
         /// template method for handling the received messages and forward them to message controller
         /// </summary>
         /// <param name="message">message, which was received</param>
+        /// <param name="sessionID">ID of the session.</param>
         /// <returns>true, if the message could successfully parsed and forwarded to the message controller</returns>
-        public abstract bool HandleReceivedMessage(string message);
+        public abstract bool HandleReceivedMessage(string message, string sessionID);
         /**{
             Log.Debug("Parsing the received message: " + message);
 
