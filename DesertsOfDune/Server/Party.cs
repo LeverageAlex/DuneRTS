@@ -104,18 +104,22 @@ namespace Server
         /// <returns>a list of all players or an empty list, if there are no players</returns>
         public List<Player> GetActivePlayers()
         {
-            List<Client> foundActiveClients = connectedClients.FindAll(client => client.IsActivePlayer);
+            //List<Client> foundActiveClients = connectedClients.FindAll(client => client.IsActivePlayer);
+            List<Player> foundActiveClients = new List<Player>();
+            foreach (var activePlayer in connectedClients)
+            {
+                if (activePlayer.IsActivePlayer)
+                {
+                    foundActiveClients.Add((Player)activePlayer);
+                }
+            }
 
             if (foundActiveClients.Count == 0)
             {
                 // there are no players
                 Log.Debug("There were no active clients, so player found");
-                return new List<Player>();
             }
-            else
-            {
-                return (List<Player>)foundActiveClients.Cast<Player>();
-            }
+            return foundActiveClients;
         }
 
         /// <summary>
