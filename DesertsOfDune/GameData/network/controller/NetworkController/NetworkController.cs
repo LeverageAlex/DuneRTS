@@ -57,9 +57,8 @@ namespace GameData.network.controller
         /// </summary>
         /// <param name="message">message, which was received</param>
         /// <returns>true, if the message could successfully parsed and forwarded to the message controller</returns>
-        /// TODO: make the method abstract and implement in the concrete instances because, they will have different message controller
-        public bool HandleReceivedMessage(string message)
-        {
+        public abstract bool HandleReceivedMessage(string message);
+        /**{
             Log.Debug("Parsing the received message: " + message);
 
             // get Message-Object from JSON-String message
@@ -73,12 +72,21 @@ namespace GameData.network.controller
                 case MessageType.DEBUG:
                     messageController.OnDebugMessage((DebugMessage)receivedMessage);
                     return true;
+                case MessageType.JOIN:
+                    messageController.OnJoinMessage((JoinMessage)receivedMessage, "");
+                    return true;
+                case MessageType.REJOIN:
+                    messageController.OnRejoinMessage((RejoinMessage)receivedMessage);
+                    return true;
+                case MessageType.JOINACCEPTED:
+                    Log.Information("Join accepted");
+                    return true;
                 default:
                     Log.Error("Incoming parsed message has invalid type (" + type + ") and could not be forwarded to the message controller!");
                     break;
             }
 
             return false;
-        }
+        }*/
     }
 }

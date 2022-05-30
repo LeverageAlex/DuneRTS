@@ -73,7 +73,7 @@ namespace Server
         /// </summary>
         private static void CreateNetworkModule()
         {
-            MessageController messageController = new MessageController();
+            MessageController messageController = new ServerMessageController();
 
             string serverAddress = ServerConfiguration.DEFAULT_SERVER_ADDRESS;
             int port = configuration.Port;

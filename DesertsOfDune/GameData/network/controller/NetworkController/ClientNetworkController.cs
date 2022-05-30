@@ -61,5 +61,126 @@ namespace GameData.network.controller
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// template method for handling the received messages and forward them to message controller
+        /// </summary>
+        /// <param name="message">message, which was received</param>
+        /// <returns>true, if the message could successfully parsed and forwarded to the message controller</returns>
+        /// TODO: make the method abstract and implement in the concrete instances because, they will have different message controller
+        public override bool HandleReceivedMessage(string message)
+        {
+            Log.Debug("Client parsing the received message: " + message);
+
+            // get Message-Object from JSON-String message
+            Message receivedMessage = MessageConverter.ToMessage(message);
+
+            // get the type of the message for determine the controller methods needed to handle this message
+            MessageType type = (MessageType)Enum.Parse(typeof(MessageType), receivedMessage.GetMessageTypeAsString());
+
+            switch (type)
+            {
+                case MessageType.DEBUG:
+                    messageController.OnDebugMessage((DebugMessage)receivedMessage);
+                    return true;
+                case MessageType.JOINACCEPTED:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.ERROR:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.GAMECFG:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.HOUSE_OFFER:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.HOUSE_ACKNOWLEDGEMENT:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.TURN_DEMAND:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.MOVEMENT_DEMAND:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.ACTION_DEMAND:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.TRANSFER_DEMAND:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.CHARACTER_STAT_CHANGE_DEMAND:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.MAP_CHANGE_DEMAND:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.ATOMICS_UPDATE_DEMAND:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.SPAWN_CHARACTER_DEMAND:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.CHANGE_PLAYER_SPICE_DEMAND:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.SANDWORM_SPAWN_DEMAND:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.SANDWORM_MOVE_DEMAND:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.SANDWORM_DESPAWN_DEMAND:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.ENDGAME:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.GAME_END:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.GAMESTATE:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.STRIKE:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.GAME_PAUSE_DEMAND:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                case MessageType.UNPAUSE_GAME_OFFER:
+                    //todo: call method from client
+                    Console.WriteLine(message);
+                    return true;
+                default:
+                    Log.Error("Incoming parsed message has invalid type (" + type + ") and could not be forwarded to the message controller!");
+                    break;
+            }
+
+            return false;
+        }
     }
 }

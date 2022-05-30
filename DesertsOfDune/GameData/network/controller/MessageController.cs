@@ -3,6 +3,8 @@ using GameData.network.messages;
 using Serilog;
 using GameData.network.util.parser;
 using GameData.network.util.world;
+using System.Collections.Generic;
+using GameData.network.util.enums;
 
 namespace GameData.network.controller
 {
@@ -21,7 +23,7 @@ namespace GameData.network.controller
     /// and the on-Methods are always triggered by the network controller (respectively connection handler) and parse as well as
     /// process a message and so effect the "context". 
     /// </remarks>
-    public class MessageController
+    public abstract class MessageController
     {
         /// <summary>
         /// parent network controller, that contains this message controller (ref. needed so give the message, which need
@@ -32,8 +34,9 @@ namespace GameData.network.controller
         /// <summary>
         /// creates a new message controller
         /// </summary>
-        public MessageController()
+        protected MessageController()
         {
+            //TODO: remove contructor?
         }
 
         /// <summary>
@@ -74,5 +77,99 @@ namespace GameData.network.controller
             // send message
             NetworkController.HandleSendingMessage(message);
         }
+
+        public abstract void OnJoinMessage(JoinMessage msg, string sessionID);
+
+        public abstract void OnRejoinMessage(RejoinMessage msg);
+
+        public abstract void OnHouseRequestMessage(HouseRequestMessage msg, string sessionID);
+
+        /// <summary>
+        /// executed, when a player wants to move his character along a path while it's his turn
+        /// </summary>
+        /// <param name="msg">contains informations about the player, the character he wants to move and the path he wants to move his character along</param>
+        /// <exception cref="NotImplementedException"></exception>
+        public abstract void OnMovementRequestMessage(MovementRequestMessage msg);
+
+        /// <summary>
+        /// executed, when a player want to do a action with his character while it's his turn
+        /// </summary>
+        /// <param name="msg">contains informations about the player, the character he wants to do a action with and the action he wants his character to do</param>
+        public abstract void OnActionRequestMessage(ActionRequestMessage msg);
+
+        public abstract void OnTransferRequestMessage(TransferRequestMessage msg);
+
+        public abstract void OnEndTurnRequestMessage(EndTurnRequestMessage msg);
+
+        public abstract void OnGameStateRequestMessage(GameStateRequestMessage msg);
+
+        public abstract void OnPauseGameRequestMessage(PauseGameRequestMessage msg);
+
+
+        public abstract void DoAcceptJoin(string clientSecret, int clientID, string sessionID);
+
+        /// <summary>
+        /// sends the an error message to the client
+        /// </summary>
+        /// <param name="errorCode">the error code (see "Standardisierungsdokument")</param>
+        /// <param name="errorDescription">a further description of the error</param>
+        /// <param name="sessionID">the session id of the client, the message need to be send to</param>
+        public abstract void DoSendError(int errorCode, string errorDescription, string sessionID);
+
+        public abstract void DoSendGameConfig();
+
+        public abstract void DoSendHouseOffer(int clientID, GreatHouseType[] houses);
+
+        public abstract void DoSendHouseAck(int clientID, string houseName);
+
+        public abstract void DoSendTurnDemand(int clientID, int characterID);
+
+        public abstract void DoSendMovementDemand(int clientID, int characterID, List<Position> path);
+
+        public abstract void DoSendActionDemand(int clientID, int characterID, ActionType action, Position target);
+
+        public abstract void DoSendTransferDemand(int clientID, int characterID, int targetID);
+
+        public abstract void DoSendChangeCharacterStatsDemand(int clientID, int characterID, CharacterStatistics stats);
+
+        public abstract void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons, MapField[,] newMap);
+
+        public abstract void DoSendAtomicsUpdateDemand(int clientID, bool shunned, int atomicsLeft);
+
+        public abstract void DoSpawnCharacterDemand(Character attributes);
+
+        public abstract void DoChangePlayerSpiceDemand(int clientID, int newSpiceVal);
+
+        public abstract void DoSpawnSandwormDemand(int characterID, MapField mapField);
+
+        public abstract void DoMoveSandwormDemand(List<MapField> list);
+
+        public abstract void DoDespawnSandwormDemand();
+
+        /// <summary>
+        /// This method will be called, when the overlengthmechanism is aktive.
+        /// </summary>
+        public abstract void DoEndGame();
+
+        /// <summary>
+        /// This message will be sent to the clients when the game ends.
+        /// </summary>
+        /// <param name="winnerID">ID of the winner of the party</param>
+        /// <param name="loserID">ID of the loser of the party</param>
+        /// <param name="stats">Repräsentation of the statistics of the Game</param>
+        public abstract void DoGameEndMessage(int winnerID, int loserID, Statistics stats);
+
+        public abstract void DoSendGameState(int clientID, int[] activlyPlayingIDs, String[] history);
+
+        /// <summary>
+        /// increases the amount of strikes of a client and sends a strike message
+        /// </summary>
+        /// <param name="player">the player, who gets a strike</param>
+        /// <param name="wrongMessage">the wrong message, who was send by the client</param>
+        public abstract void DoSendStrike(int clientID, Message wrongMessage);
+
+        public abstract void DoGamePauseDemand(int requestedByClientID, bool pause);
+
+        public abstract void OnUnpauseGameOffer(int requestedByClientID);
     }
 }

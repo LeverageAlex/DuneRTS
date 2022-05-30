@@ -31,7 +31,7 @@ namespace Server
         /// <param name="msg">JoinMessage with the value clientName, connectionCode and active flag if he is a player.</param>
         /// <param name="sessionID">the session id of the client, who wants to join</param>
         /// TODO: handle reconnect
-        public void OnJoinMessage(JoinMessage msg, string sessionID)
+        public override void OnJoinMessage(JoinMessage msg, string sessionID)
         {
             Client client;
 
@@ -79,10 +79,10 @@ namespace Server
         /// If a client loose connection to the server, he can rejoin to the game with the clientSecret from the JoinAcceptedMessage.
         /// </summary>
         /// <param name="msg">RejoinMessage with clientSecretParameter.</param>
-        public void OnRejoinMessage(RejoinMessage msg)
+        public override void OnRejoinMessage(RejoinMessage msg)
         {
             //TODO: implement this method
-            throw new NotImplementedException("not implemented completely");
+            //throw new NotImplementedException("not implemented completely");
 
             var connectedClients = Party.GetInstance().GetConnectedClients();
             bool rejoinSuccessful = false;
@@ -90,13 +90,17 @@ namespace Server
             {
                 if (client.ClientSecret == msg.ClientSecret)
                 {
+                    //set sessionID
+                    //check if player, if yes send gamestate
                     rejoinSuccessful = true;
                     Log.Information($"Rejoin of client: {client.ClientName} was successful.");
                 }
             }
             if (!rejoinSuccessful)
             {
-                Log.Error("Rejoin failed");
+                //kick client
+                //((ServerConnectionHandler)connectionHandler).sessionManager.CloseSession();
+                Log.Error("Rejoin of client failed");
             }
         }
 
@@ -105,7 +109,7 @@ namespace Server
         /// </summary>
         /// <param name="msg">the HouseRequestMessage, which contains the house name</param>
         /// <param name="sessionID">the session id of the requesting client</param>
-        public void OnHouseRequestMessage(HouseRequestMessage msg, string sessionID)
+        public override void OnHouseRequestMessage(HouseRequestMessage msg, string sessionID)
         {
             GreatHouseType chosenGreatHouse = (GreatHouseType)Enum.Parse(typeof(GreatHouseType), msg.houseName);
 
@@ -139,7 +143,7 @@ namespace Server
                     DoSendHouseOffer(requestingPlayer.ClientID, requestingPlayer.OfferedGreatHouses);
 
                     // send a strike
-                    DoSendStrike(requestingPlayer, msg);
+                    DoSendStrike(requestingPlayer.ClientID, msg);
                 }
 
             }
@@ -155,7 +159,7 @@ namespace Server
         /// </summary>
         /// <param name="msg">contains informations about the player, the character he wants to move and the path he wants to move his character along</param>
         /// <exception cref="NotImplementedException"></exception>
-        public void OnMovementRequestMessage(MovementRequestMessage msg)
+        public override void OnMovementRequestMessage(MovementRequestMessage msg)
         {
             //request from client to move a character
 
@@ -224,7 +228,7 @@ namespace Server
         /// executed, when a player want to do a action with his character while it's his turn
         /// </summary>
         /// <param name="msg">contains informations about the player, the character he wants to do a action with and the action he wants his character to do</param>
-        public void OnActionRequestMessage(ActionRequestMessage msg)
+        public override void OnActionRequestMessage(ActionRequestMessage msg)
         {
 
             //request from client to run an action
@@ -367,7 +371,7 @@ namespace Server
         /// executed if the player wants to transfer spice from one character to another
         /// </summary>
         /// <param name="msg">contains information about the player who wants to transfer spice, the character who already has the spice, the character who should get the spice and the amount of spice he wants to transfer</param>
-        public void OnTransferRequestMessage(TransferRequestMessage msg)
+        public override void OnTransferRequestMessage(TransferRequestMessage msg)
         {
             //get the player who wants to do the transfer
             Player activePlayer = null;
@@ -405,7 +409,7 @@ namespace Server
             }
         }
 
-        public void OnEndTurnRequestMessage(EndTurnRequestMessage msg)
+        public override void OnEndTurnRequestMessage(EndTurnRequestMessage msg)
         {
             throw new NotImplementedException("not implemented");
 
@@ -415,7 +419,7 @@ namespace Server
             //int characterID
         }
 
-        public void OnGameStateRequestMessage(GameStateRequestMessage msg)
+        public override void OnGameStateRequestMessage(GameStateRequestMessage msg)
         {
             throw new NotImplementedException("not implemented");
 
@@ -424,7 +428,7 @@ namespace Server
             //int clientID
         }
 
-        public void OnPauseGameRequestMessage(PauseGameRequestMessage msg)
+        public override void OnPauseGameRequestMessage(PauseGameRequestMessage msg)
         {
             throw new NotImplementedException("not implemented");
 
@@ -440,10 +444,11 @@ namespace Server
         /// TODO: what is sending back if a exception is thrown?
         /// </summary>
         /// <param name="clientSecret">Unique identifikator for the client, which is just known between the affected parties</param>
-        public void DoAcceptJoin(string clientSecret, int clientID, string sessionID)
+        public override void DoAcceptJoin(string clientSecret, int clientID, string sessionID)
         {
             JoinAcceptedMessage joinAcceptedMessage = new JoinAcceptedMessage(clientSecret, clientID);
-            NetworkController.HandleSendingMessage(joinAcceptedMessage, sessionID);
+            //NetworkController.HandleSendingMessage(joinAcceptedMessage, sessionID);
+            NetworkController.HandleSendingMessage(joinAcceptedMessage);
             Log.Information("Join request of " + clientID + " was accepted");
         }
 
@@ -453,14 +458,14 @@ namespace Server
         /// <param name="errorCode">the error code (see "Standardisierungsdokument")</param>
         /// <param name="errorDescription">a further description of the error</param>
         /// <param name="sessionID">the session id of the client, the message need to be send to</param>
-        public void DoSendError(int errorCode, string errorDescription, string sessionID)
+        public override void DoSendError(int errorCode, string errorDescription, string sessionID)
         {
             ErrorMessage errorMessage = new ErrorMessage(errorCode, errorDescription);
             NetworkController.HandleSendingMessage(errorMessage, sessionID);
             Log.Debug("An error (code = " + errorCode + " ) occured: " + errorDescription);
         }
 
-        public void DoSendGameConfig()
+        public override void DoSendGameConfig()
         {
             int client0ID = Party.GetInstance().GetActivePlayers()[0].ClientID;
             int client1ID = Party.GetInstance().GetActivePlayers()[0].ClientID;
@@ -472,62 +477,62 @@ namespace Server
             NetworkController.HandleSendingMessage(gameConfigMessage);
         }
 
-        public void DoSendHouseOffer(int clientID, GreatHouseType[] houses)
+        public override void DoSendHouseOffer(int clientID, GreatHouseType[] houses)
         {
             GreatHouse[] greatHouses = { GreatHouseFactory.CreateNewGreatHouse(houses[0]), GreatHouseFactory.CreateNewGreatHouse(houses[1]) };
             HouseOfferMessage houseOfferMessage = new HouseOfferMessage(clientID, greatHouses);
             NetworkController.HandleSendingMessage(houseOfferMessage);
         }
 
-        public void DoSendHouseAck(int clientID, string houseName)
+        public override void DoSendHouseAck(int clientID, string houseName)
         {
             HouseAcknowledgementMessage houseACKMessage = new HouseAcknowledgementMessage(clientID, houseName);
             NetworkController.HandleSendingMessage(houseACKMessage);
         }
 
-        public void DoSendTurnDemand(int clientID, int characterID)
+        public override void DoSendTurnDemand(int clientID, int characterID)
         {
             TurnDemandMessage turnDemandMessage = new TurnDemandMessage(clientID, characterID);
             NetworkController.HandleSendingMessage(turnDemandMessage);
         }
 
-        public void DoSendMovementDemand(int clientID, int characterID, List<Position> path)
+        public override void DoSendMovementDemand(int clientID, int characterID, List<Position> path)
         {
             MovementDemandMessage movementDemandMessage = new MovementDemandMessage(clientID, characterID, path);
             NetworkController.HandleSendingMessage(movementDemandMessage);
         }
 
-        public void DoSendActionDemand(int clientID, int characterID, ActionType action, Position target)
+        public override void DoSendActionDemand(int clientID, int characterID, ActionType action, Position target)
         {
             ActionDemandMessage actionDemandMessage = new ActionDemandMessage(clientID, characterID, action, target);
             NetworkController.HandleSendingMessage(actionDemandMessage);
         }
 
-        public void DoSendTransferDemand(int clientID, int characterID, int targetID)
+        public override void DoSendTransferDemand(int clientID, int characterID, int targetID)
         {
             TransferDemandMessage transferDemandMessage = new TransferDemandMessage(clientID, characterID, targetID);
             NetworkController.HandleSendingMessage(transferDemandMessage);
         }
 
-        public void DoSendChangeCharacterStatsDemand(int clientID, int characterID, CharacterStatistics stats)
+        public override void DoSendChangeCharacterStatsDemand(int clientID, int characterID, CharacterStatistics stats)
         {
             ChangeCharacterStatisticsDemandMessage changeCharacterStatisticsDemandMessage = new ChangeCharacterStatisticsDemandMessage(clientID, characterID, stats);
             NetworkController.HandleSendingMessage(changeCharacterStatisticsDemandMessage);
         }
 
-        public void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons, MapField[,] newMap)
+        public override void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons, MapField[,] newMap)
         {
             MapChangeDemandMessage mapChangeDemandMessage = new MapChangeDemandMessage(mapChangeReasons, newMap);
             NetworkController.HandleSendingMessage(mapChangeDemandMessage);
         }
 
-        public void DoSendAtomicsUpdateDemand(int clientID, bool shunned, int atomicsLeft)
+        public override void DoSendAtomicsUpdateDemand(int clientID, bool shunned, int atomicsLeft)
         {
             AtomicsUpdateDemandMessage atomicsUpdateDemandMessage = new AtomicsUpdateDemandMessage(clientID, shunned, atomicsLeft);
             NetworkController.HandleSendingMessage(atomicsUpdateDemandMessage);
         }
 
-        public void DoSpawnCharacterDemand(Character attributes)
+        public override void DoSpawnCharacterDemand(Character attributes)
         {
             string characterName = attributes.HouseCharacter.characterName;
             Position pos = new Position(attributes.CurrentMapfield.XCoordinate, attributes.CurrentMapfield.ZCoordinate);
@@ -537,13 +542,13 @@ namespace Server
             NetworkController.HandleSendingMessage(spawnCharacterDemandMessage);
         }
 
-        public void DoChangePlayerSpiceDemand(int clientID, int newSpiceVal)
+        public override void DoChangePlayerSpiceDemand(int clientID, int newSpiceVal)
         {
             ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage = new ChangePlayerSpiceDemandMessage(clientID, newSpiceVal);
             NetworkController.HandleSendingMessage(changePlayerSpiceDemandMessage);
         }
 
-        public void DoSpawnSandwormDemand(int characterID, MapField mapField)
+        public override void DoSpawnSandwormDemand(int characterID, MapField mapField)
         {
             int x = mapField.XCoordinate;
             int z = mapField.ZCoordinate;
@@ -553,7 +558,7 @@ namespace Server
             NetworkController.HandleSendingMessage(sandwormSpawnDemandMessage);
         }
 
-        public void DoMoveSandwormDemand(List<MapField> list)
+        public override void DoMoveSandwormDemand(List<MapField> list)
         {
             List<Position> path = new List<Position>();
             foreach (MapField mapField in list)
@@ -565,7 +570,7 @@ namespace Server
             NetworkController.HandleSendingMessage(sandwormMoveDemandMessage);
         }
 
-        public void DoDespawnSandwormDemand()
+        public override void DoDespawnSandwormDemand()
         {
             SandwormDespawnDemandMessage sandwormDespawnDemandMessage = new SandwormDespawnDemandMessage();
             NetworkController.HandleSendingMessage(sandwormDespawnDemandMessage);
@@ -574,7 +579,7 @@ namespace Server
         /// <summary>
         /// This method will be called, when the overlengthmechanism is aktive.
         /// </summary>
-        public void DoEndGame()
+        public override void DoEndGame()
         {
             EndGameMessage endGameMessage = new EndGameMessage();
             NetworkController.HandleSendingMessage(endGameMessage);
@@ -586,13 +591,13 @@ namespace Server
         /// <param name="winnerID">ID of the winner of the party</param>
         /// <param name="loserID">ID of the loser of the party</param>
         /// <param name="stats">Repräsentation of the statistics of the Game</param>
-        public void DoGameEndMessage(int winnerID, int loserID, Statistics stats)
+        public override void DoGameEndMessage(int winnerID, int loserID, Statistics stats)
         {
             GameEndMessage gameEndMessage = new GameEndMessage(winnerID, loserID, stats);
             NetworkController.HandleSendingMessage(gameEndMessage);
         }
 
-        public void DoSendGameState(int clientID, int[] activlyPlayingIDs, String[] history)
+        public override void DoSendGameState(int clientID, int[] activlyPlayingIDs, String[] history)
         {
             GameStateMessage gameStateMessage = new GameStateMessage(history, activlyPlayingIDs, clientID);
             NetworkController.HandleSendingMessage(gameStateMessage);
@@ -601,23 +606,40 @@ namespace Server
         /// <summary>
         /// increases the amount of strikes of a client and sends a strike message
         /// </summary>
-        /// <param name="player">the player, who gets a strike</param>
+        /// <param name="clientID">the id of the player, who gets a strike</param>
         /// <param name="wrongMessage">the wrong message, who was send by the client</param>
-        public void DoSendStrike(Player player, Message wrongMessage)
+        /**public override void DoSendStrike(Player player, Message wrongMessage)
         {
             string wrongMessageAsString = MessageConverter.FromMessage(wrongMessage);
             player.AddStrike();
             StrikeMessage strikeMessage = new StrikeMessage(player.ClientID, wrongMessageAsString, player.AmountOfStrikes);
             NetworkController.HandleSendingMessage(strikeMessage);
+        }*/
+        public override void DoSendStrike(int clientID, Message wrongMessage)
+        {
+            string wrongMessageAsString = MessageConverter.FromMessage(wrongMessage);
+            Player playerForStrike;
+            foreach (var player in Party.GetInstance().GetActivePlayers())
+            {
+                if (player.ClientID == clientID)
+                {
+                    playerForStrike = player;
+                    playerForStrike.AddStrike();
+                    StrikeMessage strikeMessage = new StrikeMessage(clientID, wrongMessageAsString, playerForStrike.AmountOfStrikes);
+                    NetworkController.HandleSendingMessage(strikeMessage);
+                    return;
+                }
+            }
+            Log.Error($"No player with clientID = {clientID} found.");
         }
 
-        public void DoGamePauseDemand(int requestedByClientID, bool pause)
+        public override void DoGamePauseDemand(int requestedByClientID, bool pause)
         {
             PausGameDemandMessage gamePauseDemandMessage = new PausGameDemandMessage(requestedByClientID, pause);
             NetworkController.HandleSendingMessage(gamePauseDemandMessage);
         }
 
-        public void OnUnpauseGameOffer(int requestedByClientID)
+        public override void OnUnpauseGameOffer(int requestedByClientID)
         {
             UnpauseGameOfferMessage unpauseGameOfferMessage = new UnpauseGameOfferMessage(requestedByClientID);
             NetworkController.HandleSendingMessage(unpauseGameOfferMessage);
