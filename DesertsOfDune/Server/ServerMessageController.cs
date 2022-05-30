@@ -82,7 +82,22 @@ namespace Server
         public void OnRejoinMessage(RejoinMessage msg)
         {
             //TODO: implement this method
-            throw new NotImplementedException("not implemented");
+            throw new NotImplementedException("not implemented completely");
+
+            var connectedClients = Party.GetInstance().GetConnectedClients();
+            bool rejoinSuccessful = false;
+            foreach (var client in connectedClients)
+            {
+                if (client.ClientSecret == msg.ClientSecret)
+                {
+                    rejoinSuccessful = true;
+                    Log.Information($"Rejoin of client: {client.ClientName} was successful.");
+                }
+            }
+            if (!rejoinSuccessful)
+            {
+                Log.Error("Rejoin failed");
+            }
         }
 
         /// <summary>

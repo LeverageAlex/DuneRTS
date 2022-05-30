@@ -62,6 +62,7 @@ namespace Server
             connectedClients = new List<Client>();
             map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
             roundHandler = new RoundHandler(PartyConfiguration.GetInstance().numbOfRounds, PartyConfiguration.GetInstance().spiceMinimum, map);
+            this.messageController = new ServerMessageController(); //TODO: create new ServerMessageController here or somewhere else
 
             Log.Debug("A new party was created!");
         }
@@ -254,6 +255,11 @@ namespace Server
         {
             Random random = new Random();
             return fields[random.Next(fields.Count)];
+        }
+
+        public List<Client> GetConnectedClients()
+        {
+            return this.connectedClients;
         }
     }
 }
