@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using System.Text;
+using GameData.graph;
 using GameData.network.messages;
 using GameData.network.util;
+using GameData.network.util.enums;
 using GameData.network.util.world;
 using GameData.network.util.world.character;
 using GameData.network.util.world.mapField;
+using GameData.Pathfinder;
 using Server;
 using Server.Configuration;
 
@@ -39,7 +43,7 @@ namespace GameData.server.roundHandler
 
         public Sandworm Execute(MapField[,] mapFields, List<Character> characters)
         {
-            if (_sandWormSingleton == null && CheckLoudness(characters))
+            /*if (_sandWormSingleton == null && CheckLoudness(characters))
             {
                 Sandworm sandWorm = Spawn(PartyConfiguration.GetInstance().sandWormSpeed, PartyConfiguration.GetInstance().sandWormSpawnDistance, mapFields, characters);
                 sandWorm._targetCharacter = ChooseTargetCharacter(characters);
@@ -56,7 +60,8 @@ namespace GameData.server.roundHandler
             } else
             {
                 return null;
-            }
+            }*/
+            return null;
         }
 
         /// <summary>
@@ -72,7 +77,7 @@ namespace GameData.server.roundHandler
             {
                 _sandWormSingleton = new Sandworm(sandWormSpeed, sandWormSpawnDistance, map, characters);
 
-               
+
             }
             return _sandWormSingleton;
         }
@@ -88,8 +93,8 @@ namespace GameData.server.roundHandler
             this._sandWormSpeed = sandWormSpeed;
             this._sandWormSpawnDistance = sandWormSpawnDistance;
             this._map = map;
-            this._currentField = DetermineField(characters);
             this._targetCharacter = ChooseTargetCharacter(characters);
+            this._currentField = DetermineField(characters);
 
             // get the target character
             Party.GetInstance().messageController.DoSpawnSandwormDemand(this._targetCharacter.CharacterId, this._currentField);
@@ -98,11 +103,41 @@ namespace GameData.server.roundHandler
         /// <summary>
         /// determines the spawn position of the sandworm
         /// </summary>
+        /// <remarks>
+        /// Be attentive, because this method uses a while (true)-loop, so it is possible, that it never returns</remarks>
         /// <returns>the spawn position of the SandWorm</returns>
-        private static MapField DetermineField(List<Character> characters)
-        { 
-           // todo determine sand field that is in specified distance to all characters
-            while(true)
+        private MapField DetermineField(List<Character> characters)
+        {
+            MapField positionOfTargetedCharacter = this._targetCharacter.CurrentMapfield;
+
+            while (true)
+            {
+                // get random desert field on map
+                MapField sandwormField = this._map.GetRandomDesertField();
+
+                if (sandwormField.IsCharacterStayingOnThisField)
+                {
+                    // field is not free
+                    continue;
+                }
+
+                if (this._map.GetNeighborFields(positionOfTargetedCharacter).Contains(sandwormField))
+                {
+                    // field is a neighbor field of the character
+                    continue;
+                }
+
+                if (sandwormField.DistanceTo(positionOfTargetedCharacter) > this._sandWormSpawnDistance)
+                {
+                    // field is to far away
+                    continue;
+                }
+
+                return sandwormField;
+            }
+
+            // todo determine sand field that is in specified distance to all characters
+            /*while(true)
             {
                 Random random = new Random();
                 int indexX = random.Next(0,map.GetLength(0));
@@ -114,31 +149,63 @@ namespace GameData.server.roundHandler
                         return map[indexX, indexZ];
                     }
                 }
-            }
+            }*/
         }
 
         /// <summary>
         /// determines the minimal distance for the Sandworm to all characters on the map from a specific field
         /// </summary>
         /// <param name="characters">all characters on the map</param>
-        /// <param name="mapField">the current mapfield used to determine the minimalD distance from</param>
-        /// <param name="map">the whole map of the game</param>
+        /// <param name="sourceField">the current mapfield used to determine the minimal distance from</param>
         /// <returns></returns>
-        private static int DetermineMinDistanceToCharacters(List<Character> characters, MapField mapField, MapField[,] map)
+        private int DetermineMinDistanceToCharacters(List<Character> characters, MapField sourceField, MapField[,] map)
         {
-            int minDistance = int.MaxValue;
+            /*int minDistance = int.MaxValue;
             Graph graph = Graph.DetermineSandWormGraph(map);
-            int startVertex = Graph.ConvertArrayIndexToVertex(mapField.XCoordinate, mapField.ZCoordinate, map);
+            int startVertex = Graph.ConvertArrayIndexToVertex(sourceField.XCoordinate, sourceField.ZCoordinate, map);
             int[] distances = DijkstrasAlgorithm.DijkstraDistances(graph.Node, startVertex);
             foreach (Character character in characters)
             {
                 int targetVertex = Graph.ConvertArrayIndexToVertex(character.CurrentMapfield.XCoordinate, character.CurrentMapfield.ZCoordinate, map);
-                if (distances[targetVertex] < minDistance)
                 {
                     minDistance = distances[targetVertex];
                 }
             }
-            return minDistance;
+            return minDistance;*/
+            return 0;
+        }
+
+        /// <summary>
+        /// calculates the path to the targeted character (from current position)
+        /// </summary>
+        /// <returns></returns>
+        public Queue<MapField> CalculatePathToTarget()
+        {
+            MapField targetField = this._targetCharacter.CurrentMapfield;
+            AStarPathfinder pathfinder = new AStarPathfinder();
+            SandwormGraph graph = new SandwormGraph(_map);
+
+            return pathfinder.GetShortestPath(_currentField, targetField, graph);
+
+            /*List<MapField> mapFields = new List<MapField>();
+            for (int i = 0; i < _sandWormSpeed; i++)
+            {
+                MapField mapfield = MoveSandWormByOneField(target, graph);
+                mapFields.Add(mapfield);
+                if (_currentField.Character != null)
+                {
+                    _currentField.Character.KilledBySandworm = true;
+                    _currentField.Character = null;
+                    // TODO: sandworm despawns and sandworm phase ends.
+                    Despawn();
+                    return mapFields;
+                }
+                if (mapfield.XCoordinate == target.CurrentMapfield.XCoordinate && mapfield.ZCoordinate == target.CurrentMapfield.ZCoordinate)
+                {
+                    return mapFields;
+                }
+            }
+            return mapFields;*/
         }
 
         /// <summary>
@@ -147,10 +214,10 @@ namespace GameData.server.roundHandler
         /// <param name="target">the target character of the SandWorm</param>
         /// <param name="graph">the graph used to move the sandworm</param>
         /// <returns>the mapth of the SandWorm</returns>
-        public List<MapField> MoveSandworm(Character target, Graph graph)
+        public List<MapField> MoveSandworm(Character target, SandwormGraph graph)
         {
             List<MapField> mapFields = new List<MapField>();
-            for(int i = 0; i < _sandWormSpeed; i++)
+            for (int i = 0; i < _sandWormSpeed; i++)
             {
                 MapField mapfield = MoveSandWormByOneField(target, graph);
                 mapFields.Add(mapfield);
@@ -171,19 +238,19 @@ namespace GameData.server.roundHandler
         }
 
         /// <summary>
-        ///  This method moves the sandworm one field towards his target
+        ///  moves the sandworm one field towards his target
         /// </summary>
         /// <param name="target">the targeted character</param>
         /// <param name="graph">the graph used to determine the movement of the sandworm</param>
         /// <returns>the resulting position of the Sandworm</returns>
-        public MapField MoveSandWormByOneField(Character target, Graph graph)
+        public MapField MoveSandWormByOneField(Character target, SandwormGraph graph)
         {
             /*
              * todo: Falls der Sandwurm keine nur über Wüstenfelder führende Strecke hat, um zu seiner Zielperson zu gelangen,
                 verschwindet er und taucht direkt danach auf einem zufällig gewählten Wüstenfeld wieder auf 
                 Seine Rundenphase ist damit beendet
              */
-            int startVertex = Graph.ConvertArrayIndexToVertex(this._currentField.XCoordinate, this._currentField.ZCoordinate, mapFields);
+            /*int startVertex = Graph.ConvertArrayIndexToVertex(this._currentField.XCoordinate, this._currentField.ZCoordinate, mapFields);
             int targetVertex = Graph.ConvertArrayIndexToVertex(target.CurrentMapfield.XCoordinate, target.CurrentMapfield.ZCoordinate, mapFields);
             int[] parent = DijkstrasAlgorithm.Dijkstra(graph.Node, startVertex);
             int nextVertex = DijkstrasAlgorithm.GetFirstStep(parent, targetVertex);
@@ -196,26 +263,77 @@ namespace GameData.server.roundHandler
             this._currentField = mapFields[indexX, indexZ];
             this._currentField.XCoordinate = indexX;
             this._currentField.ZCoordinate = indexZ;
-            return mapFields[indexX, indexZ];
+            return mapFields[indexX, indexZ];*/
+            return null;
         }
 
         /// <summary>
-        /// removes the sandWorm instance from the map.
+        /// moves the sandworm along a path
+        /// </summary>
+        /// <param name="path">the path, on which the sandworm moves (but not complete path, but only a part depending on the speed)</param>
+        public void MoveSandWorm(Queue<MapField> path)
+        {
+            // check, whether the targeted character moves on a plateau, so disappear
+
+            if (_targetCharacter.CurrentMapfield.TileType.Equals(TileType.PLATEAU.ToString())){
+                Despawn();
+            }
+            // check, if there is a path for sandworm to move along
+            else if (path.Count == 0)
+            {
+                // do not move, but disappear and appear on a random desert field
+                _currentField = this._map.GetRandomDesertField();
+            }
+            else
+            {
+                for (int i = 0; i < _sandWormSpeed; i++)
+                {
+                    MapField nextField = path.Dequeue();
+                    bool needToDisappear = MoveSandwormByOneField(nextField);
+
+                    if (needToDisappear)
+                    {
+                        Despawn();
+                        break;
+                    }
+                }
+            }
+
+
+        }
+
+        /// <summary>
+        /// moves the sandworm by one field to next field and update the old and new field.
+        /// Furthermore, if there is a character on the field, the sandworm swallow it.
+        /// </summary>
+        /// <param name="nextField">the field, the sandworm need to move on</param>
+        /// <returns>true, if the sandworm moved to a field with a character and need to disappear</returns>
+        public bool MoveSandwormByOneField(MapField nextField)
+        {
+            _currentField = new FlatSand(_currentField.HasSpice, _currentField.isInSandstorm, _currentField.stormEye);
+            _currentField.IsApproachable = true;
+            _currentField = nextField;
+            _currentField.IsApproachable = false;
+
+            if (_currentField.IsCharacterStayingOnThisField)
+            {
+                _currentField.Character.KilledBySandworm = true;
+                _currentField.Character = null;
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// removes the sandWorm instance, so let the sandworm disappear
         /// </summary>
         public static void Despawn()
         {
-            //TODO: call Party.GetInstance().serverMessageController.DoDespawnSandwormDemand();
             _sandWormSingleton = null;
-            // implement end of Sandworm Round
-        }
 
-        /// <summary>
-        /// checks, if there is a loud character on the map
-        /// </summary>
-        /// <returns>true, if a loud character exists</returns>
-        public bool CheckLoudness(List<Character> characters)
-        {
-            return characters.Any(character => character.IsLoud());
+            Party.GetInstance().messageController.DoDespawnSandwormDemand();
         }
 
         /// <summary>
@@ -228,7 +346,7 @@ namespace GameData.server.roundHandler
         {
             List<Character> loudCharacters = (List<Character>)characters.Where(character => character.IsLoud());
 
-            if(loudCharacters.Count == 0)
+            if (loudCharacters.Count == 0)
             {
                 return null;
             }
