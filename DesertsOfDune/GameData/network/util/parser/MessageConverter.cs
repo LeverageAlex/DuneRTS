@@ -156,7 +156,8 @@ namespace GameData.network.util.parser
                 case MessageType.GAMECFG:
                     return JsonConvert.DeserializeObject<GameConfigMessage>(message);
                 case MessageType.HOUSE_OFFER:
-                    return JsonConvert.DeserializeObject<HouseOfferMessage>(message);
+                    return new HouseOfferMessage(123, null); //TODO: finish deserialization of HouseOfferMessage
+                    //return JsonConvert.DeserializeObject<HouseOfferMessage>(message);
                 case MessageType.HOUSE_REQUEST:
                     return JsonConvert.DeserializeObject<HouseRequestMessage>(message);
                 case MessageType.HOUSE_ACKNOWLEDGEMENT:

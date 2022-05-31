@@ -36,7 +36,7 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
                 }
             }
             List<Character> characters = new List<Character>();
-            Nobel nobel1 = new Nobel(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true);
+            Noble nobel1 = new Noble(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true);
             MapField mapField = new MapField(false, false, 0, null);
             mapField.XCoordinate = 0;
             mapField.ZCoordinate = 2;
@@ -59,7 +59,7 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
                 }
             }
             List<Character> characters = new List<Character>();
-            Nobel nobel1 = new Nobel(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true);
+            Noble nobel1 = new Noble(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true);
             MapField mapField = new MapField(false, false, 0, null);
             mapField.XCoordinate = 0;
             mapField.ZCoordinate = 2;
@@ -73,9 +73,9 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
         public void TestChooseTargetCharacter()
         {
             List<Character> characters = new List<Character>();
-            Nobel nobel1 = new Nobel(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true);
-            Nobel nobel2 = new Nobel(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true);
-            Nobel nobel3 = new Nobel(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, false);
+            Noble nobel1 = new Noble(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true);
+            Noble nobel2 = new Noble(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true);
+            Noble nobel3 = new Noble(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, false);
             Sandworm sandWorm = Sandworm.Spawn(10, 0, null, null);
             Character target = sandWorm.ChooseTargetCharacter(characters);
             Assert.IsNull(target);
