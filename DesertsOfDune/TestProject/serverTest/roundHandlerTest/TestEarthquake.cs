@@ -37,7 +37,7 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
                 }
             }
 
-            EarthQuake e = new EarthQuake(fields);
+            EarthQuakeExecutor e = new EarthQuake(fields);
             e.TransformRockPlanes();
             for (int i = 0; i < 4; i++)
             {

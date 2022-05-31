@@ -48,20 +48,7 @@ namespace Server
             LoadConfigurationFiles();
             Log.Debug("Loaded configuration files");
 
-            Map map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
-            map.DrawMapToConsole();
-
-            DuneMovementPhase handler = new DuneMovementPhase(map);
-            SandstormPhase handler2 = new SandstormPhase(map);
-
-            for (int i = 0; i < 10; i++)
-            {
-                handler.Execute();
-                handler2.Execute();
-                map.DrawMapToConsole();
-            }
-
-            //Create new party here and set the ServerMessageController
+            // create new party here and set the ServerMessageController
             Party.GetInstance().messageController = serverMessageController;
         }
 
