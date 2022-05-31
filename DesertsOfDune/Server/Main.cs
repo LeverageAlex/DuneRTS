@@ -73,7 +73,10 @@ namespace Server
         /// </summary>
         private static void CreateNetworkModule()
         {
-            MessageController messageController = new ServerMessageController();
+            ServerMessageController messageController = new ServerMessageController();
+
+            //Create new party here and set the ServerMessageController
+            Party.GetInstance().messageController = messageController;
 
             string serverAddress = ServerConfiguration.DEFAULT_SERVER_ADDRESS;
             int port = configuration.Port;
@@ -123,6 +126,9 @@ namespace Server
             CharacterConfiguration.Mentat = PartyConfiguration.GetInstance().mentat;
             CharacterConfiguration.BeneGesserit = PartyConfiguration.GetInstance().beneGesserit;
             CharacterConfiguration.Fighter = PartyConfiguration.GetInstance().fighter;
+
+            //initialize the GreatHouseConfiguration
+            GreatHouseConfiguration greatHouseConfiguration = new GreatHouseConfiguration();
         }
     }
 }

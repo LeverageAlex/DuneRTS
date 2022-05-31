@@ -100,7 +100,7 @@ namespace GameData.network.util.world
         /// <param name="healingHP"></param>
         protected Character(CharacterType type, int maxHP, int maxMP, int maxAP, int damage, int inventorySize, int healingHP)
         {
-            this.characterType = Enum.GetName(characterType.GetType(), characterType);
+            this.characterType = Enum.GetName(typeof(CharacterType), type);
             this.healthMax = maxHP;
             this.MPmax = maxMP;
             this.APmax = maxAP;
