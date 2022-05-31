@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GameData.Configuration;
 using GameData.network.controller;
 using GameData.network.util;
@@ -34,6 +35,7 @@ namespace Server
         /// <param name="args">arguments for starting the server (see Commandline args in "Standardisierungskomitee")</param>
         static void Main(string[] args)
         {
+            
             InitiliazeLogger();
             Log.Information("Starting server... Everything will be created and configured.");
 

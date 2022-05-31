@@ -134,7 +134,7 @@ namespace GameData.gameObjects
             {
                 _duneMovementPhase.Execute();
                 _sandstormPhase.Execute();
-                ((Sandworm)_sandwormPhase).Execute();
+                // ((Sandworm)_sandwormPhase).Execute();
                 //call CheckVictory to check if after sandworm phase the last character of one house is gone and the the other player has won
                 _clonePhase.Execute();
                 characterTraitPhase.Execute();
