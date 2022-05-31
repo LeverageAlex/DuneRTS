@@ -20,6 +20,7 @@
     <None Remove="CommandLineParser" />
     <None Remove="validation\" />
     <None Remove="Configuration\" />
+    <None Remove="Pathfinder\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -41,5 +42,6 @@
     <Folder Include="parser\" />
     <Folder Include="validation\" />
     <Folder Include="Configuration\" />
+    <Folder Include="Pathfinder\" />
   </ItemGroup>
 </Project>

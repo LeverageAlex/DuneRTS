@@ -111,5 +111,10 @@ namespace GameData.network.util.world
             this.Character = character;
             this.IsCharacterStayingOnThisField = true;
         }
+
+        public double DistanceTo(MapField field)
+        {
+            return Math.Sqrt((this.XCoordinate - field.XCoordinate)^2 + (this.ZCoordinate - field.ZCoordinate)^2);
+        }
     }
 }

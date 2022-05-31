@@ -289,6 +289,28 @@ namespace GameData.network.util.world
             return spiceAmount;
         }
 
+        /// <summary>
+        /// retrieves all characters on the map
+        /// </summary>
+        /// <returns></returns>
+        public List<Character> GetCharactersOnMap()
+        {
+            List<Character> characters = new List<Character>();
+
+            for (int x = 0; x < MAP_WIDTH; x++)
+            {
+                for (int y = 0; y < MAP_HEIGHT; y++)
+                {
+                    MapField field = GetMapFieldAtPosition(x, y);
+                    if (field.IsCharacterStayingOnThisField)
+                    {
+                        characters.Add(field.Character);
+                    }
+                }
+            }
+
+            return characters;
+        }
 
     }
 }
