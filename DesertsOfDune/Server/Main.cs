@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GameData.Configuration;
 using GameData.network.controller;
 using GameData.network.util;
@@ -34,6 +35,7 @@ namespace Server
         /// <param name="args">arguments for starting the server (see Commandline args in "Standardisierungskomitee")</param>
         static void Main(string[] args)
         {
+            
             InitiliazeLogger();
             Log.Information("Starting server... Everything will be created and configured.");
 
@@ -46,20 +48,7 @@ namespace Server
             LoadConfigurationFiles();
             Log.Debug("Loaded configuration files");
 
-            Map map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
-            map.DrawMapToConsole();
-
-            DuneMovementPhase handler = new DuneMovementPhase(map);
-            SandstormPhase handler2 = new SandstormPhase(map);
-
-            for (int i = 0; i < 10; i++)
-            {
-                handler.Execute();
-                handler2.Execute();
-                map.DrawMapToConsole();
-            }
-
-            //Create new party here and set the ServerMessageController
+            // create new party here and set the ServerMessageController
             Party.GetInstance().messageController = serverMessageController;
         }
 
