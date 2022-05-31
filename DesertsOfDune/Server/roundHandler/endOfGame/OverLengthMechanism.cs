@@ -9,11 +9,15 @@ namespace GameData.network.util.world
     /// <summary>
     /// Represents and executes the overlength mechanism
     /// </summary>
-    public class OverLengthMechanism : IGamePhase
+    public class OverLengthMechanism
     {
         private readonly Map _map;
         private readonly ShaiHuludPhase _shaiHuludPhase;
 
+        /// <summary>
+        /// create a new handler for the overlength mechanism
+        /// </summary>
+        /// <param name="map">the map, the overlength mechanism is working on</param>
         public OverLengthMechanism(Map map)
         {
             this._map = map;
@@ -21,6 +25,9 @@ namespace GameData.network.util.world
             // execute the earthquake
             EarthQuakeExecutor earthQuakeExecutor = new EarthQuakeExecutor(map);
             earthQuakeExecutor.TransformRockPlanes();
+
+            // despawn the usual sandworm
+            Sandworm.Despawn();
         }
 
 
@@ -28,9 +35,10 @@ namespace GameData.network.util.world
         /// <summary>
         /// execute the overlength mechanism
         /// </summary>
-        public void Execute()
+        /// <returns>true, if the overlength mechanism is over</returns>
+        public bool Execute()
         {
-            _shaiHuludPhase.Execute();
+            return _shaiHuludPhase.Execute();
         }
     }
 }

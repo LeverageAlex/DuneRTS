@@ -286,9 +286,11 @@ namespace GameData.server.roundHandler
             }
             else
             {
+                List<MapField> movedPath = new List<MapField>();
                 for (int i = 0; i < _sandWormSpeed; i++)
                 {
                     MapField nextField = path.Dequeue();
+                    movedPath.Add(nextField);
                     bool needToDisappear = MoveSandwormByOneField(nextField);
 
                     if (needToDisappear)
@@ -297,6 +299,8 @@ namespace GameData.server.roundHandler
                         break;
                     }
                 }
+
+                Party.GetInstance().messageController.DoMoveSandwormDemand(movedPath);
             }
 
 

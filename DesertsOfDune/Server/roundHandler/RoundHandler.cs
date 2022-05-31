@@ -5,6 +5,7 @@ using System.Text;
 using GameData.network.messages;
 using GameData.network.util.world;
 using GameData.server.roundHandler;
+using Serilog;
 using Server;
 using Server.Clients;
 using Server.Configuration;
@@ -32,7 +33,7 @@ namespace GameData.gameObjects
         /// <summary>
         /// the implementation of the overlength mechanism
         /// </summary>
-        private readonly OverLengthMechanism _overLengthMechanism;
+        private OverLengthMechanism _overLengthMechanism;
 
         private bool IsOverlengthMechanismActive = false;
 
@@ -87,11 +88,15 @@ namespace GameData.gameObjects
 
             // initialize variables
             this._roundCounter = 0;
+            this._victoryChecker = new VictoryChecker();
 
             // initialize game phases
             this._duneMovementPhase = new DuneMovementPhase(map);
             this._sandstormPhase = new SandstormPhase(map);
+            this._sandwormPhase = new SandwormPhase(map);
             this._clonePhase = new ClonePhase(map, PartyConfiguration.GetInstance().cloneProbability);
+
+
         }
 
         /// <summary>
@@ -103,43 +108,58 @@ namespace GameData.gameObjects
             if (_spiceBlow.IsSpiceBlowNecessary(this._spiceMinimum, this._map.GetAmountOfSpiceOnMap()))
             {
                 _spiceBlow.Execute();
+                Log.Debug("Executed the spice blow.");
             }
 
             // check, whether the round limit is exceeded
             if (IsLastRoundOver())
             {
-                _overLengthMechanism.Execute();
+                _overLengthMechanism = new OverLengthMechanism(this._map);
+                Log.Debug("The last round is over, so start the overlength mechanism.");
             }
             else
             {
                 // execute the server side rounds
                 _duneMovementPhase.Execute();
+                Log.Debug("Executed the dune movement phase.");
+
                 _sandstormPhase.Execute();
-                _sandwormPhase.Execute();
-                //call CheckVictory to check if after sandworm phase the last character of one house is gone and the the other player has won
+                Log.Debug("Executed the sandstorm phase.");
+
+                if (IsOverlengthMechanismActive)
+                {
+                    bool finishedGame = _overLengthMechanism.Execute();
+                    Log.Debug("Executed one round in the overlength mechanism.");
+
+                    if (finishedGame)
+                    {
+                        Player winner = this._victoryChecker.GetWinnerByCheckWinnerVictoryMetric();
+                        int winnerID = winner.ClientID;
+                        int loserID = Party.GetInstance().GetActivePlayers().Find(c => c.ClientID != winner.ClientID).ClientID;
+                        Party.GetInstance().messageController.DoGameEndMessage(winnerID, loserID, new Statistics());
+
+                        Log.Information("The overlength mechanism was finished, so the game is over! \n The player " + winner.ClientName + " won the game!");
+                    }
+                }
+                else
+                {
+                    _sandwormPhase.Execute();
+                    Log.Debug("Executed the sandworm phase.");
+                    // call CheckVictory to check if after sandworm phase the last character of one house is gone and the the other player has won
+                    if (CheckVictory())
+                    {
+                        Log.Information("The game is over. One player has no characters left");
+                    }
+                }
                 _clonePhase.Execute();
+                Log.Debug("Executed the clone phase.");
+
+                Log.Debug("Execute the character trait phase...");
                 characterTraitPhase.Execute();
 
                 // increase round counter, because the round was finished
                 _roundCounter++;
             }
-        }
-
-        /// <summary>
-        /// This method Handles the Rounds of the game Dessert of Dune.
-        /// </summary>
-        public void HandleRounds()
-        {
-            for (int i = 0; i < _maximumNumberOfRounds; i++)
-            {
-                _duneMovementPhase.Execute();
-                _sandstormPhase.Execute();
-                // ((Sandworm)_sandwormPhase).Execute();
-                //call CheckVictory to check if after sandworm phase the last character of one house is gone and the the other player has won
-                _clonePhase.Execute();
-                characterTraitPhase.Execute();
-            }
-            _overLengthMechanism.Execute();
         }
 
         /// <summary>
@@ -178,7 +198,7 @@ namespace GameData.gameObjects
                 }
             }
             return false;
-        } 
+        }
 
         /// <summary>
         /// This method is responsible for pausing the game.
