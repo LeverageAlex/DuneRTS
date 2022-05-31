@@ -89,7 +89,6 @@ namespace GameData.network.util.world.character
                 return true;
             }
             return false;
-            return false;
         }
     }
 }
