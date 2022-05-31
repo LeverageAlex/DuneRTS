@@ -104,7 +104,6 @@ namespace Server
         /// <returns>a list of all players or an empty list, if there are no players</returns>
         public List<Player> GetActivePlayers()
         {
-            //List<Client> foundActiveClients = connectedClients.FindAll(client => client.IsActivePlayer);
             List<Player> foundActiveClients = new List<Player>();
             foreach (var activePlayer in connectedClients)
             {
@@ -240,26 +239,26 @@ namespace Server
             foreach (Player player in players)
             {
                 // get city and place the characters from the great house around
-                List<MapField> neighborFieldsOfCity = map.GetNeighborFields(player.City);
+                // List<MapField> neighborFieldsOfCity = map.GetNeighborFields(player.City);
 
                 // place the characters around the city
                 foreach (Character character in player.UsedGreatHouse.Characters)
                 {
-                    MapField fieldForCharacter = GetRandomField(neighborFieldsOfCity);
-                    fieldForCharacter.Character = character;
+                    MapField fieldForCharacter = this.map.GetRandomFreeApproachableNeighborField(player.City);
+                    fieldForCharacter.PlaceCharacter(character);
                     character.CurrentMapfield = fieldForCharacter;
 
-                    neighborFieldsOfCity.Remove(fieldForCharacter);
+                    // neighborFieldsOfCity.Remove(fieldForCharacter);
                 }
                 
             }
         }
 
-        private MapField GetRandomField(List<MapField> fields)
+        /*private MapField GetRandomField(List<MapField> fields)
         {
             Random random = new Random();
             return fields[random.Next(fields.Count)];
-        }
+        }*/
 
         public List<Client> GetConnectedClients()
         {

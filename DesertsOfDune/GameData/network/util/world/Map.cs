@@ -105,6 +105,32 @@ namespace GameData.network.util.world
         }
 
         /// <summary>
+        /// retrieves a random, approachble neighbor field of a given map field, on which no character stand already
+        /// </summary>
+        /// <param name="field">the field, of which a random approachble, free neighbor field should be determined</param>
+        /// <returns>the random neighbor field or null, if there doesn't exist such a field</returns>
+        /// TODO: do not return null
+        public MapField GetRandomFreeApproachableNeighborField(MapField field)
+        {
+            Random random = new Random();
+            List<MapField> neighbors = GetNeighborFields(field);
+
+            neighbors.RemoveAll(neighbor => !neighbor.IsApproachable || neighbor.IsCharacterStayingOnThisField);
+
+            int amountOfNeighbors = neighbors.Count;
+
+            if (amountOfNeighbors == 0)
+            {
+                return null;
+            }
+            else
+            {
+                int index = random.Next(amountOfNeighbors);
+                return neighbors[index];
+            }
+        }
+
+        /// <summary>
         /// checks, wether a field specified through its x- and y-coordinate on the map, so whether the coordinates are x,y > 0 and x,y < maxX, maxY
         /// </summary>
         /// <param name="x"><the x-coordinate of the mapfield/param>

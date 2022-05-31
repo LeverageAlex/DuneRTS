@@ -51,9 +51,11 @@ namespace GameData.network.util.world
         [JsonIgnore]
         public string TileType { get { return tileType; } set { tileType = value; } }
 
-        private Character character;
         [JsonIgnore]
-        public Character Character { get { return character; } set { character = value; } }
+        public Character Character { get; set; }
+
+        [JsonIgnore]
+        public bool IsCharacterStayingOnThisField { get; set; }
 
         /// <summary>
         /// Constructor of the class MapField for a City MapField
@@ -102,6 +104,12 @@ namespace GameData.network.util.world
         public void ChangeElevation(Elevation elevation)
         {
             this.elevation = elevation;
+        }
+
+        public void PlaceCharacter(Character character)
+        {
+            this.Character = character;
+            this.IsCharacterStayingOnThisField = true;
         }
     }
 }

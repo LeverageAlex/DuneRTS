@@ -74,12 +74,16 @@ namespace GameData.server.roundHandler
         /// </summary>
         private void CloneCharacter(Character character, City city)
         {
-            MapField spawnField = this._map.GetRandomApproachableNeighborField(city);
-            spawnField.Character = character;
-            character.ResetData();
+            MapField spawnField = this._map.GetRandomFreeApproachableNeighborField(city);
 
-            // send the client a message, that a character was respawned
-            Party.GetInstance().messageController.DoSpawnCharacterDemand(character);
+            if (spawnField != null)
+            {
+                spawnField.PlaceCharacter(character);
+                character.ResetData();
+
+                // send the client a message, that a character was respawned
+                Party.GetInstance().messageController.DoSpawnCharacterDemand(character);
+            }
         }
 
         public void Execute()

@@ -41,9 +41,9 @@ namespace GameData.network.util.world
         [JsonIgnore]
         protected MapField currentMapfield;
         [JsonIgnore]
-        public MapField CurrentMapfield { get{return currentMapfield; }set{ currentMapfield = value;}}
+        public MapField CurrentMapfield { get; set; }
         [JsonIgnore]
-        public int CharacterId { get; }
+        public int CharacterId { get; set; }
 
         private GreatHouse greatHouse;
         [JsonIgnore]

@@ -9,7 +9,7 @@ namespace GameData.server.roundHandler
     /// <summary>
     /// Represents the phase, which handles the sandworm
     /// </summary>
-    public abstract class SandwormPhase : IGamePhase
+    public class SandwormPhase : IGamePhase
     {
         public List<MapField> MoveSandWorm()
         {

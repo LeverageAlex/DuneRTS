@@ -551,10 +551,14 @@ namespace Server
         public override void DoSpawnSandwormDemand(int characterID, MapField mapField)
         {
             int x = mapField.XCoordinate;
-            int z = mapField.ZCoordinate;
-            Position position = new Position(x,z);
+            int y = mapField.ZCoordinate;
+            Position position = new Position(x,y);
 
-            SandwormSpawnDemandMessage sandwormSpawnDemandMessage = new SandwormSpawnDemandMessage(/*Party.GetInstance().GetClientID()*/1, characterID, position);
+            // determine the client, whose character is targeted
+            List<Player> players = Party.GetInstance().GetActivePlayers();
+            Player playerWithCharacter = players.Find(player => player.UsedGreatHouse.Characters.Any(character => character.CharacterId == characterID));
+
+            SandwormSpawnDemandMessage sandwormSpawnDemandMessage = new SandwormSpawnDemandMessage(playerWithCharacter.ClientID, characterID, position);
             NetworkController.HandleSendingMessage(sandwormSpawnDemandMessage);
         }
 
