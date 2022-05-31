@@ -20,6 +20,7 @@ namespace Server
     static class Programm {
 
         private static ServerConfiguration configuration;
+        private static ServerMessageController serverMessageController;
 
         /// <summary>
         /// main method, which is executed when the server was started / executed
@@ -57,6 +58,9 @@ namespace Server
                 handler2.Execute();
                 map.DrawMapToConsole();
             }
+
+            //Create new party here and set the ServerMessageController
+            Party.GetInstance().messageController = serverMessageController;
         }
 
         /// <summary>
@@ -73,16 +77,13 @@ namespace Server
         /// </summary>
         private static void CreateNetworkModule()
         {
-            ServerMessageController messageController = new ServerMessageController();
-
-            //Create new party here and set the ServerMessageController
-            Party.GetInstance().messageController = messageController;
+            serverMessageController = new ServerMessageController();
 
             string serverAddress = ServerConfiguration.DEFAULT_SERVER_ADDRESS;
             int port = configuration.Port;
 
             ServerConnectionHandler serverConnectionHandler = new ServerConnectionHandler(serverAddress, port);
-            _ = new ServerNetworkController(serverConnectionHandler, messageController);
+            _ = new ServerNetworkController(serverConnectionHandler, serverMessageController);
         }
 
         /// <summary>

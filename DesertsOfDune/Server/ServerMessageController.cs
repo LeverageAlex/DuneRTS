@@ -60,7 +60,15 @@ namespace Server
             }
             else
             {
-                client = new Spectator(msg.clientName, sessionID);
+                if (!msg.isCpu)
+                {
+                    client = new Spectator(msg.clientName, sessionID);
+                }
+                else
+                {
+                    DoSendError(002, "isActive and isCpu do not match, because a cpu-client cannot be a spectator", sessionID);
+                    return;
+                }
 
             }
             Party.GetInstance().AddClient(client);
