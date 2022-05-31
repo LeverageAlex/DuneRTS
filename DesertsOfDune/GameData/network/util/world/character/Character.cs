@@ -33,7 +33,7 @@ namespace GameData.network.util.world
         [JsonProperty]
         protected int inventorySize;
         [JsonProperty]
-        protected int inventoryUsed;
+        public int inventoryUsed { get; set; }
         [JsonProperty]
         protected bool killedBySandworm;
         [JsonProperty]
@@ -282,6 +282,7 @@ namespace GameData.network.util.world
             {
                 APcurrent--;
                 inventoryUsed++;
+                CurrentMapfield.HasSpice = false;
                 return true;
             }
             return false;
@@ -294,6 +295,7 @@ namespace GameData.network.util.world
         public bool GiftSpice(Character targetCharacter, int amount)
         {
             targetCharacter.inventoryUsed += amount;
+            this.inventoryUsed -= amount;
             return false;
         }
 
