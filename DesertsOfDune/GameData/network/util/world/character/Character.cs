@@ -17,7 +17,7 @@ namespace GameData.network.util.world
         [JsonProperty]
         protected int healthMax;
         [JsonProperty]
-        protected int healthCurrent;
+        public int healthCurrent { get; set; }
         [JsonProperty]
         protected int healingHP;
         [JsonProperty]
@@ -45,7 +45,7 @@ namespace GameData.network.util.world
         [JsonIgnore]
         public int CharacterId { get; set; }
 
-        private GreatHouse greatHouse;
+        public GreatHouse greatHouse { get; set; }
         [JsonIgnore]
         public bool KilledBySandworm
         {get { return killedBySandworm; } set { killedBySandworm = value; } }

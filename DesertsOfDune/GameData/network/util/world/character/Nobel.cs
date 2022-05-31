@@ -66,7 +66,13 @@ namespace GameData.network.util.world.character
         override
         public bool Kanly(Character target)
         {
-            // TODO: implement logic.
+            int dist = Math.Abs(target.CurrentMapfield.XCoordinate - currentMapfield.XCoordinate) + Math.Abs(target.CurrentMapfield.ZCoordinate - currentMapfield.ZCoordinate);
+            if (dist <= 2 && target.greatHouse != this.greatHouse && this.APcurrent == this.APmax)
+            {
+                target.DecreaseHP(target.healthCurrent);
+                SpentAp(APmax);
+                return true;
+            }
             return false;
         }
 
