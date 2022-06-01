@@ -5,9 +5,9 @@
     /// </summary>
     public enum CharacterType
     {
-        NOBEL,
+        NOBLE,
         MENTAT,
         BENEGESSERIT,
-        FIGHTHER
+        FIGHTER
     }
 }

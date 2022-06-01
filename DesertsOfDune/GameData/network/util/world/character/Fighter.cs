@@ -23,7 +23,7 @@ namespace GameData.network.util.world.character
         /// <param name="inventoryUsed">the usedup InventorySpace of the Character</param>
         /// <param name="killedBySandworm">true, if the Character was killed by the sandworm</param>
         /// <param name="isLoud">true, if the character is loud</param>
-        public Fighter(int healthMax, int healthCurrent, int healingHP, int MPmax, int MPcurrent, int APmax, int APcurrent, int attackDamage, int inventorySize, int inventoryUsed, bool killedBySandworm, bool isLoud) : base(CharacterType.FIGHTHER, healthMax, healthCurrent, healingHP, MPmax, MPcurrent, APmax, APcurrent, attackDamage, inventorySize, inventoryUsed, killedBySandworm, isLoud)
+        public Fighter(int healthMax, int healthCurrent, int healingHP, int MPmax, int MPcurrent, int APmax, int APcurrent, int attackDamage, int inventorySize, int inventoryUsed, bool killedBySandworm, bool isLoud) : base(CharacterType.FIGHTER, healthMax, healthCurrent, healingHP, MPmax, MPcurrent, APmax, APcurrent, attackDamage, inventorySize, inventoryUsed, killedBySandworm, isLoud)
         {
 
         }
@@ -31,7 +31,7 @@ namespace GameData.network.util.world.character
         /// <summary>
         /// creates a new fighter 
         /// </summary>
-        public Fighter() : base(CharacterType.FIGHTHER, CharacterConfiguration.Fighter.maxHP, CharacterConfiguration.Fighter.maxMP, CharacterConfiguration.Fighter.maxAP, CharacterConfiguration.Fighter.damage, CharacterConfiguration.Fighter.inventorySize, CharacterConfiguration.Fighter.healingHP)
+        public Fighter() : base(CharacterType.FIGHTER, CharacterConfiguration.Fighter.maxHP, CharacterConfiguration.Fighter.maxMP, CharacterConfiguration.Fighter.maxAP, CharacterConfiguration.Fighter.damage, CharacterConfiguration.Fighter.inventorySize, CharacterConfiguration.Fighter.healingHP)
         {
         }
 

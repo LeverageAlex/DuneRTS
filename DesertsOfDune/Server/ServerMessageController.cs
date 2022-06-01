@@ -319,8 +319,8 @@ namespace Server
                     case ActionType.KANLY:
                         action = ActionType.KANLY;
                         if (actionCharacter.APcurrent == actionCharacter.APmax
-                            && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBEL)
-                            && targetCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBEL)
+                            && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE)
+                            && targetCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE)
                             && !friendlyFire)
                         {
                             actionCharacter.Kanly(targetCharacter);
@@ -329,7 +329,7 @@ namespace Server
                     case ActionType.FAMILY_ATOMICS:
                         action = ActionType.FAMILY_ATOMICS;
                         if (actionCharacter.APcurrent == actionCharacter.APmax
-                            && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBEL))
+                            && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE))
                         {
                             //get the mapfield where the active Character aims to
                             MapField targetMapField = null;
@@ -363,7 +363,7 @@ namespace Server
                     case ActionType.SWORD_SPIN:
                         action = ActionType.SWORD_SPIN;
                         if (actionCharacter.APcurrent == actionCharacter.APmax
-                            && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.FIGHTHER))
+                            && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.FIGHTER))
                         {
                                 actionCharacter.SwordSpin();
                         }
@@ -476,7 +476,7 @@ namespace Server
         public override void DoSendGameConfig()
         {
             int client0ID = Party.GetInstance().GetActivePlayers()[0].ClientID;
-            int client1ID = Party.GetInstance().GetActivePlayers()[0].ClientID;
+            int client1ID = Party.GetInstance().GetActivePlayers()[1].ClientID;
 
             List<List<string>> scenario = ScenarioConfiguration.GetInstance().scenario;
             string partyConfiguration = JsonConvert.SerializeObject(PartyConfiguration.GetInstance());

@@ -71,8 +71,8 @@ namespace GameData.network.util.world
                 Character newCharacter = null;
 
                 switch ((CharacterType) Enum.Parse(typeof(CharacterType), houseCharacter.characterClass)) {
-                    case CharacterType.NOBEL:
-                        newCharacter = new Nobel();
+                    case CharacterType.NOBLE:
+                        newCharacter = new Noble();
                         break;
                     case CharacterType.BENEGESSERIT:
                         newCharacter = new BeneGesserit();
@@ -80,7 +80,7 @@ namespace GameData.network.util.world
                     case CharacterType.MENTAT:
                         newCharacter = new Mentat();
                         break;
-                    case CharacterType.FIGHTHER:
+                    case CharacterType.FIGHTER:
                         newCharacter = new Fighter();
                         break;
                     default:

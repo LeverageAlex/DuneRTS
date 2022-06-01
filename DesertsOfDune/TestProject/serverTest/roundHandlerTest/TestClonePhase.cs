@@ -29,7 +29,7 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
         {
             // implement logic
             ClonePhase clonePhase = new ClonePhase();
-            Nobel character = new Nobel(2, 1, 4, 5, 6, 7, 8, 8, 5, 4, true, true);
+            Noble character = new Noble(2, 1, 4, 5, 6, 7, 8, 8, 5, 4, true, true);
             clonePhase.CloneCharacter(character, null);
         }
         

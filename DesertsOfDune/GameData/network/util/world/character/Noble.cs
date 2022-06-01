@@ -9,7 +9,7 @@ namespace GameData.network.util.world.character
     /// <summary>
     /// This Class represents the character type Nobel
     /// </summary>
-    public class Nobel : Character
+    public class Noble : Character
     {
         /// <summary>
         /// This is the Constructor of the Class Nobel
@@ -26,7 +26,7 @@ namespace GameData.network.util.world.character
         /// <param name="inventoryUsed">the usedup InventorySpace of the Character</param>
         /// <param name="killedBySandworm">true, if the Character was killed by the sandworm</param>
         /// <param name="isLoud">true, if the character is loud</param>
-        public Nobel(int healthMax, int healthCurrent, int healingHP, int MPmax, int MPcurrent, int APmax, int APcurrent, int attackDamage, int inventorySize, int inventoryUsed, bool killedBySandworm, bool isLoud) : base(CharacterType.NOBEL, healthMax, healthCurrent, healingHP,  MPmax, MPcurrent, APmax, APcurrent, attackDamage, inventorySize, inventoryUsed, killedBySandworm, isLoud)
+        public Noble(int healthMax, int healthCurrent, int healingHP, int MPmax, int MPcurrent, int APmax, int APcurrent, int attackDamage, int inventorySize, int inventoryUsed, bool killedBySandworm, bool isLoud) : base(CharacterType.NOBLE, healthMax, healthCurrent, healingHP,  MPmax, MPcurrent, APmax, APcurrent, attackDamage, inventorySize, inventoryUsed, killedBySandworm, isLoud)
         {
 
         }
@@ -34,7 +34,7 @@ namespace GameData.network.util.world.character
         /// <summary>
         /// creates a new nobel 
         /// </summary>
-        public Nobel() : base(CharacterType.NOBEL, CharacterConfiguration.Noble.maxHP, CharacterConfiguration.Noble.maxMP, CharacterConfiguration.Noble.maxAP, CharacterConfiguration.Noble.damage, CharacterConfiguration.Noble.inventorySize, CharacterConfiguration.Noble.healingHP) {
+        public Noble() : base(CharacterType.NOBLE, CharacterConfiguration.Noble.maxHP, CharacterConfiguration.Noble.maxMP, CharacterConfiguration.Noble.maxAP, CharacterConfiguration.Noble.damage, CharacterConfiguration.Noble.inventorySize, CharacterConfiguration.Noble.healingHP) {
         }
 
         /// <summary>
