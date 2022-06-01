@@ -5,6 +5,7 @@ using GameData.network.messages;
 using Newtonsoft.Json;
 using GameData.network.util.enums;
 
+
 namespace GameData.network.util.world
 {
     /// <summary>
@@ -17,7 +18,7 @@ namespace GameData.network.util.world
         [JsonProperty]
         protected int healthMax;
         [JsonProperty]
-        protected int healthCurrent;
+        public int healthCurrent { get; set; }
         [JsonProperty]
         protected int healingHP;
         [JsonProperty]
@@ -33,7 +34,7 @@ namespace GameData.network.util.world
         [JsonProperty]
         protected int inventorySize;
         [JsonProperty]
-        protected int inventoryUsed;
+        public int inventoryUsed { get; set; }
         [JsonProperty]
         protected bool killedBySandworm;
         [JsonProperty]
@@ -45,7 +46,7 @@ namespace GameData.network.util.world
         [JsonIgnore]
         public int CharacterId { get; set; }
 
-        private GreatHouse greatHouse;
+        public GreatHouse greatHouse { get; set; }
         [JsonIgnore]
         public bool KilledBySandworm
         {get { return killedBySandworm; } set { killedBySandworm = value; } }
@@ -282,6 +283,7 @@ namespace GameData.network.util.world
             {
                 APcurrent--;
                 inventoryUsed++;
+                CurrentMapfield.HasSpice = false;
                 return true;
             }
             return false;
@@ -294,6 +296,7 @@ namespace GameData.network.util.world
         public bool GiftSpice(Character targetCharacter, int amount)
         {
             targetCharacter.inventoryUsed += amount;
+            this.inventoryUsed -= amount;
             return false;
         }
 
@@ -315,7 +318,7 @@ namespace GameData.network.util.world
         /// <param name="target"> this is the Field on the Map where the active Noble character aims its atomic bomb to </param>
         /// <returns></returns>
         virtual
-        public bool AtomicBomb(MapField target)
+        public bool AtomicBomb(MapField target, Map map)
         {
             //Do nothing because only Nobles can perform this move
             return false;
@@ -326,7 +329,7 @@ namespace GameData.network.util.world
         /// </summary>
         /// <returns></returns>
         virtual
-        public bool SpiceHoarding()
+        public bool SpiceHoarding(Map map)
         {
             //Do nothing beacuse only Mentats can perform this move
             return false;
@@ -349,7 +352,7 @@ namespace GameData.network.util.world
         /// </summary>
         /// <returns></returns>
         virtual
-        public bool SwordSpin()
+        public bool SwordSpin(Map map)
         {
             //Do nothing because only Fighters can perform this move
             return false;

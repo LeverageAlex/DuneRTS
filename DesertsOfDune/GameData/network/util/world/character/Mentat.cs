@@ -64,9 +64,28 @@ namespace GameData.network.util.world.character
         /// </summary>
         /// <returns>true, if action was successful</returns>
         override
-        public bool SpiceHoarding()
+        public bool SpiceHoarding(Map map)
         {
-            // TODO: implement logic
+            int inventoryFree = this.inventorySize - this.inventoryUsed;
+            List<MapField> NeighborFields = map.GetNeighborFields(this.currentMapfield);
+            NeighborFields.Add(this.currentMapfield);
+            Random rnd = new Random();
+            if (this.APcurrent == this.APmax && inventoryFree > 0)
+            {
+                MapField spiceField = NeighborFields[rnd.Next(NeighborFields.Count)];
+                while (inventoryFree > 0 && NeighborFields.Count > 0)
+                {
+                    if (spiceField.HasSpice)
+                    {
+                        CollectSpice();
+                        inventoryFree--;
+                    }
+                    NeighborFields.Remove(spiceField);
+                    spiceField = NeighborFields[rnd.Next(NeighborFields.Count)];
+                }
+                SpentAp(APmax);
+                return true;
+            }
             return false;
         }
     }

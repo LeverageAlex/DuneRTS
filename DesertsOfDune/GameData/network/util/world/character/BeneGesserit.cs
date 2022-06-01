@@ -68,7 +68,26 @@ namespace GameData.network.util.world.character
         override
         public bool Voice(Character target)
         {
-            // TODO: implement logic
+            int dist = Math.Abs(target.CurrentMapfield.XCoordinate - currentMapfield.XCoordinate) + Math.Abs(target.CurrentMapfield.ZCoordinate - currentMapfield.ZCoordinate);
+            int inventoryFree = this.inventorySize - this.inventoryUsed;
+            int spiceGift = 0;
+            if (dist <= 2 && target.greatHouse != this.greatHouse 
+                && this.APcurrent == this.APmax
+                && inventoryFree > 0
+                && target.inventoryUsed > 0)
+            {
+               if(inventoryFree >= target.inventoryUsed)
+                {
+                    spiceGift = target.inventoryUsed;
+                }
+                else
+                {
+                    spiceGift = inventoryFree;
+                }
+                target.GiftSpice(this, spiceGift);
+                SpentAp(APmax);
+                return true;
+            }
             return false;
         }
     }

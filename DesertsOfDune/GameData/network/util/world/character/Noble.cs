@@ -1,5 +1,6 @@
 ﻿using GameData.Configuration;
 using GameData.network.messages;
+using GameData.network.util.enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -66,7 +67,13 @@ namespace GameData.network.util.world.character
         override
         public bool Kanly(Character target)
         {
-            // TODO: implement logic.
+            int dist = Math.Abs(target.CurrentMapfield.XCoordinate - currentMapfield.XCoordinate) + Math.Abs(target.CurrentMapfield.ZCoordinate - currentMapfield.ZCoordinate);
+            if (dist <= 2 && target.greatHouse != this.greatHouse && this.APcurrent == this.APmax)
+            {
+                target.DecreaseHP(target.healthCurrent);
+                SpentAp(APmax);
+                return true;
+            }
             return false;
         }
 
@@ -76,9 +83,40 @@ namespace GameData.network.util.world.character
         /// <param name="target">The target Field for the Atack</param>
         /// <returns>true, if the action was successful</returns>
         override
-        public bool AtomicBomb(MapField target)
+        public bool AtomicBomb(MapField target, Map map)
         {
-            // TODO: implement logic.
+            if(this.APcurrent == this.APmax /*&& this.greatHouse.unusedAtomicBombs > 0*/)
+            {
+                foreach (var mapfield in map.GetNeighborFields(target))
+                {
+                    switch (Enum.Parse(typeof(TileType), mapfield.tileType))
+                    {
+                        case TileType.DUNE:
+                            mapfield.tileType = Enum.GetName(typeof(TileType), TileType.FLAT_SAND);
+                            break;
+                        case TileType.MOUNTAINS:
+                            mapfield.tileType = Enum.GetName(typeof(TileType), TileType.PLATEAU);
+                            break;
+                    }
+                    if (mapfield.IsCharacterStayingOnThisField)
+                    {
+                        mapfield.Character.DecreaseHP(mapfield.Character.healthCurrent);
+                        if(mapfield.Character.greatHouse != this.greatHouse)
+                        {
+                            //TODO: implement supportive Characters from other Houses against the Great House who used the atomic bomb
+                            //greatConvention = false;
+                        }
+                    }
+                    //remove Sandworm
+                    if (mapfield.HasSpice)
+                    {
+                        mapfield.HasSpice = false;
+                    }
+                }
+                SpentAp(APmax);
+                //this.greatHouse.unusedAtomicBombs--;
+                return true;
+            }
             return false;
         }
     }

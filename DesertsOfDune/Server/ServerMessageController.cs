@@ -338,7 +338,7 @@ namespace Server
                                 }
                             }
 
-                            actionCharacter.AtomicBomb(targetMapField);
+                            actionCharacter.AtomicBomb(targetMapField, Party.GetInstance().map);
                         }
                         break;
                     case ActionType.SPICE_HORDING:
@@ -346,7 +346,7 @@ namespace Server
                         if (actionCharacter.APcurrent == actionCharacter.APmax
                             && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.MENTAT))
                         {
-                            actionCharacter.SpiceHoarding();
+                            actionCharacter.SpiceHoarding(Party.GetInstance().map);
                         }
                         break;
                     case ActionType.VOICE:
@@ -362,7 +362,7 @@ namespace Server
                         if (actionCharacter.APcurrent == actionCharacter.APmax
                             && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.FIGHTER))
                         {
-                                actionCharacter.SwordSpin();
+                                actionCharacter.SwordSpin(Party.GetInstance().map);
                         }
                         break;
                     default:
