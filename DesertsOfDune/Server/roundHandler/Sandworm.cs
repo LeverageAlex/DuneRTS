@@ -41,29 +41,6 @@ namespace GameData.server.roundHandler
 
         }
 
-        public Sandworm Execute(MapField[,] mapFields, List<Character> characters)
-        {
-            /*if (_sandWormSingleton == null && CheckLoudness(characters))
-            {
-                Sandworm sandWorm = Spawn(PartyConfiguration.GetInstance().sandWormSpeed, PartyConfiguration.GetInstance().sandWormSpawnDistance, mapFields, characters);
-                sandWorm._targetCharacter = ChooseTargetCharacter(characters);
-                return sandWorm;
-                // end round
-            } else if (_sandWormSingleton != null)
-            {
-                Graph graph = Graph.DetermineSandWormGraph(mapFields);
-                List<MapField> list =  MoveSandworm(_targetCharacter, graph);
-                // TODO: call ServerMessageController
-                // Party.GetInstance().serverMessageController.DoMoveSandwormDemand(list);
-                // end round
-                return null;
-            } else
-            {
-                return null;
-            }*/
-            return null;
-        }
-
         /// <summary>
         /// spawns a sandworm, if no sandworm already exists (implementing the singleton pattern)
         /// </summary>
@@ -135,45 +112,8 @@ namespace GameData.server.roundHandler
 
                 return sandwormField;
             }
-
-            // todo determine sand field that is in specified distance to all characters
-            /*while(true)
-            {
-                Random random = new Random();
-                int indexX = random.Next(0,map.GetLength(0));
-                int indexZ = random.Next(0, map.GetLength(1));
-                if (map[indexX, indexZ].TileType == "DUNE" || map[indexX, indexZ].TileType == "FLAT" && map[indexX, indexZ].Character == null)
-                {
-                    if (DetermineMinDistanceToCharacters(characters, map[indexX, indexZ], map) >= sandWormSpawnDistance)
-                    {
-                        return map[indexX, indexZ];
-                    }
-                }
-            }*/
         }
 
-        /// <summary>
-        /// determines the minimal distance for the Sandworm to all characters on the map from a specific field
-        /// </summary>
-        /// <param name="characters">all characters on the map</param>
-        /// <param name="sourceField">the current mapfield used to determine the minimal distance from</param>
-        /// <returns></returns>
-        private int DetermineMinDistanceToCharacters(List<Character> characters, MapField sourceField, MapField[,] map)
-        {
-            /*int minDistance = int.MaxValue;
-            Graph graph = Graph.DetermineSandWormGraph(map);
-            int startVertex = Graph.ConvertArrayIndexToVertex(sourceField.XCoordinate, sourceField.ZCoordinate, map);
-            int[] distances = DijkstrasAlgorithm.DijkstraDistances(graph.Node, startVertex);
-            foreach (Character character in characters)
-            {
-                int targetVertex = Graph.ConvertArrayIndexToVertex(character.CurrentMapfield.XCoordinate, character.CurrentMapfield.ZCoordinate, map);
-                {
-                    minDistance = distances[targetVertex];
-                }
-            }
-            return minDistance;*/
-            return 0;
-        }
 
         /// <summary>
         /// calculates the path to the targeted character (from current position)
@@ -186,26 +126,6 @@ namespace GameData.server.roundHandler
             SandwormGraph graph = new SandwormGraph(_map);
 
             return pathfinder.GetShortestPath(_currentField, targetField, graph);
-
-            /*List<MapField> mapFields = new List<MapField>();
-            for (int i = 0; i < _sandWormSpeed; i++)
-            {
-                MapField mapfield = MoveSandWormByOneField(target, graph);
-                mapFields.Add(mapfield);
-                if (_currentField.Character != null)
-                {
-                    _currentField.Character.KilledBySandworm = true;
-                    _currentField.Character = null;
-                    // TODO: sandworm despawns and sandworm phase ends.
-                    Despawn();
-                    return mapFields;
-                }
-                if (mapfield.XCoordinate == target.CurrentMapfield.XCoordinate && mapfield.ZCoordinate == target.CurrentMapfield.ZCoordinate)
-                {
-                    return mapFields;
-                }
-            }
-            return mapFields;*/
         }
 
         /// <summary>
@@ -235,36 +155,6 @@ namespace GameData.server.roundHandler
                 }
             }
             return mapFields;
-        }
-
-        /// <summary>
-        ///  moves the sandworm one field towards his target
-        /// </summary>
-        /// <param name="target">the targeted character</param>
-        /// <param name="graph">the graph used to determine the movement of the sandworm</param>
-        /// <returns>the resulting position of the Sandworm</returns>
-        public MapField MoveSandWormByOneField(Character target, SandwormGraph graph)
-        {
-            /*
-             * todo: Falls der Sandwurm keine nur über Wüstenfelder führende Strecke hat, um zu seiner Zielperson zu gelangen,
-                verschwindet er und taucht direkt danach auf einem zufällig gewählten Wüstenfeld wieder auf 
-                Seine Rundenphase ist damit beendet
-             */
-            /*int startVertex = Graph.ConvertArrayIndexToVertex(this._currentField.XCoordinate, this._currentField.ZCoordinate, mapFields);
-            int targetVertex = Graph.ConvertArrayIndexToVertex(target.CurrentMapfield.XCoordinate, target.CurrentMapfield.ZCoordinate, mapFields);
-            int[] parent = DijkstrasAlgorithm.Dijkstra(graph.Node, startVertex);
-            int nextVertex = DijkstrasAlgorithm.GetFirstStep(parent, targetVertex);
-            if (nextVertex == startVertex)
-            {
-                nextVertex = targetVertex;
-            } 
-            int indexX = Graph.ConvertVertexToXArrayIndex(nextVertex, mapFields);
-            int indexZ = Graph.ConvertVertexToZArrayIndex(nextVertex, mapFields);
-            this._currentField = mapFields[indexX, indexZ];
-            this._currentField.XCoordinate = indexX;
-            this._currentField.ZCoordinate = indexZ;
-            return mapFields[indexX, indexZ];*/
-            return null;
         }
 
         /// <summary>

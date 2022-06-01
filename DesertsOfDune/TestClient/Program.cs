@@ -12,7 +12,7 @@ namespace TestClient
 
             Console.WriteLine("Hello World 2!");
 
-            MessageController messageController2 = new MessageController();
+            ServerMessageController messageController2 = new ServerMessageController();
 
             ClientConnectionHandler clientConnectionHandler = new ClientConnectionHandler("127.0.0.1", 10101);
 

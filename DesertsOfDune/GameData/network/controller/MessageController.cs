@@ -23,7 +23,7 @@ namespace GameData.network.controller
     /// and the on-Methods are always triggered by the network controller (respectively connection handler) and parse as well as
     /// process a message and so effect the "context". 
     /// </remarks>
-    public abstract class MessageController
+    public abstract class ServerMessageController
     {
         /// <summary>
         /// parent network controller, that contains this message controller (ref. needed so give the message, which need
@@ -34,7 +34,7 @@ namespace GameData.network.controller
         /// <summary>
         /// creates a new message controller
         /// </summary>
-        protected MessageController()
+        protected ServerMessageController()
         {
             //TODO: remove contructor?
         }

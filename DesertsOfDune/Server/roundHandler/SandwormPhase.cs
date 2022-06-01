@@ -26,11 +26,6 @@ namespace GameData.server.roundHandler
             this._map = map;
         }
 
-        public List<MapField> MoveSandWorm()
-        {
-            return null;
-        }
-
         public void Execute()
         {
             // check, whether there is a sandworm

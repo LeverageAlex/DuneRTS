@@ -27,7 +27,7 @@ namespace GameData.network.controller
         /// The message controller is used for forwarding the incoming messages to the correct methods. 
         /// *HINT* this message controller is read only and cannot be changed later
         /// </summary>
-        protected MessageController messageController { get; }
+        protected ServerMessageController messageController { get; }
         protected readonly WebSocketType webSocketType;
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace GameData.network.controller
         /// <param name="connectionHandler"></param>
         /// <param name="messageController"></param>
         /// <param name="webSocketType"></param>
-        protected NetworkController(AConnectionHandler connectionHandler, MessageController messageController, WebSocketType webSocketType)
+        protected NetworkController(AConnectionHandler connectionHandler, ServerMessageController messageController, WebSocketType webSocketType)
         {
             this.connectionHandler = connectionHandler;
             this.messageController = messageController;
