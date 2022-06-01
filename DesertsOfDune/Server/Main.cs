@@ -111,19 +111,14 @@ namespace Server
             PartyConfiguration partyConfiguration = loader.LoadPartyConfiguration(configuration.FilePathMatchConfiguration);
             PartyConfiguration.SetInstance(partyConfiguration);
 
-            // set the character configurations
-            GameData.Configuration.Configuration.InitializeCharacterConfiguration(PartyConfiguration.GetInstance().noble, PartyConfiguration.GetInstance().mentat, PartyConfiguration.GetInstance().beneGesserit, PartyConfiguration.GetInstance().fighter);
-            //CharacterConfiguration.Noble = PartyConfiguration.GetInstance().noble;
-            //CharacterConfiguration.Mentat = PartyConfiguration.GetInstance().mentat;
-            //CharacterConfiguration.BeneGesserit = PartyConfiguration.GetInstance().beneGesserit;
-            //CharacterConfiguration.Fighter = PartyConfiguration.GetInstance().fighter;
-
-            //initialize the GreatHouseConfiguration
-            //GreatHouseConfiguration greatHouseConfiguration = new GreatHouseConfiguration();
-            //CharacterConfiguration characterConfiguration = new CharacterConfiguration();
-
             //Initialization for greatHouses in GameData project
             GameData.Configuration.Configuration.InitializeConfigurations();
+            // Initialization for the character configurations in GameData project
+            GameData.Configuration.Configuration.InitializeCharacterConfiguration(
+                PartyConfiguration.GetInstance().noble,
+                PartyConfiguration.GetInstance().mentat,
+                PartyConfiguration.GetInstance().beneGesserit,
+                PartyConfiguration.GetInstance().fighter);
         }
     }
 }

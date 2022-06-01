@@ -21,7 +21,7 @@ namespace GameData.network.controller
         /// The connection handler is used for forwaring the messages to send to the correct websocket "endpoint"
         /// *HINT* this connection handler is read only and cannot be changed later
         /// </summary>
-        protected AConnectionHandler connectionHandler { get; }
+        public AConnectionHandler connectionHandler { get; }
         /// <summary>
         /// reference to the (concrete implemented) message controller used by this network controller.
         /// The message controller is used for forwarding the incoming messages to the correct methods. 
@@ -59,35 +59,5 @@ namespace GameData.network.controller
         /// <param name="sessionID">ID of the session.</param>
         /// <returns>true, if the message could successfully parsed and forwarded to the message controller</returns>
         public abstract bool HandleReceivedMessage(string message, string sessionID);
-        /**{
-            Log.Debug("Parsing the received message: " + message);
-
-            // get Message-Object from JSON-String message
-            Message receivedMessage = MessageConverter.ToMessage(message);
-
-            // get the type of the message for determine the controller methods needed to handle this message
-            MessageType type = (MessageType)Enum.Parse(typeof(MessageType), receivedMessage.GetMessageTypeAsString());
-
-            switch (type)
-            {
-                case MessageType.DEBUG:
-                    messageController.OnDebugMessage((DebugMessage)receivedMessage);
-                    return true;
-                case MessageType.JOIN:
-                    messageController.OnJoinMessage((JoinMessage)receivedMessage, "");
-                    return true;
-                case MessageType.REJOIN:
-                    messageController.OnRejoinMessage((RejoinMessage)receivedMessage);
-                    return true;
-                case MessageType.JOINACCEPTED:
-                    Log.Information("Join accepted");
-                    return true;
-                default:
-                    Log.Error("Incoming parsed message has invalid type (" + type + ") and could not be forwarded to the message controller!");
-                    break;
-            }
-
-            return false;
-        }*/
     }
 }
