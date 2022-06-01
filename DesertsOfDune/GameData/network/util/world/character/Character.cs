@@ -5,6 +5,7 @@ using GameData.network.messages;
 using Newtonsoft.Json;
 using GameData.network.util.enums;
 
+
 namespace GameData.network.util.world
 {
     /// <summary>
@@ -328,7 +329,7 @@ namespace GameData.network.util.world
         /// </summary>
         /// <returns></returns>
         virtual
-        public bool SpiceHoarding()
+        public bool SpiceHoarding(Map map)
         {
             //Do nothing beacuse only Mentats can perform this move
             return false;

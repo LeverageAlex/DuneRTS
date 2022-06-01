@@ -341,7 +341,7 @@ namespace Server
                         if (actionCharacter.APcurrent == actionCharacter.APmax
                             && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.MENTAT))
                         {
-                            actionCharacter.SpiceHoarding();
+                            actionCharacter.SpiceHoarding(Party.GetInstance().map);
                         }
                         break;
                     case ActionType.VOICE:
