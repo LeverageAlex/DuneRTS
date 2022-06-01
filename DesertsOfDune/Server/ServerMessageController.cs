@@ -357,7 +357,7 @@ namespace Server
                         if (actionCharacter.APcurrent == actionCharacter.APmax
                             && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.FIGHTHER))
                         {
-                                actionCharacter.SwordSpin();
+                                actionCharacter.SwordSpin(Party.GetInstance().map);
                         }
                         break;
                     default:

@@ -352,7 +352,7 @@ namespace GameData.network.util.world
         /// </summary>
         /// <returns></returns>
         virtual
-        public bool SwordSpin()
+        public bool SwordSpin(Map map)
         {
             //Do nothing because only Fighters can perform this move
             return false;

@@ -68,6 +68,7 @@ namespace GameData.network.util.world.character
         {
             int inventoryFree = this.inventorySize - this.inventoryUsed;
             List<MapField> NeighborFields = map.GetNeighborFields(this.currentMapfield);
+            NeighborFields.Add(this.currentMapfield);
             Random rnd = new Random();
             if (this.APcurrent == this.APmax && inventoryFree > 0)
             {
@@ -82,6 +83,7 @@ namespace GameData.network.util.world.character
                     NeighborFields.Remove(spiceField);
                     spiceField = NeighborFields[rnd.Next(NeighborFields.Count)];
                 }
+                SpentAp(APmax);
                 return true;
             }
             return false;
