@@ -27,6 +27,7 @@ namespace GameData.network.messages
         /// <param name="partyConfig">array of houses that are offered to the client</param>
         public GameConfigMessage(List<List<string>> scenario, string party, int client0ID, int client1ID) : base("0.1", MessageType.GAMECFG)
         {
+            //TODO: change GameConfigMessage like it's declared in standard document
             this.scenario = scenario;
             this.party = party;
             this.client0ID = client0ID;

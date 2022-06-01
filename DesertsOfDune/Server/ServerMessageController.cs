@@ -89,9 +89,6 @@ namespace Server
         /// <param name="msg">RejoinMessage with clientSecretParameter.</param>
         public override void OnRejoinMessage(RejoinMessage msg, string sessionID)
         {
-            //TODO: implement this method
-            //throw new NotImplementedException("not implemented completely");
-
             var connectedClients = Party.GetInstance().GetConnectedClients();
             bool rejoinSuccessful = false;
             foreach (var client in connectedClients)
@@ -99,16 +96,16 @@ namespace Server
                 if (client.ClientSecret == msg.ClientSecret)
                 {
                     client.SessionID = sessionID; //new sessionID for the rejoined client
-                    //check if player, if yes send gamestate
+                    //TODO: check if player, if yes send gamestate
                     rejoinSuccessful = true;
                     Log.Information($"Rejoin of client: {client.ClientName} was successful.");
                 }
             }
             if (!rejoinSuccessful)
             {
-                //kick client
-                //((ServerConnectionHandler)connectionHandler).sessionManager.CloseSession();
-                Log.Error("Rejoin of client failed");
+                //disconnect the client
+                Log.Information($"Rejoin of client failed.");
+                ((ServerConnectionHandler)NetworkController.connectionHandler).sessionManager.CloseSession(sessionID, WebSocketSharp.CloseStatusCode.Normal, "clientSecret do not match!");
             }
         }
 
