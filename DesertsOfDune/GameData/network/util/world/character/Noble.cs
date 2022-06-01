@@ -85,7 +85,7 @@ namespace GameData.network.util.world.character
         override
         public bool AtomicBomb(MapField target, Map map)
         {
-            if(this.APcurrent == this.APmax /*&& this.greatHouse.unusedAtomicBombs > 0*/)
+            if(this.APcurrent == this.APmax && this.greatHouse.unusedAtomicBombs > 0)
             {
                 foreach (var mapfield in map.GetNeighborFields(target))
                 {
@@ -114,7 +114,7 @@ namespace GameData.network.util.world.character
                     }
                 }
                 SpentAp(APmax);
-                //this.greatHouse.unusedAtomicBombs--;
+                this.greatHouse.unusedAtomicBombs--;
                 return true;
             }
             return false;

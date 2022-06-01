@@ -27,6 +27,8 @@ namespace GameData.network.util.world
         public City City { get; }
         [JsonIgnore]
         public List<Character> Characters { get; }
+        [JsonIgnore]
+        public int unusedAtomicBombs { get; set; }
 
         public static readonly int AMOUNT_OF_CHARACTERS_PER_GREAT_HOUSE = 6;
 
@@ -43,6 +45,7 @@ namespace GameData.network.util.world
             this.illegalAtomicUsage = false;
             this.houseCharacters = houseCharacters;
             this.Characters = GetCharactersForHouse();
+            this.unusedAtomicBombs = 3;
         }
 
         /// <summary>
