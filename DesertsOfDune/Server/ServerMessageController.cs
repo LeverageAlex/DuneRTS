@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 
 namespace Server
 {
-    public class ServerMessageController : GameData.network.controller.ServerMessageController
+    public class ServerMessageController : MessageController
     {
         private bool firstPlayerGotGreatHousesAndGotRequestAck;
 

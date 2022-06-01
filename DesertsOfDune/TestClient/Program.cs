@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Threading;
 using GameData.network.controller;
+using GameData.network.messages;
+using GameData.network.util;
+using Server;
 
 namespace TestClient
 {
@@ -12,7 +15,7 @@ namespace TestClient
 
             Console.WriteLine("Hello World 2!");
 
-            ServerMessageController messageController2 = new ServerMessageController();
+            MessageController messageController2 = new ServerMessageController();
 
             ClientConnectionHandler clientConnectionHandler = new ClientConnectionHandler("127.0.0.1", 10101);
 
@@ -20,7 +23,12 @@ namespace TestClient
 
             // client
 
+            Logger logger = new Logger();
+            logger.CreateDebugLogger();
+
             messageController2.DoDebug(123, "Hallo emil, hier ist Alex");
+
+            clientNetworkController.HandleSendingMessage(new JoinMessage("client", true, false));
         }
     }
 }

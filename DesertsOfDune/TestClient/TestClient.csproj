@@ -7,5 +7,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GameData\GameData.csproj" />
+    <ProjectReference Include="..\Server\Server.csproj" />
   </ItemGroup>
 </Project>

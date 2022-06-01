@@ -11,7 +11,7 @@ namespace GameData.network.controller
     /// </summary>
     /// <remarks>
     /// This concrete network controller implementation inherit the abstract NetworkController (<see cref="NetworkController"/>).
-    /// Thats why it needs a reference to the connection handler (<see cref="ClientConnectionHandler"/>) and message controller (<see cref="ServerMessageController"/>) used
+    /// Thats why it needs a reference to the connection handler (<see cref="ClientConnectionHandler"/>) and message controller (<see cref="MessageController"/>) used
     /// and implement the "HandlingSendingMessage"-method.
     /// </remarks>
     public class ClientNetworkController : NetworkController
@@ -24,7 +24,7 @@ namespace GameData.network.controller
         /// </remarks>
         /// <param name="connectionHandler">reference to the client connection handler used to send and receive messages</param>
         /// <param name="messageController">reference to the message controller used handle the messages received and to send</param>
-        public ClientNetworkController(ClientConnectionHandler connectionHandler, ServerMessageController messageController) : base(connectionHandler, messageController, WebSocketType.WEBSOCKET_CLIENT)
+        public ClientNetworkController(ClientConnectionHandler connectionHandler, MessageController messageController) : base(connectionHandler, messageController, WebSocketType.WEBSOCKET_CLIENT)
         {
             base.messageController.NetworkController = this;
             base.connectionHandler.NetworkController = this;
