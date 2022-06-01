@@ -318,7 +318,7 @@ namespace GameData.network.util.world
         /// <param name="target"> this is the Field on the Map where the active Noble character aims its atomic bomb to </param>
         /// <returns></returns>
         virtual
-        public bool AtomicBomb(MapField target)
+        public bool AtomicBomb(MapField target, Map map)
         {
             //Do nothing because only Nobles can perform this move
             return false;

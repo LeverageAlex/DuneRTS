@@ -333,7 +333,7 @@ namespace Server
                                 }
                             }
 
-                            actionCharacter.AtomicBomb(targetMapField);
+                            actionCharacter.AtomicBomb(targetMapField, Party.GetInstance().map);
                         }
                         break;
                     case ActionType.SPICE_HORDING:
