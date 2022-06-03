@@ -9,14 +9,8 @@ public class MainMenuManager : MonoBehaviour
     [Header("Menus:")]
     public GameObject MainMenu;
     public GameObject OptionsMenu;
-    public GameObject HouseSelectionMenu;
     public GameObject PlayOptionsMenu;
     public GameObject CreateJoinGameMenu;
-
-    [Header("HouseSelection:")]
-    public Toggle option1;
-    public Toggle option2;
-    public GameObject confirmButton;
 
     [Header("Create/Join Game:")]
     public GameObject createGameText;
@@ -37,86 +31,6 @@ public class MainMenuManager : MonoBehaviour
     void Start()
     {
         ActivateMenu(MainMenu);
-    }
-
-    /// <summary>
-    /// this method is called by the SERVER to start the HouseSelcetion with two options
-    /// </summary>
-    /// <param name="houseName1"></param>
-    /// <param name="houseName2"></param>
-    public void StartHouseSelection(string houseName1, string houseName2)
-    {
-        SetOptionText(1, houseName1);
-        SetOptionText(2, houseName2);
-
-        ActivateMenu(HouseSelectionMenu);
-    }
-
-    //THIS METHOD IS TEMPORARY AND ONLY MENT FOR THE BUTTON ACTIVATION OF THE HOUSE SELECTEION ToDo delete
-    public void StartHouseSelection()
-    {
-        StartHouseSelection("option 1", "option 2");
-    }
-
-    /// <summary>
-    /// this method is called by the SERVER to end the HouseSelection when house gets acknowkledged
-    /// </summary>
-    public void EndHouseSelection()
-    {
-        ActivateMenu(MainMenu);
-    }
-
-    /// <summary>
-    /// this method is called by a BUTTON to select one of the two house options
-    /// </summary>
-    public void SelectOption()
-    {
-        if (option1.isOn)
-        {
-            Debug.Log(option1.GetComponentInChildren<Text>().text + " was selected!");
-            //TODO send message to server
-
-            EndHouseSelection();//TODO trigger by server instead
-        }
-        else if (option2.isOn)
-        {
-            Debug.Log(option2.GetComponentInChildren<Text>().text + " was selected!");
-            //TODO send message to server
-
-            EndHouseSelection();//TODO trigger by server instead
-        }
-    }
-
-    /// <summary>
-    /// this method is called by a TOGGLE to toggle the confirmButton.isActive
-    /// </summary>
-    public void ToggleChange()
-    {
-        if (!option1.isOn && !option2.isOn)
-        {
-            confirmButton.SetActive(false);
-        }
-        else
-        {
-            confirmButton.SetActive(true);
-        }
-    }
-
-    /// <summary>
-    /// this method is a HELPER-METHOD to set the textFields of the house options
-    /// </summary>
-    /// <param name="index">first or second option</param>
-    /// <param name="houseName">name</param>
-    private void SetOptionText(int index, string houseName)
-    {
-        if (index == 1)
-        {
-            option1.GetComponentInChildren<Text>().text = houseName;
-        }
-        else if (index == 2)
-        {
-            option2.GetComponentInChildren<Text>().text = houseName;
-        }
     }
 
     /// <summary>
@@ -181,6 +95,8 @@ public class MainMenuManager : MonoBehaviour
         Debug.Log("Join: " + name + " " + connectionCode + " " + active);
 
         //TODO send JOIN message to server
+
+        PlayGame();//TODO delete, just temporary for testing
     }
 
     /// <summary>
@@ -190,6 +106,7 @@ public class MainMenuManager : MonoBehaviour
     public void JoinAccept(string clientSecret)
     {
         this.clientSecret = clientSecret;
+        PlayGame();
     }
 
     /// <summary>
@@ -199,7 +116,6 @@ public class MainMenuManager : MonoBehaviour
     private void ActivateMenu(GameObject menuToActivate)
     {
         MainMenu.SetActive(false);
-        HouseSelectionMenu.SetActive(false);
         OptionsMenu.SetActive(false);
         PlayOptionsMenu.SetActive(false);
         CreateJoinGameMenu.SetActive(false);
