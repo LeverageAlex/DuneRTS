@@ -10,7 +10,7 @@ using GameData.network.util.parser;
 /// <summary>
 /// This Class Handles all messages for the Client.
 /// </summary>
-public static class PlayerController
+public static class PlayerMessageController
 {
     /// <summary>
     /// This method triggers the MovementRequest
