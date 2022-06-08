@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5738320622534970096}
   m_Layer: 5
-  m_Name: HelpButton
+  m_Name: HelpElem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70,7 +70,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2289498299712738696, guid: 5773f067c6a30e2409db70f06acadfd1, type: 3}
       propertyPath: m_Name
-      value: HelpTextElem
+      value: HelpText
+      objectReference: {fileID: 0}
+    - target: {fileID: 2289498299712738696, guid: 5773f067c6a30e2409db70f06acadfd1, type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2289498299712738696, guid: 5773f067c6a30e2409db70f06acadfd1, type: 3}
       propertyPath: m_IsActive
@@ -184,6 +188,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -83.5
       objectReference: {fileID: 0}
+    - target: {fileID: 4193424770367406415, guid: 5773f067c6a30e2409db70f06acadfd1, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4553906177713222071, guid: 5773f067c6a30e2409db70f06acadfd1, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5773f067c6a30e2409db70f06acadfd1, type: 3}
 --- !u!1 &4200374962145058735 stripped
@@ -203,6 +215,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4200374962145058734}
     m_Modifications:
+    - target: {fileID: 2512052489069518735, guid: ed1cc5e2520fa4845b503399bfbe1d3a, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4654849287426657439, guid: ed1cc5e2520fa4845b503399bfbe1d3a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -234,6 +250,10 @@ PrefabInstance:
     - target: {fileID: 6553240376138419769, guid: ed1cc5e2520fa4845b503399bfbe1d3a, type: 3}
       propertyPath: m_Name
       value: Back
+      objectReference: {fileID: 0}
+    - target: {fileID: 6553240376138419769, guid: ed1cc5e2520fa4845b503399bfbe1d3a, type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7521332124122207396, guid: ed1cc5e2520fa4845b503399bfbe1d3a, type: 3}
       propertyPath: m_Text
@@ -466,7 +486,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8577282768059458855, guid: 500f59663c3edc84da24948b25e5a4f5, type: 3}
       propertyPath: m_Name
-      value: HelpElem
+      value: HelpButton
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 500f59663c3edc84da24948b25e5a4f5, type: 3}
