@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Newtonsoft.Json" />
+    <None Remove="network\util\" />
+    <None Remove="network\util\parse\" />
+    <None Remove="network\controller\" />
+    <None Remove="WebSocketSharp-netstandard" />
+    <None Remove="network\controller\ConnectionHandler\" />
+    <None Remove="Serilog" />
+    <None Remove="Serilog.Sinks.File" />
+    <None Remove="SonarAnalyzer.CSharp" />
+    <None Remove="Doxygen" />
+    <None Remove="Serilog.Sinks.Console" />
+    <None Remove="parser\" />
+    <None Remove="CommandLineParser" />
+    <None Remove="validation\" />
+    <None Remove="Configuration\" />
+    <None Remove="Pathfinder\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="WebSocketSharp-netstandard" Version="1.0.1" />
+    <PackageReference Include="Serilog" Version="2.11.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="WebSocketSharp-NonPreRelease" Version="1.0.0" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.39.0.47922">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="network\util\parser\" />
+    <Folder Include="network\controller\" />
+    <Folder Include="network\controller\ConnectionHandler\" />
+    <Folder Include="parser\" />
+    <Folder Include="validation\" />
+    <Folder Include="Configuration\" />
+    <Folder Include="Pathfinder\" />
+  </ItemGroup>
+</Project>

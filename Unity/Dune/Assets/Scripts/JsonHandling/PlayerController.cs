@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using GameData;
+using GameData.network.messages;
+using GameData.network.util.world;
+using GameData.network.util.parser;
 
 /// <summary>
 /// This Class Handles all messages for the Client.
 /// </summary>
 public static class PlayerController
 {
-    private static string version = "v1";
     /// <summary>
     /// This method triggers the MovementRequest
     /// </summary>
@@ -19,17 +21,11 @@ public static class PlayerController
     public static void DoMovementRequest(int clientID, int characterID, LinkedList<Vector3> path)
 
     {
-        Specs specs = new Specs();
-        specs.path = ConvertPath(path);
-        Request request = new Request(Request.RequestType.MOVEMENT_REQUEST);
-        request.version = version;
-        request.clientID = 1234;
-        request.characterID = characterID;
-        request.specs = specs;
 
-        // for testing perpeces only
-        string data = JsonConvert.SerializeObject(request, new JsonSerializerSettings());
-        Debug.Log("Updated: " + data);
+        List<Position> positions = ConvertPath(path);
+        MovementRequestMessage movementRequestMessage = new MovementRequestMessage(clientID, characterID,positions);
+
+        MessageConverter.FromMessage(movementRequestMessage);
 
     }
 
@@ -40,35 +36,47 @@ public static class PlayerController
     /// <param name="characterID">the id of the character</param>
     /// <param name="action">the action the character should use</param>
     /// <param name="target">the target of the action</param>
-    public static void DoActionRequest(int clientID, int characterID, CharacterTurnHandler.Actions action, Node target /* missing target id param*/)
+    public static void DoActionRequest(int clientID, int characterID, Enums.ActionType action, Node target /* missing target id param*/)
     {
-        Request request = new Request(Request.RequestType.ACTION_REQUEST);
-        request.version = version;
-        request.clientID = clientID;
-        // TODO habe to implement action i library...
-       // request.action = action;
-
-        Specs specs = new Specs();
-        Vector targ = new Vector(target.X, target.Z);
-        specs.target = targ;
-        request.specs = specs;
-        request.targetID = 1253;
-
-        // for testing perpeces only
-        string data = JsonConvert.SerializeObject(request, new JsonSerializerSettings());
-        Debug.Log("Updated: " + data);
+        ActionRequestMessage actionRequestMessage = new ActionRequestMessage(1234, 12, action, new Position(1, 2), 1);
+        MessageConverter.FromMessage(actionRequestMessage);
     }
 
+    /// <summary>
+    /// This method triggers the creation of a endTurnRequestmessage and forwards this message to the MessageConverter
+    /// </summary>
+    /// <param name="clientID">the id of the client</param>
+    /// <param name="characterID">the id of the character</param>
     public static void DoEndTurnRequest(int clientID, int characterID)
     {
-        Request request = new Request(Request.RequestType.END_TURN_REQEST);
-        request.version = version;
-        request.clientID = clientID;
-        request.characterID = characterID;
+        EndTurnRequestMessage endTurnRequestMessage = new EndTurnRequestMessage(clientID, characterID);
+        MessageConverter.FromMessage(endTurnRequestMessage);
+    }
 
-        // for testing perpeces only
-        string data = JsonConvert.SerializeObject(request, new JsonSerializerSettings());
-        Debug.Log("Updated: " + data);
+    /// <summary>
+    /// This method is used to tirgger the creation of a HouseRequestMessage and forward it to the MessageConverter
+    /// </summary>
+    /// <param name="houseName">the name of the requested house</param>
+    public static void DoHouseRequest(string houseName)
+    {
+        HouseRequestMessage houseRequestMessage = new HouseRequestMessage(houseName);
+        MessageConverter.FromMessage(houseRequestMessage);
+    }
+
+    /// <summary>
+    /// This method is used to request the game state.
+    /// </summary>
+    /// <param name="clientID">the id of the client</param>
+    public static void DoGamestateRequest(int clientID)
+    {
+        GameStateRequestMessage gameStateRequestMessage = new GameStateRequestMessage(clientID);
+        MessageConverter.FromMessage(gameStateRequestMessage);
+    }
+
+    public static void DoPauseRequest(int clientID)
+    {
+        PauseGameRequestMessage pauseGameRequestMessage = new PauseGameRequestMessage(clientID);
+        MessageConverter.FromMessage(pauseGameRequestMessage);
     }
 
     /// <summary>
@@ -76,13 +84,13 @@ public static class PlayerController
     /// </summary>
     /// <param name="selCharPath">the path to be converted.</param>
     /// <returns>The converted path</returns>
-    private static List<Vector> ConvertPath(LinkedList<Vector3> selCharPath)
+    private static List<Position> ConvertPath(LinkedList<Vector3> selCharPath)
     {
-        List<Vector> path = new List<Vector>();
+        List<Position> path = new List<Position>();
         foreach (Vector3 vec in selCharPath)
         {
-            Vector v = new Vector(vec.x, vec.z);
-            path.Add(v);
+            Position p = new Position(vec.x, vec.z);
+            path.Add(p);
         }
         return path;
     }
