@@ -28,6 +28,10 @@ PrefabInstance:
       value: 0.454902
       objectReference: {fileID: 0}
     - target: {fileID: -1236397413529596644, guid: 46023eff98b3f6a4e8048b11a67fd846, type: 3}
+      propertyPath: _nodeTypeEnum
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: -1236397413529596644, guid: 46023eff98b3f6a4e8048b11a67fd846, type: 3}
       propertyPath: charHeightOffset
       value: 0.2
       objectReference: {fileID: 0}

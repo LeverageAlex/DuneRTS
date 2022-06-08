@@ -25,7 +25,7 @@ public class House : ScriptableObject
 
     public string Name
     {
-        get { return name; }
+        get { return houseName; }
     }
 
     public int AtomicsLeft
