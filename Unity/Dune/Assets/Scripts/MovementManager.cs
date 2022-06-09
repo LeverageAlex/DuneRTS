@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Newtonsoft.Json;
 
 
 /**
@@ -146,7 +145,7 @@ using Newtonsoft.Json;
                 updateCharacters.AddLast(selectedChar);
 
                 // PlayerController.doRequestMovement(ClientID, CharacterId, path); 
-                PlayerMessageController.DoMovementRequest(1234, selectedChar.GetInstanceID(), selCharPath);
+               // PlayerMessageController.DoMovementRequest(1234, selectedChar.GetInstanceID(), selCharPath);
                 
                 // Message = PlayerController.OnMovement((Movement)Message)
 

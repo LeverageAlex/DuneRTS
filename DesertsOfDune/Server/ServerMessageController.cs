@@ -134,7 +134,8 @@ namespace Server
                     if (!firstPlayerGotGreatHousesAndGotRequestAck)
                     {
                         firstPlayerGotGreatHousesAndGotRequestAck = true;
-                    } else
+                    }
+                    else
                     {
                         // first player already has great house, so start the game
                         Party.GetInstance().Start();
@@ -172,7 +173,7 @@ namespace Server
             Player activePlayer = null;
             foreach (var player in Party.GetInstance().GetActivePlayers())
             {
-                if(player.ClientID == msg.clientID)
+                if (player.ClientID == msg.clientID)
                 {
                     activePlayer = player;
                 }
@@ -247,7 +248,7 @@ namespace Server
                 {
                     activePlayer = player;
                 }
-                if(player.ClientID == msg.clientID)
+                if (player.ClientID == msg.clientID)
                 {
                     enemyPlayer = player;
                 }
@@ -277,11 +278,11 @@ namespace Server
                 }
             }
             //get the target character from enemy player if the target character is not an ally
-            if(targetCharacter == null)
+            if (targetCharacter == null)
             {
-                foreach(var character in enemyPlayer.UsedGreatHouse.GetCharactersAlive())
+                foreach (var character in enemyPlayer.UsedGreatHouse.GetCharactersAlive())
                 {
-                    if(character.CurrentMapfield.stormEye == msg.specs.target)
+                    if (character.CurrentMapfield.stormEye == msg.specs.target)
                     {
                         targetCharacter = character;
                     }
@@ -312,7 +313,7 @@ namespace Server
                         action = ActionType.COLLECT;
                         actionCharacter.CollectSpice();
                         break;
-                        //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
+                    //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
                     case ActionType.KANLY:
                         action = ActionType.KANLY;
                         if (actionCharacter.APcurrent == actionCharacter.APmax
@@ -362,7 +363,7 @@ namespace Server
                         if (actionCharacter.APcurrent == actionCharacter.APmax
                             && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.FIGHTER))
                         {
-                                actionCharacter.SwordSpin(Party.GetInstance().map);
+                            actionCharacter.SwordSpin(Party.GetInstance().map);
                         }
                         break;
                     default:
@@ -408,7 +409,8 @@ namespace Server
             int activeCharacterY = activeCharacter.CurrentMapfield.stormEye.y;
             int targetCharacterX = targetCharacter.CurrentMapfield.stormEye.x;
             int targetCharacterY = targetCharacter.CurrentMapfield.stormEye.y;
-            if ((activeCharacterX == targetCharacterX && (activeCharacterY == (targetCharacterY + 1)) || (activeCharacterY == targetCharacterY - 1)) || (activeCharacterY == targetCharacterY && ((activeCharacterX == targetCharacterX + 1) || (activeCharacterX == targetCharacterX - 1)))) {
+            if ((activeCharacterX == targetCharacterX && (activeCharacterY == (targetCharacterY + 1)) || (activeCharacterY == targetCharacterY - 1)) || (activeCharacterY == targetCharacterY && ((activeCharacterX == targetCharacterX + 1) || (activeCharacterX == targetCharacterX - 1))))
+            {
                 activeCharacter.GiftSpice(targetCharacter, msg.Amount);
                 DoSendTransferDemand(msg.ClientID, msg.CharacterID, msg.TargetID);
             }
@@ -557,7 +559,7 @@ namespace Server
         {
             int x = mapField.XCoordinate;
             int y = mapField.ZCoordinate;
-            Position position = new Position(x,y);
+            Position position = new Position(x, y);
 
             // determine the client, whose character is targeted
             List<Player> players = Party.GetInstance().GetActivePlayers();
@@ -652,6 +654,126 @@ namespace Server
         {
             UnpauseGameOfferMessage unpauseGameOfferMessage = new UnpauseGameOfferMessage(requestedByClientID);
             NetworkController.HandleSendingMessage(unpauseGameOfferMessage);
+        }
+
+        // the server should not use this method
+        public override Message OnJoinAcceptedMessage(JoinAcceptedMessage joinAcceptedMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        // the server should not use this method
+        public override Message OnGameConfigMessage(GameConfigMessage gameConfigMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        // the server should not use this method
+        public override Message OnMapChangeDemandMessage(MapChangeDemandMessage mapChangeDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        // the server should not use this method
+        public override Message OnStrikeMessage(StrikeMessage strikeMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        // the server should not use this method
+        public override Message OnGameEndMessage(GameEndMessage gameEndMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        // the server should not use this method
+        public override Message OnGameStateMessage(GameStateMessage gameStateMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        // the server should not use this method
+        public override Message OnPauseGameDemandMessage(GamePauseDemandMessage gamePauseDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        // the server should not use this method
+        public override Message OnHouseOfferMessage(HouseOfferMessage houseOfferMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        // the server should not use this method
+        public override Message OnHouseAcknowledgementMessage(HouseAcknowledgementMessage houseAcknowledgementMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        // the server should not use this method
+        public override Message OnTurnDemandMessage(TurnDemandMessage turnDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        // the server should not use this method
+        public override Message OnMovementDemandMessage(MovementDemandMessage movementDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        // the server should not use this method
+        public override Message OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        // the server should not use this method
+        public override Message OnChangeCharacterStatisticsDemandMessage(ChangeCharacterStatisticsDemandMessage changeCharacterStatisticsDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        // the server should not use this method
+        public override Message OnSpawnCharacterDemandMessage(SpawnCharacterDemandMessage spawnCharacterDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        // the server should not use this method
+        public override Message OnChangePlayerSpiceDemandMessage(ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        // the server should not use this method
+        public override Message OnSandwormSpawnDemandMessage(SandwormSpawnDemandMessage sandwormSpawnDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        // the server should not use this method
+        public override Message OnSandwormMoveDemandMessage(SandwormMoveDemandMessage sandwormMoveMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        // the server should not use this method
+        public override Message OnSandwormDespawnMessage(SandwormDespawnDemandMessage sandwormDespawnDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        // the server should not use this method
+        public override Message OnEndGameMessage(EndGameMessage endGameMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        // the server should not use this method
+        public override Message OnTransferDemandMessage(TransferDemandMessage transferDemandMessage)
+        {
+            throw new NotImplementedException();
         }
     }
 }

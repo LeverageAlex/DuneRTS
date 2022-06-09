@@ -162,7 +162,7 @@ public class CharacterTurnHandler : MonoBehaviour
 
     public static void EndTurn()
     {
-        PlayerMessageController.DoEndTurnRequest(1234,12);
+        //PlayerMessageController.DoEndTurnRequest(1234,12);
         Debug.Log("Ended Turn!");
         instance.ResetSelection();
     }
