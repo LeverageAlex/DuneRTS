@@ -132,6 +132,10 @@ public class Node : MonoBehaviour
         {
             CharacterTurnHandler.instance.GetSelectedCharacter().Attack_AtomicTrigger(this);
         }
+        else if(CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.HELIPORT && nodeTypeEnum == NodeTypeEnum.HELIPORT && CharacterTurnHandler.CharSelected)
+        {
+            CharacterTurnHandler.instance.GetSelectedCharacter().Action_HeliportTrigger(this);
+        }
 
 
 

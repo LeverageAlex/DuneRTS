@@ -1038,7 +1038,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 90
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -10552,6 +10552,7 @@ MonoBehaviour:
   fighterPrefab: {fileID: 248485424704963574, guid: 87352ed578074554f87332f551b8dce6, type: 3}
   atomicPrefab: {fileID: 7412499961909464192, guid: 4e9abc8848524e642bee551042f3fc4b, type: 3}
   sandwormPrefab: {fileID: 7878245606837139554, guid: 5711f5435620ab14cbf6eedb2a1edf2d, type: 3}
+  helicopterPrefab: {fileID: 2788947140733420804, guid: 7df2b5835292fbb46a77bb67d2038059, type: 3}
   emblemRichese: {fileID: 21300000, guid: d4ab0e3b1e831e347a1ee38cb004c1be, type: 3}
   emblemVernius: {fileID: 21300000, guid: a879059f28b93654ca7a0261649874e7, type: 3}
   emblemAtreides: {fileID: 21300000, guid: 7ec2127c596765b42a6b43654d46c5b5, type: 3}
@@ -11393,7 +11394,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6682074575721881228, guid: 72bb88d6a0f1860489fa55cf2b5657d0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 135
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6682074575721881228, guid: 72bb88d6a0f1860489fa55cf2b5657d0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -13277,7 +13278,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 90
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -14150,7 +14151,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 90
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -18206,7 +18207,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 90
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -18550,6 +18551,10 @@ PrefabInstance:
     - target: {fileID: 7878245606837139554, guid: 5711f5435620ab14cbf6eedb2a1edf2d, type: 3}
       propertyPath: m_Name
       value: Sandworm
+      objectReference: {fileID: 0}
+    - target: {fileID: 7878245606837139554, guid: 5711f5435620ab14cbf6eedb2a1edf2d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8918876208983980024, guid: 5711f5435620ab14cbf6eedb2a1edf2d, type: 3}
       propertyPath: m_LocalPosition.x

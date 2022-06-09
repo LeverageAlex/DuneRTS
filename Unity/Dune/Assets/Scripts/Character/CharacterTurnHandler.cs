@@ -33,7 +33,7 @@ public class CharacterTurnHandler : MonoBehaviour
 
     public enum Actions
     {
-        ATTACK, MOVE, COLLECT, TRANSFER, KANLY, FAMILY_ATOMICS, SPICE_HOARDING, VOICE, SWORD_SPIN, EMPTY
+        ATTACK, MOVE, COLLECT, TRANSFER, KANLY, FAMILY_ATOMICS, SPICE_HOARDING, VOICE, SWORD_SPIN, EMPTY, HELIPORT
     }
 
     private void Awake()
@@ -151,6 +151,14 @@ public class CharacterTurnHandler : MonoBehaviour
         ConfirmDeactivate();
     }
 
+    public void SetCharStateHeliport()
+    {
+        if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
+        this.charState = Actions.HELIPORT;
+        ConfirmDeactivate();
+        DisableSelectionBox();
+    }
+
     public void confirmAction()
     {
         if (this.charState == Actions.MOVE)
@@ -256,5 +264,17 @@ public class CharacterTurnHandler : MonoBehaviour
         MovementManager.instance.unselectCharacter();
         confirmationPanel.SetActive(false);
         AudioController.instance.Play("menuSelect");
+    }
+
+
+    public void DisableSelectionBox()
+    {
+        PlayerText.SetActive(true);
+        SpiceText.SetActive(true);
+        CharacterText.SetActive(false);
+        HPText.SetActive(false);
+        MPText.SetActive(false);
+        APText.SetActive(false);
+        SpiceInventoryText.SetActive(false);
     }
 }
