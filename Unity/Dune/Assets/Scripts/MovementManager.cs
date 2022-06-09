@@ -146,7 +146,7 @@ using Newtonsoft.Json;
                 updateCharacters.AddLast(selectedChar);
 
                 // PlayerController.doRequestMovement(ClientID, CharacterId, path); 
-                PlayerMessageController.DoMovementRequest(1234, selectedChar.GetInstanceID(), selCharPath);
+                PlayerController.DoMovementRequest(1234, selectedChar.GetInstanceID(), selCharPath);
                 
                 // Message = PlayerController.OnMovement((Movement)Message)
 
