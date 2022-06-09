@@ -3,5 +3,6 @@ public enum FieldType {
     MOUNTAINS,
     FLAT_SAND,
     PLATEAU,
-    CITY
+    CITY,
+    HELIPORT
 }

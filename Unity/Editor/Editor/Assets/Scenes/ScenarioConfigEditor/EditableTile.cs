@@ -10,6 +10,8 @@ public class EditableTile : Tile {
     private Material flatSandTileMaterial;
     private Material plateauTileMaterial;
     private Material cityTileMaterial;
+    private Material heliportTileMaterial;
+
 
     private bool selected = false;
     private TileSelectionObserver tileSelectionObserver;
@@ -36,6 +38,7 @@ public class EditableTile : Tile {
                 flatSandTileMaterial = flatSandTile.GetComponent<Renderer>().material;
                 plateauTileMaterial = plateauTile.GetComponent<Renderer>().material;
                 cityTileMaterial = cityTile.GetComponent<Renderer>().material;
+                heliportTileMaterial = heliportTile.GetComponent<Renderer>().material;
             }
 
             duneTile.GetComponent<Renderer>().material = selectedMaterial;
@@ -43,6 +46,7 @@ public class EditableTile : Tile {
             flatSandTile.GetComponent<Renderer>().material = selectedMaterial;
             plateauTile.GetComponent<Renderer>().material = selectedMaterial;
             cityTile.GetComponent<Renderer>().material = selectedMaterial;
+            heliportTile.GetComponent<Renderer>().material = selectedMaterial;
 
             // notify observer
             if (notify && tileSelectionObserver != null) tileSelectionObserver.OnTileSelected(this);
@@ -55,6 +59,7 @@ public class EditableTile : Tile {
             flatSandTile.GetComponent<Renderer>().material = flatSandTileMaterial;
             plateauTile.GetComponent<Renderer>().material = plateauTileMaterial;
             cityTile.GetComponent<Renderer>().material = cityTileMaterial;
+            heliportTile.GetComponent <Renderer>().material = heliportTileMaterial;
 
             // notify observer
             if (notify && tileSelectionObserver != null) tileSelectionObserver.OnTileDeselected(this);

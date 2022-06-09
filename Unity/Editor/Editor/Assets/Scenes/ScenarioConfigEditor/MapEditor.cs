@@ -15,6 +15,7 @@ public class MapEditor : MonoBehaviour, TileSelectionObserver {
     public Button setFieldTypeFlatSand;
     public Button setFieldTypePlateau;
     public Button setFieldTypeCity;
+    public Button setFieldTypeHeliport;
 
     public GameObject sizeDialog;
 
@@ -130,6 +131,7 @@ public class MapEditor : MonoBehaviour, TileSelectionObserver {
         setFieldTypeFlatSand.onClick.AddListener(() => SetTypeForSelectedTiles(FieldType.FLAT_SAND));
         setFieldTypePlateau.onClick.AddListener(() => SetTypeForSelectedTiles(FieldType.PLATEAU));
         setFieldTypeCity.onClick.AddListener(() => SetTypeForSelectedTiles(FieldType.CITY));
+        setFieldTypeHeliport.onClick.AddListener(() => SetTypeForSelectedTiles(FieldType.HELIPORT));
     }
 
 
