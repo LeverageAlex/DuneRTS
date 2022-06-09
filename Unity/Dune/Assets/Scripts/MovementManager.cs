@@ -74,7 +74,8 @@ using GameData.network.util.world;
 
         if (Input.GetKeyDown(KeyCode.Return) && selCharPath.Count > 0)
             {
-                AnimateSelectedChar();
+            // AnimateChar(character, MovementManager.instance.getSelCharPath);
+            RequestMovement();
             }
 
         }
@@ -135,8 +136,8 @@ using GameData.network.util.world;
            // return true;
         }
 
-        public void AnimateSelectedChar()
-        {
+        //public void AnimateSelectedChar()
+        //{
             // if (!isAnimating)
             // {
            /* if (selCharPath.Count > 0)
@@ -156,7 +157,7 @@ using GameData.network.util.world;
                 CharacterTurnHandler.instance.ResetSelection();
             AudioController.instance.Play("CharWalk");
             }*/
-        }
+        //}
 
     private LinkedList<Vector3> convertVector(List<Position> path) {
         LinkedList<Vector3> newPos = new LinkedList<Vector3>();
@@ -196,6 +197,20 @@ using GameData.network.util.world;
     public List<Position> getSelCharPath()
     {
         return selCharPath;
+    }
+
+
+    public void RequestMovement()
+    {
+        if (!Mode.debugMode)
+        {
+            PlayerMessageController.instance.DoRequestMovement(0, CharacterTurnHandler.instance.GetSelectedCharacter().CharacterId, selCharPath);
+        }
+        else
+        {
+            AnimateChar(CharacterTurnHandler.instance.GetSelectedCharacter(), selCharPath);
+            selCharPath.Clear();
+        }
     }
 
 

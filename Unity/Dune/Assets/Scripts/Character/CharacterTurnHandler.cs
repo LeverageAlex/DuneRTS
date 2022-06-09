@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -159,12 +160,16 @@ public class CharacterTurnHandler : MonoBehaviour
         DisableSelectionBox();
     }
 
+
+    /// <summary>
+    ///Is called when the confirmButton is pressed
+    /// </summary>
     public void confirmAction()
     {
         if (this.charState == Actions.MOVE)
         {
             //MovementManager.instance.AnimateSelectedChar();
-            MovementManager.instance.AnimateChar(selectedCharacter, MovementManager.instance.getSelCharPath());
+            MovementManager.instance.RequestMovement();
         }
         ResetSelection();
     }
@@ -277,5 +282,11 @@ public class CharacterTurnHandler : MonoBehaviour
         MPText.SetActive(false);
         APText.SetActive(false);
         SpiceInventoryText.SetActive(false);
+    }
+
+    public void SetTurnChar(Character character)
+    {
+        //TODO Check for ClientID owns character
+        selectedCharacter = character;
     }
 }

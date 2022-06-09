@@ -53,6 +53,8 @@ public class Character : MonoBehaviour
 
     public int AP { get { return _AP; } }
 
+    public int CharacterId { get { return characterId; } }
+
 
     private bool isLoud;
     private bool isSwallowed;
@@ -299,11 +301,18 @@ public class Character : MonoBehaviour
 
         if (nodeManager.isNodeNeighbour(selectedNode, secondNode) && !character.IsMemberOfHouse(house))
         {
-            
+
             //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.ATTACK, selectedNode);
             // TODO wait for Server response.
             //TODO execute attack
-            Attack_BasicExecution(character);
+            if (Mode.debugMode)
+            {
+                Attack_BasicExecution(character);
+            }
+            else
+            {
+                PlayerMessageController.instance.DoRequestAction(0, characterId, ActionType.ATTACK, new GameData.network.util.world.Position(X, Z), character.characterId);
+            }
             return true;
         }
         else
@@ -338,7 +347,14 @@ public class Character : MonoBehaviour
         {
             //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.COLLECT, nodeManager.getNodeFromPos(X, Z));
             // just fill data the node should be available here.
-            Action_CollectSpiceExecution();
+            if (Mode.debugMode)
+            {
+                Action_CollectSpiceExecution();
+            }
+            else {
+                //Einfach nein @Felix
+                PlayerMessageController.instance.DoRequestAction(0, characterId, ActionType.COLLECT, new GameData.network.util.world.Position(X, Z), 0);
+            }
 
         }
         else
@@ -370,7 +386,13 @@ public class Character : MonoBehaviour
         {
             //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.TRANSFER, selectedNode);
             //TODO execute attack
-            Action_TransferSpiceExecution(character);
+            if (Mode.debugMode)
+            {
+                Action_TransferSpiceExecution(character);
+            }
+            else { 
+                
+            }
             return true;
         }
         else
@@ -402,11 +424,17 @@ public class Character : MonoBehaviour
         if (characterType == CharTypeEnum.FIGHTER)
         {
             //Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
-           
+
             // just fill data the node has to be a parameter of Atack_SwordSpin
 
             //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.SWORD_SPIN, nodeManager.getNodeFromPos(X,Z));
-            Attack_SwordSpinExecution();
+            if (Mode.debugMode)
+            {
+                Attack_SwordSpinExecution();
+            }
+            else { 
+            
+            }
             //TODO: Send Attack to Server
             //TODO: wait for response from server
            
@@ -444,7 +472,14 @@ public class Character : MonoBehaviour
             //Check, if there are atomics left in House
 
             //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.FAMILY_ATOMICS, node);
-            Attack_AtomicExecution(node);
+            if (Mode.debugMode)
+            {
+                Attack_AtomicExecution(node);
+            }
+            else
+            {
+
+            }
             return true;
         }
         else
@@ -480,7 +515,13 @@ public class Character : MonoBehaviour
             if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
             {
                 //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.KANLY, secondNode);
-                Attack_KanlyExecution(character);
+                if (Mode.debugMode)
+                {
+                    Attack_KanlyExecution(character);
+                }
+                else { 
+                
+                }
                 return true;
             }
             else
@@ -518,7 +559,13 @@ public class Character : MonoBehaviour
 
             // just fill data the selected node should be available here.
             //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.SPICE_HORDING, nodeManager.getNodeFromPos(X, Z));
-            Action_SpiceHoardingExecution();
+            if (Mode.debugMode)
+            {
+                Action_SpiceHoardingExecution();
+            }
+            else { 
+            
+            }
             return true;
         }
         else
@@ -563,10 +610,17 @@ public class Character : MonoBehaviour
             Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
             if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
             {
-                
+
                 //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.VOICE, selectedNode);
                 //TODO: wait for response from server
-                Action_VoiceExecution(character);
+                if (Mode.debugMode)
+                {
+                    Action_VoiceExecution(character);
+                }
+                else
+                {
+
+                }
                 return true;
             }
             else

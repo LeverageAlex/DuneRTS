@@ -11,7 +11,11 @@ using GameData.network.util.enums;
 /// </summary>
 public class PlayerMessageController : MessageController
 {
+    public static PlayerMessageController instance;
 
+    public PlayerMessageController() {
+        if (instance == null) instance = this;
+    }
 
     /// <summary>
     /// this method is responsible for requesting a Join
@@ -202,6 +206,7 @@ public class PlayerMessageController : MessageController
     public override Message OnTurnDemandMessage(TurnDemandMessage turnDemandMessage)
     {
         // TODO: implement logic
+        CharacterTurnHandler.instance.SetTurnChar(CharacterMgr.instance.getCharScriptByID(turnDemandMessage.clientID));
         return null;
     }
 
@@ -248,6 +253,7 @@ public class PlayerMessageController : MessageController
     public override Message OnSpawnCharacterDemandMessage(SpawnCharacterDemandMessage spawnCharacterDemandMessage)
     {
         // TODO: implement logic
+        //spawnCharacterDemandMessage.
         return null;
     }
 
