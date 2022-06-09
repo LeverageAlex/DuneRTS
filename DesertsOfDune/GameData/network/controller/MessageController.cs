@@ -105,46 +105,6 @@ namespace GameData.network.controller
 
         public abstract void OnPauseGameRequestMessage(PauseGameRequestMessage msg);
 
-        public abstract Message OnJoinAcceptedMessage(JoinAcceptedMessage joinAcceptedMessage);
-
-        public abstract Message OnGameConfigMessage(GameConfigMessage gameConfigMessage);
-
-        public abstract Message OnMapChangeDemandMessage(MapChangeDemandMessage mapChangeDemandMessage);
-
-        public abstract Message OnStrikeMessage(StrikeMessage strikeMessage);
-
-        public abstract Message OnGameEndMessage(GameEndMessage gameEndMessage);
-
-        public abstract Message OnGameStateMessage(GameStateMessage gameStateMessage);
-
-        public abstract Message OnPauseGameDemandMessage(GamePauseDemandMessage gamePauseDemandMessage);
-
-        public abstract Message OnHouseOfferMessage(HouseOfferMessage houseOfferMessage);
-
-        public abstract Message OnHouseAcknowledgementMessage(HouseAcknowledgementMessage houseAcknowledgementMessage);
-
-        public abstract Message OnTurnDemandMessage(TurnDemandMessage turnDemandMessage);
-
-        public abstract Message OnMovementDemandMessage(MovementDemandMessage movementDemandMessage);
-
-        public abstract Message OnActionDemandMessage(ActionDemandMessage actionDemandMessage);
-
-        public abstract Message OnChangeCharacterStatisticsDemandMessage(ChangeCharacterStatisticsDemandMessage changeCharacterStatisticsDemandMessage);
-
-        public abstract Message OnSpawnCharacterDemandMessage(SpawnCharacterDemandMessage spawnCharacterDemandMessage);
-
-        public abstract Message OnChangePlayerSpiceDemandMessage(ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage);
-
-        public abstract Message OnSandwormSpawnDemandMessage(SandwormSpawnDemandMessage sandwormSpawnDemandMessage);
-
-        public abstract Message OnSandwormMoveDemandMessage(SandwormMoveDemandMessage sandwormMoveMessage);
-
-        public abstract Message OnSandwormDespawnMessage(SandwormDespawnDemandMessage sandwormDespawnDemandMessage);
-
-        public abstract Message OnEndGameMessage(EndGameMessage endGameMessage);
-
-        public abstract Message OnTransferDemandMessage(TransferDemandMessage transferDemandMessage);
-
 
         public abstract void DoAcceptJoin(string clientSecret, int clientID, string sessionID);
 
