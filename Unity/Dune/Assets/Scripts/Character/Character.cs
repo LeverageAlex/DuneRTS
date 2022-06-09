@@ -596,6 +596,18 @@ public class Character : MonoBehaviour
         CharacterTurnHandler.EndTurn();
     }
 
+    public void Action_HeliportTrigger(Node targetNode)
+    {
+        Node startNode = nodeManager.getNodeFromPos(X, Z);
+
+    }
+
+    public void Action_HeliportExecution()
+    {
+
+    }
+
+
     public IEnumerator SwordDeAndActivation()
     {
         swordObject.SetActive(false);
