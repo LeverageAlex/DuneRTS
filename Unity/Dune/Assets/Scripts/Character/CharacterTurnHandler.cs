@@ -163,7 +163,8 @@ public class CharacterTurnHandler : MonoBehaviour
     {
         if (this.charState == Actions.MOVE)
         {
-            MovementManager.instance.AnimateSelectedChar();
+            //MovementManager.instance.AnimateSelectedChar();
+            MovementManager.instance.AnimateChar(selectedCharacter, MovementManager.instance.getSelCharPath());
         }
         ResetSelection();
     }

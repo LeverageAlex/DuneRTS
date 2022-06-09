@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+using GameData.network.util.world;
 
 /**
  * This manages all Characters and Moveables, that shall be moved.
@@ -18,7 +18,7 @@ using System;
         private LinkedList<Character> updateCharacters;
         private LinkedList<MoveAbles> OtherMoveAbles;
         [SerializeField]
-        private LinkedList<Vector3> selCharPath;
+        private List<Position> selCharPath;
 
         // public static bool charSelected { get { return instance.selectedChar != null; } }
         public static bool isAnimating { get { return instance.updateCharacters.Count != 0; } }
@@ -34,7 +34,7 @@ using System;
             {
                 instance = this;
                 updateCharacters = new LinkedList<Character>();
-                selCharPath = new LinkedList<Vector3>();
+                selCharPath = new List<Position>();
                 OtherMoveAbles = new LinkedList<MoveAbles>();
             }
             else Debug.Log("MovementManager Error. Instance of updateCharacters already exist.");
@@ -86,7 +86,7 @@ using System;
           }*/
 
         //Ignores all other functions within class
-        public void addCharacterToAnimate(Character character, LinkedList<Vector3> pathing)
+        public void addCharacterToAnimate(Character character, List<Vector3> pathing)
         {
             updateCharacters.AddLast(character);
             CharacterTurnHandler.instance.GetSelectedCharacter().SetWalkPath(pathing);
@@ -103,11 +103,11 @@ using System;
             selCharPath.Clear();
         }
 
-        public void AddWaypoint(Vector3 vec)
+        public void AddWaypoint(Position vec)
         {
-            if (IsWaypointAttachable((int)vec.x, (int)vec.z))
+            if (IsWaypointAttachable(vec.x, vec.y))
             {
-                selCharPath.AddLast(vec);
+                selCharPath.Add(vec);
             }
             else
             {
@@ -128,7 +128,7 @@ using System;
             }
             else
             {
-                return selCharPath.Count < CharacterTurnHandler.instance.GetSelectedCharacter().MP && MapManager.instance.isNodeNeighbour((int)selCharPath.Last.Value.x, (int)selCharPath.Last.Value.z,
+                return selCharPath.Count < CharacterTurnHandler.instance.GetSelectedCharacter().MP && MapManager.instance.isNodeNeighbour(selCharPath[selCharPath.Count-1].x, selCharPath[selCharPath.Count-1].y,
                    x, z);
             }
 
@@ -139,7 +139,7 @@ using System;
         {
             // if (!isAnimating)
             // {
-            if (selCharPath.Count > 0)
+           /* if (selCharPath.Count > 0)
             {
                 Character selectedChar = CharacterTurnHandler.instance.GetSelectedCharacter();
                 updateCharacters.AddLast(selectedChar);
@@ -152,11 +152,51 @@ using System;
                 // Sollte erst ausgeführt werden, wenn die aktion ausgeführt werden darf.
                 selectedChar.SetWalkPath(selCharPath);
                 selectedChar.ReduceMP(selCharPath.Count);
-                selCharPath = new LinkedList<Vector3>();
+                selCharPath = new List<Position>();
                 CharacterTurnHandler.instance.ResetSelection();
             AudioController.instance.Play("CharWalk");
-            }
+            }*/
         }
+
+    private LinkedList<Vector3> convertVector(List<Position> path) {
+        LinkedList<Vector3> newPos = new LinkedList<Vector3>();
+
+        Vector3 tmp;
+        foreach(Position p in path)
+        {
+            
+            tmp = new Vector3(p.x, 0, p.y);
+            newPos.AddLast(tmp);
+        }
+
+        return newPos;
+    }
+
+    public void AnimateChar(Character character, List<Position> path) {
+        if (path.Count > 0)
+        {
+            List<Vector3> newPath = new List<Vector3>(path.Count);
+
+            Vector3 tmp;
+            foreach (Position p in path)
+            {
+
+                tmp = new Vector3(p.x, character.BaseY + MapManager.instance.getNodeFromPos(p.x, p.y).charHeightOffset, p.y);
+                newPath.Add(tmp);
+            }
+
+
+            updateCharacters.AddLast(character);
+            character.SetWalkPath(newPath);
+            AudioController.instance.Play("CharWalk");
+        }
+    }
+
+
+    public List<Position> getSelCharPath()
+    {
+        return selCharPath;
+    }
 
 
     

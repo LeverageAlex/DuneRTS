@@ -12,6 +12,7 @@ using GameData.network.util.enums;
 public class PlayerMessageController : MessageController
 {
 
+
     /// <summary>
     /// this method is responsible for requesting a Join
     /// </summary>
@@ -212,6 +213,7 @@ public class PlayerMessageController : MessageController
     public override Message OnMovementDemandMessage(MovementDemandMessage movementDemandMessage)
     {
         // TODO: implement logic
+      //  MovementManager.instance.AnimateChar(CharacterMgr.instance.getCharScriptByID(movementDemandMessage.characterID), movementDemandMessage.);
         return null;
     }
 

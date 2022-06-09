@@ -57,7 +57,7 @@ public class Character : MonoBehaviour
     private bool isLoud;
     private bool isSwallowed;
 
-    private LinkedList<Vector3> walkPath;
+    private List<Vector3> walkPath;
 
 
     private MapManager nodeManager;
@@ -211,14 +211,14 @@ public class Character : MonoBehaviour
      */
     public bool MoveToPoint()
     {
-        Vector3 dir = walkPath.First.Value - transform.position;
+        Vector3 dir = walkPath[0] - transform.position;
         transform.Translate(dir.normalized * walkSpeed * Time.deltaTime, Space.World);
         charAnim.Play(animation_walk);
         RotateTowardsVector(dir);
         // ReduceMP(1);
-        if (Vector3.Distance(transform.position, walkPath.First.Value) <= 0.06f)
+        if (Vector3.Distance(transform.position, walkPath[0]) <= 0.06f)
         {
-            walkPath.RemoveFirst();
+            walkPath.RemoveAt(0);
             MapManager.instance.placeObjectOnNode(gameObject, (int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z));
 
             MapManager.instance.RemoveObjectOnNode(X, Z);
@@ -243,7 +243,7 @@ public class Character : MonoBehaviour
         return true;
     }
 
-    public void SetWalkPath(LinkedList<Vector3> way)
+    public void SetWalkPath(List<Vector3> way)
     {
         walkPath = way;
     }

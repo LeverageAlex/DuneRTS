@@ -15,7 +15,7 @@ using UnityEngine.UI;
 public class CharacterMgr : MonoBehaviour
 {
     //Connects CharacterID to CharacterObject
-    Dictionary<int, GameObject> characterDict = new Dictionary<int, GameObject>();
+    Dictionary<int, Character> characterDict = new Dictionary<int, Character>();
 
     public GameObject noblePrefab;
     public GameObject mentatPrefab;
@@ -87,7 +87,7 @@ public class CharacterMgr : MonoBehaviour
 
         float charSpawnY = MapManager.instance.getNodeFromPos(x,z).heightLvl == Node.HeightLevel.high ? charSpawnHighY : charSpawnLowY;
         GameObject newChar = (GameObject) Instantiate(getCharTypeByEnum(type), new Vector3(x, charSpawnY, z), Quaternion.identity);
-        characterDict.Add(characterID, newChar);
+        characterDict.Add(characterID, ((Character)newChar.GetComponent(typeof(Character))));
         Character localChar = (Character) newChar.GetComponent(typeof(Character));
         localChar.UpdateCharStats(HPcurrent, healingHP, MPcurrent, APcurrent, attackDamage, inventoryLeft, loud, killedBySandworm);
         return true;
@@ -108,7 +108,7 @@ public class CharacterMgr : MonoBehaviour
 
     public Character getCharScriptByID(int characterID)
     {
-        return (Character)characterDict[characterID].GetComponent(typeof(Character));
+        return characterDict[characterID];
     }
 
 
