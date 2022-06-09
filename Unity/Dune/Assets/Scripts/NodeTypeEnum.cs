@@ -1,5 +1,5 @@
 public enum NodeTypeEnum
 {
-    CITY, DUNE, FLATDUNE, FLATROCK, ROCK
+    CITY, DUNE, FLATDUNE, FLATROCK, ROCK, HELIPORT
 
 }

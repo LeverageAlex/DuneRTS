@@ -25,6 +25,7 @@ public class CharacterMgr : MonoBehaviour
     public GameObject atomicPrefab;
 
     public GameObject sandwormPrefab;
+    public GameObject helicopterPrefab;
 
     private MoveAbles sandwormMoveScript;
 

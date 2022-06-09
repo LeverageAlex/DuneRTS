@@ -8,12 +8,14 @@ public class Tile : MonoBehaviour, TileInterface {
     public GameObject prefabFlatSandTile;
     public GameObject prefabPlateauTile;
     public GameObject prefabCityTile;
+    public GameObject prefabHeliportTile;
 
     protected GameObject duneTile;
     protected GameObject mountainTile;
     protected GameObject flatSandTile;
     protected GameObject plateauTile;
     protected GameObject cityTile;
+    protected GameObject heliportTile;
 
     protected GameObject activeTile;
 
@@ -31,12 +33,14 @@ public class Tile : MonoBehaviour, TileInterface {
         flatSandTile = Instantiate(prefabFlatSandTile);
         plateauTile = Instantiate(prefabPlateauTile);
         cityTile = Instantiate(prefabCityTile);
+        heliportTile = Instantiate(prefabHeliportTile);
 
         duneTile.transform.parent = this.transform;
         mountainTile.transform.parent = this.transform;
         flatSandTile.transform.parent = this.transform;
         plateauTile.transform.parent = this.transform;
         cityTile.transform.parent = this.transform;
+        heliportTile.transform.parent = this.transform;
 
         model = new TileModel(FieldType.DUNE, indexX, indexY);
     }
@@ -51,6 +55,7 @@ public class Tile : MonoBehaviour, TileInterface {
                     mountainTile.SetActive(false);
                     plateauTile.SetActive(false);
                     cityTile.SetActive(false);
+                    heliportTile.SetActive(false);
 
                     activeTile = flatSandTile;
                     break;
@@ -60,6 +65,7 @@ public class Tile : MonoBehaviour, TileInterface {
                     mountainTile.SetActive(false);
                     plateauTile.SetActive(false);
                     cityTile.SetActive(false);
+                    heliportTile.SetActive(false);
 
                     activeTile = duneTile;
                     break;
@@ -69,6 +75,7 @@ public class Tile : MonoBehaviour, TileInterface {
                     duneTile.SetActive(false);
                     plateauTile.SetActive(false);
                     cityTile.SetActive(false);
+                    heliportTile.SetActive(false);
 
                     activeTile = mountainTile;
                     break;
@@ -78,6 +85,7 @@ public class Tile : MonoBehaviour, TileInterface {
                     mountainTile.SetActive(false);
                     plateauTile.SetActive(false);
                     duneTile.SetActive(false);
+                    heliportTile.SetActive(false);
 
                     activeTile = cityTile;
                     break;
@@ -87,8 +95,19 @@ public class Tile : MonoBehaviour, TileInterface {
                     mountainTile.SetActive(false);
                     duneTile.SetActive(false);
                     cityTile.SetActive(false);
+                    heliportTile.SetActive(false);
 
                     activeTile = plateauTile;
+                    break;
+                case FieldType.HELIPORT:
+                    heliportTile.SetActive(true);
+                    plateauTile.SetActive(false);
+                    flatSandTile.SetActive(false);
+                    mountainTile.SetActive(false);
+                    duneTile.SetActive(false);
+                    cityTile.SetActive(false);
+                    
+                    activeTile = heliportTile;
                     break;
             }
 

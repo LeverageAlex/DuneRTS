@@ -113,4 +113,5 @@ MonoBehaviour:
   prefabFlatSandTile: {fileID: 7397377683046699990, guid: 6ed28b6a198c5468d960628a1c5b12a5, type: 3}
   prefabPlateauTile: {fileID: 7101214851358364350, guid: 55fbd2c49fa7443c4b9973751c4abab6, type: 3}
   prefabCityTile: {fileID: 7512137706056474526, guid: 845a97f22a1bd4620a4864c0641e8f77, type: 3}
+  prefabHeliportTile: {fileID: 8165523163750390394, guid: e320d64c538a5b94c9646a7b3392d0bf, type: 3}
   selectedMaterial: {fileID: 2100000, guid: 622b21d5cee494c3da39177b1f481451, type: 2}
