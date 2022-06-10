@@ -35,7 +35,7 @@ namespace AIClient.parser
         /// <summary>
         /// the command line argument option for the name of the ai
         /// </summary>
-        [Option('n', "name", Default = "ki008", HelpText = "The name of the ai. It's format should be ki###, where ### represents the team number (e. g. 008 for team 8).")]
-        public int Name { get; set; }
+        [Option('n', "name", Default = "team008", HelpText = "The name of the ai. It's format should be team###, where ### represents the team number (e. g. 008 for team 8), but other names are also allowed as long as there are longer than 3 characters.")]
+        public string Name { get; set; }
     }
 }

@@ -10,8 +10,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="parser\" />
+    <None Remove="Configuration\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="parser\" />
+    <Folder Include="Configuration\" />
   </ItemGroup>
 </Project>

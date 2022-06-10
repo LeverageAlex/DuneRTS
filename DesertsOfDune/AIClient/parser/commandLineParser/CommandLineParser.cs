@@ -1,92 +1,81 @@
 ﻿using System;
+using AIClient.Configuration;
 using GameData.network.util.parser;
-using GameData.parser;
 using GameData.validation;
 using Serilog;
-using Server.Configuration;
 
-namespace Server.parser.commandLineParser
+namespace AIClient.parser.commandLineParser
 {
     /// <summary>
-    /// Parser for the command line arguments given, when the server is started.
+    /// Parser for the command line arguments given, when the ai client is started.
     /// </summary>
     /// <remarks>
-    /// Therefore this class inherits the <see cref="ACommandLineParser{T}"/> and use the <see cref="ServerOptions"/> as parameter,
+    /// Therefore this class inherits the <see cref="ACommandLineParser{T}"/> and use the <see cref="AIClientOptions"/> as parameter,
     /// so the parser nows which options can / must be parsed. \n
     /// Addtionally this class provides a handler for the parsed arguments, which process and validates the arguments
     /// </remarks>
-    public class CommandLineParser : ACommandLineParser<ServerOptions>
+    public class CommandLineParser : ACommandLineParser<AIClientOptions>
     {
+        private readonly AIClientConfigurationValidator validator;
+
         /// <summary>
-        /// validator for the server configuration entries like the port or the file paths
+        /// the configuration for the ai client
         /// </summary>
-        private readonly ServerConfigurationValidator validator;
-
-        public ServerConfiguration Configuration { get; }
+        public AIClientConfiguration Configuration { get; }
 
         /// <summary>
-        /// creates a command line parser for the server and initializes the parser
+        /// creates a command line parser for the ai client and initializes the parser
         /// </summary>
         public CommandLineParser() : base()
         {
-            validator = new ServerConfigurationValidator();
-            Configuration = new ServerConfiguration();
-
             InitializeParser();
         }
 
         /// <summary>
-        /// validate and process the given arguments as the server was started.
+        /// validate and process the given arguments as the ai client was started
         /// </summary>
         /// <remarks>
         /// This means, for every argument (e.g. port) a validator checks, whether the argument is valid and print hints to
-        /// user, if there any problems. If the argument is valid, the informationen is processed and the data set in the server configuration
+        /// user, if there any problems. If the argument is valid, the informationen is processed and the data set in the ai client configuration
         /// </remarks>
-        /// <param name="options"></param>
+        /// <param name="options">the list of possible arguments and further information about them</param>
         /// <returns>true, if the parsed arguments were valid and could be set in the configuration and false if there were any errors</returns>
-        protected override bool HandleParsedArguments(ServerOptions options)
+        protected override bool HandleParsedArguments(AIClientOptions options)
         {
-            // handle all given argumentsx
+            // handle all given arguments
+            bool successfullySetAddress = HandleServerAddress(options.Address);
 
-            bool sucessfullySetMatchConfigFilePath = HandleMatchConfigurationFilePath(options.ConfigurationFileMatch);
+            bool successfullySetPort = HandlePort(options.Port);
 
-            bool sucessfullySetScenarioConfigFilePath = HandleScenarioConfigurationFilePath(options.ConfigurationFileScenario);
+            bool successfullySetName = HandleName(options.Name);
 
-            bool sucessfullySetPort = HandlePort(options.Port);
-
-            return sucessfullySetMatchConfigFilePath && sucessfullySetScenarioConfigFilePath && sucessfullySetPort;
+            return successfullySetAddress && successfullySetPort && successfullySetName;
         }
 
-        /// <summary>
-        /// handles the filepath to the match configuration file, so checks whether is filepath is valid and set the filepath in the server configuration if so
-        /// </summary>
-        /// <param name="filepath">path to the match configuration file</param>
-        /// <returns>true, if the filepath is valid and was set to the server configuration</returns>
-        private bool HandleMatchConfigurationFilePath(string filepath)
-        {
-            if (validator.IsMatchConfigFilePathValid(filepath))
-            {
-                Configuration.FilePathMatchConfiguration = filepath;
 
-                Log.Debug("The filepath " + filepath + " is valid and the match config will tried to be load.");
+        /// <summary>
+        /// handles the server address, so if it is the default address (127.0.0.1) set it in configuration file and if it a custom server address, check this server address and also set it to the configuration file
+        /// if the the server address is valid. 
+        /// </summary>
+        /// <param name="port">the server address, which should be set to the configuration class</param>
+        /// <returns>true, if the server address was sucessfully set in the configuration class</returns>
+        private bool HandleServerAddress(string address)
+        {
+            if (address.Equals(AIClientConfiguration.DEFAULT_SERVER_ADDRESS))
+            {
+                Log.Information("The default server address " + AIClientConfiguration.DEFAULT_SERVER_ADDRESS + " is used.");
+                Configuration.Address = AIClientConfiguration.DEFAULT_SERVER_ADDRESS;
                 return true;
             }
-            return false;
-        }
-
-        /// <summary>
-        /// handles the filepath to the scenario configuration file, so checks whether is filepath is valid and set the filepath in the server configuration if so
-        /// </summary>
-        /// <param name="filepath">path to the scenario configuration file</param>
-        /// <returns>true, if the filepath is valid and was set to the server configuration</returns>
-        private bool HandleScenarioConfigurationFilePath(string filepath)
-        {
-            if (validator.IsScenarioConfigFilePathValid(filepath))
+            else
             {
-                Configuration.FilePathScenarioConfiguration = filepath;
-
-                Log.Debug("The filepath " + filepath + " is valid and the scenario config will tried to be load.");
-                return true;
+                // check, whether the server address is valid
+                if (validator.IsServerAddressValid(address))
+                {
+                    Log.Debug($"The server address {address} is valid and will be used to connect to the server.");
+                    Configuration.Address = address;
+                    return true;
+                }
             }
             return false;
         }
@@ -99,10 +88,10 @@ namespace Server.parser.commandLineParser
         /// <returns>true, if the port was sucessfully set in the configuration class</returns>
         private bool HandlePort(int port)
         {
-            if (port == ServerConfiguration.DEFAULT_PORT)
+            if (port == AIClientConfiguration.DEFAULT_PORT)
             {
-                Log.Information("The default port " + ServerConfiguration.DEFAULT_PORT + " is used");
-                Configuration.Port = ServerConfiguration.DEFAULT_PORT;
+                Log.Information("The default port " + AIClientConfiguration.DEFAULT_PORT + " is used.");
+                Configuration.Port = AIClientConfiguration.DEFAULT_PORT;
                 return true;
             }
             else
@@ -110,8 +99,33 @@ namespace Server.parser.commandLineParser
                 // check, whether the port is valid
                 if (validator.IsPortValid(port))
                 {
-                    Log.Debug("The port " + port + " is valid and will be used to start the websocket server");
+                    Log.Debug($"The port {port} is valid and will be used to connect to the server.");
                     Configuration.Port = port;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// handles the name, so if it is teh default name, set this in the configuration and otherwise check the name and set it, if the name is valide
+        /// </summary>
+        /// <param name="name">the name, which was given as paramter and should be set in the configuration</param>
+        /// <returns>true, if the name was sucessfully set in the configuration class</returns>
+        private bool HandleName(string name)
+        {
+            if (name.Equals(AIClientConfiguration.DEFAULT_NAME))
+            {
+                Log.Information("The default name " + AIClientConfiguration.DEFAULT_PORT + " is used.");
+                Configuration.Name = AIClientConfiguration.DEFAULT_NAME;
+                return true;
+            } else
+            {
+                // check, whether the name is valid
+                if (validator.IsNameValid(name))
+                {
+                    Log.Debug($"The name {name} is valid and will be used to connect to the server.");
+                    Configuration.Name = name;
                     return true;
                 }
             }
