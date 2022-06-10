@@ -46,6 +46,7 @@ public class CharacterMgr : MonoBehaviour
 
     public int clientID;
     public int enemyClientID;
+    public string clientSecret;
 
 
 
@@ -147,6 +148,12 @@ public class CharacterMgr : MonoBehaviour
         else Debug.Log("There is already a sandworm!");
     }
 
+    public void DespawnSandworm()
+    {
+        Destroy(sandwormMoveScript.gameObject);
+        sandwormMoveScript = null;
+    }
+
     /**
      * Makes the worm move along the given path
      */
@@ -164,5 +171,6 @@ public class CharacterMgr : MonoBehaviour
 
         sandwormMoveScript.WalkAlongPath(newPos);
     }
+
 
 }

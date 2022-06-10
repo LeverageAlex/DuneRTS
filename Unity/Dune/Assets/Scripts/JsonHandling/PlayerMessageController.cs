@@ -94,6 +94,8 @@ public class PlayerMessageController : MessageController
     public override Message OnJoinAcceptedMessage(JoinAcceptedMessage joinAcceptedMessage)
     {
         // TODO: implement logic
+        CharacterMgr.instance.clientID = joinAcceptedMessage.clientID;
+        CharacterMgr.instance.clientSecret = joinAcceptedMessage.clientSecret;
         return null;
     }
 
@@ -105,6 +107,27 @@ public class PlayerMessageController : MessageController
     public override Message OnGameConfigMessage(GameConfigMessage gameConfigMessage)
     {
         // TODO: implement logic
+       if( gameConfigMessage.client0ID == CharacterMgr.instance.clientID)
+        {
+            CharacterMgr.instance.enemyClientID = gameConfigMessage.client1ID;
+        }
+       else
+        {
+            CharacterMgr.instance.enemyClientID = gameConfigMessage.client0ID;
+        }
+
+       //Second list contains z size
+        MapManager.instance.setMapSize(gameConfigMessage.scenario.Count, gameConfigMessage.scenario[0].Count);
+
+        for (int x = 0; x < gameConfigMessage.scenario.Count; x++)
+        {
+            for (int z = 0; z < gameConfigMessage.scenario[0].Count; z++)
+            {
+                MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), false);
+            }
+        }
+        //MISSING: CITIES not linked to Player and no StormEye set
+       
         return null;
     }
 
@@ -355,6 +378,7 @@ public class PlayerMessageController : MessageController
     public override Message OnSandwormDespawnMessage(SandwormDespawnDemandMessage sandwormDespawnDemandMessage)
     {
         // TODO: implement logic
+        CharacterMgr.instance.DespawnSandworm();
         return null;
     }
 
