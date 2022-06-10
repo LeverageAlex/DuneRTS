@@ -173,17 +173,17 @@ public class Character : MonoBehaviour
     {
        if(characterType == CharTypeEnum.NOBLE)
         {
-            UpdateCharStats(100, 10, 100, 2, 20, 5, false, false);
+            UpdateCharStats(100, 100, 2, 5, false, false);
         } else if(characterType == CharTypeEnum.FIGHTER)
         {
-            UpdateCharStats(200, 20, 100, 3, 40, 3, false, false);
+            UpdateCharStats(200, 100, 3, 3, false, false);
 
         } else if(characterType== CharTypeEnum.MENTANT)
         {
-            UpdateCharStats(75, 10, 100, 2, 10, 10, false, false);
+            UpdateCharStats(75, 100, 2, 10, false, false);
         } else if(characterType==CharTypeEnum.BENEGESSERIT)
         {
-            UpdateCharStats(150, 20, 100, 2, 20, 5, false, false);
+            UpdateCharStats(150, 100, 2, 5, false, false);
         }
 
         SetMatColorToHouse();
@@ -193,13 +193,12 @@ public class Character : MonoBehaviour
    
 
 
-    public void UpdateCharStats(int HP, int HealHP, int MP, int AP, int AD, int spiceInv, bool isLoud, bool isSwallowed)
+    public void UpdateCharStats(int HP, int MP, int AP, int spiceInv, bool isLoud, bool isSwallowed)
     {
         this.HP = HP;
-        this.healingHP = HealHP;
+        //this.healingHP = HealHP;
         this._AP = AP;
         this._MP = MP;
-        this.AD = AD;
         this.spiceInv = spiceInv;
         this.isLoud = isLoud;
         this.isSwallowed = isSwallowed;

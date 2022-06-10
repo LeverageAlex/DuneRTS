@@ -268,6 +268,7 @@ public class PlayerMessageController : MessageController
     public override Message OnChangeCharacterStatisticsDemandMessage(ChangeCharacterStatisticsDemandMessage changeCharacterStatisticsDemandMessage)
     {
         // TODO: implement logic
+       // changeCharacterStatisticsDemandMessage.
         return null;
     }
 
@@ -281,6 +282,24 @@ public class PlayerMessageController : MessageController
     {
         // TODO: implement logic
         //spawnCharacterDemandMessage.
+        CharTypeEnum type;
+        switch(spawnCharacterDemandMessage.attributes.characterType)
+        {
+            case "FIGHTER":
+                type = CharTypeEnum.FIGHTER;
+                break;
+            case "NOBLE":
+                type = CharTypeEnum.NOBLE;
+                break;
+            case "MENTAT":
+                type = CharTypeEnum.MENTANT;
+                break;
+            default:
+                type = CharTypeEnum.BENEGESSERIT;
+                break;
+        }
+
+        CharacterMgr.instance.spawnCharacter(spawnCharacterDemandMessage.characterID, type, spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.KilledBySandworm, spawnCharacterDemandMessage.attributes.IsLoud());
         return null;
     }
 
@@ -292,6 +311,7 @@ public class PlayerMessageController : MessageController
     public override Message OnChangePlayerSpiceDemandMessage(ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage)
     {
         // TODO: implement logic
+
         return null;
     }
 

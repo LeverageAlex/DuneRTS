@@ -79,7 +79,7 @@ public class CharacterMgr : MonoBehaviour
     /*
      * To be filled after open question regarding standardDocument has ben resolved
   */
-    public bool spawnCharacter(int characterID, CharTypeEnum type,int x, int z,int HPcurrent, int healingHP, int MPcurrent, int APcurrent, int attackDamage, int inventoryLeft, bool killedBySandworm, bool loud)
+    public bool spawnCharacter(int characterID, CharTypeEnum type,int x, int z,int HPcurrent, int MPcurrent, int APcurrent, int inventorySize, bool killedBySandworm, bool loud)
     {
         if (characterDict.ContainsKey(characterID))
             return false;
@@ -89,20 +89,20 @@ public class CharacterMgr : MonoBehaviour
         GameObject newChar = (GameObject) Instantiate(getCharTypeByEnum(type), new Vector3(x, charSpawnY, z), Quaternion.identity);
         characterDict.Add(characterID, ((Character)newChar.GetComponent(typeof(Character))));
         Character localChar = (Character) newChar.GetComponent(typeof(Character));
-        localChar.UpdateCharStats(HPcurrent, healingHP, MPcurrent, APcurrent, attackDamage, inventoryLeft, loud, killedBySandworm);
+        localChar.UpdateCharStats(HPcurrent, MPcurrent, APcurrent, inventorySize, loud, killedBySandworm);
         return true;
     }
 
     /**
      * Used to update data of a character (HP etc.)
      */
-    public bool characterStatChange(int characterID, int HP, int HealHP, int MP, int AP, int AD, int spiceInv, bool isLoud, bool isSwallowed)
+    public bool characterStatChange(int characterID, int HP, int MP, int AP, int AD, int spiceInv, bool isLoud, bool isSwallowed)
     {
         if (!characterDict.ContainsKey(characterID))
             return false;
 
         Character charScript = getCharScriptByID(characterID);
-        charScript.UpdateCharStats(HP, HealHP, MP, AP, AD, spiceInv, isLoud, isSwallowed);
+        charScript.UpdateCharStats(HP, MP, AP, spiceInv, isLoud, isSwallowed);
         return true;
     }
 
