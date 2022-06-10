@@ -113,12 +113,13 @@ namespace TestProject.networkTest.utilTest.parserTest
             scenario.Add(new List<string>(arr1));
             scenario.Add(new List<string>(arr2));
             PartyReference party = new PartyReference("#/definitions/partiekonfigschema");
-            GameConfigMessage message = new GameConfigMessage(scenario, party, 0, 0);
+            CityToClient cityToClient1 = new CityToClient(1234, 2, 3);
+            CityToClient cityToClient2 = new CityToClient(1234, 6, 6);
+            CityToClient[] citiesToClients = { cityToClient1, cityToClient2 };
+            GameConfigMessage message = new GameConfigMessage(scenario, party, citiesToClients, new Position(0,1));
             string serializedMessage = MessageConverter.FromMessage(message);
 
-                                                            // \"scenario\":[[\"<String>\",\"<String>\"],[\"<String>\",\"<String>\"]],\"party\":{\"$ref\":\"#/definitions/partiekonfigschema\"},\"cityToClient\":[{\"clientID\":\"<int>\",\"x\":\"<int>\",\"y\":\"<int>\"},{\"clientID\":\"<int>\",\"x\":\"<int>\",\"y\":\"<int>\"}],\"stormEye\":{\"x\":\"<int>\",\"y\":\"<int>\"}
-
-            Assert.AreEqual("{\"type\":\"GAMECFG\",\"version\":\"1.0\",\"scenario\":[[\"String\",\"String\"],[\"String\",\"String\"]],\"party\":\"party\",\"client0ID\":0,\"client1ID\":0}", serializedMessage);
+            Assert.AreEqual("{\"type\":\"GAMECFG\",\"version\":\"1.0\",\"scenario\":[[\"String\",\"String\"],[\"String\",\"String\"]],\"party\":{\"refr\":\"#/definitions/partiekonfigschema\"},\"cityToClient\":[{\"clientID\":1234,\"x\":2,\"y\":3},{\"clientID\":1234,\"x\":6,\"y\":6}],\"stormEye\":{\"x\":0,\"y\":1}}", serializedMessage);
         }
 
         /// <summary>

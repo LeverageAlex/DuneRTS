@@ -16,23 +16,24 @@ namespace GameData.network.messages
         [JsonProperty]
         public PartyReference party { get; }
         [JsonProperty]
-        public int client0ID { get; }
+        public CityToClient[] cityToClient { get; }
         [JsonProperty]
-        public int client1ID { get; }
+        public Position stormEye { get; }
 
         /// <summary>
         /// Constructor of the class GameConfigMessage
         /// </summary>
         /// <param name="scenario">the scenario configuration</param>
-        /// <param name="partyConfig">the party configuration</param>
-        /// <param name="partyConfig">array of houses that are offered to the client</param>
-        public GameConfigMessage(List<List<string>> scenario, PartyReference party, int client0ID, int client1ID) : base("1.0", MessageType.GAMECFG)
+        /// <param name="party">the party configuration</param>
+        /// <param name="cityToClient">The id or the client and the coordinates of his cityt</param>
+        /// <param name="stormEye"></param>
+        /// <param name="client1ID"></param>
+        public GameConfigMessage(List<List<string>> scenario, PartyReference party, CityToClient[] cityToClient, Position stormEye) : base("1.0", MessageType.GAMECFG)
         {
-            //TODO: change GameConfigMessage like it's declared in standard document
             this.scenario = scenario;
             this.party = party;
-            this.client0ID = client0ID;
-            this.client1ID = client1ID;
+            this.cityToClient = cityToClient;
+            this.stormEye = stormEye;
         }
     }
 }

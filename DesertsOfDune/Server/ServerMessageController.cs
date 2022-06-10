@@ -481,7 +481,7 @@ namespace Server
             string partyConfiguration = JsonConvert.SerializeObject(PartyConfiguration.GetInstance());
             PartyReference partyReference = new PartyReference(partyConfiguration);
 
-            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, partyReference, client0ID, client1ID);
+            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, partyReference,null, null);
             NetworkController.HandleSendingMessage(gameConfigMessage);
         }
 
