@@ -330,6 +330,8 @@ public class PlayerMessageController : MessageController
     public override Message OnSandwormSpawnDemandMessage(SandwormSpawnDemandMessage sandwormSpawnDemandMessage)
     {
         // TODO: implement logic
+        CharacterMgr.instance.SpawnSandworm(sandwormSpawnDemandMessage.position.x, sandwormSpawnDemandMessage.position.y);
+
         return null;
     }
 
@@ -341,6 +343,7 @@ public class PlayerMessageController : MessageController
     public override Message OnSandwormMoveDemandMessage(SandwormMoveDemandMessage sandwormMoveMessage)
     {
         // TODO: implement logic
+        CharacterMgr.instance.SandwormMove(sandwormMoveMessage.path);
         return null;
     }
 

@@ -1,3 +1,4 @@
+using GameData.network.util.world;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -149,10 +150,19 @@ public class CharacterMgr : MonoBehaviour
     /**
      * Makes the worm move along the given path
      */
-    public void SandwormMove(LinkedList<Vector3> path)
+    public void SandwormMove(List<Position> path)
     {
         Debug.Log("It's about to happen: " + sandwormMoveScript.name);
-        sandwormMoveScript.WalkAlongPath(path);
+        LinkedList<Vector3> newPos = new LinkedList<Vector3>();
+
+        Vector3 tmp;
+        foreach (Position p in path)
+        {
+                tmp = new Vector3(p.x, 0.372f + MapManager.instance.getNodeFromPos(p.x, p.y).charHeightOffset, p.y);
+                newPos.AddLast(tmp);
+        }
+
+        sandwormMoveScript.WalkAlongPath(newPos);
     }
 
 }
