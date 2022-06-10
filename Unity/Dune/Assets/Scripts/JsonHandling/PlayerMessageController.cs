@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GameData.network.controller;
 using GameData.network.util.enums;
+using System;
 
 /// <summary>
 /// This Class Handles all messages for the Client.
@@ -94,6 +95,8 @@ public class PlayerMessageController : MessageController
     public override Message OnJoinAcceptedMessage(JoinAcceptedMessage joinAcceptedMessage)
     {
         // TODO: implement logic
+        CharacterMgr.instance.clientID = joinAcceptedMessage.clientID;
+        CharacterMgr.instance.clientSecret = joinAcceptedMessage.clientSecret;
         return null;
     }
 
@@ -105,17 +108,52 @@ public class PlayerMessageController : MessageController
     public override Message OnGameConfigMessage(GameConfigMessage gameConfigMessage)
     {
         // TODO: implement logic
+       if( gameConfigMessage.client0ID == CharacterMgr.instance.clientID)
+        {
+            CharacterMgr.instance.enemyClientID = gameConfigMessage.client1ID;
+        }
+       else
+        {
+            CharacterMgr.instance.enemyClientID = gameConfigMessage.client0ID;
+        }
+
+       //Second list contains z size
+        MapManager.instance.setMapSize(gameConfigMessage.scenario.Count, gameConfigMessage.scenario[0].Count);
+
+        for (int x = 0; x < gameConfigMessage.scenario.Count; x++)
+        {
+            for (int z = 0; z < gameConfigMessage.scenario[0].Count; z++)
+            {
+                MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), false);
+            }
+        }
+        //MISSING: CITIES not linked to Player and no StormEye set
+       
         return null;
     }
 
     /// <summary>
     /// This method handles the MapChangeDemandMessage
+    /// Method currently not updatet, wait for implementation of message
     /// </summary>
     /// <param name="mapChangeDemandMessage">this message represents the map change demanded by the server</param>
     /// <returns></returns>
     public override Message OnMapChangeDemandMessage(MapChangeDemandMessage mapChangeDemandMessage)
     {
         // TODO: implement logic
+     /*   MapManager.instance.setMapSize(mapChangeDemandMessage.newMap.GetLength(0), mapChangeDemandMessage.newMap.GetLength(1));
+
+        for (int x = 0; x < mapChangeDemandMessage.newMap.GetLength(0); x++)
+        {
+            for (int z = 0; z < mapChangeDemandMessage.newMap.GetLength(1); z++)
+            {
+                var cluster = mapChangeDemandMessage.newMap[x, z];
+                MapManager.instance.UpdateBoard(x, z, cluster.HasSpice, MapManager.instance.StringtoNodeEnum(cluster.tileType), cluster.isInSandstorm);
+                
+
+            }
+        }
+        CharacterMgr.instance.SpawnSandworm(mapChangeDemandMessage.newMap[0,0].stormEye.x, mapChangeDemandMessage.newMap[0, 0].stormEye.y);*/
         return null;
     }
 
@@ -165,6 +203,7 @@ public class PlayerMessageController : MessageController
 
     /// <summary>
     /// This method handles the HouseOfferMessage
+    /// Method currently not updatet, wait for implementation of message
     /// </summary>
     /// <param name="houseOfferMessage">this message represents the houseoffer of the Server</param>
     /// <returns></returns>
@@ -216,7 +255,7 @@ public class PlayerMessageController : MessageController
     public override Message OnMovementDemandMessage(MovementDemandMessage movementDemandMessage)
     {
         // TODO: implement logic
-      //  MovementManager.instance.AnimateChar(CharacterMgr.instance.getCharScriptByID(movementDemandMessage.characterID), movementDemandMessage.);
+        MovementManager.instance.AnimateChar(CharacterMgr.instance.getCharScriptByID(movementDemandMessage.characterID), movementDemandMessage.specs.path);
         return null;
     }
 
@@ -228,6 +267,35 @@ public class PlayerMessageController : MessageController
     public override Message OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
     {
         // TODO: implement logic
+        Character character = CharacterMgr.instance.getCharScriptByID(actionDemandMessage.characterID);
+        Character enemy;
+        switch(actionDemandMessage.action)
+        {
+            case "ATTACK":
+                enemy = MapManager.instance.GetCharOnNode(actionDemandMessage.specs.target.x, actionDemandMessage.specs.target.y);
+                character.Attack_BasicExecution(enemy);
+                break;
+            case "COLLECT":
+                character.Action_CollectSpiceExecution();
+                break;
+            case "KANLY":
+                enemy = MapManager.instance.GetCharOnNode(actionDemandMessage.specs.target.x, actionDemandMessage.specs.target.y);
+                character.Attack_KanlyExecution(enemy);
+                break;
+            case "FAMILY_ATOMICS":
+                character.Attack_AtomicExecution(MapManager.instance.getNodeFromPos(actionDemandMessage.specs.target.x, actionDemandMessage.specs.target.y));
+                break;
+            case "SPICE_HOARDING":
+                character.Action_SpiceHoardingExecution();
+                break;
+            case "VOICE":
+                enemy = MapManager.instance.GetCharOnNode(actionDemandMessage.specs.target.x, actionDemandMessage.specs.target.y);
+                character.Action_VoiceExecution(enemy);
+                break;
+            case "SWORDSPIN":
+                character.Attack_SwordSpinExecution();
+                break;
+        }
         return null;
     }
 
@@ -238,12 +306,16 @@ public class PlayerMessageController : MessageController
     /// <returns></returns>
     public override Message OnChangeCharacterStatisticsDemandMessage(ChangeCharacterStatisticsDemandMessage changeCharacterStatisticsDemandMessage)
     {
+        //All fields currently private
+        //changeCharacterStatisticsDemandMessage.stats.
         // TODO: implement logic
+       // changeCharacterStatisticsDemandMessage.
         return null;
     }
 
 
     /// <summary>
+    /// Method currently not updatet, wait for implementation of message
     /// This method handles the SpawnCharacterDemandMessage
     /// </summary>
     /// <param name="spawnCharacterDemandMessage"></param>
@@ -252,6 +324,24 @@ public class PlayerMessageController : MessageController
     {
         // TODO: implement logic
         //spawnCharacterDemandMessage.
+        CharTypeEnum type;
+        switch(spawnCharacterDemandMessage.attributes.characterType)
+        {
+            case "FIGHTER":
+                type = CharTypeEnum.FIGHTER;
+                break;
+            case "NOBLE":
+                type = CharTypeEnum.NOBLE;
+                break;
+            case "MENTAT":
+                type = CharTypeEnum.MENTANT;
+                break;
+            default:
+                type = CharTypeEnum.BENEGESSERIT;
+                break;
+        }
+
+        CharacterMgr.instance.spawnCharacter(spawnCharacterDemandMessage.characterID, type, spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.KilledBySandworm, spawnCharacterDemandMessage.attributes.IsLoud());
         return null;
     }
 
@@ -263,6 +353,14 @@ public class PlayerMessageController : MessageController
     public override Message OnChangePlayerSpiceDemandMessage(ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage)
     {
         // TODO: implement logic
+        if (CharacterMgr.instance.clientID == changePlayerSpiceDemandMessage.clientID) {
+            GUIHandler.UpdatePlayerSpice(changePlayerSpiceDemandMessage.newSpiceValue);
+        }
+        else
+        {
+            GUIHandler.UpdateEnemySpice(changePlayerSpiceDemandMessage.newSpiceValue);
+        }
+
         return null;
     }
 
@@ -274,6 +372,8 @@ public class PlayerMessageController : MessageController
     public override Message OnSandwormSpawnDemandMessage(SandwormSpawnDemandMessage sandwormSpawnDemandMessage)
     {
         // TODO: implement logic
+        CharacterMgr.instance.SpawnSandworm(sandwormSpawnDemandMessage.position.x, sandwormSpawnDemandMessage.position.y);
+
         return null;
     }
 
@@ -285,6 +385,7 @@ public class PlayerMessageController : MessageController
     public override Message OnSandwormMoveDemandMessage(SandwormMoveDemandMessage sandwormMoveMessage)
     {
         // TODO: implement logic
+        CharacterMgr.instance.SandwormMove(sandwormMoveMessage.path);
         return null;
     }
 
@@ -296,6 +397,7 @@ public class PlayerMessageController : MessageController
     public override Message OnSandwormDespawnMessage(SandwormDespawnDemandMessage sandwormDespawnDemandMessage)
     {
         // TODO: implement logic
+        CharacterMgr.instance.DespawnSandworm();
         return null;
     }
 

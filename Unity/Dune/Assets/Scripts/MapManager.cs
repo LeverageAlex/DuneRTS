@@ -160,6 +160,11 @@ public class MapManager : MonoBehaviour
         return enemiesOnBoard[node.Z + node.X * GridSizeZ];
     }
 
+    public Character GetCharOnNode(int x, int z)
+    {
+        return (Character)(enemiesOnBoard[z + x * GridSizeZ]).GetComponent(typeof(Character));
+    }
+
     public void ResetNodeColors()
     {
         foreach (Node node in nodes)
@@ -277,4 +282,22 @@ public class MapManager : MonoBehaviour
     public int GridSizeX { get { return _gridSizeX; } }
     public int GridSizeZ { get { return _gridSizeZ; } }
 
+    public NodeTypeEnum StringtoNodeEnum(string nodeEnum)
+    {
+        switch(nodeEnum)
+        {
+            case "CITY":
+                return NodeTypeEnum.CITY;
+            case "MOUNTAINS":
+                return NodeTypeEnum.ROCK;
+            case "PLATEAU":
+                return NodeTypeEnum.FLATROCK;
+            case "FLAT_SAND":
+                return NodeTypeEnum.FLATDUNE;
+            case "DUNE":
+                return NodeTypeEnum.DUNE;
+            default:
+                return NodeTypeEnum.HELIPORT;
+        }
+    }
 }

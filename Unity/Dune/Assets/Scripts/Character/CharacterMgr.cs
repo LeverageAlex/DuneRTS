@@ -1,3 +1,4 @@
+using GameData.network.util.world;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -44,6 +45,10 @@ public class CharacterMgr : MonoBehaviour
     private float wormHeightOffset = 0.35f;
 
     public int clientID;
+    public int enemyClientID;
+    public string clientSecret;
+
+
 
     public static CharacterMgr instance;
 
@@ -79,7 +84,7 @@ public class CharacterMgr : MonoBehaviour
     /*
      * To be filled after open question regarding standardDocument has ben resolved
   */
-    public bool spawnCharacter(int characterID, CharTypeEnum type,int x, int z,int HPcurrent, int healingHP, int MPcurrent, int APcurrent, int attackDamage, int inventoryLeft, bool killedBySandworm, bool loud)
+    public bool spawnCharacter(int characterID, CharTypeEnum type,int x, int z,int HPcurrent, int MPcurrent, int APcurrent, int inventorySize, bool killedBySandworm, bool loud)
     {
         if (characterDict.ContainsKey(characterID))
             return false;
@@ -89,20 +94,20 @@ public class CharacterMgr : MonoBehaviour
         GameObject newChar = (GameObject) Instantiate(getCharTypeByEnum(type), new Vector3(x, charSpawnY, z), Quaternion.identity);
         characterDict.Add(characterID, ((Character)newChar.GetComponent(typeof(Character))));
         Character localChar = (Character) newChar.GetComponent(typeof(Character));
-        localChar.UpdateCharStats(HPcurrent, healingHP, MPcurrent, APcurrent, attackDamage, inventoryLeft, loud, killedBySandworm);
+        localChar.UpdateCharStats(HPcurrent, MPcurrent, APcurrent, inventorySize, loud, killedBySandworm);
         return true;
     }
 
     /**
      * Used to update data of a character (HP etc.)
      */
-    public bool characterStatChange(int characterID, int HP, int HealHP, int MP, int AP, int AD, int spiceInv, bool isLoud, bool isSwallowed)
+    public bool characterStatChange(int characterID, int HP, int MP, int AP, int AD, int spiceInv, bool isLoud, bool isSwallowed)
     {
         if (!characterDict.ContainsKey(characterID))
             return false;
 
         Character charScript = getCharScriptByID(characterID);
-        charScript.UpdateCharStats(HP, HealHP, MP, AP, AD, spiceInv, isLoud, isSwallowed);
+        charScript.UpdateCharStats(HP, MP, AP, spiceInv, isLoud, isSwallowed);
         return true;
     }
 
@@ -140,16 +145,35 @@ public class CharacterMgr : MonoBehaviour
         {
             sandwormMoveScript = ((MoveAbles)Instantiate(sandwormPrefab, new Vector3(x, wormHeightOffset + MapManager.instance.getNodeFromPos(x, z).charHeightOffset, z), Quaternion.identity).GetComponent(typeof(MoveAbles)));
         }
-        else Debug.Log("There is already a sandworm!");
+        else
+        {
+            Debug.Log("There is already a sandworm!");
+        }
+    }
+
+    public void DespawnSandworm()
+    {
+        Destroy(sandwormMoveScript.gameObject);
+        sandwormMoveScript = null;
     }
 
     /**
      * Makes the worm move along the given path
      */
-    public void SandwormMove(LinkedList<Vector3> path)
+    public void SandwormMove(List<Position> path)
     {
         Debug.Log("It's about to happen: " + sandwormMoveScript.name);
-        sandwormMoveScript.WalkAlongPath(path);
+        LinkedList<Vector3> newPos = new LinkedList<Vector3>();
+
+        Vector3 tmp;
+        foreach (Position p in path)
+        {
+                tmp = new Vector3(p.x, 0.372f + MapManager.instance.getNodeFromPos(p.x, p.y).charHeightOffset, p.y);
+                newPos.AddLast(tmp);
+        }
+
+        sandwormMoveScript.WalkAlongPath(newPos);
     }
+
 
 }
