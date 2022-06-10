@@ -1,4 +1,6 @@
 ﻿using System;
+using AIClient.Configuration;
+using AIClient.parser.commandLineParser;
 using GameData.network.controller;
 using GameData.network.util;
 using Serilog;
@@ -20,6 +22,11 @@ namespace AIClient
         /// the message controller used by this ai client
         /// </summary>
         private static AIPlayerMessageController messageController;
+
+        /// <summary>
+        /// the configuration of the ai client, given by the command line arguements
+        /// </summary>
+        private static AIClientConfiguration configuration;
 
         /// <summary>
         /// main method, which is executed when the ai client was started / executed
@@ -62,7 +69,7 @@ namespace AIClient
         {
             messageController = new AIPlayerMessageController();
 
-            ClientConnectionHandler aiClientConnectionHandler = new ClientConnectionHandler("127.0.0.1", 1234);
+            ClientConnectionHandler aiClientConnectionHandler = new ClientConnectionHandler(configuration.Address, configuration.Port);
             _ = new ClientNetworkController(aiClientConnectionHandler, messageController);
         }
 
@@ -72,20 +79,20 @@ namespace AIClient
         /// <param name="args"></param>
         private static void ParseCommandLineArguments(String[] args)
         {
-            /*CommandLineParser parser = new CommandLineParser();
+            CommandLineParser parser = new CommandLineParser();
             bool wasSuccessfullyParsed = parser.ParseCommandLineArguments(args);
             if (wasSuccessfullyParsed)
             {
-                Log.Debug("The command line arguments of the server were parsed sucessfully");
+                Log.Debug("The command line arguments of the ai client were parsed sucessfully");
 
                 // get the configuration data
                 configuration = parser.Configuration;
             }
             else
             {
-                Log.Fatal("The given command line arguments contains errors and cannot be processed. So restart the server with correct arguments.");
+                Log.Fatal("The given command line arguments contains errors and cannot be processed. So restart the ai client with correct arguments.");
                 Environment.Exit(0);
-            }*/
+            }
         }
     }
 }
