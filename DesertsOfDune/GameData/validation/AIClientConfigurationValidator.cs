@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Text.RegularExpressions;
 using Serilog;
 
 namespace GameData.validation
@@ -20,7 +22,17 @@ namespace GameData.validation
         /// TODO: try to connect to check, whether this address is semantically correct too
         public bool IsServerAddressValid(string address)
         {
-            
+            // check, whether the ip address has the correct format
+            bool correcFormat = Regex.IsMatch(address, "\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}");
+
+            if (correcFormat)
+            {
+                // check, whether it is syntactically correct:
+                IPAddress ipAddress = null;
+                return IPAddress.TryParse(address, out ipAddress);
+            }
+
+            return false;
         }
 
         /// <summary>
