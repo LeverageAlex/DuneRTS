@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameData", "GameData\GameDa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestSuite", "TestProject\UnitTestSuite.csproj", "{BB1B873A-4B86-43B1-AD5B-DD2E99000685}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIClient", "AIClient\AIClient.csproj", "{45CADA07-AC6C-405C-8129-96A088EEA354}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|anycpu = Debug|anycpu
@@ -33,6 +35,10 @@ Global
 		{BB1B873A-4B86-43B1-AD5B-DD2E99000685}.Debug|anycpu.Build.0 = Debug|Any CPU
 		{BB1B873A-4B86-43B1-AD5B-DD2E99000685}.Release|anycpu.ActiveCfg = Release|Any CPU
 		{BB1B873A-4B86-43B1-AD5B-DD2E99000685}.Release|anycpu.Build.0 = Release|Any CPU
+		{45CADA07-AC6C-405C-8129-96A088EEA354}.Debug|anycpu.ActiveCfg = Debug|Any CPU
+		{45CADA07-AC6C-405C-8129-96A088EEA354}.Debug|anycpu.Build.0 = Debug|Any CPU
+		{45CADA07-AC6C-405C-8129-96A088EEA354}.Release|anycpu.ActiveCfg = Release|Any CPU
+		{45CADA07-AC6C-405C-8129-96A088EEA354}.Release|anycpu.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
