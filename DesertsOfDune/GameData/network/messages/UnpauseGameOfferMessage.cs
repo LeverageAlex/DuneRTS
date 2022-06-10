@@ -6,7 +6,7 @@ namespace GameData.network.messages
     public class UnpauseGameOfferMessage : Message
     {
         [JsonProperty]
-        private int RequestedByClientID;
+        public int RequestedByClientID { get; }
 
         /// <summary>
         /// Message to finish the pause and continue the game.

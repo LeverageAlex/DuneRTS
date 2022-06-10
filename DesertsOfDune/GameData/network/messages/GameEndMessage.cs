@@ -12,11 +12,11 @@ namespace GameData.network.messages
     public class GameEndMessage : Message
     {
         [JsonProperty]
-        private int winnerID;
+        public int winnerID { get; }
         [JsonProperty]
-        private int loserID;
+        public int loserID { get; }
         [JsonProperty]
-        private Statistics statistics;
+        public Statistics statistics { get; }
 
         /// <summary>
         /// Constructor of the class GameEndMessage

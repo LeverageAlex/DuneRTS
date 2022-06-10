@@ -11,9 +11,9 @@ namespace GameData.network.messages
     public class TransferDemandMessage : ClientServerMessage
     {
         [JsonProperty]
-        private int characterID;
+        public int characterID { get; }
         [JsonProperty]
-        private int targetID;
+        public int targetID { get; }
 
         /// <summary>
         /// Constructor of the class TransferDemandMessage

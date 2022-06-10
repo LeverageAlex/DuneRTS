@@ -58,7 +58,6 @@ public class PlayerMessageController : MessageController
     /// <param name="path">the requested path for the character</param>
     public void DoRequestMovement(int clientID, int characterID, List<Position> path)
     {
-
         MovementRequestMessage movementRequestMessage = new MovementRequestMessage(clientID, characterID, path);
         NetworkController.HandleSendingMessage(movementRequestMessage);
     }
@@ -73,8 +72,8 @@ public class PlayerMessageController : MessageController
     /// <param name="targetID">the id of the targetCharacter</param>
     public void DoRequestAction(int clientID, int characterID, ActionType action, Position target, int targetID)
     {
-        ActionDemandMessage actionDemandMessage = new ActionDemandMessage(clientID, characterID, action, target);
-        NetworkController.HandleSendingMessage(actionDemandMessage);
+        ActionRequestMessage actionRequestMessage = new ActionRequestMessage(clientID, characterID, action, target);
+        NetworkController.HandleSendingMessage(actionRequestMessage);
     }
 
     /// <summary>

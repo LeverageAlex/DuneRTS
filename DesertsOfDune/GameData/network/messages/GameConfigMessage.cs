@@ -11,13 +11,13 @@ namespace GameData.network.messages
     public class GameConfigMessage : Message
     {
         [JsonProperty]
-        private List<List<string>> scenario;
+        public List<List<string>> scenario { get; }
         [JsonProperty]
-        private string party;
+        public string party { get; }
         [JsonProperty]
-        private int client0ID;
+        public int client0ID { get; }
         [JsonProperty]
-        private int client1ID;
+        public int client1ID { get; }
 
         /// <summary>
         /// Constructor of the class GameConfigMessage

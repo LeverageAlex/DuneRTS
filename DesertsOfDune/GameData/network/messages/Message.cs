@@ -11,9 +11,9 @@ namespace GameData.network.messages
     public abstract class Message
     {
         [JsonProperty(Order = -4)]
-        protected string version;
+        public string version { get; }
         [JsonProperty(Order = -5)]
-        protected string type;
+        public string type { get; }
 
         [JsonIgnore]
         protected MessageType messageType;

@@ -12,7 +12,7 @@ namespace GameData.network.messages
     public class MovementDemandMessage : TurnMessage
     {
         [JsonProperty]
-        private Specs specs;
+        public Specs specs { get; }
 
         /// <summary>
         /// Constructor of the class MovementMessage

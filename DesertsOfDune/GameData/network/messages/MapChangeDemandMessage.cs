@@ -12,9 +12,9 @@ namespace GameData.network.messages
     public class MapChangeDemandMessage : Message
     {
         [JsonProperty]
-        private string changeReason;
+        public string changeReason { get; }
         [JsonProperty]
-        private MapField[,] newMap;
+        public MapField[,] newMap { get; }
 
         /// <summary>
         /// Constructor of the class MapChangeMessage

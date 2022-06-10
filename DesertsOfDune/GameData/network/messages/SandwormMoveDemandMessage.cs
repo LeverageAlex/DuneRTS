@@ -12,7 +12,7 @@ namespace GameData.network.messages
     public class SandwormMoveDemandMessage : Message
     {
         [JsonProperty]
-        private List<Position> path;
+        public List<Position> path { get; }
 
         /// <summary>
         /// Constructor of the class SandwormMoveMessage

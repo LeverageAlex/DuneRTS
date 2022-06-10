@@ -12,7 +12,7 @@ namespace GameData.network.messages
     public class SandwormSpawnDemandMessage : TurnMessage
     {
         [JsonProperty]
-        private Position position;
+        public Position position { get; }
 
         /// <summary>
         /// Constructor of the class SandwormSpawnMessage

@@ -11,9 +11,10 @@ namespace GameData.network.messages
     public class PausGameDemandMessage : Message
     {
         [JsonProperty]
-        private int requestedByClientID;
+        public int requestedByClientID { get; }
         [JsonProperty]
-        private bool pause;
+        public bool pause { get; }
+
         /// <summary>
         /// Constructor fo the Class PausGAmeDemandMessage
         /// </summary>

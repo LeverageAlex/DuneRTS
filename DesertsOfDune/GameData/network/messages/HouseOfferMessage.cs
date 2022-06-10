@@ -12,7 +12,7 @@ namespace GameData.network.messages
     public class HouseOfferMessage : ClientServerMessage
     {
         [JsonProperty]
-        private GreatHouse[] houses;
+        public GreatHouse[] houses { get; }
 
         /// <summary>
         /// Constructor of the class ClientServerMessage
