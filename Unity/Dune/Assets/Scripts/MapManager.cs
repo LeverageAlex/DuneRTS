@@ -160,6 +160,11 @@ public class MapManager : MonoBehaviour
         return enemiesOnBoard[node.Z + node.X * GridSizeZ];
     }
 
+    public Character GetCharOnNode(int x, int z)
+    {
+        return (Character)(enemiesOnBoard[z + x * GridSizeZ]).GetComponent(typeof(Character));
+    }
+
     public void ResetNodeColors()
     {
         foreach (Node node in nodes)

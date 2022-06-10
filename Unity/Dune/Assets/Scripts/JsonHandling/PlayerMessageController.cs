@@ -216,7 +216,7 @@ public class PlayerMessageController : MessageController
     public override Message OnMovementDemandMessage(MovementDemandMessage movementDemandMessage)
     {
         // TODO: implement logic
-      //  MovementManager.instance.AnimateChar(CharacterMgr.instance.getCharScriptByID(movementDemandMessage.characterID), movementDemandMessage.);
+        MovementManager.instance.AnimateChar(CharacterMgr.instance.getCharScriptByID(movementDemandMessage.characterID), movementDemandMessage.specs.path);
         return null;
     }
 
@@ -228,6 +228,35 @@ public class PlayerMessageController : MessageController
     public override Message OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
     {
         // TODO: implement logic
+        Character character = CharacterMgr.instance.getCharScriptByID(actionDemandMessage.characterID);
+        Character enemy;
+        switch(actionDemandMessage.action)
+        {
+            case "ATTACK":
+                enemy = MapManager.instance.GetCharOnNode(actionDemandMessage.specs.target.x, actionDemandMessage.specs.target.y);
+                character.Attack_BasicExecution(enemy);
+                break;
+            case "COLLECT":
+                character.Action_CollectSpiceExecution();
+                break;
+            case "KANLY":
+                enemy = MapManager.instance.GetCharOnNode(actionDemandMessage.specs.target.x, actionDemandMessage.specs.target.y);
+                character.Attack_KanlyExecution(enemy);
+                break;
+            case "FAMILY_ATOMICS":
+                character.Attack_AtomicExecution(MapManager.instance.getNodeFromPos(actionDemandMessage.specs.target.x, actionDemandMessage.specs.target.y));
+                break;
+            case "SPICE_HOARDING":
+                character.Action_SpiceHoardingExecution();
+                break;
+            case "VOICE":
+                enemy = MapManager.instance.GetCharOnNode(actionDemandMessage.specs.target.x, actionDemandMessage.specs.target.y);
+                character.Action_VoiceExecution(enemy);
+                break;
+            case "SWORDSPIN":
+                character.Attack_SwordSpinExecution();
+                break;
+        }
         return null;
     }
 
