@@ -13,7 +13,7 @@ namespace GameData.network.messages
         /// <summary>
         /// Constructor of the class SandwormDespawnMessage
         /// </summary>
-        public SandwormDespawnDemandMessage() : base("0.1",MessageType.SANDWORM_DESPAWN_DEMAND)
+        public SandwormDespawnDemandMessage() : base("1.0", MessageType.SANDWORM_DESPAWN_DEMAND)
         {
 
         }

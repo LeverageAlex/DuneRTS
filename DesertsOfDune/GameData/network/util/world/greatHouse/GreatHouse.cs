@@ -22,7 +22,7 @@ namespace GameData.network.util.world
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         private bool illegalAtomicUsage;
         [JsonProperty]
-        private HouseCharacter[] houseCharacters;
+        public HouseCharacter[] houseCharacters { get; set; }
         [JsonIgnore]
         public City City { get; }
         [JsonIgnore]

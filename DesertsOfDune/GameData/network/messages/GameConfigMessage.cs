@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
+using GameData.network.util.world;
 
 namespace GameData.network.messages
 {
@@ -13,7 +14,7 @@ namespace GameData.network.messages
         [JsonProperty]
         public List<List<string>> scenario { get; }
         [JsonProperty]
-        public string party { get; }
+        public PartyReference party { get; }
         [JsonProperty]
         public int client0ID { get; }
         [JsonProperty]
@@ -25,7 +26,7 @@ namespace GameData.network.messages
         /// <param name="scenario">the scenario configuration</param>
         /// <param name="partyConfig">the party configuration</param>
         /// <param name="partyConfig">array of houses that are offered to the client</param>
-        public GameConfigMessage(List<List<string>> scenario, string party, int client0ID, int client1ID) : base("0.1", MessageType.GAMECFG)
+        public GameConfigMessage(List<List<string>> scenario, PartyReference party, int client0ID, int client1ID) : base("1.0", MessageType.GAMECFG)
         {
             //TODO: change GameConfigMessage like it's declared in standard document
             this.scenario = scenario;

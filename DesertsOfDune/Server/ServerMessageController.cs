@@ -36,7 +36,7 @@ namespace Server
             Client client;
 
             // check, whether the new client is a player or spectator
-            if (msg.active)
+            if (msg.isActive)
             {
                 // check, whether there are already two active player
                 if (Party.GetInstance().AreTwoPlayersRegistred())
@@ -383,7 +383,7 @@ namespace Server
             Player activePlayer = null;
             foreach (var player in Party.GetInstance().GetActivePlayers())
             {
-                if (player.ClientID == msg.ClientID)
+                if (player.ClientID == msg.clientID)
                 {
                     activePlayer = player;
                 }
@@ -394,11 +394,11 @@ namespace Server
             Character targetCharacter = null;
             foreach (var character in activePlayer.UsedGreatHouse.Characters)
             {
-                if (character.CharacterId == msg.CharacterID)
+                if (character.CharacterId == msg.characterID)
                 {
                     activeCharacter = character;
                 }
-                if (character.CharacterId == msg.TargetID)
+                if (character.CharacterId == msg.targetID)
                 {
                     targetCharacter = character;
                 }
@@ -411,8 +411,8 @@ namespace Server
             int targetCharacterY = targetCharacter.CurrentMapfield.stormEye.y;
             if ((activeCharacterX == targetCharacterX && (activeCharacterY == (targetCharacterY + 1)) || (activeCharacterY == targetCharacterY - 1)) || (activeCharacterY == targetCharacterY && ((activeCharacterX == targetCharacterX + 1) || (activeCharacterX == targetCharacterX - 1))))
             {
-                activeCharacter.GiftSpice(targetCharacter, msg.Amount);
-                DoSendTransferDemand(msg.ClientID, msg.CharacterID, msg.TargetID);
+                activeCharacter.GiftSpice(targetCharacter, msg.amount);
+                DoSendTransferDemand(msg.clientID, msg.characterID, msg.targetID);
             }
         }
 
@@ -479,8 +479,9 @@ namespace Server
 
             List<List<string>> scenario = ScenarioConfiguration.GetInstance().scenario;
             string partyConfiguration = JsonConvert.SerializeObject(PartyConfiguration.GetInstance());
+            PartyReference partyReference = new PartyReference(partyConfiguration);
 
-            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, partyConfiguration, client0ID, client1ID);
+            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, partyReference, client0ID, client1ID);
             NetworkController.HandleSendingMessage(gameConfigMessage);
         }
 

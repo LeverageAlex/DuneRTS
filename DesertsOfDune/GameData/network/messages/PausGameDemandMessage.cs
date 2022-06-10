@@ -20,7 +20,7 @@ namespace GameData.network.messages
         /// </summary>
         /// <param name="requestedByClientID">the id of the requesting client</param>
         /// <param name="pause">weather the game should be paused or run again</param>
-        public PausGameDemandMessage(int requestedByClientID, bool pause) : base("0.1",MessageType.GAME_PAUSE_DEMAND)
+        public PausGameDemandMessage(int requestedByClientID, bool pause) : base("1.0", MessageType.GAME_PAUSE_DEMAND)
         {
             this.requestedByClientID = requestedByClientID;
             this.pause = pause;

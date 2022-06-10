@@ -69,8 +69,7 @@ public class PlayerMessageController : MessageController
     /// <param name="characterID">the id of the character the action is requested for</param>
     /// <param name="action">the action that is requested</param>
     /// <param name="target">the target of the action</param>
-    /// <param name="targetID">the id of the targetCharacter</param>
-    public void DoRequestAction(int clientID, int characterID, ActionType action, Position target, int targetID)
+    public void DoRequestAction(int clientID, int characterID, ActionType action, Position target)
     {
         ActionRequestMessage actionRequestMessage = new ActionRequestMessage(clientID, characterID, action, target);
         NetworkController.HandleSendingMessage(actionRequestMessage);

@@ -27,7 +27,7 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
         [Test]
         public void TestExecuteWithSandwormInstance()
         {
-            MapField[,] mapFields = new MapField[5, 5];
+           /* MapField[,] mapFields = new MapField[5, 5];
             for (int i = 0; i < 5; i++)
             {
                 for (int j = 0; j < 5; j++)
@@ -44,7 +44,7 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
             characters.Add(nobel1);
             Sandworm sandWorm = new Sandworm();
             sandWorm = sandWorm.Execute(mapFields, characters);
-            sandWorm.Execute(mapFields, characters);
+            sandWorm.Execute(mapFields, characters); */
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
             nobel1.CurrentMapfield = mapField;
             characters.Add(nobel1);
             Sandworm sandWorm = new Sandworm();
-            sandWorm.Execute(mapFields, characters);
+            //sandWorm.Execute(mapFields, characters);
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
                     mapFields[i, j] = new FlatSand(false, false, null);
                 }
             }
-            Sandworm sandWorm = Sandworm.Spawn(10, 0, mapFields, null);
+           // Sandworm sandWorm = Sandworm.Spawn(10, 0, mapFields, null);
 
             // TODO: implement test
 
