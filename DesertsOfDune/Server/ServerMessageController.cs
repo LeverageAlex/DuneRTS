@@ -653,5 +653,15 @@ namespace Server
             UnpauseGameOfferMessage unpauseGameOfferMessage = new UnpauseGameOfferMessage(requestedByClientID);
             NetworkController.HandleSendingMessage(unpauseGameOfferMessage);
         }
+
+        public override void OnJoinAccepted(JoinAcceptedMessage msg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoSendJoin(string clientName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -129,35 +129,6 @@ namespace GameData.server.roundHandler
         }
 
         /// <summary>
-        /// This method handles the Sandworm movement.
-        /// </summary>
-        /// <param name="target">the target character of the SandWorm</param>
-        /// <param name="graph">the graph used to move the sandworm</param>
-        /// <returns>the mapth of the SandWorm</returns>
-        public List<MapField> MoveSandworm(Character target, SandwormGraph graph)
-        {
-            List<MapField> mapFields = new List<MapField>();
-            for (int i = 0; i < _sandWormSpeed; i++)
-            {
-                MapField mapfield = MoveSandWormByOneField(target, graph);
-                mapFields.Add(mapfield);
-                if (_currentField.Character != null)
-                {
-                    _currentField.Character.KilledBySandworm = true;
-                    _currentField.Character = null;
-                    // TODO: sandworm despawns and sandworm phase ends.
-                    Despawn();
-                    return mapFields;
-                }
-                if (mapfield.XCoordinate == target.CurrentMapfield.XCoordinate && mapfield.ZCoordinate == target.CurrentMapfield.ZCoordinate)
-                {
-                    return mapFields;
-                }
-            }
-            return mapFields;
-        }
-
-        /// <summary>
         /// moves the sandworm along a path
         /// </summary>
         /// <param name="path">the path, on which the sandworm moves (but not complete path, but only a part depending on the speed)</param>

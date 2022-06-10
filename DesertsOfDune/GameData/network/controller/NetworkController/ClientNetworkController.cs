@@ -84,8 +84,7 @@ namespace GameData.network.controller
                     messageController.OnDebugMessage((DebugMessage)receivedMessage);
                     return true;
                 case MessageType.JOINACCEPTED:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnJoinAccepted((JoinAcceptedMessage)receivedMessage);
                     return true;
                 case MessageType.ERROR:
                     //todo: call method from client
