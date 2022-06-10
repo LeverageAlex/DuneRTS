@@ -44,6 +44,9 @@ public class CharacterMgr : MonoBehaviour
     private float wormHeightOffset = 0.35f;
 
     public int clientID;
+    public int enemyClientID;
+
+
 
     public static CharacterMgr instance;
 

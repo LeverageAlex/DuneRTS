@@ -311,6 +311,13 @@ public class PlayerMessageController : MessageController
     public override Message OnChangePlayerSpiceDemandMessage(ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage)
     {
         // TODO: implement logic
+        if (CharacterMgr.instance.clientID == changePlayerSpiceDemandMessage.clientID) {
+            GUIHandler.UpdatePlayerSpice(changePlayerSpiceDemandMessage.newSpiceValue);
+        }
+        else
+        {
+            GUIHandler.UpdateEnemySpice(changePlayerSpiceDemandMessage.newSpiceValue);
+        }
 
         return null;
     }
