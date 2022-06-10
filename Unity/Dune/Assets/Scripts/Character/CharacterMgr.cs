@@ -145,7 +145,10 @@ public class CharacterMgr : MonoBehaviour
         {
             sandwormMoveScript = ((MoveAbles)Instantiate(sandwormPrefab, new Vector3(x, wormHeightOffset + MapManager.instance.getNodeFromPos(x, z).charHeightOffset, z), Quaternion.identity).GetComponent(typeof(MoveAbles)));
         }
-        else Debug.Log("There is already a sandworm!");
+        else
+        {
+            Debug.Log("There is already a sandworm!");
+        }
     }
 
     public void DespawnSandworm()

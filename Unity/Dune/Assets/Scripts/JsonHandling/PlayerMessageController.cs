@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GameData.network.controller;
 using GameData.network.util.enums;
+using System;
 
 /// <summary>
 /// This Class Handles all messages for the Client.
@@ -133,12 +134,26 @@ public class PlayerMessageController : MessageController
 
     /// <summary>
     /// This method handles the MapChangeDemandMessage
+    /// Method currently not updatet, wait for implementation of message
     /// </summary>
     /// <param name="mapChangeDemandMessage">this message represents the map change demanded by the server</param>
     /// <returns></returns>
     public override Message OnMapChangeDemandMessage(MapChangeDemandMessage mapChangeDemandMessage)
     {
         // TODO: implement logic
+     /*   MapManager.instance.setMapSize(mapChangeDemandMessage.newMap.GetLength(0), mapChangeDemandMessage.newMap.GetLength(1));
+
+        for (int x = 0; x < mapChangeDemandMessage.newMap.GetLength(0); x++)
+        {
+            for (int z = 0; z < mapChangeDemandMessage.newMap.GetLength(1); z++)
+            {
+                var cluster = mapChangeDemandMessage.newMap[x, z];
+                MapManager.instance.UpdateBoard(x, z, cluster.HasSpice, MapManager.instance.StringtoNodeEnum(cluster.tileType), cluster.isInSandstorm);
+                
+
+            }
+        }
+        CharacterMgr.instance.SpawnSandworm(mapChangeDemandMessage.newMap[0,0].stormEye.x, mapChangeDemandMessage.newMap[0, 0].stormEye.y);*/
         return null;
     }
 
@@ -188,6 +203,7 @@ public class PlayerMessageController : MessageController
 
     /// <summary>
     /// This method handles the HouseOfferMessage
+    /// Method currently not updatet, wait for implementation of message
     /// </summary>
     /// <param name="houseOfferMessage">this message represents the houseoffer of the Server</param>
     /// <returns></returns>
@@ -290,6 +306,8 @@ public class PlayerMessageController : MessageController
     /// <returns></returns>
     public override Message OnChangeCharacterStatisticsDemandMessage(ChangeCharacterStatisticsDemandMessage changeCharacterStatisticsDemandMessage)
     {
+        //All fields currently private
+        //changeCharacterStatisticsDemandMessage.stats.
         // TODO: implement logic
        // changeCharacterStatisticsDemandMessage.
         return null;
@@ -297,6 +315,7 @@ public class PlayerMessageController : MessageController
 
 
     /// <summary>
+    /// Method currently not updatet, wait for implementation of message
     /// This method handles the SpawnCharacterDemandMessage
     /// </summary>
     /// <param name="spawnCharacterDemandMessage"></param>
