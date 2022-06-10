@@ -8,4 +8,10 @@
   <ItemGroup>
     <ProjectReference Include="..\GameData\GameData.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="parser\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="parser\" />
+  </ItemGroup>
 </Project>
