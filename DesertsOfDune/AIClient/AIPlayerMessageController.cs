@@ -4,6 +4,7 @@ using GameData.network.controller;
 using GameData.network.messages;
 using GameData.network.util.enums;
 using GameData.network.util.world;
+using Serilog;
 
 namespace AIClient
 {
@@ -88,6 +89,12 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
+        public override void DoSendJoin(string clientName)
+        {
+            JoinMessage msg = new JoinMessage(clientName, true, true);
+            NetworkController.HandleSendingMessage(msg);
+        }
+
         public override void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons, MapField[,] newMap)
         {
             throw new NotImplementedException();
@@ -141,6 +148,11 @@ namespace AIClient
         public override void OnHouseRequestMessage(HouseRequestMessage msg, string sessionID)
         {
             throw new NotImplementedException();
+        }
+
+        public override void OnJoinAccepted(JoinAcceptedMessage msg)
+        {
+            Log.Information($"The join requested was successful. The client has now the id {msg.clientID}.");
         }
 
         public override void OnJoinMessage(JoinMessage msg, string sessionID)

@@ -22,7 +22,7 @@ namespace Server.roundHandler.duneMovementHandler
         public DuneMovementPhase(Map map)
         {
             this.map = map;
-            this.automaton = new CellularAutomaton(map, PartyConfiguration.GetInstance().cellularAutomaton);
+            this.automaton = new CellularAutomaton(map);
         }
 
         /// <summary>

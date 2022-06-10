@@ -6,6 +6,7 @@ using GameData.network.util.enums;
 using GameData.network.util.world;
 using GameData.network.util.world.mapField;
 using Serilog;
+using Server.Configuration;
 
 namespace Server.roundHandler.duneMovementHandler
 {
@@ -37,11 +38,10 @@ namespace Server.roundHandler.duneMovementHandler
         /// create a new cellular automaton with a given transition rule
         /// </summary>
         /// <param name="map">the map, the cellular automaton work on and manipulate</param>
-        /// <param name="transitionRule">the transition rule for the automaton</param>
-        public CellularAutomaton(Map map, string transitionRule)
+        public CellularAutomaton(Map map)
         {
             this.map = map;
-            ParseTransitionRule(transitionRule);
+            ParseTransitionRule(PartyConfiguration.GetInstance().cellularAutomaton);
         }
 
         /// <summary>

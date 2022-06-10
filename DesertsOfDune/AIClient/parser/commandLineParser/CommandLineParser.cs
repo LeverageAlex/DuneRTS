@@ -28,6 +28,9 @@ namespace AIClient.parser.commandLineParser
         /// </summary>
         public CommandLineParser() : base()
         {
+            validator = new AIClientConfigurationValidator();
+            Configuration = new AIClientConfiguration();
+
             InitializeParser();
         }
 

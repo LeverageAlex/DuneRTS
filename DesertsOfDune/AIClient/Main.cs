@@ -48,9 +48,9 @@ namespace AIClient
             Log.Debug("Parsed the command line arguments and configuring the ai client");
 
             CreateNetworkModule();
-            Log.Debug("Created network module in ai client");
+            Log.Debug("Created network module in ai client and connect to the server");
 
-            // TODO: connect to a new party on the server 
+            messageController.DoSendJoin(configuration.Name);
         }
 
         /// <summary>
