@@ -56,9 +56,18 @@ public class MainMenuManager : MonoBehaviour
 
         Debug.Log("Join: " + name + " " + serverIP + " " + serverPort + " " + active);
 
-        //TODO send JOIN message to server
+        //TODO send JOIN message to server with given IP and given port
 
         PlayGame();//TODO delete, just temporary for testing
+    }
+
+    /// <summary>
+    /// this method ist called by a BUTTON to rejoin the game
+    /// </summary>
+    public void RejoinGame()
+    {
+        Debug.Log("Rejoin: " + clientSecret);
+        //TODO send REJOIN with clientSecret
     }
 
     /// <summary>
@@ -70,6 +79,7 @@ public class MainMenuManager : MonoBehaviour
         this.clientSecret = clientSecret;
         PlayGame();
     }
+
 
     /// <summary>
     /// this method is a HELPER-METHOD to change the .isActive trade of the menus
