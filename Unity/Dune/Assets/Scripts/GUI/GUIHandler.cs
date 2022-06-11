@@ -63,7 +63,7 @@ public class GUIHandler : MonoBehaviour
 
     }
 
-    public static void UpdateSpice(int spiceText)
+    public static void UpdateCharSpice(int spiceText)
     {
         instance.SpiceInv.text = "Inventory: " + spiceText.ToString();
 

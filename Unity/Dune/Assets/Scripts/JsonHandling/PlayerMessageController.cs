@@ -108,14 +108,8 @@ public class PlayerMessageController : MessageController
     public override Message OnGameConfigMessage(GameConfigMessage gameConfigMessage)
     {
         // TODO: implement logic
-      /* if( gameConfigMessage.client0ID == CharacterMgr.instance.clientID)
-        {
-            CharacterMgr.instance.enemyClientID = gameConfigMessage.client1ID;
-        }
-       else
-        {
-            CharacterMgr.instance.enemyClientID = gameConfigMessage.client0ID;
-        } */
+     
+
 
        //Second list contains z size
         MapManager.instance.setMapSize(gameConfigMessage.scenario.Count, gameConfigMessage.scenario[0].Count);
@@ -124,11 +118,30 @@ public class PlayerMessageController : MessageController
         {
             for (int z = 0; z < gameConfigMessage.scenario[0].Count; z++)
             {
-                MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), false);
+                if (MapManager.instance.isNodeNeighbour(x, z, gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y))
+                {
+                    //Node is in Sandstorm
+                    MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), true);
+                }
+                else
+                {
+                    MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), false);
+                }
             }
         }
+        MapManager.instance.getNodeFromPos(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y).SetSandstorm(true);
         //MISSING: CITIES not linked to Player and no StormEye set
-       
+        MapManager.instance.SetStormEye(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y);
+
+        if(gameConfigMessage.cityToClient[0].clientID == CharacterMgr.instance.clientID)
+        {
+            CharacterMgr.instance.enemyClientID = gameConfigMessage.cityToClient[1].clientID;
+        } else
+        {
+            CharacterMgr.instance.enemyClientID = gameConfigMessage.cityToClient[0].clientID;
+        }
+        MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[0].x, gameConfigMessage.cityToClient[0].y).cityOwnerId = gameConfigMessage.cityToClient[0].clientID;
+        MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[1].x, gameConfigMessage.cityToClient[1].y).cityOwnerId = gameConfigMessage.cityToClient[1].clientID;
         return null;
     }
 
@@ -231,7 +244,9 @@ public class PlayerMessageController : MessageController
     /// <returns></returns>
     public override Message OnTransferDemandMessage(TransferDemandMessage transferDemandMessage)
     {
-        // TODO: implement logic
+        Character c1 = CharacterMgr.instance.getCharScriptByID(transferDemandMessage.characterID);
+        Character c2 = CharacterMgr.instance.getCharScriptByID(transferDemandMessage.targetID);
+        c1.Action_TransferSpiceExecution(c2);
         return null;
     }
 
@@ -309,7 +324,9 @@ public class PlayerMessageController : MessageController
         //All fields currently private
         //changeCharacterStatisticsDemandMessage.stats.
         // TODO: implement logic
-       // changeCharacterStatisticsDemandMessage.
+        Character character = CharacterMgr.instance.getCharScriptByID(changeCharacterStatisticsDemandMessage.characterID);
+        character.UpdateCharStats(changeCharacterStatisticsDemandMessage.stats.HP, changeCharacterStatisticsDemandMessage.stats.MP, changeCharacterStatisticsDemandMessage.stats.AP, changeCharacterStatisticsDemandMessage.stats.spice, changeCharacterStatisticsDemandMessage.stats.isLoud, changeCharacterStatisticsDemandMessage.stats.isSwallowed);
+        
         return null;
     }
 
@@ -342,6 +359,7 @@ public class PlayerMessageController : MessageController
         }
 
         CharacterMgr.instance.spawnCharacter(spawnCharacterDemandMessage.characterID, type, spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.KilledBySandworm, spawnCharacterDemandMessage.attributes.IsLoud());
+        CharacterMgr.instance.getCharScriptByID(spawnCharacterDemandMessage.characterID).setMaxAP(spawnCharacterDemandMessage.attributes.APmax);
         return null;
     }
 

@@ -203,6 +203,11 @@ public class Character : MonoBehaviour
         this.isLoud = isLoud;
         this.isSwallowed = isSwallowed;
 
+        if (turnHandler.GetSelectedCharacter() == this)
+        {
+            DrawStats();
+        }
+
         Debug.Log("Updated " + gameObject.name + "s stats.");
     }
 
@@ -329,7 +334,6 @@ public class Character : MonoBehaviour
         charAnim.Play(animation_attack);
         StartCoroutine(character.PlayDamageAnimation(this));
         audioManager.Play("SwordStab");
-        ReduceAP(1);
         if (_AP <= 0) CharacterTurnHandler.EndTurn();
 
         Debug.Log("Attack");
@@ -370,7 +374,6 @@ public class Character : MonoBehaviour
         charAnim.Play(animation_pickUpSpice);
         nodeManager.CollectSpice(X, Z);
         audioManager.Play("SpicePickup");
-        ReduceAP(1);
         Debug.Log("Collected Spice!");
         if (_AP <= 0) CharacterTurnHandler.EndTurn();
     }
@@ -408,7 +411,6 @@ public class Character : MonoBehaviour
         RotateTowardsVector(dir);
         StartCoroutine(SwordDeAndActivation());
         charAnim.Play(animation_transferSpice);
-        ReduceAP(1);
         if (_AP <= 0) CharacterTurnHandler.EndTurn();
         //reset 
         // secondCharacter = null;
@@ -455,7 +457,6 @@ public class Character : MonoBehaviour
         turnHandler.ResetSelection();
         charAnim.Play(animation_swordSpin);
 
-        ReduceAP(_AP); // Reduce AP to 0 | should be removed when server manages MP
         if (_AP <= 0) CharacterTurnHandler.EndTurn();
         CharacterTurnHandler.EndTurn();
     }
@@ -495,7 +496,6 @@ public class Character : MonoBehaviour
         audioManager.Play("AtomicFly");
         Debug.Log("Created Atomic");
         turnHandler.ResetSelection();
-        ReduceAP(_AP); // Reduce AP to 0 | should be removed when server manages MP
         if (_AP <= 0) CharacterTurnHandler.EndTurn();
         //CharacterTurnHandler.EndTurn();
     }
@@ -545,7 +545,6 @@ public class Character : MonoBehaviour
         charAnim.Play(animation_kanly);
         StartCoroutine(character.PlayDamageAnimation(this));
         turnHandler.ResetSelection();
-        ReduceAP(_AP); //reduce AP to 0
         if (_AP <= 0) CharacterTurnHandler.EndTurn();
     }
 
@@ -587,7 +586,6 @@ public class Character : MonoBehaviour
                 {
                     nodeManager.CollectSpice(X + i, Z + j);
                     Debug.Log("Collected Spice!");
-                    ReduceAP(_AP); //Set AP to 0
                     CharacterTurnHandler.EndTurn();
                 }
             }
@@ -645,7 +643,6 @@ public class Character : MonoBehaviour
 
 
         turnHandler.ResetSelection();
-        ReduceAP(_AP); //reduce to MP to 0
         CharacterTurnHandler.EndTurn();
     }
 
@@ -682,28 +679,9 @@ public class Character : MonoBehaviour
         return (BaseAP <= _AP);  
     }
 
-    private void ReduceAP(int reduce)
-    {
-        if (_AP > 0)
-        {
-            _AP -= reduce;
-            GUIHandler.UpdateAP(_AP);
-
-        }
-    }
-
     public bool HasAP()
     {
         return _AP > 0;
-    }
-
-    public void ReduceMP(int reduce)
-    {
-        if(_MP > 0)
-        {
-            _MP -= reduce;
-            GUIHandler.UpdateMP(_MP);
-        }
     }
 
     public void SetMatColorToHouse()
@@ -772,7 +750,7 @@ public class Character : MonoBehaviour
         GUIHandler.UpdateHP(HP);
         GUIHandler.UpdateAP(_AP);
         GUIHandler.UpdateMP(_MP);
-        GUIHandler.UpdateSpice(spiceInv);
+        GUIHandler.UpdateCharSpice(spiceInv);
     }
 
     public void RotateTowardsVector(Vector3 dir)
@@ -786,6 +764,13 @@ public class Character : MonoBehaviour
     {
         charAnim.Play(animation_idle);
     }
+
+    public void setMaxAP(int maxAP)
+    {
+        BaseAP = maxAP;
+    }
+
+    
 
 
 }
