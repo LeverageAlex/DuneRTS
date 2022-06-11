@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using GameData.network.controller;
+using Serilog;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -39,14 +40,18 @@ public class MainMenuManager : MonoBehaviour
     /// </summary>
     public void DemandPlayGame()
     {
+        Log.Debug("DemandPlayGame");
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        if (SceneManager.GetActiveScene().buildIndex != 1)
+       // if (SceneManager.GetActiveScene().buildIndex != 1)
         {
+            Log.Debug("Active Scene != 1");
             SceneManager.LoadScene(1);
+            Log.Debug("End of Loading Scene");
         }
-        else
+        //else
         {
-            InGameMenuManager.instance.DemandAcceptRejoin();
+       //     Log.Debug("DemandPlayGame Else");
+         //   InGameMenuManager.instance.DemandAcceptRejoin();
         }
     }
 
@@ -92,9 +97,16 @@ public class MainMenuManager : MonoBehaviour
     /// this method is called by the SERVER to accept a join and send the clienSecret
     /// </summary>
     /// <param name="clientSecret"></param>
-    public void DemandJoinAccept(string clientSecret)
+    public void DemandJoinAccept()
     {
-        DemandPlayGame();
+        IEnumerator demandPlaygame()
+        {
+            DemandPlayGame();
+            yield return null;
+        }
+        Log.Debug("DemandJoinAccept: " + clientSecret);
+        UnityMainThreadDispatcher.Instance().Enqueue(demandPlaygame());
+
     }
 
 

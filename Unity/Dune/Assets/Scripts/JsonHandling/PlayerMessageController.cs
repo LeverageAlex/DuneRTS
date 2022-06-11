@@ -6,6 +6,7 @@ using UnityEngine;
 using GameData.network.controller;
 using GameData.network.util.enums;
 using System;
+using Serilog;
 
 /// <summary>
 /// This Class Handles all messages for the Client.
@@ -26,6 +27,7 @@ public class PlayerMessageController : MessageController
     /// <param name="isCpu">weather the client is a cpu or not</param>
     public void DoJoin(string clientName, bool active, bool isCpu)
     {
+        Log.Debug("Sended DoJoin");
         JoinMessage joinMessage = new JoinMessage(clientName, active, isCpu);
         NetworkController.HandleSendingMessage(joinMessage);
         //CharacterMgr.handler.
@@ -94,14 +96,15 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="joinAcceptedMessage">this message represents the join acceptance of the Server</param>
     /// <returns></returns>
-    public override Message OnJoinAcceptedMessage(JoinAcceptedMessage joinAcceptedMessage)
+    public override void OnJoinAccepted(JoinAcceptedMessage joinAcceptedMessage)
     {
         // TODO: implement logic
-        CharacterMgr.instance.clientID = joinAcceptedMessage.clientID;
-        CharacterMgr.instance.clientSecret = joinAcceptedMessage.clientSecret;
-        Debug.Log("Join successfully");
-        MainMenuManager.instance.DemandJoinAccept("");
-        return null;
+        Log.Debug("received JoinAccept!");
+        ConnectionEstablisher.clientId = joinAcceptedMessage.clientID;
+        ConnectionEstablisher.clientSecret = joinAcceptedMessage.clientSecret;
+
+
+        MainMenuManager.instance.DemandJoinAccept();
     }
 
     /// <summary>
@@ -514,10 +517,7 @@ public class PlayerMessageController : MessageController
         throw new NotImplementedException();
     }
 
-    public override void OnJoinAccepted(JoinAcceptedMessage msg)
-    {
-        throw new NotImplementedException();
-    }
+
 
     // This method should not be called by the client.
     public override void OnEndTurnRequestMessage(EndTurnRequestMessage msg)
@@ -673,5 +673,10 @@ public class PlayerMessageController : MessageController
     public override void OnUnpauseGameOffer(int requestedByClientID)
     {
         throw new System.NotImplementedException();
+    }
+
+    public override Message OnJoinAcceptedMessage(JoinAcceptedMessage joinAcceptedMessage)
+    {
+        throw new NotImplementedException();
     }
 }

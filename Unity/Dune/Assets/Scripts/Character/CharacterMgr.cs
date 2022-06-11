@@ -49,6 +49,8 @@ public class CharacterMgr : MonoBehaviour
     public int enemyClientID;
     public string clientSecret;
 
+    public static int clientID2;
+
     private HouseEnum playerHouse;
     private HouseEnum enemyHouse;
 
