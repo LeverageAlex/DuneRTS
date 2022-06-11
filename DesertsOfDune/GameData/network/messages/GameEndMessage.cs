@@ -12,11 +12,11 @@ namespace GameData.network.messages
     public class GameEndMessage : Message
     {
         [JsonProperty]
-        private int winnerID;
+        public int winnerID { get; }
         [JsonProperty]
-        private int loserID;
+        public int loserID { get; }
         [JsonProperty]
-        private Statistics statistics;
+        public Statistics statistics { get; }
 
         /// <summary>
         /// Constructor of the class GameEndMessage
@@ -24,7 +24,7 @@ namespace GameData.network.messages
         /// <param name="winner">the winner of the game</param>
         /// <param name="loser">the loser of the game</param>
         /// <param name="statistics">the statistics of the game</param>
-        public GameEndMessage(int winnerID, int loserID, Statistics statistics) : base("0.1",MessageType.GAME_END)
+        public GameEndMessage(int winnerID, int loserID, Statistics statistics) : base("1.0", MessageType.GAME_END)
         {
             this.winnerID = winnerID;
             this.loserID = loserID;

@@ -114,7 +114,7 @@ namespace GameData.network.util.parser
                     PauseGameRequestMessage pauseGameRequestMessage = (PauseGameRequestMessage)message;
                     return JsonConvert.SerializeObject(pauseGameRequestMessage);
                 case MessageType.GAME_PAUSE_DEMAND:
-                    GamePauseDemandMessage pauseGameMessage = (GamePauseDemandMessage)message;
+                    PausGameDemandMessage pauseGameMessage = (PausGameDemandMessage)message;
                     return JsonConvert.SerializeObject(pauseGameMessage);
                 case MessageType.UNPAUSE_GAME_OFFER:
                     UnpauseGameOfferMessage unpauseGameOfferMessage = (UnpauseGameOfferMessage)message;

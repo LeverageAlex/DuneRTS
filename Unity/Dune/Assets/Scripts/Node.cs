@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine;
-
+using GameData.network.util.world;
 
 /**
  * Class is the functional representation of Nodes displayed on the board
@@ -33,6 +33,8 @@ public class Node : MonoBehaviour
     private Color markedPathColor = Color.green;
 
     private bool isInSandstorm;
+
+    public int cityOwnerId;
 
 
 
@@ -114,23 +116,28 @@ public class Node : MonoBehaviour
     public void SelectNode()
     {
 
-        if (accessible && CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.MOVE && CharacterTurnHandler.CharSelected && MapManager.instance.getObjectOnNode(this) == null)
+        if (accessible && CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.MOVE && CharacterTurnHandler.CharSelected /*&& MapManager.instance.getObjectOnNode(this) == null*/)
         {
             if (MovementManager.instance.IsWaypointAttachable(X, Z))
             {
                 this.rend.material.color = markedPathColor;
                 marked = true;
             }
-            Vector3 point = new Vector3();
-            point.x = transform.position.x;
-            point.y = CharacterTurnHandler.instance.GetSelectedCharacter().BaseY + charHeightOffset;
-            point.z = transform.position.z;
+            //Vector3 point = new Vector3();
+            Position point = new Position(X, Z);
+            //point.x = transform.position.x;
+            //point.y = CharacterTurnHandler.instance.GetSelectedCharacter().BaseY + charHeightOffset;
+           // point.z = transform.position.z;
             MovementManager.instance.AddWaypoint(point);
 
         }
         else if (CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.FAMILY_ATOMICS && CharacterTurnHandler.CharSelected)
         {
             CharacterTurnHandler.instance.GetSelectedCharacter().Attack_AtomicTrigger(this);
+        }
+        else if(CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.HELIPORT && nodeTypeEnum == NodeTypeEnum.HELIPORT && CharacterTurnHandler.CharSelected)
+        {
+            CharacterTurnHandler.instance.GetSelectedCharacter().Action_HeliportTrigger(this);
         }
 
 

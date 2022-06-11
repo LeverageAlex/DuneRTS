@@ -11,17 +11,17 @@ namespace GameData.network.util.world
     public class CharacterStatistics
     {
         [JsonProperty]
-        private int HP;
+        public int HP { get; }
         [JsonProperty]
-        private int AP;
+        public int AP { get; }
         [JsonProperty]
-        private int MP;
+        public int MP { get; }
         [JsonProperty]
-        private int spice;
+        public int spice { get; }
         [JsonProperty]
-        private bool isLoud;
+        public bool isLoud { get; }
         [JsonProperty]
-        private bool isSwallowed;
+        public bool isSwallowed { get; }
 
         /// <summary>
         /// Constructor of the class CharacterStatistics

@@ -11,7 +11,7 @@ namespace GameData.network.messages
     public class JoinAcceptedMessage : ClientServerMessage
     {
         [JsonProperty(Order = -3)]
-        private string clientSecret;
+        public string clientSecret { get; }
 
         /// <summary>
         /// Constructor of the class JoinAcceptedMessage

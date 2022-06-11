@@ -27,7 +27,7 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
         [Test]
         public void TestTransformRockPlanes()
         {
-            MapField[,] fields = new MapField[4, 2];
+          /*  MapField[,] fields = new MapField[4, 2];
             RockPlateau field = new RockPlateau(false, false, null);
             for (int i = 0; i < 4; i++)
             {
@@ -45,7 +45,7 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
                 {
                     Assert.AreEqual("DUNE", fields[i, j].TileType);
                 }
-            }
+            } */
         }
 
         /// <summary>

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,7 +34,7 @@ public class CharacterTurnHandler : MonoBehaviour
 
     public enum Actions
     {
-        ATTACK, MOVE, COLLECT, TRANSFER, KANLY, FAMILY_ATOMICS, SPICE_HOARDING, VOICE, SWORD_SPIN, EMPTY
+        ATTACK, MOVE, COLLECT, TRANSFER, KANLY, FAMILY_ATOMICS, SPICE_HOARDING, VOICE, SWORD_SPIN, EMPTY, HELIPORT
     }
 
     private void Awake()
@@ -151,18 +152,31 @@ public class CharacterTurnHandler : MonoBehaviour
         ConfirmDeactivate();
     }
 
+    public void SetCharStateHeliport()
+    {
+        if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
+        this.charState = Actions.HELIPORT;
+        ConfirmDeactivate();
+        DisableSelectionBox();
+    }
+
+
+    /// <summary>
+    ///Is called when the confirmButton is pressed
+    /// </summary>
     public void confirmAction()
     {
         if (this.charState == Actions.MOVE)
         {
-            MovementManager.instance.AnimateSelectedChar();
+            //MovementManager.instance.AnimateSelectedChar();
+            MovementManager.instance.RequestMovement();
         }
         ResetSelection();
     }
 
     public static void EndTurn()
     {
-        PlayerController.DoEndTurnRequest(1234,12);
+        //PlayerMessageController.DoEndTurnRequest(1234,12);
         Debug.Log("Ended Turn!");
         instance.ResetSelection();
     }
@@ -256,5 +270,23 @@ public class CharacterTurnHandler : MonoBehaviour
         MovementManager.instance.unselectCharacter();
         confirmationPanel.SetActive(false);
         AudioController.instance.Play("menuSelect");
+    }
+
+
+    public void DisableSelectionBox()
+    {
+        PlayerText.SetActive(true);
+        SpiceText.SetActive(true);
+        CharacterText.SetActive(false);
+        HPText.SetActive(false);
+        MPText.SetActive(false);
+        APText.SetActive(false);
+        SpiceInventoryText.SetActive(false);
+    }
+
+    public void SetTurnChar(Character character)
+    {
+        //TODO Check for ClientID owns character
+        selectedCharacter = character;
     }
 }

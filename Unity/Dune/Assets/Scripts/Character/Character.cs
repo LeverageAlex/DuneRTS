@@ -17,6 +17,7 @@ using GameData.network.messages;
 [Serializable]
 public class Character : MonoBehaviour
 {
+
     public string charName;
     public float walkSpeed = 3f;
     //[SerializeField] this is used to serialize private fields in json format
@@ -52,11 +53,13 @@ public class Character : MonoBehaviour
 
     public int AP { get { return _AP; } }
 
+    public int CharacterId { get { return characterId; } }
+
 
     private bool isLoud;
     private bool isSwallowed;
 
-    private LinkedList<Vector3> walkPath;
+    private List<Vector3> walkPath;
 
 
     private MapManager nodeManager;
@@ -170,17 +173,17 @@ public class Character : MonoBehaviour
     {
        if(characterType == CharTypeEnum.NOBLE)
         {
-            UpdateCharStats(100, 10, 100, 2, 20, 5, false, false);
+            UpdateCharStats(100, 100, 2, 5, false, false);
         } else if(characterType == CharTypeEnum.FIGHTER)
         {
-            UpdateCharStats(200, 20, 100, 3, 40, 3, false, false);
+            UpdateCharStats(200, 100, 3, 3, false, false);
 
         } else if(characterType== CharTypeEnum.MENTANT)
         {
-            UpdateCharStats(75, 10, 100, 2, 10, 10, false, false);
+            UpdateCharStats(75, 100, 2, 10, false, false);
         } else if(characterType==CharTypeEnum.BENEGESSERIT)
         {
-            UpdateCharStats(150, 20, 100, 2, 20, 5, false, false);
+            UpdateCharStats(150, 100, 2, 5, false, false);
         }
 
         SetMatColorToHouse();
@@ -190,16 +193,20 @@ public class Character : MonoBehaviour
    
 
 
-    public void UpdateCharStats(int HP, int HealHP, int MP, int AP, int AD, int spiceInv, bool isLoud, bool isSwallowed)
+    public void UpdateCharStats(int HP, int MP, int AP, int spiceInv, bool isLoud, bool isSwallowed)
     {
         this.HP = HP;
-        this.healingHP = HealHP;
+        //this.healingHP = HealHP;
         this._AP = AP;
         this._MP = MP;
-        this.AD = AD;
         this.spiceInv = spiceInv;
         this.isLoud = isLoud;
         this.isSwallowed = isSwallowed;
+
+        if (turnHandler.GetSelectedCharacter() == this)
+        {
+            DrawStats();
+        }
 
         Debug.Log("Updated " + gameObject.name + "s stats.");
     }
@@ -210,14 +217,14 @@ public class Character : MonoBehaviour
      */
     public bool MoveToPoint()
     {
-        Vector3 dir = walkPath.First.Value - transform.position;
+        Vector3 dir = walkPath[0] - transform.position;
         transform.Translate(dir.normalized * walkSpeed * Time.deltaTime, Space.World);
         charAnim.Play(animation_walk);
         RotateTowardsVector(dir);
         // ReduceMP(1);
-        if (Vector3.Distance(transform.position, walkPath.First.Value) <= 0.06f)
+        if (Vector3.Distance(transform.position, walkPath[0]) <= 0.06f)
         {
-            walkPath.RemoveFirst();
+            walkPath.RemoveAt(0);
             MapManager.instance.placeObjectOnNode(gameObject, (int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z));
 
             MapManager.instance.RemoveObjectOnNode(X, Z);
@@ -242,7 +249,7 @@ public class Character : MonoBehaviour
         return true;
     }
 
-    public void SetWalkPath(LinkedList<Vector3> way)
+    public void SetWalkPath(List<Vector3> way)
     {
         walkPath = way;
     }
@@ -298,11 +305,18 @@ public class Character : MonoBehaviour
 
         if (nodeManager.isNodeNeighbour(selectedNode, secondNode) && !character.IsMemberOfHouse(house))
         {
-            
-            PlayerController.DoActionRequest(1234, characterId, Enums.ActionType.ATTACK, selectedNode);
+
+            //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.ATTACK, selectedNode);
             // TODO wait for Server response.
             //TODO execute attack
-            Attack_BasicExecution(character);
+            if (Mode.debugMode)
+            {
+                Attack_BasicExecution(character);
+            }
+            else
+            {
+                PlayerMessageController.instance.DoRequestAction(0, characterId, ActionType.ATTACK, new GameData.network.util.world.Position(X, Z));
+            }
             return true;
         }
         else
@@ -320,7 +334,6 @@ public class Character : MonoBehaviour
         charAnim.Play(animation_attack);
         StartCoroutine(character.PlayDamageAnimation(this));
         audioManager.Play("SwordStab");
-        ReduceAP(1);
         if (_AP <= 0) CharacterTurnHandler.EndTurn();
 
         Debug.Log("Attack");
@@ -335,9 +348,15 @@ public class Character : MonoBehaviour
     {
         if (nodeManager.IsSpiceOn(X, Z))
         {
-            PlayerController.DoActionRequest(1234, characterId, Enums.ActionType.COLLECT, nodeManager.getNodeFromPos(X, Z));
+            //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.COLLECT, nodeManager.getNodeFromPos(X, Z));
             // just fill data the node should be available here.
-            Action_CollectSpiceExecution();
+            if (Mode.debugMode)
+            {
+                Action_CollectSpiceExecution();
+            }
+            else {
+                PlayerMessageController.instance.DoRequestAction(0, characterId, ActionType.COLLECT, new GameData.network.util.world.Position(X, Z));
+            }
 
         }
         else
@@ -355,7 +374,6 @@ public class Character : MonoBehaviour
         charAnim.Play(animation_pickUpSpice);
         nodeManager.CollectSpice(X, Z);
         audioManager.Play("SpicePickup");
-        ReduceAP(1);
         Debug.Log("Collected Spice!");
         if (_AP <= 0) CharacterTurnHandler.EndTurn();
     }
@@ -367,9 +385,15 @@ public class Character : MonoBehaviour
 
         if (nodeManager.isNodeNeighbour(selectedNode, secondNode) && character.IsMemberOfHouse(house))
         {
-            PlayerController.DoActionRequest(1234, characterId, Enums.ActionType.TRANSFER, selectedNode);
+            //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.TRANSFER, selectedNode);
             //TODO execute attack
-            Action_TransferSpiceExecution(character);
+            if (Mode.debugMode)
+            {
+                Action_TransferSpiceExecution(character);
+            }
+            else { 
+                
+            }
             return true;
         }
         else
@@ -387,7 +411,6 @@ public class Character : MonoBehaviour
         RotateTowardsVector(dir);
         StartCoroutine(SwordDeAndActivation());
         charAnim.Play(animation_transferSpice);
-        ReduceAP(1);
         if (_AP <= 0) CharacterTurnHandler.EndTurn();
         //reset 
         // secondCharacter = null;
@@ -401,11 +424,17 @@ public class Character : MonoBehaviour
         if (characterType == CharTypeEnum.FIGHTER)
         {
             //Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
-           
+
             // just fill data the node has to be a parameter of Atack_SwordSpin
 
-            PlayerController.DoActionRequest(1234, characterId, Enums.ActionType.SWORD_SPIN, nodeManager.getNodeFromPos(X,Z));
-            Attack_SwordSpinExecution();
+            //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.SWORD_SPIN, nodeManager.getNodeFromPos(X,Z));
+            if (Mode.debugMode)
+            {
+                Attack_SwordSpinExecution();
+            }
+            else { 
+            
+            }
             //TODO: Send Attack to Server
             //TODO: wait for response from server
            
@@ -428,7 +457,6 @@ public class Character : MonoBehaviour
         turnHandler.ResetSelection();
         charAnim.Play(animation_swordSpin);
 
-        ReduceAP(_AP); // Reduce AP to 0 | should be removed when server manages MP
         if (_AP <= 0) CharacterTurnHandler.EndTurn();
         CharacterTurnHandler.EndTurn();
     }
@@ -442,8 +470,15 @@ public class Character : MonoBehaviour
         {
             //Check, if there are atomics left in House
 
-            PlayerController.DoActionRequest(1234, characterId, Enums.ActionType.FAMILY_ATOMICS, node);
-            Attack_AtomicExecution(node);
+            //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.FAMILY_ATOMICS, node);
+            if (Mode.debugMode)
+            {
+                Attack_AtomicExecution(node);
+            }
+            else
+            {
+
+            }
             return true;
         }
         else
@@ -461,7 +496,6 @@ public class Character : MonoBehaviour
         audioManager.Play("AtomicFly");
         Debug.Log("Created Atomic");
         turnHandler.ResetSelection();
-        ReduceAP(_AP); // Reduce AP to 0 | should be removed when server manages MP
         if (_AP <= 0) CharacterTurnHandler.EndTurn();
         //CharacterTurnHandler.EndTurn();
     }
@@ -478,8 +512,14 @@ public class Character : MonoBehaviour
             Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
             if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
             {
-                PlayerController.DoActionRequest(1234, characterId, Enums.ActionType.KANLY, secondNode);
-                Attack_KanlyExecution(character);
+                //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.KANLY, secondNode);
+                if (Mode.debugMode)
+                {
+                    Attack_KanlyExecution(character);
+                }
+                else { 
+                
+                }
                 return true;
             }
             else
@@ -505,7 +545,6 @@ public class Character : MonoBehaviour
         charAnim.Play(animation_kanly);
         StartCoroutine(character.PlayDamageAnimation(this));
         turnHandler.ResetSelection();
-        ReduceAP(_AP); //reduce AP to 0
         if (_AP <= 0) CharacterTurnHandler.EndTurn();
     }
 
@@ -516,8 +555,14 @@ public class Character : MonoBehaviour
         {
 
             // just fill data the selected node should be available here.
-            PlayerController.DoActionRequest(1234, characterId, Enums.ActionType.SPICE_HORDING, nodeManager.getNodeFromPos(X, Z));
-            Action_SpiceHoardingExecution();
+            //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.SPICE_HORDING, nodeManager.getNodeFromPos(X, Z));
+            if (Mode.debugMode)
+            {
+                Action_SpiceHoardingExecution();
+            }
+            else { 
+            
+            }
             return true;
         }
         else
@@ -541,7 +586,6 @@ public class Character : MonoBehaviour
                 {
                     nodeManager.CollectSpice(X + i, Z + j);
                     Debug.Log("Collected Spice!");
-                    ReduceAP(_AP); //Set AP to 0
                     CharacterTurnHandler.EndTurn();
                 }
             }
@@ -562,10 +606,17 @@ public class Character : MonoBehaviour
             Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
             if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
             {
-                
-                PlayerController.DoActionRequest(1234, characterId, Enums.ActionType.VOICE, selectedNode);
+
+                //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.VOICE, selectedNode);
                 //TODO: wait for response from server
-                Action_VoiceExecution(character);
+                if (Mode.debugMode)
+                {
+                    Action_VoiceExecution(character);
+                }
+                else
+                {
+
+                }
                 return true;
             }
             else
@@ -592,9 +643,20 @@ public class Character : MonoBehaviour
 
 
         turnHandler.ResetSelection();
-        ReduceAP(_AP); //reduce to MP to 0
         CharacterTurnHandler.EndTurn();
     }
+
+    public void Action_HeliportTrigger(Node targetNode)
+    {
+        Node startNode = nodeManager.getNodeFromPos(X, Z);
+
+    }
+
+    public void Action_HeliportExecution()
+    {
+
+    }
+
 
     public IEnumerator SwordDeAndActivation()
     {
@@ -617,28 +679,9 @@ public class Character : MonoBehaviour
         return (BaseAP <= _AP);  
     }
 
-    private void ReduceAP(int reduce)
-    {
-        if (_AP > 0)
-        {
-            _AP -= reduce;
-            GUIHandler.UpdateAP(_AP);
-
-        }
-    }
-
     public bool HasAP()
     {
         return _AP > 0;
-    }
-
-    public void ReduceMP(int reduce)
-    {
-        if(_MP > 0)
-        {
-            _MP -= reduce;
-            GUIHandler.UpdateMP(_MP);
-        }
     }
 
     public void SetMatColorToHouse()
@@ -707,7 +750,7 @@ public class Character : MonoBehaviour
         GUIHandler.UpdateHP(HP);
         GUIHandler.UpdateAP(_AP);
         GUIHandler.UpdateMP(_MP);
-        GUIHandler.UpdateSpice(spiceInv);
+        GUIHandler.UpdateCharSpice(spiceInv);
     }
 
     public void RotateTowardsVector(Vector3 dir)
@@ -721,6 +764,13 @@ public class Character : MonoBehaviour
     {
         charAnim.Play(animation_idle);
     }
+
+    public void setMaxAP(int maxAP)
+    {
+        BaseAP = maxAP;
+    }
+
+    
 
 
 }

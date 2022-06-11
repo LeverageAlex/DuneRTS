@@ -11,7 +11,7 @@ namespace GameData.network.messages
     public class ChangePlayerSpiceDemandMessage : ClientServerMessage
     {
         [JsonProperty]
-        private int newSpiceValue;
+        public int newSpiceValue { get; }
 
         /// <summary>
         /// Constructor of the class ChangePlayerSpiceMessage

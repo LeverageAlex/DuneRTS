@@ -57,6 +57,6 @@ namespace GameData.network.util
         public void SetMinimumLevel(LogEventLevel level)
         {
             levelSwitch.MinimumLevel = level;
-        }
+        } 
     }
 }

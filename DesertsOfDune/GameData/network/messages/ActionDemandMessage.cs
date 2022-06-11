@@ -12,9 +12,9 @@ namespace GameData.network.messages
     public class ActionDemandMessage : TurnMessage
     {
         [JsonProperty]
-        private string action;
+        public string action { get; }
         [JsonProperty(Order = 5)]
-        private Specs specs;
+        public Specs specs { get; }
 
         /// <summary>
         /// Constructor of the class ActionMessage

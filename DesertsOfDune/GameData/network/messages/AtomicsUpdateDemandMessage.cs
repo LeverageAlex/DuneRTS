@@ -9,11 +9,11 @@ namespace GameData.network.messages
     public class AtomicsUpdateDemandMessage : Message
     {
         [JsonProperty]
-        public int ClientID { get; }
+        public int clientID { get; }
         [JsonProperty]
-        public bool Shunned { get; }
+        public bool shunned { get; }
         [JsonProperty]
-        public int AtomicsLeft { get; }
+        public int atomicsLeft { get; }
 
         /// <summary>
         /// Constructor of the class AtomicsUpdateDemandMessage.
@@ -21,11 +21,11 @@ namespace GameData.network.messages
         /// <param name="clientID">The ID of the client.</param>
         /// <param name="shunned">Determines, if player is outlawed after using Atomics action.</param>
         /// <param name="atomicsLeft">Determines, how much atomics actions the player can use.</param>
-        public AtomicsUpdateDemandMessage(int clientID, bool shunned, int atomicsLeft) : base("0.1", MessageType.ATOMICS_UPDATE_DEMAND)
+        public AtomicsUpdateDemandMessage(int clientID, bool shunned, int atomicsLeft) : base("1.0", MessageType.ATOMICS_UPDATE_DEMAND)
         {
-            this.ClientID = clientID;
-            this.Shunned = shunned;
-            this.AtomicsLeft = atomicsLeft;
+            this.clientID = clientID;
+            this.shunned = shunned;
+            this.atomicsLeft = atomicsLeft;
         }
     }
 }

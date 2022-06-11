@@ -6,20 +6,20 @@ namespace GameData.network.messages
     public class TransferRequestMessage : Message
     {
         [JsonProperty]
-        public int ClientID { get; set; }
+        public int clientID { get; set; }
         [JsonProperty]
-        public int CharacterID { get; set; }
+        public int characterID { get; set; }
         [JsonProperty]
-        public int TargetID { get; set; }
+        public int targetID { get; set; }
         [JsonProperty]
-        public int Amount { get; set; }
+        public int amount { get; set; }
 
-        public TransferRequestMessage(int clientID, int characterID, int targetID, int amount) : base("v1", MessageType.TRANSFER_REQUEST)
+        public TransferRequestMessage(int clientID, int characterID, int targetID, int amount) : base("1.0", MessageType.TRANSFER_REQUEST)
         {
-            this.ClientID = clientID;
-            this.CharacterID = characterID;
-            this.TargetID = targetID;
-            this.Amount = amount;
+            this.clientID = clientID;
+            this.characterID = characterID;
+            this.targetID = targetID;
+            this.amount = amount;
         }
     }
 }
