@@ -359,6 +359,7 @@ public class PlayerMessageController : MessageController
         }
 
         CharacterMgr.instance.spawnCharacter(spawnCharacterDemandMessage.characterID, type, spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.KilledBySandworm, spawnCharacterDemandMessage.attributes.IsLoud());
+        CharacterMgr.instance.getCharScriptByID(spawnCharacterDemandMessage.characterID).setMaxAP(spawnCharacterDemandMessage.attributes.APmax);
         return null;
     }
 

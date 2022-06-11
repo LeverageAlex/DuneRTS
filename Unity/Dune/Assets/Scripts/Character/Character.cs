@@ -765,6 +765,11 @@ public class Character : MonoBehaviour
         charAnim.Play(animation_idle);
     }
 
+    public void setMaxAP(int maxAP)
+    {
+        BaseAP = maxAP;
+    }
+
     
 
 
