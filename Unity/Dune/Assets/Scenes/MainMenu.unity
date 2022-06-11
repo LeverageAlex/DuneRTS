@@ -930,6 +930,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5738320622534970096, guid: 05626fb4aa5aa8d4d84f59381240bea5, type: 3}
   m_PrefabInstance: {fileID: 368085278}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &396721948 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 553912738425829212, guid: 8958132a31d0e4c41803c82e656d22fe, type: 3}
+  m_PrefabInstance: {fileID: 510890399}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &483402665
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2326,6 +2337,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
+--- !u!114 &1237293667 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 553912738425829212, guid: 8958132a31d0e4c41803c82e656d22fe, type: 3}
+  m_PrefabInstance: {fileID: 1323576928}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1323576928
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3532,8 +3554,8 @@ MonoBehaviour:
   nameInput: {fileID: 3171437797871924033}
   playerToggle: {fileID: 1921256184}
   viewerToggle: {fileID: 210333683}
-  serverIPInput: {fileID: 0}
-  serverPortInput: {fileID: 0}
+  serverIPInput: {fileID: 1237293667}
+  serverPortInput: {fileID: 396721948}
 --- !u!1001 &1921256182
 PrefabInstance:
   m_ObjectHideFlags: 0
