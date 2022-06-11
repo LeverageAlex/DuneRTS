@@ -10,21 +10,14 @@ public class MainMenuManager : MonoBehaviour
     public GameObject MainMenu;
     public GameObject OptionsMenu;
     public GameObject PlayOptionsMenu;
-    public GameObject CreateJoinGameMenu;
+    public GameObject JoinGameMenu;
 
     [Header("Create/Join Game:")]
-    public GameObject createGameText;
-    public GameObject joinGameText;
-    public GameObject cpuCountPanel;
-    public GameObject createButton;
-    public GameObject joinButton;
     public InputField nameInput;
     public Toggle playerToggle;
     public Toggle viewerToggle;
-    public InputField lobbyCodeInput;
-    public Dropdown cpuCountDropdown;
-    //public Dropdown scenarioDropdown;
-    //public Dropdown matchDropdown;
+    public InputField serverIPInput;
+    public InputField serverPortInput;
 
     private string clientSecret;
 
@@ -50,53 +43,31 @@ public class MainMenuManager : MonoBehaviour
     }
 
     /// <summary>
-    /// this mehtod is called by a BUTTON to create a game
-    /// </summary>
-    public void CreateGame()
-    {
-        string lobbyCode = lobbyCodeInput.text;
-        int cpuCount = cpuCountDropdown.value;
-
-        string name = nameInput.text;
-        bool active = playerToggle.isOn;
-
-        //TODO validate inputs
-
-        Debug.Log("Create: " + lobbyCode + " " + cpuCount);
-
-        //TODO send CREATE message to server
-
-        JoinGame(name, lobbyCode, active);
-    }
-
-    /// <summary>
     /// this method is called by a BUTTON to join a game
     /// </summary>
     public void JoinGame()
     {
         string name = nameInput.text;
-        string lobbyCode = lobbyCodeInput.text;
         bool active = playerToggle.isOn;
+        string serverIP = serverIPInput.text;
+        string serverPort = serverPortInput.text;
 
         //TODO validate inputs
 
-        JoinGame(name, lobbyCode, active);
+        Debug.Log("Join: " + name + " " + serverIP + " " + serverPort + " " + active);
+
+        //TODO send JOIN message to server with given IP and given port
+
+        PlayGame();//TODO delete, just temporary for testing
     }
 
     /// <summary>
-    /// this method is called to join/rejoin a game
-    /// it gets called as a followup from CreateGame or the button-called JoinGame-Method or by rejoining after connection loss
+    /// this method ist called by a BUTTON to rejoin the game
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="connectionCode"></param>
-    /// <param name="active"></param>
-    private void JoinGame(string name, string connectionCode, bool active)
+    public void RejoinGame()
     {
-        Debug.Log("Join: " + name + " " + connectionCode + " " + active);
-
-        //TODO send JOIN message to server
-
-        PlayGame();//TODO delete, just temporary for testing
+        Debug.Log("Rejoin: " + clientSecret);
+        //TODO send REJOIN with clientSecret
     }
 
     /// <summary>
@@ -109,6 +80,7 @@ public class MainMenuManager : MonoBehaviour
         PlayGame();
     }
 
+
     /// <summary>
     /// this method is a HELPER-METHOD to change the .isActive trade of the menus
     /// </summary>
@@ -118,7 +90,7 @@ public class MainMenuManager : MonoBehaviour
         MainMenu.SetActive(false);
         OptionsMenu.SetActive(false);
         PlayOptionsMenu.SetActive(false);
-        CreateJoinGameMenu.SetActive(false);
+        JoinGameMenu.SetActive(false);
 
         if (menuToActivate != null)
         {
@@ -154,28 +126,10 @@ public class MainMenuManager : MonoBehaviour
     }
 
     /// <summary>
-    /// this method is called by a BUTTON to switch to the CreateGameMenu
-    /// </summary>
-    public void SwitchToCreatGameMenu()
-    {
-        ActivateMenu(CreateJoinGameMenu);
-        createGameText.SetActive(true);
-        joinGameText.SetActive(false);
-        cpuCountPanel.SetActive(true);
-        createButton.SetActive(true);
-        joinButton.SetActive(false);
-    }
-
-    /// <summary>
     /// this method is called by a BUTTON to switch to the JoinGameMenu
     /// </summary>
     public void SwitchToJoinGameMenu()
     {
-        ActivateMenu(CreateJoinGameMenu);
-        createGameText.SetActive(false);
-        joinGameText.SetActive(true);
-        cpuCountPanel.SetActive(false);
-        createButton.SetActive(false);
-        joinButton.SetActive(true);
+        ActivateMenu(JoinGameMenu);
     }
 }
