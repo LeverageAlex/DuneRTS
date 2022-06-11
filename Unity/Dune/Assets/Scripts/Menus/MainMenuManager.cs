@@ -75,10 +75,16 @@ public class MainMenuManager : MonoBehaviour
         //TODO send JOIN message to server with given IP and given port
         if (!Mode.debugMode)
         {
-            CharacterMgr.instance.handler = new ClientConnectionHandler(serverIP, int.Parse(serverPort));
-        }
+            ConnectionEstablisher.CreateNetworkModule(serverIP, int.Parse(serverPort));
+            ConnectionEstablisher.messageController.DoJoin(name, active, false);
 
-        DemandPlayGame();//TODO delete, just temporary for testing
+
+        }
+        else
+        {
+
+            DemandPlayGame();//TODO delete, just temporary for testing
+        }
     }
 
 

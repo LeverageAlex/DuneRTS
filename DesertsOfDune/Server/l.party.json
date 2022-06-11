@@ -1,0 +1,47 @@
+{
+  "noble": {
+    "maxHP": 0,
+    "maxMP": 0,
+    "maxAP": 0,
+    "damage": 0,
+    "inventorySize": 0,
+    "healingHP": 0
+  },
+  "mentat": {
+    "maxHP": 0,
+    "maxMP": 0,
+    "maxAP": 0,
+    "damage": 0,
+    "inventorySize": 0,
+    "healingHP": 0
+  },
+  "beneGesserit": {
+    "maxHP": 0,
+    "maxMP": 0,
+    "maxAP": 0,
+    "damage": 0,
+    "inventorySize": 0,
+    "healingHP": 0
+  },
+  "fighter": {
+    "maxHP": 0,
+    "maxMP": 0,
+    "maxAP": 0,
+    "damage": 0,
+    "inventorySize": 0,
+    "healingHP": 0
+  },
+  "numbOfRounds": 1,
+  "actionTimeUserClient": 0,
+  "actionTimeAiClient": 0,
+  "highGroundBonusRatio": 0.0,
+  "lowerGroundMalusRatio": 0.0,
+  "kanlySuccessProbability": 0.0,
+  "spiceMinimum": 0,
+  "cellularAutomaton": "B3/S2",
+  "sandWormSpeed": 0,
+  "sandWormSpawnDistance": 2,
+  "cloneProbability": 0.0,
+  "minPauseTime": 0,
+  "maxStrikes": 0
+}

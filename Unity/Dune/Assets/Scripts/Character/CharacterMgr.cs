@@ -57,7 +57,7 @@ public class CharacterMgr : MonoBehaviour
     private int benneGesseritMaxHP;
     private int mentatMaxHP;
 
-    public ClientConnectionHandler handler;
+    public static ClientConnectionHandler handler;
 
     public static CharacterMgr instance;
 

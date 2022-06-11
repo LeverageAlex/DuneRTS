@@ -28,7 +28,9 @@ public class PlayerMessageController : MessageController
     {
         JoinMessage joinMessage = new JoinMessage(clientName, active, isCpu);
         NetworkController.HandleSendingMessage(joinMessage);
-
+        //CharacterMgr.handler.
+        //NetworkController.HandleSendingMessage(joinMessage);
+        //   Debug.Log(CharacterMgr.handler.WebSocket.ToString());
     }
 
     /// <summary>
@@ -97,6 +99,8 @@ public class PlayerMessageController : MessageController
         // TODO: implement logic
         CharacterMgr.instance.clientID = joinAcceptedMessage.clientID;
         CharacterMgr.instance.clientSecret = joinAcceptedMessage.clientSecret;
+        Debug.Log("Join successfully");
+        MainMenuManager.instance.DemandJoinAccept("");
         return null;
     }
 
@@ -503,6 +507,16 @@ public class PlayerMessageController : MessageController
     public override void OnTransferRequestMessage(TransferRequestMessage msg)
     {
         throw new System.NotImplementedException();
+    }
+
+    public override void DoSendJoin(string clientName)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void OnJoinAccepted(JoinAcceptedMessage msg)
+    {
+        throw new NotImplementedException();
     }
 
     // This method should not be called by the client.
