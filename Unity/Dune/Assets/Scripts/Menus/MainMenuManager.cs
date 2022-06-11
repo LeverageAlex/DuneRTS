@@ -13,12 +13,11 @@ public class MainMenuManager : MonoBehaviour
     public GameObject JoinGameMenu;
 
     [Header("Create/Join Game:")]
-    public GameObject joinGameText;
-    public GameObject joinButton;
     public InputField nameInput;
     public Toggle playerToggle;
     public Toggle viewerToggle;
-    public InputField lobbyCodeInput;
+    public InputField serverIPInput;
+    public InputField serverPortInput;
 
     private string clientSecret;
 
@@ -49,24 +48,13 @@ public class MainMenuManager : MonoBehaviour
     public void JoinGame()
     {
         string name = nameInput.text;
-        string lobbyCode = lobbyCodeInput.text;
         bool active = playerToggle.isOn;
+        string serverIP = serverIPInput.text;
+        string serverPort = serverPortInput.text;
 
         //TODO validate inputs
 
-        JoinGame(name, lobbyCode, active);
-    }
-
-    /// <summary>
-    /// this method is called to join/rejoin a game
-    /// it gets called as a followup from CreateGame or the button-called JoinGame-Method or by rejoining after connection loss
-    /// </summary>
-    /// <param name="name"></param>
-    /// <param name="connectionCode"></param>
-    /// <param name="active"></param>
-    private void JoinGame(string name, string connectionCode, bool active)
-    {
-        Debug.Log("Join: " + name + " " + connectionCode + " " + active);
+        Debug.Log("Join: " + name + " " + serverIP + " " + serverPort + " " + active);
 
         //TODO send JOIN message to server
 
