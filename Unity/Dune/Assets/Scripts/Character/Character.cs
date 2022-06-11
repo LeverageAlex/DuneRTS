@@ -336,7 +336,10 @@ public class Character : MonoBehaviour
         charAnim.Play(animation_attack);
         StartCoroutine(character.PlayDamageAnimation(this));
         audioManager.Play("SwordStab");
-        if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        if (Mode.debugMode)
+        {
+            if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        }
 
         Debug.Log("Attack");
 
@@ -377,7 +380,10 @@ public class Character : MonoBehaviour
         nodeManager.CollectSpice(X, Z);
         audioManager.Play("SpicePickup");
         Debug.Log("Collected Spice!");
-        if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        if (Mode.debugMode)
+        {
+            if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        }
     }
 
     public bool Action_TransferSpiceTrigger(Character character)
@@ -413,7 +419,10 @@ public class Character : MonoBehaviour
         RotateTowardsVector(dir);
         StartCoroutine(SwordDeAndActivation());
         charAnim.Play(animation_transferSpice);
-        if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        if (Mode.debugMode)
+        {
+            if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        }
         //reset 
         // secondCharacter = null;
         turnHandler.ResetSelection();
@@ -459,8 +468,11 @@ public class Character : MonoBehaviour
         turnHandler.ResetSelection();
         charAnim.Play(animation_swordSpin);
 
-        if (_AP <= 0) CharacterTurnHandler.EndTurn();
-        CharacterTurnHandler.EndTurn();
+        if (Mode.debugMode)
+        {
+            CharacterTurnHandler.EndTurn();
+        }
+        
     }
 
     /*
@@ -498,7 +510,10 @@ public class Character : MonoBehaviour
         audioManager.Play("AtomicFly");
         Debug.Log("Created Atomic");
         turnHandler.ResetSelection();
-        if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        if (Mode.debugMode)
+        {
+            if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        }
         //CharacterTurnHandler.EndTurn();
     }
 

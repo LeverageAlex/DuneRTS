@@ -178,7 +178,15 @@ public class CharacterTurnHandler : MonoBehaviour
     {
         //PlayerMessageController.DoEndTurnRequest(1234,12);
         Debug.Log("Ended Turn!");
-        instance.ResetSelection();
+        if(Mode.debugMode)
+        {
+            instance.ResetSelection();
+        } 
+        else
+        {
+
+        }
+        
     }
 
     //Button activation/deactivation
