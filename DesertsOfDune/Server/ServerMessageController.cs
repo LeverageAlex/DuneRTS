@@ -657,11 +657,17 @@ namespace Server
             NetworkController.HandleSendingMessage(unpauseGameOfferMessage);
         }
 
+        public override void OnJoinAccepted(JoinAcceptedMessage msg)
+
         // the server should not use this method
         public override Message OnJoinAcceptedMessage(JoinAcceptedMessage joinAcceptedMessage)
+
         {
             throw new NotImplementedException();
         }
+
+
+        public override void DoSendJoin(string clientName)
 
         // the server should not use this method
         public override Message OnGameConfigMessage(GameConfigMessage gameConfigMessage)

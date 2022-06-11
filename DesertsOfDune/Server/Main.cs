@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using GameData.Configuration;
 using GameData.network.controller;
 using GameData.network.util;
@@ -47,6 +48,9 @@ namespace Server
 
             LoadConfigurationFiles();
             Log.Debug("Loaded configuration files");
+
+            // waiting 3s, so everything can be configured
+            Thread.Sleep(3000);
 
             // create new party here and set the ServerMessageController
             Party.GetInstance().messageController = serverMessageController;

@@ -80,6 +80,8 @@ namespace GameData.network.controller
 
         public abstract void OnJoinMessage(JoinMessage msg, string sessionID);
 
+        public abstract void OnJoinAccepted(JoinAcceptedMessage msg);
+
         public abstract void OnRejoinMessage(RejoinMessage msg, string sessionID);
 
         public abstract void OnHouseRequestMessage(HouseRequestMessage msg, string sessionID);
@@ -104,6 +106,8 @@ namespace GameData.network.controller
         public abstract void OnGameStateRequestMessage(GameStateRequestMessage msg);
 
         public abstract void OnPauseGameRequestMessage(PauseGameRequestMessage msg);
+
+        public abstract void DoSendJoin(string clientName);
 
         public abstract Message OnJoinAcceptedMessage(JoinAcceptedMessage joinAcceptedMessage);
 
