@@ -108,14 +108,14 @@ public class PlayerMessageController : MessageController
     public override Message OnGameConfigMessage(GameConfigMessage gameConfigMessage)
     {
         // TODO: implement logic
-       if( gameConfigMessage.client0ID == CharacterMgr.instance.clientID)
+      /* if( gameConfigMessage.client0ID == CharacterMgr.instance.clientID)
         {
             CharacterMgr.instance.enemyClientID = gameConfigMessage.client1ID;
         }
        else
         {
             CharacterMgr.instance.enemyClientID = gameConfigMessage.client0ID;
-        }
+        } */
 
        //Second list contains z size
         MapManager.instance.setMapSize(gameConfigMessage.scenario.Count, gameConfigMessage.scenario[0].Count);
