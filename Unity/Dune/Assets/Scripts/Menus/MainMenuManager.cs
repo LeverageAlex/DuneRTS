@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
+    public static MainMenuManager instance;
+
     [Header("Menus:")]
     public GameObject MainMenu;
     public GameObject OptionsMenu;
@@ -21,6 +23,11 @@ public class MainMenuManager : MonoBehaviour
 
     private string clientSecret;
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
     void Start()
     {
         ActivateMenu(MainMenu);
@@ -31,7 +38,15 @@ public class MainMenuManager : MonoBehaviour
     /// </summary>
     public void DemandPlayGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        if (SceneManager.GetActiveScene().buildIndex != 1)
+        {
+            SceneManager.LoadScene(1);
+        }
+        else
+        {
+            InGameMenuManager.instance.DemandAcceptRejoin();
+        }
     }
 
     /// <summary>

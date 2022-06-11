@@ -8,11 +8,13 @@ public class InGameMenuManager : MonoBehaviour
 {
 
     public static InGameMenuManager instance;
+
     [Header("Menus:")]
     public GameObject InGameMenu;
     public GameObject InGameUI;
     public GameObject OptionsMenu;
     public GameObject HouseSelectionMenu;
+    public GameObject RejoinMenu;
     public GameObject PauseScreenWithButton;
     public GameObject PauseScreenNoButton;
 
@@ -26,6 +28,38 @@ public class InGameMenuManager : MonoBehaviour
     {
         instance = this; 
     }
+
+    private void Start()
+    {
+        ActivateMenu(InGameUI);
+    }
+
+    /// <summary>
+    /// this method gets called when the Player should have the option to rejoin, for example at a disconnect
+    /// </summary>
+    public void DemandRejoinOption()
+    {
+        ActivateMenu(RejoinMenu);
+    }
+
+    /// <summary>
+    /// this method is called by a BUTTON to rejoin the game
+    /// </summary>
+    public void RequestRejoinGame()
+    {
+        Debug.Log("Rejoining");
+        //TODO send REJOIN
+
+    }
+
+    /// <summary>
+    /// this method is called when Rejoin gets accepted
+    /// </summary>
+    public void DemandAcceptRejoin()
+    {
+        ActivateMenu(InGameUI);
+    }
+
     /// <summary>
     /// this method is called by the SERVER to start the HouseSelcetion with two options
     /// </summary>
@@ -168,6 +202,7 @@ public class InGameMenuManager : MonoBehaviour
         InGameUI.SetActive(false);
         OptionsMenu.SetActive(false);
         HouseSelectionMenu.SetActive(false);
+        RejoinMenu.SetActive(false);
 
         if(menuToActivate != null)
         {
