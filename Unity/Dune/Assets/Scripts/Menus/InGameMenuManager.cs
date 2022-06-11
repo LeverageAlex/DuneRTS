@@ -31,7 +31,7 @@ public class InGameMenuManager : MonoBehaviour
     /// </summary>
     /// <param name="houseName1"></param>
     /// <param name="houseName2"></param>
-    public void StartHouseSelection(string houseName1, string houseName2)
+    public void DemandStartHouseSelection(string houseName1, string houseName2)
     {
         SetOptionText(1, houseName1);
         SetOptionText(2, houseName2);
@@ -42,27 +42,27 @@ public class InGameMenuManager : MonoBehaviour
     //THIS METHOD IS TEMPORARY AND ONLY MENT FOR THE BUTTON ACTIVATION OF THE HOUSE SELECTEION ToDo delete
     public void StartHouseSelection()
     {
-        StartHouseSelection("option 1", "option 2");
+        DemandStartHouseSelection("option 1", "option 2");
     }
 
     /// <summary>
     /// this method is called by a BUTTON to select one of the two house options
     /// </summary>
-    public void SelectOption()
+    public void RequestSelectOption()
     {
         if (option1.isOn)
         {
             Debug.Log(option1.GetComponentInChildren<Text>().text + " was selected!");
             //TODO send message to server
 
-            EndHouseSelection();//TODO trigger by server instead
+            DemandEndHouseSelection();//TODO trigger by server instead
         }
         else if (option2.isOn)
         {
             Debug.Log(option2.GetComponentInChildren<Text>().text + " was selected!");
             //TODO send message to server
 
-            EndHouseSelection();//TODO trigger by server instead
+            DemandEndHouseSelection();//TODO trigger by server instead
         }
     }
 
@@ -101,7 +101,7 @@ public class InGameMenuManager : MonoBehaviour
     /// <summary>
     /// this method is called by the SERVER to end the HouseSelection when house gets acknowkledged
     /// </summary>
-    public void EndHouseSelection()
+    public void DemandEndHouseSelection()
     {
         ActivateMenu(InGameUI);
     }
@@ -114,18 +114,18 @@ public class InGameMenuManager : MonoBehaviour
     /// <summary>
     /// this method is called by a button to send a pause request
     /// </summary>
-    public void PauseGame()
+    public void RequestPauseGame()
     {
 
 
         //TODO send message to server for a pause request
-        ForcedPauseGame(false);//TODO delete
+        DemandPauseGame(false);//TODO delete
     }
 
     /// <summary>
     /// this method is called by a server message to pause the game
     /// </summary>
-    public void ForcedPauseGame(bool forced)
+    public void DemandPauseGame(bool forced)
     {
         ActivateMenu(null);//deactivate all menus
 
@@ -139,16 +139,16 @@ public class InGameMenuManager : MonoBehaviour
     /// <summary>
     /// this method is called by a button to send an unpause request
     /// </summary>
-    public void UnpauseGame()
+    public void RequestUnpauseGame()
     {
         //TODO send message to server for a unpause request
-        ForcedUnpauseGame();//TODO delete
+        DemandUnpauseGame();//TODO delete
     }
 
     /// <summary>
     /// this method is called by a server message to unpause the game
     /// </summary>
-    public void ForcedUnpauseGame()
+    public void DemandUnpauseGame()
     {
         ActivateMenu(InGameUI);
 

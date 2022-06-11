@@ -213,11 +213,11 @@ public class PlayerMessageController : MessageController
     {
         if (gamePauseDemandMessage.pause)
         {
-            InGameMenuManager.instance.ForcedPauseGame(CharacterMgr.instance.clientID != gamePauseDemandMessage.requestedByClientID);
+            InGameMenuManager.instance.DemandPauseGame(CharacterMgr.instance.clientID != gamePauseDemandMessage.requestedByClientID);
         }
         else
         {
-            InGameMenuManager.instance.UnpauseGame();
+            InGameMenuManager.instance.RequestUnpauseGame();
         }
         return null;
     }

@@ -29,7 +29,7 @@ public class MainMenuManager : MonoBehaviour
     /// <summary>
     /// this method is called by a BUTTON to play the game
     /// </summary>
-    public void PlayGame()
+    public void DemandPlayGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
@@ -45,7 +45,7 @@ public class MainMenuManager : MonoBehaviour
     /// <summary>
     /// this method is called by a BUTTON to join a game
     /// </summary>
-    public void JoinGame()
+    public void RequestJoinGame()
     {
         string name = nameInput.text;
         bool active = playerToggle.isOn;
@@ -58,13 +58,13 @@ public class MainMenuManager : MonoBehaviour
 
         //TODO send JOIN message to server with given IP and given port
 
-        PlayGame();//TODO delete, just temporary for testing
+        DemandPlayGame();//TODO delete, just temporary for testing
     }
 
     /// <summary>
     /// this method ist called by a BUTTON to rejoin the game
     /// </summary>
-    public void RejoinGame()
+    public void RequestRejoinGame()
     {
         Debug.Log("Rejoin: " + clientSecret);
         //TODO send REJOIN with clientSecret
@@ -74,10 +74,10 @@ public class MainMenuManager : MonoBehaviour
     /// this method is called by the SERVER to accept a join and send the clienSecret
     /// </summary>
     /// <param name="clientSecret"></param>
-    public void JoinAccept(string clientSecret)
+    public void DemandJoinAccept(string clientSecret)
     {
         this.clientSecret = clientSecret;
-        PlayGame();
+        DemandPlayGame();
     }
 
 
