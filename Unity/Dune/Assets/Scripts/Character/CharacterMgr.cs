@@ -48,6 +48,11 @@ public class CharacterMgr : MonoBehaviour
     public int enemyClientID;
     public string clientSecret;
 
+    private int nobleMaxHP;
+    private int fighterMaxHP;
+    private int benneGesseritMaxHP;
+    private int mentatMaxHP;
+
 
 
     public static CharacterMgr instance;
@@ -173,6 +178,23 @@ public class CharacterMgr : MonoBehaviour
         }
 
         sandwormMoveScript.WalkAlongPath(newPos);
+    }
+
+
+    public int MaxHP(CharTypeEnum character)
+    {
+        switch(character)
+        {
+            case CharTypeEnum.NOBLE:
+                return nobleMaxHP;
+            case CharTypeEnum.MENTANT:
+                return mentatMaxHP;
+            case CharTypeEnum.BENEGESSERIT:
+                return benneGesseritMaxHP;
+            //case CharTypeEnum.FIGHTER:
+            default:
+                return fighterMaxHP;
+        }
     }
 
 

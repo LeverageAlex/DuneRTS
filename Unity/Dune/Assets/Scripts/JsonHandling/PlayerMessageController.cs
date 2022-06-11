@@ -108,8 +108,7 @@ public class PlayerMessageController : MessageController
     public override Message OnGameConfigMessage(GameConfigMessage gameConfigMessage)
     {
         // TODO: implement logic
-
-       
+     
 
 
        //Second list contains z size
@@ -134,7 +133,15 @@ public class PlayerMessageController : MessageController
         //MISSING: CITIES not linked to Player and no StormEye set
         MapManager.instance.SetStormEye(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y);
 
-
+        if(gameConfigMessage.cityToClient[0].clientID == CharacterMgr.instance.clientID)
+        {
+            CharacterMgr.instance.enemyClientID = gameConfigMessage.cityToClient[1].clientID;
+        } else
+        {
+            CharacterMgr.instance.enemyClientID = gameConfigMessage.cityToClient[0].clientID;
+        }
+        MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[0].x, gameConfigMessage.cityToClient[0].y).cityOwnerId = gameConfigMessage.cityToClient[0].clientID;
+        MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[1].x, gameConfigMessage.cityToClient[1].y).cityOwnerId = gameConfigMessage.cityToClient[1].clientID;
         return null;
     }
 
@@ -237,7 +244,9 @@ public class PlayerMessageController : MessageController
     /// <returns></returns>
     public override Message OnTransferDemandMessage(TransferDemandMessage transferDemandMessage)
     {
-        // TODO: implement logic
+        Character c1 = CharacterMgr.instance.getCharScriptByID(transferDemandMessage.characterID);
+        Character c2 = CharacterMgr.instance.getCharScriptByID(transferDemandMessage.targetID);
+        c1.Action_TransferSpiceExecution(c2);
         return null;
     }
 
@@ -317,6 +326,7 @@ public class PlayerMessageController : MessageController
         // TODO: implement logic
         Character character = CharacterMgr.instance.getCharScriptByID(changeCharacterStatisticsDemandMessage.characterID);
         character.UpdateCharStats(changeCharacterStatisticsDemandMessage.stats.HP, changeCharacterStatisticsDemandMessage.stats.MP, changeCharacterStatisticsDemandMessage.stats.AP, changeCharacterStatisticsDemandMessage.stats.spice, changeCharacterStatisticsDemandMessage.stats.isLoud, changeCharacterStatisticsDemandMessage.stats.isSwallowed);
+        
         return null;
     }
 

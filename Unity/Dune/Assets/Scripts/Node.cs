@@ -34,6 +34,8 @@ public class Node : MonoBehaviour
 
     private bool isInSandstorm;
 
+    public int cityOwnerId;
+
 
 
     public enum HeightLevel
