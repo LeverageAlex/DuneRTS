@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using GameData.network.controller;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -72,18 +73,14 @@ public class MainMenuManager : MonoBehaviour
         Debug.Log("Join: " + name + " " + serverIP + " " + serverPort + " " + active);
 
         //TODO send JOIN message to server with given IP and given port
+        if (!Mode.debugMode)
+        {
+            CharacterMgr.instance.handler = new ClientConnectionHandler(serverIP, int.Parse(serverPort));
+        }
 
         DemandPlayGame();//TODO delete, just temporary for testing
     }
 
-    /// <summary>
-    /// this method ist called by a BUTTON to rejoin the game
-    /// </summary>
-    public void RequestRejoinGame()
-    {
-        Debug.Log("Rejoin: " + clientSecret);
-        //TODO send REJOIN with clientSecret
-    }
 
     /// <summary>
     /// this method is called by the SERVER to accept a join and send the clienSecret
@@ -91,7 +88,6 @@ public class MainMenuManager : MonoBehaviour
     /// <param name="clientSecret"></param>
     public void DemandJoinAccept(string clientSecret)
     {
-        this.clientSecret = clientSecret;
         DemandPlayGame();
     }
 
