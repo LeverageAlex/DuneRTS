@@ -99,13 +99,10 @@ public class MainMenuManager : MonoBehaviour
     /// <param name="clientSecret"></param>
     public void DemandJoinAccept()
     {
-        IEnumerator demandPlaygame()
-        {
+
             DemandPlayGame();
-            yield return null;
-        }
+
         Log.Debug("DemandJoinAccept: " + clientSecret);
-        UnityMainThreadDispatcher.Instance().Enqueue(demandPlaygame());
 
     }
 

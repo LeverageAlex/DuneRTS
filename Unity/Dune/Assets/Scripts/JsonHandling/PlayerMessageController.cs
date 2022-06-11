@@ -27,7 +27,6 @@ public class PlayerMessageController : MessageController
     /// <param name="isCpu">weather the client is a cpu or not</param>
     public void DoJoin(string clientName, bool active, bool isCpu)
     {
-        Log.Debug("Sended DoJoin");
         JoinMessage joinMessage = new JoinMessage(clientName, active, isCpu);
         NetworkController.HandleSendingMessage(joinMessage);
         //CharacterMgr.handler.
@@ -99,12 +98,17 @@ public class PlayerMessageController : MessageController
     public override void OnJoinAccepted(JoinAcceptedMessage joinAcceptedMessage)
     {
         // TODO: implement logic
-        Log.Debug("received JoinAccept!");
         ConnectionEstablisher.clientId = joinAcceptedMessage.clientID;
         ConnectionEstablisher.clientSecret = joinAcceptedMessage.clientSecret;
 
+        IEnumerator demandPlaygame()
+        {
+            MainMenuManager.instance.DemandJoinAccept();
+            yield return null;
+        }
 
-        MainMenuManager.instance.DemandJoinAccept();
+        UnityMainThreadDispatcher.Instance().Enqueue(demandPlaygame());
+
     }
 
     /// <summary>
