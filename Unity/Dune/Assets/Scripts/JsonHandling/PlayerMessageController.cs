@@ -211,7 +211,14 @@ public class PlayerMessageController : MessageController
     /// <returns></returns>
     public override Message OnPauseGameDemandMessage(GamePauseDemandMessage gamePauseDemandMessage)
     {
-        // TODO: implement logic
+        if (gamePauseDemandMessage.pause)
+        {
+            InGameMenuManager.instance.ForcedPauseGame(CharacterMgr.instance.clientID != gamePauseDemandMessage.requestedByClientID);
+        }
+        else
+        {
+            InGameMenuManager.instance.UnpauseGame();
+        }
         return null;
     }
 

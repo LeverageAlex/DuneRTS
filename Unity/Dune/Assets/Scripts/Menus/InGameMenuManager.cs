@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class InGameMenuManager : MonoBehaviour
 {
+
+    public static InGameMenuManager instance;
     [Header("Menus:")]
     public GameObject InGameMenu;
     public GameObject InGameUI;
@@ -20,6 +22,10 @@ public class InGameMenuManager : MonoBehaviour
     public GameObject confirmButton;
 
 
+    private void Awake()
+    {
+        instance = this; 
+    }
     /// <summary>
     /// this method is called by the SERVER to start the HouseSelcetion with two options
     /// </summary>
@@ -110,23 +116,22 @@ public class InGameMenuManager : MonoBehaviour
     /// </summary>
     public void PauseGame()
     {
-        PauseScreenWithButton.SetActive(true);
+
 
         //TODO send message to server for a pause request
-        ForcedPauseGame();//TODO delete
+        ForcedPauseGame(false);//TODO delete
     }
 
     /// <summary>
     /// this method is called by a server message to pause the game
     /// </summary>
-    public void ForcedPauseGame()
+    public void ForcedPauseGame(bool forced)
     {
         ActivateMenu(null);//deactivate all menus
 
-        if (!PauseScreenWithButton.activeSelf)
-        {
-            PauseScreenNoButton.SetActive(true);
-        }
+        PauseScreenWithButton.SetActive(!forced);
+        PauseScreenNoButton.SetActive(forced);
+ 
 
         Time.timeScale = 0f;
     }
