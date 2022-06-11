@@ -109,8 +109,6 @@ public class PlayerMessageController : MessageController
     {
         // TODO: implement logic
      
-
-
        //Second list contains z size
         MapManager.instance.setMapSize(gameConfigMessage.scenario.Count, gameConfigMessage.scenario[0].Count);
 
