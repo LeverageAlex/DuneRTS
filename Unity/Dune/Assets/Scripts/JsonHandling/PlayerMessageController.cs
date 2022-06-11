@@ -141,12 +141,12 @@ public class PlayerMessageController : MessageController
         MapManager.instance.getNodeFromPos(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y).SetSandstorm(true);
         MapManager.instance.SetStormEye(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y);
 
-        if(gameConfigMessage.cityToClient[0].clientID == CharacterMgr.instance.clientID)
+        if(gameConfigMessage.cityToClient[0].clientID == ConnectionEstablisher.clientId)
         {
-            CharacterMgr.instance.enemyClientID = gameConfigMessage.cityToClient[1].clientID;
+            ConnectionEstablisher.enemyClientId = gameConfigMessage.cityToClient[1].clientID;
         } else
         {
-            CharacterMgr.instance.enemyClientID = gameConfigMessage.cityToClient[0].clientID;
+            ConnectionEstablisher.enemyClientId = gameConfigMessage.cityToClient[0].clientID;
         }
         MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[0].x, gameConfigMessage.cityToClient[0].y).cityOwnerId = gameConfigMessage.cityToClient[0].clientID;
         MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[1].x, gameConfigMessage.cityToClient[1].y).cityOwnerId = gameConfigMessage.cityToClient[1].clientID;
@@ -222,7 +222,7 @@ public class PlayerMessageController : MessageController
     {
         if (gamePauseDemandMessage.pause)
         {
-            InGameMenuManager.instance.DemandPauseGame(CharacterMgr.instance.clientID != gamePauseDemandMessage.requestedByClientID);
+            InGameMenuManager.instance.DemandPauseGame(ConnectionEstablisher.clientId != gamePauseDemandMessage.requestedByClientID);
         }
         else
         {
@@ -276,7 +276,7 @@ public class PlayerMessageController : MessageController
                 break;
         }
 
-        if(houseAcknowledgementMessage.clientID == CharacterMgr.instance.clientID)
+        if(houseAcknowledgementMessage.clientID == ConnectionEstablisher.clientId)
         {
             CharacterMgr.instance.SetPlayerHouse(house);
         }
@@ -421,7 +421,7 @@ public class PlayerMessageController : MessageController
     public override Message OnChangePlayerSpiceDemandMessage(ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage)
     {
         // TODO: implement logic
-        if (CharacterMgr.instance.clientID == changePlayerSpiceDemandMessage.clientID) {
+        if (ConnectionEstablisher.clientId == changePlayerSpiceDemandMessage.clientID) {
             GUIHandler.UpdatePlayerSpice(changePlayerSpiceDemandMessage.newSpiceValue);
         }
         else

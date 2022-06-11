@@ -45,12 +45,6 @@ public class CharacterMgr : MonoBehaviour
 
     private float wormHeightOffset = 0.35f;
 
-    public int clientID;
-    public int enemyClientID;
-    public string clientSecret;
-
-    public static int clientID2;
-
     private HouseEnum playerHouse;
     private HouseEnum enemyHouse;
 
@@ -106,7 +100,7 @@ public class CharacterMgr : MonoBehaviour
         characterDict.Add(characterID, ((Character)newChar.GetComponent(typeof(Character))));
         Character localChar = (Character) newChar.GetComponent(typeof(Character));
         localChar.UpdateCharStats(HPcurrent, MPcurrent, APcurrent, inventorySize, loud, killedBySandworm);
-        if (clientId == this.clientID)
+        if (clientId == ConnectionEstablisher.clientId)
         {
             localChar.house = playerHouse;
         }
