@@ -15,8 +15,12 @@ public class InGameMenuManager : MonoBehaviour
     public GameObject OptionsMenu;
     public GameObject HouseSelectionMenu;
     public GameObject RejoinMenu;
+    public GameObject EndScreen;
     public GameObject PauseScreenWithButton;
     public GameObject PauseScreenNoButton;
+
+    [Header("EndScreen")]
+    public Text statisticsText;
 
     [Header("HouseSelection:")]
     public Toggle option1;
@@ -32,6 +36,17 @@ public class InGameMenuManager : MonoBehaviour
     private void Start()
     {
         ActivateMenu(InGameUI);
+    }
+
+    /// <summary>
+    /// this method gets called by the SERVER to end the game and show the statistics
+    /// </summary>
+    /// <param name="statistics"></param>
+    public void DemandEndGame(string statistics)
+    {
+        statisticsText.text = statistics;
+        Time.timeScale = 0f;
+        ActivateMenu(EndScreen);
     }
 
     /// <summary>
@@ -204,6 +219,7 @@ public class InGameMenuManager : MonoBehaviour
         OptionsMenu.SetActive(false);
         HouseSelectionMenu.SetActive(false);
         RejoinMenu.SetActive(false);
+        EndScreen.SetActive(false);
 
         if(menuToActivate != null)
         {
