@@ -130,7 +130,6 @@ public class PlayerMessageController : MessageController
             }
         }
         MapManager.instance.getNodeFromPos(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y).SetSandstorm(true);
-        //MISSING: CITIES not linked to Player and no StormEye set
         MapManager.instance.SetStormEye(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y);
 
         if(gameConfigMessage.cityToClient[0].clientID == CharacterMgr.instance.clientID)
@@ -177,7 +176,7 @@ public class PlayerMessageController : MessageController
     /// <returns></returns>
     public override Message OnStrikeMessage(StrikeMessage strikeMessage)
     {
-        // TODO: implement logic
+        GUIHandler.BroadcastGameMessage(strikeMessage.wrongMessage);
         return null;
     }
 
@@ -189,6 +188,7 @@ public class PlayerMessageController : MessageController
     public override Message OnGameEndMessage(GameEndMessage gameEndMessage)
     {
         // TODO: implement logic
+
         return null;
     }
 
@@ -199,7 +199,8 @@ public class PlayerMessageController : MessageController
     /// <returns></returns>
     public override Message OnGameStateMessage(GameStateMessage gameStateMessage)
     {
-        // TODO: implement logic
+        //WE WILL NEVER NEED THIS
+        //Do not implement
         return null;
     }
 
@@ -358,8 +359,7 @@ public class PlayerMessageController : MessageController
                 break;
         }
 
-        CharacterMgr.instance.spawnCharacter(spawnCharacterDemandMessage.characterID, type, spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.KilledBySandworm, spawnCharacterDemandMessage.attributes.IsLoud());
-        CharacterMgr.instance.getCharScriptByID(spawnCharacterDemandMessage.characterID).setMaxAP(spawnCharacterDemandMessage.attributes.APmax);
+        CharacterMgr.instance.spawnCharacter(spawnCharacterDemandMessage.characterID, type, spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.APmax, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.KilledBySandworm, spawnCharacterDemandMessage.attributes.IsLoud());
         return null;
     }
 

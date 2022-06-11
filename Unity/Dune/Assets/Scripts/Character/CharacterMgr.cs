@@ -89,7 +89,7 @@ public class CharacterMgr : MonoBehaviour
     /*
      * To be filled after open question regarding standardDocument has ben resolved
   */
-    public bool spawnCharacter(int characterID, CharTypeEnum type,int x, int z,int HPcurrent, int MPcurrent, int APcurrent, int inventorySize, bool killedBySandworm, bool loud)
+    public bool spawnCharacter(int characterID, CharTypeEnum type,int x, int z,int HPcurrent, int MPcurrent, int APcurrent, int APMax, int inventorySize, bool killedBySandworm, bool loud)
     {
         if (characterDict.ContainsKey(characterID))
             return false;
@@ -100,6 +100,8 @@ public class CharacterMgr : MonoBehaviour
         characterDict.Add(characterID, ((Character)newChar.GetComponent(typeof(Character))));
         Character localChar = (Character) newChar.GetComponent(typeof(Character));
         localChar.UpdateCharStats(HPcurrent, MPcurrent, APcurrent, inventorySize, loud, killedBySandworm);
+        localChar.setMaxAP(APMax);
+        localChar.setMaxHP(HPcurrent);
         return true;
     }
 

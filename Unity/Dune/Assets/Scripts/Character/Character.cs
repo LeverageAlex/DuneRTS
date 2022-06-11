@@ -90,6 +90,8 @@ public class Character : MonoBehaviour
 
     public GameObject swordObject;
 
+    private int BaseHP;
+
 
     // public Transform t;
 
@@ -768,6 +770,11 @@ public class Character : MonoBehaviour
     public void setMaxAP(int maxAP)
     {
         BaseAP = maxAP;
+    }
+
+    public void setMaxHP(int maxHP)
+    {
+        BaseHP = maxHP;
     }
 
     
