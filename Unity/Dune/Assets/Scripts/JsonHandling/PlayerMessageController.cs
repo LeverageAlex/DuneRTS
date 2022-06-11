@@ -240,6 +240,40 @@ public class PlayerMessageController : MessageController
     public override Message OnHouseAcknowledgementMessage(HouseAcknowledgementMessage houseAcknowledgementMessage)
     {
         // TODO: implement logic
+        InGameMenuManager.instance.DemandEndHouseSelection();
+
+        HouseEnum house;
+        switch(houseAcknowledgementMessage.houseName)
+        {
+            case "CORRINO":
+                house = HouseEnum.CORRINO;
+                break;
+            case "ATREIDES":
+                house = HouseEnum.ATREIDES;
+                break;
+            case "HARKONNEN":
+                house = HouseEnum.HARKONNEN;
+                break;
+            case "ORDOS":
+                house = HouseEnum.ORDOS;
+                break;
+            case "RICHESE":
+                house = HouseEnum.RICHESE;
+                break;
+            default:
+                house = HouseEnum.VERNIUS;
+                break;
+        }
+
+        if(houseAcknowledgementMessage.clientID == CharacterMgr.instance.clientID)
+        {
+            CharacterMgr.instance.SetPlayerHouse(house);
+        }
+        else
+        {
+            CharacterMgr.instance.SetEnemyHouse(house);
+        }
+
         return null;
     }
 
@@ -364,7 +398,7 @@ public class PlayerMessageController : MessageController
                 break;
         }
 
-        CharacterMgr.instance.spawnCharacter(spawnCharacterDemandMessage.characterID, type, spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.APmax, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.KilledBySandworm, spawnCharacterDemandMessage.attributes.IsLoud());
+        CharacterMgr.instance.spawnCharacter(spawnCharacterDemandMessage.clientID, spawnCharacterDemandMessage.characterID, type, spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.APmax, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.KilledBySandworm, spawnCharacterDemandMessage.attributes.IsLoud());
         return null;
     }
 

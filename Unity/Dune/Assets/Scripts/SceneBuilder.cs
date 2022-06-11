@@ -71,10 +71,10 @@ public class SceneBuilder : MonoBehaviour
     public void createEnemys()
     {
 
-        CharacterMgr.instance.spawnCharacter(1, CharTypeEnum.NOBLE, 0, 0, 100, 10, 10, 10, 10, false, false);
-        CharacterMgr.instance.spawnCharacter(2, CharTypeEnum.BENEGESSERIT, 0, 2, 100, 10, 10, 10, 10, false, false);
-        CharacterMgr.instance.spawnCharacter(3, CharTypeEnum.FIGHTER, 0, 4, 100, 10, 10, 10, 10, false, false);
-        CharacterMgr.instance.spawnCharacter(4, CharTypeEnum.MENTANT, 0, 6, 100, 10, 10, 10, 10, false, false);
+        CharacterMgr.instance.spawnCharacter(0, 1, CharTypeEnum.NOBLE, 0, 0, 100, 10, 10, 10, 10, false, false);
+        CharacterMgr.instance.spawnCharacter(0, 2, CharTypeEnum.BENEGESSERIT, 0, 2, 100, 10, 10, 10, 10, false, false);
+        CharacterMgr.instance.spawnCharacter(0, 3, CharTypeEnum.FIGHTER, 0, 4, 100, 10, 10, 10, 10, false, false);
+        CharacterMgr.instance.spawnCharacter(0, 4, CharTypeEnum.MENTANT, 0, 6, 100, 10, 10, 10, 10, false, false);
     }
 
  
