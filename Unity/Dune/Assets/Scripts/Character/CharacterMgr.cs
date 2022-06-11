@@ -1,3 +1,4 @@
+using GameData.network.controller;
 using GameData.network.util.world;
 using System.Collections;
 using System.Collections.Generic;
@@ -56,7 +57,7 @@ public class CharacterMgr : MonoBehaviour
     private int benneGesseritMaxHP;
     private int mentatMaxHP;
 
-
+    public ClientConnectionHandler handler;
 
     public static CharacterMgr instance;
 
