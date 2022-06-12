@@ -130,7 +130,32 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
+        public override void OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void OnActionRequestMessage(ActionRequestMessage msg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnAtomicsUpdateDemandMessage(AtomicsUpdateDemandMessage atomicUpdateDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnChangeCharacterStatisticsDemandMessage(ChangeCharacterStatisticsDemandMessage changeCharacterStatisticsDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnChangePlayerSpiceDemandMessage(ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnEndGameMessage(EndGameMessage endGameMessage)
         {
             throw new NotImplementedException();
         }
@@ -140,7 +165,32 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
+        public override void OnGameConfigMessage(GameConfigMessage gameConfigMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnGameEndMessage(GameEndMessage gameEndMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnGameStateMessage(GameStateMessage gameStateMessage)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void OnGameStateRequestMessage(GameStateRequestMessage msg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnHouseAcknowledgementMessage(HouseAcknowledgementMessage houseAcknowledgementMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnHouseOfferMessage(HouseOfferMessage houseOfferMessage)
         {
             throw new NotImplementedException();
         }
@@ -155,12 +205,32 @@ namespace AIClient
             Log.Information($"The join requested was successful. The client has now the id {msg.clientID}.");
         }
 
+        public override void OnJoinAcceptedMessage(JoinAcceptedMessage joinAcceptedMessage)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void OnJoinMessage(JoinMessage msg, string sessionID)
         {
             throw new NotImplementedException();
         }
 
+        public override void OnMapChangeDemandMessage(MapChangeDemandMessage mapChangeDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnMovementDemandMessage(MovementDemandMessage movementDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void OnMovementRequestMessage(MovementRequestMessage msg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnPauseGameDemandMessage(GamePauseDemandMessage gamePauseDemandMessage)
         {
             throw new NotImplementedException();
         }
@@ -175,7 +245,42 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
+        public override void OnSandwormDespawnMessage(SandwormDespawnDemandMessage sandwormDespawnDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnSandwormMoveDemandMessage(SandwormMoveDemandMessage sandwormMoveMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnSandwormSpawnDemandMessage(SandwormSpawnDemandMessage sandwormSpawnDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnSpawnCharacterDemandMessage(SpawnCharacterDemandMessage spawnCharacterDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnStrikeMessage(StrikeMessage strikeMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnTransferDemandMessage(TransferDemandMessage transferDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void OnTransferRequestMessage(TransferRequestMessage msg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnTurnDemandMessage(TurnDemandMessage turnDemandMessage)
         {
             throw new NotImplementedException();
         }

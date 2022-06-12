@@ -149,6 +149,8 @@ namespace GameData.network.controller
 
         public abstract void OnTransferDemandMessage(TransferDemandMessage transferDemandMessage);
 
+        public abstract void OnAtomicsUpdateDemandMessage(AtomicsUpdateDemandMessage atomicUpdateDemandMessage);
+
 
         public abstract void DoAcceptJoin(string clientSecret, int clientID, string sessionID);
 
@@ -214,6 +216,6 @@ namespace GameData.network.controller
 
         public abstract void DoGamePauseDemand(int requestedByClientID, bool pause);
 
-        public abstract void OnUnpauseGameOffer(int requestedByClientID);
+        public abstract void OnUnpauseGameOffer(int requestdByClient);
     }
 }

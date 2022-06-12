@@ -784,5 +784,11 @@ namespace Server
         {
             throw new NotImplementedException();
         }
+
+        // the server should not use this method
+        public override void OnAtomicsUpdateDemandMessage(AtomicsUpdateDemandMessage atomicUpdateDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

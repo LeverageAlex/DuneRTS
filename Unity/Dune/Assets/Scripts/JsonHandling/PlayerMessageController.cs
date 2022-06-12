@@ -469,6 +469,15 @@ public class PlayerMessageController : MessageController
         // TODO: implement logic
     }
 
+    /// <summary>
+    /// This method handles the AtomicsUpdateDemandMessage
+    /// </summary>
+    /// <param name="atomicUpdateDemandMessage">this message represents the demand to update the atomic by the server</param>
+    public override void OnAtomicsUpdateDemandMessage(AtomicsUpdateDemandMessage atomicUpdateDemandMessage)
+    {
+        // TODO: implement logic
+    }
+
     // This method should not be called by the client.
     public override void OnJoinMessage(JoinMessage msg, string sessionID)
     {
@@ -672,4 +681,5 @@ public class PlayerMessageController : MessageController
     {
         throw new NotImplementedException();
     }
+
 }
