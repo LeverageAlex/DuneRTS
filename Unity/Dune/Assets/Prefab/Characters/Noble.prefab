@@ -114,6 +114,7 @@ MonoBehaviour:
   walkSpeed: 3
   characterType: 0
   house: 5
+  audioManager: {fileID: 0}
   emblemLogo: {fileID: 3709811689709717307}
   charModel: {fileID: 6147592722220831659}
   charSex: 0

@@ -223,6 +223,7 @@ public class Character : MonoBehaviour
         transform.Translate(dir.normalized * walkSpeed * Time.deltaTime, Space.World);
         charAnim.Play(animation_walk);
         RotateTowardsVector(dir);
+        turnHandler.updateSelectionArrow();
         // ReduceMP(1);
         if (Vector3.Distance(transform.position, walkPath[0]) <= 0.06f)
         {
