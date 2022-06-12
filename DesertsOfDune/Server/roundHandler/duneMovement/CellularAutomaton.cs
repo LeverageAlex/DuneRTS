@@ -89,7 +89,7 @@ namespace Server.roundHandler.duneMovementHandler
         /// <returns></returns>
         private bool CellIsAlive(MapField field)
         {
-            return field.TileType.Equals(TileType.DUNE.ToString()) || field.TileType.Equals(TileType.MOUNTAINS.ToString()) || field.TileType.Equals(TileType.CITY.ToString());
+            return field.tileType.Equals(TileType.DUNE.ToString()) || field.tileType.Equals(TileType.MOUNTAINS.ToString()) || field.tileType.Equals(TileType.CITY.ToString());
         }
 
         /// <summary>

@@ -76,7 +76,7 @@ namespace GameData.network.util.parser
                     return JsonConvert.SerializeObject(endTurnRequestMessage);
                 case MessageType.MAP_CHANGE_DEMAND:
                     MapChangeDemandMessage mapChangeMessage = (MapChangeDemandMessage)message;
-                    return JsonConvert.SerializeObject(mapChangeMessage);
+                    return JsonConvert.SerializeObject(mapChangeMessage, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Include });
                 case MessageType.ATOMICS_UPDATE_DEMAND:
                     AtomicsUpdateDemandMessage atomicsUpdateDemandMessage = (AtomicsUpdateDemandMessage)message;
                     return JsonConvert.SerializeObject(atomicsUpdateDemandMessage);

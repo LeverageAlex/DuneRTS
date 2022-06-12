@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Server.Configuration;
 using GameData.Configuration;
 using GameData.network.util.world.character;
+using GameData.network.util.enums;
 
 namespace TestProject.networkTest.utilTest.parserTest
 {
@@ -192,18 +193,23 @@ namespace TestProject.networkTest.utilTest.parserTest
         {
             GreatHouse[] houses = new GreatHouse[2];
 
-            houses[0] = new Corrino();
-            houses[0].Characters.Add(new Noble());
-            //HouseCharacter emperorShaddamIVCorrino = new HouseCharacter("EmperorShaddamIVCorrino", "NOBLE");
-            //HouseCharacter princessIrulanCorrino = new HouseCharacter("PrincessIrulanCorrino", "BENE_GESSERIT");
+            HouseCharacter houseCharacter1 = new HouseCharacter("Emperor Shaddam IV Corrino", "NOBLE");
+            HouseCharacter houseCharacter2 = new HouseCharacter("Princess Irulan Corrino", "BENE_GESSERIT");
+            HouseCharacter houseCharacter3 = new HouseCharacter("Count Hasimir Fenring", "MENTAT");
+            HouseCharacter houseCharacter4 = new HouseCharacter("Lady Margot Fenring", "BENE_GESSERIT");
+            HouseCharacter houseCharacter5 = new HouseCharacter("Reverend Mother Gaius Helen Mohiam", "BENE_GESSERIT");
+            HouseCharacter houseCharacter6 = new HouseCharacter("Captain Aramsham", "BENE_GESSERIT");
 
-            //HouseCharacter[] houseCharacters = { emperorShaddamIVCorrino , princessIrulanCorrino };
-            //houses[0].houseCharacters = houseCharacters;
-            //houses[1] = new Atreides(); 
+            HouseCharacter[] characters = new HouseCharacter[] { houseCharacter1,houseCharacter2,houseCharacter3,houseCharacter4,houseCharacter5,houseCharacter6 };
+            Corrino c = new Corrino(characters);
+
+            houses[0] = c;
+
+
             HouseOfferMessage message = new HouseOfferMessage(1234, houses);
             string serializedMessage = MessageConverter.FromMessage(message);
 
-            Assert.AreEqual("{\"type\":\"HOUSE_OFFER\",\"version\":\"1.0\",\"clientID\":1234,\"houses\":[{\"houseName\":\"CORRINO\",\"houseColor\":\"GOLD\",\"houseCharacters\":[{\"characterName\":\"EmperorShaddamIVCorrino\",\"characterClass\":\"NOBLE\"},{\"characterName\":\"PrincessIrulanCorrino\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"CountHasimirFenring\",\"characterClass\":\"MENTAT\"},{\"characterName\":\"LadyMargotFenring\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"ReverendMotherGaiusHelenMohiam\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"CaptainAramsham\",", serializedMessage);
+            Assert.AreEqual("{\"type\":\"HOUSE_OFFER\",\"version\":\"1.0\",\"clientID\":1234,\"houses\":[{\"houseName\":\"CORRINO\",\"houseColor\":\"GOLD\",\"houseCharacters\":[{\"characterName\":\"Emperor Shaddam IV Corrino\",\"characterClass\":\"NOBLE\"},{\"characterName\":\"Princess Irulan Corrino\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Count Hasimir Fenring\",\"characterClass\":\"MENTAT\"},{\"characterName\":\"Lady Margot Fenring\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Reverend Mother Gaius Helen Mohiam\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Captain Aramsham\",\"characterClass\":\"BENE_GESSERIT\"}]},null]}", serializedMessage);
         }
 
         /// <summary>
@@ -246,13 +252,12 @@ namespace TestProject.networkTest.utilTest.parserTest
         public void TestFromMapChangeDemandMessage()
         {
             MapField[,] map = new MapField[1, 2];
-            map[0, 0] = new MapField(false, false, 1234, new Position(1,2));
-            map[0, 1] = new MapField(false, false, 4321, new Position(1, 2));
+            map[0, 0] = new MapField(false, false, 1234, null);
+            map[0, 1] = new MapField(TileType.DUNE, Elevation.high, false, false, null);
             MapChangeDemandMessage message = new MapChangeDemandMessage(MapChangeReasons.FAMILY_ATOMICS, map);
             string serializedMessage = MessageConverter.FromMessage(message);
-            // {\"type\":\"MAP_CHANGE_DEMAND\",\"version\":\"0.1\",\"changeReason\":\"FAMILY_ATOMICS\",\"newMap\":[[{\"tileType\":\"CITY\",\"clientID\":1234,\"hasSpice\":false,\"isInSandstorm\":false},{\"tileType\":\"DUNE\",\"hasSpice\":false,\"isInSandstorm\":false},...],...],\"stormEye\":{\"x\":4,
 
-            Assert.AreEqual("{\"type\":\"MAP_CHANGE_DEMAND\",\"version\":\"1.0\",\"changeReason\":\"FAMILY_ATOMICS\",\"newMap\":[[{\"tileType\":\"CITY\",\"clientID\":1234,\"hasSpice\":false,\"isInSandstorm\":false},{\"tileType\":\"CITY\",\"clientID\":4321,\"hasSpice\":false,\"isInSandstorm\":false}]]}", serializedMessage);
+            Assert.AreEqual("{\"type\":\"MAP_CHANGE_DEMAND\",\"version\":\"1.0\",\"changeReason\":\"FAMILY_ATOMICS\",\"newMap\":[[{\"tileType\":\"CITY\",\"clientID\":1234,\"hasSpice\":false,\"isInSandstorm\":false},{\"tileType\":\"DUNE\",\"hasSpice\":false,\"isInSandstorm\":false}]]}", serializedMessage);
         }
 
         /// <summary>
@@ -342,9 +347,8 @@ namespace TestProject.networkTest.utilTest.parserTest
             Character attributes = new Fighter(100, 75, 10, 3, 1, 4, 2, 10, 5, 3, false, true);
             SpawnCharacterDemandMessage message = new SpawnCharacterDemandMessage(1234, 12, "Vorname Nachname", new Position(0, 1), attributes);
             string serializedMessage = MessageConverter.FromMessage(message);
-            // {\"type\":\"SPAWN_CHARACTER_DEMAND\",\"version\":\"0.1\",\"clientID\":1234,\"characterID\":12,\"characterName\":\"VornameNachname\",\"position\":{\"x\":0,\"y\":1},\"attributes\":{\"characterType\":\"FIGHTHER\",\"healthMax\":100,\"healthCurrent\":75,\"healingHP\":10,\"MPmax\":3,\"MPcurrent\":1,\"APmax\":4,\"APcurrent\":2,\"attackDamage\":10,\"inventorySize\":5,\"\"killedBySandworm\":false,\"isLoud\":true}
-
-            Assert.AreEqual("{\"type\":\"SPAWN_CHARACTER_DEMAND\",\"version\":\"1.0\",\"clientID\":1234,\"characterID\":12,\"characterName\":\"Vorname Nachname\",\"position\":{\"x\":0,\"y\":1},\"attributes\":{\"characterType\":\"FIGHTHER\",\"healthMax\":100,\"healthCurrent\":75,\"healingHP\":10,\"MPmax\":3,\"MPcurrent\":1,\"APmax\":4,\"APcurrent\":2,\"attackDamage\":10,\"inventorySize\":5,\"inventoryUsed\":3,\"killedBySandworm\":false,\"isLoud\":true}}", serializedMessage);
+           
+            Assert.AreEqual("{\"type\":\"SPAWN_CHARACTER_DEMAND\",\"version\":\"1.0\",\"clientID\":1234,\"characterID\":12,\"characterName\":\"Vorname Nachname\",\"position\":{\"x\":0,\"y\":1},\"attributes\":{\"characterType\":\"FIGHTER\",\"healthMax\":100,\"healthCurrent\":75,\"healingHP\":10,\"MPmax\":3,\"MPcurrent\":1,\"APmax\":4,\"APcurrent\":2,\"attackDamage\":10,\"inventorySize\":5,\"inventoryUsed\":3,\"killedBySandworm\":false,\"isLoud\":true}}", serializedMessage);
         }
 
         /// <summary>

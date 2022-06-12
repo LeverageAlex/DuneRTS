@@ -193,7 +193,7 @@ namespace GameData.network.util.world
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    if (fields[y, x].TileType == TileType.CITY.ToString())
+                    if (fields[y, x].tileType == TileType.CITY.ToString())
                     {
                         cities.Add((City)fields[y, x]);
                     }
@@ -210,7 +210,7 @@ namespace GameData.network.util.world
         /// <returns>true, if the given map field is a desert field</returns>
         public bool IsMapFieldADesertField(MapField mapField)
         {
-            return mapField.TileType.Equals(TileType.FLAT_SAND.ToString()) || mapField.TileType.Equals(TileType.DUNE.ToString());
+            return mapField.tileType.Equals(TileType.FLAT_SAND.ToString()) || mapField.tileType.Equals(TileType.DUNE.ToString());
         }
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace GameData.network.util.world
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    builder.Append(GetMapFieldAtPosition(x, y).TileType.ToString());
+                    builder.Append(GetMapFieldAtPosition(x, y).tileType.ToString());
 
                     if (GetMapFieldAtPosition(x, y).isInSandstorm)
                     {

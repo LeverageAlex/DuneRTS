@@ -80,21 +80,21 @@ namespace GameData.graph
             {
                 for (int j = 0; j < map.MAP_WIDTH; j++)
                 {
-                    if (i + 1 < map.MAP_HEIGHT && map.GetMapFieldAtPosition(i+1,j).TileType == TileType.DUNE.ToString() || map.GetMapFieldAtPosition(i, j).TileType == TileType.FLAT_SAND.ToString())
+                    if (i + 1 < map.MAP_HEIGHT && map.GetMapFieldAtPosition(i+1,j).tileType == TileType.DUNE.ToString() || map.GetMapFieldAtPosition(i, j).tileType == TileType.FLAT_SAND.ToString())
                     {
                         if (index + 1 < map.MAP_HEIGHT * map.MAP_WIDTH)
                         {
                             graph.AddEdge(index, index + 1);
                         }
                     }
-                    if (i + j * i - 1 >= 0 && map.GetMapFieldAtPosition(i - 1, j).TileType == TileType.DUNE.ToString() || map.GetMapFieldAtPosition(i, j).TileType == TileType.FLAT_SAND.ToString())
+                    if (i + j * i - 1 >= 0 && map.GetMapFieldAtPosition(i - 1, j).tileType == TileType.DUNE.ToString() || map.GetMapFieldAtPosition(i, j).tileType == TileType.FLAT_SAND.ToString())
                     {
                         if (index - 1 >= 0)
                         {
                             graph.AddEdge(index, index - 1);
                         }
                     }
-                    if (j + 1 < map.MAP_WIDTH && map.GetMapFieldAtPosition(i, j+1).TileType == TileType.DUNE.ToString() || map.GetMapFieldAtPosition(i, j).TileType == TileType.FLAT_SAND.ToString())
+                    if (j + 1 < map.MAP_WIDTH && map.GetMapFieldAtPosition(i, j+1).tileType == TileType.DUNE.ToString() || map.GetMapFieldAtPosition(i, j).tileType == TileType.FLAT_SAND.ToString())
                     {
                         if (index + map.MAP_WIDTH < 100)
                         {
@@ -102,7 +102,7 @@ namespace GameData.graph
                         }
 
                     }
-                    if (j - 1 >= 0 && map.GetMapFieldAtPosition(i, j-1).TileType == TileType.DUNE.ToString() || map.GetMapFieldAtPosition(i, j).TileType == TileType.FLAT_SAND.ToString())
+                    if (j - 1 >= 0 && map.GetMapFieldAtPosition(i, j-1).tileType == TileType.DUNE.ToString() || map.GetMapFieldAtPosition(i, j).tileType == TileType.FLAT_SAND.ToString())
                     {
                         if (index - map.MAP_WIDTH >= 0)
                         {
