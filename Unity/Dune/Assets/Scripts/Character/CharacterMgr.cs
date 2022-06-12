@@ -100,7 +100,7 @@ public class CharacterMgr : MonoBehaviour
         characterDict.Add(characterID, ((Character)newChar.GetComponent(typeof(Character))));
         Character localChar = (Character) newChar.GetComponent(typeof(Character));
         localChar.UpdateCharStats(HPcurrent, MPcurrent, APcurrent, inventorySize, loud, killedBySandworm);
-        if (clientId == ConnectionEstablisher.clientId)
+        if (clientId == SessionHandler.clientId)
         {
             localChar.house = playerHouse;
         }
