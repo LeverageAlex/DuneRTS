@@ -96,7 +96,10 @@ namespace Server
                 if (client.ClientSecret == msg.ClientSecret)
                 {
                     client.SessionID = sessionID; //new sessionID for the rejoined client
-                    //TODO: check if player, if yes send gamestate
+                    if (client.IsActivePlayer)
+                    {
+                        // TODO: send current game stats or gamestats what player has missed
+                    }
                     rejoinSuccessful = true;
                     Log.Information($"Rejoin of client: {client.ClientName} was successful.");
                 }
@@ -454,8 +457,7 @@ namespace Server
         public override void DoAcceptJoin(string clientSecret, int clientID, string sessionID)
         {
             JoinAcceptedMessage joinAcceptedMessage = new JoinAcceptedMessage(clientSecret, clientID);
-            //NetworkController.HandleSendingMessage(joinAcceptedMessage, sessionID);
-            NetworkController.HandleSendingMessage(joinAcceptedMessage);
+            NetworkController.HandleSendingMessage(joinAcceptedMessage, sessionID);
             Log.Information("Join request of " + clientID + " was accepted");
         }
 
@@ -481,7 +483,7 @@ namespace Server
             string partyConfiguration = JsonConvert.SerializeObject(PartyConfiguration.GetInstance());
             PartyReference partyReference = new PartyReference(partyConfiguration);
 
-            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, partyReference,null, null);
+            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, partyReference, null, null);
             NetworkController.HandleSendingMessage(gameConfigMessage);
         }
 
