@@ -20,6 +20,10 @@ public class Character : MonoBehaviour
 
     public string charName;
     public float walkSpeed = 3f;
+
+    public GameObject healthBar;
+    public Image healthBarImage;
+
     //[SerializeField] this is used to serialize private fields in json format
     private int characterId;
 
@@ -75,6 +79,7 @@ public class Character : MonoBehaviour
 
     private Animator charAnim;
     Quaternion emblem_rotation;
+    Quaternion healthBar_rotation;
 
     private string animation_idle;
     private string animation_attack;
@@ -113,6 +118,7 @@ public class Character : MonoBehaviour
         _y = transform.position.y - nodeManager.getNodeFromPos(X, Z).charHeightOffset;
 
         //SampleCode only
+        BaseHP = 100;
         initCharacter();
 
         //Update Nodes references on start (only needed because of editor)
@@ -122,6 +128,7 @@ public class Character : MonoBehaviour
         //Debug.Log("Object name: " + gameObject.name);
         BaseAP = _AP;
         emblem_rotation = emblemLogo.transform.rotation;
+        healthBar_rotation = healthBar.transform.rotation;
 
         charAnim = charModel.GetComponent<Animator>();
         initAnimations();
@@ -204,6 +211,8 @@ public class Character : MonoBehaviour
         this.spiceInv = spiceInv;
         this.isLoud = isLoud;
         this.isSwallowed = isSwallowed;
+
+        healthBarImage.fillAmount = (float) HP / BaseHP;
 
         if (turnHandler.GetSelectedCharacter() == this)
         {
@@ -775,6 +784,7 @@ public class Character : MonoBehaviour
     {
         transform.rotation = Quaternion.LookRotation(dir);
         emblemLogo.transform.rotation = emblem_rotation;
+        healthBar.transform.rotation = healthBar_rotation;
     }
  
 
