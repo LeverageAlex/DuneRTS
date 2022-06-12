@@ -28,6 +28,7 @@ public class PlayerMessageController : MessageController
     public void DoJoin(string clientName, bool active, bool isCpu)
     {
         Log.Debug("Starting Join!");
+        SessionHandler.isPlayer = active;
         JoinMessage joinMessage = new JoinMessage(clientName, active, isCpu);
         Log.Debug("Parsing of Message successful");
         NetworkController.HandleSendingMessage(joinMessage);
@@ -102,9 +103,16 @@ public class PlayerMessageController : MessageController
     {
         Log.Debug("Join Accepted!");
         // TODO: implement logic
-        ConnectionEstablisher.clientId = joinAcceptedMessage.clientID;
-        ConnectionEstablisher.clientSecret = joinAcceptedMessage.clientSecret;
-
+        if (SessionHandler.isPlayer)
+        {
+            SessionHandler.clientId = joinAcceptedMessage.clientID;
+        }
+        else
+        {
+            SessionHandler.viewerId = joinAcceptedMessage.clientID;
+        }
+            SessionHandler.clientSecret = joinAcceptedMessage.clientSecret;
+        
         IEnumerator demandPlaygame()
         {
             MainMenuManager.instance.DemandJoinAccept();
@@ -145,12 +153,12 @@ public class PlayerMessageController : MessageController
         MapManager.instance.getNodeFromPos(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y).SetSandstorm(true);
         MapManager.instance.SetStormEye(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y);
 
-        if(gameConfigMessage.cityToClient[0].clientID == ConnectionEstablisher.clientId)
+        if(gameConfigMessage.cityToClient[0].clientID == SessionHandler.clientId)
         {
-            ConnectionEstablisher.enemyClientId = gameConfigMessage.cityToClient[1].clientID;
+            SessionHandler.enemyClientId = gameConfigMessage.cityToClient[1].clientID;
         } else
         {
-            ConnectionEstablisher.enemyClientId = gameConfigMessage.cityToClient[0].clientID;
+            SessionHandler.enemyClientId = gameConfigMessage.cityToClient[0].clientID;
         }
         MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[0].x, gameConfigMessage.cityToClient[0].y).cityOwnerId = gameConfigMessage.cityToClient[0].clientID;
         MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[1].x, gameConfigMessage.cityToClient[1].y).cityOwnerId = gameConfigMessage.cityToClient[1].clientID;
@@ -226,7 +234,7 @@ public class PlayerMessageController : MessageController
     {
         if (gamePauseDemandMessage.pause)
         {
-            InGameMenuManager.instance.DemandPauseGame(ConnectionEstablisher.clientId != gamePauseDemandMessage.requestedByClientID);
+            InGameMenuManager.instance.DemandPauseGame(SessionHandler.clientId != gamePauseDemandMessage.requestedByClientID);
         }
         else
         {
@@ -280,7 +288,7 @@ public class PlayerMessageController : MessageController
                 break;
         }
 
-        if(houseAcknowledgementMessage.clientID == ConnectionEstablisher.clientId)
+        if(houseAcknowledgementMessage.clientID == SessionHandler.clientId)
         {
             CharacterMgr.instance.SetPlayerHouse(house);
         }
@@ -425,7 +433,7 @@ public class PlayerMessageController : MessageController
     public override Message OnChangePlayerSpiceDemandMessage(ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage)
     {
         // TODO: implement logic
-        if (ConnectionEstablisher.clientId == changePlayerSpiceDemandMessage.clientID) {
+        if (SessionHandler.clientId == changePlayerSpiceDemandMessage.clientID) {
             GUIHandler.UpdatePlayerSpice(changePlayerSpiceDemandMessage.newSpiceValue);
         }
         else

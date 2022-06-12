@@ -3,13 +3,15 @@ using GameData.network.controller;
 using GameData.network.util;
 using Serilog;
 
-public static class ConnectionEstablisher
+public static class SessionHandler
 {
 
-        public static PlayerMessageController messageController;
+    public static PlayerMessageController messageController;
     public static int clientId;
     public static int enemyClientId;
     public static string clientSecret;
+    public static bool isPlayer = true;
+    public static int viewerId;
 
         public static void CreateNetworkModule(String ip, int port)
         {

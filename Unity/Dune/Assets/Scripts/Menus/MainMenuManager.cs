@@ -80,8 +80,8 @@ public class MainMenuManager : MonoBehaviour
         //TODO send JOIN message to server with given IP and given port
         if (!Mode.debugMode)
         {
-            ConnectionEstablisher.CreateNetworkModule(serverIP, int.Parse(serverPort));
-            ConnectionEstablisher.messageController.DoJoin(name, active, false);
+            SessionHandler.CreateNetworkModule(serverIP, int.Parse(serverPort));
+            SessionHandler.messageController.DoJoin(name, active, false);
 
 
         }

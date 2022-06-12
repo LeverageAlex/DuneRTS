@@ -208,7 +208,7 @@ public class CharacterTurnHandler : MonoBehaviour
 
             return;
         }
-        else
+        else if(SessionHandler.isPlayer)
         {
             characterAttacksPanel.SetActive(true);
            
@@ -221,55 +221,57 @@ public class CharacterTurnHandler : MonoBehaviour
             APText.SetActive(true);
             SpiceInventoryText.SetActive(true);
         }
-
-        if(!selectedCharacter.isEligibleForSpecialAction())
+        if (SessionHandler.isPlayer)
         {
-            //special
-            atomicsButton.SetActive(false);
-            swordSpinButton.SetActive(false);
-            kanlyButton.SetActive(false);
-            voiceButton.SetActive(false);
-            spiceHoardingButton.SetActive(false);
-            return;
-        }
+            if (!selectedCharacter.isEligibleForSpecialAction())
+            {
+                //special
+                atomicsButton.SetActive(false);
+                swordSpinButton.SetActive(false);
+                kanlyButton.SetActive(false);
+                voiceButton.SetActive(false);
+                spiceHoardingButton.SetActive(false);
+                return;
+            }
 
-        switch (selectedCharacter.characterType)
-        {
-            case CharTypeEnum.FIGHTER:
-                atomicsButton.SetActive(false);
-                swordSpinButton.SetActive(true);
-                kanlyButton.SetActive(false);
-                voiceButton.SetActive(false);
-                spiceHoardingButton.SetActive(false);
-                break;
-            case CharTypeEnum.NOBLE:
-                atomicsButton.SetActive(true);
-                swordSpinButton.SetActive(false);
-                kanlyButton.SetActive(true);
-                voiceButton.SetActive(false);
-                spiceHoardingButton.SetActive(false);
-                break;
-            case CharTypeEnum.MENTANT:
-                atomicsButton.SetActive(false);
-                swordSpinButton.SetActive(false);
-                kanlyButton.SetActive(false);
-                voiceButton.SetActive(false);
-                spiceHoardingButton.SetActive(true);
-                break;
-            case CharTypeEnum.BENEGESSERIT:
-                atomicsButton.SetActive(false);
-                swordSpinButton.SetActive(false);
-                kanlyButton.SetActive(false);
-                voiceButton.SetActive(true);
-                spiceHoardingButton.SetActive(false);
-                break;
-            default:
-                atomicsButton.SetActive(false);
-                swordSpinButton.SetActive(false);
-                kanlyButton.SetActive(false);
-                voiceButton.SetActive(false);
-                spiceHoardingButton.SetActive(false);
-                break;
+            switch (selectedCharacter.characterType)
+            {
+                case CharTypeEnum.FIGHTER:
+                    atomicsButton.SetActive(false);
+                    swordSpinButton.SetActive(true);
+                    kanlyButton.SetActive(false);
+                    voiceButton.SetActive(false);
+                    spiceHoardingButton.SetActive(false);
+                    break;
+                case CharTypeEnum.NOBLE:
+                    atomicsButton.SetActive(true);
+                    swordSpinButton.SetActive(false);
+                    kanlyButton.SetActive(true);
+                    voiceButton.SetActive(false);
+                    spiceHoardingButton.SetActive(false);
+                    break;
+                case CharTypeEnum.MENTANT:
+                    atomicsButton.SetActive(false);
+                    swordSpinButton.SetActive(false);
+                    kanlyButton.SetActive(false);
+                    voiceButton.SetActive(false);
+                    spiceHoardingButton.SetActive(true);
+                    break;
+                case CharTypeEnum.BENEGESSERIT:
+                    atomicsButton.SetActive(false);
+                    swordSpinButton.SetActive(false);
+                    kanlyButton.SetActive(false);
+                    voiceButton.SetActive(true);
+                    spiceHoardingButton.SetActive(false);
+                    break;
+                default:
+                    atomicsButton.SetActive(false);
+                    swordSpinButton.SetActive(false);
+                    kanlyButton.SetActive(false);
+                    voiceButton.SetActive(false);
+                    spiceHoardingButton.SetActive(false);
+                    break;
+            }
         }
     }
 
