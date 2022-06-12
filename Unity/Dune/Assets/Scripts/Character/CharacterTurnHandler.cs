@@ -46,8 +46,8 @@ public class CharacterTurnHandler : MonoBehaviour
     private void Start()
     {
         nodeManager = MapManager.instance;
-        // ButtonToggles();
-        //  ConfirmDeactivate();
+        ButtonToggles();
+        ConfirmDeactivate();
     }
 
 
