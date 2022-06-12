@@ -27,8 +27,11 @@ public class PlayerMessageController : MessageController
     /// <param name="isCpu">weather the client is a cpu or not</param>
     public void DoJoin(string clientName, bool active, bool isCpu)
     {
+        Log.Debug("Starting Join!");
         JoinMessage joinMessage = new JoinMessage(clientName, active, isCpu);
+        Log.Debug("Parsing of Message successful");
         NetworkController.HandleSendingMessage(joinMessage);
+        Log.Debug("Sent message!");
         //CharacterMgr.handler.
         //NetworkController.HandleSendingMessage(joinMessage);
         //   Debug.Log(CharacterMgr.handler.WebSocket.ToString());
@@ -97,6 +100,7 @@ public class PlayerMessageController : MessageController
     /// <returns></returns>
     public override void OnJoinAccepted(JoinAcceptedMessage joinAcceptedMessage)
     {
+        Log.Debug("Join Accepted!");
         // TODO: implement logic
         ConnectionEstablisher.clientId = joinAcceptedMessage.clientID;
         ConnectionEstablisher.clientSecret = joinAcceptedMessage.clientSecret;
@@ -106,7 +110,7 @@ public class PlayerMessageController : MessageController
             MainMenuManager.instance.DemandJoinAccept();
             yield return null;
         }
-
+        Log.Debug("Got to ThreadDispatcher");
         UnityMainThreadDispatcher.Instance().Enqueue(demandPlaygame());
 
     }
