@@ -87,6 +87,7 @@ namespace Server
         /// If a client loose connection to the server, he can rejoin to the game with the clientSecret from the JoinAcceptedMessage.
         /// </summary>
         /// <param name="msg">RejoinMessage with clientSecretParameter.</param>
+        /// <param name="sessionID">he session id of the client, who wants to rejoin to the party</param>
         public override void OnRejoinMessage(RejoinMessage msg, string sessionID)
         {
             var connectedClients = Party.GetInstance().GetConnectedClients();
@@ -101,12 +102,14 @@ namespace Server
                         // TODO: send current game stats or gamestats what player has missed
                     }
                     rejoinSuccessful = true;
+                    DoAcceptJoin(client.ClientSecret, client.ClientID, client.SessionID);
                     Log.Information($"Rejoin of client: {client.ClientName} was successful.");
                 }
             }
             if (!rejoinSuccessful)
             {
-                //disconnect the client
+                //disconnect the client because the reconnect failed
+                DoSendError(005, "Rejoin failed because clientSecret do not match!", sessionID);
                 Log.Information($"Rejoin of client failed.");
                 ((ServerConnectionHandler)NetworkController.connectionHandler).sessionManager.CloseSession(sessionID, WebSocketSharp.CloseStatusCode.Normal, "clientSecret do not match!");
             }
