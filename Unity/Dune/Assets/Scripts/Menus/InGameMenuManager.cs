@@ -19,6 +19,8 @@ public class InGameMenuManager : MonoBehaviour
     public GameObject PauseScreenWithButton;
     public GameObject PauseScreenNoButton;
 
+    public GameObject[] forbiddenMenus;
+
     [Header("EndScreen")]
     public Text statisticsText;
 
@@ -224,6 +226,12 @@ public class InGameMenuManager : MonoBehaviour
         if(menuToActivate != null)
         {
             menuToActivate.SetActive(true);
+        }
+        if(!SessionHandler.isPlayer)
+        {
+            foreach(GameObject obj in forbiddenMenus) {
+                obj.SetActive(false);
+            }
         }
     }
 

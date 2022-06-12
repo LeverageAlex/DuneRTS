@@ -10,7 +10,7 @@ public static class SessionHandler
     public static int clientId;
     public static int enemyClientId;
     public static string clientSecret;
-    public static bool isPlayer = true;
+    public static bool isPlayer = false;
     public static int viewerId;
 
         public static void CreateNetworkModule(String ip, int port)

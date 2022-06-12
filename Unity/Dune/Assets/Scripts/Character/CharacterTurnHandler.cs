@@ -208,7 +208,7 @@ public class CharacterTurnHandler : MonoBehaviour
 
             return;
         }
-        else if(SessionHandler.isPlayer)
+        else 
         {
             characterAttacksPanel.SetActive(true);
            
