@@ -28,7 +28,7 @@ public class CharacterTurnHandler : MonoBehaviour
 
     [Header("Stats:")]
     public GameObject playerStatsPanel;
-    public GameObject PlayerText, SpiceText, CharacterText ,HPText, APText, MPText, SpiceInventoryText; 
+    public GameObject PlayerText, SpiceText, CharacterText ,HPText, APText, MPText, SpiceInventoryText, selectedArrow; 
 
     private MapManager nodeManager;
 
@@ -54,6 +54,8 @@ public class CharacterTurnHandler : MonoBehaviour
     public void SelectCharacter(Character character)
     {
         selectedCharacter = character;
+        selectedArrow.SetActive(true);
+        updateSelectionArrow();
         ButtonToggles();
         selectedCharacter.DrawStats();
     }
@@ -67,6 +69,7 @@ public class CharacterTurnHandler : MonoBehaviour
     public void ResetSelection()
     {
         selectedCharacter = null;
+        selectedArrow.SetActive(false);
         charState = Actions.EMPTY;
         ConfirmDeactivate();
         ButtonToggles();
@@ -298,5 +301,13 @@ public class CharacterTurnHandler : MonoBehaviour
     {
         //TODO Check for ClientID owns character
         selectedCharacter = character;
+    }
+
+    public void updateSelectionArrow()
+    {
+        if (selectedCharacter != null)
+        {
+            selectedArrow.transform.position = selectedCharacter.transform.position;
+        }
     }
 }
