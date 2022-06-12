@@ -109,45 +109,45 @@ namespace GameData.network.controller
 
         public abstract void DoSendJoin(string clientName);
 
-        public abstract Message OnJoinAcceptedMessage(JoinAcceptedMessage joinAcceptedMessage);
+        public abstract void OnJoinAcceptedMessage(JoinAcceptedMessage joinAcceptedMessage);
 
-        public abstract Message OnGameConfigMessage(GameConfigMessage gameConfigMessage);
+        public abstract void OnGameConfigMessage(GameConfigMessage gameConfigMessage);
 
-        public abstract Message OnMapChangeDemandMessage(MapChangeDemandMessage mapChangeDemandMessage);
+        public abstract void OnMapChangeDemandMessage(MapChangeDemandMessage mapChangeDemandMessage);
 
-        public abstract Message OnStrikeMessage(StrikeMessage strikeMessage);
+        public abstract void OnStrikeMessage(StrikeMessage strikeMessage);
 
-        public abstract Message OnGameEndMessage(GameEndMessage gameEndMessage);
+        public abstract void OnGameEndMessage(GameEndMessage gameEndMessage);
 
-        public abstract Message OnGameStateMessage(GameStateMessage gameStateMessage);
+        public abstract void OnGameStateMessage(GameStateMessage gameStateMessage);
 
-        public abstract Message OnPauseGameDemandMessage(GamePauseDemandMessage gamePauseDemandMessage);
+        public abstract void OnPauseGameDemandMessage(GamePauseDemandMessage gamePauseDemandMessage);
 
-        public abstract Message OnHouseOfferMessage(HouseOfferMessage houseOfferMessage);
+        public abstract void OnHouseOfferMessage(HouseOfferMessage houseOfferMessage);
 
-        public abstract Message OnHouseAcknowledgementMessage(HouseAcknowledgementMessage houseAcknowledgementMessage);
+        public abstract void OnHouseAcknowledgementMessage(HouseAcknowledgementMessage houseAcknowledgementMessage);
 
-        public abstract Message OnTurnDemandMessage(TurnDemandMessage turnDemandMessage);
+        public abstract void OnTurnDemandMessage(TurnDemandMessage turnDemandMessage);
 
-        public abstract Message OnMovementDemandMessage(MovementDemandMessage movementDemandMessage);
+        public abstract void OnMovementDemandMessage(MovementDemandMessage movementDemandMessage);
 
-        public abstract Message OnActionDemandMessage(ActionDemandMessage actionDemandMessage);
+        public abstract void OnActionDemandMessage(ActionDemandMessage actionDemandMessage);
 
-        public abstract Message OnChangeCharacterStatisticsDemandMessage(ChangeCharacterStatisticsDemandMessage changeCharacterStatisticsDemandMessage);
+        public abstract void OnChangeCharacterStatisticsDemandMessage(ChangeCharacterStatisticsDemandMessage changeCharacterStatisticsDemandMessage);
 
-        public abstract Message OnSpawnCharacterDemandMessage(SpawnCharacterDemandMessage spawnCharacterDemandMessage);
+        public abstract void OnSpawnCharacterDemandMessage(SpawnCharacterDemandMessage spawnCharacterDemandMessage);
 
-        public abstract Message OnChangePlayerSpiceDemandMessage(ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage);
+        public abstract void OnChangePlayerSpiceDemandMessage(ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage);
 
-        public abstract Message OnSandwormSpawnDemandMessage(SandwormSpawnDemandMessage sandwormSpawnDemandMessage);
+        public abstract void OnSandwormSpawnDemandMessage(SandwormSpawnDemandMessage sandwormSpawnDemandMessage);
 
-        public abstract Message OnSandwormMoveDemandMessage(SandwormMoveDemandMessage sandwormMoveMessage);
+        public abstract void OnSandwormMoveDemandMessage(SandwormMoveDemandMessage sandwormMoveMessage);
 
-        public abstract Message OnSandwormDespawnMessage(SandwormDespawnDemandMessage sandwormDespawnDemandMessage);
+        public abstract void OnSandwormDespawnMessage(SandwormDespawnDemandMessage sandwormDespawnDemandMessage);
 
-        public abstract Message OnEndGameMessage(EndGameMessage endGameMessage);
+        public abstract void OnEndGameMessage(EndGameMessage endGameMessage);
 
-        public abstract Message OnTransferDemandMessage(TransferDemandMessage transferDemandMessage);
+        public abstract void OnTransferDemandMessage(TransferDemandMessage transferDemandMessage);
 
 
         public abstract void DoAcceptJoin(string clientSecret, int clientID, string sessionID);

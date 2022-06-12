@@ -662,7 +662,7 @@ namespace Server
         public override void OnJoinAccepted(JoinAcceptedMessage msg) { }
 
         // the server should not use this method
-        public override Message OnJoinAcceptedMessage(JoinAcceptedMessage joinAcceptedMessage)
+        public override void OnJoinAcceptedMessage(JoinAcceptedMessage joinAcceptedMessage)
 
         {
             throw new NotImplementedException();
@@ -672,115 +672,115 @@ namespace Server
         public override void DoSendJoin(string clientName) { }
 
         // the server should not use this method
-        public override Message OnGameConfigMessage(GameConfigMessage gameConfigMessage)
+        public override void OnGameConfigMessage(GameConfigMessage gameConfigMessage)
         {
             throw new NotImplementedException();
         }
 
         // the server should not use this method
-        public override Message OnMapChangeDemandMessage(MapChangeDemandMessage mapChangeDemandMessage)
+        public override void OnMapChangeDemandMessage(MapChangeDemandMessage mapChangeDemandMessage)
         {
             throw new NotImplementedException();
         }
 
         // the server should not use this method
-        public override Message OnStrikeMessage(StrikeMessage strikeMessage)
+        public override void OnStrikeMessage(StrikeMessage strikeMessage)
         {
             throw new NotImplementedException();
         }
 
         // the server should not use this method
-        public override Message OnGameEndMessage(GameEndMessage gameEndMessage)
+        public override void OnGameEndMessage(GameEndMessage gameEndMessage)
         {
             throw new NotImplementedException();
         }
 
         // the server should not use this method
-        public override Message OnGameStateMessage(GameStateMessage gameStateMessage)
+        public override void OnGameStateMessage(GameStateMessage gameStateMessage)
         {
             throw new NotImplementedException();
         }
 
         // the server should not use this method
-        public override Message OnPauseGameDemandMessage(GamePauseDemandMessage gamePauseDemandMessage)
+        public override void OnPauseGameDemandMessage(GamePauseDemandMessage gamePauseDemandMessage)
         {
             throw new NotImplementedException();
         }
 
         // the server should not use this method
-        public override Message OnHouseOfferMessage(HouseOfferMessage houseOfferMessage)
+        public override void OnHouseOfferMessage(HouseOfferMessage houseOfferMessage)
         {
             throw new NotImplementedException();
         }
 
         // the server should not use this method
-        public override Message OnHouseAcknowledgementMessage(HouseAcknowledgementMessage houseAcknowledgementMessage)
+        public override void OnHouseAcknowledgementMessage(HouseAcknowledgementMessage houseAcknowledgementMessage)
         {
             throw new NotImplementedException();
         }
 
         // the server should not use this method
-        public override Message OnTurnDemandMessage(TurnDemandMessage turnDemandMessage)
+        public override void OnTurnDemandMessage(TurnDemandMessage turnDemandMessage)
         {
             throw new NotImplementedException();
         }
 
         // the server should not use this method
-        public override Message OnMovementDemandMessage(MovementDemandMessage movementDemandMessage)
+        public override void OnMovementDemandMessage(MovementDemandMessage movementDemandMessage)
         {
             throw new NotImplementedException();
         }
 
         // the server should not use this method
-        public override Message OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
+        public override void OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
         {
             throw new NotImplementedException();
         }
 
         // the server should not use this method
-        public override Message OnChangeCharacterStatisticsDemandMessage(ChangeCharacterStatisticsDemandMessage changeCharacterStatisticsDemandMessage)
+        public override void OnChangeCharacterStatisticsDemandMessage(ChangeCharacterStatisticsDemandMessage changeCharacterStatisticsDemandMessage)
         {
             throw new NotImplementedException();
         }
 
         // the server should not use this method
-        public override Message OnSpawnCharacterDemandMessage(SpawnCharacterDemandMessage spawnCharacterDemandMessage)
+        public override void OnSpawnCharacterDemandMessage(SpawnCharacterDemandMessage spawnCharacterDemandMessage)
         {
             throw new NotImplementedException();
         }
 
         // the server should not use this method
-        public override Message OnChangePlayerSpiceDemandMessage(ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage)
+        public override void OnChangePlayerSpiceDemandMessage(ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage)
         {
             throw new NotImplementedException();
         }
 
         // the server should not use this method
-        public override Message OnSandwormSpawnDemandMessage(SandwormSpawnDemandMessage sandwormSpawnDemandMessage)
+        public override void OnSandwormSpawnDemandMessage(SandwormSpawnDemandMessage sandwormSpawnDemandMessage)
         {
             throw new NotImplementedException();
         }
 
         // the server should not use this method
-        public override Message OnSandwormMoveDemandMessage(SandwormMoveDemandMessage sandwormMoveMessage)
+        public override void OnSandwormMoveDemandMessage(SandwormMoveDemandMessage sandwormMoveMessage)
         {
             throw new NotImplementedException();
         }
 
         // the server should not use this method
-        public override Message OnSandwormDespawnMessage(SandwormDespawnDemandMessage sandwormDespawnDemandMessage)
+        public override void OnSandwormDespawnMessage(SandwormDespawnDemandMessage sandwormDespawnDemandMessage)
         {
             throw new NotImplementedException();
         }
 
         // the server should not use this method
-        public override Message OnEndGameMessage(EndGameMessage endGameMessage)
+        public override void OnEndGameMessage(EndGameMessage endGameMessage)
         {
             throw new NotImplementedException();
         }
 
         // the server should not use this method
-        public override Message OnTransferDemandMessage(TransferDemandMessage transferDemandMessage)
+        public override void OnTransferDemandMessage(TransferDemandMessage transferDemandMessage)
         {
             throw new NotImplementedException();
         }
