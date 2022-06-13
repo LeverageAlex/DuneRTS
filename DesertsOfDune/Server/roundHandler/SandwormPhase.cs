@@ -1,4 +1,5 @@
 ﻿using GameData.network.util.world;
+using Server;
 using Server.Configuration;
 using Server.roundHandler;
 using System;
@@ -41,7 +42,7 @@ namespace GameData.server.roundHandler
                 if (CheckLoudness(characters))
                 {
                     // there is no sandworm, but loud characters, so spawn one
-                    _sandworm = Sandworm.Spawn(PartyConfiguration.GetInstance().sandWormSpeed, PartyConfiguration.GetInstance().sandWormSpawnDistance, this._map, characters);
+                    _sandworm = Sandworm.Spawn(PartyConfiguration.GetInstance().sandWormSpeed, PartyConfiguration.GetInstance().sandWormSpawnDistance, this._map, characters, Party.GetInstance().messageController);
                 }
             }
         }

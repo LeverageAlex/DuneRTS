@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using GameData.server.roundHandler;
+using Server;
 using Server.roundHandler;
 
 namespace GameData.network.util.world
@@ -27,7 +28,7 @@ namespace GameData.network.util.world
             earthQuakeExecutor.TransformRockPlanes();
 
             // despawn the usual sandworm
-            Sandworm.Despawn();
+            Sandworm.Despawn(Party.GetInstance().messageController);
         }
 
 

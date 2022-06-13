@@ -34,6 +34,7 @@ namespace Server
         public override void OnJoinMessage(JoinMessage msg, string sessionID)
         {
             Client client;
+            Log.Debug(msg.isActive + " " + msg.isCpu);
 
             // check, whether the new client is a player or spectator
             if (msg.isActive)
@@ -658,16 +659,21 @@ namespace Server
         }
 
         public override void OnJoinAccepted(JoinAcceptedMessage msg)
+        {
+            throw new NotImplementedException();
+        }
 
         // the server should not use this method
         public override Message OnJoinAcceptedMessage(JoinAcceptedMessage joinAcceptedMessage)
-
         {
             throw new NotImplementedException();
         }
 
 
         public override void DoSendJoin(string clientName)
+        {
+            throw new NotImplementedException();
+        }
 
         // the server should not use this method
         public override Message OnGameConfigMessage(GameConfigMessage gameConfigMessage)
