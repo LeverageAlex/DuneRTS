@@ -19,18 +19,38 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
         /// This Testcase validates the behaviour of the method PlaceSpiceOnFields
         /// </summary>
         [Test]
-        public void TestPlaceSpiceOnFields()
+        public void TestPlaceSpiceOnFieldsAllFieldsAproachable()
         {
-           /* Map map = new Map(3, 3, null);
-            RoundHandler roundHandler = new RoundHandler(2, 3, map);
+            List<List<string>> scenarioConfiguration = new List<List<string>>();
+            List<string> list1 = new List<string>();
+            list1.Add("FLAT_SAND");
+            list1.Add("FLAT_SAND");
+            list1.Add("FLAT_SAND");
+            List<string> list2 = new List<string>();
+            list2.Add("FLAT_SAND");
+            list2.Add("FLAT_SAND");
+            list2.Add("FLAT_SAND");
+            List<string> list3 = new List<string>();
+            list3.Add("FLAT_SAND");
+            list3.Add("FLAT_SAND");
+            list3.Add("FLAT_SAND");
+            scenarioConfiguration.Add(list1);
+            scenarioConfiguration.Add(list2);
+            scenarioConfiguration.Add(list3);
+            Map map = new Map(3, 3, scenarioConfiguration);
+            foreach (MapField mapField in map.fields)
+            {
+                mapField.IsApproachable = true;
+            }
 
             SpiceBlow spiceBlow = new SpiceBlow(map);
             MapField randomField = map.GetRandomDesertField();
-            if (!randomField.HasSpice)
-            {
-                spiceBlow.PlaceSpiceOnFields(randomField);
-            }
-            Assert.True(randomField.HasSpice); */
+            Assert.AreEqual(0, map.GetAmountOfSpiceOnMap());
+            
+            spiceBlow.PlaceSpiceOnFields(randomField);
+
+            Assert.Greater(map.GetAmountOfSpiceOnMap(),2);
+            Assert.LessOrEqual(map.GetAmountOfSpiceOnMap(),7);
         }
 
         /// <summary>
@@ -39,7 +59,10 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
         [Test]
         public void TestIsSpiceBlowNecessary()
         {
-
+            SpiceBlow spiceBlow = new SpiceBlow(null);
+            Assert.False(spiceBlow.IsSpiceBlowNecessary(1,2));
+            Assert.False(spiceBlow.IsSpiceBlowNecessary(2, 2));
+            Assert.False(spiceBlow.IsSpiceBlowNecessary(2, 3));
         }
 
 
@@ -49,7 +72,44 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
         [Test]
         public void TestExecute()
         {
+            List<List<string>> scenarioConfiguration = new List<List<string>>();
+            List<string> list1 = new List<string>();
+            list1.Add("FLAT_SAND");
+            list1.Add("FLAT_SAND");
+            list1.Add("FLAT_SAND");
+            List<string> list2 = new List<string>();
+            list2.Add("FLAT_SAND");
+            list2.Add("FLAT_SAND");
+            list2.Add("FLAT_SAND");
+            List<string> list3 = new List<string>();
+            list3.Add("FLAT_SAND");
+            list3.Add("FLAT_SAND");
+            list3.Add("FLAT_SAND");
+            scenarioConfiguration.Add(list1);
+            scenarioConfiguration.Add(list2);
+            scenarioConfiguration.Add(list3);
+            Map map = new Map(3, 3, scenarioConfiguration);
+            foreach (MapField mapField in map.fields)
+            {
+                mapField.IsApproachable = true;
+            }
 
+            SpiceBlow spiceBlow = new SpiceBlow(map);
+            Assert.AreEqual(0, map.GetAmountOfSpiceOnMap());
+            foreach (MapField mapField in map.fields)
+            {
+                Assert.AreEqual("FLAT_SAND", mapField.tileType);
+            }
+
+            spiceBlow.Execute();
+
+            foreach (MapField mapField in map.fields)
+            {
+                Assert.True(mapField.tileType.Equals("FLAT_SAND") || mapField.tileType.Equals("DUNE"));
+            }
+
+            Assert.Greater(map.GetAmountOfSpiceOnMap(), 1);
+            Assert.LessOrEqual(map.GetAmountOfSpiceOnMap(), 7);
         }
     }
 }

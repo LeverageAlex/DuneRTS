@@ -39,7 +39,7 @@ namespace GameData.server.roundHandler
             {
                 if (this._map.IsMapFieldADesertField(neighbor))
                 {
-                    if (random.Next() < 0.5)
+                    if (random.NextDouble() < 0.5)
                     {
                         MapField newDune = new Dune(randomField.HasSpice, randomField.isInSandstorm, randomField.stormEye);
                         newDune.Character = randomField.Character;
