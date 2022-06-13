@@ -5,6 +5,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using System.Text;
 using GameData.graph;
+using GameData.network.controller;
 using GameData.network.messages;
 using GameData.network.util;
 using GameData.network.util.enums;
@@ -12,8 +13,6 @@ using GameData.network.util.world;
 using GameData.network.util.world.character;
 using GameData.network.util.world.mapField;
 using GameData.Pathfinder;
-using Server;
-using Server.Configuration;
 
 namespace GameData.server.roundHandler
 {
@@ -32,6 +31,8 @@ namespace GameData.server.roundHandler
 
         private Character _targetCharacter;
 
+        private readonly MessageController _messageController;
+
         /// <summary>
         /// Public constructor just used to creat a sandworm to call the Execute method for the first time.
         /// This Constructor should not be used for other usecases.
@@ -47,12 +48,13 @@ namespace GameData.server.roundHandler
         /// <param name="sandWormSpeed">defines the speed the sandworm has</param>
         /// <param name="sandWormSpawnDistance">defines the minimal spawn distance from characters</param>
         /// <param name="map">the map, the sandworm is living on</param>
+        /// <param name="messageController">Party.getInstance().messageController</param>
         /// <returns>a reference to a sandworm</returns>
-        public static Sandworm Spawn(int sandWormSpeed, int sandWormSpawnDistance, Map map, List<Character> characters)
+        public static Sandworm Spawn(int sandWormSpeed, int sandWormSpawnDistance, Map map, List<Character> characters, MessageController messageController)
         {
             if (_sandWormSingleton == null)
             {
-                _sandWormSingleton = new Sandworm(sandWormSpeed, sandWormSpawnDistance, map, characters);
+                _sandWormSingleton = new Sandworm(sandWormSpeed, sandWormSpawnDistance, map, characters, messageController);
 
 
             }
@@ -65,16 +67,18 @@ namespace GameData.server.roundHandler
         /// <param name="sandWormSpeed">defines the speed the sandworm has</param>
         /// <param name="sandWormSpawnDistance">defines the minimal spawn distance from characters</param>
         /// <param name="map">the map, the sandworm is living on</param>
-        private Sandworm(int sandWormSpeed, int sandWormSpawnDistance, Map map, List<Character> characters)
+        /// <param name="messageController">Party.getInstance().messageController</param>
+        private Sandworm(int sandWormSpeed, int sandWormSpawnDistance, Map map, List<Character> characters, MessageController messageController)
         {
             this._sandWormSpeed = sandWormSpeed;
             this._sandWormSpawnDistance = sandWormSpawnDistance;
             this._map = map;
             this._targetCharacter = ChooseTargetCharacter(characters);
             this._currentField = DetermineField(characters);
+            this._messageController = messageController;
 
             // get the target character
-            Party.GetInstance().messageController.DoSpawnSandwormDemand(this._targetCharacter.CharacterId, this._currentField);
+            _messageController.DoSpawnSandwormDemand(this._targetCharacter.CharacterId, this._currentField);
         }
 
         /// <summary>
@@ -137,7 +141,7 @@ namespace GameData.server.roundHandler
             // check, whether the targeted character moves on a plateau, so disappear
 
             if (_targetCharacter.CurrentMapfield.TileType.Equals(TileType.PLATEAU.ToString())){
-                Despawn();
+                Despawn(_messageController);
             }
             // check, if there is a path for sandworm to move along
             else if (path.Count == 0)
@@ -156,12 +160,12 @@ namespace GameData.server.roundHandler
 
                     if (needToDisappear)
                     {
-                        Despawn();
+                        Despawn(_messageController);
                         break;
                     }
                 }
 
-                Party.GetInstance().messageController.DoMoveSandwormDemand(movedPath);
+                _messageController.DoMoveSandwormDemand(movedPath);
             }
 
 
@@ -194,11 +198,11 @@ namespace GameData.server.roundHandler
         /// <summary>
         /// removes the sandWorm instance, so let the sandworm disappear
         /// </summary>
-        public static void Despawn()
+        public static void Despawn(MessageController messageController)
         {
             _sandWormSingleton = null;
 
-            Party.GetInstance().messageController.DoDespawnSandwormDemand();
+            messageController.DoDespawnSandwormDemand();
         }
 
         /// <summary>
