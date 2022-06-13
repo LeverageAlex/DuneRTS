@@ -1,3 +1,4 @@
+using GameData.network.controller;
 using GameData.network.util.world;
 using System.Collections;
 using System.Collections.Generic;
@@ -44,16 +45,15 @@ public class CharacterMgr : MonoBehaviour
 
     private float wormHeightOffset = 0.35f;
 
-    public int clientID;
-    public int enemyClientID;
-    public string clientSecret;
+    private HouseEnum playerHouse;
+    private HouseEnum enemyHouse;
 
     private int nobleMaxHP;
     private int fighterMaxHP;
     private int benneGesseritMaxHP;
     private int mentatMaxHP;
 
-
+    public static ClientConnectionHandler handler;
 
     public static CharacterMgr instance;
 
@@ -89,7 +89,7 @@ public class CharacterMgr : MonoBehaviour
     /*
      * To be filled after open question regarding standardDocument has ben resolved
   */
-    public bool spawnCharacter(int characterID, CharTypeEnum type,int x, int z,int HPcurrent, int MPcurrent, int APcurrent, int inventorySize, bool killedBySandworm, bool loud)
+    public bool spawnCharacter(int clientId, int characterID, CharTypeEnum type,int x, int z,int HPcurrent, int MPcurrent, int APcurrent, int APMax, int inventorySize, bool killedBySandworm, bool loud)
     {
         if (characterDict.ContainsKey(characterID))
             return false;
@@ -100,6 +100,16 @@ public class CharacterMgr : MonoBehaviour
         characterDict.Add(characterID, ((Character)newChar.GetComponent(typeof(Character))));
         Character localChar = (Character) newChar.GetComponent(typeof(Character));
         localChar.UpdateCharStats(HPcurrent, MPcurrent, APcurrent, inventorySize, loud, killedBySandworm);
+        if (clientId == SessionHandler.clientId)
+        {
+            localChar.house = playerHouse;
+        }
+        else
+        {
+            localChar.house = enemyHouse;
+        }
+        localChar.setMaxAP(APMax);
+        localChar.setMaxHP(HPcurrent);
         return true;
     }
 
@@ -196,6 +206,18 @@ public class CharacterMgr : MonoBehaviour
                 return fighterMaxHP;
         }
     }
+
+
+    public void SetPlayerHouse(HouseEnum house)
+    {
+        playerHouse = house;
+    }
+
+    public void SetEnemyHouse(HouseEnum house)
+    {
+        enemyHouse = house;
+    }
+
 
 
 }

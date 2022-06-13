@@ -20,6 +20,10 @@ public class Character : MonoBehaviour
 
     public string charName;
     public float walkSpeed = 3f;
+
+    public GameObject healthBar;
+    public Image healthBarImage;
+
     //[SerializeField] this is used to serialize private fields in json format
     private int characterId;
 
@@ -75,6 +79,7 @@ public class Character : MonoBehaviour
 
     private Animator charAnim;
     Quaternion emblem_rotation;
+    Quaternion healthBar_rotation;
 
     private string animation_idle;
     private string animation_attack;
@@ -89,6 +94,8 @@ public class Character : MonoBehaviour
     private string animation_death;
 
     public GameObject swordObject;
+
+    private int BaseHP;
 
 
     // public Transform t;
@@ -111,6 +118,7 @@ public class Character : MonoBehaviour
         _y = transform.position.y - nodeManager.getNodeFromPos(X, Z).charHeightOffset;
 
         //SampleCode only
+        BaseHP = 100;
         initCharacter();
 
         //Update Nodes references on start (only needed because of editor)
@@ -120,6 +128,7 @@ public class Character : MonoBehaviour
         //Debug.Log("Object name: " + gameObject.name);
         BaseAP = _AP;
         emblem_rotation = emblemLogo.transform.rotation;
+        healthBar_rotation = healthBar.transform.rotation;
 
         charAnim = charModel.GetComponent<Animator>();
         initAnimations();
@@ -203,6 +212,8 @@ public class Character : MonoBehaviour
         this.isLoud = isLoud;
         this.isSwallowed = isSwallowed;
 
+        healthBarImage.fillAmount = (float) HP / BaseHP;
+
         if (turnHandler.GetSelectedCharacter() == this)
         {
             DrawStats();
@@ -221,6 +232,7 @@ public class Character : MonoBehaviour
         transform.Translate(dir.normalized * walkSpeed * Time.deltaTime, Space.World);
         charAnim.Play(animation_walk);
         RotateTowardsVector(dir);
+        turnHandler.updateSelectionArrow();
         // ReduceMP(1);
         if (Vector3.Distance(transform.position, walkPath[0]) <= 0.06f)
         {
@@ -334,7 +346,10 @@ public class Character : MonoBehaviour
         charAnim.Play(animation_attack);
         StartCoroutine(character.PlayDamageAnimation(this));
         audioManager.Play("SwordStab");
-        if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        if (Mode.debugMode)
+        {
+            if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        }
 
         Debug.Log("Attack");
 
@@ -375,7 +390,10 @@ public class Character : MonoBehaviour
         nodeManager.CollectSpice(X, Z);
         audioManager.Play("SpicePickup");
         Debug.Log("Collected Spice!");
-        if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        if (Mode.debugMode)
+        {
+            if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        }
     }
 
     public bool Action_TransferSpiceTrigger(Character character)
@@ -411,7 +429,10 @@ public class Character : MonoBehaviour
         RotateTowardsVector(dir);
         StartCoroutine(SwordDeAndActivation());
         charAnim.Play(animation_transferSpice);
-        if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        if (Mode.debugMode)
+        {
+            if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        }
         //reset 
         // secondCharacter = null;
         turnHandler.ResetSelection();
@@ -457,8 +478,11 @@ public class Character : MonoBehaviour
         turnHandler.ResetSelection();
         charAnim.Play(animation_swordSpin);
 
-        if (_AP <= 0) CharacterTurnHandler.EndTurn();
-        CharacterTurnHandler.EndTurn();
+        if (Mode.debugMode)
+        {
+            CharacterTurnHandler.EndTurn();
+        }
+        
     }
 
     /*
@@ -496,7 +520,10 @@ public class Character : MonoBehaviour
         audioManager.Play("AtomicFly");
         Debug.Log("Created Atomic");
         turnHandler.ResetSelection();
-        if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        if (Mode.debugMode)
+        {
+            if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        }
         //CharacterTurnHandler.EndTurn();
     }
 
@@ -757,6 +784,7 @@ public class Character : MonoBehaviour
     {
         transform.rotation = Quaternion.LookRotation(dir);
         emblemLogo.transform.rotation = emblem_rotation;
+        healthBar.transform.rotation = healthBar_rotation;
     }
  
 
@@ -768,6 +796,11 @@ public class Character : MonoBehaviour
     public void setMaxAP(int maxAP)
     {
         BaseAP = maxAP;
+    }
+
+    public void setMaxHP(int maxHP)
+    {
+        BaseHP = maxHP;
     }
 
     

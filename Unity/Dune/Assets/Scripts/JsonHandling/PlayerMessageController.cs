@@ -6,6 +6,7 @@ using UnityEngine;
 using GameData.network.controller;
 using GameData.network.util.enums;
 using System;
+using Serilog;
 
 /// <summary>
 /// This Class Handles all messages for the Client.
@@ -26,9 +27,15 @@ public class PlayerMessageController : MessageController
     /// <param name="isCpu">weather the client is a cpu or not</param>
     public void DoJoin(string clientName, bool active, bool isCpu)
     {
+        Log.Debug("Starting Join!");
+        SessionHandler.isPlayer = active;
         JoinMessage joinMessage = new JoinMessage(clientName, active, isCpu);
+        Log.Debug("Parsing of Message successful");
         NetworkController.HandleSendingMessage(joinMessage);
-
+        Log.Debug("Sent message!");
+        //CharacterMgr.handler.
+        //NetworkController.HandleSendingMessage(joinMessage);
+        //   Debug.Log(CharacterMgr.handler.WebSocket.ToString());
     }
 
     /// <summary>
@@ -92,12 +99,28 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="joinAcceptedMessage">this message represents the join acceptance of the Server</param>
     /// <returns></returns>
-    public override Message OnJoinAcceptedMessage(JoinAcceptedMessage joinAcceptedMessage)
+    public override void OnJoinAccepted(JoinAcceptedMessage joinAcceptedMessage)
     {
+        Log.Debug("Join Accepted!");
         // TODO: implement logic
-        CharacterMgr.instance.clientID = joinAcceptedMessage.clientID;
-        CharacterMgr.instance.clientSecret = joinAcceptedMessage.clientSecret;
-        return null;
+        if (SessionHandler.isPlayer)
+        {
+            SessionHandler.clientId = joinAcceptedMessage.clientID;
+        }
+        else
+        {
+            SessionHandler.viewerId = joinAcceptedMessage.clientID;
+        }
+            SessionHandler.clientSecret = joinAcceptedMessage.clientSecret;
+        
+        IEnumerator demandPlaygame()
+        {
+            MainMenuManager.instance.DemandJoinAccept();
+            yield return null;
+        }
+        Log.Debug("Got to ThreadDispatcher");
+        UnityMainThreadDispatcher.Instance().Enqueue(demandPlaygame());
+
     }
 
     /// <summary>
@@ -105,12 +128,10 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="gameConfigMessage">this message represents the game configuration of the Server</param>
     /// <returns></returns>
-    public override Message OnGameConfigMessage(GameConfigMessage gameConfigMessage)
+    public override void OnGameConfigMessage(GameConfigMessage gameConfigMessage)
     {
         // TODO: implement logic
      
-
-
        //Second list contains z size
         MapManager.instance.setMapSize(gameConfigMessage.scenario.Count, gameConfigMessage.scenario[0].Count);
 
@@ -130,19 +151,17 @@ public class PlayerMessageController : MessageController
             }
         }
         MapManager.instance.getNodeFromPos(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y).SetSandstorm(true);
-        //MISSING: CITIES not linked to Player and no StormEye set
         MapManager.instance.SetStormEye(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y);
 
-        if(gameConfigMessage.cityToClient[0].clientID == CharacterMgr.instance.clientID)
+        if(gameConfigMessage.cityToClient[0].clientID == SessionHandler.clientId)
         {
-            CharacterMgr.instance.enemyClientID = gameConfigMessage.cityToClient[1].clientID;
+            SessionHandler.enemyClientId = gameConfigMessage.cityToClient[1].clientID;
         } else
         {
-            CharacterMgr.instance.enemyClientID = gameConfigMessage.cityToClient[0].clientID;
+            SessionHandler.enemyClientId = gameConfigMessage.cityToClient[0].clientID;
         }
         MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[0].x, gameConfigMessage.cityToClient[0].y).cityOwnerId = gameConfigMessage.cityToClient[0].clientID;
         MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[1].x, gameConfigMessage.cityToClient[1].y).cityOwnerId = gameConfigMessage.cityToClient[1].clientID;
-        return null;
     }
 
     /// <summary>
@@ -151,7 +170,7 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="mapChangeDemandMessage">this message represents the map change demanded by the server</param>
     /// <returns></returns>
-    public override Message OnMapChangeDemandMessage(MapChangeDemandMessage mapChangeDemandMessage)
+    public override void OnMapChangeDemandMessage(MapChangeDemandMessage mapChangeDemandMessage)
     {
         // TODO: implement logic
      /*   MapManager.instance.setMapSize(mapChangeDemandMessage.newMap.GetLength(0), mapChangeDemandMessage.newMap.GetLength(1));
@@ -167,7 +186,6 @@ public class PlayerMessageController : MessageController
             }
         }
         CharacterMgr.instance.SpawnSandworm(mapChangeDemandMessage.newMap[0,0].stormEye.x, mapChangeDemandMessage.newMap[0, 0].stormEye.y);*/
-        return null;
     }
 
     /// <summary>
@@ -175,10 +193,9 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="strikeMessage">this message represents the reaction of the Server to a faulty behaviour of the client</param>
     /// <returns></returns>
-    public override Message OnStrikeMessage(StrikeMessage strikeMessage)
+    public override void OnStrikeMessage(StrikeMessage strikeMessage)
     {
-        // TODO: implement logic
-        return null;
+        GUIHandler.BroadcastGameMessage(strikeMessage.wrongMessage);
     }
 
     /// <summary>
@@ -186,10 +203,10 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="gameEndMessage">this message represents the end of the game triggered by the Server</param>
     /// <returns></returns>
-    public override Message OnGameEndMessage(GameEndMessage gameEndMessage)
+    public override void OnGameEndMessage(GameEndMessage gameEndMessage)
     {
         // TODO: implement logic
-        return null;
+
     }
 
     /// <summary>
@@ -197,10 +214,10 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="gameStateMessage">this message represents the game state the Server holds</param>
     /// <returns></returns>
-    public override Message OnGameStateMessage(GameStateMessage gameStateMessage)
+    public override void OnGameStateMessage(GameStateMessage gameStateMessage)
     {
-        // TODO: implement logic
-        return null;
+        //WE WILL NEVER NEED THIS
+        //Do not implement
     }
 
     /// <summary>
@@ -208,10 +225,16 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="gamePauseDemandMessage">this message represents the game pause demand of the Server</param>
     /// <returns></returns>
-    public override Message OnPauseGameDemandMessage(GamePauseDemandMessage gamePauseDemandMessage)
+    public override void OnPauseGameDemandMessage(GamePauseDemandMessage gamePauseDemandMessage)
     {
-        // TODO: implement logic
-        return null;
+        if (gamePauseDemandMessage.pause)
+        {
+            InGameMenuManager.instance.DemandPauseGame(SessionHandler.clientId != gamePauseDemandMessage.requestedByClientID);
+        }
+        else
+        {
+            InGameMenuManager.instance.RequestUnpauseGame();
+        }
     }
 
     /// <summary>
@@ -220,10 +243,9 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="houseOfferMessage">this message represents the houseoffer of the Server</param>
     /// <returns></returns>
-    public override Message OnHouseOfferMessage(HouseOfferMessage houseOfferMessage)
+    public override void OnHouseOfferMessage(HouseOfferMessage houseOfferMessage)
     {
         // TODO: implement logic
-        return null;
     }
 
     /// <summary>
@@ -231,10 +253,42 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="houseAcknowledgementMessage">this message represents the houseAcknowlegement of the Server</param>
     /// <returns></returns>
-    public override Message OnHouseAcknowledgementMessage(HouseAcknowledgementMessage houseAcknowledgementMessage)
+    public override void OnHouseAcknowledgementMessage(HouseAcknowledgementMessage houseAcknowledgementMessage)
     {
         // TODO: implement logic
-        return null;
+        InGameMenuManager.instance.DemandEndHouseSelection();
+
+        HouseEnum house;
+        switch(houseAcknowledgementMessage.houseName)
+        {
+            case "CORRINO":
+                house = HouseEnum.CORRINO;
+                break;
+            case "ATREIDES":
+                house = HouseEnum.ATREIDES;
+                break;
+            case "HARKONNEN":
+                house = HouseEnum.HARKONNEN;
+                break;
+            case "ORDOS":
+                house = HouseEnum.ORDOS;
+                break;
+            case "RICHESE":
+                house = HouseEnum.RICHESE;
+                break;
+            default:
+                house = HouseEnum.VERNIUS;
+                break;
+        }
+
+        if(houseAcknowledgementMessage.clientID == SessionHandler.clientId)
+        {
+            CharacterMgr.instance.SetPlayerHouse(house);
+        }
+        else
+        {
+            CharacterMgr.instance.SetEnemyHouse(house);
+        }
     }
 
     /// <summary>
@@ -242,12 +296,11 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="transferDemandMessage">this message represents the transfer demand of the Server</param>
     /// <returns></returns>
-    public override Message OnTransferDemandMessage(TransferDemandMessage transferDemandMessage)
+    public override void OnTransferDemandMessage(TransferDemandMessage transferDemandMessage)
     {
         Character c1 = CharacterMgr.instance.getCharScriptByID(transferDemandMessage.characterID);
         Character c2 = CharacterMgr.instance.getCharScriptByID(transferDemandMessage.targetID);
         c1.Action_TransferSpiceExecution(c2);
-        return null;
     }
 
     /// <summary>
@@ -255,11 +308,10 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="turnDemandMessage">this message represents the TurnRequest of the Server</param>
     /// <returns></returns>
-    public override Message OnTurnDemandMessage(TurnDemandMessage turnDemandMessage)
+    public override void OnTurnDemandMessage(TurnDemandMessage turnDemandMessage)
     {
         // TODO: implement logic
         CharacterTurnHandler.instance.SetTurnChar(CharacterMgr.instance.getCharScriptByID(turnDemandMessage.clientID));
-        return null;
     }
 
     /// <summary>
@@ -267,11 +319,10 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="movementDemandMessage">This message represents the movement demand of the Server</param>
     /// <returns></returns>
-    public override Message OnMovementDemandMessage(MovementDemandMessage movementDemandMessage)
+    public override void OnMovementDemandMessage(MovementDemandMessage movementDemandMessage)
     {
         // TODO: implement logic
         MovementManager.instance.AnimateChar(CharacterMgr.instance.getCharScriptByID(movementDemandMessage.characterID), movementDemandMessage.specs.path);
-        return null;
     }
 
     /// <summary>
@@ -279,7 +330,7 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="actionDemandMessage">This message represents the action demand of the Server</param>
     /// <returns></returns>
-    public override Message OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
+    public override void OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
     {
         // TODO: implement logic
         Character character = CharacterMgr.instance.getCharScriptByID(actionDemandMessage.characterID);
@@ -311,7 +362,6 @@ public class PlayerMessageController : MessageController
                 character.Attack_SwordSpinExecution();
                 break;
         }
-        return null;
     }
 
     /// <summary>
@@ -319,15 +369,13 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="changeCharacterStatisticsDemandMessage">this message represents the demand to change the character statistics of the server</param>
     /// <returns></returns>
-    public override Message OnChangeCharacterStatisticsDemandMessage(ChangeCharacterStatisticsDemandMessage changeCharacterStatisticsDemandMessage)
+    public override void OnChangeCharacterStatisticsDemandMessage(ChangeCharacterStatisticsDemandMessage changeCharacterStatisticsDemandMessage)
     {
         //All fields currently private
         //changeCharacterStatisticsDemandMessage.stats.
         // TODO: implement logic
         Character character = CharacterMgr.instance.getCharScriptByID(changeCharacterStatisticsDemandMessage.characterID);
         character.UpdateCharStats(changeCharacterStatisticsDemandMessage.stats.HP, changeCharacterStatisticsDemandMessage.stats.MP, changeCharacterStatisticsDemandMessage.stats.AP, changeCharacterStatisticsDemandMessage.stats.spice, changeCharacterStatisticsDemandMessage.stats.isLoud, changeCharacterStatisticsDemandMessage.stats.isSwallowed);
-        
-        return null;
     }
 
 
@@ -337,7 +385,7 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="spawnCharacterDemandMessage"></param>
     /// <returns></returns>
-    public override Message OnSpawnCharacterDemandMessage(SpawnCharacterDemandMessage spawnCharacterDemandMessage)
+    public override void OnSpawnCharacterDemandMessage(SpawnCharacterDemandMessage spawnCharacterDemandMessage)
     {
         // TODO: implement logic
         //spawnCharacterDemandMessage.
@@ -358,9 +406,7 @@ public class PlayerMessageController : MessageController
                 break;
         }
 
-        CharacterMgr.instance.spawnCharacter(spawnCharacterDemandMessage.characterID, type, spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.KilledBySandworm, spawnCharacterDemandMessage.attributes.IsLoud());
-        CharacterMgr.instance.getCharScriptByID(spawnCharacterDemandMessage.characterID).setMaxAP(spawnCharacterDemandMessage.attributes.APmax);
-        return null;
+        CharacterMgr.instance.spawnCharacter(spawnCharacterDemandMessage.clientID, spawnCharacterDemandMessage.characterID, type, spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.APmax, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.KilledBySandworm, spawnCharacterDemandMessage.attributes.IsLoud());
     }
 
     /// <summary>
@@ -368,18 +414,16 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="changePlayerSpiceDemandMessage"></param>
     /// <returns></returns>
-    public override Message OnChangePlayerSpiceDemandMessage(ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage)
+    public override void OnChangePlayerSpiceDemandMessage(ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage)
     {
         // TODO: implement logic
-        if (CharacterMgr.instance.clientID == changePlayerSpiceDemandMessage.clientID) {
+        if (SessionHandler.clientId == changePlayerSpiceDemandMessage.clientID) {
             GUIHandler.UpdatePlayerSpice(changePlayerSpiceDemandMessage.newSpiceValue);
         }
         else
         {
             GUIHandler.UpdateEnemySpice(changePlayerSpiceDemandMessage.newSpiceValue);
         }
-
-        return null;
     }
 
     /// <summary>
@@ -387,12 +431,10 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="sandwormSpawnDemandMessage"></param>
     /// <returns></returns>
-    public override Message OnSandwormSpawnDemandMessage(SandwormSpawnDemandMessage sandwormSpawnDemandMessage)
+    public override void OnSandwormSpawnDemandMessage(SandwormSpawnDemandMessage sandwormSpawnDemandMessage)
     {
         // TODO: implement logic
         CharacterMgr.instance.SpawnSandworm(sandwormSpawnDemandMessage.position.x, sandwormSpawnDemandMessage.position.y);
-
-        return null;
     }
 
     /// <summary>
@@ -400,11 +442,10 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="sandwormMoveMessage"></param>
     /// <returns></returns>
-    public override Message OnSandwormMoveDemandMessage(SandwormMoveDemandMessage sandwormMoveMessage)
+    public override void OnSandwormMoveDemandMessage(SandwormMoveDemandMessage sandwormMoveMessage)
     {
         // TODO: implement logic
         CharacterMgr.instance.SandwormMove(sandwormMoveMessage.path);
-        return null;
     }
 
     /// <summary>
@@ -412,11 +453,10 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="sandwormDespawnDemandMessage"></param>
     /// <returns></returns>
-    public override Message OnSandwormDespawnMessage(SandwormDespawnDemandMessage sandwormDespawnDemandMessage)
+    public override void OnSandwormDespawnMessage(SandwormDespawnDemandMessage sandwormDespawnDemandMessage)
     {
         // TODO: implement logic
         CharacterMgr.instance.DespawnSandworm();
-        return null;
     }
 
     /// <summary>
@@ -424,10 +464,18 @@ public class PlayerMessageController : MessageController
     /// </summary>
     /// <param name="endGameMessage"></param>
     /// <returns></returns>
-    public override Message OnEndGameMessage(EndGameMessage endGameMessage)
+    public override void OnEndGameMessage(EndGameMessage endGameMessage)
     {
         // TODO: implement logic
-        return null;
+    }
+
+    /// <summary>
+    /// This method handles the AtomicsUpdateDemandMessage
+    /// </summary>
+    /// <param name="atomicUpdateDemandMessage">this message represents the demand to update the atomic by the server</param>
+    public override void OnAtomicsUpdateDemandMessage(AtomicsUpdateDemandMessage atomicUpdateDemandMessage)
+    {
+        // TODO: implement logic
     }
 
     // This method should not be called by the client.
@@ -465,6 +513,13 @@ public class PlayerMessageController : MessageController
     {
         throw new System.NotImplementedException();
     }
+
+    public override void DoSendJoin(string clientName)
+    {
+        throw new NotImplementedException();
+    }
+
+
 
     // This method should not be called by the client.
     public override void OnEndTurnRequestMessage(EndTurnRequestMessage msg)
@@ -621,4 +676,10 @@ public class PlayerMessageController : MessageController
     {
         throw new System.NotImplementedException();
     }
+
+    public override void OnJoinAcceptedMessage(JoinAcceptedMessage joinAcceptedMessage)
+    {
+        throw new NotImplementedException();
+    }
+
 }

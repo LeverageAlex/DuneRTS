@@ -47,10 +47,11 @@ namespace GameData.network.controller
             // connect to websocket server
             ConnectToWebsocketServer();
 
+            
             // wait for a signal from the user, to close the connection to the server
             // TODO: implement logic, which holds the websocket alive and close it by user client
             Console.ReadKey();
-            CloseConnectionToWebsocketServer(CloseStatusCode.Away, "User closed the connection via the command line");
+            //CloseConnectionToWebsocketServer(CloseStatusCode.Away, "User closed the connection via the command line");
         }
 
         /// <summary>

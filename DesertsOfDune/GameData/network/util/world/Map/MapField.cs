@@ -12,7 +12,7 @@ namespace GameData.network.util.world
     /// </summary>
     public class MapField
     {
-        [JsonProperty]
+        [JsonProperty(Order = -2)]
         public string tileType { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         private int clientID;
@@ -48,8 +48,7 @@ namespace GameData.network.util.world
         public int ZCoordinate { get { return zCoordinate; } set { zCoordinate = value; } }
 
         protected bool IsCityField;
-        [JsonIgnore]
-        public string TileType { get { return tileType; } set { tileType = value; } }
+
 
         [JsonIgnore]
         public Character Character { get; set; }
@@ -96,6 +95,11 @@ namespace GameData.network.util.world
             this.XCoordinate = x;
             this.ZCoordinate = y;
         }
+
+       /* public bool ShouldSerializetileType()
+        {
+            return false;
+        } */
 
         /// <summary>
         /// This method changes the elevation of the map field

@@ -3,30 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using GameData.network.controller;
+using Serilog;
 
 public class MainMenuManager : MonoBehaviour
 {
+    public static MainMenuManager instance;
+
     [Header("Menus:")]
     public GameObject MainMenu;
     public GameObject OptionsMenu;
     public GameObject PlayOptionsMenu;
-    public GameObject CreateJoinGameMenu;
+    public GameObject JoinGameMenu;
 
     [Header("Create/Join Game:")]
-    public GameObject createGameText;
-    public GameObject joinGameText;
-    public GameObject cpuCountPanel;
-    public GameObject createButton;
-    public GameObject joinButton;
     public InputField nameInput;
     public Toggle playerToggle;
     public Toggle viewerToggle;
-    public InputField lobbyCodeInput;
-    public Dropdown cpuCountDropdown;
-    //public Dropdown scenarioDropdown;
-    //public Dropdown matchDropdown;
+    public InputField serverIPInput;
+    public InputField serverPortInput;
 
     private string clientSecret;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
@@ -36,9 +38,21 @@ public class MainMenuManager : MonoBehaviour
     /// <summary>
     /// this method is called by a BUTTON to play the game
     /// </summary>
-    public void PlayGame()
+    public void DemandPlayGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        Log.Debug("DemandPlayGame");
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+       // if (SceneManager.GetActiveScene().buildIndex != 1)
+        {
+            Log.Debug("Active Scene != 1");
+            SceneManager.LoadScene(1);
+            Log.Debug("End of Loading Scene");
+        }
+        //else
+        {
+       //     Log.Debug("DemandPlayGame Else");
+         //   InGameMenuManager.instance.DemandAcceptRejoin();
+        }
     }
 
     /// <summary>
@@ -50,64 +64,48 @@ public class MainMenuManager : MonoBehaviour
     }
 
     /// <summary>
-    /// this mehtod is called by a BUTTON to create a game
-    /// </summary>
-    public void CreateGame()
-    {
-        string lobbyCode = lobbyCodeInput.text;
-        int cpuCount = cpuCountDropdown.value;
-
-        string name = nameInput.text;
-        bool active = playerToggle.isOn;
-
-        //TODO validate inputs
-
-        Debug.Log("Create: " + lobbyCode + " " + cpuCount);
-
-        //TODO send CREATE message to server
-
-        JoinGame(name, lobbyCode, active);
-    }
-
-    /// <summary>
     /// this method is called by a BUTTON to join a game
     /// </summary>
-    public void JoinGame()
+    public void RequestJoinGame()
     {
         string name = nameInput.text;
-        string lobbyCode = lobbyCodeInput.text;
         bool active = playerToggle.isOn;
+        string serverIP = serverIPInput.text;
+        string serverPort = serverPortInput.text;
 
         //TODO validate inputs
 
-        JoinGame(name, lobbyCode, active);
+        Debug.Log("Join: " + name + " " + serverIP + " " + serverPort + " " + active);
+
+        //TODO send JOIN message to server with given IP and given port
+        if (!Mode.debugMode)
+        {
+            SessionHandler.CreateNetworkModule(serverIP, int.Parse(serverPort));
+            SessionHandler.messageController.DoJoin(name, active, false);
+
+
+        }
+        else
+        {
+
+            DemandPlayGame();//TODO delete, just temporary for testing
+        }
     }
 
-    /// <summary>
-    /// this method is called to join/rejoin a game
-    /// it gets called as a followup from CreateGame or the button-called JoinGame-Method or by rejoining after connection loss
-    /// </summary>
-    /// <param name="name"></param>
-    /// <param name="connectionCode"></param>
-    /// <param name="active"></param>
-    private void JoinGame(string name, string connectionCode, bool active)
-    {
-        Debug.Log("Join: " + name + " " + connectionCode + " " + active);
-
-        //TODO send JOIN message to server
-
-        PlayGame();//TODO delete, just temporary for testing
-    }
 
     /// <summary>
     /// this method is called by the SERVER to accept a join and send the clienSecret
     /// </summary>
     /// <param name="clientSecret"></param>
-    public void JoinAccept(string clientSecret)
+    public void DemandJoinAccept()
     {
-        this.clientSecret = clientSecret;
-        PlayGame();
+
+            DemandPlayGame();
+
+        Log.Debug("DemandJoinAccept: " + clientSecret);
+
     }
+
 
     /// <summary>
     /// this method is a HELPER-METHOD to change the .isActive trade of the menus
@@ -118,7 +116,7 @@ public class MainMenuManager : MonoBehaviour
         MainMenu.SetActive(false);
         OptionsMenu.SetActive(false);
         PlayOptionsMenu.SetActive(false);
-        CreateJoinGameMenu.SetActive(false);
+        JoinGameMenu.SetActive(false);
 
         if (menuToActivate != null)
         {
@@ -154,28 +152,10 @@ public class MainMenuManager : MonoBehaviour
     }
 
     /// <summary>
-    /// this method is called by a BUTTON to switch to the CreateGameMenu
-    /// </summary>
-    public void SwitchToCreatGameMenu()
-    {
-        ActivateMenu(CreateJoinGameMenu);
-        createGameText.SetActive(true);
-        joinGameText.SetActive(false);
-        cpuCountPanel.SetActive(true);
-        createButton.SetActive(true);
-        joinButton.SetActive(false);
-    }
-
-    /// <summary>
     /// this method is called by a BUTTON to switch to the JoinGameMenu
     /// </summary>
     public void SwitchToJoinGameMenu()
     {
-        ActivateMenu(CreateJoinGameMenu);
-        createGameText.SetActive(false);
-        joinGameText.SetActive(true);
-        cpuCountPanel.SetActive(false);
-        createButton.SetActive(false);
-        joinButton.SetActive(true);
+        ActivateMenu(JoinGameMenu);
     }
 }

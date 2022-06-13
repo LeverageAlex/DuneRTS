@@ -15,122 +15,41 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
     /// </summary>
     public class TestSpiceBlow
     {
-
-
         /// <summary>
-        /// This Testcase validates the behaviour of the method ApplySpiceBlow
+        /// This Testcase validates the behaviour of the method PlaceSpiceOnFields
         /// </summary>
         [Test]
-        public void TestApplySpiceBlow()
+        public void TestPlaceSpiceOnFields()
         {
-           /* RoundHandler roundHandler = new RoundHandler(2, 3);
-            roundHandler.CurrentSpice = 2;
-            SpiceBlow spiceBlow = new SpiceBlow(roundHandler.Map);
-            bool spiceBlowApplicable = spiceBlow.SpiceBlowIsApplicable(roundHandler.SpiceMinimum,roundHandler.CurrentSpice);
-            Assert.IsTrue(spiceBlowApplicable); */
-        }
+           /* Map map = new Map(3, 3, null);
+            RoundHandler roundHandler = new RoundHandler(2, 3, map);
 
-        /// <summary>
-        /// This Testcase validates the behaviour of the method ChoosRandomMapFieldIndxX
-        /// </summary>
-        [Test]
-        public void TestChoosRandomMapFieldIndxX()
-        {
-           /* RoundHandler roundHandler = new RoundHandler(2, 3);
-            MapField[,] mapFields = new MapField[2, 2];
-            mapFields[0, 0] = new MapField(false, false, 0, null);
-            mapFields[1, 0] = new MapField(false, false, 0, null);
-            mapFields[0, 1] = new MapField(false, false, 0, null);
-            mapFields[1, 1] = new MapField(false, false, 0, null);
-            roundHandler.Map = mapFields;
-
-            SpiceBlow spiceBlow = new SpiceBlow(roundHandler.Map);
-            int result = spiceBlow.ChoosRandomMapFieldIndexX();
-            Assert.GreaterOrEqual(result, 0);
-            Assert.LessOrEqual(result, 1); */
-        }
-
-        /// <summary>
-        /// This Testcase validates the behaviour of the method ChoosRandomMapFieldIndexZ
-        /// </summary>
-        [Test]
-        public void TestChoosRandomMapFieldIndxZ()
-        {
-           /* RoundHandler roundHandler = new RoundHandler(2, 3);
-            MapField[,] mapFields = new MapField[2, 2];
-            mapFields[0, 0] = new MapField(false, false, 0, null);
-            mapFields[1, 0] = new MapField(false, false, 0, null);
-            mapFields[0, 1] = new MapField(false, false, 0, null);
-            mapFields[1, 1] = new MapField(false, false, 0, null);
-            roundHandler.Map = mapFields;
-
-            SpiceBlow spiceBlow = new SpiceBlow(roundHandler.Map);
-            int result = spiceBlow.ChoosRandomMapFieldIndexZ();
-            Assert.GreaterOrEqual(result, 0);
-            Assert.LessOrEqual(result, 1); */
-        }
-
-        [Test]
-        public void TestplaceSpiceOnFields()
-        {
-           /* RoundHandler roundHandler = new RoundHandler(2, 3);
-            MapField[,] mapFields = new MapField[3, 3];
-            mapFields[0, 0] = new MapField(false, false, 0, null);
-            mapFields[0, 1] = new MapField(false, false, 0, null);
-            mapFields[0, 2] = new MapField(false, false, 0, null);
-            mapFields[1, 0] = new MapField(false, false, 0, null);
-            mapFields[1, 1] = new MapField(false, false, 0, null);
-            mapFields[1, 2] = new MapField(false, false, 0, null);
-            mapFields[2, 0] = new MapField(false, false, 0, null);
-            mapFields[2, 1] = new MapField(false, false, 0, null);
-            mapFields[2, 2] = new MapField(false, false, 0, null);
-            roundHandler.Map = mapFields;
-            SpiceBlow spiceBlow = new SpiceBlow(roundHandler.Map);
-            spiceBlow.PlaceSpiceOnFields(0, 0);
-            int counter = 0;
-            for(int i = 0; i < 3; i++)
+            SpiceBlow spiceBlow = new SpiceBlow(map);
+            MapField randomField = map.GetRandomDesertField();
+            if (!randomField.HasSpice)
             {
-                for(int j = 0; j < 3; j++)
-                {
-                    if(mapFields[i,j].HasSpice == true)
-                    {
-                        counter++;
-                    }
-                }
+                spiceBlow.PlaceSpiceOnFields(randomField);
             }
-            Assert.GreaterOrEqual(counter, 3);
-            Assert.LessOrEqual(counter, 6); */
+            Assert.True(randomField.HasSpice); */
+        }
+
+        /// <summary>
+        /// This Testcase validates the behaviour of the method IsSpiceBlowNecessary
+        /// </summary>
+        [Test]
+        public void TestIsSpiceBlowNecessary()
+        {
+
         }
 
 
         /// <summary>
-        /// This Testcase validates the behaviour of the method ChangeFieldAndNeighborsRandomly
+        /// This Testcase validates the behaviour of the method Execute
         /// </summary>
         [Test]
-        public void TestChangeFieldAndNeighborsRandomly()
+        public void TestExecute()
         {
-            /*RoundHandler roundHandler = new RoundHandler(2, 3);
-            SpiceBlow spiceBlow = new SpiceBlow(roundHandler.Map);
-            MapField[,] mapFields = new MapField[3, 3];
-            mapFields[0, 0] = new MapField(false, false, 0, null);
-            mapFields[0, 1] = new MapField(false, false, 0, null);
-            mapFields[0, 2] = new MapField(false, false, 0, null);
-            mapFields[1, 0] = new MapField(false, false, 0, null);
-            mapFields[1, 1] = new MapField(false, false, 0, null);
-            mapFields[1, 2] = new MapField(false, false, 0, null);
-            mapFields[2, 0] = new MapField(false, false, 0, null);
-            mapFields[2, 1] = new MapField(false, false, 0, null);
-            mapFields[2, 2] = new MapField(false, false, 0, null);
-            roundHandler.Map = mapFields;
-            spiceBlow.ChangeFieldAndNeighborsRandomly(1, 1);
 
-            for(int i = 0; i < 3; i++)
-            {
-                for(int j = 0; j < 3; j++)
-                {
-                    Assert.True(mapFields[i, j].TileType == "DUNE" || mapFields[i, j].TileType == "FLAT");
-                }
-            } */
         }
     }
 }
