@@ -35,10 +35,9 @@ namespace Server
         /// </summary>
         /// <param name="args">arguments for starting the server (see Commandline args in "Standardisierungskomitee")</param>
         static void Main(string[] args)
-        {
-            
+        { 
             InitiliazeLogger();
-            Log.Information("Starting server... Everything will be created and configured.");
+            Log.Information("Starting server... Everything will be created and configured!");
 
             ParseCommandLineArguments(args);
             Log.Debug("Parsed the command line arguments and configuring the server");

@@ -22,7 +22,7 @@ namespace GameData.network.util.world
         /// This constructor is implemented for testing perpeces only.
         /// </summary>
         /// <param name="houseCharacters">the characters of a house specificly specified</param>
-        public Corrino(HouseCharacter[] houseCharacters) : base("CORRINO", "GOLD", houseCharacters, null)
+        public Corrino(HouseCharacter[] houseCharacters) : base("CORRINO", "GOLD", houseCharacters)
         {
 
         }

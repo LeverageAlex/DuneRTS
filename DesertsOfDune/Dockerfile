@@ -1,7 +1,6 @@
 FROM mcr.microsoft.com/dotnet/aspnet:3.1 AS base
 WORKDIR /app
 
-
 FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
 WORKDIR /src
 
@@ -33,5 +32,5 @@ COPY --from=publish /app .
 # the host system
 EXPOSE 8000
 
-ENTRYPOINT ["dotnet", "Server.dll"]
-CMD ["--config-match","src/Server/Configuration/ConfigurationFiles/team08.party.json","-s","src/Server/Configuration/ConfigurationFiles/team08.scenario.json","--port","10101"]
+# run the server with the arguments given in the docker compose
+CMD ["sh", "-c", "dotnet Server.dll --config-match src/Server/Configuration/ConfigurationFiles/team08.party.json -s src/Server/Configuration/ConfigurationFiles/team08.scenario.json --port ${PORT}"]

@@ -141,7 +141,7 @@ namespace GameData.server.roundHandler
             // check, whether the targeted character moves on a plateau, so disappear
 
             if (_targetCharacter.CurrentMapfield.tileType.Equals(TileType.PLATEAU.ToString())){
-                Despawn();
+                Despawn(_messageController);
             }
             // check, if there is a path for sandworm to move along
             else if (path.Count == 0)
