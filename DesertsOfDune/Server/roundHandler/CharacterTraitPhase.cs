@@ -1,11 +1,9 @@
-﻿using GameData.gameObjects;
-using GameData.network.util.world;
+﻿using GameData.network.util.world;
 using Server;
 using Server.roundHandler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace GameData.server.roundHandler
 {
@@ -14,61 +12,70 @@ namespace GameData.server.roundHandler
     /// </summary>
     public class CharacterTraitPhase : IGamePhase
     {
-        // todo implement class character
-        // private List<Character> charactersAlive;
-        //private Character[] traitSequence;
-
-        private RoundHandler parent;
-        private bool characterInAction = false;
-        private List<Character> allCharacters = new List<Character>();
-        private Character aktiveCharacter; //TODO:if turn from previous character is over, set next character from list to aktive character
+        private List<Character> _allCharacters;
+        private static bool _isTraitActive = false;
 
         public void Execute()
         {
-            //TODO: finish implementation
+            GenerateTraitSequenze();
+
+            foreach (var character in _allCharacters)
+            {
+                if (!character.IsDead())
+                {
+                    character.resetMPandAp();
+                    RequestClientForNextCharacterTrait(character.CharacterId);
+                    while (_isTraitActive)
+                    {
+                        if ((character.APcurrent <= 0 && character.MPcurrent <= 0) || character.IsDead()) //if character has no point for action or movement left or is dead, end his turn
+                        {
+                            SetIsTraitActive(false);
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// This method gets all characters and randomizes this list for the traitsequenze
+        /// </summary>
+        /// <returns>Returns the new sorted list of characters.</returns>
+        public bool GenerateTraitSequenze()
+        {
+            _allCharacters = new List<Character>();
             foreach (var player in Party.GetInstance().GetActivePlayers())
             {
                 foreach (var character in player.UsedGreatHouse.GetCharactersAlive())
                 {
-                    allCharacters.Add(character);
+                    _allCharacters.Add(character);
                 }
             }
-            RandomizeTraitSequenze();
-
-
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// This method randomizes the traitsequenze
-        /// </summary>
-        /// <returns>Returns the new sorted list of characters.</returns>
-        public bool RandomizeTraitSequenze()
-        {
-            // todo implement logic
             var random = new Random();
-            allCharacters = (List<Character>)allCharacters.OrderBy(item => random.Next());
+            _allCharacters = (List<Character>)_allCharacters.OrderBy(item => random.Next());
             return true;
         }
 
         /// <summary>
         /// Sends a message to the client who has the next turn with the ID of the character, whos turn it is.
         /// </summary>
-        public void RequestClientForNextCharacterTrait()
+        public void RequestClientForNextCharacterTrait(int characterID)
         {
-            //TODO: finish implementation
-            var characterID = allCharacters[0].CharacterId; //TODO: change this
-
             foreach (var player in Party.GetInstance().GetActivePlayers())
             {
                 foreach (var character in player.UsedGreatHouse.GetCharactersAlive())
                 {
                     if (character.CharacterId == characterID)
                     {
-                        Party.GetInstance().messageController.DoSendTurnDemand(player.ClientID, characterID);
+                        Party.GetInstance().messageController.DoSendTurnDemand(player.ClientID, characterID); //request client to execute a characterTrait
+                        SetIsTraitActive(true);
                     }
                 }
             }
+        }
+
+        public static void SetIsTraitActive(bool isActive)
+        {
+            _isTraitActive = isActive;
         }
     }
 }

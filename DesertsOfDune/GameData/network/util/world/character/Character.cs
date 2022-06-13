@@ -22,7 +22,7 @@ namespace GameData.network.util.world
         [JsonProperty]
         protected int healingHP;
         [JsonProperty]
-        protected int MPmax;
+        public int MPmax;
         [JsonProperty]
         public int MPcurrent { get; set; }
         [JsonProperty]
@@ -139,7 +139,6 @@ namespace GameData.network.util.world
         /// <returns>true, if character was healed</returns>
         public bool HealIfHasntMoved()
         {
-            // TODO: add if moved this round clause
             if (healthCurrent + healingHP < healthMax)
             {
                 this.healthCurrent = healthCurrent + healingHP;
