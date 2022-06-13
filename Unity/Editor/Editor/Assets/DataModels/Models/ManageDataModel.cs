@@ -100,6 +100,7 @@ public class ManageDataModel : MonoBehaviour
             allSliders[2].Value = (int)(m.cloneProbability*100);
             allSliders[1].Value = m.minPauseTime;
             allSliders[0].Value = m.maxStrikes;
+            allSliders[36].Value = (int)(m.heliCrashProbability*100);
 
 
             allSliders[11].Value = m.fighter.inventorySize;
@@ -161,7 +162,11 @@ public class ManageDataModel : MonoBehaviour
 
         
         //                                 noble                mentant             BeneGesit           Fighter             
-        DataModel = new PartieConfigModel(characterValues[3], characterValues[2], characterValues[1], characterValues[0], propertieValues[34], propertieValues[10], propertieValues[9], (float)propertieValues[8]/100, (float)propertieValues[7]/100, (float)propertieValues[6] / 100, propertieValues[5], cellularAutomaton, propertieValues[4], propertieValues[3], (float)propertieValues[2]/100, propertieValues[1], propertieValues[0]);
+        DataModel = new PartieConfigModel(characterValues[3], characterValues[2], characterValues[1], characterValues[0]
+            , propertieValues[34], propertieValues[10], propertieValues[9], (float)propertieValues[8]/100
+            , (float)propertieValues[7]/100, (float)propertieValues[6] / 100, propertieValues[5]
+            , cellularAutomaton, propertieValues[4], propertieValues[3], (float)propertieValues[2]/100
+            , propertieValues[1], propertieValues[0], (float)propertieValues[11]/100);
 
         Debug.Log("Low GRound Malus for research: " + propertieValues[7]);
         Debug.Log("(float)propertieValues[7]/100: " + (float)propertieValues[7]/100);

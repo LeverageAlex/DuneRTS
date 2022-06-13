@@ -21,11 +21,13 @@ public class PopulateProperties : MonoBehaviour
     public PropertyProperty[] properties;
 
     // The relative hight every element takes from the whole panel
-    //private readonly float relativeHeight = 0.09f;//0.095f;
-    private readonly float relativeHeight = 0.075f;
+    //0,9 / amount of Properties
+    private float relativeHeight;
 
 
     public void Init() {
+        relativeHeight = 0.91f / properties.Length;
+
         // First entry (Game Of Life)
         SetAnchors(transform.Find("GameOfLife").gameObject, 0);
 

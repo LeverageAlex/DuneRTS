@@ -2012,6 +2012,11 @@ MonoBehaviour:
     DefaultValue: 0
     MinValue: 0
     MaxValue: 100
+  - Title: Heli Crash Probability
+    Unit: '%'
+    DefaultValue: 0
+    MinValue: 0
+    MaxValue: 100
 --- !u!114 &917498396
 MonoBehaviour:
   m_ObjectHideFlags: 0
