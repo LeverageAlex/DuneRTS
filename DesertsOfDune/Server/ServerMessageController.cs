@@ -346,7 +346,8 @@ namespace Server
                                 }
                             }
 
-                            actionCharacter.AtomicBomb(targetMapField, Party.GetInstance().map);
+                            actionCharacter.AtomicBomb(targetMapField, Party.GetInstance().map, Party.GetInstance().greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse);
+                            Party.GetInstance().greatHouseConventionBroken = true;
                         }
                         break;
                     case ActionType.SPICE_HORDING:
