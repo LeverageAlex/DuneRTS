@@ -1,9 +1,11 @@
-﻿using GameData.network.util.world;
+﻿using GameData.network.controller;
+using GameData.network.util.world;
 using Server;
 using Server.roundHandler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Timers;
 
 namespace GameData.server.roundHandler
 {
@@ -14,13 +16,17 @@ namespace GameData.server.roundHandler
     {
         private List<Character> _allCharacters;
         private static bool _isTraitActive = false;
+        private static Character _currentCharacter = null;
+        private static Timer _timer;
 
         public void Execute()
         {
+            SetTimer(100); //initialize timer with length of 100 seconds
             GenerateTraitSequenze();
 
             foreach (var character in _allCharacters)
             {
+                _currentCharacter = character;
                 if (!character.IsDead())
                 {
                     character.resetMPandAp();
@@ -32,6 +38,7 @@ namespace GameData.server.roundHandler
                             SetIsTraitActive(false);
                         }
                     }
+                    _timer.Stop(); //stop timer when characterTrait is finished
                 }
             }
         }
@@ -68,6 +75,7 @@ namespace GameData.server.roundHandler
                     {
                         Party.GetInstance().messageController.DoSendTurnDemand(player.ClientID, characterID); //request client to execute a characterTrait
                         SetIsTraitActive(true);
+                        _timer.Start(); // starts the timer when characterTrait starts
                     }
                 }
             }
@@ -76,6 +84,38 @@ namespace GameData.server.roundHandler
         public static void SetIsTraitActive(bool isActive)
         {
             _isTraitActive = isActive;
+        }
+
+        /// <summary>
+        /// Starts a new timer with the time from the parameter.
+        /// </summary>
+        /// <param name="timeInSeconds">Time in seconds how long the timer runs.</param>
+        private static void SetTimer(int timeInSeconds)
+        {
+            _timer = new Timer(timeInSeconds * 1000);
+            _timer.Elapsed += OnTimedEvent;
+            _timer.AutoReset = true;
+        }
+
+        /// <summary>
+        /// This Event is called when the timer runs out and then disconnect the client.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
+        private static void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            string sessionID = "";
+            foreach (var player in Party.GetInstance().GetActivePlayers())
+            {
+                foreach (var character in player.UsedGreatHouse.Characters)
+                {
+                    if (character.CharacterId == _currentCharacter.CharacterId)
+                    {
+                        sessionID = player.SessionID;
+                    }
+                }
+            }
+            ((ServerConnectionHandler)Party.GetInstance().messageController.NetworkController.connectionHandler).sessionManager.CloseSession(sessionID, WebSocketSharp.CloseStatusCode.Normal, "Timeout happend in characterTraitPhase!");
         }
     }
 }
