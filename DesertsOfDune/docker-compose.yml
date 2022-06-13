@@ -1,11 +1,8 @@
 services:
-  server: # <- the name of the service, kan be any hostname
+  server: 
     build: .
-    pull_policy: always # <- !!! important, is needed for ci/cd
-    environment: # <- here you can define environment variables
+    pull_policy: always
+    environment: 
       TEXT: "Environment variables are WORKING :)"
-    volumes: # <- here you can define volume mappings (to get file/dirs into the container)
-       - ./config.json:/usr/src/app/config.json # <- uncomment this for local deployment
-       # - /var/lib/docker/volumes/portainer_data/_data/compose/21/config.json:/usr/src/app/config.json # <- uncomment this for the ci/cd deployment
     ports:
-      - "10101:8000" # <- HOST_PORT:PORT_OF_EXECUTABLE
+      - "10101:8000" # change 10101, if you want to expose the server (host system) on another port
