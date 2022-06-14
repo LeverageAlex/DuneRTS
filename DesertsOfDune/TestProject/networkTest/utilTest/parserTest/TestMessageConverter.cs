@@ -18,6 +18,24 @@ namespace TestProject.networkTest.utilTest.parserTest
         [SetUp]
         public void Setup()
         {
+            ConfigurationFileLoader loader = new ConfigurationFileLoader();
+
+            // load scenario and create a new scenario configuration
+            ScenarioConfiguration scenarioConfiguration = loader.LoadScenarioConfiguration("../.././../ConfigurationFiles/team08.scenario.json");
+            ScenarioConfiguration.CreateInstance(scenarioConfiguration);
+
+            // load the party configuration and create a new party configuration class
+            PartyConfiguration partyConfiguration = loader.LoadPartyConfiguration("../.././../ConfigurationFiles/team08.party.json");
+            PartyConfiguration.SetInstance(partyConfiguration);
+
+            //Initialization for greatHouses in GameData project
+            GameData.Configuration.Configuration.InitializeConfigurations();
+            // Initialization for the character configurations in GameData project
+            GameData.Configuration.Configuration.InitializeCharacterConfiguration(
+                PartyConfiguration.GetInstance().noble,
+                PartyConfiguration.GetInstance().mentat,
+                PartyConfiguration.GetInstance().beneGesserit,
+                PartyConfiguration.GetInstance().fighter);
         }
 
         // The following tests validate the FromMessage Method
@@ -117,7 +135,7 @@ namespace TestProject.networkTest.utilTest.parserTest
             CityToClient cityToClient1 = new CityToClient(1234, 2, 3);
             CityToClient cityToClient2 = new CityToClient(1234, 6, 6);
             CityToClient[] citiesToClients = { cityToClient1, cityToClient2 };
-            GameConfigMessage message = new GameConfigMessage(scenario, party, citiesToClients, new Position(0,1));
+            GameConfigMessage message = new GameConfigMessage(scenario, party, citiesToClients, new Position(0, 1));
             string serializedMessage = MessageConverter.FromMessage(message);
 
             Assert.AreEqual("{\"type\":\"GAMECFG\",\"version\":\"1.0\",\"scenario\":[[\"String\",\"String\"],[\"String\",\"String\"]],\"party\":{\"refr\":\"#/definitions/partiekonfigschema\"},\"cityToClient\":[{\"clientID\":1234,\"x\":2,\"y\":3},{\"clientID\":1234,\"x\":6,\"y\":6}],\"stormEye\":{\"x\":0,\"y\":1}}", serializedMessage);
@@ -200,7 +218,7 @@ namespace TestProject.networkTest.utilTest.parserTest
             HouseCharacter houseCharacter5 = new HouseCharacter("Reverend Mother Gaius Helen Mohiam", "BENE_GESSERIT");
             HouseCharacter houseCharacter6 = new HouseCharacter("Captain Aramsham", "BENE_GESSERIT");
 
-            HouseCharacter[] characters = new HouseCharacter[] { houseCharacter1,houseCharacter2,houseCharacter3,houseCharacter4,houseCharacter5,houseCharacter6 };
+            HouseCharacter[] characters = new HouseCharacter[] { houseCharacter1, houseCharacter2, houseCharacter3, houseCharacter4, houseCharacter5, houseCharacter6 };
             Corrino c = new Corrino(characters);
 
             houses[0] = c;
@@ -229,7 +247,7 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromJoinAcceptedMessage()
         {
-            JoinAcceptedMessage message = new JoinAcceptedMessage("secret1234",1234);
+            JoinAcceptedMessage message = new JoinAcceptedMessage("secret1234", 1234);
             string serializedMessage = MessageConverter.FromMessage(message);
             Assert.AreEqual("{\"type\":\"JOINACCEPTED\",\"version\":\"1.0\",\"clientSecret\":\"secret1234\",\"clientID\":1234}", serializedMessage);
         }
@@ -347,7 +365,7 @@ namespace TestProject.networkTest.utilTest.parserTest
             Character attributes = new Fighter(100, 75, 10, 3, 1, 4, 2, 10, 5, 3, false, true);
             SpawnCharacterDemandMessage message = new SpawnCharacterDemandMessage(1234, 12, "Vorname Nachname", new Position(0, 1), attributes);
             string serializedMessage = MessageConverter.FromMessage(message);
-           
+
             Assert.AreEqual("{\"type\":\"SPAWN_CHARACTER_DEMAND\",\"version\":\"1.0\",\"clientID\":1234,\"characterID\":12,\"characterName\":\"Vorname Nachname\",\"position\":{\"x\":0,\"y\":1},\"attributes\":{\"characterType\":\"FIGHTER\",\"healthMax\":100,\"healthCurrent\":75,\"healingHP\":10,\"MPmax\":3,\"MPcurrent\":1,\"APmax\":4,\"APcurrent\":2,\"attackDamage\":10,\"inventorySize\":5,\"inventoryUsed\":3,\"killedBySandworm\":false,\"isLoud\":true}}", serializedMessage);
         }
 
@@ -441,9 +459,14 @@ namespace TestProject.networkTest.utilTest.parserTest
         {
             string serializedMessage = "{\"type\":\"ACTION_DEMAND\",\"version\":\"1.0\",\"clientID\":1234,\"characterID\":12,\"action\":\"ATTACK\",\"specs\":{\"target\":{\"x\":2,\"y\":3}}}";
             Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
-            Assert.IsNotNull(deserializedMessage);
-            Assert.IsInstanceOf<ActionDemandMessage>(deserializedMessage);
-            ((ActionDemandMessage)deserializedMessage).GetMessageTypeAsString();
+
+            Assert.AreEqual("ACTION_DEMAND", ((ActionDemandMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((ActionDemandMessage)deserializedMessage).version);
+            Assert.AreEqual(1234, ((ActionDemandMessage)deserializedMessage).clientID);
+            Assert.AreEqual(12, ((ActionDemandMessage)deserializedMessage).characterID);
+            Assert.AreEqual("ATTACK", ((ActionDemandMessage)deserializedMessage).action);
+            Assert.AreEqual(2, ((ActionDemandMessage)deserializedMessage).specs.target.x);
+            Assert.AreEqual(3, ((ActionDemandMessage)deserializedMessage).specs.target.y);
         }
 
         /// <summary>
@@ -452,12 +475,16 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestToActionRequestMessage()
         {
-         /* TODO implement
-          * string serializedMessage = "{\"type\":\"ACTION_REQUEST\",\"version\":\"0.1\",\"clientID\":1234,\"characterID\":12,\"action\":\"VOICE\",\"specs\":{\"target\":{\"x\":2,\"y\":3}}}";
+            string serializedMessage = "{\"type\":\"ACTION_REQUEST\",\"version\":\"1.0\",\"clientID\":1234,\"characterID\":12,\"action\":\"VOICE\",\"specs\":{\"target\":{\"x\":2,\"y\":3}}}";
             Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
-            Assert.IsNotNull(deserializedMessage);
-            Assert.IsInstanceOf<ActionDemandMessage>(deserializedMessage);
-            ((ActionRequestMessage)deserializedMessage).getMessageType(); */
+
+            Assert.AreEqual("ACTION_REQUEST", ((ActionRequestMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((ActionRequestMessage)deserializedMessage).version);
+            Assert.AreEqual(1234, ((ActionRequestMessage)deserializedMessage).clientID);
+            Assert.AreEqual(12, ((ActionRequestMessage)deserializedMessage).characterID);
+            Assert.AreEqual("VOICE", ((ActionRequestMessage)deserializedMessage).action);
+            Assert.AreEqual(2, ((ActionRequestMessage)deserializedMessage).specs.target.x);
+            Assert.AreEqual(3, ((ActionRequestMessage)deserializedMessage).specs.target.y);
         }
 
         /// <summary>
@@ -466,58 +493,159 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestToChangeCharacterStatisticsDemandMessage()
         {
-            /* todo: implement
-            string serializedMessage = "";
+            string serializedMessage = "{\"type\":\"CHARACTER_STAT_CHANGE_DEMAND\",\"version\":\"1.0\",\"clientID\":1234,\"characterID\":12,\"stats\":{\"HP\":10,\"AP\":4,\"MP\":3,\"spice\":8,\"isLoud\":false,\"isSwallowed\":false}}";
             Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
-            Assert.IsNotNull(deserializedMessage);
-            Assert.IsInstanceOf<ActionDemandMessage>(deserializedMessage);
-            ((ChangeCharacterStatisticsDemandMessage)deserializedMessage).getMessageType(); 
-            */
+
+            Assert.AreEqual("CHARACTER_STAT_CHANGE_DEMAND", ((ChangeCharacterStatisticsDemandMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((ChangeCharacterStatisticsDemandMessage)deserializedMessage).version);
+            Assert.AreEqual(1234, ((ChangeCharacterStatisticsDemandMessage)deserializedMessage).clientID);
+            Assert.AreEqual(12, ((ChangeCharacterStatisticsDemandMessage)deserializedMessage).characterID);
+            Assert.AreEqual(10, ((ChangeCharacterStatisticsDemandMessage)deserializedMessage).stats.HP);
+            Assert.AreEqual(4, ((ChangeCharacterStatisticsDemandMessage)deserializedMessage).stats.AP);
+            Assert.AreEqual(3, ((ChangeCharacterStatisticsDemandMessage)deserializedMessage).stats.MP);
+            Assert.AreEqual(8, ((ChangeCharacterStatisticsDemandMessage)deserializedMessage).stats.spice);
+            Assert.AreEqual(false, ((ChangeCharacterStatisticsDemandMessage)deserializedMessage).stats.isLoud);
+            Assert.AreEqual(false, ((ChangeCharacterStatisticsDemandMessage)deserializedMessage).stats.isSwallowed);
+
         }
 
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message HouseOfferMessage
+        /// </summary>
         [Test]
         public void TestToHouseOfferMessage()
         {
-            ConfigurationFileLoader loader = new ConfigurationFileLoader();
+            string serializedMessage = "{\"type\":\"HOUSE_OFFER\",\"version\":\"1.0\",\"clientID\":1234,\"houses\":[{\"houseName\":\"CORRINO\",\"houseColor\":\"GOLD\",\"houseCharacters\":[{\"characterName\":\"Emperor Shaddam IV Corrino\",\"characterClass\":\"NOBLE\"},{\"characterName\":\"Princess Irulan Corrino\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Count Hasimir Fenring\",\"characterClass\":\"MENTAT\"},{\"characterName\":\"Lady Margot Fenring\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Reverend Mother Gaius Helen Mohiam\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Captain Aramsham\",\"characterClass\":\"BENE_GESSERIT\"}]},null]}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
 
-            // load scenario and create a new scenario configuration
-            ScenarioConfiguration scenarioConfiguration = loader.LoadScenarioConfiguration("../.././../ConfigurationFiles/team08.scenario.json");
-            ScenarioConfiguration.CreateInstance(scenarioConfiguration);
-
-            // load the party configuration and create a new party configuration class
-            PartyConfiguration partyConfiguration = loader.LoadPartyConfiguration("../.././../ConfigurationFiles/team08.party.json");
-            PartyConfiguration.SetInstance(partyConfiguration);
-
-            //Initialization for greatHouses in GameData project
-            GameData.Configuration.Configuration.InitializeConfigurations();
-            // Initialization for the character configurations in GameData project
-            GameData.Configuration.Configuration.InitializeCharacterConfiguration(
-                PartyConfiguration.GetInstance().noble,
-                PartyConfiguration.GetInstance().mentat,
-                PartyConfiguration.GetInstance().beneGesserit,
-                PartyConfiguration.GetInstance().fighter);
-
-            string message = "{\"type\":\"HOUSE_OFFER\",\"version\":\"1.0\",\"clientID\":1234,\"houses\":[{\"houseName\":\"CORRINO\",\"houseColor\":\"GOLD\",\"houseCharacters\":[{\"characterName\":\"Emperor Shaddam IV Corrino\",\"characterClass\":\"NOBLE\"},{\"characterName\":\"Princess Irulan Corrino\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Count Hasimir Fenring\",\"characterClass\":\"MENTAT\"},{\"characterName\":\"Lady Margot Fenring\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Reverend Mother Gaius Helen Mohiam\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Captain Aramsham\",\"characterClass\":\"BENE_GESSERIT\"}]},null]}";
-            Message deserealizedMessage = MessageConverter.ToMessage(message);
-
-            Assert.AreEqual(null, deserealizedMessage);
+            Assert.AreEqual("HOUSE_OFFER", ((HouseOfferMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual(2, ((HouseOfferMessage)deserializedMessage).houses.Length);
+            Assert.AreEqual("CORRINO", ((HouseOfferMessage)deserializedMessage).houses[0].houseName);
+            Assert.AreEqual("GOLD", ((HouseOfferMessage)deserializedMessage).houses[0].houseColor);
+            Assert.AreEqual("Emperor Shaddam IV Corrino", ((HouseOfferMessage)deserializedMessage).houses[0].houseCharacters[0].characterName);
+            Assert.AreEqual("NOBLE", ((HouseOfferMessage)deserializedMessage).houses[0].houseCharacters[0].characterClass);
+            Assert.AreEqual("Princess Irulan Corrino", ((HouseOfferMessage)deserializedMessage).houses[0].houseCharacters[1].characterName);
+            Assert.AreEqual("BENE_GESSERIT", ((HouseOfferMessage)deserializedMessage).houses[0].houseCharacters[1].characterClass);
+            Assert.AreEqual("Count Hasimir Fenring", ((HouseOfferMessage)deserializedMessage).houses[0].houseCharacters[2].characterName);
+            Assert.AreEqual("MENTAT", ((HouseOfferMessage)deserializedMessage).houses[0].houseCharacters[2].characterClass);
+            Assert.AreEqual("Lady Margot Fenring", ((HouseOfferMessage)deserializedMessage).houses[0].houseCharacters[3].characterName);
+            Assert.AreEqual("BENE_GESSERIT", ((HouseOfferMessage)deserializedMessage).houses[0].houseCharacters[3].characterClass);
+            Assert.AreEqual("Reverend Mother Gaius Helen Mohiam", ((HouseOfferMessage)deserializedMessage).houses[0].houseCharacters[4].characterName);
+            Assert.AreEqual("BENE_GESSERIT", ((HouseOfferMessage)deserializedMessage).houses[0].houseCharacters[4].characterClass);
+            Assert.AreEqual("Captain Aramsham", ((HouseOfferMessage)deserializedMessage).houses[0].houseCharacters[5].characterName);
+            Assert.AreEqual("BENE_GESSERIT", ((HouseOfferMessage)deserializedMessage).houses[0].houseCharacters[5].characterClass);
+            Assert.Null(((HouseOfferMessage)deserializedMessage).houses[1]);
         }
 
-        // TODO: implement tests for these messages..
 
-        //ChangePlayerSpiceDemandMessage
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message ChangePlayerSpiceDemandMessage
+        /// </summary>
+        [Test]
+        public void TestToChangePlayerSpiceDemandMessage()
+        {
+            string serializedMessage = "{\"type\":\"CHANGE_PLAYER_SPICE_DEMAND\",\"version\":\"1.0\",\"clientID\":123123,\"newSpiceValue\":5}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
 
-        //CreateMessage
+            Assert.AreEqual("CHANGE_PLAYER_SPICE_DEMAND", ((ChangePlayerSpiceDemandMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((ChangePlayerSpiceDemandMessage)deserializedMessage).version);
+            Assert.AreEqual(123123, ((ChangePlayerSpiceDemandMessage)deserializedMessage).clientID);
+            Assert.AreEqual(5, ((ChangePlayerSpiceDemandMessage)deserializedMessage).newSpiceValue);
+        }
 
-        //DebugMessage
 
-        //EndGameMessage
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message CreateMessage
+        /// </summary>
+        [Test]
+        public void TestToDebugMessage()
+        {
+            string serializedMessage = "{\"type\":\"DEBUG\",\"version\":\"1.0\",\"code\":1,\"explanation\":\"explenation\"}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
 
-        // EndTurnRequestMessage
+            Assert.AreEqual("DEBUG", ((DebugMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((DebugMessage)deserializedMessage).version);
+            Assert.AreEqual(1, ((DebugMessage)deserializedMessage).code);
+            Assert.AreEqual("explenation", ((DebugMessage)deserializedMessage).explanation);
+        }
 
-        // GameConfigMessage
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message EndGameMessage
+        /// </summary>
+        [Test]
+        public void TestToEndGameMessage()
+        {
+            string serializedMessage = "{\"type\":\"ENDGAME\",\"version\":\"1.0\"}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
 
-        // GameEndMessage
+            Assert.AreEqual("ENDGAME", ((EndGameMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((EndGameMessage)deserializedMessage).version);
+        }
+
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message EndTurnRequestMessage
+        /// </summary>
+        [Test]
+        public void TestToEndTurnRequestMessage()
+        {
+            string serializedMessage = "{\"type\":\"END_TURN_REQUEST\",\"version\":\"1.0\",\"clientID\":1234,\"characterID\":12}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+
+            Assert.AreEqual("END_TURN_REQUEST", ((EndTurnRequestMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((EndTurnRequestMessage)deserializedMessage).version);
+            Assert.AreEqual(1234, ((EndTurnRequestMessage)deserializedMessage).clientID);
+            Assert.AreEqual(12, ((EndTurnRequestMessage)deserializedMessage).characterID);
+        }
+
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message GameConfigMessage
+        /// </summary>
+        [Test]
+        public void TestToGameConfigMessage()
+        {
+            string serializedMessage = "{\"type\":\"GAMECFG\",\"version\":\"1.0\",\"scenario\":[[\"String\",\"String\"],[\"String\",\"String\"]],\"party\":{\"refr\":\"#/definitions/partiekonfigschema\"},\"cityToClient\":[{\"clientID\":1234,\"x\":2,\"y\":3},{\"clientID\":1234,\"x\":6,\"y\":6}],\"stormEye\":{\"x\":0,\"y\":1}}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+
+            Assert.AreEqual("GAMECFG", ((GameConfigMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((GameConfigMessage)deserializedMessage).version);
+            Assert.AreEqual(2, ((GameConfigMessage)deserializedMessage).scenario.Count);
+            Assert.AreEqual("String", ((GameConfigMessage)deserializedMessage).scenario[0][0]);
+            Assert.AreEqual("String", ((GameConfigMessage)deserializedMessage).scenario[0][1]);
+            Assert.AreEqual("String", ((GameConfigMessage)deserializedMessage).scenario[1][0]);
+            Assert.AreEqual("String", ((GameConfigMessage)deserializedMessage).scenario[1][1]);
+            Assert.AreEqual("#/definitions/partiekonfigschema", ((GameConfigMessage)deserializedMessage).party.refr);
+            Assert.AreEqual(2, ((GameConfigMessage)deserializedMessage).cityToClient[0].x);
+            Assert.AreEqual(3, ((GameConfigMessage)deserializedMessage).cityToClient[0].y);
+            Assert.AreEqual(1234, ((GameConfigMessage)deserializedMessage).cityToClient[0].clientID);
+            Assert.AreEqual(6, ((GameConfigMessage)deserializedMessage).cityToClient[1].x);
+            Assert.AreEqual(6, ((GameConfigMessage)deserializedMessage).cityToClient[1].y);
+            Assert.AreEqual(1234, ((GameConfigMessage)deserializedMessage).cityToClient[1].clientID);
+            Assert.AreEqual(0, ((GameConfigMessage)deserializedMessage).stormEye.x);
+            Assert.AreEqual(1, ((GameConfigMessage)deserializedMessage).stormEye.y);
+
+        }
+
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message GameEndMessage
+        /// </summary>
+        [Test]
+        public void TestToGameEndMessage()
+        {
+            string serializedMessage = "{\"type\":\"GAME_END\",\"version\":\"1.0\",\"winnerID\":1234,\"loserID\":1235,\"statistics\":{\"HouseSpiceStorage\":0,\"TotalSpiceCollected\":0,\"EnemiesDefeated\":0,\"CharactersSwallowed\":0,\"CharactersAlive\":null,\"LastCharacterStanding\":false}}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+
+            Assert.AreEqual("GAME_END", ((GameEndMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((GameEndMessage)deserializedMessage).version);
+            Assert.AreEqual(1234, ((GameEndMessage)deserializedMessage).winnerID);
+            Assert.AreEqual(1235, ((GameEndMessage)deserializedMessage).loserID);
+            Assert.AreEqual(0, ((GameEndMessage)deserializedMessage).statistics.HouseSpiceStorage);
+            Assert.AreEqual(0, ((GameEndMessage)deserializedMessage).statistics.TotalSpiceCollected);
+            Assert.AreEqual(0, ((GameEndMessage)deserializedMessage).statistics.EnemiesDefeated);
+            Assert.AreEqual(0, ((GameEndMessage)deserializedMessage).statistics.CharactersSwallowed);
+            Assert.Null(((GameEndMessage)deserializedMessage).statistics.CharactersAlive);
+            Assert.AreEqual(false, ((GameEndMessage)deserializedMessage).statistics.LastCharacterStanding);
+        }
+
 
         //GameStateMessage
 
