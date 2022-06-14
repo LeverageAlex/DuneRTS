@@ -15,6 +15,8 @@ namespace GameData.network.util.world
     {
         public MapField[,] fields { get; set; }
 
+        public static Map instance;
+
         public int MAP_WIDTH { get; }
         public int MAP_HEIGHT { get; }
 
@@ -24,6 +26,7 @@ namespace GameData.network.util.world
         {
             this.MAP_WIDTH = mapWidth;
             this.MAP_HEIGHT = mapHeight;
+            instance = this;
 
             // check, that the scenarionConfiguration has the correct sizes
             CreateMapFromScenario(scenarioConfiguration);

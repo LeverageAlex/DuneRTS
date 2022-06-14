@@ -499,7 +499,9 @@ namespace Server
             string partyConfiguration = JsonConvert.SerializeObject(PartyConfiguration.GetInstance());
             PartyReference partyReference = new PartyReference(partyConfiguration);
 
-            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, partyReference, null, null);
+            var field = Map.instance.GetRandomDesertField();
+            //TODO NICHT FERTIG
+            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, partyReference, new CityToClient[2] {new CityToClient(client0ID, 0, 0), new CityToClient(client1ID, 3, 3)}, new Position(field.XCoordinate, field.ZCoordinate));
             NetworkController.HandleSendingMessage(gameConfigMessage);
         }
 

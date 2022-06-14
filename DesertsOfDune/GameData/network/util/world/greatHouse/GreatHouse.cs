@@ -32,6 +32,9 @@ namespace GameData.network.util.world
 
         public static readonly int AMOUNT_OF_CHARACTERS_PER_GREAT_HOUSE = 6;
 
+        [JsonIgnore]
+        public static bool determineCharacters = true;
+
         /// <summary>
         /// Constructor of the Class GreatHouse
         /// </summary>
@@ -46,7 +49,10 @@ namespace GameData.network.util.world
             this.houseColor = houseColor;
             this.illegalAtomicUsage = false;
             this.houseCharacters = houseCharacters;
-            this.Characters = GetCharactersForHouse();
+            if (determineCharacters)
+            {
+                this.Characters = GetCharactersForHouse();
+            }
             this.unusedAtomicBombs = 3;
         }
 

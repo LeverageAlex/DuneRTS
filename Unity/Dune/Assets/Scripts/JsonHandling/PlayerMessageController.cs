@@ -133,37 +133,55 @@ public class PlayerMessageController : MessageController
     public override void OnGameConfigMessage(GameConfigMessage gameConfigMessage)
     {
         // TODO: implement logic
-     
-       //Second list contains z size
-        MapManager.instance.setMapSize(gameConfigMessage.scenario.Count, gameConfigMessage.scenario[0].Count);
-
-        for (int x = 0; x < gameConfigMessage.scenario.Count; x++)
+        Log.Debug("Preparing Debug OnGameConfig");
+        IEnumerator buildMap()
         {
-            for (int z = 0; z < gameConfigMessage.scenario[0].Count; z++)
+
+            Debug.Log("Start Building map!");
+            //Second list contains z size
+            MapManager.instance.setMapSize(gameConfigMessage.scenario.Count, gameConfigMessage.scenario[0].Count);
+
+            for (int x = 0; x < gameConfigMessage.scenario.Count; x++)
             {
-                if (MapManager.instance.isNodeNeighbour(x, z, gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y))
+                for (int z = 0; z < gameConfigMessage.scenario[0].Count; z++)
                 {
-                    //Node is in Sandstorm
-                    MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), true);
-                }
-                else
-                {
-                    MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), false);
+                    Debug.Log("PreLoop Built x: " + x + " and z: " + z);
+                    if ( gameConfigMessage.stormEye != null && MapManager.instance.isNodeNeighbour(x, z, gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y))
+                    {
+                        //Node is in Sandstorm
+                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), true);
+                    }
+                    else
+                    {
+                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), false);
+                    }
+                    Debug.Log("Built x: " + x + " and z: " + z);
                 }
             }
-        }
-        MapManager.instance.getNodeFromPos(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y).SetSandstorm(true);
-        MapManager.instance.SetStormEye(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y);
 
-        if(gameConfigMessage.cityToClient[0].clientID == SessionHandler.clientId)
-        {
-            SessionHandler.enemyClientId = gameConfigMessage.cityToClient[1].clientID;
-        } else
-        {
-            SessionHandler.enemyClientId = gameConfigMessage.cityToClient[0].clientID;
+            Debug.Log("Built Map!");
+            if (gameConfigMessage.stormEye != null)
+            {
+                MapManager.instance.getNodeFromPos(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y).SetSandstorm(true);
+                MapManager.instance.SetStormEye(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y);
+            }
+            Debug.Log("Checkpoint");
+            Debug.Log("Pre Crash" + gameConfigMessage.cityToClient[0]);
+
+            if (gameConfigMessage.cityToClient[0].clientID == SessionHandler.clientId)
+            {
+                SessionHandler.enemyClientId = gameConfigMessage.cityToClient[1].clientID;
+            }
+            else
+            {
+                SessionHandler.enemyClientId = gameConfigMessage.cityToClient[0].clientID;
+            }
+            Debug.Log("Soweit Clean");
+            MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[0].x, gameConfigMessage.cityToClient[0].y).cityOwnerId = gameConfigMessage.cityToClient[0].clientID;
+            MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[1].x, gameConfigMessage.cityToClient[1].y).cityOwnerId = gameConfigMessage.cityToClient[1].clientID;
+            yield return null;
         }
-        MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[0].x, gameConfigMessage.cityToClient[0].y).cityOwnerId = gameConfigMessage.cityToClient[0].clientID;
-        MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[1].x, gameConfigMessage.cityToClient[1].y).cityOwnerId = gameConfigMessage.cityToClient[1].clientID;
+        UnityMainThreadDispatcher.Instance().Enqueue(buildMap());
     }
 
     /// <summary>

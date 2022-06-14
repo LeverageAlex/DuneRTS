@@ -22,7 +22,7 @@ public static class SessionHandler
 
             ClientConnectionHandler clientconhandler = new ClientConnectionHandler(ip, port);
             _ = new ClientNetworkController(clientconhandler, messageController);
-
+            GameData.network.util.world.GreatHouse.determineCharacters = false;
 
     }
       

@@ -294,10 +294,11 @@ public class MapManager : MonoBehaviour
                 return NodeTypeEnum.FLATROCK;
             case "FLAT_SAND":
                 return NodeTypeEnum.FLATDUNE;
-            case "DUNE":
-                return NodeTypeEnum.DUNE;
+            //case "DUNE":
             default:
-                return NodeTypeEnum.HELIPORT;
+                return NodeTypeEnum.DUNE;
+            //default:
+           //    return NodeTypeEnum.HELIPORT;
         }
     }
 }
