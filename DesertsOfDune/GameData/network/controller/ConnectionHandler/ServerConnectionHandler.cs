@@ -13,7 +13,7 @@ namespace GameData.network.controller
     /// </summary>
     public class GameService : WebSocketBehavior
     {
-        
+
         private readonly ServerConnectionHandler _connectionHandler;
 
         public GameService(ServerConnectionHandler _serverConnectionHandler)
@@ -32,7 +32,7 @@ namespace GameData.network.controller
         }
 
         protected override void OnMessage(MessageEventArgs e)
-        { 
+        {
             _connectionHandler.OnMessage(e, this.ID);
         }
 
@@ -58,6 +58,8 @@ namespace GameData.network.controller
         /// </summary>
         public WebSocketSessionManager sessionManager { get; set; }
 
+        private bool _isServerStopped;
+
         /// <summary>
         /// creates a new server connection handler and start the websocket server,
         /// which is identified by the given address
@@ -74,7 +76,8 @@ namespace GameData.network.controller
         /// <summary>
         /// create, initialize and start the websocket server
         /// </summary>
-        public void InitializeWebSocketServer() {
+        public void InitializeWebSocketServer()
+        {
             // initialize the websocket on the given url
 
             WebSocketServer webSocketServer = new WebSocketServer(GetURL());
@@ -86,15 +89,29 @@ namespace GameData.network.controller
             webSocketServer.Start();
             Log.Information("Started websocket on " + GetURL() + "/");
 
+            _isServerStopped = false;
+
             // set the session mananger
             sessionManager = webSocketServer.WebSocketServices["/"].Sessions;
 
             // wait for the user to quit the websocket server by typing any key in the console
             // TODO: add logic, that the websocket server is closed, when the server is shut down
 
-            Console.ReadKey();
+            // Console.ReadKey();
+
+            // check, whether the server was requested to stop, otherwise keep it open
+            while (!_isServerStopped)
+            {
+                Thread.Sleep(1000);
+            }
             webSocketServer.Stop();
             Log.Warning("The websocket server was stopped!");
+
+        }
+
+        public void CloseServer()
+        {
+            _isServerStopped = true;
         }
 
         // TODO: finish the implementation of the callback functions

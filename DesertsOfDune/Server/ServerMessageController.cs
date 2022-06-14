@@ -35,7 +35,6 @@ namespace Server
         public override void OnJoinMessage(JoinMessage msg, string sessionID)
         {
             Client client;
-            Log.Debug(msg.isActive + " " + msg.isCpu);
 
             // check, whether the new client is a player or spectator
             if (msg.isActive)
