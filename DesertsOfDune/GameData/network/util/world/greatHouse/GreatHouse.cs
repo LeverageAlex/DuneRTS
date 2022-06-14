@@ -38,7 +38,9 @@ namespace GameData.network.util.world
         /// <param name="houseName">the name of the Greathouse</param>
         /// <param name="houseColor">the color of the house</param>
         /// <param name="houseCharacters">the characters of the house</param>
-        protected GreatHouse(string houseName, string houseColor, HouseCharacter[] houseCharacters)
+
+        [JsonConstructor]
+        public GreatHouse(string houseName, string houseColor, HouseCharacter[] houseCharacters)
         {
             this.houseName = houseName;
             this.houseColor = houseColor;
