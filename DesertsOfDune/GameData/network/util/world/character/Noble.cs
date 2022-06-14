@@ -83,7 +83,7 @@ namespace GameData.network.util.world.character
         /// <param name="target">The target Field for the Atack</param>
         /// <returns>true, if the action was successful</returns>
         override
-        public bool AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse)
+        public bool AtomicBomb(MapField target, Map map)
         {
             if(this.APcurrent == this.APmax && this.greatHouse.unusedAtomicBombs > 0)
             {
@@ -101,36 +101,10 @@ namespace GameData.network.util.world.character
                     if (mapfield.IsCharacterStayingOnThisField)
                     {
                         mapfield.Character.DecreaseHP(mapfield.Character.healthCurrent);
-                        if(!greatHouseConventionBroken)
+                        if(mapfield.Character.greatHouse != this.greatHouse)
                         {
                             //TODO: implement supportive Characters from other Houses against the Great House who used the atomic bomb
-                            List < GreatHouse > remainingGreatHouses = new List<GreatHouse>();
-                            if(activePlayerGreatHouse.houseName != "CORRINO" && passivePlayerGreatHouse.houseName != "CORRINO"){
-                                remainingGreatHouses.Add(new Corrino());
-                            }
-                            if (activePlayerGreatHouse.houseName != "ATREIDES" && passivePlayerGreatHouse.houseName != "ATREIDES"){
-                                remainingGreatHouses.Add(new Atreides());
-                            }
-                            if (activePlayerGreatHouse.houseName != "HARKONNEN" && passivePlayerGreatHouse.houseName != "HARKONNEN"){
-                                remainingGreatHouses.Add(new Harkonnen());
-                            }
-                            if (activePlayerGreatHouse.houseName != "ORDOS" && passivePlayerGreatHouse.houseName != "ORDOS"){
-                                remainingGreatHouses.Add(new Ordos());
-                            }
-                            if (activePlayerGreatHouse.houseName != "RICHESE" && passivePlayerGreatHouse.houseName != "RICHESE")
-                            {
-                                remainingGreatHouses.Add(new Richese());
-                            }
-                            if (activePlayerGreatHouse.houseName != "VERNIUS" && passivePlayerGreatHouse.houseName != "VERNIUS")
-                            {
-                                remainingGreatHouses.Add(new Vernius());
-                            }
-                            Random rnd = new Random();
-                            foreach (var greatHouse in remainingGreatHouses)
-                            {
-                                int randomCharacterIndex = rnd.Next(greatHouse.Characters.Count);
-                                passivePlayerGreatHouse.Characters.Add(greatHouse.Characters[randomCharacterIndex]);
-                            }
+                            //greatConvention = false;
                         }
                     }
                     //remove Sandworm
