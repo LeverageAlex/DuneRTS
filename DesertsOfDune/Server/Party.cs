@@ -147,6 +147,7 @@ namespace Server
         /// </summary>
         public void PrepareGame()
         {
+            Log.Information("Preparing Game");
             // get two disjoint sets of each two great houses and offer them to the client
             GreatHouseType[] firstSet;
             GreatHouseType[] secondSet;
