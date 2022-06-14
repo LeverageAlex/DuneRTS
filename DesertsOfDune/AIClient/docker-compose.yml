@@ -1,0 +1,12 @@
+services:
+  ai_client: 
+    build: 
+        context: ..
+        dockerfile: AIClient/Dockerfile
+    pull_policy: always
+    environment: 
+      SERVER_ADDRESS: "127.0.0.1"
+      PORT: 10101
+      NAME: "Team008"
+    ports:
+      - "10101:8000" # change 10101, if you want to expose the server (host system) on another port
