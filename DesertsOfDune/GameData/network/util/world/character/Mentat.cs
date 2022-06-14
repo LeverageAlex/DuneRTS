@@ -34,7 +34,8 @@ namespace GameData.network.util.world.character
         /// <summary>
         /// creates a new mentat 
         /// </summary>
-        public Mentat() : base(CharacterType.MENTAT, CharacterConfiguration.Mentat.maxHP, CharacterConfiguration.Mentat.maxMP, CharacterConfiguration.Mentat.maxAP, CharacterConfiguration.Mentat.damage, CharacterConfiguration.Mentat.inventorySize, CharacterConfiguration.Mentat.healingHP)
+        /// <param name="name">the name of the mentat</param>
+        public Mentat(string name) : base(CharacterType.MENTAT, CharacterConfiguration.Mentat.maxHP, CharacterConfiguration.Mentat.maxMP, CharacterConfiguration.Mentat.maxAP, CharacterConfiguration.Mentat.damage, CharacterConfiguration.Mentat.inventorySize, CharacterConfiguration.Mentat.healingHP, name)
         {
         }
 

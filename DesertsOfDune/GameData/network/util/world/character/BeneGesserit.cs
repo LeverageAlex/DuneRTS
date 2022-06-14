@@ -33,9 +33,10 @@ namespace GameData.network.util.world.character
         }
 
         /// <summary>
-        /// creates a new bene gesserit 
+        /// creates a new bene gesserit
         /// </summary>
-        public BeneGesserit() : base(CharacterType.BENE_GESSERIT, CharacterConfiguration.BeneGesserit.maxHP, CharacterConfiguration.BeneGesserit.maxMP, CharacterConfiguration.BeneGesserit.maxAP, CharacterConfiguration.BeneGesserit.damage, CharacterConfiguration.BeneGesserit.inventorySize, CharacterConfiguration.BeneGesserit.healingHP)
+        /// <param name="name">the name of the bene gesserit</param>
+        public BeneGesserit(string name) : base(CharacterType.BENE_GESSERIT, CharacterConfiguration.BeneGesserit.maxHP, CharacterConfiguration.BeneGesserit.maxMP, CharacterConfiguration.BeneGesserit.maxAP, CharacterConfiguration.BeneGesserit.damage, CharacterConfiguration.BeneGesserit.inventorySize, CharacterConfiguration.BeneGesserit.healingHP, name)
         {
         }
 

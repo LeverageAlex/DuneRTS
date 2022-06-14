@@ -49,10 +49,6 @@ namespace GameData.network.util.world
             this.houseColor = houseColor;
             this.illegalAtomicUsage = false;
             this.houseCharacters = houseCharacters;
-            if (determineCharacters)
-            {
-                this.Characters = GetCharactersForHouse();
-            }
             this.unusedAtomicBombs = 3;
         }
 
@@ -63,14 +59,12 @@ namespace GameData.network.util.world
         /// <param name="houseColor">the color of the house</param>
         /// <param name="houseCharacters">the characters of the house</param>
         /// <param name="characters">the characters of the House</param>
-        protected GreatHouse(string houseName, string houseColor, HouseCharacter[] houseCharacters, List<Character> characters)
+        protected GreatHouse(string houseName, string houseColor, HouseCharacter[] houseCharacters, bool initializeCharacters) : this(houseName, houseColor, houseCharacters)
         {
-            this.houseName = houseName;
-            this.houseColor = houseColor;
-            this.illegalAtomicUsage = false;
-            this.houseCharacters = houseCharacters;
-            this.Characters = characters;
-            this.unusedAtomicBombs = 3;
+            if (initializeCharacters)
+            {
+                this.Characters = GetCharactersForHouse();
+            }
         }
 
         /// <summary>
@@ -100,22 +94,22 @@ namespace GameData.network.util.world
 
                 switch ((CharacterType) Enum.Parse(typeof(CharacterType), houseCharacter.characterClass)) {
                     case CharacterType.NOBLE:
-                        newCharacter = new Noble();
+                        newCharacter = new Noble(houseCharacter.characterName);
                         break;
                     case CharacterType.BENE_GESSERIT:
-                        newCharacter = new BeneGesserit();
+                        newCharacter = new BeneGesserit(houseCharacter.characterName);
                         break;
                     case CharacterType.MENTAT:
-                        newCharacter = new Mentat();
+                        newCharacter = new Mentat(houseCharacter.characterName);
                         break;
                     case CharacterType.FIGHTER:
-                        newCharacter = new Fighter();
+                        newCharacter = new Fighter(houseCharacter.characterName);
                         break;
                     default:
                         // TODO: print error or throw exception, if type of character is not valid
                         break;
                 }
-
+                newCharacter.greatHouse = this;
                 characters.Add(newCharacter);
             }
 

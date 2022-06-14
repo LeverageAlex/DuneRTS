@@ -31,7 +31,8 @@ namespace GameData.network.util.world.character
         /// <summary>
         /// creates a new fighter 
         /// </summary>
-        public Fighter() : base(CharacterType.FIGHTER, CharacterConfiguration.Fighter.maxHP, CharacterConfiguration.Fighter.maxMP, CharacterConfiguration.Fighter.maxAP, CharacterConfiguration.Fighter.damage, CharacterConfiguration.Fighter.inventorySize, CharacterConfiguration.Fighter.healingHP)
+        /// <param name="name">the name of the figther</param>
+        public Fighter(string name) : base(CharacterType.FIGHTER, CharacterConfiguration.Fighter.maxHP, CharacterConfiguration.Fighter.maxMP, CharacterConfiguration.Fighter.maxAP, CharacterConfiguration.Fighter.damage, CharacterConfiguration.Fighter.inventorySize, CharacterConfiguration.Fighter.healingHP, name)
         {
         }
 

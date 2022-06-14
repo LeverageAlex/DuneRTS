@@ -4,7 +4,7 @@ using System.Text;
 using GameData.network.messages;
 using Newtonsoft.Json;
 using GameData.network.util.enums;
-
+using System.Numerics;
 
 namespace GameData.network.util.world
 {
@@ -52,7 +52,7 @@ namespace GameData.network.util.world
         {get { return killedBySandworm; } set { killedBySandworm = value; } }
         
         [JsonIgnore]
-        public HouseCharacter HouseCharacter { get; }
+        public string CharacterName { get; }
 
 
         /// <summary>
@@ -99,15 +99,29 @@ namespace GameData.network.util.world
         /// <param name="damage"></param>
         /// <param name="inventorySize"></param>
         /// <param name="healingHP"></param>
-        protected Character(CharacterType type, int maxHP, int maxMP, int maxAP, int damage, int inventorySize, int healingHP)
+        /// <param name="name">the name of the character</param>
+        protected Character(CharacterType type, int maxHP, int maxMP, int maxAP, int damage, int inventorySize, int healingHP, string name)
         {
             this.characterType = Enum.GetName(typeof(CharacterType), type);
             this.healthMax = maxHP;
+            this.healthCurrent = maxHP;
+            this.healingHP = healingHP;
             this.MPmax = maxMP;
+            this.MPcurrent = maxMP;
             this.APmax = maxAP;
+            this.APcurrent = maxAP;
             this.attackDamage = damage;
             this.inventorySize = inventorySize;
-            this.healingHP = healingHP;
+            this.CharacterName = name;
+
+            // set meaningful default values for the remaining attributes
+            this.inventoryUsed = 0;
+            this.killedBySandworm = false;
+            this.isLoud = false;
+
+            Random random = new Random();
+            this.CharacterId = random.Next(int.MaxValue);
+            
         }
 
         /// <summary>

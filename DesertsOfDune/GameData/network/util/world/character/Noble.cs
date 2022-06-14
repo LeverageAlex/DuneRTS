@@ -35,7 +35,8 @@ namespace GameData.network.util.world.character
         /// <summary>
         /// creates a new nobel 
         /// </summary>
-        public Noble() : base(CharacterType.NOBLE, CharacterConfiguration.Noble.maxHP, CharacterConfiguration.Noble.maxMP, CharacterConfiguration.Noble.maxAP, CharacterConfiguration.Noble.damage, CharacterConfiguration.Noble.inventorySize, CharacterConfiguration.Noble.healingHP) {
+        /// <param name="name">the name of the nobel</param>
+        public Noble(string name) : base(CharacterType.NOBLE, CharacterConfiguration.Noble.maxHP, CharacterConfiguration.Noble.maxMP, CharacterConfiguration.Noble.maxAP, CharacterConfiguration.Noble.damage, CharacterConfiguration.Noble.inventorySize, CharacterConfiguration.Noble.healingHP, name) {
         }
 
         /// <summary>
