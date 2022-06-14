@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using GameData.network.messages;
 using GameData.server.roundHandler;
 using Server;
 using Server.roundHandler;
@@ -26,6 +27,9 @@ namespace GameData.network.util.world
             // execute the earthquake
             EarthQuakeExecutor earthQuakeExecutor = new EarthQuakeExecutor(map);
             earthQuakeExecutor.TransformRockPlanes();
+
+            // send map change message because of ENDGAME
+            Party.GetInstance().messageController.DoSendMapChangeDemand(MapChangeReasons.ENDGAME);
 
             // despawn the usual sandworm
             Sandworm.Despawn(Party.GetInstance().messageController);

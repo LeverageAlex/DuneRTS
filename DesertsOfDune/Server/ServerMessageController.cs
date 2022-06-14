@@ -574,8 +574,11 @@ namespace Server
             NetworkController.HandleSendingMessage(changeCharacterStatisticsDemandMessage);
         }
 
-        public override void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons, MapField[,] newMap)
+        public override void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons)
         {
+            // get the new map from the party
+            MapField[,] newMap = Party.GetInstance().map.fields;
+
             MapChangeDemandMessage mapChangeDemandMessage = new MapChangeDemandMessage(mapChangeReasons, newMap);
             NetworkController.HandleSendingMessage(mapChangeDemandMessage);
         }

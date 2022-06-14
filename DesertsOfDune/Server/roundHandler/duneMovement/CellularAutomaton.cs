@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CommandLine;
+using GameData.network.messages;
 using GameData.network.util.enums;
 using GameData.network.util.world;
 using GameData.network.util.world.mapField;
@@ -97,6 +98,8 @@ namespace Server.roundHandler.duneMovementHandler
         /// </summary>
         public void NextIteration()
         {
+            bool wasMapChanged = false;
+
             for (int x = 0; x < map.MAP_WIDTH; x++)
             {
                 for (int y = 0; y < map.MAP_HEIGHT; y++)
@@ -116,6 +119,7 @@ namespace Server.roundHandler.duneMovementHandler
                             newDune.PlaceCharacter(cell.Character);
 
                             map.SetMapFieldAtPosition(newDune, x, y);
+                            wasMapChanged = true;
                             continue;
                         }
 
@@ -130,9 +134,15 @@ namespace Server.roundHandler.duneMovementHandler
                         newFlatSand.PlaceCharacter(cell.Character);
 
                         map.SetMapFieldAtPosition(newFlatSand, x, y);
-
+                        wasMapChanged = true;
                     }
                 }
+            }
+
+            // if the map was changed in this iteration, send the map change message
+            if (wasMapChanged)
+            {
+                Party.GetInstance().messageController.DoSendMapChangeDemand(MapChangeReasons.DUNEWALKING);
             }
         }
 
