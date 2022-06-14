@@ -591,11 +591,29 @@ namespace Server
 
         public override void DoSpawnCharacterDemand(Character attributes)
         {
-            string characterName = attributes.HouseCharacter.characterName;
-            Position pos = new Position(attributes.CurrentMapfield.XCoordinate, attributes.CurrentMapfield.ZCoordinate);
+            // get both players
+            Player player1 = Party.GetInstance().GetActivePlayers()[0];
+            Player player2 = Party.GetInstance().GetActivePlayers()[1];
 
-            // todo set clientid reasonable.
-            SpawnCharacterDemandMessage spawnCharacterDemandMessage = new SpawnCharacterDemandMessage(1234, attributes.CharacterId, characterName, pos, attributes);
+            int clientID = 0;
+
+            // fetch the id of the client, whose character this is
+            // therefore, check whether the character is from player 1
+            if (player1.UsedGreatHouse.Characters.Contains(attributes))
+            {
+                clientID = player1.ClientID;
+            } else if (player2.UsedGreatHouse.Characters.Contains(attributes))
+            {
+                clientID = player2.ClientID;
+            } else
+            {
+                Log.Error("Cannot send SPAWN_CHARACTER_DEMAND, because the spawned character do not belong to any player!");
+            }
+
+            // get the position of the character
+            Position position = new Position(attributes.CurrentMapfield.XCoordinate, attributes.CurrentMapfield.ZCoordinate);
+
+            SpawnCharacterDemandMessage spawnCharacterDemandMessage = new SpawnCharacterDemandMessage(clientID, attributes.CharacterId, attributes.CharacterName, position, attributes);
             NetworkController.HandleSendingMessage(spawnCharacterDemandMessage);
         }
 

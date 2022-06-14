@@ -134,11 +134,11 @@ namespace Server
             Log.Debug("Matching the cities to the players...");
             MatchGreatHouseToCity();
 
-            Log.Debug("Place the characters of each player around it's city...");
-            PlaceCharactersAroundCity();
-
             // cities were matched to the characters, so send the game config message to the clients
             messageController.DoSendGameConfig();
+
+            Log.Debug("Place the characters of each player around it's city...");
+            PlaceCharactersAroundCity();
 
             Log.Information("The party was prepared, so both player chose their Greathouse. The party now will start ... ");
             RoundHandler.NextRound();
