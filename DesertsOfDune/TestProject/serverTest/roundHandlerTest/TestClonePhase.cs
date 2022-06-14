@@ -7,6 +7,7 @@ using NUnit.Framework;
 using GameData.server.roundHandler;
 using GameData.network.messages;
 using GameData.network.util.world.character;
+using Server.Configuration;
 
 namespace UnitTestSuite.serverTest.roundHandlerTest
 {
@@ -18,6 +19,24 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
         [SetUp]
         public void Setup()
         {
+            ConfigurationFileLoader loader = new ConfigurationFileLoader();
+
+            // load scenario and create a new scenario configuration
+            ScenarioConfiguration scenarioConfiguration = loader.LoadScenarioConfiguration("");
+            ScenarioConfiguration.CreateInstance(scenarioConfiguration);
+
+            // load the party configuration and create a new party configuration class
+            PartyConfiguration partyConfiguration = loader.LoadPartyConfiguration("");
+            PartyConfiguration.SetInstance(partyConfiguration);
+
+            //Initialization for greatHouses in GameData project
+            GameData.Configuration.Configuration.InitializeConfigurations();
+            // Initialization for the character configurations in GameData project
+            GameData.Configuration.Configuration.InitializeCharacterConfiguration(
+                PartyConfiguration.GetInstance().noble,
+                PartyConfiguration.GetInstance().mentat,
+                PartyConfiguration.GetInstance().beneGesserit,
+                PartyConfiguration.GetInstance().fighter);
         }
 
 
