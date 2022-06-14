@@ -42,16 +42,16 @@ public class ManageDataModel : MonoBehaviour
             valueManager[0].Value = m.numbOfRounds;
             valueManager[1].Value = m.actionTimeUserClient;
             valueManager[2].Value = m.actionTimeAiClient;
-            valueManager[3].Value = (int)(m.highGroundBonusRatio*100);
-            valueManager[4].Value = (int)(m.lowerGroundMalusRatio*100);
-            valueManager[5].Value = (int)(m.kanlySuccessProbability*100);
+            valueManager[3].Value = (int)Mathf.Round(m.highGroundBonusRatio*100);
+            valueManager[4].Value = (int)Mathf.Round(m.lowerGroundMalusRatio*100);
+            valueManager[5].Value = (int)Mathf.Round(m.kanlySuccessProbability*100);
             valueManager[6].Value = m.spiceMinimum;
             valueManager[7].Value = m.sandWormSpeed;
             valueManager[8].Value = m.sandWormSpawnDistance;
-            valueManager[9].Value = (int)(m.cloneProbability*100);
+            valueManager[9].Value = (int)Mathf.Round(m.cloneProbability*100);
             valueManager[10].Value = m.minPauseTime;
             valueManager[11].Value = m.maxStrikes;
-            valueManager[12].Value = (int)(m.heliCrashProbability*100);
+            valueManager[12].Value = (int)Mathf.Round(m.heliCrashProbability*100);
 
 
             characterValuesManager[3].InvSize = m.fighter.inventorySize;
