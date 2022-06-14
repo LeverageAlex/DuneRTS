@@ -48,9 +48,6 @@ namespace Server
             LoadConfigurationFiles();
             Log.Debug("Loaded configuration files");
 
-            // waiting 3s, so everything can be configured
-            Thread.Sleep(3000);
-
             // create new party here and set the ServerMessageController
             Party.GetInstance().messageController = serverMessageController;
         }

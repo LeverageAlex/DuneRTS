@@ -30,7 +30,7 @@ COPY --from=publish /app .
 
 # expose the the port, on which the docker container will be accessable in 
 # the host system
-EXPOSE 8000
+EXPOSE ${PORT}
 
 # run the ai client with the arguments given in the docker compose
 CMD ["sh", "-c", "dotnet AIClient.dll -a ${SERVER_ADDRESS} -p ${PORT} -n ${NAME}"]

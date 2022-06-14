@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using AIClient.Configuration;
 using AIClient.parser.commandLineParser;
 using GameData.network.controller;
@@ -40,6 +41,8 @@ namespace AIClient
         /// <param name="args">arguments for starting the server (see Commandline args in "Standardisierungskomitee")</param>
         static void Main(string[] args)
         {
+            // wait 2 seconds for configuring everything
+            Thread.Sleep(2000);
 
             InitiliazeLogger();
             Log.Information("Starting ai client... Everything will be created and configured.");
@@ -48,7 +51,7 @@ namespace AIClient
             Log.Debug("Parsed the command line arguments and configuring the ai client");
 
             CreateNetworkModule();
-            Log.Debug("Created network module in ai client and connect to the server");
+            Log.Debug("Created network module in ai client and connect to the server");  
 
             messageController.DoSendJoin(configuration.Name);
         }
