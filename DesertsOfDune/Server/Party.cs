@@ -41,11 +41,6 @@ namespace Server
         private readonly List<Client> connectedClients;
 
         /// <summary>
-        /// information if the Great House Convention is already broken
-        /// </summary>
-        public bool greatHouseConventionBroken { get; set; }
-
-        /// <summary>
         /// the round handler for this party, which execute the rounds in the correct order and handles the user input
         /// </summary>
         private readonly RoundHandler roundHandler;
@@ -67,7 +62,6 @@ namespace Server
             connectedClients = new List<Client>();
             map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
             roundHandler = new RoundHandler(PartyConfiguration.GetInstance().numbOfRounds, PartyConfiguration.GetInstance().spiceMinimum, map);
-            greatHouseConventionBroken = false;
 
             Log.Debug("A new party was created!");
         }

@@ -12,7 +12,6 @@ using System.Linq;
 using GameData.network.util.parser;
 using Server.Configuration;
 using Newtonsoft.Json;
-using GameData.server.roundHandler;
 
 namespace Server
 {
@@ -244,6 +243,7 @@ namespace Server
         /// <param name="msg">contains informations about the player, the character he wants to do a action with and the action he wants his character to do</param>
         public override void OnActionRequestMessage(ActionRequestMessage msg)
         {
+
             //request from client to run an action
 
             //get the player who wants to do the action
@@ -346,8 +346,7 @@ namespace Server
                                 }
                             }
 
-                            actionCharacter.AtomicBomb(targetMapField, Party.GetInstance().map, Party.GetInstance().greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse);
-                            Party.GetInstance().greatHouseConventionBroken = true;
+                            actionCharacter.AtomicBomb(targetMapField, Party.GetInstance().map);
                         }
                         break;
                     case ActionType.SPICE_HORDING:
@@ -424,26 +423,14 @@ namespace Server
             }
         }
 
-        /// <summary>
-        /// End turn of a character and heal this character if he hasn't moved
-        /// </summary>
-        /// <param name="msg"></param>
         public override void OnEndTurnRequestMessage(EndTurnRequestMessage msg)
         {
-            foreach (var player in Party.GetInstance().GetActivePlayers())
-            {
-                if (player.ClientID == msg.clientID)
-                {
-                    foreach (var character in player.UsedGreatHouse.Characters)
-                    {
-                        if (character.CharacterId == msg.characterID && character.MPcurrent == character.MPmax)
-                        {
-                            character.HealIfHasntMoved();
-                        }
-                    }
-                }
-            }
-            CharacterTraitPhase.SetIsTraitActive(false);
+            throw new NotImplementedException("not implemented");
+
+            //End move phase prematurely
+
+            //int clientID
+            //int characterID
         }
 
         public override void OnGameStateRequestMessage(GameStateRequestMessage msg)

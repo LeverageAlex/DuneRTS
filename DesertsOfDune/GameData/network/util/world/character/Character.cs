@@ -13,31 +13,31 @@ namespace GameData.network.util.world
     /// </summary>
     public abstract class Character
     {
-        [JsonProperty]
+        [JsonProperty (Order = -2)]
         public string characterType { get; set; }
-        [JsonProperty]
+        [JsonProperty(Order = -1)]
         protected int healthMax;
-        [JsonProperty]
+        [JsonProperty(Order = 0)]
         public int healthCurrent { get; set; }
-        [JsonProperty]
+        [JsonProperty(Order = 1)]
         protected int healingHP;
-        [JsonProperty]
-        public int MPmax;
-        [JsonProperty]
+        [JsonProperty(Order = 2)]
+        protected int MPmax;
+        [JsonProperty(Order = 3)]
         public int MPcurrent { get; set; }
-        [JsonProperty]
+        [JsonProperty(Order = 4)]
         public int APmax { get; set; }
-        [JsonProperty]
+        [JsonProperty(Order = 5)]
         public int APcurrent { get; set; }
-        [JsonProperty]
+        [JsonProperty(Order = 6)]
         protected int attackDamage;
-        [JsonProperty]
+        [JsonProperty(Order = 7)]
         protected int inventorySize;
-        [JsonProperty]
+        [JsonProperty(Order = 8)]
         public int inventoryUsed { get; set; }
-        [JsonProperty]
+        [JsonProperty(Order = 9)]
         protected bool killedBySandworm;
-        [JsonProperty]
+        [JsonProperty(Order = 10)]
         protected bool isLoud;
         [JsonIgnore]
         protected MapField currentMapfield;
@@ -46,6 +46,7 @@ namespace GameData.network.util.world
         [JsonIgnore]
         public int CharacterId { get; set; }
 
+        [JsonIgnore]
         public GreatHouse greatHouse { get; set; }
         [JsonIgnore]
         public bool KilledBySandworm
@@ -139,6 +140,7 @@ namespace GameData.network.util.world
         /// <returns>true, if character was healed</returns>
         public bool HealIfHasntMoved()
         {
+            // TODO: add if moved this round clause
             if (healthCurrent + healingHP < healthMax)
             {
                 this.healthCurrent = healthCurrent + healingHP;
@@ -317,7 +319,7 @@ namespace GameData.network.util.world
         /// <param name="target"> this is the Field on the Map where the active Noble character aims its atomic bomb to </param>
         /// <returns></returns>
         virtual
-        public bool AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse)
+        public bool AtomicBomb(MapField target, Map map)
         {
             //Do nothing because only Nobles can perform this move
             return false;

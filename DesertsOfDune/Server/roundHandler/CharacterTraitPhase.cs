@@ -1,11 +1,11 @@
-﻿using GameData.network.controller;
+﻿using GameData.gameObjects;
 using GameData.network.util.world;
 using Server;
 using Server.roundHandler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Timers;
+using System.Text;
 
 namespace GameData.server.roundHandler
 {
@@ -14,108 +14,61 @@ namespace GameData.server.roundHandler
     /// </summary>
     public class CharacterTraitPhase : IGamePhase
     {
-        private List<Character> _allCharacters;
-        private static bool _isTraitActive = false;
-        private static Character _currentCharacter = null;
-        private static Timer _timer;
+        // todo implement class character
+        // private List<Character> charactersAlive;
+        //private Character[] traitSequence;
+
+        private RoundHandler parent;
+        private bool characterInAction = false;
+        private List<Character> allCharacters = new List<Character>();
+        private Character aktiveCharacter; //TODO:if turn from previous character is over, set next character from list to aktive character
 
         public void Execute()
         {
-            SetTimer(100); //initialize timer with length of 100 seconds
-            GenerateTraitSequenze();
-
-            foreach (var character in _allCharacters)
-            {
-                _currentCharacter = character;
-                if (!character.IsDead())
-                {
-                    character.resetMPandAp();
-                    RequestClientForNextCharacterTrait(character.CharacterId);
-                    while (_isTraitActive)
-                    {
-                        if ((character.APcurrent <= 0 && character.MPcurrent <= 0) || character.IsDead()) //if character has no point for action or movement left or is dead, end his turn
-                        {
-                            SetIsTraitActive(false);
-                        }
-                    }
-                    _timer.Stop(); //stop timer when characterTrait is finished
-                }
-            }
-        }
-
-        /// <summary>
-        /// This method gets all characters and randomizes this list for the traitsequenze
-        /// </summary>
-        /// <returns>Returns the new sorted list of characters.</returns>
-        public bool GenerateTraitSequenze()
-        {
-            _allCharacters = new List<Character>();
+            //TODO: finish implementation
             foreach (var player in Party.GetInstance().GetActivePlayers())
             {
                 foreach (var character in player.UsedGreatHouse.GetCharactersAlive())
                 {
-                    _allCharacters.Add(character);
+                    allCharacters.Add(character);
                 }
             }
+            RandomizeTraitSequenze();
+
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// This method randomizes the traitsequenze
+        /// </summary>
+        /// <returns>Returns the new sorted list of characters.</returns>
+        public bool RandomizeTraitSequenze()
+        {
+            // todo implement logic
             var random = new Random();
-            _allCharacters = (List<Character>)_allCharacters.OrderBy(item => random.Next());
+            allCharacters = (List<Character>)allCharacters.OrderBy(item => random.Next());
             return true;
         }
 
         /// <summary>
         /// Sends a message to the client who has the next turn with the ID of the character, whos turn it is.
         /// </summary>
-        public void RequestClientForNextCharacterTrait(int characterID)
+        public void RequestClientForNextCharacterTrait()
         {
+            //TODO: finish implementation
+            var characterID = allCharacters[0].CharacterId; //TODO: change this
+
             foreach (var player in Party.GetInstance().GetActivePlayers())
             {
                 foreach (var character in player.UsedGreatHouse.GetCharactersAlive())
                 {
                     if (character.CharacterId == characterID)
                     {
-                        Party.GetInstance().messageController.DoSendTurnDemand(player.ClientID, characterID); //request client to execute a characterTrait
-                        SetIsTraitActive(true);
-                        _timer.Start(); // starts the timer when characterTrait starts
+                        Party.GetInstance().messageController.DoSendTurnDemand(player.ClientID, characterID);
                     }
                 }
             }
-        }
-
-        public static void SetIsTraitActive(bool isActive)
-        {
-            _isTraitActive = isActive;
-        }
-
-        /// <summary>
-        /// Starts a new timer with the time from the parameter.
-        /// </summary>
-        /// <param name="timeInSeconds">Time in seconds how long the timer runs.</param>
-        private static void SetTimer(int timeInSeconds)
-        {
-            _timer = new Timer(timeInSeconds * 1000);
-            _timer.Elapsed += OnTimedEvent;
-            _timer.AutoReset = true;
-        }
-
-        /// <summary>
-        /// This Event is called when the timer runs out and then disconnect the client.
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="e"></param>
-        private static void OnTimedEvent(Object source, ElapsedEventArgs e)
-        {
-            string sessionID = "";
-            foreach (var player in Party.GetInstance().GetActivePlayers())
-            {
-                foreach (var character in player.UsedGreatHouse.Characters)
-                {
-                    if (character.CharacterId == _currentCharacter.CharacterId)
-                    {
-                        sessionID = player.SessionID;
-                    }
-                }
-            }
-            ((ServerConnectionHandler)Party.GetInstance().messageController.NetworkController.connectionHandler).sessionManager.CloseSession(sessionID, WebSocketSharp.CloseStatusCode.Normal, "Timeout happend in characterTraitPhase!");
         }
     }
 }
