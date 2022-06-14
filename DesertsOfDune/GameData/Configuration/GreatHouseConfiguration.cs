@@ -34,7 +34,7 @@ namespace GameData.Configuration
             HouseCharactersAtreides = new HouseCharacter[GreatHouse.AMOUNT_OF_CHARACTERS_PER_GREAT_HOUSE];
             HouseCharactersAtreides[0] = new HouseCharacter("Duke Leto Atreides", CharacterType.NOBLE.ToString());
             HouseCharactersAtreides[1] = new HouseCharacter("Paul Atreides", CharacterType.NOBLE.ToString());
-            HouseCharactersAtreides[2] = new HouseCharacter("Lady Jessica", CharacterType.BENEGESSERIT.ToString());
+            HouseCharactersAtreides[2] = new HouseCharacter("Lady Jessica", CharacterType.BENE_GESSERIT.ToString());
             HouseCharactersAtreides[3] = new HouseCharacter("Thufir Hawat", CharacterType.MENTAT.ToString());
             HouseCharactersAtreides[4] = new HouseCharacter("Gurney Halleck", CharacterType.FIGHTER.ToString());
             HouseCharactersAtreides[5] = new HouseCharacter("Space Pug, Duke Letos tapferer Mopshund", CharacterType.FIGHTER.ToString());
@@ -47,10 +47,10 @@ namespace GameData.Configuration
         {
             HouseCharactersCorrino = new HouseCharacter[GreatHouse.AMOUNT_OF_CHARACTERS_PER_GREAT_HOUSE];
             HouseCharactersCorrino[0] = new HouseCharacter("Emperor Shaddam IV Corrino", CharacterType.NOBLE.ToString());
-            HouseCharactersCorrino[1] = new HouseCharacter("Princess Irulan Corrino", CharacterType.BENEGESSERIT.ToString());
+            HouseCharactersCorrino[1] = new HouseCharacter("Princess Irulan Corrino", CharacterType.BENE_GESSERIT.ToString());
             HouseCharactersCorrino[2] = new HouseCharacter("Count Hasimir Fenring", CharacterType.MENTAT.ToString());
-            HouseCharactersCorrino[3] = new HouseCharacter("Lady Margot Fenring", CharacterType.BENEGESSERIT.ToString());
-            HouseCharactersCorrino[4] = new HouseCharacter("Reverend Mother Gaius Helen Mohiam", CharacterType.BENEGESSERIT.ToString());
+            HouseCharactersCorrino[3] = new HouseCharacter("Lady Margot Fenring", CharacterType.BENE_GESSERIT.ToString());
+            HouseCharactersCorrino[4] = new HouseCharacter("Reverend Mother Gaius Helen Mohiam", CharacterType.BENE_GESSERIT.ToString());
             HouseCharactersCorrino[5] = new HouseCharacter("Captain Aramsham", CharacterType.FIGHTER.ToString());
         }
 
@@ -105,7 +105,7 @@ namespace GameData.Configuration
             HouseCharactersVernius[0] = new HouseCharacter("Earl Dominic Vernius", CharacterType.NOBLE.ToString());
             HouseCharactersVernius[1] = new HouseCharacter("Lady Shando Vernius", CharacterType.NOBLE.ToString());
             HouseCharactersVernius[2] = new HouseCharacter("Kailea Vernius", CharacterType.NOBLE.ToString());
-            HouseCharactersVernius[3] = new HouseCharacter("Tessia Vernius", CharacterType.BENEGESSERIT.ToString());
+            HouseCharactersVernius[3] = new HouseCharacter("Tessia Vernius", CharacterType.BENE_GESSERIT.ToString());
             HouseCharactersVernius[4] = new HouseCharacter("Rhombur Vernius", CharacterType.FIGHTER.ToString());
             HouseCharactersVernius[5] = new HouseCharacter("Bronso Vernius", CharacterType.MENTAT.ToString());
         }

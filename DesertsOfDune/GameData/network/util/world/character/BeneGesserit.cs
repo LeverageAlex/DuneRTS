@@ -27,7 +27,7 @@ namespace GameData.network.util.world.character
         /// <param name="inventoryUsed">the usedup InventorySpace of the Character</param>
         /// <param name="killedBySandworm">true, if the Character was killed by the sandworm</param>
         /// <param name="isLoud">true, if the character is loud</param>
-        public BeneGesserit(int healthMax, int healthCurrent, int healingHP, int MPmax, int MPcurrent, int APmax, int APcurrent, int attackDamage, int inventorySize, int inventoryUsed, bool killedBySandworm, bool isLoud) : base(CharacterType.BENEGESSERIT, healthMax, healthCurrent, healingHP, MPmax, MPcurrent, APmax, APcurrent, attackDamage, inventorySize, inventoryUsed, killedBySandworm, isLoud)
+        public BeneGesserit(int healthMax, int healthCurrent, int healingHP, int MPmax, int MPcurrent, int APmax, int APcurrent, int attackDamage, int inventorySize, int inventoryUsed, bool killedBySandworm, bool isLoud) : base(CharacterType.BENE_GESSERIT, healthMax, healthCurrent, healingHP, MPmax, MPcurrent, APmax, APcurrent, attackDamage, inventorySize, inventoryUsed, killedBySandworm, isLoud)
         {
 
         }
@@ -35,7 +35,7 @@ namespace GameData.network.util.world.character
         /// <summary>
         /// creates a new bene gesserit 
         /// </summary>
-        public BeneGesserit() : base(CharacterType.BENEGESSERIT, CharacterConfiguration.BeneGesserit.maxHP, CharacterConfiguration.BeneGesserit.maxMP, CharacterConfiguration.BeneGesserit.maxAP, CharacterConfiguration.BeneGesserit.damage, CharacterConfiguration.BeneGesserit.inventorySize, CharacterConfiguration.BeneGesserit.healingHP)
+        public BeneGesserit() : base(CharacterType.BENE_GESSERIT, CharacterConfiguration.BeneGesserit.maxHP, CharacterConfiguration.BeneGesserit.maxMP, CharacterConfiguration.BeneGesserit.maxAP, CharacterConfiguration.BeneGesserit.damage, CharacterConfiguration.BeneGesserit.inventorySize, CharacterConfiguration.BeneGesserit.healingHP)
         {
         }
 

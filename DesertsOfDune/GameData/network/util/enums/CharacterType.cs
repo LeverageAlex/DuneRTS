@@ -7,7 +7,7 @@
     {
         NOBLE,
         MENTAT,
-        BENEGESSERIT,
+        BENE_GESSERIT,
         FIGHTER
     }
 }

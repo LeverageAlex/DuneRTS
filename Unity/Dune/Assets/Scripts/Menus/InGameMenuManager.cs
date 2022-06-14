@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class InGameMenuManager : MonoBehaviour
 {
 
-    public static InGameMenuManager instance;
+    private static InGameMenuManager instance;
 
     [Header("Menus:")]
     public GameObject InGameMenu;
@@ -29,10 +29,29 @@ public class InGameMenuManager : MonoBehaviour
     public Toggle option2;
     public GameObject confirmButton;
 
+    private string option1Name;
+    private string option2Name;
+
 
     private void Awake()
     {
-        instance = this; 
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public static InGameMenuManager getInstance()
+    {
+        if(instance == null)
+        {
+            instance = new InGameMenuManager();
+        }
+        return instance;
     }
 
     private void Start()
@@ -87,6 +106,9 @@ public class InGameMenuManager : MonoBehaviour
         SetOptionText(1, houseName1);
         SetOptionText(2, houseName2);
 
+        option1Name = houseName1;
+        option2Name = houseName2;
+
         ActivateMenu(HouseSelectionMenu);
     }
 
@@ -106,14 +128,15 @@ public class InGameMenuManager : MonoBehaviour
             Debug.Log(option1.GetComponentInChildren<Text>().text + " was selected!");
             //TODO send message to server
 
-            DemandEndHouseSelection();//TODO trigger by server instead
+            SessionHandler.messageController.DoRequestHouse(option1Name);
+            //DemandEndHouseSelection();//TODO trigger by server instead
         }
         else if (option2.isOn)
         {
             Debug.Log(option2.GetComponentInChildren<Text>().text + " was selected!");
             //TODO send message to server
-
-            DemandEndHouseSelection();//TODO trigger by server instead
+            SessionHandler.messageController.DoRequestHouse(option2Name);
+            //DemandEndHouseSelection();//TODO trigger by server instead
         }
     }
 

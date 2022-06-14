@@ -13,15 +13,15 @@ namespace GameData.network.util.world
     /// <summary>
     /// Base class for the Great Houses
     /// </summary>
-    public abstract class GreatHouse
+    public class GreatHouse
     {
-        [JsonProperty]
+        [JsonProperty(Order = 1)]
         public string houseName { get; }
-        [JsonProperty]
+        [JsonProperty (Order = 2)]
         private string houseColor;
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore, Order = 3)]
         private bool illegalAtomicUsage;
-        [JsonProperty]
+        [JsonProperty (Order = 4)]
         public HouseCharacter[] houseCharacters { get; set; }
         [JsonIgnore]
         public City City { get; }
@@ -38,7 +38,9 @@ namespace GameData.network.util.world
         /// <param name="houseName">the name of the Greathouse</param>
         /// <param name="houseColor">the color of the house</param>
         /// <param name="houseCharacters">the characters of the house</param>
-        protected GreatHouse(string houseName, string houseColor, HouseCharacter[] houseCharacters)
+
+        [JsonConstructor]
+        public GreatHouse(string houseName, string houseColor, HouseCharacter[] houseCharacters)
         {
             this.houseName = houseName;
             this.houseColor = houseColor;
@@ -94,7 +96,7 @@ namespace GameData.network.util.world
                     case CharacterType.NOBLE:
                         newCharacter = new Noble();
                         break;
-                    case CharacterType.BENEGESSERIT:
+                    case CharacterType.BENE_GESSERIT:
                         newCharacter = new BeneGesserit();
                         break;
                     case CharacterType.MENTAT:
