@@ -13,6 +13,7 @@ using GameData.network.util.parser;
 using Server.Configuration;
 using Newtonsoft.Json;
 using GameData.server.roundHandler;
+using GameData.network.util.world.mapField;
 
 namespace Server
 {
@@ -490,18 +491,43 @@ namespace Server
             Log.Debug("An error (code = " + errorCode + " ) occured: " + errorDescription);
         }
 
+        /// <summary>
+        /// sends the game configuration message
+        /// </summary>
+        /// <remarks>
+        /// Therefore the server fetches
+        /// <list type="bullet">
+        /// <item>the configuration classes (scenario and party configuration)</item>
+        /// <item>the client ids of both players and their cities (positions)</item>
+        /// <item>the eye of the storm</item>
+        /// </list>
+        /// </remarks>
         public override void DoSendGameConfig()
         {
-            int client0ID = Party.GetInstance().GetActivePlayers()[0].ClientID;
-            int client1ID = Party.GetInstance().GetActivePlayers()[1].ClientID;
-
+            // get the scenario loaded by the server
             List<List<string>> scenario = ScenarioConfiguration.GetInstance().scenario;
+
+            // get the party configuration loaded by the server
             string partyConfiguration = JsonConvert.SerializeObject(PartyConfiguration.GetInstance());
             PartyReference partyReference = new PartyReference(partyConfiguration);
 
-            var field = Map.instance.GetRandomDesertField();
-            //TODO NICHT FERTIG
-            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, partyReference, new CityToClient[2] {new CityToClient(client0ID, 0, 0), new CityToClient(client1ID, 3, 3)}, new Position(field.XCoordinate, field.ZCoordinate));
+            // get the client ids and their city positions
+            int client0ID = Party.GetInstance().GetActivePlayers()[0].ClientID;
+            int client1ID = Party.GetInstance().GetActivePlayers()[1].ClientID;
+
+            // get cities of both players
+            City cityPlayer0 = Party.GetInstance().GetActivePlayers()[0].City;
+            City cityPlayer1 = Party.GetInstance().GetActivePlayers()[1].City;
+
+            CityToClient[] cityToClientArray = new CityToClient[2];
+            cityToClientArray[0] = new CityToClient(client0ID, cityPlayer0.XCoordinate, cityPlayer0.ZCoordinate);
+            cityToClientArray[1] = new CityToClient(client1ID, cityPlayer1.XCoordinate, cityPlayer1.ZCoordinate);
+
+            // get the eye of the storm
+            MapField stormEyeField = Party.GetInstance().RoundHandler.SandstormPhase.EyeOfStorm;
+            Position stormEye = new Position(stormEyeField.XCoordinate, stormEyeField.ZCoordinate);
+
+            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, partyReference, cityToClientArray, stormEye);
             NetworkController.HandleSendingMessage(gameConfigMessage);
         }
 
@@ -548,8 +574,11 @@ namespace Server
             NetworkController.HandleSendingMessage(changeCharacterStatisticsDemandMessage);
         }
 
-        public override void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons, MapField[,] newMap)
+        public override void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons)
         {
+            // get the new map from the party
+            MapField[,] newMap = Party.GetInstance().map.fields;
+
             MapChangeDemandMessage mapChangeDemandMessage = new MapChangeDemandMessage(mapChangeReasons, newMap);
             NetworkController.HandleSendingMessage(mapChangeDemandMessage);
         }
@@ -562,11 +591,29 @@ namespace Server
 
         public override void DoSpawnCharacterDemand(Character attributes)
         {
-            string characterName = attributes.HouseCharacter.characterName;
-            Position pos = new Position(attributes.CurrentMapfield.XCoordinate, attributes.CurrentMapfield.ZCoordinate);
+            // get both players
+            Player player1 = Party.GetInstance().GetActivePlayers()[0];
+            Player player2 = Party.GetInstance().GetActivePlayers()[1];
 
-            // todo set clientid reasonable.
-            SpawnCharacterDemandMessage spawnCharacterDemandMessage = new SpawnCharacterDemandMessage(1234, attributes.CharacterId, characterName, pos, attributes);
+            int clientID = 0;
+
+            // fetch the id of the client, whose character this is
+            // therefore, check whether the character is from player 1
+            if (player1.UsedGreatHouse.Characters.Contains(attributes))
+            {
+                clientID = player1.ClientID;
+            } else if (player2.UsedGreatHouse.Characters.Contains(attributes))
+            {
+                clientID = player2.ClientID;
+            } else
+            {
+                Log.Error("Cannot send SPAWN_CHARACTER_DEMAND, because the spawned character do not belong to any player!");
+            }
+
+            // get the position of the character
+            Position position = new Position(attributes.CurrentMapfield.XCoordinate, attributes.CurrentMapfield.ZCoordinate);
+
+            SpawnCharacterDemandMessage spawnCharacterDemandMessage = new SpawnCharacterDemandMessage(clientID, attributes.CharacterId, attributes.CharacterName, position, attributes);
             NetworkController.HandleSendingMessage(spawnCharacterDemandMessage);
         }
 

@@ -139,7 +139,6 @@ namespace GameData.server.roundHandler
         public void MoveSandWorm(Queue<MapField> path)
         {
             // check, whether the targeted character moves on a plateau, so disappear
-
             if (_targetCharacter.CurrentMapfield.tileType.Equals(TileType.PLATEAU.ToString())){
                 Despawn(_messageController);
             }

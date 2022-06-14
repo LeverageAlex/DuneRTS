@@ -21,7 +21,7 @@ namespace Server
     /// </summary>
     /// <remarks>
     /// Therefore this class stores all information about the party (identifier of this party) and the connected clients to this party.
-    /// If two players are connected, the party can be prepared and started with this class. Afterwards it executes all game phases via the <see cref="RoundHandler"/>.
+    /// If two players are connected, the party can be prepared and started with this class. Afterwards it executes all game phases via the <see cref="GameData.gameObjects.RoundHandler"/>.
     /// Furthermore this class regularly check for the winning condition and can end the party or launch the end game phase.
     /// </remarks>
     /// TODO: do not work with singleton and references on both sides (message controller)
@@ -48,7 +48,7 @@ namespace Server
         /// <summary>
         /// the round handler for this party, which execute the rounds in the correct order and handles the user input
         /// </summary>
-        private readonly RoundHandler roundHandler;
+        public RoundHandler RoundHandler { get; }
 
         /// <summary>
         /// the map of this game / party
@@ -66,7 +66,7 @@ namespace Server
         {
             connectedClients = new List<Client>();
             map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
-            roundHandler = new RoundHandler(PartyConfiguration.GetInstance().numbOfRounds, PartyConfiguration.GetInstance().spiceMinimum, map);
+            RoundHandler = new RoundHandler(PartyConfiguration.GetInstance().numbOfRounds, PartyConfiguration.GetInstance().spiceMinimum, map);
             greatHouseConventionBroken = false;
 
             Log.Debug("A new party was created!");
@@ -134,11 +134,14 @@ namespace Server
             Log.Debug("Matching the cities to the players...");
             MatchGreatHouseToCity();
 
+            // cities were matched to the characters, so send the game config message to the clients
+            messageController.DoSendGameConfig();
+
             Log.Debug("Place the characters of each player around it's city...");
             PlaceCharactersAroundCity();
 
             Log.Information("The party was prepared, so both player chose their Greathouse. The party now will start ... ");
-            roundHandler.NextRound();
+            RoundHandler.NextRound();
             Log.Debug("Triggered first round by round handler");
         }
 

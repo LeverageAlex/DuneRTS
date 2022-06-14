@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using GameData.network.messages;
 using GameData.network.util.enums;
 using GameData.network.util.world;
 using GameData.network.util.world.mapField;
+using Server;
 using Server.roundHandler;
 
 namespace GameData.server.roundHandler
@@ -31,6 +33,7 @@ namespace GameData.server.roundHandler
         /// <param name="randomField">the random field</param>
         private void ChangeFieldAndNeighborsRandomly(MapField randomField)
         {
+            bool wasMapChanged = false;
 
             Random random = new Random();
             List<MapField> neighbors = this._map.GetNeighborFields(randomField);
@@ -45,6 +48,7 @@ namespace GameData.server.roundHandler
                         newDune.Character = randomField.Character;
 
                         this._map.SetMapFieldAtPosition(newDune, randomField.XCoordinate, randomField.ZCoordinate);
+                        wasMapChanged = true;
                     }
                     else
                     {
@@ -52,8 +56,15 @@ namespace GameData.server.roundHandler
                         newFlatSand.Character = randomField.Character;
 
                         this._map.SetMapFieldAtPosition(newFlatSand, randomField.XCoordinate, randomField.ZCoordinate);
+                        wasMapChanged = true;
                     }
                 }
+            }
+
+            // check, whether the map was changed while the spice blow, if so send a map change message
+            if (wasMapChanged)
+            {
+                Party.GetInstance().messageController.DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
             }
         }
 

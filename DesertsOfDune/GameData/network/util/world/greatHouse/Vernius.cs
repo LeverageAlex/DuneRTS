@@ -14,7 +14,7 @@ namespace GameData.network.util.world
         /// <summary>
         /// create a new Great house of type "Vernius" with the characters from the "Standisierungsdokument"
         /// </summary>
-        public Vernius() : base("VERNIUS", "VIOLETT", GreatHouseConfiguration.HouseCharactersVernius)
+        public Vernius() : base("VERNIUS", "VIOLETT", GreatHouseConfiguration.HouseCharactersVernius, true)
         {
         }
     }

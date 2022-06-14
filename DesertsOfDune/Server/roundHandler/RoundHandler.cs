@@ -51,7 +51,7 @@ namespace GameData.gameObjects
         /// game phases, handled only by the server (dune movement, sandstorm, sandworm, cloning, overlength mechanism)
         /// </summary>
         private readonly DuneMovementPhase _duneMovementPhase;
-        private readonly SandstormPhase _sandstormPhase;
+        public SandstormPhase SandstormPhase { get; }
         private readonly SandwormPhase _sandwormPhase;
         private readonly ClonePhase _clonePhase;
 
@@ -92,7 +92,7 @@ namespace GameData.gameObjects
 
             // initialize game phases
             this._duneMovementPhase = new DuneMovementPhase(map);
-            this._sandstormPhase = new SandstormPhase(map);
+            this.SandstormPhase = new SandstormPhase(map);
             this._sandwormPhase = new SandwormPhase(map);
             this._clonePhase = new ClonePhase(map, PartyConfiguration.GetInstance().cloneProbability);
 
@@ -123,7 +123,7 @@ namespace GameData.gameObjects
                 _duneMovementPhase.Execute();
                 Log.Debug("Executed the dune movement phase.");
 
-                _sandstormPhase.Execute();
+                SandstormPhase.Execute();
                 Log.Debug("Executed the sandstorm phase.");
 
                 if (IsOverlengthMechanismActive)

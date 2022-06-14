@@ -178,7 +178,7 @@ namespace GameData.network.controller
 
         public abstract void DoSendChangeCharacterStatsDemand(int clientID, int characterID, CharacterStatistics stats);
 
-        public abstract void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons, MapField[,] newMap);
+        public abstract void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons);
 
         public abstract void DoSendAtomicsUpdateDemand(int clientID, bool shunned, int atomicsLeft);
 
