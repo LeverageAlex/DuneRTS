@@ -475,6 +475,34 @@ namespace TestProject.networkTest.utilTest.parserTest
             */
         }
 
+        [Test]
+        public void TestToHouseOfferMessage()
+        {
+            ConfigurationFileLoader loader = new ConfigurationFileLoader();
+
+            // load scenario and create a new scenario configuration
+            ScenarioConfiguration scenarioConfiguration = loader.LoadScenarioConfiguration("../.././../ConfigurationFiles/team08.scenario.json");
+            ScenarioConfiguration.CreateInstance(scenarioConfiguration);
+
+            // load the party configuration and create a new party configuration class
+            PartyConfiguration partyConfiguration = loader.LoadPartyConfiguration("../.././../ConfigurationFiles/team08.party.json");
+            PartyConfiguration.SetInstance(partyConfiguration);
+
+            //Initialization for greatHouses in GameData project
+            GameData.Configuration.Configuration.InitializeConfigurations();
+            // Initialization for the character configurations in GameData project
+            GameData.Configuration.Configuration.InitializeCharacterConfiguration(
+                PartyConfiguration.GetInstance().noble,
+                PartyConfiguration.GetInstance().mentat,
+                PartyConfiguration.GetInstance().beneGesserit,
+                PartyConfiguration.GetInstance().fighter);
+
+            string message = "{\"type\":\"HOUSE_OFFER\",\"version\":\"1.0\",\"clientID\":1234,\"houses\":[{\"houseName\":\"CORRINO\",\"houseColor\":\"GOLD\",\"houseCharacters\":[{\"characterName\":\"Emperor Shaddam IV Corrino\",\"characterClass\":\"NOBLE\"},{\"characterName\":\"Princess Irulan Corrino\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Count Hasimir Fenring\",\"characterClass\":\"MENTAT\"},{\"characterName\":\"Lady Margot Fenring\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Reverend Mother Gaius Helen Mohiam\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Captain Aramsham\",\"characterClass\":\"BENE_GESSERIT\"}]},null]}";
+            Message deserealizedMessage = MessageConverter.ToMessage(message);
+
+            Assert.AreEqual(null, deserealizedMessage);
+        }
+
         // TODO: implement tests for these messages..
 
         //ChangePlayerSpiceDemandMessage

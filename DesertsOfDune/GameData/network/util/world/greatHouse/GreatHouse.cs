@@ -96,7 +96,7 @@ namespace GameData.network.util.world
                     case CharacterType.NOBLE:
                         newCharacter = new Noble();
                         break;
-                    case CharacterType.BENEGESSERIT:
+                    case CharacterType.BENE_GESSERIT:
                         newCharacter = new BeneGesserit();
                         break;
                     case CharacterType.MENTAT:

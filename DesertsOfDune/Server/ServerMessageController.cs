@@ -360,7 +360,7 @@ namespace Server
                     case ActionType.VOICE:
                         action = ActionType.VOICE;
                         if (actionCharacter.APcurrent == actionCharacter.APmax
-                            && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.BENEGESSERIT))
+                            && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.BENE_GESSERIT))
                         {
                             actionCharacter.Voice(targetCharacter);
                         }
