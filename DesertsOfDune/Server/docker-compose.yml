@@ -1,6 +1,8 @@
 services:
   server: 
-    build: .
+    build: 
+      context: ..
+      dockerfile: Server/Dockerfile
     pull_policy: always
     environment: 
       PARTY_CONFIG_FILEPATH: "src/Server/Configuration/ConfigurationFiles/team08.party.json"
