@@ -22,10 +22,12 @@ public class ManageCharacterValues : MonoBehaviour
     private int _currentMaxAP;
     private int _currentMaxInv;
 
-    public void Init() {
+    public CharacterValues[] Init() {
         // initialize common maximum values
-        GetComponent<PopulateCharacters>().Init();
+        CharacterValues[] ret = GetComponent<PopulateCharacters>().Init();
         UpdateMaxima(MaxHealth, MaxInventorySize, MaxAP, MaxMP);
+
+        return ret;
     }
 
     // Update is called once per frame

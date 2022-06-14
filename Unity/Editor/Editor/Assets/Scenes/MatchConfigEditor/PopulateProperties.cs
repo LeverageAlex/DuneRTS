@@ -18,32 +18,35 @@ public class PopulateProperties : MonoBehaviour
         public int MaxValue;
     }
 
+    public GameObject probertyPrefab;
     public PropertyProperty[] properties;
+    
 
     // The relative hight every element takes from the whole panel
     //0,9 / amount of Properties
     private float relativeHeight;
 
+    private UpdateSlider[] allSliders { get; set; }
 
-    public void Init() {
+
+    public UpdateSlider[] Init() {
         relativeHeight = 0.91f / properties.Length;
 
         // First entry (Game Of Life)
         SetAnchors(transform.Find("GameOfLife").gameObject, 0);
 
-        // Second enty (Prototype)
-        GameObject prototype = transform.Find("NumberOfRounds").gameObject;
-        prototype.transform.Find("Input").GetComponent<UpdateSlider>().Init();
-        SetValues(prototype, properties[0]);
-        SetAnchors(prototype, 1);
 
+        allSliders = new UpdateSlider[properties.Length];
         // List of all other properties (copies of the first)
-        for (int i = 1; i < properties.Length; i++) {
-            GameObject newInput = Instantiate(prototype, this.transform);
-            newInput.transform.Find("Input").GetComponent<UpdateSlider>().Init();
+        for (int i = 0; i < properties.Length; i++) {
+            GameObject newInput = Instantiate(probertyPrefab, this.transform);
+            allSliders[i] = newInput.transform.Find("Input").GetComponent<UpdateSlider>();
+            allSliders[i].Init();
             SetValues(newInput, properties[i]);
             SetAnchors(newInput, i + 1);
         }
+
+        return allSliders;
     }
 
     void SetValues(GameObject go, PropertyProperty property) {
