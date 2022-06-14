@@ -14,7 +14,7 @@ namespace GameData.network.util.world
         /// <summary>
         /// create a new Great house of type "Ordos" with the characters from the "Standisierungsdokument"
         /// </summary>
-        public Ordos() : base("ORDOS", "BLAU", GreatHouseConfiguration.HouseCharactersOrdos)
+        public Ordos() : base("ORDOS", "BLAU", GreatHouseConfiguration.HouseCharactersOrdos, true)
         {
         }
     }

@@ -14,7 +14,7 @@ namespace GameData.network.util.world
         /// <summary>
         /// create a new Great house of type "Corrino" with the characters from the "Standisierungsdokument"
         /// </summary>
-        public Corrino() : base("CORRINO", "GOLD", GreatHouseConfiguration.HouseCharactersCorrino)
+        public Corrino() : base("CORRINO", "GOLD", GreatHouseConfiguration.HouseCharactersCorrino, true)
         {
         }
 

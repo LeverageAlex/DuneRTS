@@ -14,7 +14,7 @@ namespace GameData.network.util.world
         /// <summary>
         /// create a new Great house of type "Atreides" with the characters from the "Standisierungsdokument"
         /// </summary>
-        public Atreides() : base("ATREIDES", "GRÜN", GreatHouseConfiguration.HouseCharactersAtreides)
+        public Atreides() : base("ATREIDES", "GRÜN", GreatHouseConfiguration.HouseCharactersAtreides, true)
         {
         }
     }
