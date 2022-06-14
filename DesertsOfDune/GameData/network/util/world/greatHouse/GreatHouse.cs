@@ -16,7 +16,7 @@ namespace GameData.network.util.world
     public abstract class GreatHouse
     {
         [JsonProperty]
-        private string houseName;
+        public string houseName { get; }
         [JsonProperty]
         private string houseColor;
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
@@ -45,23 +45,6 @@ namespace GameData.network.util.world
             this.illegalAtomicUsage = false;
             this.houseCharacters = houseCharacters;
             this.Characters = GetCharactersForHouse();
-            this.unusedAtomicBombs = 3;
-        }
-
-        /// <summary>
-        /// This constructor is used for testing perpeces only in order to not use the method getcharactersforhouse.
-        /// </summary>
-        /// <param name="houseName">the name of the Greathouse</param>
-        /// <param name="houseColor">the color of the house</param>
-        /// <param name="houseCharacters">the characters of the house</param>
-        /// <param name="characters">the characters of the House</param>
-        protected GreatHouse(string houseName, string houseColor, HouseCharacter[] houseCharacters, List<Character> characters)
-        {
-            this.houseName = houseName;
-            this.houseColor = houseColor;
-            this.illegalAtomicUsage = false;
-            this.houseCharacters = houseCharacters;
-            this.Characters = characters;
             this.unusedAtomicBombs = 3;
         }
 
