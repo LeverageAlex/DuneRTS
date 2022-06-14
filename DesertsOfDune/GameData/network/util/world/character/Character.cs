@@ -45,7 +45,7 @@ namespace GameData.network.util.world
         public MapField CurrentMapfield { get; set; }
         [JsonIgnore]
         public int CharacterId { get; set; }
-
+        [JsonIgnore]
         public GreatHouse greatHouse { get; set; }
         [JsonIgnore]
         public bool KilledBySandworm

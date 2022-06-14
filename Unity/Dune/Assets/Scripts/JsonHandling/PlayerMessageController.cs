@@ -106,10 +106,12 @@ public class PlayerMessageController : MessageController
         if (SessionHandler.isPlayer)
         {
             SessionHandler.clientId = joinAcceptedMessage.clientID;
+            Debug.Log("Set client id to: " + SessionHandler.clientId);
         }
         else
         {
             SessionHandler.viewerId = joinAcceptedMessage.clientID;
+            Debug.Log("Joined as viewer and set id to: " + SessionHandler.clientId);
         }
             SessionHandler.clientSecret = joinAcceptedMessage.clientSecret;
         
@@ -229,11 +231,11 @@ public class PlayerMessageController : MessageController
     {
         if (gamePauseDemandMessage.pause)
         {
-            InGameMenuManager.instance.DemandPauseGame(SessionHandler.clientId != gamePauseDemandMessage.requestedByClientID);
+            InGameMenuManager.getInstance().DemandPauseGame(SessionHandler.clientId != gamePauseDemandMessage.requestedByClientID);
         }
         else
         {
-            InGameMenuManager.instance.RequestUnpauseGame();
+            InGameMenuManager.getInstance().RequestUnpauseGame();
         }
     }
 
@@ -245,7 +247,25 @@ public class PlayerMessageController : MessageController
     /// <returns></returns>
     public override void OnHouseOfferMessage(HouseOfferMessage houseOfferMessage)
     {
-        // TODO: implement logic
+        Log.Debug("Entered OnHouseOffer");
+        Debug.Log("Received clientId: " + houseOfferMessage.clientID + "; expected: " + SessionHandler.clientId);
+        if (SessionHandler.clientId == houseOfferMessage.clientID)
+        {
+            Log.Debug("Entered House Offer Method");
+            // TODO: implement logic
+            if (UnityMainThreadDispatcher.Instance() == null) Log.Debug("Alles schrott hier");
+            IEnumerator houseOff()
+            {
+                Debug.Log("IEnumerator");
+                if (InGameMenuManager.getInstance() == null) Debug.Log("IngameMenuManager is null!");
+                InGameMenuManager.getInstance().DemandStartHouseSelection(houseOfferMessage.houses[0].houseName, houseOfferMessage.houses[1].houseName);
+                Debug.Log("log changed window!");
+                yield return null;
+            }
+
+            UnityMainThreadDispatcher.Instance().Enqueue(houseOff());
+            Log.Debug("Leaving House Offer");
+        }
     }
 
     /// <summary>
@@ -256,39 +276,46 @@ public class PlayerMessageController : MessageController
     public override void OnHouseAcknowledgementMessage(HouseAcknowledgementMessage houseAcknowledgementMessage)
     {
         // TODO: implement logic
-        InGameMenuManager.instance.DemandEndHouseSelection();
+        IEnumerator houseAckn()
+        {
+            InGameMenuManager.getInstance().DemandEndHouseSelection();
 
-        HouseEnum house;
-        switch(houseAcknowledgementMessage.houseName)
-        {
-            case "CORRINO":
-                house = HouseEnum.CORRINO;
-                break;
-            case "ATREIDES":
-                house = HouseEnum.ATREIDES;
-                break;
-            case "HARKONNEN":
-                house = HouseEnum.HARKONNEN;
-                break;
-            case "ORDOS":
-                house = HouseEnum.ORDOS;
-                break;
-            case "RICHESE":
-                house = HouseEnum.RICHESE;
-                break;
-            default:
-                house = HouseEnum.VERNIUS;
-                break;
-        }
+            HouseEnum house;
+            switch (houseAcknowledgementMessage.houseName)
+            {
+                case "CORRINO":
+                    house = HouseEnum.CORRINO;
+                    break;
+                case "ATREIDES":
+                    house = HouseEnum.ATREIDES;
+                    break;
+                case "HARKONNEN":
+                    house = HouseEnum.HARKONNEN;
+                    break;
+                case "ORDOS":
+                    house = HouseEnum.ORDOS;
+                    break;
+                case "RICHESE":
+                    house = HouseEnum.RICHESE;
+                    break;
+                default:
+                    house = HouseEnum.VERNIUS;
+                    break;
+            }
 
-        if(houseAcknowledgementMessage.clientID == SessionHandler.clientId)
-        {
-            CharacterMgr.instance.SetPlayerHouse(house);
+            if (houseAcknowledgementMessage.clientID == SessionHandler.clientId)
+            {
+                CharacterMgr.instance.SetPlayerHouse(house);
+            }
+            else
+            {
+                CharacterMgr.instance.SetEnemyHouse(house);
+            }
+
+            InGameMenuManager.getInstance().DemandEndHouseSelection();
+            yield return null;
         }
-        else
-        {
-            CharacterMgr.instance.SetEnemyHouse(house);
-        }
+        UnityMainThreadDispatcher.Instance().Enqueue(houseAckn());
     }
 
     /// <summary>
