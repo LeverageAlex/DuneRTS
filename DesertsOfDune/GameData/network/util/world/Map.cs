@@ -38,31 +38,31 @@ namespace GameData.network.util.world
         /// <param name="scenarioConfiguration">the "array" of the field types of the map / scenario</param>
         private void CreateMapFromScenario(List<List<string>> scenarioConfiguration)
         {
-            fields = new MapField[MAP_WIDTH, MAP_HEIGHT];
+            fields = new MapField[MAP_HEIGHT, MAP_WIDTH];
             for (int x = 0; x < MAP_WIDTH; x++)
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    switch(scenarioConfiguration[(MAP_HEIGHT - 1) - y][x])
+                    switch(scenarioConfiguration[x][(MAP_HEIGHT - 1) - y])
                     {
                         case "DUNE":
-                            fields[x, y] = new Dune(false, false, null);
+                            fields[y, x] = new Dune(false, false, null);
                             break;
                         case "FLAT_SAND":
-                            fields[x, y] = new FlatSand(false, false, null);
+                            fields[y, x] = new FlatSand(false, false, null);
                             break;
                         case "MOUNTAINS":
-                            fields[x, y] = new Mountain(false, false, null);
+                            fields[y, x] = new Mountain(false, false, null);
                             break;
                         case "PLATEAU":
-                            fields[x, y] = new RockPlateau(false, false, null);
+                            fields[y, x] = new RockPlateau(false, false, null);
                             break;
                         case "CITY":
-                            fields[x, y] = new City(0, false, false, null);
+                            fields[y, x] = new City(0, false, false, null);
                             break;
                     }
-                    fields[x, y].XCoordinate = x;
-                    fields[x, y].ZCoordinate = y;
+                    fields[y, x].XCoordinate = x;
+                    fields[y, x].ZCoordinate = y;
                   //  fields[y, x] = new MapField(scenarioConfiguration[x][(MAP_HEIGHT - 1) - y], x, y);
                 }
             }
