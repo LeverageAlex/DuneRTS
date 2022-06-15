@@ -297,7 +297,7 @@ public class PlayerMessageController : MessageController
         if (houseAcknowledgementMessage.clientID == SessionHandler.clientId)
         {
             IEnumerator houseAckn()
-            {
+            { 
                 InGameMenuManager.getInstance().DemandEndHouseSelection();
 
                 HouseEnum house;
