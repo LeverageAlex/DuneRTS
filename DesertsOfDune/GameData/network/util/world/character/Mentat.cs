@@ -67,8 +67,8 @@ namespace GameData.network.util.world.character
         public bool SpiceHoarding(Map map)
         {
             int inventoryFree = this.inventorySize - this.inventoryUsed;
-            List<MapField> NeighborFields = map.GetNeighborFields(this.currentMapfield);
-            NeighborFields.Add(this.currentMapfield);
+            List<MapField> NeighborFields = map.GetNeighborFields(this.CurrentMapfield);
+            NeighborFields.Add(this.CurrentMapfield);
             Random rnd = new Random();
             if (this.APcurrent == this.APmax && inventoryFree > 0)
             {

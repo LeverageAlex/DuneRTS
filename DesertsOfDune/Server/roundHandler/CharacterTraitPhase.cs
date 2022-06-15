@@ -60,7 +60,7 @@ namespace GameData.server.roundHandler
                 }
             }
             var random = new Random();
-            _allCharacters = (List<Character>)_allCharacters.OrderBy(item => random.Next());
+            _allCharacters.OrderBy(item => random.Next());
             return true;
         }
 
@@ -94,7 +94,7 @@ namespace GameData.server.roundHandler
         /// <param name="timeInSeconds">Time in seconds how long the timer runs.</param>
         private static void SetTimer()
         {
-            int timeInMilliseconds = 0;
+            int timeInMilliseconds = PartyConfiguration.GetInstance().actionTimeUserClient;
             foreach(var player in Party.GetInstance().GetActivePlayers())
             {
                 foreach(var character in player.UsedGreatHouse.GetCharactersAlive())

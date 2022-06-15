@@ -621,6 +621,7 @@ namespace Server
                 Log.Error("Cannot send SPAWN_CHARACTER_DEMAND, because the spawned character do not belong to any player!");
             }
 
+
             // get the position of the character
             Position position = new Position(attributes.CurrentMapfield.XCoordinate, attributes.CurrentMapfield.ZCoordinate);
 

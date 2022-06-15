@@ -39,8 +39,8 @@ namespace GameData.network.util.world
         protected bool killedBySandworm;
         [JsonProperty(Order = 10)]
         protected bool isLoud;
-        [JsonIgnore]
-        protected MapField currentMapfield;
+       // [JsonIgnore]
+       // protected MapField currentMapfield;
         [JsonIgnore]
         public MapField CurrentMapfield { get; set; }
         [JsonIgnore]
@@ -253,9 +253,9 @@ namespace GameData.network.util.world
         /// <returns>true, if the character stands next to his city</returns>
         public bool StandingNextToCityField()
         {
-            if (Math.Abs(this.greatHouse.City.XCoordinate - this.currentMapfield.XCoordinate) <= 1)
+            if (Math.Abs(this.greatHouse.City.XCoordinate - this.CurrentMapfield.XCoordinate) <= 1)
             {
-                if (Math.Abs(this.greatHouse.City.ZCoordinate - this.currentMapfield.ZCoordinate) <= 1)
+                if (Math.Abs(this.greatHouse.City.ZCoordinate - this.CurrentMapfield.ZCoordinate) <= 1)
                 {
                     return true;
                 }
@@ -277,7 +277,7 @@ namespace GameData.network.util.world
             {
                 return false;
             }
-            currentMapfield = goalField;
+            CurrentMapfield = goalField;
             startField.DisplaceCharacter();
             goalField.PlaceCharacter(this);
             return true;
@@ -290,7 +290,7 @@ namespace GameData.network.util.world
         /// <returns>true, if attack was possible</returns>
         public bool Atack(Character target)
         {
-            int dist = Math.Abs(target.currentMapfield.XCoordinate - currentMapfield.XCoordinate) + Math.Abs(target.currentMapfield.ZCoordinate - currentMapfield.ZCoordinate);
+            int dist = Math.Abs(target.CurrentMapfield.XCoordinate - CurrentMapfield.XCoordinate) + Math.Abs(target.CurrentMapfield.ZCoordinate - CurrentMapfield.ZCoordinate);
             if (APcurrent > 0 && dist <= 2 && target.greatHouse != greatHouse)
             {
                 APcurrent--;
@@ -306,7 +306,7 @@ namespace GameData.network.util.world
         /// <returns>true, if the action was possible else false</returns>
         public bool CollectSpice()
         {
-            if (APcurrent > 0 && currentMapfield.HasSpice && inventoryUsed < inventorySize)
+            if (APcurrent > 0 && CurrentMapfield.HasSpice && inventoryUsed < inventorySize)
             {
                 APcurrent--;
                 inventoryUsed++;
@@ -392,15 +392,15 @@ namespace GameData.network.util.world
         /// <returns></returns>
         public bool IsInSandStorm(Map map)
         {
-            if(currentMapfield.GetMapFieldPosition() == map.PositionOfEyeOfStorm)
+            if(CurrentMapfield.GetMapFieldPosition().x == map.PositionOfEyeOfStorm.x && CurrentMapfield.GetMapFieldPosition().y == map.PositionOfEyeOfStorm.y)
             {
-                return false;
+                return true;
             }
-            foreach(var mapfield in map.GetNeighborFields(currentMapfield))
+            foreach(var mapfield in map.GetNeighborFields(CurrentMapfield))
             {
-                if(mapfield.GetMapFieldPosition() == map.PositionOfEyeOfStorm)
+                if(mapfield.GetMapFieldPosition().x == map.PositionOfEyeOfStorm.x && mapfield.GetMapFieldPosition().y == map.PositionOfEyeOfStorm.y)
                 {
-                    return false;
+                    return true;
                 }
             }
             return false;
