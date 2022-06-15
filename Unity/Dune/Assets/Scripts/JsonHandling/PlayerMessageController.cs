@@ -13,12 +13,7 @@ using Serilog;
 /// </summary>
 public class PlayerMessageController : MessageController
 {
-    public static PlayerMessageController instance;
 
-    public PlayerMessageController()
-    {
-        if (instance == null) instance = this;
-    }
 
     /// <summary>
     /// this method is responsible for requesting a Join
@@ -68,7 +63,9 @@ public class PlayerMessageController : MessageController
     public void DoRequestMovement(int clientID, int characterID, List<Position> path)
     {
         MovementRequestMessage movementRequestMessage = new MovementRequestMessage(clientID, characterID, new Specs(null, path));
+        Log.Debug("start sending message");
         NetworkController.HandleSendingMessage(movementRequestMessage);
+        Log.Debug("finished sending");
     }
 
     /// <summary>
