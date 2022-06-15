@@ -1,6 +1,7 @@
 ﻿using GameData.network.controller;
 using GameData.network.util.world;
 using Server;
+using Server.Configuration;
 using Server.roundHandler;
 using System;
 using System.Collections.Generic;
@@ -21,13 +22,13 @@ namespace GameData.server.roundHandler
 
         public void Execute()
         {
-            SetTimer(100); //initialize timer with length of 100 seconds
+            SetTimer(); //initialize timer
             GenerateTraitSequenze();
 
             foreach (var character in _allCharacters)
             {
                 _currentCharacter = character;
-                if (!character.IsDead())
+                if (!character.IsDead()) // check if character stays in storm
                 {
                     character.resetMPandAp();
                     RequestClientForNextCharacterTrait(character.CharacterId);
@@ -41,6 +42,7 @@ namespace GameData.server.roundHandler
                     _timer.Stop(); //stop timer when characterTrait is finished
                 }
             }
+            Party.GetInstance().RoundHandler.NextRound();
         }
 
         /// <summary>
@@ -90,9 +92,25 @@ namespace GameData.server.roundHandler
         /// Starts a new timer with the time from the parameter.
         /// </summary>
         /// <param name="timeInSeconds">Time in seconds how long the timer runs.</param>
-        private static void SetTimer(int timeInSeconds)
+        private static void SetTimer()
         {
-            _timer = new Timer(timeInSeconds * 1000);
+            int timeInMilliseconds = 0;
+            foreach(var player in Party.GetInstance().GetActivePlayers())
+            {
+                foreach(var character in player.UsedGreatHouse.GetCharactersAlive())
+                {
+                    if(character == _currentCharacter)
+                    {
+                        if (player is HumanPlayer){
+                            timeInMilliseconds = PartyConfiguration.GetInstance().actionTimeUserClient;
+                        }
+                        else if(player is AIPlayer){
+                            timeInMilliseconds = PartyConfiguration.GetInstance().actionTimeAiClient;
+                        }
+                    }
+                }
+            }
+            _timer = new Timer(timeInMilliseconds);
             _timer.Elapsed += OnTimedEvent;
             _timer.AutoReset = true;
         }
