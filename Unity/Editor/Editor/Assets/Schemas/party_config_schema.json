@@ -6,41 +6,41 @@
 			"type": "object",
 			"properties": {
 				"maxHP": {
-					"title": "maxHP", 
+					"title": "maxHP",
 					"type": "number",
-					"examples": [20],
+					"examples": [ 20 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Initialer Wert der Heilungspunkte (HP)."
 				},
 				"maxMP": {
-					"title": "maxMP", 
+					"title": "maxMP",
 					"type": "integer",
-					"examples": [21],
+					"examples": [ 21 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Initialer Wert der Bewegungspunkte (MP)."
 				},
 				"maxAP": {
-					"title": "maxAP", 
+					"title": "maxAP",
 					"type": "integer",
-					"examples": [22],
+					"examples": [ 22 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Initialer Wert der Aktionspunkte (AP)."
 				},
 				"damage": {
-					"title": "damage", 
+					"title": "damage",
 					"type": "number",
-					"examples": [4],
+					"examples": [ 4 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Hoehe des Schadens, den der Charaktertyp verursacht."
 				},
 				"inventorySize": {
-					"title": "inventorySize", 
+					"title": "inventorySize",
 					"type": "integer",
-					"examples": [8],
+					"examples": [ 8 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Groesse des Inventars des Charaktertypen."
@@ -48,7 +48,7 @@
 				"healingHP": {
 					"title": "healingHP",
 					"type": "number",
-					"examples": [6],
+					"examples": [ 6 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Anzahl der Punkte, die auf den Gesundheitspunkten (HP) bei einer Heilung hinzugefuegt werden."
@@ -68,49 +68,49 @@
 			"type": "object",
 			"properties": {
 				"maxHP": {
-					"title": "maxHP", 
+					"title": "maxHP",
 					"type": "number",
-					"examples": [20],
+					"examples": [ 20 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Initialer Wert der Heilungspunkte (HP)."
 				},
 				"maxMP": {
-					"title": "maxMP", 
+					"title": "maxMP",
 					"type": "integer",
-					"examples": [21],
+					"examples": [ 21 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Initialer Wert der Bewegungspunkte (MP)."
 				},
 				"maxAP": {
-					"title": "maxAP", 
+					"title": "maxAP",
 					"type": "integer",
-					"examples": [22],
+					"examples": [ 22 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Initialer Wert der Aktionspunkte (AP)."
 				},
 				"damage": {
-					"title": "damage", 
+					"title": "damage",
 					"type": "number",
-					"examples": [4],
+					"examples": [ 4 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Hoehe des Schadens, den der Charaktertyp verursacht."
 				},
 				"inventorySize": {
-					"title": "inventorySize", 
+					"title": "inventorySize",
 					"type": "integer",
-					"examples": [8],
+					"examples": [ 8 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Groesse des Inventars des Charaktertypen."
 				},
 				"healingHP": {
-					"title": "healingHP", 
+					"title": "healingHP",
 					"type": "number",
-					"examples": [6],
+					"examples": [ 6 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Anzahl der Punkte, die auf den Gesundheitspunkten (HP) bei einer Heilung hinzugefuegt werden."
@@ -130,49 +130,49 @@
 			"type": "object",
 			"properties": {
 				"maxHP": {
-					"title": "maxHP", 
+					"title": "maxHP",
 					"type": "number",
-					"examples": [20],
+					"examples": [ 20 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Initialer Wert der Heilungspunkte (HP)."
 				},
 				"maxMP": {
-					"title": "maxMP", 
+					"title": "maxMP",
 					"type": "integer",
-					"examples": [21],
+					"examples": [ 21 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Initialer Wert der Bewegungspunkte (MP)."
 				},
 				"maxAP": {
-					"title": "maxAP", 
+					"title": "maxAP",
 					"type": "integer",
-					"examples": [22],
+					"examples": [ 22 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Initialer Wert der Aktionspunkte (AP)."
 				},
 				"damage": {
-					"title": "damage", 
+					"title": "damage",
 					"type": "number",
-					"examples": [4],
+					"examples": [ 4 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Hoehe des Schadens, den der Charaktertyp verursacht."
 				},
 				"inventorySize": {
-					"title": "inventorySize", 
+					"title": "inventorySize",
 					"type": "integer",
-					"examples": [8],
+					"examples": [ 8 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Groesse des Inventars des Charaktertypen."
 				},
 				"healingHP": {
-					"title": "healingHP", 
+					"title": "healingHP",
 					"type": "number",
-					"examples": [6],
+					"examples": [ 6 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Anzahl der Punkte, die auf den Gesundheitspunkten (HP) bei einer Heilung hinzugefuegt werden."
@@ -192,49 +192,49 @@
 			"type": "object",
 			"properties": {
 				"maxHP": {
-					"title": "maxHP", 
+					"title": "maxHP",
 					"type": "number",
-					"examples": [20],
+					"examples": [ 20 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Initialer Wert der Heilungspunkte (HP)."
 				},
 				"maxMP": {
-					"title": "maxMP", 
+					"title": "maxMP",
 					"type": "integer",
-					"examples": [21],
+					"examples": [ 21 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Initialer Wert der Bewegungspunkte (MP)."
 				},
 				"maxAP": {
-					"title": "maxAP", 
+					"title": "maxAP",
 					"type": "integer",
-					"examples": [22],
+					"examples": [ 22 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Initialer Wert der Aktionspunkte (AP)."
 				},
 				"damage": {
-					"title": "damage", 
+					"title": "damage",
 					"type": "number",
-					"examples": [4],
+					"examples": [ 4 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Hoehe des Schadens, den der Charaktertyp verursacht."
 				},
 				"inventorySize": {
-					"title": "inventorySize", 
+					"title": "inventorySize",
 					"type": "integer",
-					"examples": [8],
+					"examples": [ 8 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Groesse des Inventars des Charaktertypen."
 				},
 				"healingHP": {
-					"title": "healingHP", 
+					"title": "healingHP",
 					"type": "number",
-					"examples": [6],
+					"examples": [ 6 ],
 					"default": 0,
 					"minimum": 0,
 					"description": "Anzahl der Punkte, die auf den Gesundheitspunkten (HP) bei einer Heilung hinzugefuegt werden."
@@ -251,107 +251,116 @@
 			]
 		},
 		"numbOfRounds": {
-			"title": "numbOfRounds", 
+			"title": "numbOfRounds",
 			"type": "integer",
-			"examples": [10],
+			"examples": [ 10 ],
 			"default": 0,
 			"minimum": 1,
 			"description": "Die Anzahl der Runden bis der Ueberlaengenmechnismus greift."
 		},
 		"actionTimeUserClient": {
-			"title": "actionTimeUserClient", 
+			"title": "actionTimeUserClient",
 			"type": "integer",
-			"examples": [5000],
+			"examples": [ 5000 ],
 			"default": 0,
 			"minimum": 0,
 			"description": "Maximale Zeit für den Benutzer-Client, um Aktionen eines Charakters durchzufuehren in ms."
 		},
 		"actionTimeAiClient": {
-			"title": "actionTimeAiClient", 
+			"title": "actionTimeAiClient",
 			"type": "integer",
-			"examples": [500],
+			"examples": [ 500 ],
 			"default": 0,
 			"minimum": 0,
 			"description": "Maximale Zeit für den KI-Client, um Aktionen eines Charakters durchzufuehren in ms."
 		},
 		"highGroundBonusRatio": {
-			"title": "highGroundBonusRatio", 
+			"title": "highGroundBonusRatio",
 			"type": "number",
-			"examples": [0.5],
+			"examples": [ 0.5 ],
 			"default": 0.0,
 			"minimum": 0.0,
 			"description": "Quotient, der den Vorteil eines hoch gelegenen Feldes im Vergleich zu einem niedrig gelegenen Feld festlegt."
 		},
 		"lowerGroundMalusRatio": {
-			"title": "lowerGroundMalusRatio", 
+			"title": "lowerGroundMalusRatio",
 			"type": "number",
-			"examples": [0.5],
+			"examples": [ 0.5 ],
 			"default": 0.0,
 			"minimum": 0.0,
 			"description": "Quotient, der den Nachteil eines niedrig gelegenen Feldes im Vergleich zu einem hoch gelegenen Feld festlegt."
 		},
 		"kanlySuccessProbability": {
-			"title": "kanlySuccessProbability", 
+			"title": "kanlySuccessProbability",
 			"type": "number",
-			"examples": [0.5],
+			"examples": [ 0.5 ],
 			"default": 0.0,
 			"minimum": 0.0,
 			"maximum": 1.0,
 			"description": "Wahrscheinlichkeit, dass der Kanly Angriff erfolgreich ist."
 		},
 		"spiceMinimum": {
-			"title": "spiceMinimum", 
+			"title": "spiceMinimum",
 			"type": "integer",
-			"examples": [10],
+			"examples": [ 10 ],
 			"default": 0,
 			"minimum": 0,
 			"description": "Minimaler Spice Betrag, bevor ein Spice Blow stattfindet."
 		},
 		"cellularAutomaton": {
-			"title": "cellularAutomaton", 
+			"title": "cellularAutomaton",
 			"type": "string",
 			"default": "",
-			"examples": ["B2/S3"],
+			"examples": [ "B2/S3" ],
 			"pattern": "B[0-8]*/S[0-8]*",
-			"description": "String mit der Vorschrift, wie die Duenen wandern. (https://de.wikipedia.org/wiki/Conways_Spiel_des_Lebens)" 
+			"description": "String mit der Vorschrift, wie die Duenen wandern. (https://de.wikipedia.org/wiki/Conways_Spiel_des_Lebens)"
+		},
+		"crashProbability": {
+			"title": "crashProbability",
+			"type": "number",
+			"examples": [ 0.5 ],
+			"default": 0.0,
+			"minimum": 0.0,
+			"maximum": 1.0,
+			"description": "Wahrscheinlichkeit, ein Character bei einem Flug durch den Sandwurm abstürzt."
 		},
 		"sandWormSpeed": {
-			"title": "sandWormSpeed", 
+			"title": "sandWormSpeed",
 			"type": "integer",
-			"examples": [10],
+			"examples": [ 10 ],
 			"default": 0,
 			"minimum": 0,
 			"description": "Anzahl der Felder, um die sich der Sandwurm pro Runde bewegen kann."
 		},
 		"sandWormSpawnDistance": {
-			"title": "sandWormSpawnDistance", 
+			"title": "sandWormSpawnDistance",
 			"type": "integer",
-			"examples": [10],
+			"examples": [ 10 ],
 			"default": 2,
 			"minimum": 2,
 			"description": "Sandwurm Auftauch Entfernung."
 		},
 		"cloneProbability": {
-			"title": "cloneProbability", 
+			"title": "cloneProbability",
 			"type": "number",
-			"examples": [0.5],
+			"examples": [ 0.5 ],
 			"default": 0.0,
 			"minimum": 0.0,
 			"maximum": 1.0,
-			"description": "Wahrscheinlichkeit, dass ein Charakter in der Klon Phase geklont wird." 
+			"description": "Wahrscheinlichkeit, dass ein Charakter in der Klon Phase geklont wird."
 		},
 		"minPauseTime": {
-			"title": "minPauseTime", 
+			"title": "minPauseTime",
 			"type": "integer",
-			"examples": [1000],
+			"examples": [ 1000 ],
 			"default": 0,
 			"minimum": 0,
 			"description": "Zeit, die eine Pause mindestens dauert, bevor ein Spieler sie beenden kann in ms."
 		},
 		"maxStrikes": {
-			"title": "maxStrikes", 
+			"title": "maxStrikes",
 			"type": "integer",
-			"examples": [10],
+			"examples": [ 10 ],
 			"default": 0,
 			"minimum": 0,
 			"description": "Die maximale Anzahl an Strikes, die Clients für Verstöße bekommen können."
@@ -370,6 +379,7 @@
 		"kanlySuccessProbability",
 		"spiceMinimum",
 		"cellularAutomaton",
+		"crashProbability",
 		"sandWormSpeed",
 		"sandWormSpawnDistance",
 		"cloneProbability",

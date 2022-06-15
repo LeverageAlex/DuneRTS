@@ -51,7 +51,7 @@ public class ManageDataModel : MonoBehaviour
             valueManager[9].Value = (int)Mathf.Round(m.cloneProbability*100);
             valueManager[10].Value = m.minPauseTime;
             valueManager[11].Value = m.maxStrikes;
-            valueManager[12].Value = (int)Mathf.Round(m.heliCrashProbability*100);
+            valueManager[12].Value = (int)Mathf.Round(m.crashProbability*100);
 
 
             characterValuesManager[3].InvSize = m.fighter.inventorySize;

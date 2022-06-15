@@ -217,7 +217,7 @@ public class PartieObject {
     public float cloneProbability;
     public int minPauseTime;
     public int maxStrikes;
-    public float heliCrashProbability;
+    public float crashProbability;
 
     public PartieObject(character noble,
                         character mentat,
@@ -236,7 +236,7 @@ public class PartieObject {
                         float cloneProbability,
                         int minPauseTime,
                         int maxStrikes,
-                        float heliCrashProbability) {
+                        float crashProbability) {
         this.noble = noble;
         this.mentat = mentat;
         this.beneGesserit = beneGesserit;
@@ -254,7 +254,7 @@ public class PartieObject {
         this.cloneProbability = cloneProbability;
         this.minPauseTime = minPauseTime;
         this.maxStrikes = maxStrikes;
-        this.heliCrashProbability = heliCrashProbability;
+        this.crashProbability = crashProbability;
     }
 
 }
