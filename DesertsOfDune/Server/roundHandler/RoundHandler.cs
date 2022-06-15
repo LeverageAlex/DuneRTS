@@ -96,6 +96,7 @@ namespace GameData.gameObjects
             this._sandwormPhase = new SandwormPhase(map);
             this._clonePhase = new ClonePhase(map, PartyConfiguration.GetInstance().cloneProbability);
             this._spiceBlow = new SpiceBlow(map);
+            this.characterTraitPhase = new CharacterTraitPhase();
 
         }
 
