@@ -12,9 +12,9 @@ namespace GameData.network.messages
     public class ActionDemandMessage : TurnMessage
     {
         [JsonProperty]
-        public string action { get; }
+        public string action { get; set; }
         [JsonProperty(Order = 5)]
-        public Specs specs { get; }
+        public Specs specs { get; set; }
 
         /// <summary>
         /// Constructor of the class ActionMessage
@@ -26,8 +26,8 @@ namespace GameData.network.messages
         public ActionDemandMessage(int clientID, int characterID, ActionType action, Position target) : base(characterID,clientID,MessageType.ACTION_DEMAND)
         {
             this.action = Enum.GetName(typeof(ActionType), action);
-            Specs s = new Specs();
-            s.target = target;
+            Specs s = new Specs(target, null);
+            //s.target = target;
             this.specs = s;
         }
 
