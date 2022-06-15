@@ -193,20 +193,26 @@ public class PlayerMessageController : MessageController
     /// <returns></returns>
     public override void OnMapChangeDemandMessage(MapChangeDemandMessage mapChangeDemandMessage)
     {
-        // TODO: implement logic
-        /*   MapManager.instance.setMapSize(mapChangeDemandMessage.newMap.GetLength(0), mapChangeDemandMessage.newMap.GetLength(1));
 
-           for (int x = 0; x < mapChangeDemandMessage.newMap.GetLength(0); x++)
-           {
-               for (int z = 0; z < mapChangeDemandMessage.newMap.GetLength(1); z++)
-               {
-                   var cluster = mapChangeDemandMessage.newMap[x, z];
-                   MapManager.instance.UpdateBoard(x, z, cluster.HasSpice, MapManager.instance.StringtoNodeEnum(cluster.tileType), cluster.isInSandstorm);
-
-
-               }
-           }
-           CharacterMgr.instance.SpawnSandworm(mapChangeDemandMessage.newMap[0,0].stormEye.x, mapChangeDemandMessage.newMap[0, 0].stormEye.y);*/
+        mapChangeDemandMessage.
+        for (int x = 0; x < mapChangeDemandMessage.newMap.GetLength(0); x++)
+        {
+            for (int z = 0; z < mapChangeDemandMessage.newMap.GetLength(1); z++)
+            {
+                Debug.Log("PreLoop Built x: " + x + " and z: " + z);
+                if (gameConfigMessage.stormEye != null && MapManager.instance.isNodeNeighbour(x, z, gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y))
+                {
+                    
+                    //Node is in Sandstorm
+                    MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), true);
+                }
+                else
+                {
+                    MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), false);
+                }
+                Debug.Log("Built x: " + x + " and z: " + z);
+            }
+        }
     }
 
     /// <summary>

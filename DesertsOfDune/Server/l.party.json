@@ -1,47 +1,47 @@
 {
   "noble": {
-    "maxHP": 0,
-    "maxMP": 0,
-    "maxAP": 0,
-    "damage": 0,
-    "inventorySize": 0,
-    "healingHP": 0
+    "maxHP": 100,
+    "maxMP": 10,
+    "maxAP": 10,
+    "damage": 5,
+    "inventorySize": 10,
+    "healingHP": 5
   },
   "mentat": {
-    "maxHP": 0,
-    "maxMP": 0,
-    "maxAP": 0,
-    "damage": 0,
-    "inventorySize": 0,
-    "healingHP": 0
+    "maxHP": 100,
+    "maxMP": 10,
+    "maxAP": 10,
+    "damage": 10,
+    "inventorySize": 10,
+    "healingHP": 10
   },
   "beneGesserit": {
-    "maxHP": 0,
-    "maxMP": 0,
-    "maxAP": 0,
-    "damage": 0,
-    "inventorySize": 0,
-    "healingHP": 0
+    "maxHP": 100,
+    "maxMP": 10,
+    "maxAP": 10,
+    "damage": 20,
+    "inventorySize": 10,
+    "healingHP": 20
   },
   "fighter": {
-    "maxHP": 0,
-    "maxMP": 0,
-    "maxAP": 0,
-    "damage": 0,
-    "inventorySize": 0,
-    "healingHP": 0
+    "maxHP": 100,
+    "maxMP": 10,
+    "maxAP": 10,
+    "damage": 30,
+    "inventorySize": 10,
+    "healingHP": 30
   },
-  "numbOfRounds": 1,
-  "actionTimeUserClient": 0,
-  "actionTimeAiClient": 0,
-  "highGroundBonusRatio": 0.0,
-  "lowerGroundMalusRatio": 0.0,
-  "kanlySuccessProbability": 0.0,
-  "spiceMinimum": 0,
+  "numbOfRounds": 20,
+  "actionTimeUserClient": 30000,
+  "actionTimeAiClient": 30000,
+  "highGroundBonusRatio": 0.6,
+  "lowerGroundMalusRatio": 0.4,
+  "kanlySuccessProbability": 0.5,
+  "spiceMinimum": 20,
   "cellularAutomaton": "B3/S2",
-  "sandWormSpeed": 0,
+  "sandWormSpeed": 5,
   "sandWormSpawnDistance": 2,
-  "cloneProbability": 0.0,
-  "minPauseTime": 0,
-  "maxStrikes": 0
+  "cloneProbability": 0.5,
+  "minPauseTime": 5000,
+  "maxStrikes": 5,
 }
