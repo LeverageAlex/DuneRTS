@@ -66,7 +66,7 @@ public class PlayerMessageController : MessageController
     /// <param name="path">the requested path for the character</param>
     public void DoRequestMovement(int clientID, int characterID, List<Position> path)
     {
-        MovementRequestMessage movementRequestMessage = new MovementRequestMessage(clientID, characterID, path);
+        MovementRequestMessage movementRequestMessage = new MovementRequestMessage(clientID, characterID, new Specs(null, path));
         NetworkController.HandleSendingMessage(movementRequestMessage);
     }
 
@@ -79,7 +79,7 @@ public class PlayerMessageController : MessageController
     /// <param name="target">the target of the action</param>
     public void DoRequestAction(int clientID, int characterID, ActionType action, Position target)
     {
-        ActionRequestMessage actionRequestMessage = new ActionRequestMessage(clientID, characterID, action, target);
+        ActionRequestMessage actionRequestMessage = new ActionRequestMessage(clientID, characterID, action, new Specs(target, null));
         NetworkController.HandleSendingMessage(actionRequestMessage);
     }
 
@@ -265,8 +265,8 @@ public class PlayerMessageController : MessageController
     /// <returns></returns>
     public override void OnHouseOfferMessage(HouseOfferMessage houseOfferMessage)
     {
-        Log.Debug("Entered OnHouseOffer");
-        Debug.Log("Received clientId: " + houseOfferMessage.clientID + "; expected: " + SessionHandler.clientId);
+        //Log.Debug("Entered OnHouseOffer");
+       // Debug.Log("Received clientId: " + houseOfferMessage.clientID + "; expected: " + SessionHandler.clientId);
         if (SessionHandler.clientId == houseOfferMessage.clientID)
         {
             Log.Debug("Entered House Offer Method");
@@ -294,46 +294,49 @@ public class PlayerMessageController : MessageController
     public override void OnHouseAcknowledgementMessage(HouseAcknowledgementMessage houseAcknowledgementMessage)
     {
         // TODO: implement logic
-        IEnumerator houseAckn()
+        if (houseAcknowledgementMessage.clientID == SessionHandler.clientId)
         {
-            InGameMenuManager.getInstance().DemandEndHouseSelection();
-
-            HouseEnum house;
-            switch (houseAcknowledgementMessage.houseName)
+            IEnumerator houseAckn()
             {
-                case "CORRINO":
-                    house = HouseEnum.CORRINO;
-                    break;
-                case "ATREIDES":
-                    house = HouseEnum.ATREIDES;
-                    break;
-                case "HARKONNEN":
-                    house = HouseEnum.HARKONNEN;
-                    break;
-                case "ORDOS":
-                    house = HouseEnum.ORDOS;
-                    break;
-                case "RICHESE":
-                    house = HouseEnum.RICHESE;
-                    break;
-                default:
-                    house = HouseEnum.VERNIUS;
-                    break;
-            }
+                InGameMenuManager.getInstance().DemandEndHouseSelection();
 
-            if (houseAcknowledgementMessage.clientID == SessionHandler.clientId)
-            {
-                CharacterMgr.instance.SetPlayerHouse(house);
-            }
-            else
-            {
-                CharacterMgr.instance.SetEnemyHouse(house);
-            }
+                HouseEnum house;
+                switch (houseAcknowledgementMessage.houseName)
+                {
+                    case "CORRINO":
+                        house = HouseEnum.CORRINO;
+                        break;
+                    case "ATREIDES":
+                        house = HouseEnum.ATREIDES;
+                        break;
+                    case "HARKONNEN":
+                        house = HouseEnum.HARKONNEN;
+                        break;
+                    case "ORDOS":
+                        house = HouseEnum.ORDOS;
+                        break;
+                    case "RICHESE":
+                        house = HouseEnum.RICHESE;
+                        break;
+                    default:
+                        house = HouseEnum.VERNIUS;
+                        break;
+                }
 
-            InGameMenuManager.getInstance().DemandEndHouseSelection();
-            yield return null;
+                if (houseAcknowledgementMessage.clientID == SessionHandler.clientId)
+                {
+                    CharacterMgr.instance.SetPlayerHouse(house);
+                }
+                else
+                {
+                    CharacterMgr.instance.SetEnemyHouse(house);
+                }
+
+                InGameMenuManager.getInstance().DemandEndHouseSelection();
+                yield return null;
+            }
+            UnityMainThreadDispatcher.Instance().Enqueue(houseAckn());
         }
-        UnityMainThreadDispatcher.Instance().Enqueue(houseAckn());
     }
 
     /// <summary>
@@ -644,11 +647,6 @@ public class PlayerMessageController : MessageController
         throw new System.NotImplementedException();
     }
 
-    // This method should not be called by the client.
-    public override void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons, MapField[,] newMap)
-    {
-        throw new System.NotImplementedException();
-    }
 
     // This method should not be called by the client.
     public override void DoSendAtomicsUpdateDemand(int clientID, bool shunned, int atomicsLeft)
@@ -727,4 +725,8 @@ public class PlayerMessageController : MessageController
         throw new NotImplementedException();
     }
 
+    public override void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons)
+    {
+        throw new NotImplementedException();
+    }
 }

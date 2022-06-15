@@ -81,7 +81,7 @@ namespace Server
             if (Party.GetInstance().AreTwoPlayersRegistred())
             {
                 Party.GetInstance().PrepareGame();
-                DoSendGameConfig();
+              //  DoSendGameConfig();
             }
         }
 
