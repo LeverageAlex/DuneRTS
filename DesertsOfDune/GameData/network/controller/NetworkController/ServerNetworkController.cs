@@ -3,6 +3,7 @@ using GameData.network.messages;
 using GameData.network.util.enums;
 using GameData.network.util.parser;
 using Serilog;
+using Serilog.Context;
 
 namespace GameData.network.controller
 {
@@ -70,6 +71,12 @@ namespace GameData.network.controller
             // check, whether the parsing was successful
             if (parsedMessage != null)
             {
+                // logging the sending message
+                using (LogContext.PushProperty("Direction", "send"))
+                {
+                    Log.Information("{ message: " + parsedMessage + " }, \"direction\": \"send\" } \n");
+                }
+
                 // broadcast parsed message to all active sessions so clients
                 ((ServerConnectionHandler)connectionHandler).sessionManager.SendTo(parsedMessage, clientID);
                 return true;
@@ -93,6 +100,12 @@ namespace GameData.network.controller
 
             // get Message-Object from JSON-String message
             Message receivedMessage = MessageConverter.ToMessage(message);
+
+            // logging the received message
+            using (LogContext.PushProperty("Direction", "receive"))
+            {
+                Log.Information("{ message: " + message + " }, \"direction\": \"receive\" } \n");
+            }
 
             // get the type of the message for determine the controller methods needed to handle this message
             MessageType type = (MessageType)Enum.Parse(typeof(MessageType), receivedMessage.GetMessageTypeAsString());

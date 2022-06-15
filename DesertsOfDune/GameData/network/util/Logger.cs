@@ -1,8 +1,10 @@
 ﻿using System;
+using System.IO;
 using Serilog;
 using Serilog.Configuration;
 using Serilog.Core;
 using Serilog.Events;
+using Serilog.Filters;
 
 namespace GameData.network.util
 {
@@ -47,6 +49,19 @@ namespace GameData.network.util
             Log.Logger = new LoggerConfiguration()
                  .MinimumLevel.ControlledBy(levelSwitch)
                  .WriteTo.Console()
+                 .CreateLogger();
+        }
+
+        public void CreateReplayLogger()
+        {
+            Log.Logger = new LoggerConfiguration()
+                 .Enrich.FromLogContext()
+                 .MinimumLevel.ControlledBy(levelSwitch)
+                 .WriteTo.Console()
+                 .WriteTo.Logger(lc => lc
+                    .Filter.ByIncludingOnly(arg => arg.Properties.ContainsKey("Direction"))
+                    .WriteTo.File(Path.Combine(Directory.GetCurrentDirectory(), "../../../Log/", "replayLog.txt"), outputTemplate: "{Message:j}")
+                 )
                  .CreateLogger();
         }
 

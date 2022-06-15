@@ -95,7 +95,7 @@ namespace AIClient
             NetworkController.HandleSendingMessage(msg);
         }
 
-        public override void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons, MapField[,] newMap)
+        public override void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons)
         {
             throw new NotImplementedException();
         }

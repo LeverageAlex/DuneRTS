@@ -33,6 +33,7 @@
     <None Remove="ClientManagement\Clients\" />
     <None Remove="roundHandler\duneMovement\" />
     <None Remove="roundHandler\endOfGame\" />
+    <None Remove="Log\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="parser\" />
@@ -43,5 +44,6 @@
     <Folder Include="ClientManagement\Clients\" />
     <Folder Include="roundHandler\duneMovement\" />
     <Folder Include="roundHandler\endOfGame\" />
+    <Folder Include="Log\" />
   </ItemGroup>
 </Project>
