@@ -17,8 +17,8 @@ namespace GameData.network.util.world
     {
         [JsonProperty(Order = 1)]
         public string houseName { get; }
-        [JsonProperty (Order = 2)]
-        private string houseColor;
+        [JsonProperty(Order = 2)]
+        public string houseColor { get; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore, Order = 3)]
         private bool illegalAtomicUsage;
         [JsonProperty (Order = 4)]

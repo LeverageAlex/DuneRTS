@@ -18,8 +18,8 @@ namespace GameData.server.roundHandler
         /// <summary>
         /// the central field of the storm
         /// </summary>
+        /// 
         public MapField EyeOfStorm { get; private set; }
-
         private Map map;
 
         /// <summary>
