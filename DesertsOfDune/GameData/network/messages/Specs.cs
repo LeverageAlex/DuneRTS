@@ -11,6 +11,14 @@ public class Specs
     public List<Position> path;
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public Position target;
+
+    [JsonConstructor]
+    public Specs(Position target, List<Position> path )
+    {
+        this.path = path;
+        this.target = target;
+
+    }
     //[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
    // public int targetID;
 }

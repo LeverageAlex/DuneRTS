@@ -22,8 +22,8 @@ namespace GameData.network.messages
         /// <param name="path">the path the character takes</param>
         public MovementDemandMessage(int clientID, int characterID, List<Position> path) : base(characterID,clientID,MessageType.MOVEMENT_DEMAND)
         {
-            specs = new Specs();
-            specs.path = path;
+         //   specs = new Specs(path, null);
+          //  specs.path = path;
         }
     }
 }

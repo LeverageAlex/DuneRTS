@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using GameData.network.messages;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace GameData.network.util.parser
 {

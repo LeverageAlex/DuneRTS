@@ -20,9 +20,9 @@ namespace GameData.network.messages
         /// <param name="clientID">the id of the client</param>
         /// <param name="characterID">the id of the character</param>
         /// <param name="pos">the position the sandworm is spawned on</param>
-        public SandwormSpawnDemandMessage(int clientID, int characterID, Position pos) :base(characterID,clientID,MessageType.SANDWORM_SPAWN_DEMAND)
+        public SandwormSpawnDemandMessage(int clientID, int characterID, Position position) :base(characterID,clientID,MessageType.SANDWORM_SPAWN_DEMAND)
         {
-            this.position = pos;
+            this.position = position;
         }
 
     }

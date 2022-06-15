@@ -20,6 +20,7 @@ namespace GameData.network.util.world
         /// </summary>
         /// <param name="x">the x coordinate on the map</param>
         /// <param name="y">the y coordinate on the map</param>
+        [JsonConstructor]
         public Position(int x, int y)
         {
             this.x = x;
