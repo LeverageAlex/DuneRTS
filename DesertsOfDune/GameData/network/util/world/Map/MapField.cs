@@ -131,7 +131,7 @@ namespace GameData.network.util.world
 
         public Position GetMapFieldPosition()
         {
-
+            return new Position(XCoordinate, ZCoordinate);
         }
     }
 }
