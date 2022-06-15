@@ -150,11 +150,11 @@ public class PlayerMessageController : MessageController
                     if (gameConfigMessage.stormEye != null && MapManager.instance.isNodeNeighbour(x, z, gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y))
                     {
                         //Node is in Sandstorm
-                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[z][x]), true);
+                        MapManager.instance.UpdateBoard(x, z, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[z][x]), true);
                     }
                     else
                     {
-                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[z][x]), false);
+                        MapManager.instance.UpdateBoard(x, z, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[z][x]), false);
                     }
                     Debug.Log("Built x: " + x + " and z: " + z);
                 }
@@ -209,11 +209,11 @@ public class PlayerMessageController : MessageController
                     {
 
                         //Node is in Sandstorm
-                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(mapChangeDemandMessage.newMap[z, x].tileType), true);
+                        MapManager.instance.UpdateBoard(x, z, MapManager.instance.StringtoNodeEnum(mapChangeDemandMessage.newMap[z, x].tileType), true);
                     }
                     else
                     {
-                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(mapChangeDemandMessage.newMap[z, x].tileType), false);
+                        MapManager.instance.UpdateBoard(x, z, MapManager.instance.StringtoNodeEnum(mapChangeDemandMessage.newMap[z, x].tileType), false);
                     }
                     Debug.Log("Built x: " + x + " and z: " + z);
 
