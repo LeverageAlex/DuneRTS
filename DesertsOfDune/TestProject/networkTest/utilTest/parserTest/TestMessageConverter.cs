@@ -646,22 +646,122 @@ namespace TestProject.networkTest.utilTest.parserTest
             Assert.AreEqual(false, ((GameEndMessage)deserializedMessage).statistics.LastCharacterStanding);
         }
 
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message GameStateMessage
+        /// </summary>
+        [Test]
+        public void TestToGameStateMessage()
+        {
+            string serializedMessage = "{\"type\":\"GAMESTATE\",\"version\":\"1.0\",\"clientID\":1,\"activelyPlayingIDs\":[1235,1345],\"history\":[\"*MAP_CHANGE als String*\",\"*Mehrere SPAWN_CHARACTER als String*\"]}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
 
-        //GameStateMessage
+            Assert.AreEqual("GAMESTATE", ((GameStateMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((GameStateMessage)deserializedMessage).version);
+            Assert.AreEqual(1, ((GameStateMessage)deserializedMessage).clientID);
+            Assert.AreEqual(1235, ((GameStateMessage)deserializedMessage).activelyPlayingIDs[0]);
+            Assert.AreEqual(1345, ((GameStateMessage)deserializedMessage).activelyPlayingIDs[1]);
+            Assert.AreEqual("*MAP_CHANGE als String*", ((GameStateMessage)deserializedMessage).history[0]);
+            Assert.AreEqual("*Mehrere SPAWN_CHARACTER als String*", ((GameStateMessage)deserializedMessage).history[1]);
+            Assert.AreEqual(2, ((GameStateMessage)deserializedMessage).history.Length);
 
-        //GameStateRequestMessage
+        }
 
-        //HouseAcknowledgementMessage
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message GameStateRequestMessage
+        /// </summary>
+        [Test]
+        public void TestToGameStateRequestMessage()
+        {
+            string serializedMessage = "{\"type\":\"GAMESTATE_REQUEST\",\"version\":\"1.0\",\"clientID\":1234}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
 
-        //HouseOfferMessage
+            Assert.AreEqual("GAMESTATE_REQUEST", ((GameStateRequestMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((GameStateRequestMessage)deserializedMessage).version);
+            Assert.AreEqual(1234, ((GameStateRequestMessage)deserializedMessage).clientID);
+        }
 
-        //HouseRequestMessage
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message HouseAcknowledgementMessage
+        /// </summary>
+        [Test]
+        public void TestToHouseAcknowledgementMessage()
+        {
+            string serializedMessage = "{\"type\":\"HOUSE_ACKNOWLEDGEMENT\",\"version\":\"1.0\",\"clientID\":1234,\"houseName\":\"ATREIDES\"}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
 
-        //JoinAcceptedMessage
+            Assert.AreEqual("HOUSE_ACKNOWLEDGEMENT", ((HouseAcknowledgementMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((HouseAcknowledgementMessage)deserializedMessage).version);
+            Assert.AreEqual(1234, ((HouseAcknowledgementMessage)deserializedMessage).clientID);
+            Assert.AreEqual("ATREIDES", ((HouseAcknowledgementMessage)deserializedMessage).houseName);
+        }
 
-        //JoinMessage
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message HouseRequestMessage
+        /// </summary>
+        [Test]
+        public void TestToHouseRequestMessage()
+        {
+            string serializedMessage = "{\"type\":\"HOUSE_REQUEST\",\"version\":\"1.0\",\"houseName\":\"ATREIDES\"}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
 
-        //MapChangeDemandMessage
+            Assert.AreEqual("HOUSE_REQUEST", ((HouseRequestMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((HouseRequestMessage)deserializedMessage).version);
+            Assert.AreEqual("ATREIDES", ((HouseRequestMessage)deserializedMessage).houseName);
+        }
+
+
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message JoinAcceptedMessage
+        /// </summary>
+        [Test]
+        public void TestToJoinAcceptedMessage()
+        {
+            string serializedMessage = "{\"type\":\"JOINACCEPTED\",\"version\":\"1.0\",\"clientSecret\":\"secret1234\",\"clientID\":1234}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+
+            Assert.AreEqual("JOINACCEPTED", ((JoinAcceptedMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((JoinAcceptedMessage)deserializedMessage).version);
+            Assert.AreEqual("secret1234", ((JoinAcceptedMessage)deserializedMessage).clientSecret);
+            Assert.AreEqual(1234, ((JoinAcceptedMessage)deserializedMessage).clientID);
+        }
+
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message JoinMessage
+        /// </summary>
+        [Test]
+        public void TestToJoinMessage()
+        {
+            string serializedMessage = "{\"type\":\"JOIN\",\"version\":\"1.0\",\"clientName\":\"name\",\"isActive\":true,\"isCpu\":false}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+
+            Assert.AreEqual("JOIN", ((JoinMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((JoinMessage)deserializedMessage).version);
+            Assert.AreEqual("name", ((JoinMessage)deserializedMessage).clientName);
+            Assert.AreEqual(true, ((JoinMessage)deserializedMessage).isActive);
+            Assert.AreEqual(false, ((JoinMessage)deserializedMessage).isCpu);
+        }
+
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message MapChangeDemandMessage
+        /// </summary>
+        [Test]
+        public void TestToMapChangeDemandMessage()
+        {
+            string serializedMessage = "{\"type\":\"MAP_CHANGE_DEMAND\",\"version\":\"1.0\",\"changeReason\":\"FAMILY_ATOMICS\",\"newMap\":[[{\"tileType\":\"CITY\",\"clientID\":1234,\"hasSpice\":false,\"isInSandstorm\":false},{\"tileType\":\"DUNE\",\"hasSpice\":false,\"isInSandstorm\":false}]]}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+
+            Assert.AreEqual("MAP_CHANGE_DEMAND", ((MapChangeDemandMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((MapChangeDemandMessage)deserializedMessage).version);
+            Assert.AreEqual("FAMILY_ATOMICS", ((MapChangeDemandMessage)deserializedMessage).changeReason);
+            Assert.AreEqual("CITY", ((MapChangeDemandMessage)deserializedMessage).newMap[0,0].tileType);
+            Assert.AreEqual(1234, ((MapChangeDemandMessage)deserializedMessage).newMap[0,0].clientID);
+            Assert.AreEqual(false, ((MapChangeDemandMessage)deserializedMessage).newMap[0,0].HasSpice);
+            Assert.AreEqual(false, ((MapChangeDemandMessage)deserializedMessage).newMap[0,0].isInSandstorm);
+            Assert.AreEqual("DUNE", ((MapChangeDemandMessage)deserializedMessage).newMap[0,1].tileType);
+            Assert.AreEqual(false, ((MapChangeDemandMessage)deserializedMessage).newMap[0,1].HasSpice);
+            Assert.AreEqual(false, ((MapChangeDemandMessage)deserializedMessage).newMap[0,1].isInSandstorm);
+            Assert.AreEqual(0, ((MapChangeDemandMessage)deserializedMessage).newMap[0, 1].clientID);
+        }
 
         //MovementDemandMessage
 

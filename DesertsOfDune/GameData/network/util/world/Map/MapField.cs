@@ -12,10 +12,10 @@ namespace GameData.network.util.world
     /// </summary>
     public class MapField
     {
-        [JsonProperty(Order = -2)]
+        [JsonProperty(Order = -3)]
         public string tileType { get; set; }
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private int clientID;
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore, Order = -2)]
+        public int clientID { get; }
         [JsonProperty]
         private bool hasSpice;
         [JsonIgnore]
@@ -64,6 +64,7 @@ namespace GameData.network.util.world
         /// <param name="isInSandstorm">true, if there is a sandstorm on the field.</param>
         /// <param name="clientID">the id of the client (only to be set for city tiles)</param>
         /// <param name="stormEye">the center position of the storm can be null</param>
+        [JsonConstructor]
         public MapField(bool hasSpice, bool isInSandstorm, int clientID, Position stormEye)
         {
             this.tileType = Enum.GetName(typeof(TileType),enums.TileType.CITY);
