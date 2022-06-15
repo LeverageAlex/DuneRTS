@@ -149,7 +149,8 @@ public static class ConfigJSONLink
             partieConfigModel.sandWormSpawnDistance,
             partieConfigModel.cloneProbability,
             partieConfigModel.minPauseTime,
-            partieConfigModel.maxStrikes);
+            partieConfigModel.maxStrikes,
+            partieConfigModel.heliCrashProbability);
 
         Debug.WriteLine("[JSON CONVERT] Number of Rounds: " + partieConfigModel.numberOfRounds);
         Debug.WriteLine("[JSON CONVERT] actionTime: " + partieConfigModel.actionTimeUserClient);
@@ -216,6 +217,7 @@ public class PartieObject {
     public float cloneProbability;
     public int minPauseTime;
     public int maxStrikes;
+    public float heliCrashProbability;
 
     public PartieObject(character noble,
                         character mentat,
@@ -233,7 +235,8 @@ public class PartieObject {
                         int sandWormSpawnDistance,
                         float cloneProbability,
                         int minPauseTime,
-                        int maxStrikes) {
+                        int maxStrikes,
+                        float heliCrashProbability) {
         this.noble = noble;
         this.mentat = mentat;
         this.beneGesserit = beneGesserit;
@@ -251,6 +254,7 @@ public class PartieObject {
         this.cloneProbability = cloneProbability;
         this.minPauseTime = minPauseTime;
         this.maxStrikes = maxStrikes;
+        this.heliCrashProbability = heliCrashProbability;
     }
 
 }

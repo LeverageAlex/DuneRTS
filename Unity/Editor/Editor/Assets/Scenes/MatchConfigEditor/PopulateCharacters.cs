@@ -13,8 +13,12 @@ public class PopulateCharacters : MonoBehaviour
 
     public CharacterProperties[] properties;
 
+    private CharacterValues[] allCharacters { get; set; }
 
-    public void Init() {
+
+    public CharacterValues[] Init() {
+        
+
         // Copy Noble 4 times
         GameObject prototype = transform.Find("Noble").gameObject;
         for (int i = 1; i < 4; i++) {
@@ -24,9 +28,22 @@ public class PopulateCharacters : MonoBehaviour
             newCharacter.transform.Find("Main").gameObject.GetComponentInChildren<Image>().sprite = properties[i].Thumbnail;
             newCharacter.GetComponent<RectTransform>().anchorMax = new Vector2(1, (1 - 0.25f * i));
             newCharacter.GetComponent<RectTransform>().anchorMin = new Vector2(0, (0.75f - 0.25f * i));
+
+            //transform.GetComponent<CharacterValues>().Init();
+            //allCharacters[i] = newCharacter.GetComponent<CharacterValues>();
+            //allCharacters[i].Init();
         }
+
+
         // Initialize every Character
-        foreach (Transform t in transform)
-            t.GetComponent<CharacterValues>().Init();
+        allCharacters = new CharacterValues[properties.Length];
+        int iterator = 0;
+        foreach (Transform t in transform) {
+            allCharacters[iterator] = t.GetComponent<CharacterValues>();
+            allCharacters[iterator].Init();
+            iterator++;
+        }
+        
+        return allCharacters;
     }
 }
