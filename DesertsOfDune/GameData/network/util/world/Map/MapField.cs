@@ -122,7 +122,11 @@ namespace GameData.network.util.world
             character.CurrentMapfield = this;
         }
 
-        //deplace
+        public void DisplaceCharacter()
+        {
+            this.Character = null;
+            this.IsCharacterStayingOnThisField = false;
+        }
 
         public double DistanceTo(MapField field)
         {

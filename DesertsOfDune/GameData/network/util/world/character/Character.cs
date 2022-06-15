@@ -236,6 +236,14 @@ namespace GameData.network.util.world
         }
 
         /// <summary>
+        /// This method is used to set a character to silent
+        /// </summary>
+        public void SetSilent()
+        {
+            isLoud = false;
+        }
+
+        /// <summary>
         /// this method tells weather the character stands next to his city.
         /// </summary>
         /// <returns>true, if the character stands next to his city</returns>
@@ -266,6 +274,8 @@ namespace GameData.network.util.world
                 return false;
             }
             currentMapfield = goalField;
+            startField.DisplaceCharacter();
+            goalField.PlaceCharacter(this);
             return true;
         }
 
@@ -273,7 +283,7 @@ namespace GameData.network.util.world
         /// this method contains the logic for a atack from one character to a nother character.
         /// </summary>
         /// <param name="target">the character targeted by the atack</param>
-        /// <returns>true, if atack was possible</returns>
+        /// <returns>true, if attack was possible</returns>
         public bool Atack(Character target)
         {
             int dist = Math.Abs(target.currentMapfield.XCoordinate - currentMapfield.XCoordinate) + Math.Abs(target.currentMapfield.ZCoordinate - currentMapfield.ZCoordinate);
@@ -368,6 +378,27 @@ namespace GameData.network.util.world
         public bool SwordSpin(Map map)
         {
             //Do nothing because only Fighters can perform this move
+            return false;
+        }
+
+        /// <summary>
+        /// This method is used to check if the Character is staying in the sandstorm
+        /// </summary>
+        /// <param name="map">The map where the player is</param>
+        /// <returns></returns>
+        public bool IsInSandStorm(Map map)
+        {
+            if(currentMapfield.GetMapFieldPosition() == map.PositionOfEyeOfStorm)
+            {
+                return false;
+            }
+            foreach(var mapfield in map.GetNeighborFields(currentMapfield))
+            {
+                if(mapfield.GetMapFieldPosition() == map.PositionOfEyeOfStorm)
+                {
+                    return false;
+                }
+            }
             return false;
         }
     }
