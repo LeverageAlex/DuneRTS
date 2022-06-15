@@ -15,7 +15,7 @@ namespace GameData.network.util.world
         [JsonProperty(Order = -3)]
         public string tileType { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore, Order = -2)]
-        public int clientID { get; }
+        public int clientID { get; set; }
         [JsonProperty]
         private bool hasSpice;
         [JsonIgnore]
@@ -64,15 +64,15 @@ namespace GameData.network.util.world
         /// <param name="isInSandstorm">true, if there is a sandstorm on the field.</param>
         /// <param name="clientID">the id of the client (only to be set for city tiles)</param>
         /// <param name="stormEye">the center position of the storm can be null</param>
-        [JsonConstructor]
-        public MapField(bool hasSpice, bool isInSandstorm, int clientID, Position stormEye)
+        
+    /*    public MapField(bool hasSpice, bool isInSandstorm, int clientID, Position stormEye)
         {
             this.tileType = Enum.GetName(typeof(TileType),enums.TileType.CITY);
             this.hasSpice = hasSpice;
             this.isInSandstorm = isInSandstorm;
             this.clientID = clientID;
             this.stormEye = stormEye;
-        }
+        }*/
 
         /// <summary>
         /// Constructof of the Class MapField for Fields that are not the city
@@ -81,13 +81,15 @@ namespace GameData.network.util.world
         /// <param name="hasSpice">true, if the MapField has spice on it</param>
         /// <param name="isInSandstorm">true, if there is a sandstorm on the MapField</param>
         /// <param name="stormEye">the Position of the Sandstorm can also be null</param>
-        public MapField(TileType tt, Elevation heightLevel, bool hasSpice, bool isInSandstorm, Position stormEye)
+        [JsonConstructor]
+        public MapField(TileType tt, Elevation heightLevel, bool hasSpice, bool isInSandstorm, bool isApproachable, Position stormEye)
         {
             this.tileType = Enum.GetName(typeof(TileType), tt);
             this.elevation = heightLevel;
             this.hasSpice = hasSpice;
             this.isInSandstorm = isInSandstorm;
             this.stormEye = stormEye;
+            this.IsApproachable = isApproachable;
         }
 
         public MapField(string tileType, int x, int y)

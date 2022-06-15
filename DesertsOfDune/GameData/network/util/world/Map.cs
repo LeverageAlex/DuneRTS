@@ -43,7 +43,27 @@ namespace GameData.network.util.world
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    fields[y, x] = new MapField(scenarioConfiguration[x][(MAP_HEIGHT - 1) - y], x, y);
+                    switch(scenarioConfiguration[x][(MAP_HEIGHT - 1) - y])
+                    {
+                        case "DUNE":
+                            fields[y, x] = new Dune(false, false, null);
+                            break;
+                        case "FLAT_SAND":
+                            fields[y, x] = new FlatSand(false, false, null);
+                            break;
+                        case "MOUNTAINS":
+                            fields[y, x] = new Mountain(false, false, null);
+                            break;
+                        case "PLATEAU":
+                            fields[y, x] = new RockPlateau(false, false, null);
+                            break;
+                        case "CITY":
+                            fields[y, x] = new City(0, false, false, null);
+                            break;
+                    }
+                    fields[y, x].XCoordinate = x;
+                    fields[y, x].ZCoordinate = y;
+                  //  fields[y, x] = new MapField(scenarioConfiguration[x][(MAP_HEIGHT - 1) - y], x, y);
                 }
             }
         }
@@ -159,6 +179,7 @@ namespace GameData.network.util.world
             }
             else
             {
+                
                 return null;
             }
         }
@@ -196,7 +217,7 @@ namespace GameData.network.util.world
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    if (fields[y, x].tileType == TileType.CITY.ToString())
+                    if (fields[y, x].tileType.Equals(Enum.GetName(typeof(TileType), TileType.CITY)))
                     {
                         cities.Add((City)fields[y, x]);
                     }

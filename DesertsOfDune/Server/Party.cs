@@ -257,6 +257,7 @@ namespace Server
                     fieldForCharacter.PlaceCharacter(character);
                     character.CurrentMapfield = fieldForCharacter;
 
+                    messageController.DoSpawnCharacterDemand(character);
                     // neighborFieldsOfCity.Remove(fieldForCharacter);
                 }
                 

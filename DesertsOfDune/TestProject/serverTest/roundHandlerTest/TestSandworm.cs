@@ -60,7 +60,8 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
             }
             List<Character> characters = new List<Character>();
             Noble nobel1 = new Noble(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true);
-            MapField mapField = new MapField(false, false, 0, null);
+            MapField mapField = new City(1234, false, false, new Position(0,0));
+                //new MapField(GameData.network.util.enums.TileType.CITY, GameData.network.util.enums.Elevation.low,false, false, 0, null);
             mapField.XCoordinate = 0;
             mapField.ZCoordinate = 2;
             nobel1.CurrentMapfield = mapField;

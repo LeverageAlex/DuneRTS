@@ -61,6 +61,9 @@ namespace GameData.server.roundHandler
                 for (int y = 0; y < this.map.MAP_HEIGHT; y++)
                 {
                     MapField field = this.map.GetMapFieldAtPosition(x, y);
+                  //  Console.WriteLine("Hello, this is the start of Logging");
+                  //  Console.WriteLine("The current field: " + field.ToString());
+                  //  Console.WriteLine("Neighbors are: " + neighbors);
                     if (field.Equals(EyeOfStorm) || neighbors.Contains(field))
                     {
                         field.isInSandstorm = true;

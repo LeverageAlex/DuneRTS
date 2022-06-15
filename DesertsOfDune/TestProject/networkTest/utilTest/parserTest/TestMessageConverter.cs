@@ -270,7 +270,8 @@ namespace TestProject.networkTest.utilTest.parserTest
         public void TestFromMapChangeDemandMessage()
         {
             MapField[,] map = new MapField[1, 2];
-            map[0, 0] = new MapField(false, false, 1234, null);
+            map[0, 0] = new GameData.network.util.world.mapField.City(1234, false, false, null);
+                //new MapField(false, false, 1234, null);
             map[0, 1] = new MapField(TileType.DUNE, Elevation.high, false, false, null);
             MapChangeDemandMessage message = new MapChangeDemandMessage(MapChangeReasons.FAMILY_ATOMICS, map);
             string serializedMessage = MessageConverter.FromMessage(message);

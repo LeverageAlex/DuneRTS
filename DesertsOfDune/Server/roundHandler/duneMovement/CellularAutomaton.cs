@@ -116,7 +116,11 @@ namespace Server.roundHandler.duneMovementHandler
                         {
                             // cell will be born, so will be a dune
                             MapField newDune = new Dune(cell.HasSpice, cell.isInSandstorm, cell.stormEye);
-                            newDune.PlaceCharacter(cell.Character);
+                            if (cell.Character != null)
+                            {
+
+                                newDune.PlaceCharacter(cell.Character);
+                            }
 
                             map.SetMapFieldAtPosition(newDune, x, y);
                             wasMapChanged = true;
@@ -131,7 +135,10 @@ namespace Server.roundHandler.duneMovementHandler
                         
                         // cell will die, so will be a flat sand
                         MapField newFlatSand = new FlatSand(cell.HasSpice, cell.isInSandstorm, cell.stormEye);
-                        newFlatSand.PlaceCharacter(cell.Character);
+                        if (cell.Character != null)
+                        {
+                            newFlatSand.PlaceCharacter(cell.Character);
+                        }
 
                         map.SetMapFieldAtPosition(newFlatSand, x, y);
                         wasMapChanged = true;

@@ -46,6 +46,11 @@ namespace GameData.network.controller
             // check, whether the parsing was successful
             if (parsedMessage != null)
             {
+                // logging the sending message
+                using (LogContext.PushProperty("Direction", "send"))
+                {
+                    Log.Information("{ message: " + parsedMessage + " }, \"direction\": \"send\" } \n");
+                }
                 // broadcast parsed message to all active sessions so clients
                 ((ServerConnectionHandler)connectionHandler).sessionManager.Broadcast(parsedMessage);
                 return true;
