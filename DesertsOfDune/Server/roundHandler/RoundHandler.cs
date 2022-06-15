@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using GameData.network.messages;
 using GameData.network.util.world;
 using GameData.server.roundHandler;
@@ -113,10 +114,12 @@ namespace GameData.gameObjects
             }
 
             // check, whether the round limit is exceeded
-            if (IsLastRoundOver())
+            if (!IsOverlengthMechanismActive && IsLastRoundOver ())
             {
                 _overLengthMechanism = new OverLengthMechanism(this._map);
                 Log.Debug("The last round is over, so start the overlength mechanism.");
+                
+                NextRound();
             }
             else
             {
@@ -156,10 +159,12 @@ namespace GameData.gameObjects
                 Log.Debug("Executed the clone phase.");
 
                 Log.Debug("Execute the character trait phase...");
-                characterTraitPhase.Execute();
-
+           //      characterTraitPhase.Execute();
+                
                 // increase round counter, because the round was finished
                 _roundCounter++;
+                Thread.Sleep(2000);
+                NextRound();
             }
         }
 

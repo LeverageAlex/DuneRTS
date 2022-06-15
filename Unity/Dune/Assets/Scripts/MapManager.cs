@@ -176,7 +176,10 @@ public class MapManager : MonoBehaviour
 
     public void SpawnSpiceCrumOn(int x, float y, int z)
     {
-        if (spiceCrumbs[z, x] != null) return;
+        if (spiceCrumbs[z, x] != null)
+        {
+            return;
+        }
         GameObject spice = Instantiate(spicePrefab, new Vector3(x, y, z), Quaternion.identity);
         spiceCrumbs[z, x] = spice;
 

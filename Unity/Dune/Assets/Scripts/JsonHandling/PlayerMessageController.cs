@@ -15,7 +15,8 @@ public class PlayerMessageController : MessageController
 {
     public static PlayerMessageController instance;
 
-    public PlayerMessageController() {
+    public PlayerMessageController()
+    {
         if (instance == null) instance = this;
     }
 
@@ -113,8 +114,8 @@ public class PlayerMessageController : MessageController
             SessionHandler.viewerId = joinAcceptedMessage.clientID;
             Debug.Log("Joined as viewer and set id to: " + SessionHandler.clientId);
         }
-            SessionHandler.clientSecret = joinAcceptedMessage.clientSecret;
-        
+        SessionHandler.clientSecret = joinAcceptedMessage.clientSecret;
+
         IEnumerator demandPlaygame()
         {
             MainMenuManager.instance.DemandJoinAccept();
@@ -146,14 +147,14 @@ public class PlayerMessageController : MessageController
                 for (int z = 0; z < gameConfigMessage.scenario[0].Count; z++)
                 {
                     Debug.Log("PreLoop Built x: " + x + " and z: " + z);
-                    if ( gameConfigMessage.stormEye != null && MapManager.instance.isNodeNeighbour(x, z, gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y))
+                    if (gameConfigMessage.stormEye != null && MapManager.instance.isNodeNeighbour(x, z, gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y))
                     {
                         //Node is in Sandstorm
-                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), true);
+                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[z][x]), true);
                     }
                     else
                     {
-                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), false);
+                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[z][x]), false);
                     }
                     Debug.Log("Built x: " + x + " and z: " + z);
                 }
@@ -192,20 +193,46 @@ public class PlayerMessageController : MessageController
     /// <returns></returns>
     public override void OnMapChangeDemandMessage(MapChangeDemandMessage mapChangeDemandMessage)
     {
-        // TODO: implement logic
-     /*   MapManager.instance.setMapSize(mapChangeDemandMessage.newMap.GetLength(0), mapChangeDemandMessage.newMap.GetLength(1));
 
-        for (int x = 0; x < mapChangeDemandMessage.newMap.GetLength(0); x++)
+        IEnumerator mapchange()
         {
-            for (int z = 0; z < mapChangeDemandMessage.newMap.GetLength(1); z++)
+            for (int x = 0; x < mapChangeDemandMessage.newMap.GetLength(0); x++)
             {
-                var cluster = mapChangeDemandMessage.newMap[x, z];
-                MapManager.instance.UpdateBoard(x, z, cluster.HasSpice, MapManager.instance.StringtoNodeEnum(cluster.tileType), cluster.isInSandstorm);
-                
+                for (int z = 0; z < mapChangeDemandMessage.newMap.GetLength(1); z++)
+                {
 
+
+
+
+                    Debug.Log("PreLoop Built x: " + x + " and z: " + z);
+                    if (mapChangeDemandMessage.stormEye != null && MapManager.instance.isNodeNeighbour(x, z, mapChangeDemandMessage.stormEye.x, mapChangeDemandMessage.stormEye.y))
+                    {
+
+                        //Node is in Sandstorm
+                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(mapChangeDemandMessage.newMap[z, x].tileType), true);
+                    }
+                    else
+                    {
+                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(mapChangeDemandMessage.newMap[z, x].tileType), false);
+                    }
+                    Debug.Log("Built x: " + x + " and z: " + z);
+
+
+                    if (mapChangeDemandMessage.newMap[z, x].HasSpice)
+                    {
+                        
+                        MapManager.instance.SpawnSpiceCrumOn(x, 0.5f, z);
+                    }
+                    else
+                    {
+                        MapManager.instance.CollectSpice(x, z);
+                    }
+                }
             }
+            MapManager.instance.SetStormEye(mapChangeDemandMessage.stormEye.x, mapChangeDemandMessage.stormEye.y);
+            yield return null;
         }
-        CharacterMgr.instance.SpawnSandworm(mapChangeDemandMessage.newMap[0,0].stormEye.x, mapChangeDemandMessage.newMap[0, 0].stormEye.y);*/
+        UnityMainThreadDispatcher.Instance().Enqueue(mapchange());
     }
 
     /// <summary>
@@ -266,7 +293,7 @@ public class PlayerMessageController : MessageController
     public override void OnHouseOfferMessage(HouseOfferMessage houseOfferMessage)
     {
         //Log.Debug("Entered OnHouseOffer");
-       // Debug.Log("Received clientId: " + houseOfferMessage.clientID + "; expected: " + SessionHandler.clientId);
+        // Debug.Log("Received clientId: " + houseOfferMessage.clientID + "; expected: " + SessionHandler.clientId);
         if (SessionHandler.clientId == houseOfferMessage.clientID)
         {
             Log.Debug("Entered House Offer Method");
@@ -294,48 +321,44 @@ public class PlayerMessageController : MessageController
     public override void OnHouseAcknowledgementMessage(HouseAcknowledgementMessage houseAcknowledgementMessage)
     {
         // TODO: implement logic
+
+        HouseEnum house;
+        switch (houseAcknowledgementMessage.houseName)
+        {
+            case "CORRINO":
+                house = HouseEnum.CORRINO;
+                break;
+            case "ATREIDES":
+                house = HouseEnum.ATREIDES;
+                break;
+            case "HARKONNEN":
+                house = HouseEnum.HARKONNEN;
+                break;
+            case "ORDOS":
+                house = HouseEnum.ORDOS;
+                break;
+            case "RICHESE":
+                house = HouseEnum.RICHESE;
+                break;
+            default:
+                house = HouseEnum.VERNIUS;
+                break;
+        }
+
         if (houseAcknowledgementMessage.clientID == SessionHandler.clientId)
         {
             IEnumerator houseAckn()
-            { 
+            {
                 InGameMenuManager.getInstance().DemandEndHouseSelection();
 
-                HouseEnum house;
-                switch (houseAcknowledgementMessage.houseName)
-                {
-                    case "CORRINO":
-                        house = HouseEnum.CORRINO;
-                        break;
-                    case "ATREIDES":
-                        house = HouseEnum.ATREIDES;
-                        break;
-                    case "HARKONNEN":
-                        house = HouseEnum.HARKONNEN;
-                        break;
-                    case "ORDOS":
-                        house = HouseEnum.ORDOS;
-                        break;
-                    case "RICHESE":
-                        house = HouseEnum.RICHESE;
-                        break;
-                    default:
-                        house = HouseEnum.VERNIUS;
-                        break;
-                }
-
-                if (houseAcknowledgementMessage.clientID == SessionHandler.clientId)
-                {
-                    CharacterMgr.instance.SetPlayerHouse(house);
-                }
-                else
-                {
-                    CharacterMgr.instance.SetEnemyHouse(house);
-                }
-
-                InGameMenuManager.getInstance().DemandEndHouseSelection();
                 yield return null;
             }
+            CharacterMgr.instance.SetPlayerHouse(house);
             UnityMainThreadDispatcher.Instance().Enqueue(houseAckn());
+        }
+        else
+        {
+            CharacterMgr.instance.SetEnemyHouse(house);
         }
     }
 
@@ -383,7 +406,7 @@ public class PlayerMessageController : MessageController
         // TODO: implement logic
         Character character = CharacterMgr.instance.getCharScriptByID(actionDemandMessage.characterID);
         Character enemy;
-        switch(actionDemandMessage.action)
+        switch (actionDemandMessage.action)
         {
             case "ATTACK":
                 enemy = MapManager.instance.GetCharOnNode(actionDemandMessage.specs.target.x, actionDemandMessage.specs.target.y);
@@ -437,24 +460,34 @@ public class PlayerMessageController : MessageController
     {
         // TODO: implement logic
         //spawnCharacterDemandMessage.
-        CharTypeEnum type;
-        switch(spawnCharacterDemandMessage.attributes.characterType)
+        Log.Debug("Trigged OnSpawnCharacterDemandMessage in Client. Starting Main Function...");
+        IEnumerator spawnCharacters()
         {
-            case "FIGHTER":
-                type = CharTypeEnum.FIGHTER;
-                break;
-            case "NOBLE":
-                type = CharTypeEnum.NOBLE;
-                break;
-            case "MENTAT":
-                type = CharTypeEnum.MENTANT;
-                break;
-            default:
-                type = CharTypeEnum.BENEGESSERIT;
-                break;
-        }
+            Debug.Log("Started IEnumerator");
+            Log.Debug("Ienumerator startup");
+            Debug.Log("Character Attributes: " + (spawnCharacterDemandMessage.attributes == null));
+            CharTypeEnum type;
+            switch (spawnCharacterDemandMessage.attributes.characterType)
+            {
+                case "FIGHTER":
+                    type = CharTypeEnum.FIGHTER;
+                    break;
+                case "NOBLE":
+                    type = CharTypeEnum.NOBLE;
+                    break;
+                case "MENTAT":
+                    type = CharTypeEnum.MENTANT;
+                    break;
+                default:
+                    type = CharTypeEnum.BENEGESSERIT;
+                    break;
+            }
+            Debug.Log("Selection successful");
 
-        CharacterMgr.instance.spawnCharacter(spawnCharacterDemandMessage.clientID, spawnCharacterDemandMessage.characterID, type, spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.APmax, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.KilledBySandworm, spawnCharacterDemandMessage.attributes.IsLoud());
+            CharacterMgr.instance.spawnCharacter(spawnCharacterDemandMessage.clientID, spawnCharacterDemandMessage.characterID, type, spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.APmax, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.KilledBySandworm, spawnCharacterDemandMessage.attributes.IsLoud());
+            yield return null;
+        }
+        UnityMainThreadDispatcher.Instance().Enqueue(spawnCharacters());
     }
 
     /// <summary>
@@ -465,7 +498,8 @@ public class PlayerMessageController : MessageController
     public override void OnChangePlayerSpiceDemandMessage(ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage)
     {
         // TODO: implement logic
-        if (SessionHandler.clientId == changePlayerSpiceDemandMessage.clientID) {
+        if (SessionHandler.clientId == changePlayerSpiceDemandMessage.clientID)
+        {
             GUIHandler.UpdatePlayerSpice(changePlayerSpiceDemandMessage.newSpiceValue);
         }
         else
@@ -482,7 +516,13 @@ public class PlayerMessageController : MessageController
     public override void OnSandwormSpawnDemandMessage(SandwormSpawnDemandMessage sandwormSpawnDemandMessage)
     {
         // TODO: implement logic
-        CharacterMgr.instance.SpawnSandworm(sandwormSpawnDemandMessage.position.x, sandwormSpawnDemandMessage.position.y);
+        IEnumerator spawnWorm()
+        {
+            CharacterMgr.instance.SpawnSandworm(sandwormSpawnDemandMessage.position.x, sandwormSpawnDemandMessage.position.y);
+            yield return null;
+        }
+
+        UnityMainThreadDispatcher.Instance().Enqueue(spawnWorm());
     }
 
     /// <summary>
@@ -493,7 +533,12 @@ public class PlayerMessageController : MessageController
     public override void OnSandwormMoveDemandMessage(SandwormMoveDemandMessage sandwormMoveMessage)
     {
         // TODO: implement logic
-        CharacterMgr.instance.SandwormMove(sandwormMoveMessage.path);
+        IEnumerator moveWorm()
+        {
+            CharacterMgr.instance.SandwormMove(sandwormMoveMessage.path);
+            yield return null;
+        }
+        UnityMainThreadDispatcher.Instance().Enqueue(moveWorm());
     }
 
     /// <summary>
@@ -504,7 +549,12 @@ public class PlayerMessageController : MessageController
     public override void OnSandwormDespawnMessage(SandwormDespawnDemandMessage sandwormDespawnDemandMessage)
     {
         // TODO: implement logic
-        CharacterMgr.instance.DespawnSandworm();
+        IEnumerator despawnMove()
+        {
+            CharacterMgr.instance.DespawnSandworm();
+            yield return null;
+        }
+        UnityMainThreadDispatcher.Instance().Enqueue(despawnMove());
     }
 
     /// <summary>

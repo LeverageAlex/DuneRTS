@@ -33,6 +33,7 @@ namespace GameData.network.util.world
 
             // despawn the usual sandworm
             Sandworm.Despawn(Party.GetInstance().messageController);
+            _shaiHuludPhase = new ShaiHuludPhase(map);
         }
 
 

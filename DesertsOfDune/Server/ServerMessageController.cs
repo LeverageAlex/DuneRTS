@@ -579,7 +579,7 @@ namespace Server
             // get the new map from the party
             MapField[,] newMap = Party.GetInstance().map.fields;
 
-            MapChangeDemandMessage mapChangeDemandMessage = new MapChangeDemandMessage(mapChangeReasons, newMap);
+            MapChangeDemandMessage mapChangeDemandMessage = new MapChangeDemandMessage(mapChangeReasons, newMap, new Position(Party.GetInstance().RoundHandler.SandstormPhase.EyeOfStorm.XCoordinate, Party.GetInstance().RoundHandler.SandstormPhase.EyeOfStorm.ZCoordinate));
             NetworkController.HandleSendingMessage(mapChangeDemandMessage);
         }
 

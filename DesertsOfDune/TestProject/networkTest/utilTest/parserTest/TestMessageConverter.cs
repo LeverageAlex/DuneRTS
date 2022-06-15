@@ -7,6 +7,7 @@ using Server.Configuration;
 using GameData.Configuration;
 using GameData.network.util.world.character;
 using GameData.network.util.enums;
+using GameData.network.util.world.mapField;
 
 namespace TestProject.networkTest.utilTest.parserTest
 {
@@ -271,12 +272,11 @@ namespace TestProject.networkTest.utilTest.parserTest
         {
             MapField[,] map = new MapField[1, 2];
             map[0, 0] = new GameData.network.util.world.mapField.City(1234, false, false, null);
-                //new MapField(false, false, 1234, null);
-            map[0, 1] = new MapField(TileType.DUNE, Elevation.high, false, false, null);
-            MapChangeDemandMessage message = new MapChangeDemandMessage(MapChangeReasons.FAMILY_ATOMICS, map);
+            map[0, 1] = new Dune(false, false, null);
+            MapChangeDemandMessage message = new MapChangeDemandMessage(MapChangeReasons.FAMILY_ATOMICS, map, new Position(1,2));
             string serializedMessage = MessageConverter.FromMessage(message);
 
-            Assert.AreEqual("{\"type\":\"MAP_CHANGE_DEMAND\",\"version\":\"1.0\",\"changeReason\":\"FAMILY_ATOMICS\",\"newMap\":[[{\"tileType\":\"CITY\",\"clientID\":1234,\"hasSpice\":false,\"isInSandstorm\":false},{\"tileType\":\"DUNE\",\"hasSpice\":false,\"isInSandstorm\":false}]]}", serializedMessage);
+            Assert.AreEqual("{\"type\":\"MAP_CHANGE_DEMAND\",\"version\":\"1.0\",\"changeReason\":\"FAMILY_ATOMICS\",\"newMap\":[[{\"tileType\":\"CITY\",\"clientID\":1234,\"hasSpice\":false,\"isInSandstorm\":false},{\"tileType\":\"DUNE\",\"hasSpice\":false,\"isInSandstorm\":false}]],\"stormEye\":{\"x\":1,\"y\":2}}", serializedMessage);
         }
 
         /// <summary>
@@ -749,7 +749,7 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestToMapChangeDemandMessage()
         {
-            string serializedMessage = "{\"type\":\"MAP_CHANGE_DEMAND\",\"version\":\"1.0\",\"changeReason\":\"FAMILY_ATOMICS\",\"newMap\":[[{\"tileType\":\"CITY\",\"clientID\":1234,\"hasSpice\":false,\"isInSandstorm\":false},{\"tileType\":\"DUNE\",\"hasSpice\":false,\"isInSandstorm\":false}]]}";
+            string serializedMessage = "{\"type\":\"MAP_CHANGE_DEMAND\",\"version\":\"1.0\",\"changeReason\":\"FAMILY_ATOMICS\",\"newMap\":[[{\"tileType\":\"CITY\",\"clientID\":1234,\"hasSpice\":false,\"isInSandstorm\":false},{\"tileType\":\"DUNE\",\"hasSpice\":false,\"isInSandstorm\":false}]],\"stormEye\":{\"x\":4,\"y\":5}}";
             Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
 
             Assert.AreEqual("MAP_CHANGE_DEMAND", ((MapChangeDemandMessage)deserializedMessage).GetMessageTypeAsString());
@@ -763,6 +763,8 @@ namespace TestProject.networkTest.utilTest.parserTest
             Assert.AreEqual(false, ((MapChangeDemandMessage)deserializedMessage).newMap[0,1].HasSpice);
             Assert.AreEqual(false, ((MapChangeDemandMessage)deserializedMessage).newMap[0,1].isInSandstorm);
             Assert.AreEqual(0, ((MapChangeDemandMessage)deserializedMessage).newMap[0, 1].clientID);
+            Assert.AreEqual(4, ((MapChangeDemandMessage)deserializedMessage).stormEye.x);
+            Assert.AreEqual(5, ((MapChangeDemandMessage)deserializedMessage).stormEye.y);
         }
 
         /// <summary>
@@ -878,6 +880,21 @@ namespace TestProject.networkTest.utilTest.parserTest
             Assert.AreEqual(1236, ((SandwormSpawnDemandMessage)deserializedMessage).characterID);
             Assert.AreEqual(2, ((SandwormSpawnDemandMessage)deserializedMessage).position.x);
             Assert.AreEqual(3, ((SandwormSpawnDemandMessage)deserializedMessage).position.y);
+        }
+
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message SpawnCharacterDemandMessage
+        /// </summary>
+        [Test]
+        public void TestToSpawnCharacterDemandMessage()
+        {
+            string serializedMessage = "{\"type\":\"SPAWN_CHARACTER_DEMAND\",\"version\":\"1.0\",\"clientID\":1234,\"characterID\":12,\"characterName\":\"Vorname Nachname\",\"position\":{\"x\":0,\"y\":1},\"attributes\":{\"characterType\":\"FIGHTER\",\"healthMax\":100,\"healthCurrent\":75,\"healingHP\":10,\"MPmax\":3,\"MPcurrent\":1,\"APmax\":4,\"APcurrent\":2,\"attackDamage\":10,\"inventorySize\":5,\"inventoryUsed\":3,\"killedBySandworm\":false,\"isLoud\":true}}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+
+            Assert.AreEqual("SPAWN_CHARACTER_DEMAND", ((SpawnCharacterDemandMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((SpawnCharacterDemandMessage)deserializedMessage).version);
+            Assert.AreEqual(1234, ((SpawnCharacterDemandMessage)deserializedMessage).clientID);
+            Assert.AreEqual(12, ((SpawnCharacterDemandMessage)deserializedMessage).characterID);
         }
 
         // SandwormSpawnDemandMessage
