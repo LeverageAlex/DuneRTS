@@ -288,7 +288,7 @@ namespace TestProject.networkTest.utilTest.parserTest
             path.Add(new Position(1, 2));
             path.Add(new Position(2, 2));
             path.Add(new Position(2, 3));
-            MovementDemandMessage message = new MovementDemandMessage(1234, 12, path);
+            MovementDemandMessage message = new MovementDemandMessage(1234, 12, new Specs(null,path));
             string serializedMessage = MessageConverter.FromMessage(message);
             Assert.AreEqual("{\"type\":\"MOVEMENT_DEMAND\",\"version\":\"1.0\",\"clientID\":1234,\"characterID\":12,\"specs\":{\"path\":[{\"x\":1,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":3}]}}", serializedMessage);
         }
@@ -303,7 +303,7 @@ namespace TestProject.networkTest.utilTest.parserTest
             path.Add(new Position(1, 2));
             path.Add(new Position(2, 2));
             path.Add(new Position(2, 3));
-            MovementRequestMessage message = new MovementRequestMessage(1234, 12, path);
+            MovementRequestMessage message = new MovementRequestMessage(1234, 12, new Specs(null,path));
             string serializedMessage = MessageConverter.FromMessage(message);
             Assert.AreEqual("{\"type\":\"MOVEMENT_REQUEST\",\"version\":\"1.0\",\"clientID\":1234,\"characterID\":12,\"specs\":{\"path\":[{\"x\":1,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":3}]}}", serializedMessage);
         }

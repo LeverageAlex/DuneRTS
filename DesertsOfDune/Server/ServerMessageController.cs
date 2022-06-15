@@ -552,7 +552,7 @@ namespace Server
 
         public override void DoSendMovementDemand(int clientID, int characterID, List<Position> path)
         {
-            MovementDemandMessage movementDemandMessage = new MovementDemandMessage(clientID, characterID, path);
+            MovementDemandMessage movementDemandMessage = new MovementDemandMessage(clientID, characterID, new Specs(null, path));
             NetworkController.HandleSendingMessage(movementDemandMessage);
         }
 
