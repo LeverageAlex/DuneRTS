@@ -382,7 +382,16 @@ public class PlayerMessageController : MessageController
     public override void OnTurnDemandMessage(TurnDemandMessage turnDemandMessage)
     {
         // TODO: implement logic
-        CharacterTurnHandler.instance.SetTurnChar(CharacterMgr.instance.getCharScriptByID(turnDemandMessage.clientID));
+        Log.Debug("Triggered TurnDemandMessage");
+        if (SessionHandler.clientId == turnDemandMessage.clientID)
+        {
+            IEnumerator turnDemand()
+            {
+                CharacterTurnHandler.instance.SelectCharacter(CharacterMgr.instance.getCharScriptByID(turnDemandMessage.characterID));
+                yield return null;
+            }
+            UnityMainThreadDispatcher.Instance().Enqueue(turnDemand());
+        }
     }
 
     /// <summary>
@@ -463,8 +472,6 @@ public class PlayerMessageController : MessageController
         Log.Debug("Trigged OnSpawnCharacterDemandMessage in Client. Starting Main Function...");
         IEnumerator spawnCharacters()
         {
-            Debug.Log("Started IEnumerator");
-            Log.Debug("Ienumerator startup");
             Debug.Log("Character Attributes: " + (spawnCharacterDemandMessage.attributes == null));
             CharTypeEnum type;
             switch (spawnCharacterDemandMessage.attributes.characterType)
@@ -483,7 +490,6 @@ public class PlayerMessageController : MessageController
                     break;
             }
             Debug.Log("Selection successful");
-
             CharacterMgr.instance.spawnCharacter(spawnCharacterDemandMessage.clientID, spawnCharacterDemandMessage.characterID, type, spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.APmax, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.KilledBySandworm, spawnCharacterDemandMessage.attributes.IsLoud());
             yield return null;
         }

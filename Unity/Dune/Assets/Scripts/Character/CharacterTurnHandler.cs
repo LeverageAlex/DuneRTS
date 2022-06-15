@@ -297,11 +297,6 @@ public class CharacterTurnHandler : MonoBehaviour
         SpiceInventoryText.SetActive(false);
     }
 
-    public void SetTurnChar(Character character)
-    {
-        //TODO Check for ClientID owns character
-        selectedCharacter = character;
-    }
 
     public void updateSelectionArrow()
     {
