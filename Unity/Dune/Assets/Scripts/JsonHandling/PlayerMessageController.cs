@@ -150,11 +150,11 @@ public class PlayerMessageController : MessageController
                     if (gameConfigMessage.stormEye != null && MapManager.instance.isNodeNeighbour(x, z, gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y))
                     {
                         //Node is in Sandstorm
-                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), true);
+                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[z][x]), true);
                     }
                     else
                     {
-                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), false);
+                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[z][x]), false);
                     }
                     Debug.Log("Built x: " + x + " and z: " + z);
                 }
@@ -194,25 +194,45 @@ public class PlayerMessageController : MessageController
     public override void OnMapChangeDemandMessage(MapChangeDemandMessage mapChangeDemandMessage)
     {
 
-        mapChangeDemandMessage.
-        for (int x = 0; x < mapChangeDemandMessage.newMap.GetLength(0); x++)
+        IEnumerator mapchange()
         {
-            for (int z = 0; z < mapChangeDemandMessage.newMap.GetLength(1); z++)
+            for (int x = 0; x < mapChangeDemandMessage.newMap.GetLength(0); x++)
             {
-                Debug.Log("PreLoop Built x: " + x + " and z: " + z);
-                if (gameConfigMessage.stormEye != null && MapManager.instance.isNodeNeighbour(x, z, gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y))
+                for (int z = 0; z < mapChangeDemandMessage.newMap.GetLength(1); z++)
                 {
-                    
-                    //Node is in Sandstorm
-                    MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), true);
+
+
+
+
+                    Debug.Log("PreLoop Built x: " + x + " and z: " + z);
+                    if (mapChangeDemandMessage.stormEye != null && MapManager.instance.isNodeNeighbour(x, z, mapChangeDemandMessage.stormEye.x, mapChangeDemandMessage.stormEye.y))
+                    {
+
+                        //Node is in Sandstorm
+                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(mapChangeDemandMessage.newMap[z, x].tileType), true);
+                    }
+                    else
+                    {
+                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(mapChangeDemandMessage.newMap[z, x].tileType), false);
+                    }
+                    Debug.Log("Built x: " + x + " and z: " + z);
+
+
+                    if (mapChangeDemandMessage.newMap[z, x].HasSpice)
+                    {
+                        
+                        MapManager.instance.SpawnSpiceCrumOn(x, 0.5f, z);
+                    }
+                    else
+                    {
+                        MapManager.instance.CollectSpice(x, z);
+                    }
                 }
-                else
-                {
-                    MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), false);
-                }
-                Debug.Log("Built x: " + x + " and z: " + z);
             }
+            MapManager.instance.SetStormEye(mapChangeDemandMessage.stormEye.x, mapChangeDemandMessage.stormEye.y);
+            yield return null;
         }
+        UnityMainThreadDispatcher.Instance().Enqueue(mapchange());
     }
 
     /// <summary>
@@ -496,7 +516,13 @@ public class PlayerMessageController : MessageController
     public override void OnSandwormSpawnDemandMessage(SandwormSpawnDemandMessage sandwormSpawnDemandMessage)
     {
         // TODO: implement logic
-        CharacterMgr.instance.SpawnSandworm(sandwormSpawnDemandMessage.position.x, sandwormSpawnDemandMessage.position.y);
+        IEnumerator spawnWorm()
+        {
+            CharacterMgr.instance.SpawnSandworm(sandwormSpawnDemandMessage.position.x, sandwormSpawnDemandMessage.position.y);
+            yield return null;
+        }
+
+        UnityMainThreadDispatcher.Instance().Enqueue(spawnWorm());
     }
 
     /// <summary>
@@ -507,7 +533,12 @@ public class PlayerMessageController : MessageController
     public override void OnSandwormMoveDemandMessage(SandwormMoveDemandMessage sandwormMoveMessage)
     {
         // TODO: implement logic
-        CharacterMgr.instance.SandwormMove(sandwormMoveMessage.path);
+        IEnumerator moveWorm()
+        {
+            CharacterMgr.instance.SandwormMove(sandwormMoveMessage.path);
+            yield return null;
+        }
+        UnityMainThreadDispatcher.Instance().Enqueue(moveWorm());
     }
 
     /// <summary>
@@ -518,7 +549,12 @@ public class PlayerMessageController : MessageController
     public override void OnSandwormDespawnMessage(SandwormDespawnDemandMessage sandwormDespawnDemandMessage)
     {
         // TODO: implement logic
-        CharacterMgr.instance.DespawnSandworm();
+        IEnumerator despawnMove()
+        {
+            CharacterMgr.instance.DespawnSandworm();
+            yield return null;
+        }
+        UnityMainThreadDispatcher.Instance().Enqueue(despawnMove());
     }
 
     /// <summary>
