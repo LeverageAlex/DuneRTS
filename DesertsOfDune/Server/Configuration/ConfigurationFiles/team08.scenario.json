@@ -1,9 +1,0 @@
-{
-    "scenario": [
-      ["CITY"      ,"MOUNTAINS" ,"PLATEAU"   ,"PLATEAU"   ,"FLAT_SAND"],
-      ["FLAT_SAND" ,"FLAT_SAND" ,"FLAT_SAND" ,"FLAT_SAND" ,"FLAT_SAND"],
-      ["PLATEAU"   ,"FLAT_SAND" ,"PLATEAU"   ,"DUNE"      ,"FLAT_SAND"],
-      ["DUNE"      ,"FLAT_SAND" ,"MOUNTAINS" ,"FLAT_SAND" ,"FLAT_SAND"],
-      ["FLAT_SAND" ,"DUNE"      ,"FLAT_SAND" ,"FLAT_SAND" ,"CITY"     ]
-    ]
-  }

@@ -43,7 +43,7 @@ namespace GameData.network.util.world
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    switch(scenarioConfiguration[x][(MAP_HEIGHT - 1) - y])
+                    switch(scenarioConfiguration[x][y])
                     {
                         case "DUNE":
                             fields[y, x] = new Dune(false, false, null);
@@ -175,7 +175,7 @@ namespace GameData.network.util.world
         {
             if (IsFieldOnMap(x, y))
             {
-                return this.fields[(MAP_HEIGHT - 1) - y, x];
+                return this.fields[y, x];
             }
             else
             {
@@ -195,7 +195,7 @@ namespace GameData.network.util.world
         {
             if (IsFieldOnMap(x, y))
             {
-                this.fields[(MAP_HEIGHT - 1) - y, x] = newField;
+                this.fields[y, x] = newField;
                 newField.XCoordinate = x;
                 newField.ZCoordinate = y;
                 return true;
