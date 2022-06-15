@@ -763,17 +763,120 @@ namespace TestProject.networkTest.utilTest.parserTest
             Assert.AreEqual(0, ((MapChangeDemandMessage)deserializedMessage).newMap[0, 1].clientID);
         }
 
-        //MovementDemandMessage
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message MovementDemandMessage
+        /// </summary>
+        [Test]
+        public void TestToMovementDemandMessage()
+        {
+            string serializedMessage = "{\"type\":\"MOVEMENT_DEMAND\",\"version\":\"1.0\",\"clientID\":1234,\"characterID\":12,\"specs\":{\"path\":[{\"x\":1,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":3}]}}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
 
-        //MovementRequestMessage
+            Assert.AreEqual("MOVEMENT_DEMAND", ((MovementDemandMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((MovementDemandMessage)deserializedMessage).version);
+            Assert.AreEqual(1234, ((MovementDemandMessage)deserializedMessage).clientID);
+            Assert.AreEqual(12, ((MovementDemandMessage)deserializedMessage).characterID);
+            Assert.AreEqual(1, ((MovementDemandMessage)deserializedMessage).specs.path[0].x);
+            Assert.AreEqual(2, ((MovementDemandMessage)deserializedMessage).specs.path[0].y);
+            Assert.AreEqual(2, ((MovementDemandMessage)deserializedMessage).specs.path[1].x);
+            Assert.AreEqual(2, ((MovementDemandMessage)deserializedMessage).specs.path[1].y);
+            Assert.AreEqual(2, ((MovementDemandMessage)deserializedMessage).specs.path[2].x);
+            Assert.AreEqual(3, ((MovementDemandMessage)deserializedMessage).specs.path[2].y);
+        }
 
-        //PauseGameMessage
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message MovementRequestMessage
+        /// </summary>
+        [Test]
+        public void TestToMovementRequestMessage()
+        {
+            string serializedMessage = "{\"type\":\"MOVEMENT_REQUEST\",\"version\":\"1.0\",\"clientID\":1234,\"characterID\":12,\"specs\":{\"path\":[{\"x\":1,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":3}]}}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
 
-        //PauseGameRequestMessage
+            Assert.AreEqual("MOVEMENT_REQUEST", ((MovementRequestMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((MovementRequestMessage)deserializedMessage).version);
+            Assert.AreEqual(1234, ((MovementRequestMessage)deserializedMessage).clientID);
+            Assert.AreEqual(12, ((MovementRequestMessage)deserializedMessage).characterID);
+            Assert.AreEqual(1, ((MovementRequestMessage)deserializedMessage).specs.path[0].x);
+            Assert.AreEqual(2, ((MovementRequestMessage)deserializedMessage).specs.path[0].y);
+            Assert.AreEqual(2, ((MovementRequestMessage)deserializedMessage).specs.path[1].x);
+            Assert.AreEqual(2, ((MovementRequestMessage)deserializedMessage).specs.path[1].y);
+            Assert.AreEqual(2, ((MovementRequestMessage)deserializedMessage).specs.path[2].x);
+            Assert.AreEqual(3, ((MovementRequestMessage)deserializedMessage).specs.path[2].y);
+        }
 
-        //SandwormDespawnDemandMessage
 
-        //SandwormMoveDemandMessage
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message PauseGameRequestMessage
+        /// </summary>
+        [Test]
+        public void TestToPauseGameRequestMessage()
+        {            
+            string serializedMessage = "{\"type\":\"PAUSE_REQUEST\",\"version\":\"1.0\",\"pause\":true}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+
+            Assert.AreEqual("PAUSE_REQUEST", ((PauseGameRequestMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((PauseGameRequestMessage)deserializedMessage).version);
+            Assert.AreEqual(true, ((PauseGameRequestMessage)deserializedMessage).pause);
+        }
+
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message PauseGameRequestMessage
+        /// </summary>
+        [Test]
+        public void TestToGamePauseDemandMessage()
+        {
+            string serializedMessage = "{\"type\":\"GAME_PAUSE_DEMAND\",\"version\":\"0.1\",\"requestedByClientID\":1234,\"pause\": true}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+
+            Assert.AreEqual("GAME_PAUSE_DEMAND", ((GamePauseDemandMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((GamePauseDemandMessage)deserializedMessage).version);
+            Assert.AreEqual(1234, ((GamePauseDemandMessage)deserializedMessage).requestedByClientID);
+        }
+
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message SandwormDespawnDemandMessage
+        /// </summary>
+        [Test]
+        public void TestToSandwormDespawnDemandMessage()
+        {
+            string serializedMessage = "{\"type\":\"SANDWORM_DESPAWN_DEMAND\",\"version\":\"1.0\"}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+
+            Assert.AreEqual("SANDWORM_DESPAWN_DEMAND", ((SandwormDespawnDemandMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((SandwormDespawnDemandMessage)deserializedMessage).version);
+        }
+
+
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message SandwormMoveDemandMessage
+        /// </summary>
+        [Test]
+        public void TestToSandwormMoveDemandMessage()
+        {
+            string serializedMessage = "{\"type\":\"SANDWORM_DESPAWN_DEMAND\",\"version\":\"1.0\"}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+
+            Assert.AreEqual("SANDWORM_DESPAWN_DEMAND", ((SandwormDespawnDemandMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((SandwormDespawnDemandMessage)deserializedMessage).version);
+        }
+
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message SandwormSpawnDemandMessage
+        /// </summary>
+        [Test]
+        public void TestToSandwormSpawnDemandMessage()
+        {
+            string serializedMessage = "{\"type\":\"SANDWORM_SPAWN_DEMAND\",\"version\":\"1.0\",\"clientID\":1234,\"characterID\":1236,\"position\":{\"x\":2,\"y\":3}}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+
+            Assert.AreEqual("SANDWORM_SPAWN_DEMAND", ((SandwormSpawnDemandMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((SandwormSpawnDemandMessage)deserializedMessage).version);
+            Assert.AreEqual(1234, ((SandwormSpawnDemandMessage)deserializedMessage).clientID);
+            Assert.AreEqual(1236, ((SandwormSpawnDemandMessage)deserializedMessage).characterID);
+            Assert.AreEqual(2, ((SandwormSpawnDemandMessage)deserializedMessage).position.x);
+            Assert.AreEqual(3, ((SandwormSpawnDemandMessage)deserializedMessage).position.y);
+        }
 
         // SandwormSpawnDemandMessage
 
