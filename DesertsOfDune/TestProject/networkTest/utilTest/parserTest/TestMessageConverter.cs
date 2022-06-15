@@ -7,6 +7,7 @@ using Server.Configuration;
 using GameData.Configuration;
 using GameData.network.util.world.character;
 using GameData.network.util.enums;
+using GameData.network.util.world.mapField;
 
 namespace TestProject.networkTest.utilTest.parserTest
 {
@@ -271,8 +272,7 @@ namespace TestProject.networkTest.utilTest.parserTest
         {
             MapField[,] map = new MapField[1, 2];
             map[0, 0] = new GameData.network.util.world.mapField.City(1234, false, false, null);
-                //new MapField(false, false, 1234, null);
-            map[0, 1] = new MapField(TileType.DUNE, Elevation.high, false, false, null);
+            map[0, 1] = new Dune(false, false, null);
             MapChangeDemandMessage message = new MapChangeDemandMessage(MapChangeReasons.FAMILY_ATOMICS, map);
             string serializedMessage = MessageConverter.FromMessage(message);
 
@@ -878,6 +878,19 @@ namespace TestProject.networkTest.utilTest.parserTest
             Assert.AreEqual(1236, ((SandwormSpawnDemandMessage)deserializedMessage).characterID);
             Assert.AreEqual(2, ((SandwormSpawnDemandMessage)deserializedMessage).position.x);
             Assert.AreEqual(3, ((SandwormSpawnDemandMessage)deserializedMessage).position.y);
+        }
+
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message SpawnCharacterDemandMessage
+        /// </summary>
+        [Test]
+        public void TestToSpawnCharacterDemandMessage()
+        {
+            string serializedMessage = "{\"type\":\"SPAWN_CHARACTER_DEMAND\",\"version\":\"1.0\",\"clientID\":1234,\"characterID\":12,\"characterName\":\"Vorname Nachname\",\"position\":{\"x\":0,\"y\":1},\"attributes\":{\"characterType\":\"FIGHTER\",\"healthMax\":100,\"healthCurrent\":75,\"healingHP\":10,\"MPmax\":3,\"MPcurrent\":1,\"APmax\":4,\"APcurrent\":2,\"attackDamage\":10,\"inventorySize\":5,\"inventoryUsed\":3,\"killedBySandworm\":false,\"isLoud\":true}}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+
+            Assert.AreEqual("SPAWN_CHARACTER_DEMAND", ((SpawnCharacterDemandMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.0", ((SpawnCharacterDemandMessage)deserializedMessage).version);
         }
 
         // SandwormSpawnDemandMessage

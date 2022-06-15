@@ -11,7 +11,7 @@ namespace GameData.network.util.world
     /// <summary>
     /// This is the base class for all Characterstypes to inherit from
     /// </summary>
-    public abstract class Character
+    public class Character
     {
         [JsonProperty(Order = -2)]
         public string characterType { get; set; }
@@ -71,7 +71,8 @@ namespace GameData.network.util.world
         /// <param name="inventoryUsed">the usedup InventorySpace of the Character</param>
         /// <param name="killedBySandworm">true, if the Character was killed by the sandworm</param>
         /// <param name="isLoud">true, if the character is loud</param>
-        protected Character(CharacterType characterType, int healthMax, int healthCurrent, int healingHP, int MPmax, int MPcurrent, int APmax, int APcurrent, int attackDamage, int inventorySize, int inventoryUsed, bool killedBySandworm, bool isLoud)
+        [JsonConstructor]
+        public Character(CharacterType characterType, int healthMax, int healthCurrent, int healingHP, int MPmax, int MPcurrent, int APmax, int APcurrent, int attackDamage, int inventorySize, int inventoryUsed, bool killedBySandworm, bool isLoud)
         {
             this.characterType = Enum.GetName(characterType.GetType(), characterType);
             this.healthMax = healthMax;
@@ -127,7 +128,10 @@ namespace GameData.network.util.world
         /// <summary>
         /// This method sets the character data to default values in the in the respective inherited classes.
         /// </summary>
-        public abstract void ResetData();
+        public virtual void ResetData()
+        {
+
+        }
 
         /// <summary>
         /// This method decreases the hp of the character by a specific amount.

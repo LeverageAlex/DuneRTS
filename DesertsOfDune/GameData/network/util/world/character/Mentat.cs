@@ -42,8 +42,7 @@ namespace GameData.network.util.world.character
         /// <summary>
         /// This method resets the data of the character
         /// </summary>
-        override
-        public void ResetData()
+        public override void ResetData()
         {
             this.characterType = Enum.GetName(characterType.GetType(), characterType);
             this.healthMax = CharacterConfiguration.Mentat.maxHP;
