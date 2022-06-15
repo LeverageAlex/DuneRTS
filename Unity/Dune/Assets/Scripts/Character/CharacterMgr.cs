@@ -108,6 +108,7 @@ public class CharacterMgr : MonoBehaviour
         {
             localChar.house = enemyHouse;
         }
+        localChar.SetMatColorToHouse();
         localChar.setMaxAP(APMax);
         localChar.setMaxHP(HPcurrent);
         return true;

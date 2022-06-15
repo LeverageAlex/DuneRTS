@@ -214,7 +214,7 @@ public class Character : MonoBehaviour
 
         healthBarImage.fillAmount = (float) HP / BaseHP;
 
-        if (turnHandler.GetSelectedCharacter() == this)
+        if (turnHandler != null && turnHandler.GetSelectedCharacter() == this)
         {
             DrawStats();
         }
