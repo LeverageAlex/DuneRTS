@@ -27,7 +27,13 @@ public class UpdateSlider : MonoBehaviour
     public void Init() {
         Slider = this.transform.Find("Slider").GetComponent<Slider>();
         Slider.wholeNumbers = true;
+        Slider.onValueChanged.AddListener(v => UpdateValue(v));
         InputField = this.transform.Find("InputField").GetComponent<InputField>();
+        InputField.onValueChanged.AddListener(v => {
+            float res;
+                if (float.TryParse(v, out res))
+                UpdateValue(res);
+            });
         Text = this.transform.Find("InputField").Find("Text").GetComponent<Text>();
     }
 
@@ -38,20 +44,8 @@ public class UpdateSlider : MonoBehaviour
         InputField.text = Value.ToString();
     }
 
-
-
-    // Update is called once per frame
-    void Update()
+    public void UpdateValue(float value) 
     {
-        // if slider or input text changes, update UI
-        if (Slider.value != Value)
-            Value = (int)Slider.value;
-        else {
-            int textValue;
-            if (int.TryParse(Text.text, out textValue)) {
-                if (textValue != Value)
-                    Value = textValue;
-            }
-        }        
+        Value =  Mathf.RoundToInt(value);   
     }
 }
