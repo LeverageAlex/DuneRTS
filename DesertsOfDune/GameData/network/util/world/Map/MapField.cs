@@ -122,9 +122,20 @@ namespace GameData.network.util.world
             character.CurrentMapfield = this;
         }
 
+        public void DisplaceCharacter()
+        {
+            this.Character = null;
+            this.IsCharacterStayingOnThisField = false;
+        }
+
         public double DistanceTo(MapField field)
         {
             return Math.Sqrt((this.XCoordinate - field.XCoordinate)^2 + (this.ZCoordinate - field.ZCoordinate)^2);
+        }
+
+        public Position GetMapFieldPosition()
+        {
+            return new Position(XCoordinate, ZCoordinate);
         }
     }
 }
