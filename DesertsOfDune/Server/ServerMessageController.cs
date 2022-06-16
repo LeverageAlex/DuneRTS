@@ -236,6 +236,15 @@ namespace Server
                                     alreadySteppedOnSandField = true;
                                 }
                             }
+                            //deliver spice to city if city is neighborfield
+                            foreach (var mapfield in Party.GetInstance().map.GetNeighborFields(movingCharacter.CurrentMapfield))
+                            {
+                                if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
+                                {
+                                    activePlayer.statistics.HouseSpiceStorage += movingCharacter.inventoryUsed;
+                                    movingCharacter.inventoryUsed = 0;
+                                }
+                            }
                         }
                     }
                     else
