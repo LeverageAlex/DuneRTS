@@ -160,11 +160,11 @@ namespace GameData.gameObjects
 
                 Log.Debug("Execute the character trait phase...");
                 _roundCounter++;
-                characterTraitPhase.Execute();
+                // characterTraitPhase.Execute();
                 
                 // increase round counter, because the round was finished
                 
-               //NextRound();
+               NextRound();
             }
         }
 

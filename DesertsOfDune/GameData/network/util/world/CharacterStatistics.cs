@@ -41,5 +41,20 @@ namespace GameData.network.util.world
             this.isLoud = isLoud;
             this.isSwallowed = isSwallowed;
         }
+
+        /// <summary>
+        /// creates the character statistics depending on a character
+        /// </summary>
+        /// <param name="character">the character, whose statistics should be created</param>
+        /// TODO: check, whether spice, isLoud and isSwallowed is correct
+        public CharacterStatistics(Character character)
+        {
+            this.HP = character.healthCurrent;
+            this.AP = character.APcurrent;
+            this.MP = character.MPcurrent;
+            this.spice = character.inventoryUsed;
+            this.isLoud = character.IsLoud();
+            this.isSwallowed = character.IsDead();
+        }
     }
 }
