@@ -45,7 +45,7 @@ namespace GameData.server.roundHandler
                 }
             }
             var random = new Random();
-            _allCharacters.OrderBy(item => random.Next());
+            _allCharacters =_allCharacters.OrderBy(item => random.Next()).ToList<Character>();
             return true;
         }
 

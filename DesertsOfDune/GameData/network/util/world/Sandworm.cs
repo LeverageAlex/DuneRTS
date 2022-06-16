@@ -212,7 +212,8 @@ namespace GameData.server.roundHandler
         /// TODO: do not return null
         public Character ChooseTargetCharacter(List<Character> characters)
         {
-            List<Character> loudCharacters = (List<Character>)characters.Where(character => character.IsLoud());
+
+            List<Character> loudCharacters = characters.Where(character => character.IsLoud()).ToList<Character>();
 
             if (loudCharacters.Count == 0)
             {

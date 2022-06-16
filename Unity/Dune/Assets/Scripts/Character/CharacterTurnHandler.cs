@@ -191,7 +191,7 @@ public class CharacterTurnHandler : MonoBehaviour
         } 
         else
         {
-
+            SessionHandler.messageController.DoRequestEndTurn(SessionHandler.clientId, instance.selectedCharacter.characterId);
         }
         
     }

@@ -11,64 +11,68 @@ using Serilog;
  * - Moves Characters according to path
  */
 [Serializable]
-    public class MovementManager : MonoBehaviour
+public class MovementManager : MonoBehaviour
+{
+
+    public static MovementManager instance;
+    // private Character selectedChar;
+    private LinkedList<Character> updateCharacters;
+    private LinkedList<MoveAbles> OtherMoveAbles;
+    [SerializeField]
+    private List<Position> selCharPath;
+
+    // public static bool charSelected { get { return instance.selectedChar != null; } }
+    public static bool isAnimating { get { return instance.updateCharacters.Count != 0; } }
+
+    /**
+     * This class shall manage the movement of the characters
+     */
+
+    // Start is called before the first frame update
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            updateCharacters = new LinkedList<Character>();
+            selCharPath = new List<Position>();
+            OtherMoveAbles = new LinkedList<MoveAbles>();
+        }
+        else Debug.Log("MovementManager Error. Instance of updateCharacters already exist.");
+
+
+    }
+
+    // Update is called once per frame
+    void Update()
     {
 
-        public static MovementManager instance;
-        // private Character selectedChar;
-        private LinkedList<Character> updateCharacters;
-        private LinkedList<MoveAbles> OtherMoveAbles;
-        [SerializeField]
-        private List<Position> selCharPath;
 
-        // public static bool charSelected { get { return instance.selectedChar != null; } }
-        public static bool isAnimating { get { return instance.updateCharacters.Count != 0; } }
-
-        /**
-         * This class shall manage the movement of the characters
-         */
-
-        // Start is called before the first frame update
-        void Awake()
+        for (var cluster = updateCharacters.First; cluster != null;)
         {
-            if (instance == null)
+            var next = cluster.Next;
+            if (!cluster.Value.calledUpdate())
             {
-                instance = this;
-                updateCharacters = new LinkedList<Character>();
-                selCharPath = new List<Position>();
-                OtherMoveAbles = new LinkedList<MoveAbles>();
+                MapManager.instance.getNodeFromPos(cluster.Value.X, cluster.Value.Z).ResetColor();
+                updateCharacters.Remove(cluster);
             }
-            else Debug.Log("MovementManager Error. Instance of updateCharacters already exist.");
-
-
+            else
+            {
+                MapManager.instance.ResetNodeColors();
+            }
+            cluster = next;
         }
 
-        // Update is called once per frame
-        void Update()
+        //Every other Object to move, who is not a Character
+        for (var cluster = OtherMoveAbles.First; cluster != null;)
         {
-
-
-            for (var cluster = updateCharacters.First; cluster != null;)
+            var next = cluster.Next;
+            if (!cluster.Value.calledUpdate())
             {
-                var next = cluster.Next;
-                if (!cluster.Value.calledUpdate())
-                {
-                    MapManager.instance.getNodeFromPos(cluster.Value.X, cluster.Value.Z).ResetColor();
-                    updateCharacters.Remove(cluster);
-                }
-                cluster = next;
+                OtherMoveAbles.Remove(cluster);
             }
-
-            //Every other Object to move, who is not a Character
-            for (var cluster = OtherMoveAbles.First; cluster != null;)
-            {
-                var next = cluster.Next;
-                if (!cluster.Value.calledUpdate())
-                {
-                    OtherMoveAbles.Remove(cluster);
-                }
-                cluster = next;
-            }
+            cluster = next;
+        }
 
         //Test code
         //Starts animation on key b
@@ -79,20 +83,20 @@ using Serilog;
             RequestMovement();
             } */
 
-        }
+    }
 
 
-        /*  public void selectCharacter(Character character)
-          {
-              selectedChar = character;
-          }*/
+    /*  public void selectCharacter(Character character)
+      {
+          selectedChar = character;
+      }*/
 
-        //Ignores all other functions within class
-        public void addCharacterToAnimate(Character character, List<Vector3> pathing)
-        {
-            updateCharacters.AddLast(character);
-            CharacterTurnHandler.instance.GetSelectedCharacter().SetWalkPath(pathing);
-        }
+    //Ignores all other functions within class
+    public void addCharacterToAnimate(Character character, List<Vector3> pathing)
+    {
+        updateCharacters.AddLast(character);
+        CharacterTurnHandler.instance.GetSelectedCharacter().SetWalkPath(pathing);
+    }
 
     public void addOtherToAnimate(MoveAbles moveAble)
     {
@@ -101,72 +105,74 @@ using Serilog;
 
 
     public void unselectCharacter()
+    {
+        selCharPath.Clear();
+    }
+
+    public void AddWaypoint(Position vec)
+    {
+        if (IsWaypointAttachable(vec.x, vec.y))
         {
-            selCharPath.Clear();
+            selCharPath.Add(vec);
+        }
+        else
+        {
+            Debug.Log("Can not extend Path, due too low MP or Field out of range");
+        }
+    }
+
+
+    /*
+     * Will check whether the MP limit is reached and if point is in range.
+     * Currently deactivated for easier testing, but should be activated later
+     */
+    public bool IsWaypointAttachable(int x, int z)
+    {
+        if (selCharPath.Count == 0)
+        { // distinction needed at the first node to select
+            return selCharPath.Count < CharacterTurnHandler.instance.GetSelectedCharacter().MP && MapManager.instance.isNodeNeighbour(CharacterTurnHandler.instance.GetSelectedCharacter().X,
+                CharacterTurnHandler.instance.GetSelectedCharacter().Z, x, z);
+        }
+        else
+        {
+            return selCharPath.Count < CharacterTurnHandler.instance.GetSelectedCharacter().MP && MapManager.instance.isNodeNeighbour(selCharPath[selCharPath.Count - 1].x, selCharPath[selCharPath.Count - 1].y,
+               x, z);
         }
 
-        public void AddWaypoint(Position vec)
-        {
-            if (IsWaypointAttachable(vec.x, vec.y))
-            {
-                selCharPath.Add(vec);
-            }
-            else
-            {
-                Debug.Log("Can not extend Path, due too low MP or Field out of range");
-            }
-        }
+        // return true;
+    }
 
+    //public void AnimateSelectedChar()
+    //{
+    // if (!isAnimating)
+    // {
+    /* if (selCharPath.Count > 0)
+     {
+         Character selectedChar = CharacterTurnHandler.instance.GetSelectedCharacter();
+         updateCharacters.AddLast(selectedChar);
 
-        /*
-         * Will check whether the MP limit is reached and if point is in range.
-         * Currently deactivated for easier testing, but should be activated later
-         */
-        public bool IsWaypointAttachable(int x, int z)
-        {
-            if (selCharPath.Count == 0) { // distinction needed at the first node to select
-                return selCharPath.Count < CharacterTurnHandler.instance.GetSelectedCharacter().MP && MapManager.instance.isNodeNeighbour(CharacterTurnHandler.instance.GetSelectedCharacter().X,
-                    CharacterTurnHandler.instance.GetSelectedCharacter().Z, x, z);
-            }
-            else
-            {
-                return selCharPath.Count < CharacterTurnHandler.instance.GetSelectedCharacter().MP && MapManager.instance.isNodeNeighbour(selCharPath[selCharPath.Count-1].x, selCharPath[selCharPath.Count-1].y,
-                   x, z);
-            }
+         // PlayerController.doRequestMovement(ClientID, CharacterId, path); 
+        // PlayerMessageController.DoMovementRequest(1234, selectedChar.GetInstanceID(), selCharPath);
 
-           // return true;
-        }
+         // Message = PlayerController.OnMovement((Movement)Message)
 
-        //public void AnimateSelectedChar()
-        //{
-            // if (!isAnimating)
-            // {
-           /* if (selCharPath.Count > 0)
-            {
-                Character selectedChar = CharacterTurnHandler.instance.GetSelectedCharacter();
-                updateCharacters.AddLast(selectedChar);
+         // Sollte erst ausgeführt werden, wenn die aktion ausgeführt werden darf.
+         selectedChar.SetWalkPath(selCharPath);
+         selectedChar.ReduceMP(selCharPath.Count);
+         selCharPath = new List<Position>();
+         CharacterTurnHandler.instance.ResetSelection();
+     AudioController.instance.Play("CharWalk");
+     }*/
+    //}
 
-                // PlayerController.doRequestMovement(ClientID, CharacterId, path); 
-               // PlayerMessageController.DoMovementRequest(1234, selectedChar.GetInstanceID(), selCharPath);
-                
-                // Message = PlayerController.OnMovement((Movement)Message)
-
-                // Sollte erst ausgeführt werden, wenn die aktion ausgeführt werden darf.
-                selectedChar.SetWalkPath(selCharPath);
-                selectedChar.ReduceMP(selCharPath.Count);
-                selCharPath = new List<Position>();
-                CharacterTurnHandler.instance.ResetSelection();
-            AudioController.instance.Play("CharWalk");
-            }*/
-        //}
-
-    private LinkedList<Vector3> convertVector(List<Position> path) {
+    private LinkedList<Vector3> convertVector(List<Position> path)
+    {
         LinkedList<Vector3> newPos = new LinkedList<Vector3>();
 
         Vector3 tmp;
-        foreach(Position p in path)
+        foreach (Position p in path)
         {
-            
+
             tmp = new Vector3(p.x, 0, p.y);
             newPos.AddLast(tmp);
         }
@@ -174,7 +180,8 @@ using Serilog;
         return newPos;
     }
 
-    public void AnimateChar(Character character, List<Position> path) {
+    public void AnimateChar(Character character, List<Position> path)
+    {
         if (path.Count > 0)
         {
             List<Vector3> newPath = new List<Vector3>(path.Count);
@@ -218,5 +225,5 @@ using Serilog;
     }
 
 
-    
+
 }
