@@ -380,7 +380,7 @@ namespace Server
                             MapField targetMapField = null;
                             foreach (var mapfield in Party.GetInstance().map.fields)
                             {
-                                if (mapfield.stormEye == msg.specs.target)
+                                if (mapfield.XCoordinate == msg.specs.target.x && mapfield.ZCoordinate == msg.specs.target.y)
                                 {
                                     targetMapField = mapfield;
                                 }
@@ -400,6 +400,7 @@ namespace Server
                                 }
                             }
                             actionCharacter.AtomicBomb(targetMapField, Party.GetInstance().map, Party.GetInstance().greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse);
+                            DoSendAtomicsUpdateDemand(msg.clientID, true, 1);
                             Party.GetInstance().greatHouseConventionBroken = true;
                         }
                         break;

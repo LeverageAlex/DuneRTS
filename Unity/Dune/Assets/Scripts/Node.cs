@@ -134,6 +134,7 @@ public class Node : MonoBehaviour
         }
         else if (CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.FAMILY_ATOMICS && CharacterTurnHandler.CharSelected)
         {
+            Debug.Log("Atomic coordinates: " + this.X + " " +  this.Z);
             CharacterTurnHandler.instance.GetSelectedCharacter().Attack_AtomicTrigger(this);
         }
         else if(CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.HELIPORT && nodeTypeEnum == NodeTypeEnum.HELIPORT && CharacterTurnHandler.CharSelected)
