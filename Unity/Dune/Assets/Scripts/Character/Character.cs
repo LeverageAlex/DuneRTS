@@ -363,8 +363,10 @@ public class Character : MonoBehaviour
         Debug.Log("Attack");
 
         //reset 
-        // secondCharacter = null;
-        turnHandler.ResetSelection();
+        if (Mode.debugMode)
+        {
+            turnHandler.ResetSelection();
+        }
 
     }
 
@@ -388,7 +390,11 @@ public class Character : MonoBehaviour
             Debug.Log("No Spice to collect!");
             return false;
         }
-        turnHandler.ResetSelection();
+        //reset 
+        if (Mode.debugMode)
+        {
+            turnHandler.ResetSelection();
+        }
         return true;
     }
 
@@ -443,8 +449,10 @@ public class Character : MonoBehaviour
             if (_AP <= 0) CharacterTurnHandler.EndTurn();
         }
         //reset 
-        // secondCharacter = null;
-        turnHandler.ResetSelection();
+        if (Mode.debugMode)
+        {
+            turnHandler.ResetSelection();
+        }
     }
 
 
@@ -484,14 +492,18 @@ public class Character : MonoBehaviour
     public void Attack_SwordSpinExecution()
     {
         Debug.Log("Attack_SwordSpin");
-        turnHandler.ResetSelection();
+        
         charAnim.Play(animation_swordSpin);
 
         if (Mode.debugMode)
         {
             CharacterTurnHandler.EndTurn();
         }
-        
+        //reset 
+        if (Mode.debugMode)
+        {
+            turnHandler.ResetSelection();
+        }
     }
 
     /*
@@ -528,12 +540,18 @@ public class Character : MonoBehaviour
         ((AtomicController)atomicInst.GetComponent(typeof(AtomicController))).SetTargetPos(node.X, node.Z);
         audioManager.Play("AtomicFly");
         Debug.Log("Created Atomic");
-        turnHandler.ResetSelection();
+       
         if (Mode.debugMode)
         {
             if (_AP <= 0) CharacterTurnHandler.EndTurn();
         }
         //CharacterTurnHandler.EndTurn();
+
+        //reset 
+        if (Mode.debugMode)
+        {
+            turnHandler.ResetSelection();
+        }
     }
 
     /*
@@ -580,8 +598,16 @@ public class Character : MonoBehaviour
         RotateTowardsVector(dir);
         charAnim.Play(animation_kanly);
         StartCoroutine(character.PlayDamageAnimation(this));
-        turnHandler.ResetSelection();
-        if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        if (Mode.debugMode)
+        {
+            if (_AP <= 0) CharacterTurnHandler.EndTurn();
+        }
+        
+        //reset 
+        if (Mode.debugMode)
+        {
+            turnHandler.ResetSelection();
+        }
     }
 
     public bool Action_SpiceHoardingTrigger()
@@ -627,7 +653,11 @@ public class Character : MonoBehaviour
             }
         }
 
-        turnHandler.ResetSelection();
+        //reset 
+        if (Mode.debugMode)
+        {
+            turnHandler.ResetSelection();
+        }
     }
 
     /*
@@ -678,7 +708,11 @@ public class Character : MonoBehaviour
         Debug.Log("Voice!");
 
 
-        turnHandler.ResetSelection();
+        //reset 
+        if (Mode.debugMode)
+        {
+            turnHandler.ResetSelection();
+        }
         CharacterTurnHandler.EndTurn();
     }
 
