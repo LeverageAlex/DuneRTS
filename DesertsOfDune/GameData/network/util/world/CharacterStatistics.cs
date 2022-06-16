@@ -54,7 +54,7 @@ namespace GameData.network.util.world
             this.MP = character.MPcurrent;
             this.spice = character.inventoryUsed;
             this.isLoud = character.IsLoud();
-            this.isSwallowed = character.IsDead();
+            this.isSwallowed = character.KilledBySandworm;
         }
     }
 }
