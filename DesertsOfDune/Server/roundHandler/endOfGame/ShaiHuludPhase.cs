@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using GameData.network.messages;
 using GameData.network.util.world;
 using GameData.network.util.world.mapField;
+using Serilog;
 using Server;
 using Server.Clients;
 using Server.roundHandler;
@@ -48,13 +50,36 @@ namespace GameData.server.roundHandler
         /// <param name="targetCharacter">the targeted character, who will be eaten</param>
         private void EatTargetCharacter(Character targetCharacter)
         {
+            List<MapField> path = new List<MapField>();
+            path.Add(_currentField);
+            path.Add(targetCharacter.CurrentMapfield);
+
             _currentField = new FlatSand(_currentField.HasSpice, _currentField.isInSandstorm, _currentField.stormEye);
+
+            // send map change for updating the map in the user client
+            Party.GetInstance().messageController.DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
             _currentField.IsApproachable = true;
             _currentField = targetCharacter.CurrentMapfield;
             _currentField.IsApproachable = false;
 
+            // move the shai hulud
+            Party.GetInstance().messageController.DoMoveSandwormDemand(path);
+
+            // kill target character and send message, that stats of character changed
             _currentField.Character.KilledBySandworm = true;
             _currentField.Character = null;
+
+            // get the id the client, whose character the target character is
+            Player player = Party.GetInstance().GetPlayerByCharacterID(targetCharacter.CharacterId);
+            if (player != null)
+            {
+                Party.GetInstance().messageController.DoSendChangeCharacterStatsDemand(player.ClientID, targetCharacter.CharacterId, new CharacterStatistics(targetCharacter));
+            }
+            else
+            {
+                Log.Error($"There is no player with a character with the character ID {targetCharacter.CharacterId}!");
+            }
+
 
         }
 
@@ -103,7 +128,15 @@ namespace GameData.server.roundHandler
                 if (CheckLastPlayerStanding())
                 {
                     Character target = ChooseTargetCharacter();
+
+                    // spawn the shai hulud
+                    Party.GetInstance().messageController.DoSpawnSandwormDemand(target.CharacterId, _currentField);
+
                     EatTargetCharacter(target);
+
+                    // despawn the shai hulud
+
+                    Party.GetInstance().messageController.DoDespawnSandwormDemand();
 
                     // after the last character was eaten, there is no character left
                     _lastCharacterEaten = true;
