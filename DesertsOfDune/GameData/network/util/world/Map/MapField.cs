@@ -39,13 +39,11 @@ namespace GameData.network.util.world
         [JsonIgnore]
         public bool IsApproachable { get; set; }
 
-        private int xCoordinate;
         [JsonIgnore]
-        public int XCoordinate { get { return xCoordinate; } set { xCoordinate = value; } }
+        public int XCoordinate { get; set; }
 
-        private int zCoordinate;
         [JsonIgnore]
-        public int ZCoordinate { get { return zCoordinate; } set { zCoordinate = value; } }
+        public int ZCoordinate { get; set; } 
 
         protected bool IsCityField;
 

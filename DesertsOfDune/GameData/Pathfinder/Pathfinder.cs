@@ -49,7 +49,8 @@ namespace GameData.Pathfinder
 
                 openSet.Remove(current);
 
-                foreach (MapField neighbor in graph.GetNeighborsOfVertex(current))
+                List<MapField> neighb = graph.GetNeighborsOfVertex(current);
+                foreach (MapField neighbor in neighb)
                 {
                     double tentativeGScore = gScore.GetValueOrDefault(current) + graph.GetWeigthOfEdge(current, neighbor);
                     if (tentativeGScore < gScore.GetValueOrDefault(current))
