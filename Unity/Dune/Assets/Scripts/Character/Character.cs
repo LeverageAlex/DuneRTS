@@ -119,7 +119,10 @@ public class Character : MonoBehaviour
 
         //SampleCode only
         BaseHP = 100;
-        initCharacter();
+        if (Mode.debugMode)
+        {
+            initCharacter();
+        }
 
         //Update Nodes references on start (only needed because of editor)
         //gameManager.getNodeFromPos((int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z)).placeObjectOnNode(gameObject);
@@ -133,6 +136,7 @@ public class Character : MonoBehaviour
         charAnim = charModel.GetComponent<Animator>();
         initAnimations();
         audioManager = AudioController.instance;
+        SetMatColorToHouse();
     }
 
     public void initAnimations()
@@ -194,7 +198,6 @@ public class Character : MonoBehaviour
         {
             UpdateCharStats(150, 100, 2, 5, false, false);
         }
-
         SetMatColorToHouse();
     }
 
@@ -851,5 +854,4 @@ public class Character : MonoBehaviour
     {
         BaseHP = maxHP;
     }
-
 }
