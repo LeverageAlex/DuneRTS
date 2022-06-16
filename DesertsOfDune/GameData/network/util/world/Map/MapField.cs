@@ -137,5 +137,25 @@ namespace GameData.network.util.world
         {
             return new Position(XCoordinate, ZCoordinate);
         }
+
+        public Character GetCharacterStayingOnThisField(List<Character> characters)
+        {
+            Character characterStayingOnThisField = null;
+            if (this.IsCharacterStayingOnThisField)
+            {
+                foreach (var character in characters)
+                {
+                    if(character.CurrentMapfield == this)
+                    {
+                        characterStayingOnThisField = character;
+                    }
+                }
+            }
+            else
+            {
+                throw new NullReferenceException("No character is staying on this field");
+            }
+            return characterStayingOnThisField;
+        }
     }
 }

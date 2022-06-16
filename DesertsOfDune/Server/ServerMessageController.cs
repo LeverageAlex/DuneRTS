@@ -223,6 +223,11 @@ namespace Server
                         //check if movement is on walkable terrain
                         if (party.map.fields[position.x, position.y].tileType != TileType.MOUNTAINS.ToString() && party.map.fields[position.x, position.y].tileType != TileType.CITY.ToString()) //check needed and not implemented utils
                         {
+                            if(party.map.fields[position.x, position.y].IsCharacterStayingOnThisField)  //if the mapfield is occupied by a character they swap positions
+                            {
+                                Character passiveCharacter = party.map.fields[position.x, position.y].GetCharacterStayingOnThisField(party.map.GetCharactersOnMap());
+                                passiveCharacter.Movement(passiveCharacter.CurrentMapfield, movingCharacter.CurrentMapfield);
+                            }
                             movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.x, position.y]); //move character 1 field along its path
                             //path.Add(position);
                             newPath.Add(position);
@@ -237,7 +242,7 @@ namespace Server
                                 }
                             }
                             //deliver spice to city if city is neighborfield
-                            foreach (var mapfield in Party.GetInstance().map.GetNeighborFields(movingCharacter.CurrentMapfield))
+                            foreach (var mapfield in party.map.GetNeighborFields(movingCharacter.CurrentMapfield))
                             {
                                 if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
                                 {
