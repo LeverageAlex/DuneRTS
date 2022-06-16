@@ -58,7 +58,7 @@ namespace Server
         private static void InitiliazeLogger()
         {
             Logger logger = new Logger();
-            logger.CreateReplayLogger();
+            logger.CreateDebugLogger();
         }
 
         /// <summary>

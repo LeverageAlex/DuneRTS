@@ -25,7 +25,7 @@ public class Character : MonoBehaviour
     public Image healthBarImage;
 
     //[SerializeField] this is used to serialize private fields in json format
-    private int characterId;
+    public int characterId { get; set; }
 
     CharacterTurnHandler turnHandler;
 

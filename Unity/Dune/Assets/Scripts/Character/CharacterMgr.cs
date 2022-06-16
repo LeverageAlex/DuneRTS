@@ -103,6 +103,7 @@ public class CharacterMgr : MonoBehaviour
         Log.Debug(characterDict[characterID].charName);
         Log.Debug("Successful print");
         Character localChar = (Character) newChar.GetComponent(typeof(Character));
+        localChar.characterId = characterID;
         localChar.UpdateCharStats(HPcurrent, MPcurrent, APcurrent, inventorySize, loud, killedBySandworm);
         if (clientId == SessionHandler.clientId)
         {

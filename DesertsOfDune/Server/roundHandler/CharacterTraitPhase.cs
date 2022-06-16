@@ -16,34 +16,19 @@ namespace GameData.server.roundHandler
     public class CharacterTraitPhase : IGamePhase
     {
         private List<Character> _allCharacters;
-        private static bool _isTraitActive = false;
         private static Character _currentCharacter = null;
+        private int _currentCharacterIndex;
         private static Timer _timer;
 
         public void Execute()
         {
             SetTimer(); //initialize timer
             GenerateTraitSequenze();
-
-            foreach (var character in _allCharacters)
-            {
-                _currentCharacter = character;
-                if (!character.IsDead() && !character.IsInSandStorm(Party.GetInstance().map)) // check if character is dead or staying in storm
-                {
-                    character.resetMPandAp();
-                    RequestClientForNextCharacterTrait(character.CharacterId);
-                  //  while (_isTraitActive)
-                 //   {
-                   //     if ((character.APcurrent <= 0 && character.MPcurrent <= 0) || character.IsDead()) //if character has no point for action or movement left or is dead, end his turn
-                    //    {
-                         //   SetIsTraitActive(false);
-                     //   }
-                  //  }
-                   // _timer.Stop(); //stop timer when characterTrait is finished
-                }
-            }
-          //  Party.GetInstance().RoundHandler.NextRound();
+            _currentCharacterIndex = 0;
+            SendRequestForNextCharacter();
         }
+
+        
 
         /// <summary>
         /// This method gets all characters and randomizes this list for the traitsequenze
@@ -65,6 +50,41 @@ namespace GameData.server.roundHandler
         }
 
         /// <summary>
+        /// preparing the turn for the next character in the random sequence
+        /// </summary>
+        public void SendRequestForNextCharacter()
+        {
+            if (_currentCharacterIndex < _allCharacters.Count -1 )
+            {
+                _currentCharacterIndex++;
+                _currentCharacter = _allCharacters[_currentCharacterIndex];
+                _currentCharacter.SetSilent();
+                if (!_currentCharacter.IsDead() && !_currentCharacter.IsInSandStorm(Party.GetInstance().map)) // check if character is dead or staying in storm
+                {
+                    _currentCharacter.resetMPandAp();
+                    RequestClientForNextCharacterTrait(_currentCharacter.CharacterId);
+                }
+                else
+                {
+                    SendRequestForNextCharacter();
+                }
+            }
+            else
+            {
+                Party.GetInstance().RoundHandler.NextRound();
+            }
+            
+        }
+
+        /// <summary>
+        /// stop timer
+        /// </summary>
+        public void StopTimer()
+        {
+            _timer.Stop();
+        }
+
+        /// <summary>
         /// Sends a message to the client who has the next turn with the ID of the character, whos turn it is.
         /// </summary>
         public void RequestClientForNextCharacterTrait(int characterID)
@@ -76,17 +96,13 @@ namespace GameData.server.roundHandler
                     if (character.CharacterId == characterID)
                     {
                         Party.GetInstance().messageController.DoSendTurnDemand(player.ClientID, characterID); //request client to execute a characterTrait
-                        SetIsTraitActive(true);
+                        //SetIsTraitActive(true);
                          _timer.Start(); // starts the timer when characterTrait starts
                     }
                 }
             }
         }
 
-        public static void SetIsTraitActive(bool isActive)
-        {
-            _isTraitActive = isActive;
-        }
 
         /// <summary>
         /// Starts a new timer with the time from the parameter.

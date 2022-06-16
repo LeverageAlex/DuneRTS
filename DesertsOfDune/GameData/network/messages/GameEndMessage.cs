@@ -30,5 +30,21 @@ namespace GameData.network.messages
             this.loserID = loserID;
             this.statistics = statistics;
         }
+
+        /// <summary>
+        /// This method is used to create a String out of 
+        /// </summary>
+        /// <returns></returns>
+        public override String ToString()
+        {
+            string s = "House storage: " + statistics.HouseSpiceStorage + "Spice collected: " + statistics.TotalSpiceCollected + "Enemies defeated: " + statistics.EnemiesDefeated + "Count swallowed Characters: " + statistics.CharactersSwallowed;
+            StringBuilder sb = new StringBuilder(s);
+            foreach(String character in statistics.CharactersAlive)
+            {
+                sb.Append(character);
+            }
+            sb.Append("Has last Character standing: " + statistics.LastCharacterStanding);
+            return sb.ToString();
+        }
     }
 }
