@@ -159,12 +159,12 @@ namespace GameData.gameObjects
                 Log.Debug("Executed the clone phase.");
 
                 Log.Debug("Execute the character trait phase...");
-           //      characterTraitPhase.Execute();
+                _roundCounter++;
+                characterTraitPhase.Execute();
                 
                 // increase round counter, because the round was finished
-                _roundCounter++;
-                Thread.Sleep(2000);
-                NextRound();
+                
+               //NextRound();
             }
         }
 

@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using GameData.network.messages;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Serilog;
 
 namespace GameData.network.util.parser
 {
@@ -52,7 +53,9 @@ namespace GameData.network.util.parser
                     TurnDemandMessage turnDemandMessage = (TurnDemandMessage)message;
                     return JsonConvert.SerializeObject(turnDemandMessage);
                 case MessageType.MOVEMENT_REQUEST:
+                    Log.Debug("Start Movement Deserialization");
                     MovementRequestMessage movementRequestMessage = (MovementRequestMessage)message;
+                    Log.Debug("Finishied parsing. Returning.");
                     return JsonConvert.SerializeObject(movementRequestMessage);
                 case MessageType.ACTION_REQUEST:
                     ActionRequestMessage actionRequestMessage = (ActionRequestMessage)message;
@@ -62,6 +65,7 @@ namespace GameData.network.util.parser
                     return JsonConvert.SerializeObject(transferReuqestMessage);
                 case MessageType.MOVEMENT_DEMAND:
                     MovementDemandMessage movementMessage = (MovementDemandMessage)message;
+
                     return JsonConvert.SerializeObject(movementMessage);
                 case MessageType.ACTION_DEMAND:
                     ActionDemandMessage actionDemandMessage = (ActionDemandMessage)message;

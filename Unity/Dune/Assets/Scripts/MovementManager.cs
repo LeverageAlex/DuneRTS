@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using GameData.network.util.world;
+using Serilog;
 
 /**
  * This manages all Characters and Moveables, that shall be moved.
@@ -202,15 +203,17 @@ using GameData.network.util.world;
 
     public void RequestMovement()
     {
-        if (!Mode.debugMode)
-        {
-            PlayerMessageController.instance.DoRequestMovement(0, CharacterTurnHandler.instance.GetSelectedCharacter().CharacterId, selCharPath);
-        }
-        else
-        {
-            AnimateChar(CharacterTurnHandler.instance.GetSelectedCharacter(), selCharPath);
-            selCharPath.Clear();
-        }
+     //   Log.Debug("Button getriggert. Sende Nachricht");
+    //    SessionHandler.messageController.DoRequestHouse("ATREIDES");
+        //if (!Mode.debugMode)
+        //{
+         SessionHandler.messageController.DoRequestMovement(SessionHandler.clientId, CharacterTurnHandler.instance.GetSelectedCharacter().CharacterId, selCharPath);
+        // }
+        //else
+        //{
+        //     AnimateChar(CharacterTurnHandler.instance.GetSelectedCharacter(), selCharPath);
+        //    selCharPath.Clear();
+        // }
     }
 
 

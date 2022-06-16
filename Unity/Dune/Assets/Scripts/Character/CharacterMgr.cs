@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Serilog;
 
 
 /**
@@ -98,6 +99,9 @@ public class CharacterMgr : MonoBehaviour
         float charSpawnY = MapManager.instance.getNodeFromPos(x,z).heightLvl == Node.HeightLevel.high ? charSpawnHighY : charSpawnLowY;
         GameObject newChar = (GameObject) Instantiate(getCharTypeByEnum(type), new Vector3(x, charSpawnY, z), Quaternion.identity);
         characterDict.Add(characterID, ((Character)newChar.GetComponent(typeof(Character))));
+        Log.Debug("Added Character to list: " + characterID);
+        Log.Debug(characterDict[characterID].charName);
+        Log.Debug("Successful print");
         Character localChar = (Character) newChar.GetComponent(typeof(Character));
         localChar.UpdateCharStats(HPcurrent, MPcurrent, APcurrent, inventorySize, loud, killedBySandworm);
         if (clientId == SessionHandler.clientId)

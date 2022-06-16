@@ -214,7 +214,7 @@ public class MapManager : MonoBehaviour
     /**
      * Updates given Node with the given values
      */
-    public void UpdateBoard(int x, int z, bool spiceOnNode, NodeTypeEnum nodeEnum, bool isInStorm)
+    public void UpdateBoard(int x, int z, NodeTypeEnum nodeEnum, bool isInStorm)
     {
         Node currentNode = getNodeFromPos(x, z);
         if (currentNode == null || currentNode.nodeTypeEnum != nodeEnum)
@@ -234,14 +234,6 @@ public class MapManager : MonoBehaviour
             }
             currentNode = (Node)Instantiate(nodePrefab, new Vector3(x, 0, z), Quaternion.identity).GetComponent(typeof(Node));
             nodes[z + GridSizeZ * x] = currentNode;
-        }
-        if(spiceOnNode)
-        {
-            SpawnSpiceCrumOn(x, currentNode.charHeightOffset, z);
-        }
-        else
-        {
-            CollectSpice(x, z);
         }
         currentNode.SetSandstorm(isInStorm);
     }

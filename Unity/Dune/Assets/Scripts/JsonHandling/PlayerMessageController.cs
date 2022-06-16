@@ -13,12 +13,7 @@ using Serilog;
 /// </summary>
 public class PlayerMessageController : MessageController
 {
-    public static PlayerMessageController instance;
 
-    public PlayerMessageController()
-    {
-        if (instance == null) instance = this;
-    }
 
     /// <summary>
     /// this method is responsible for requesting a Join
@@ -68,7 +63,9 @@ public class PlayerMessageController : MessageController
     public void DoRequestMovement(int clientID, int characterID, List<Position> path)
     {
         MovementRequestMessage movementRequestMessage = new MovementRequestMessage(clientID, characterID, new Specs(null, path));
+        Log.Debug("start sending message");
         NetworkController.HandleSendingMessage(movementRequestMessage);
+        Log.Debug("finished sending");
     }
 
     /// <summary>
@@ -150,11 +147,11 @@ public class PlayerMessageController : MessageController
                     if (gameConfigMessage.stormEye != null && MapManager.instance.isNodeNeighbour(x, z, gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y))
                     {
                         //Node is in Sandstorm
-                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[z][x]), true);
+                        MapManager.instance.UpdateBoard(x, z, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[z][x]), true);
                     }
                     else
                     {
-                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[z][x]), false);
+                        MapManager.instance.UpdateBoard(x, z, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[z][x]), false);
                     }
                     Debug.Log("Built x: " + x + " and z: " + z);
                 }
@@ -209,11 +206,11 @@ public class PlayerMessageController : MessageController
                     {
 
                         //Node is in Sandstorm
-                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(mapChangeDemandMessage.newMap[z, x].tileType), true);
+                        MapManager.instance.UpdateBoard(x, z, MapManager.instance.StringtoNodeEnum(mapChangeDemandMessage.newMap[z, x].tileType), true);
                     }
                     else
                     {
-                        MapManager.instance.UpdateBoard(x, z, false, MapManager.instance.StringtoNodeEnum(mapChangeDemandMessage.newMap[z, x].tileType), false);
+                        MapManager.instance.UpdateBoard(x, z, MapManager.instance.StringtoNodeEnum(mapChangeDemandMessage.newMap[z, x].tileType), false);
                     }
                     Debug.Log("Built x: " + x + " and z: " + z);
 
@@ -382,7 +379,16 @@ public class PlayerMessageController : MessageController
     public override void OnTurnDemandMessage(TurnDemandMessage turnDemandMessage)
     {
         // TODO: implement logic
-        CharacterTurnHandler.instance.SetTurnChar(CharacterMgr.instance.getCharScriptByID(turnDemandMessage.clientID));
+        Log.Debug("Triggered TurnDemandMessage");
+        if (SessionHandler.clientId == turnDemandMessage.clientID)
+        {
+            IEnumerator turnDemand()
+            {
+                CharacterTurnHandler.instance.SelectCharacter(CharacterMgr.instance.getCharScriptByID(turnDemandMessage.characterID));
+                yield return null;
+            }
+            UnityMainThreadDispatcher.Instance().Enqueue(turnDemand());
+        }
     }
 
     /// <summary>
@@ -463,8 +469,6 @@ public class PlayerMessageController : MessageController
         Log.Debug("Trigged OnSpawnCharacterDemandMessage in Client. Starting Main Function...");
         IEnumerator spawnCharacters()
         {
-            Debug.Log("Started IEnumerator");
-            Log.Debug("Ienumerator startup");
             Debug.Log("Character Attributes: " + (spawnCharacterDemandMessage.attributes == null));
             CharTypeEnum type;
             switch (spawnCharacterDemandMessage.attributes.characterType)
@@ -483,7 +487,6 @@ public class PlayerMessageController : MessageController
                     break;
             }
             Debug.Log("Selection successful");
-
             CharacterMgr.instance.spawnCharacter(spawnCharacterDemandMessage.clientID, spawnCharacterDemandMessage.characterID, type, spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.APmax, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.KilledBySandworm, spawnCharacterDemandMessage.attributes.IsLoud());
             yield return null;
         }

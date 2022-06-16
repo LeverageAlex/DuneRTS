@@ -33,17 +33,17 @@ namespace GameData.server.roundHandler
                 {
                     character.resetMPandAp();
                     RequestClientForNextCharacterTrait(character.CharacterId);
-                    while (_isTraitActive)
-                    {
-                        if ((character.APcurrent <= 0 && character.MPcurrent <= 0) || character.IsDead()) //if character has no point for action or movement left or is dead, end his turn
-                        {
-                            SetIsTraitActive(false);
-                        }
-                    }
-                    _timer.Stop(); //stop timer when characterTrait is finished
+                  //  while (_isTraitActive)
+                 //   {
+                   //     if ((character.APcurrent <= 0 && character.MPcurrent <= 0) || character.IsDead()) //if character has no point for action or movement left or is dead, end his turn
+                    //    {
+                         //   SetIsTraitActive(false);
+                     //   }
+                  //  }
+                   // _timer.Stop(); //stop timer when characterTrait is finished
                 }
             }
-            Party.GetInstance().RoundHandler.NextRound();
+          //  Party.GetInstance().RoundHandler.NextRound();
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace GameData.server.roundHandler
                 }
             }
             var random = new Random();
-            _allCharacters = (List<Character>)_allCharacters.OrderBy(item => random.Next());
+            _allCharacters.OrderBy(item => random.Next());
             return true;
         }
 
@@ -78,7 +78,7 @@ namespace GameData.server.roundHandler
                     {
                         Party.GetInstance().messageController.DoSendTurnDemand(player.ClientID, characterID); //request client to execute a characterTrait
                         SetIsTraitActive(true);
-                        _timer.Start(); // starts the timer when characterTrait starts
+                         _timer.Start(); // starts the timer when characterTrait starts
                     }
                 }
             }
@@ -95,7 +95,7 @@ namespace GameData.server.roundHandler
         /// <param name="timeInSeconds">Time in seconds how long the timer runs.</param>
         private static void SetTimer()
         {
-            int timeInMilliseconds = 0;
+            int timeInMilliseconds = PartyConfiguration.GetInstance().actionTimeUserClient;
             foreach(var player in Party.GetInstance().GetActivePlayers())
             {
                 foreach(var character in player.UsedGreatHouse.GetCharactersAlive())
