@@ -245,8 +245,9 @@ namespace Server
                             {
                                 if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
                                 {
-                                    activePlayer.statistics.HouseSpiceStorage += movingCharacter.inventoryUsed;
+                                    activePlayer.statistics.AddToHouseSpiceStorage(movingCharacter.inventoryUsed);
                                     movingCharacter.inventoryUsed = 0;
+                                    DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
                                 }
                             }
                         }
@@ -263,6 +264,7 @@ namespace Server
             }
 
             DoSendMovementDemand(msg.clientID, msg.characterID, newPath);
+            DoSendChangeCharacterStatsDemand(msg.clientID, msg.characterID, new CharacterStatistics(movingCharacter));
 
             if(movingCharacter.MPcurrent <= 0 && movingCharacter.APcurrent <= 0)
             {
@@ -341,19 +343,24 @@ namespace Server
 
             if (actionCharacter.APcurrent > 0)
             {
+                var map = Party.GetInstance().map;
+                List<Character> charactersHit = new List<Character>();
                 //check which action the player wants to do with his character
                 switch (Enum.Parse(typeof(ActionType), msg.action))
                 {
                     case ActionType.ATTACK:
                         action = ActionType.ATTACK;
-                        if (!friendlyFire)
+                        if (!friendlyFire && !targetCharacter.IsInSandStorm(map))
                         {
-                            actionCharacter.Atack(targetCharacter);
+                            actionCharacter.Attack(targetCharacter);
+                            charactersHit.Add(targetCharacter);
                         }
                         break;
                     case ActionType.COLLECT:
                         action = ActionType.COLLECT;
                         actionCharacter.CollectSpice();
+                        activePlayer.statistics.AddToTotalSpiceCollected(1);
+                        DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
                         break;
                     //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
                     case ActionType.KANLY:
@@ -362,13 +369,15 @@ namespace Server
                         {
                             DoSendError(005, "Target character is null when kanly action is executed!", activePlayer.SessionID);
                         }
-                        if (actionCharacter.APcurrent == actionCharacter.APmax
+                        else if (actionCharacter.APcurrent == actionCharacter.APmax
                             && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE)
                             && targetCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE)
-                            && !friendlyFire)
+                            && !friendlyFire
+                            && !targetCharacter.IsInSandStorm(map))
                         {
 
                             actionCharacter.Kanly(targetCharacter);
+                            charactersHit.Add(targetCharacter);
                         }
                         break;
                     case ActionType.FAMILY_ATOMICS:
@@ -378,16 +387,15 @@ namespace Server
                         {
                             //get the mapfield where the active Character aims to
                             MapField targetMapField = null;
-                            foreach (var mapfield in Party.GetInstance().map.fields)
+                            foreach (var mapfield in map.fields)
                             {
-                                if (mapfield.stormEye == msg.specs.target)
+                                if (mapfield.GetMapFieldPosition() == msg.specs.target)
                                 {
                                     targetMapField = mapfield;
                                 }
                             }
 
                             // if atomic bomb is thrown on sandworm or neighborfield of sandworm then remove the sandworm
-                            var map = Party.GetInstance().map;
                             if (Sandworm.GetSandworm() != null)
                             {
                                 foreach (var mapField in map.GetNeighborFields(targetMapField))
@@ -399,8 +407,9 @@ namespace Server
                                     }
                                 }
                             }
-                            actionCharacter.AtomicBomb(targetMapField, Party.GetInstance().map, Party.GetInstance().greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse);
-                            Party.GetInstance().greatHouseConventionBroken = true;
+                            actionCharacter.AtomicBomb(targetMapField, map, Party.GetInstance().greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse, charactersHit);
+                            DoSendMapChangeDemand(MapChangeReasons.FAMILY_ATOMICS);
+                            DoSendAtomicsUpdateDemand(msg.clientID, Party.GetInstance().greatHouseConventionBroken, actionCharacter.greatHouse.unusedAtomicBombs);
                         }
                         break;
                     case ActionType.SPICE_HOARDING:
@@ -408,9 +417,8 @@ namespace Server
                         if (actionCharacter.APcurrent == actionCharacter.APmax
                             && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.MENTAT))
                         {
-                            actionCharacter.SpiceHoarding(Party.GetInstance().map);
+                            actionCharacter.SpiceHoarding(map);
                             DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
-                            DoSendChangeCharacterStatsDemand(msg.clientID, actionCharacter.CharacterId, new CharacterStatistics(actionCharacter));
                         }
                         break;
                     case ActionType.VOICE:
@@ -422,7 +430,10 @@ namespace Server
                             {
                                 DoSendError(005, "Target character is null when voice action is executed!", activePlayer.SessionID);
                             }
+                            int InventoryUsedBeforeVoice = actionCharacter.inventoryUsed;
                             actionCharacter.Voice(targetCharacter);
+                            activePlayer.statistics.AddToTotalSpiceCollected(actionCharacter.inventoryUsed-InventoryUsedBeforeVoice);
+                            charactersHit.Add(targetCharacter);
                         }
                         break;
                     case ActionType.SWORD_SPIN:
@@ -430,14 +441,26 @@ namespace Server
                         if (actionCharacter.APcurrent == actionCharacter.APmax
                             && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.FIGHTER))
                         {
-                            actionCharacter.SwordSpin(Party.GetInstance().map);
+                            actionCharacter.SwordSpin(map, charactersHit);
                         }
                         break;
                     default:
                         throw new ArgumentException($"Actiontype {msg.action} not supoorted here.");
                 }
+                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
+                foreach (var character in charactersHit)
+                {
+                    if (activePlayer.UsedGreatHouse == character.greatHouse)
+                    {
+                        DoSendChangeCharacterStatsDemand(activePlayer.ClientID, character.CharacterId, new CharacterStatistics(character));
+                    }
+                    else if (enemyPlayer.UsedGreatHouse == character.greatHouse)
+                    {
+                        DoSendChangeCharacterStatsDemand(enemyPlayer.ClientID, character.CharacterId, new CharacterStatistics(character));
+                    }
+                }
+                DoSendChangeCharacterStatsDemand(activePlayer.ClientID, actionCharacter.CharacterId, new CharacterStatistics(actionCharacter));
             }
-            DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
 
             if ((actionCharacter.MPcurrent <= 0 && actionCharacter.APcurrent <= 0) || actionCharacter.IsDead())
             {
@@ -524,6 +547,7 @@ namespace Server
                         if (character.CharacterId == msg.characterID && character.MPcurrent == character.MPmax)
                         {
                             character.HealIfHasntMoved();
+                            DoSendChangeCharacterStatsDemand(msg.clientID, msg.characterID, new CharacterStatistics(character));
                         }
                     }
                 }

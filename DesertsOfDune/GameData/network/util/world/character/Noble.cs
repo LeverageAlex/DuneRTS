@@ -83,7 +83,7 @@ namespace GameData.network.util.world.character
         /// <param name="target">The target Field for the Atack</param>
         /// <returns>true, if the action was successful</returns>
         override
-        public bool AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse)
+        public bool AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse, List<Character> charactersHit)
         {
             if(this.APcurrent == this.APmax && this.greatHouse.unusedAtomicBombs > 0)
             {
@@ -104,8 +104,10 @@ namespace GameData.network.util.world.character
                     if (mapfield.IsCharacterStayingOnThisField)
                     {
                         mapfield.Character.DecreaseHP(mapfield.Character.healthCurrent);
+                        charactersHit.Add(mapfield.Character);
                         if(!greatHouseConventionBroken)
                         {
+                            greatHouseConventionBroken = true;
                             List<GreatHouse> remainingGreatHouses = new List<GreatHouse>();
                             if(activePlayerGreatHouse.houseName != "CORRINO" && passivePlayerGreatHouse.houseName != "CORRINO"){
                                 remainingGreatHouses.Add(new Corrino());

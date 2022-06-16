@@ -61,7 +61,7 @@ namespace GameData.network.util.world.character
         /// </summary>
         /// <returns>true, if the action was successful</returns>
         override
-        public bool SwordSpin(Map map)
+        public bool SwordSpin(Map map, List<Character> charactersHit)
         {
             if(this.APcurrent == this.APmax)
             {
@@ -72,7 +72,8 @@ namespace GameData.network.util.world.character
                     {
                         if(mapfield.Character.greatHouse != this.greatHouse)
                         {
-                            Atack(mapfield.Character);
+                            Attack(mapfield.Character);
+                            charactersHit.Add(mapfield.Character);
                         }
 
                     }
