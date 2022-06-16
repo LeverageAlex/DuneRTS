@@ -229,6 +229,7 @@ public class Character : MonoBehaviour
         else
         {
             //Killing Character
+            Debug.Log("Removed Character at x: " + this.X + ", Z: " + this.Z);
             CharacterMgr.instance.removeCharacter(characterId);
             Destroy(gameObject);
             }

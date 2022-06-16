@@ -152,5 +152,12 @@ namespace GameData.network.util.world
             }
             return characterStayingOnThisField;
         }
+
+
+        public override bool Equals(object obj)
+        {
+            MapField nb = (MapField)obj;
+            return nb.XCoordinate == this.XCoordinate && nb.ZCoordinate == this.ZCoordinate;
+        }
     }
 }
