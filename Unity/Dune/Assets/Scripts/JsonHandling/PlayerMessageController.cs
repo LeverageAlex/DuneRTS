@@ -391,6 +391,13 @@ public class PlayerMessageController : MessageController
     public override void OnTurnDemandMessage(TurnDemandMessage turnDemandMessage)
     {
         // TODO: implement logic
+        IEnumerator deselectDemand()
+        {
+            CharacterTurnHandler.instance.ResetSelection();
+            yield return null;
+        }
+        UnityMainThreadDispatcher.Instance().Enqueue(deselectDemand());
+
         Log.Debug("Triggered TurnDemandMessage");
         if (SessionHandler.clientId == turnDemandMessage.clientID)
         {

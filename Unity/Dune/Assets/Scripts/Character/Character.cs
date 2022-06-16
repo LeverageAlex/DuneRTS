@@ -647,10 +647,15 @@ public class Character : MonoBehaviour
                 if (nodeManager.IsSpiceOn(X + i, Z + j))
                 {
                     nodeManager.CollectSpice(X + i, Z + j);
+                    
                     Debug.Log("Collected Spice!");
-                    CharacterTurnHandler.EndTurn();
                 }
             }
+        }
+        
+        if (Mode.debugMode)
+        {
+            CharacterTurnHandler.EndTurn();
         }
 
         //reset 
@@ -712,8 +717,9 @@ public class Character : MonoBehaviour
         if (Mode.debugMode)
         {
             turnHandler.ResetSelection();
+            CharacterTurnHandler.EndTurn();
         }
-        CharacterTurnHandler.EndTurn();
+       
     }
 
     public void Action_HeliportTrigger(Node targetNode)
@@ -845,8 +851,5 @@ public class Character : MonoBehaviour
     {
         BaseHP = maxHP;
     }
-
-    
-
 
 }
