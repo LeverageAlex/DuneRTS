@@ -367,8 +367,8 @@ namespace Server
                             && targetCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE)
                             && !friendlyFire)
                         {
-
                             actionCharacter.Kanly(targetCharacter);
+                            DoSendChangeCharacterStatsDemand(msg.clientID, targetCharacter.CharacterId, new CharacterStatistics(targetCharacter));
                         }
                         break;
                     case ActionType.FAMILY_ATOMICS:
