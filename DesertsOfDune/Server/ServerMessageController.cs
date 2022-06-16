@@ -354,6 +354,7 @@ namespace Server
                     case ActionType.COLLECT:
                         action = ActionType.COLLECT;
                         actionCharacter.CollectSpice();
+                        DoSendChangeCharacterStatsDemand(msg.clientID, actionCharacter.CharacterId, new CharacterStatistics(actionCharacter));
                         break;
                     //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
                     case ActionType.KANLY:

@@ -76,6 +76,7 @@ public class InGameMenuManager : MonoBehaviour
     /// <param name="spiceInv"></param>
     public void DemandSpiceAmount(Character giver, Character receiver, int spiceInv)
     {
+        Debug.Log("This the the spiceInv: " + spiceInv);
         SpiceMaxText.text = spiceInv.ToString();
         SpiceAmountSlider.maxValue = spiceInv;
         SpiceAmountSlider.wholeNumbers = true;
