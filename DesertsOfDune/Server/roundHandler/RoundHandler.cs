@@ -225,5 +225,14 @@ namespace GameData.gameObjects
             // TODO implement logic
             return false;
         }
+
+        /// <summary>
+        /// getter for the characterTraitPhase
+        /// </summary>
+        /// <returns>current characterTraitPhase</returns>
+        public CharacterTraitPhase GetCharacterTraitPhase()
+        {
+            return this.characterTraitPhase;
+        }
     }
 }

@@ -454,7 +454,7 @@ namespace Server
                     }
                 }
             }
-            CharacterTraitPhase.SetIsTraitActive(false);
+            Party.GetInstance().RoundHandler.GetCharacterTraitPhase().SendRequestForNextCharacter();
         }
 
         public override void OnGameStateRequestMessage(GameStateRequestMessage msg)
