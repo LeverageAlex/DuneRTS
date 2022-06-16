@@ -493,10 +493,10 @@ namespace Server
             }
 
             //get the postion of the characters and check if they stand next to each other
-            int activeCharacterX = activeCharacter.CurrentMapfield.stormEye.x;
-            int activeCharacterY = activeCharacter.CurrentMapfield.stormEye.y;
-            int targetCharacterX = targetCharacter.CurrentMapfield.stormEye.x;
-            int targetCharacterY = targetCharacter.CurrentMapfield.stormEye.y;
+            int activeCharacterX = activeCharacter.CurrentMapfield.XCoordinate;
+            int activeCharacterY = activeCharacter.CurrentMapfield.ZCoordinate;
+            int targetCharacterX = targetCharacter.CurrentMapfield.XCoordinate;
+            int targetCharacterY = targetCharacter.CurrentMapfield.ZCoordinate;
             if ((activeCharacterX == targetCharacterX && (activeCharacterY == (targetCharacterY + 1)) || (activeCharacterY == targetCharacterY - 1)) || (activeCharacterY == targetCharacterY && ((activeCharacterX == targetCharacterX + 1) || (activeCharacterX == targetCharacterX - 1))))
             {
                 activeCharacter.GiftSpice(targetCharacter, msg.amount);

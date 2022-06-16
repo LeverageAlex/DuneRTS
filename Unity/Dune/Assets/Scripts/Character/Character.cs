@@ -428,7 +428,9 @@ public class Character : MonoBehaviour
                 Action_TransferSpiceExecution(character);
             }
             else {
-                SessionHandler.messageController.DoRequestAction(SessionHandler.clientId, characterId, ActionType.TRANSFER, new GameData.network.util.world.Position(character.X, character.Z));
+                Debug.Log("action transferSpice: " + SessionHandler.clientId);
+                //SessionHandler.messageController.DoRequestAction(SessionHandler.clientId, characterId, ActionType.TRANSFER, new GameData.network.util.world.Position(character.X, character.Z));
+                SessionHandler.messageController.DoRequestTransfer(SessionHandler.clientId, characterId, character.characterId, 1);
             }
             return true;
         }

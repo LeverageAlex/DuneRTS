@@ -90,6 +90,20 @@ public class PlayerMessageController : MessageController
         NetworkController.HandleSendingMessage(endTurnRequestMessage);
     }
 
+
+    /// <summary>
+    /// This method is responsible for requesting the Transfer of spice.
+    /// </summary>
+    /// <param name="clientID">the id of the client</param>
+    /// <param name="characterID">the id of the character</param>
+    /// <param name="targetID">the id of the targeted character</param>
+    /// <param name="amount">the amount to be transfered</param>
+    public void DoRequestTransfer(int clientID, int characterID, int targetID, int amount)
+    {
+        TransferRequestMessage endTurnRequestMessage = new TransferRequestMessage(clientID, characterID, targetID, amount);
+        NetworkController.HandleSendingMessage(endTurnRequestMessage);
+    }
+
     /// <summary>
     /// This method handles the HouseOfferMessage
     /// </summary>

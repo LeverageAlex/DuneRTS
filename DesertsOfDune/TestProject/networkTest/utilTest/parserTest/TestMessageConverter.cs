@@ -757,10 +757,10 @@ namespace TestProject.networkTest.utilTest.parserTest
             Assert.AreEqual("FAMILY_ATOMICS", ((MapChangeDemandMessage)deserializedMessage).changeReason);
             Assert.AreEqual("CITY", ((MapChangeDemandMessage)deserializedMessage).newMap[0,0].tileType);
             Assert.AreEqual(1234, ((MapChangeDemandMessage)deserializedMessage).newMap[0,0].clientID);
-            Assert.AreEqual(false, ((MapChangeDemandMessage)deserializedMessage).newMap[0,0].HasSpice);
+            Assert.AreEqual(false, ((MapChangeDemandMessage)deserializedMessage).newMap[0,0].hasSpice);
             Assert.AreEqual(false, ((MapChangeDemandMessage)deserializedMessage).newMap[0,0].isInSandstorm);
             Assert.AreEqual("DUNE", ((MapChangeDemandMessage)deserializedMessage).newMap[0,1].tileType);
-            Assert.AreEqual(false, ((MapChangeDemandMessage)deserializedMessage).newMap[0,1].HasSpice);
+            Assert.AreEqual(false, ((MapChangeDemandMessage)deserializedMessage).newMap[0,1].hasSpice);
             Assert.AreEqual(false, ((MapChangeDemandMessage)deserializedMessage).newMap[0,1].isInSandstorm);
             Assert.AreEqual(0, ((MapChangeDemandMessage)deserializedMessage).newMap[0, 1].clientID);
             Assert.AreEqual(4, ((MapChangeDemandMessage)deserializedMessage).stormEye.x);
