@@ -83,7 +83,7 @@ namespace GameData.network.util.world.character
         /// <param name="target">The target Field for the Atack</param>
         /// <returns>true, if the action was successful</returns>
         override
-        public bool AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse, List<Character> charactersHit)
+        public bool AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse)
         {
             if(this.APcurrent == this.APmax && this.greatHouse.unusedAtomicBombs > 0)
             {

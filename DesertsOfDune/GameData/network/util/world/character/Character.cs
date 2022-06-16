@@ -147,7 +147,7 @@ namespace GameData.network.util.world
             } else
             {
                 healthCurrent = 0;
-                CurrentMapfield.DisplaceCharacter(this);
+                //CurrentMapfield.DisplaceCharacter(this);
                 return false;
             }
         }
@@ -348,7 +348,7 @@ namespace GameData.network.util.world
         /// <param name="target"> this is the Field on the Map where the active Noble character aims its atomic bomb to </param>
         /// <returns></returns>
         virtual
-        public bool AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse, List<Character> charactersHit)
+        public bool AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse)
         {
             //Do nothing because only Nobles can perform this move
             return false;
