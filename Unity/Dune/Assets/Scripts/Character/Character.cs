@@ -336,7 +336,7 @@ public class Character : MonoBehaviour
             }
             else
             {
-                SessionHandler.messageController.DoRequestAction(0, characterId, ActionType.ATTACK, new GameData.network.util.world.Position(X, Z));
+                SessionHandler.messageController.DoRequestAction(SessionHandler.clientId, characterId, ActionType.ATTACK, new GameData.network.util.world.Position(X, Z));
             }
             return true;
         }
@@ -381,7 +381,7 @@ public class Character : MonoBehaviour
                 Action_CollectSpiceExecution();
             }
             else {
-                SessionHandler.messageController.DoRequestAction(0, characterId, ActionType.COLLECT, new GameData.network.util.world.Position(X, Z));
+                SessionHandler.messageController.DoRequestAction(SessionHandler.clientId, characterId, ActionType.COLLECT, new GameData.network.util.world.Position(X, Z));
             }
 
         }

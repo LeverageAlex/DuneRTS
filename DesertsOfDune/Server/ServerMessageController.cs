@@ -299,7 +299,7 @@ namespace Server
                 {
                     actionCharacter = character;
                 }
-                if (character.CurrentMapfield.stormEye == msg.specs.target)
+                if (character.CurrentMapfield.XCoordinate ==  msg.specs.target.x && character.CurrentMapfield.ZCoordinate == msg.specs.target.y)
                 {
                     targetCharacter = character;
                     friendlyFire = true; //characters can not attack their allys
@@ -310,7 +310,7 @@ namespace Server
             {
                 foreach (var character in enemyPlayer.UsedGreatHouse.GetCharactersAlive())
                 {
-                    if (character.CurrentMapfield.stormEye == msg.specs.target)
+                    if (character.CurrentMapfield.XCoordinate == msg.specs.target.x && character.CurrentMapfield.ZCoordinate == msg.specs.target.y)
                     {
                         targetCharacter = character;
                     }

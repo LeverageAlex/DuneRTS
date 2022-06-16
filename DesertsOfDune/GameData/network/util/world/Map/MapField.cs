@@ -117,7 +117,7 @@ namespace GameData.network.util.world
         {
             this.Character = character;
             this.IsCharacterStayingOnThisField = true;
-
+            
             // assign this map field to the character
             character.CurrentMapfield = this;
         }
