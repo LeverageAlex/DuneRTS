@@ -226,7 +226,7 @@ public class PlayerMessageController : MessageController
                     Debug.Log("Built x: " + x + " and z: " + z);
 
 
-                    if (mapChangeDemandMessage.newMap[z, x].HasSpice)
+                    if (mapChangeDemandMessage.newMap[z, x].hasSpice)
                     {
                         
                         MapManager.instance.SpawnSpiceCrumOn(x, 0.5f, z);

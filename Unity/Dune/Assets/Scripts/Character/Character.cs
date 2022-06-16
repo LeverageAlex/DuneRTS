@@ -422,17 +422,7 @@ public class Character : MonoBehaviour
 
         if (nodeManager.isNodeNeighbour(selectedNode, secondNode) && character.IsMemberOfHouse(house))
         {
-            
-            //TODO execute attack
-            if (Mode.debugMode)
-            {
-                Action_TransferSpiceExecution(character);
-            }
-            else {
-                Debug.Log("action transferSpice: " + SessionHandler.clientId);
-                //SessionHandler.messageController.DoRequestAction(SessionHandler.clientId, characterId, ActionType.TRANSFER, new GameData.network.util.world.Position(character.X, character.Z));
-                SessionHandler.messageController.DoRequestTransfer(SessionHandler.clientId, characterId, character.characterId, 1);
-            }
+            InGameMenuManager.getInstance().DemandSpiceAmount(this, character, this.spiceInv);
             return true;
         }
         else
@@ -443,6 +433,33 @@ public class Character : MonoBehaviour
         }
     }
 
+    public void CancleRequstTransferSpice()
+    {
+        turnHandler.ResetAction();
+        Debug.Log("cancled Transfer!");
+    }
+
+    /// <summary>
+    /// finaly sends TransferSpice
+    /// </summary>
+    /// <param name="character"></param>
+    /// <param name="spiceAmount"></param>
+    public void TriggerRequestTransferSpice(Character character, int spiceAmount)
+    {
+        //TODO execute attack
+        if (Mode.debugMode)
+        {
+            Action_TransferSpiceExecution(character);
+        }
+        else
+        {
+            Debug.Log("action transferSpice: " + SessionHandler.clientId);
+            //SessionHandler.messageController.DoRequestAction(SessionHandler.clientId, characterId, ActionType.TRANSFER, new GameData.network.util.world.Position(character.X, character.Z));
+            SessionHandler.messageController.DoRequestTransfer(SessionHandler.clientId, characterId, character.characterId, spiceAmount);
+        }      
+    }
+
+    
     public void Action_TransferSpiceExecution(Character character)
     {
         Debug.Log("Transfer!");
