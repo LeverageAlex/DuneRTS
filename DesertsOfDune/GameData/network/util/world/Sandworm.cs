@@ -76,7 +76,7 @@ namespace GameData.server.roundHandler
             this._messageController = messageController;
 
             // get the target character
-            _messageController.DoSpawnSandwormDemand(this._targetCharacter.CharacterId, this._currentField);
+            // _messageController.DoSpawnSandwormDemand(this._targetCharacter.CharacterId, this._currentField);
         }
 
         /// <summary>
