@@ -186,11 +186,11 @@ namespace Server
                     activePlayer = player;
                 }
             }
-            /**if(activePlayer == null)
+
+            if(activePlayer == null)
             {
-                DoSendError(005, $"No Player with clientID = {msg.clientID} known.", sessionID);
-                return;
-            }*/
+                throw new NullReferenceException($"Requested player with {msg.clientID} isn't known!");
+            }
 
             //get the character which should be moved
             Character movingCharacter = null;
@@ -201,13 +201,13 @@ namespace Server
                     movingCharacter = character;
                 }
             }
-            /**if(movingCharacter == null)
-            {
-                DoSendError(005, $"Moving character is null", sessionID);
-                return;
-            }*/
 
-            //List<Position> path = new List<Position>();
+            if(movingCharacter == null)
+            {
+                DoSendError(005, $"Moving character is null", activePlayer.SessionID);
+                return;
+            }
+
             List<Position> path = msg.specs.path;
             bool alreadySteppedOnSandField = false;
             foreach (var position in path)
@@ -247,6 +247,11 @@ namespace Server
                 }
             }
             DoSendMovementDemand(msg.clientID, msg.characterID, path);
+
+            if(movingCharacter.MPcurrent <= 0 && movingCharacter.APcurrent <= 0)
+            {
+                Party.GetInstance().RoundHandler.GetCharacterTraitPhase().SendRequestForNextCharacter();
+            }
         }
 
         /// <summary>
@@ -266,18 +271,20 @@ namespace Server
                 {
                     activePlayer = player;
                 }
-                if (player.ClientID == msg.clientID)
+                if (player.ClientID != msg.clientID)
                 {
                     enemyPlayer = player;
                 }
-
             }
 
-            /**if(activePlayer == null)
+            if(activePlayer == null)
             {
-                DoSendError(005, $"No Player with clientID = {msg.clientID} known.", sessionID);
-                return;
-            }*/
+                throw new NullReferenceException($"Requested player with {msg.clientID} isn't known!");
+            }
+            if (enemyPlayer == null)
+            {
+                throw new NullReferenceException($"Enemy player not found!");
+            }
 
             //get the characters which are involved in the action
             Character actionCharacter = null;
@@ -292,7 +299,7 @@ namespace Server
                 if (character.CurrentMapfield.stormEye == msg.specs.target)
                 {
                     targetCharacter = character;
-                    friendlyFire = true;            //characters can not attack their allys
+                    friendlyFire = true; //characters can not attack their allys
                 }
             }
             //get the target character from enemy player if the target character is not an ally
@@ -307,10 +314,11 @@ namespace Server
                 }
             }
 
-            /**if (actionCharacter == null)
+            if (actionCharacter == null)
             {
-                DoSendError(005, "ActionCharacter is null", sessionID)
-            }*/
+                DoSendError(005, "ActionCharacter is null", activePlayer.SessionID);
+                return;
+            }
 
             //set Attack as standard enum and change it if needed
             ActionType action = ActionType.ATTACK;
@@ -334,11 +342,16 @@ namespace Server
                     //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
                     case ActionType.KANLY:
                         action = ActionType.KANLY;
+                        if (targetCharacter == null)
+                        {
+                            DoSendError(005, "Target character is null when kanly action is executed!", activePlayer.SessionID);
+                        }
                         if (actionCharacter.APcurrent == actionCharacter.APmax
                             && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE)
                             && targetCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE)
                             && !friendlyFire)
                         {
+
                             actionCharacter.Kanly(targetCharacter);
                         }
                         break;
@@ -374,6 +387,10 @@ namespace Server
                         if (actionCharacter.APcurrent == actionCharacter.APmax
                             && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.BENE_GESSERIT))
                         {
+                            if (targetCharacter == null)
+                            {
+                                DoSendError(005, "Target character is null when voice action is executed!", activePlayer.SessionID);
+                            }
                             actionCharacter.Voice(targetCharacter);
                         }
                         break;
@@ -390,6 +407,11 @@ namespace Server
                 }
             }
             DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
+
+            if ((actionCharacter.MPcurrent <= 0 && actionCharacter.APcurrent <= 0) || actionCharacter.IsDead())
+            {
+                Party.GetInstance().RoundHandler.GetCharacterTraitPhase().SendRequestForNextCharacter();
+            }
         }
 
         /// <summary>
@@ -408,6 +430,11 @@ namespace Server
                 }
             }
 
+            if (activePlayer == null)
+            {
+                throw new NullReferenceException($"Requested player with {msg.clientID} isn't known!");
+            }
+
             //get the characters which are involved in the transfer
             Character activeCharacter = null;
             Character targetCharacter = null;
@@ -423,6 +450,17 @@ namespace Server
                 }
             }
 
+            if (activeCharacter == null)
+            {
+                DoSendError(005, "Active character is null", activePlayer.SessionID);
+                return;
+            }
+            if (targetCharacter == null)
+            {
+                DoSendError(005, "TargetCharacter is null", activePlayer.SessionID);
+                return;
+            }
+
             //get the postion of the characters and check if they stand next to each other
             int activeCharacterX = activeCharacter.CurrentMapfield.stormEye.x;
             int activeCharacterY = activeCharacter.CurrentMapfield.stormEye.y;
@@ -432,6 +470,11 @@ namespace Server
             {
                 activeCharacter.GiftSpice(targetCharacter, msg.amount);
                 DoSendTransferDemand(msg.clientID, msg.characterID, msg.targetID);
+            }
+
+            if (activeCharacter.MPcurrent <= 0 && activeCharacter.APcurrent <= 0)
+            {
+                Party.GetInstance().RoundHandler.GetCharacterTraitPhase().SendRequestForNextCharacter();
             }
         }
 
