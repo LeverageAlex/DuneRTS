@@ -16,7 +16,7 @@ namespace GameData.network.util.world
         [JsonProperty(Order = -2)]
         public string characterType { get; set; }
         [JsonProperty(Order = -1)]
-        protected int healthMax;
+        public int healthMax { get; set; }
         [JsonProperty(Order = 0)]
         public int healthCurrent { get; set; }
         [JsonProperty(Order = 1)]
@@ -30,15 +30,15 @@ namespace GameData.network.util.world
         [JsonProperty(Order = 5)]
         public int APcurrent { get; set; }
         [JsonProperty(Order = 6)]
-        protected int attackDamage;
+        public int attackDamage { get; set; }
         [JsonProperty(Order = 7)]
-        protected int inventorySize;
+        public int inventorySize { get; set; }
         [JsonProperty(Order = 8)]
         public int inventoryUsed { get; set; }
         [JsonProperty(Order = 9)]
-        protected bool killedBySandworm;
+        public bool killedBySandworm { get; set; }
         [JsonProperty(Order = 10)]
-        protected bool isLoud;
+        public bool isLoud { get; set; }
        // [JsonIgnore]
        // protected MapField currentMapfield;
         [JsonIgnore]
@@ -306,15 +306,16 @@ namespace GameData.network.util.world
         /// <returns>true, if the action was possible else false</returns>
         public bool CollectSpice()
         {
-            if (APcurrent > 0 && CurrentMapfield.HasSpice && inventoryUsed < inventorySize)
+            if (APcurrent > 0 && CurrentMapfield.hasSpice && inventoryUsed < inventorySize)
             {
                 APcurrent--;
                 inventoryUsed++;
-                CurrentMapfield.HasSpice = false;
+                CurrentMapfield.hasSpice = false;
                 return true;
             }
             return false;
         }
+
 
         /// <summary>
         /// This method holds the logic for converting spice from a player to his city.

@@ -54,7 +54,7 @@ namespace GameData.server.roundHandler
             path.Add(_currentField);
             path.Add(targetCharacter.CurrentMapfield);
 
-            _currentField = new FlatSand(_currentField.HasSpice, _currentField.isInSandstorm, _currentField.stormEye);
+            _currentField = new FlatSand(_currentField.hasSpice, _currentField.isInSandstorm, _currentField.stormEye);
 
             // send map change for updating the map in the user client
             Party.GetInstance().messageController.DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);

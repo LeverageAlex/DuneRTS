@@ -44,7 +44,7 @@ namespace GameData.server.roundHandler
                 {
                     if (random.NextDouble() < 0.5)
                     {
-                        MapField newDune = new Dune(randomField.HasSpice, randomField.isInSandstorm, randomField.stormEye);
+                        MapField newDune = new Dune(randomField.hasSpice, randomField.isInSandstorm, randomField.stormEye);
                         newDune.Character = randomField.Character;
 
                         this._map.SetMapFieldAtPosition(newDune, randomField.XCoordinate, randomField.ZCoordinate);
@@ -52,7 +52,7 @@ namespace GameData.server.roundHandler
                     }
                     else
                     {
-                        MapField newFlatSand = new FlatSand(randomField.HasSpice, randomField.isInSandstorm, randomField.stormEye);
+                        MapField newFlatSand = new FlatSand(randomField.hasSpice, randomField.isInSandstorm, randomField.stormEye);
                         newFlatSand.Character = randomField.Character;
 
                         this._map.SetMapFieldAtPosition(newFlatSand, randomField.XCoordinate, randomField.ZCoordinate);
@@ -108,9 +108,9 @@ namespace GameData.server.roundHandler
                 else
                 {
                     // if there is no spice on this map field, place it and call the method for a approachable neighbor field
-                    if (!field.HasSpice)
+                    if (!field.hasSpice)
                     {
-                        field.HasSpice = true;
+                        field.hasSpice = true;
                         return PlaceSpiceOnField(nextField, restAmountOfSpiceToPlace - 1);
                     }
                     else

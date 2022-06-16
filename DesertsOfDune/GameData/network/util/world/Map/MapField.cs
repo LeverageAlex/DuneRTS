@@ -17,13 +17,7 @@ namespace GameData.network.util.world
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore, Order = -2)]
         public int clientID { get; set; }
         [JsonProperty]
-        private bool hasSpice;
-        [JsonIgnore]
-        public bool HasSpice
-        {
-            get { return hasSpice; }
-            set { hasSpice = value; }
-        }
+        public bool hasSpice { get; set; }
         [JsonProperty]
         public bool isInSandstorm { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

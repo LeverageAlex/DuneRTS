@@ -176,7 +176,7 @@ namespace GameData.server.roundHandler
         /// <returns>true, if the sandworm moved to a field with a character and need to disappear</returns>
         public bool MoveSandwormByOneField(MapField nextField)
         {
-            _currentField = new FlatSand(_currentField.HasSpice, _currentField.isInSandstorm, _currentField.stormEye);
+            _currentField = new FlatSand(_currentField.hasSpice, _currentField.isInSandstorm, _currentField.stormEye);
             _currentField.IsApproachable = true;
             _currentField = nextField;
             _currentField.IsApproachable = false;

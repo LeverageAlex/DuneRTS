@@ -35,7 +35,7 @@ namespace GameData.server.roundHandler
                 {
                     MapField field = this._map.GetMapFieldAtPosition(x, y);
                     if (field.tileType.Equals(TileType.MOUNTAINS.ToString()) || field.tileType.Equals(TileType.PLATEAU.ToString())){
-                        MapField newField = new Dune(field.HasSpice, field.isInSandstorm, field.stormEye);
+                        MapField newField = new Dune(field.hasSpice, field.isInSandstorm, field.stormEye);
                         if (field.Character != null)
                         {
                             newField.PlaceCharacter(field.Character);

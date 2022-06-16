@@ -304,7 +304,7 @@ namespace GameData.network.util.world
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    if (GetMapFieldAtPosition(x, y).HasSpice)
+                    if (GetMapFieldAtPosition(x, y).hasSpice)
                     {
                         spiceAmount++;
                     }

@@ -63,8 +63,8 @@ namespace GameData.network.util.world.character
         /// This method represents the action SpiceHoarding of the characterType Mentat
         /// </summary>
         /// <returns>true, if action was successful</returns>
-        override
-        public bool SpiceHoarding(Map map)
+
+        public override bool SpiceHoarding(Map map)
         {
             int inventoryFree = this.inventorySize - this.inventoryUsed;
             List<MapField> NeighborFields = map.GetNeighborFields(this.CurrentMapfield);
@@ -72,21 +72,26 @@ namespace GameData.network.util.world.character
             Random rnd = new Random();
             if (this.APcurrent == this.APmax && inventoryFree > 0)
             {
-                MapField spiceField = NeighborFields[rnd.Next(NeighborFields.Count)];
+                MapField spiceField;
                 while (inventoryFree > 0 && NeighborFields.Count > 0)
                 {
-                    if (spiceField.HasSpice)
+                    spiceField = NeighborFields[rnd.Next(NeighborFields.Count)];
+                    if (spiceField.hasSpice)
                     {
-                        CollectSpice();
+                        inventoryUsed++;
+                        spiceField.hasSpice = false;
                         inventoryFree--;
                     }
                     NeighborFields.Remove(spiceField);
-                    spiceField = NeighborFields[rnd.Next(NeighborFields.Count)];
+                   //  = NeighborFields[rnd.Next(NeighborFields.Count)];
                 }
-                SpentAp(APmax);
+              //  SpentAp(APmax);
+                
                 return true;
             }
             return false;
         }
     }
+
+
 }

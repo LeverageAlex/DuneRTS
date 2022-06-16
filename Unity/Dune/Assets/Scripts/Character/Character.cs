@@ -336,7 +336,7 @@ public class Character : MonoBehaviour
             }
             else
             {
-                SessionHandler.messageController.DoRequestAction(SessionHandler.clientId, characterId, ActionType.ATTACK, new GameData.network.util.world.Position(X, Z));
+                SessionHandler.messageController.DoRequestAction(SessionHandler.clientId, characterId, ActionType.ATTACK, new GameData.network.util.world.Position(character.X, character.Z));
             }
             return true;
         }
@@ -418,14 +418,14 @@ public class Character : MonoBehaviour
 
         if (nodeManager.isNodeNeighbour(selectedNode, secondNode) && character.IsMemberOfHouse(house))
         {
-            //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.TRANSFER, selectedNode);
+            
             //TODO execute attack
             if (Mode.debugMode)
             {
                 Action_TransferSpiceExecution(character);
             }
-            else { 
-                
+            else {
+                SessionHandler.messageController.DoRequestAction(SessionHandler.clientId, characterId, ActionType.TRANSFER, new GameData.network.util.world.Position(character.X, character.Z));
             }
             return true;
         }
@@ -465,17 +465,17 @@ public class Character : MonoBehaviour
 
             // just fill data the node has to be a parameter of Atack_SwordSpin
 
-            //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.SWORD_SPIN, nodeManager.getNodeFromPos(X,Z));
+           
             if (Mode.debugMode)
             {
                 Attack_SwordSpinExecution();
             }
-            else { 
-            
+            else {
+                SessionHandler.messageController.DoRequestAction(SessionHandler.clientId, characterId, ActionType.SWORD_SPIN, new GameData.network.util.world.Position(X, Z));
             }
             //TODO: Send Attack to Server
             //TODO: wait for response from server
-           
+
             return true;
         }
         else
@@ -515,14 +515,14 @@ public class Character : MonoBehaviour
         {
             //Check, if there are atomics left in House
 
-            //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.FAMILY_ATOMICS, node);
+            
             if (Mode.debugMode)
             {
                 Attack_AtomicExecution(node);
             }
             else
             {
-
+                SessionHandler.messageController.DoRequestAction(SessionHandler.clientId, characterId, ActionType.FAMILY_ATOMICS, new GameData.network.util.world.Position(node.X, node.Z));
             }
             return true;
         }
@@ -566,13 +566,13 @@ public class Character : MonoBehaviour
             Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
             if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
             {
-                //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.KANLY, secondNode);
+                
                 if (Mode.debugMode)
                 {
                     Attack_KanlyExecution(character);
                 }
-                else { 
-                
+                else {
+                    SessionHandler.messageController.DoRequestAction(SessionHandler.clientId, characterId, ActionType.KANLY, new GameData.network.util.world.Position(character.X, character.Z));
                 }
                 return true;
             }
@@ -617,13 +617,13 @@ public class Character : MonoBehaviour
         {
 
             // just fill data the selected node should be available here.
-            //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.SPICE_HORDING, nodeManager.getNodeFromPos(X, Z));
+
             if (Mode.debugMode)
             {
                 Action_SpiceHoardingExecution();
             }
-            else { 
-            
+            else {
+                SessionHandler.messageController.DoRequestAction(SessionHandler.clientId, characterId, ActionType.SPICE_HOARDING, new GameData.network.util.world.Position(X, Z));
             }
             return true;
         }
@@ -640,18 +640,6 @@ public class Character : MonoBehaviour
         charAnim.Play(animation_spiceHoarding);
         audioManager.Play("SpiceHoarding");
 
-        for (int i = -1; i <= 1; i++)
-        {
-            for (int j = -1; j <= 1; j++)
-            {
-                if (nodeManager.IsSpiceOn(X + i, Z + j))
-                {
-                    nodeManager.CollectSpice(X + i, Z + j);
-                    
-                    Debug.Log("Collected Spice!");
-                }
-            }
-        }
         
         if (Mode.debugMode)
         {
@@ -661,6 +649,18 @@ public class Character : MonoBehaviour
         //reset 
         if (Mode.debugMode)
         {
+            for (int i = -1; i <= 1; i++)
+            {
+                for (int j = -1; j <= 1; j++)
+                {
+                    if (nodeManager.IsSpiceOn(X + i, Z + j))
+                    {
+                        nodeManager.CollectSpice(X + i, Z + j);
+
+                        Debug.Log("Collected Spice!");
+                    }
+                }
+            }
             turnHandler.ResetSelection();
         }
     }
@@ -678,7 +678,7 @@ public class Character : MonoBehaviour
             if (nodeManager.isNodeNeighbour(selectedNode, secondNode))
             {
 
-                //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.VOICE, selectedNode);
+
                 //TODO: wait for response from server
                 if (Mode.debugMode)
                 {
@@ -686,7 +686,7 @@ public class Character : MonoBehaviour
                 }
                 else
                 {
-
+                    SessionHandler.messageController.DoRequestAction(SessionHandler.clientId, characterId, ActionType.VOICE, new GameData.network.util.world.Position(character.X, character.Z));
                 }
                 return true;
             }

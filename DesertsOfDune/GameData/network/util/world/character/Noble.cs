@@ -135,9 +135,9 @@ namespace GameData.network.util.world.character
                             }
                         }
                     }
-                    if (mapfield.HasSpice)
+                    if (mapfield.hasSpice)
                     {
-                        mapfield.HasSpice = false;
+                        mapfield.hasSpice = false;
                     }
                 }
                 SpentAp(APmax);

@@ -403,12 +403,14 @@ namespace Server
                             Party.GetInstance().greatHouseConventionBroken = true;
                         }
                         break;
-                    case ActionType.SPICE_HORDING:
-                        action = ActionType.SPICE_HORDING;
+                    case ActionType.SPICE_HOARDING:
+                        action = ActionType.SPICE_HOARDING;
                         if (actionCharacter.APcurrent == actionCharacter.APmax
                             && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.MENTAT))
                         {
                             actionCharacter.SpiceHoarding(Party.GetInstance().map);
+                            DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
+                            DoSendChangeCharacterStatsDemand(msg.clientID, actionCharacter.CharacterId, new CharacterStatistics(actionCharacter));
                         }
                         break;
                     case ActionType.VOICE:
