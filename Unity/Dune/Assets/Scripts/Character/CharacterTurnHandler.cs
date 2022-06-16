@@ -75,6 +75,8 @@ public class CharacterTurnHandler : MonoBehaviour
         ButtonToggles();
     }
 
+    
+
     public void ResetAction()
     {
         charState = Actions.EMPTY;
@@ -174,7 +176,9 @@ public class CharacterTurnHandler : MonoBehaviour
             //MovementManager.instance.AnimateSelectedChar();
             MovementManager.instance.RequestMovement();
         }
-        ResetSelection();
+
+        charState = Actions.EMPTY;
+        ConfirmDeactivate();
     }
 
     public static void EndTurn()
