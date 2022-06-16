@@ -32,6 +32,7 @@ namespace GameData.network.util.world
         /// <param name="spice">the amount of spice the character has</param>
         /// <param name="isLoud">true, if the character is loud</param>
         /// <param name="isSwallowed">true, if the character got swallowed</param>
+        [JsonConstructor]
         public CharacterStatistics(int hp, int ap, int mp, int spice, bool isLoud, bool isSwallowed)
         {
             this.HP = hp;
