@@ -19646,6 +19646,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Arrow
       objectReference: {fileID: 0}
+    - target: {fileID: 527541370366696710, guid: db5275b128500924ebdb86ded3c7fa4f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3773862778616854183, guid: db5275b128500924ebdb86ded3c7fa4f, type: 3}
       propertyPath: m_RootOrder
       value: 17
