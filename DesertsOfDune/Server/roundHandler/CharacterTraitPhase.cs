@@ -28,6 +28,7 @@ namespace GameData.server.roundHandler
             foreach (var character in _allCharacters)
             {
                 _currentCharacter = character;
+                character.SetSilent();
                 if (!character.IsDead() && !character.IsInSandStorm(Party.GetInstance().map)) // check if character is dead or staying in storm
                 {
                     character.resetMPandAp();
