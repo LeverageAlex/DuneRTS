@@ -73,11 +73,11 @@ using Serilog;
         //Test code
         //Starts animation on key b
 
-        if (Input.GetKeyDown(KeyCode.Return) && selCharPath.Count > 0)
+        /*if (Input.GetKeyDown(KeyCode.Return) && selCharPath.Count > 0)
             {
             // AnimateChar(character, MovementManager.instance.getSelCharPath);
             RequestMovement();
-            }
+            } */
 
         }
 

@@ -210,7 +210,7 @@ namespace Server
 
             List<Position> path = msg.specs.path;
             bool alreadySteppedOnSandField = false;
-            List<Position> newPath = new List<Position>(path);
+            List<Position> newPath = new List<Position>();
             foreach (var position in path)
             {
                 var party = Party.GetInstance();
