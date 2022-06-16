@@ -12,6 +12,7 @@ public static class SessionHandler
     public static string clientSecret;
     public static bool isPlayer = true;
     public static int viewerId;
+    public static int atomicsLeft;
 
         public static void CreateNetworkModule(String ip, int port)
         {

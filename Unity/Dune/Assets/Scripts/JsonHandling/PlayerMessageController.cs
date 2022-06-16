@@ -26,9 +26,8 @@ public class PlayerMessageController : MessageController
         Log.Debug("Starting Join!");
         SessionHandler.isPlayer = active;
         JoinMessage joinMessage = new JoinMessage(clientName, active, isCpu);
-        Log.Debug("Parsing of Message successful");
         NetworkController.HandleSendingMessage(joinMessage);
-        Log.Debug("Sent message!");
+        Log.Debug("Sent JoinMessage!");
         //CharacterMgr.handler.
         //NetworkController.HandleSendingMessage(joinMessage);
         //   Debug.Log(CharacterMgr.handler.WebSocket.ToString());
@@ -63,9 +62,8 @@ public class PlayerMessageController : MessageController
     public void DoRequestMovement(int clientID, int characterID, List<Position> path)
     {
         MovementRequestMessage movementRequestMessage = new MovementRequestMessage(clientID, characterID, new Specs(null, path));
-        Log.Debug("start sending message");
         NetworkController.HandleSendingMessage(movementRequestMessage);
-        Log.Debug("finished sending");
+        Log.Debug("finished sending MovementMessage");
     }
 
     /// <summary>
@@ -118,7 +116,6 @@ public class PlayerMessageController : MessageController
             MainMenuManager.instance.DemandJoinAccept();
             yield return null;
         }
-        Log.Debug("Got to ThreadDispatcher");
         UnityMainThreadDispatcher.Instance().Enqueue(demandPlaygame());
 
     }
@@ -239,7 +236,12 @@ public class PlayerMessageController : MessageController
     /// <returns></returns>
     public override void OnStrikeMessage(StrikeMessage strikeMessage)
     {
-        GUIHandler.BroadcastGameMessage(strikeMessage.wrongMessage);
+        IEnumerator strike()
+        {
+            GUIHandler.BroadcastGameMessage(strikeMessage.wrongMessage);
+            yield return null;
+        }
+        UnityMainThreadDispatcher.Instance().Enqueue(strike());
     }
 
     /// <summary>
@@ -250,7 +252,12 @@ public class PlayerMessageController : MessageController
     public override void OnGameEndMessage(GameEndMessage gameEndMessage)
     {
         // TODO: implement logic
-
+        IEnumerator gameEnd()
+        {
+            InGameMenuManager.getInstance().DemandEndGame("The Winner is: " + gameEndMessage.winnerID);
+            yield return null;
+        }
+        UnityMainThreadDispatcher.Instance().Enqueue(gameEnd());
     }
 
     /// <summary>
@@ -366,9 +373,14 @@ public class PlayerMessageController : MessageController
     /// <returns></returns>
     public override void OnTransferDemandMessage(TransferDemandMessage transferDemandMessage)
     {
-        Character c1 = CharacterMgr.instance.getCharScriptByID(transferDemandMessage.characterID);
-        Character c2 = CharacterMgr.instance.getCharScriptByID(transferDemandMessage.targetID);
-        c1.Action_TransferSpiceExecution(c2);
+        IEnumerator transferDemand()
+        {
+            Character c1 = CharacterMgr.instance.getCharScriptByID(transferDemandMessage.characterID);
+            Character c2 = CharacterMgr.instance.getCharScriptByID(transferDemandMessage.targetID);
+            c1.Action_TransferSpiceExecution(c2);
+            yield return null;
+        }
+        UnityMainThreadDispatcher.Instance().Enqueue(transferDemand());
     }
 
     /// <summary>
@@ -399,7 +411,12 @@ public class PlayerMessageController : MessageController
     public override void OnMovementDemandMessage(MovementDemandMessage movementDemandMessage)
     {
         // TODO: implement logic
-        MovementManager.instance.AnimateChar(CharacterMgr.instance.getCharScriptByID(movementDemandMessage.characterID), movementDemandMessage.specs.path);
+        IEnumerator movementDemand()
+        {
+            MovementManager.instance.AnimateChar(CharacterMgr.instance.getCharScriptByID(movementDemandMessage.characterID), movementDemandMessage.specs.path);
+            yield return null;
+        }
+        UnityMainThreadDispatcher.Instance().Enqueue(movementDemand());
     }
 
     /// <summary>
@@ -410,35 +427,41 @@ public class PlayerMessageController : MessageController
     public override void OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
     {
         // TODO: implement logic
-        Character character = CharacterMgr.instance.getCharScriptByID(actionDemandMessage.characterID);
-        Character enemy;
-        switch (actionDemandMessage.action)
+        IEnumerator onActionDemand()
         {
-            case "ATTACK":
-                enemy = MapManager.instance.GetCharOnNode(actionDemandMessage.specs.target.x, actionDemandMessage.specs.target.y);
-                character.Attack_BasicExecution(enemy);
-                break;
-            case "COLLECT":
-                character.Action_CollectSpiceExecution();
-                break;
-            case "KANLY":
-                enemy = MapManager.instance.GetCharOnNode(actionDemandMessage.specs.target.x, actionDemandMessage.specs.target.y);
-                character.Attack_KanlyExecution(enemy);
-                break;
-            case "FAMILY_ATOMICS":
-                character.Attack_AtomicExecution(MapManager.instance.getNodeFromPos(actionDemandMessage.specs.target.x, actionDemandMessage.specs.target.y));
-                break;
-            case "SPICE_HOARDING":
-                character.Action_SpiceHoardingExecution();
-                break;
-            case "VOICE":
-                enemy = MapManager.instance.GetCharOnNode(actionDemandMessage.specs.target.x, actionDemandMessage.specs.target.y);
-                character.Action_VoiceExecution(enemy);
-                break;
-            case "SWORDSPIN":
-                character.Attack_SwordSpinExecution();
-                break;
+            Character character = CharacterMgr.instance.getCharScriptByID(actionDemandMessage.characterID);
+            Character enemy;
+            switch (actionDemandMessage.action)
+            {
+                case "ATTACK":
+                    enemy = MapManager.instance.GetCharOnNode(actionDemandMessage.specs.target.x, actionDemandMessage.specs.target.y);
+                    character.Attack_BasicExecution(enemy);
+                    break;
+                case "COLLECT":
+                    character.Action_CollectSpiceExecution();
+                    break;
+                case "KANLY":
+                    enemy = MapManager.instance.GetCharOnNode(actionDemandMessage.specs.target.x, actionDemandMessage.specs.target.y);
+                    character.Attack_KanlyExecution(enemy);
+                    break;
+                case "FAMILY_ATOMICS":
+                    character.Attack_AtomicExecution(MapManager.instance.getNodeFromPos(actionDemandMessage.specs.target.x, actionDemandMessage.specs.target.y));
+                    break;
+                case "SPICE_HOARDING":
+                    character.Action_SpiceHoardingExecution();
+                    break;
+                case "VOICE":
+                    enemy = MapManager.instance.GetCharOnNode(actionDemandMessage.specs.target.x, actionDemandMessage.specs.target.y);
+                    character.Action_VoiceExecution(enemy);
+                    break;
+                case "SWORDSPIN":
+                    character.Attack_SwordSpinExecution();
+                    break;
+            }
+            yield return null;
         }
+
+        UnityMainThreadDispatcher.Instance().Enqueue(onActionDemand());
     }
 
     /// <summary>
@@ -451,8 +474,14 @@ public class PlayerMessageController : MessageController
         //All fields currently private
         //changeCharacterStatisticsDemandMessage.stats.
         // TODO: implement logic
-        Character character = CharacterMgr.instance.getCharScriptByID(changeCharacterStatisticsDemandMessage.characterID);
-        character.UpdateCharStats(changeCharacterStatisticsDemandMessage.stats.HP, changeCharacterStatisticsDemandMessage.stats.MP, changeCharacterStatisticsDemandMessage.stats.AP, changeCharacterStatisticsDemandMessage.stats.spice, changeCharacterStatisticsDemandMessage.stats.isLoud, changeCharacterStatisticsDemandMessage.stats.isSwallowed);
+        IEnumerator changeCharStats()
+        {
+            Character character = CharacterMgr.instance.getCharScriptByID(changeCharacterStatisticsDemandMessage.characterID);
+            character.UpdateCharStats(changeCharacterStatisticsDemandMessage.stats.HP, changeCharacterStatisticsDemandMessage.stats.MP, changeCharacterStatisticsDemandMessage.stats.AP, changeCharacterStatisticsDemandMessage.stats.spice, changeCharacterStatisticsDemandMessage.stats.isLoud, changeCharacterStatisticsDemandMessage.stats.isSwallowed);
+            yield return null;
+        }
+        UnityMainThreadDispatcher.Instance().Enqueue(changeCharStats());
+
     }
 
 
@@ -501,14 +530,19 @@ public class PlayerMessageController : MessageController
     public override void OnChangePlayerSpiceDemandMessage(ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage)
     {
         // TODO: implement logic
-        if (SessionHandler.clientId == changePlayerSpiceDemandMessage.clientID)
+        IEnumerator changePlayerSpice()
         {
-            GUIHandler.UpdatePlayerSpice(changePlayerSpiceDemandMessage.newSpiceValue);
+            if (SessionHandler.clientId == changePlayerSpiceDemandMessage.clientID)
+            {
+                GUIHandler.UpdatePlayerSpice(changePlayerSpiceDemandMessage.newSpiceValue);
+            }
+            else
+            {
+                GUIHandler.UpdateEnemySpice(changePlayerSpiceDemandMessage.newSpiceValue);
+            }
+            yield return null;
         }
-        else
-        {
-            GUIHandler.UpdateEnemySpice(changePlayerSpiceDemandMessage.newSpiceValue);
-        }
+        UnityMainThreadDispatcher.Instance().Enqueue(changePlayerSpice());
     }
 
     /// <summary>
@@ -567,7 +601,13 @@ public class PlayerMessageController : MessageController
     /// <returns></returns>
     public override void OnEndGameMessage(EndGameMessage endGameMessage)
     {
+        IEnumerator Endgame()
+        {
+            GUIHandler.BroadcastGameMessage("EndGame has begun!");
+            yield return null;
+        }
         // TODO: implement logic
+        UnityMainThreadDispatcher.Instance().Enqueue(Endgame());
     }
 
     /// <summary>
@@ -577,6 +617,16 @@ public class PlayerMessageController : MessageController
     public override void OnAtomicsUpdateDemandMessage(AtomicsUpdateDemandMessage atomicUpdateDemandMessage)
     {
         // TODO: implement logic
+        if (atomicUpdateDemandMessage.clientID == SessionHandler.clientId)
+        {
+            SessionHandler.atomicsLeft = atomicUpdateDemandMessage.atomicsLeft;
+            IEnumerator atomicsUpdate()
+            {
+                GUIHandler.instance.BroadcastMessage("Player " + atomicUpdateDemandMessage.clientID + "outlawed");
+                yield return null;
+            }
+            UnityMainThreadDispatcher.Instance().Enqueue(atomicsUpdate());
+        }
     }
 
     // This method should not be called by the client.

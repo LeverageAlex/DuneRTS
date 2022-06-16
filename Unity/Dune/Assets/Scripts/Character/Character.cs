@@ -204,22 +204,31 @@ public class Character : MonoBehaviour
 
     public void UpdateCharStats(int HP, int MP, int AP, int spiceInv, bool isLoud, bool isSwallowed)
     {
-        this.HP = HP;
-        //this.healingHP = HealHP;
-        this._AP = AP;
-        this._MP = MP;
-        this.spiceInv = spiceInv;
-        this.isLoud = isLoud;
-        this.isSwallowed = isSwallowed;
-
-        healthBarImage.fillAmount = (float) HP / BaseHP;
-
-        if (turnHandler != null && turnHandler.GetSelectedCharacter() == this)
+        if (HP > 0 && !isSwallowed)
         {
-            DrawStats();
-        }
+            this.HP = HP;
+            //this.healingHP = HealHP;
+            this._AP = AP;
+            this._MP = MP;
+            this.spiceInv = spiceInv;
+            this.isLoud = isLoud;
+            this.isSwallowed = isSwallowed;
 
-        Debug.Log("Updated " + gameObject.name + "s stats.");
+            healthBarImage.fillAmount = (float)HP / BaseHP;
+
+            if (turnHandler != null && turnHandler.GetSelectedCharacter() == this)
+            {
+                DrawStats();
+            }
+
+            Debug.Log("Updated " + gameObject.name + "s stats.");
+        }
+        else
+        {
+            //Killing Character
+            CharacterMgr.instance.removeCharacter(characterId);
+            Destroy(gameObject);
+            }
     }
 
     /*

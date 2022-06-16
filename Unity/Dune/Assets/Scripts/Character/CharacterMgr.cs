@@ -223,6 +223,10 @@ public class CharacterMgr : MonoBehaviour
         enemyHouse = house;
     }
 
+    public void removeCharacter(int charID)
+    {
+        characterDict.Remove(charID);
+    }
 
 
 }
