@@ -216,6 +216,26 @@ namespace Server
         }
 
         /// <summary>
+        /// gets a player from the list of all players, whose character has the given character id
+        /// </summary>
+        /// <param name="characterID">the id of the character, whose matched player need to be determined</param>
+        /// <returns>the player, who has the character with the given id or null, if the character do not belong to any player</returns>
+        /// TODO: do not return null
+        public Player GetPlayerByCharacterID(int characterID)
+        {
+            Player player = null; 
+            foreach (Player activePlayer in GetActivePlayers())
+            {
+                Character foundCharacter = activePlayer.UsedGreatHouse.Characters.Find((character) => character.CharacterId == characterID);
+                if (foundCharacter != null)
+                {
+                    return activePlayer;
+                }
+            }
+            return player;
+        }
+
+        /// <summary>
         /// decide for each city, which player will use this city and match the city to the player
         /// </summary>
         public void MatchGreatHouseToCity()
