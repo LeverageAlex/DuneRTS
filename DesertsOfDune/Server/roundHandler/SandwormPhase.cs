@@ -27,6 +27,9 @@ namespace GameData.server.roundHandler
             this._map = map;
         }
 
+        /// <summary>
+        /// Executes the sandworm phase
+        /// </summary>
         public void Execute()
         {
             // check, whether there is a sandworm
@@ -34,10 +37,10 @@ namespace GameData.server.roundHandler
             {
                 Queue<MapField> path = _sandworm.CalculatePathToTarget();
                 _sandworm.MoveSandWorm(path);
-            } else
+            }
+            else
             {
                 List<Character> characters = this._map.GetCharactersOnMap();
-
                 // check, if there are any loud characters on the map, so the sandworm spawns
                 if (CheckLoudness(characters))
                 {

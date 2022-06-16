@@ -87,7 +87,10 @@ namespace GameData.network.util.world.character
         {
             if(this.APcurrent == this.APmax && this.greatHouse.unusedAtomicBombs > 0)
             {
-                foreach (var mapfield in map.GetNeighborFields(target))
+                var mapFields = map.GetNeighborFields(target);
+                mapFields.Add(target);
+
+                foreach (var mapfield in mapFields)
                 {
                     switch (Enum.Parse(typeof(TileType), mapfield.tileType))
                     {
@@ -103,8 +106,7 @@ namespace GameData.network.util.world.character
                         mapfield.Character.DecreaseHP(mapfield.Character.healthCurrent);
                         if(!greatHouseConventionBroken)
                         {
-                            //TODO: implement supportive Characters from other Houses against the Great House who used the atomic bomb
-                            List < GreatHouse > remainingGreatHouses = new List<GreatHouse>();
+                            List<GreatHouse> remainingGreatHouses = new List<GreatHouse>();
                             if(activePlayerGreatHouse.houseName != "CORRINO" && passivePlayerGreatHouse.houseName != "CORRINO"){
                                 remainingGreatHouses.Add(new Corrino());
                             }
@@ -133,7 +135,6 @@ namespace GameData.network.util.world.character
                             }
                         }
                     }
-                    //remove Sandworm
                     if (mapfield.HasSpice)
                     {
                         mapfield.HasSpice = false;

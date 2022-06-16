@@ -55,8 +55,6 @@ namespace GameData.server.roundHandler
             if (_sandWormSingleton == null)
             {
                 _sandWormSingleton = new Sandworm(sandWormSpeed, sandWormSpawnDistance, map, characters, messageController);
-
-
             }
             return _sandWormSingleton;
         }
@@ -224,6 +222,16 @@ namespace GameData.server.roundHandler
             Random random = new Random();
             int index = random.Next(loudCharacters.Count);
             return loudCharacters[index];
+        }
+
+        public MapField GetCurrentField()
+        {
+            return this._currentField;
+        }
+
+        public static Sandworm GetSandworm()
+        {
+            return _sandWormSingleton;
         }
     }
 }
