@@ -278,7 +278,7 @@ namespace GameData.network.util.world
                 return false;
             }
             CurrentMapfield = goalField;
-            startField.DisplaceCharacter();
+            startField.DisplaceCharacter(this);
             goalField.PlaceCharacter(this);
             return true;
         }

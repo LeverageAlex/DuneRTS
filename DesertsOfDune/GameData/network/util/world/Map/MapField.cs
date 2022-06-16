@@ -45,7 +45,7 @@ namespace GameData.network.util.world
         [JsonIgnore]
         public int ZCoordinate { get; set; } 
 
-        protected bool IsCityField;
+        public bool IsCityField;
 
 
         [JsonIgnore]
@@ -120,10 +120,13 @@ namespace GameData.network.util.world
             character.CurrentMapfield = this;
         }
 
-        public void DisplaceCharacter()
+        public void DisplaceCharacter(Character c)
         {
-            this.Character = null;
-            this.IsCharacterStayingOnThisField = false;
+            if (c == this.Character)
+            {
+                this.Character = null;
+                this.IsCharacterStayingOnThisField = false;
+            }
         }
 
         public double DistanceTo(MapField field)
@@ -134,6 +137,26 @@ namespace GameData.network.util.world
         public Position GetMapFieldPosition()
         {
             return new Position(XCoordinate, ZCoordinate);
+        }
+
+        public Character GetCharacterStayingOnThisField(List<Character> characters)
+        {
+            Character characterStayingOnThisField = null;
+            if (this.IsCharacterStayingOnThisField)
+            {
+                foreach (var character in characters)
+                {
+                    if(character.CurrentMapfield == this)
+                    {
+                        characterStayingOnThisField = character;
+                    }
+                }
+            }
+            else
+            {
+                throw new NullReferenceException("No character is staying on this field");
+            }
+            return characterStayingOnThisField;
         }
     }
 }

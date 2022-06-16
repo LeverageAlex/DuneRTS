@@ -214,15 +214,19 @@ namespace Server
             foreach (var position in path)
             {
                 var party = Party.GetInstance();
-                //check if Character has enough Movement Points
-                if (movingCharacter.MPcurrent > 0)
+                if (movingCharacter.MPcurrent > 0) //check if Character has enough Movement Points
                 {
-                    //check if movement is in bounds of the map
-                    if (position.x >= 0 && position.x < party.map.MAP_WIDTH && position.y >= 0 && position.y < party.map.MAP_HEIGHT)
+                    if (position.x >= 0 && position.x < party.map.MAP_WIDTH && position.y >= 0 && position.y < party.map.MAP_HEIGHT) //check if movement is in bounds of the map
                     {
                         //check if movement is on walkable terrain
                         if (party.map.fields[position.y, position.x].tileType != TileType.MOUNTAINS.ToString() && party.map.fields[position.y, position.x].tileType != TileType.CITY.ToString()) //check needed and not implemented utils
                         {
+                            if(party.map.fields[position.y, position.x].IsCharacterStayingOnThisField)  //if the mapfield is occupied by a character they swap positions
+                            {
+                                Character passiveCharacter = party.map.fields[position.y, position.x].GetCharacterStayingOnThisField(party.map.GetCharactersOnMap());
+                                passiveCharacter.Movement(passiveCharacter.CurrentMapfield, movingCharacter.CurrentMapfield);
+                                DoSendMovementDemand(msg.clientID, passiveCharacter.CharacterId, new List<Position> { new Position(movingCharacter.CurrentMapfield.XCoordinate, movingCharacter.CurrentMapfield.ZCoordinate) });
+                            }
                             movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]); //move character 1 field along its path
                             //path.Add(position);
                             newPath.Add(position);
@@ -234,6 +238,15 @@ namespace Server
                                 else
                                 {
                                     alreadySteppedOnSandField = true;
+                                }
+                            }
+                            //deliver spice to city if city is neighborfield
+                            foreach (var mapfield in party.map.GetNeighborFields(movingCharacter.CurrentMapfield))
+                            {
+                                if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
+                                {
+                                    activePlayer.statistics.HouseSpiceStorage += movingCharacter.inventoryUsed;
+                                    movingCharacter.inventoryUsed = 0;
                                 }
                             }
                         }
@@ -373,6 +386,19 @@ namespace Server
                                 }
                             }
 
+                            // if atomic bomb is thrown on sandworm or neighborfield of sandworm then remove the sandworm
+                            var map = Party.GetInstance().map;
+                            if (Sandworm.GetSandworm() != null)
+                            {
+                                foreach (var mapField in map.GetNeighborFields(targetMapField))
+                                {
+                                    if (Sandworm.GetSandworm().GetCurrentField() == mapField || Sandworm.GetSandworm().GetCurrentField() == targetMapField)
+                                    {
+                                        Sandworm.Despawn(this);
+                                        break;
+                                    }
+                                }
+                            }
                             actionCharacter.AtomicBomb(targetMapField, Party.GetInstance().map, Party.GetInstance().greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse);
                             Party.GetInstance().greatHouseConventionBroken = true;
                         }
