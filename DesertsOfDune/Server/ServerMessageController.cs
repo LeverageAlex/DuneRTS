@@ -210,6 +210,7 @@ namespace Server
             //List<Position> path = new List<Position>();
             List<Position> path = msg.specs.path;
             bool alreadySteppedOnSandField = false;
+            List<Position> newPath = new List<Position>(path);
             foreach (var position in path)
             {
                 var party = Party.GetInstance();
@@ -223,8 +224,9 @@ namespace Server
                         if (party.map.fields[position.x, position.y].tileType != TileType.MOUNTAINS.ToString() && party.map.fields[position.x, position.y].tileType != TileType.CITY.ToString()) //check needed and not implemented utils
                         {
                             movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.x, position.y]); //move character 1 field along its path
-                            path.Add(position);
-                            if(party.map.fields[position.x,  position.y].tileType == TileType.FLAT_SAND.ToString() || party.map.fields[position.x, position.y].tileType == TileType.DUNE.ToString()){
+                            //path.Add(position);
+                            newPath.Add(position);
+                            if (party.map.fields[position.x,  position.y].tileType == TileType.FLAT_SAND.ToString() || party.map.fields[position.x, position.y].tileType == TileType.DUNE.ToString()){
                                 if (alreadySteppedOnSandField)
                                 {
                                     movingCharacter.SetLoud();
@@ -246,7 +248,7 @@ namespace Server
                     break;
                 }
             }
-            DoSendMovementDemand(msg.clientID, msg.characterID, path);
+            DoSendMovementDemand(msg.clientID, msg.characterID, newPath);
         }
 
         /// <summary>

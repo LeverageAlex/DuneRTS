@@ -203,11 +203,12 @@ using Serilog;
 
     public void RequestMovement()
     {
-     //   Log.Debug("Button getriggert. Sende Nachricht");
-    //    SessionHandler.messageController.DoRequestHouse("ATREIDES");
+        //   Log.Debug("Button getriggert. Sende Nachricht");
+        //    SessionHandler.messageController.DoRequestHouse("ATREIDES");
         //if (!Mode.debugMode)
         //{
-         SessionHandler.messageController.DoRequestMovement(SessionHandler.clientId, CharacterTurnHandler.instance.GetSelectedCharacter().CharacterId, selCharPath);
+        Log.Debug("DoRequestMovement: for characterID " + CharacterTurnHandler.instance.GetSelectedCharacter().CharacterId);
+        SessionHandler.messageController.DoRequestMovement(SessionHandler.clientId, CharacterTurnHandler.instance.GetSelectedCharacter().CharacterId, selCharPath);
         // }
         //else
         //{
