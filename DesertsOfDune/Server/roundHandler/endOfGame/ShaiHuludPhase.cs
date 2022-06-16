@@ -66,8 +66,7 @@ namespace GameData.server.roundHandler
             Party.GetInstance().messageController.DoMoveSandwormDemand(path);
 
             // kill target character and send message, that stats of character changed
-            _currentField.Character.KilledBySandworm = true;
-            _currentField.Character = null;
+            _currentField.Character.KilledBySandworm = true;    
 
             // get the id the client, whose character the target character is
             Player player = Party.GetInstance().GetPlayerByCharacterID(targetCharacter.CharacterId);
@@ -80,7 +79,7 @@ namespace GameData.server.roundHandler
                 Log.Error($"There is no player with a character with the character ID {targetCharacter.CharacterId}!");
             }
 
-
+            _currentField.Character = null;
         }
 
         /// <summary>
