@@ -119,7 +119,10 @@ public class Character : MonoBehaviour
 
         //SampleCode only
         BaseHP = 100;
-        initCharacter();
+        if (Mode.debugMode)
+        {
+            initCharacter();
+        }
 
         //Update Nodes references on start (only needed because of editor)
         //gameManager.getNodeFromPos((int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z)).placeObjectOnNode(gameObject);
@@ -133,6 +136,7 @@ public class Character : MonoBehaviour
         charAnim = charModel.GetComponent<Animator>();
         initAnimations();
         audioManager = AudioController.instance;
+        SetMatColorToHouse();
     }
 
     public void initAnimations()
@@ -194,7 +198,6 @@ public class Character : MonoBehaviour
         {
             UpdateCharStats(150, 100, 2, 5, false, false);
         }
-
         SetMatColorToHouse();
     }
 
@@ -226,6 +229,7 @@ public class Character : MonoBehaviour
         else
         {
             //Killing Character
+            Debug.Log("Removed Character at x: " + this.X + ", Z: " + this.Z);
             CharacterMgr.instance.removeCharacter(characterId);
             Destroy(gameObject);
             }
@@ -418,15 +422,7 @@ public class Character : MonoBehaviour
 
         if (nodeManager.isNodeNeighbour(selectedNode, secondNode) && character.IsMemberOfHouse(house))
         {
-            
-            //TODO execute attack
-            if (Mode.debugMode)
-            {
-                Action_TransferSpiceExecution(character);
-            }
-            else {
-                SessionHandler.messageController.DoRequestAction(SessionHandler.clientId, characterId, ActionType.TRANSFER, new GameData.network.util.world.Position(character.X, character.Z));
-            }
+            InGameMenuManager.getInstance().DemandSpiceAmount(this, character, this.spiceInv);
             return true;
         }
         else
@@ -437,6 +433,33 @@ public class Character : MonoBehaviour
         }
     }
 
+    public void CancleRequstTransferSpice()
+    {
+        turnHandler.ResetAction();
+        Debug.Log("cancled Transfer!");
+    }
+
+    /// <summary>
+    /// finaly sends TransferSpice
+    /// </summary>
+    /// <param name="character"></param>
+    /// <param name="spiceAmount"></param>
+    public void TriggerRequestTransferSpice(Character character, int spiceAmount)
+    {
+        //TODO execute attack
+        if (Mode.debugMode)
+        {
+            Action_TransferSpiceExecution(character);
+        }
+        else
+        {
+            Debug.Log("action transferSpice: " + SessionHandler.clientId);
+            //SessionHandler.messageController.DoRequestAction(SessionHandler.clientId, characterId, ActionType.TRANSFER, new GameData.network.util.world.Position(character.X, character.Z));
+            SessionHandler.messageController.DoRequestTransfer(SessionHandler.clientId, characterId, character.characterId, spiceAmount);
+        }      
+    }
+
+    
     public void Action_TransferSpiceExecution(Character character)
     {
         Debug.Log("Transfer!");
@@ -851,5 +874,4 @@ public class Character : MonoBehaviour
     {
         BaseHP = maxHP;
     }
-
 }

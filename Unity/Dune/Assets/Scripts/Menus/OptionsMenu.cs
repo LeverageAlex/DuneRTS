@@ -30,7 +30,8 @@ public class OptionsMenu : MonoBehaviour
         }
 
         resolutionDropdown.AddOptions(options);
-        resolutionDropdown.value = currentResIndex;
+        //resolutionDropdown.value = currentResIndex;
+        resolutionDropdown.value = resolutionDropdown.options.Count - 1;//biggest
         resolutionDropdown.RefreshShownValue();
     }
 

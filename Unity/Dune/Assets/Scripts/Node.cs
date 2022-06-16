@@ -122,17 +122,19 @@ public class Node : MonoBehaviour
             {
                 this.rend.material.color = markedPathColor;
                 marked = true;
+
+                //Vector3 point = new Vector3();
+                Position point = new Position(X, Z);
+                //point.x = transform.position.x;
+                //point.y = CharacterTurnHandler.instance.GetSelectedCharacter().BaseY + charHeightOffset;
+                // point.z = transform.position.z;
+                MovementManager.instance.AddWaypoint(point);
             }
-            //Vector3 point = new Vector3();
-            Position point = new Position(X, Z);
-            //point.x = transform.position.x;
-            //point.y = CharacterTurnHandler.instance.GetSelectedCharacter().BaseY + charHeightOffset;
-           // point.z = transform.position.z;
-            MovementManager.instance.AddWaypoint(point);
 
         }
         else if (CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.FAMILY_ATOMICS && CharacterTurnHandler.CharSelected)
         {
+            Debug.Log("Atomic coordinates: " + this.X + " " +  this.Z);
             CharacterTurnHandler.instance.GetSelectedCharacter().Attack_AtomicTrigger(this);
         }
         else if(CharacterTurnHandler.instance.CharState == CharacterTurnHandler.Actions.HELIPORT && nodeTypeEnum == NodeTypeEnum.HELIPORT && CharacterTurnHandler.CharSelected)

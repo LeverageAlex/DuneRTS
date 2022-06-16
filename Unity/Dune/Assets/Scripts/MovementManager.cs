@@ -128,6 +128,7 @@ public class MovementManager : MonoBehaviour
      */
     public bool IsWaypointAttachable(int x, int z)
     {
+        //Debug.Log("IsWayPoint Attachable: Current MP: " + CharacterTurnHandler.instance.GetSelectedCharacter().MP + " and selCharPath size: " + selCharPath.Count);
         if (selCharPath.Count == 0)
         { // distinction needed at the first node to select
             return selCharPath.Count < CharacterTurnHandler.instance.GetSelectedCharacter().MP && MapManager.instance.isNodeNeighbour(CharacterTurnHandler.instance.GetSelectedCharacter().X,

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using GameData.network.controller;
 using GameData.network.messages;
@@ -359,8 +359,12 @@ namespace Server
                     case ActionType.COLLECT:
                         action = ActionType.COLLECT;
                         actionCharacter.CollectSpice();
+<<<<<<< HEAD
                         activePlayer.statistics.AddToTotalSpiceCollected(1);
                         DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
+=======
+                        DoSendChangeCharacterStatsDemand(msg.clientID, actionCharacter.CharacterId, new CharacterStatistics(actionCharacter));
+>>>>>>> origin/develop
                         break;
                     //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
                     case ActionType.KANLY:
@@ -375,9 +379,12 @@ namespace Server
                             && !friendlyFire
                             && !targetCharacter.IsInSandStorm(map))
                         {
-
                             actionCharacter.Kanly(targetCharacter);
+<<<<<<< HEAD
                             charactersHit.Add(targetCharacter);
+=======
+                            DoSendChangeCharacterStatsDemand(msg.clientID, targetCharacter.CharacterId, new CharacterStatistics(targetCharacter));
+>>>>>>> origin/develop
                         }
                         break;
                     case ActionType.FAMILY_ATOMICS:
@@ -389,7 +396,11 @@ namespace Server
                             MapField targetMapField = null;
                             foreach (var mapfield in map.fields)
                             {
+<<<<<<< HEAD
                                 if (mapfield.GetMapFieldPosition() == msg.specs.target)
+=======
+                                if (mapfield.XCoordinate == msg.specs.target.x && mapfield.ZCoordinate == msg.specs.target.y)
+>>>>>>> origin/develop
                                 {
                                     targetMapField = mapfield;
                                 }
@@ -407,9 +418,15 @@ namespace Server
                                     }
                                 }
                             }
+<<<<<<< HEAD
                             actionCharacter.AtomicBomb(targetMapField, map, Party.GetInstance().greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse, charactersHit);
                             DoSendMapChangeDemand(MapChangeReasons.FAMILY_ATOMICS);
                             DoSendAtomicsUpdateDemand(msg.clientID, Party.GetInstance().greatHouseConventionBroken, actionCharacter.greatHouse.unusedAtomicBombs);
+=======
+                            actionCharacter.AtomicBomb(targetMapField, Party.GetInstance().map, Party.GetInstance().greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse);
+                            DoSendAtomicsUpdateDemand(msg.clientID, true, 1);
+                            Party.GetInstance().greatHouseConventionBroken = true;
+>>>>>>> origin/develop
                         }
                         break;
                     case ActionType.SPICE_HOARDING:
@@ -516,10 +533,10 @@ namespace Server
             }
 
             //get the postion of the characters and check if they stand next to each other
-            int activeCharacterX = activeCharacter.CurrentMapfield.stormEye.x;
-            int activeCharacterY = activeCharacter.CurrentMapfield.stormEye.y;
-            int targetCharacterX = targetCharacter.CurrentMapfield.stormEye.x;
-            int targetCharacterY = targetCharacter.CurrentMapfield.stormEye.y;
+            int activeCharacterX = activeCharacter.CurrentMapfield.XCoordinate;
+            int activeCharacterY = activeCharacter.CurrentMapfield.ZCoordinate;
+            int targetCharacterX = targetCharacter.CurrentMapfield.XCoordinate;
+            int targetCharacterY = targetCharacter.CurrentMapfield.ZCoordinate;
             if ((activeCharacterX == targetCharacterX && (activeCharacterY == (targetCharacterY + 1)) || (activeCharacterY == targetCharacterY - 1)) || (activeCharacterY == targetCharacterY && ((activeCharacterX == targetCharacterX + 1) || (activeCharacterX == targetCharacterX - 1))))
             {
                 activeCharacter.GiftSpice(targetCharacter, msg.amount);

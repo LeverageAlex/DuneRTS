@@ -144,7 +144,27 @@ namespace GameData.server.roundHandler
             else if (path.Count == 0)
             {
                 // do not move, but disappear and appear on a random desert field
+                List<Character> characters = this._map.GetCharactersOnMap();
+                List<Character> loudCharacters = new List<Character>();
                 _currentField = this._map.GetRandomDesertField();
+
+                foreach (Character character in characters)
+                {
+                    if(character.isLoud)
+                    {
+                        loudCharacters.Add(character);
+                    }
+                }
+
+
+                Random rdm = new Random();
+                
+                
+
+
+                _messageController.DoDespawnSandwormDemand();
+                _messageController.DoSpawnSandwormDemand(loudCharacters[rdm.Next(loudCharacters.Count)].CharacterId, _currentField);
+           //TODO Send Despawn and Spawn
             }
             else
             {
@@ -184,6 +204,8 @@ namespace GameData.server.roundHandler
             if (_currentField.IsCharacterStayingOnThisField)
             {
                 _currentField.Character.KilledBySandworm = true;
+                //TODO: Character statChange
+                _messageController.DoSendChangeCharacterStatsDemand(_currentField.clientID, _currentField.Character.CharacterId, new CharacterStatistics(_currentField.Character));
                 _currentField.Character = null;
 
                 return true;

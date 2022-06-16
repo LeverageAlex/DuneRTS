@@ -52,18 +52,39 @@ namespace GameData.Pathfinder
                 List<MapField> neighb = graph.GetNeighborsOfVertex(current);
                 foreach (MapField neighbor in neighb)
                 {
-                    double tentativeGScore = gScore.GetValueOrDefault(current) + graph.GetWeigthOfEdge(current, neighbor);
-                    if (tentativeGScore < gScore.GetValueOrDefault(current))
+                    double gScoreCurrent;
+                    if (gScore.TryGetValue(current, out gScoreCurrent))
                     {
-                        cameFrom[neighbor] = current;
-                        gScore[neighbor] = tentativeGScore;
-                        fScore[neighbor] = tentativeGScore + H(neighbor, targetNode);
+                        double tentativeGScore = gScoreCurrent + graph.GetWeigthOfEdge(current, neighbor);
 
-                        if (!openSet.Contains(neighbor))
+                        double gScoreNeighbor;
+                        if (gScore.TryGetValue(neighbor, out gScoreNeighbor))
                         {
-                            openSet.Add(neighbor);
+                            if (tentativeGScore < gScoreNeighbor)
+                            {
+                                cameFrom[neighbor] = current;
+                                gScore[neighbor] = tentativeGScore;
+                                fScore[neighbor] = tentativeGScore + H(neighbor, targetNode);
+
+                                if (!openSet.Contains(neighbor))
+                                {
+                                    openSet.Add(neighbor);
+                                }
+                            }
+                        } else
+                        {
+                            cameFrom[neighbor] = current;
+                            gScore[neighbor] = tentativeGScore;
+                            fScore[neighbor] = tentativeGScore + H(neighbor, targetNode);
+
+                            if (!openSet.Contains(neighbor))
+                            {
+                                openSet.Add(neighbor);
+                            }
                         }
+                        
                     }
+                    
                 }
             }
 

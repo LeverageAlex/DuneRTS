@@ -18,7 +18,8 @@ public class InGameMenuManager : MonoBehaviour
     public GameObject EndScreen;
     public GameObject PauseScreenWithButton;
     public GameObject PauseScreenNoButton;
-
+    public GameObject SpiceAmountDialog;
+        
     public GameObject[] forbiddenMenus;
 
     [Header("EndScreen")]
@@ -28,6 +29,14 @@ public class InGameMenuManager : MonoBehaviour
     public Toggle option1;
     public Toggle option2;
     public GameObject confirmButton;
+
+    [Header("SpiceAmountDialog")]
+    
+    public Slider SpiceAmountSlider;
+    public Text SpiceMaxText;
+    public Button SpiceCancleButton;
+    public Button SpiceTransferButton;
+
 
     private string option1Name;
     private string option2Name;
@@ -57,6 +66,30 @@ public class InGameMenuManager : MonoBehaviour
     private void Start()
     {
         ActivateMenu(InGameUI);
+    }
+
+    /// <summary>
+    /// this method is called by Action_TransferSpiceTrigger
+    /// </summary>
+    /// <param name="giver"></param>
+    /// <param name="receiver"></param>
+    /// <param name="spiceInv"></param>
+    public void DemandSpiceAmount(Character giver, Character receiver, int spiceInv)
+    {
+        Debug.Log("This the the spiceInv: " + spiceInv);
+        SpiceMaxText.text = spiceInv.ToString();
+        SpiceAmountSlider.maxValue = spiceInv;
+        SpiceAmountSlider.wholeNumbers = true;
+        SpiceTransferButton.onClick.AddListener(() => {
+            giver.TriggerRequestTransferSpice(receiver, Mathf.RoundToInt(SpiceAmountSlider.value));
+            ActivateMenu(InGameUI);
+        });
+        SpiceCancleButton.onClick.AddListener(() => {
+            giver.CancleRequstTransferSpice();
+            ActivateMenu(InGameUI);
+        });
+
+        ActivateMenu(SpiceAmountDialog);
     }
 
     /// <summary>
@@ -245,6 +278,7 @@ public class InGameMenuManager : MonoBehaviour
         HouseSelectionMenu.SetActive(false);
         RejoinMenu.SetActive(false);
         EndScreen.SetActive(false);
+        SpiceAmountDialog.SetActive(false);
 
         if(menuToActivate != null)
         {
