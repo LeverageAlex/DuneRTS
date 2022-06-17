@@ -162,20 +162,21 @@ public class CharacterMgr : MonoBehaviour
      */
     public void SpawnSandworm(int x, int z)
     {
-        if (sandwormMoveScript == null)
+        if (sandwormMoveScript != null)
         {
+            Destroy(sandwormMoveScript.gameObject);
+        }
             sandwormMoveScript = ((MoveAbles)Instantiate(sandwormPrefab, new Vector3(x, wormHeightOffset + MapManager.instance.getNodeFromPos(x, z).charHeightOffset, z), Quaternion.identity).GetComponent(typeof(MoveAbles)));
-        }
-        else
-        {
-            Debug.Log("There is already a sandworm!");
-        }
+        
     }
 
     public void DespawnSandworm()
     {
-        Destroy(sandwormMoveScript.gameObject);
-        sandwormMoveScript = null;
+        if (sandwormMoveScript != null)
+        {
+            Destroy(sandwormMoveScript.gameObject);
+            sandwormMoveScript = null;
+        }
     }
 
     /**
@@ -183,17 +184,20 @@ public class CharacterMgr : MonoBehaviour
      */
     public void SandwormMove(List<Position> path)
     {
-        Debug.Log("It's about to happen: " + sandwormMoveScript.name);
-        LinkedList<Vector3> newPos = new LinkedList<Vector3>();
-
-        Vector3 tmp;
-        foreach (Position p in path)
+        if (sandwormMoveScript != null)
         {
+            Debug.Log("It's about to happen: " + sandwormMoveScript.name);
+            LinkedList<Vector3> newPos = new LinkedList<Vector3>();
+
+            Vector3 tmp;
+            foreach (Position p in path)
+            {
                 tmp = new Vector3(p.x, 0.372f + MapManager.instance.getNodeFromPos(p.x, p.y).charHeightOffset, p.y);
                 newPos.AddLast(tmp);
-        }
+            }
 
-        sandwormMoveScript.WalkAlongPath(newPos);
+            sandwormMoveScript.WalkAlongPath(newPos);
+        }
     }
 
 
