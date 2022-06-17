@@ -140,10 +140,7 @@ namespace GameData.server.roundHandler
                     EatTargetCharacter(target);
 
                     // despawn the shai hulud
-
                     wormDespawnTimer.Start();
-
-
 
                     // after the last character was eaten, there is no character left
                     _lastCharacterEaten = true;
@@ -166,7 +163,6 @@ namespace GameData.server.roundHandler
 
         private static void OnTimerDespawnWorm(Object source, ElapsedEventArgs e)
         {
-            Console.WriteLine("Timer triggered");
             Party.GetInstance().messageController.DoDespawnSandwormDemand();
         }
 
