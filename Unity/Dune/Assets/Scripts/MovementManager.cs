@@ -67,7 +67,7 @@ public class MovementManager : MonoBehaviour
         for (var cluster = OtherMoveAbles.First; cluster != null;)
         {
             var next = cluster.Next;
-            if (!cluster.Value.calledUpdate())
+            if (cluster.Value == null || !cluster.Value.calledUpdate() )
             {
                 OtherMoveAbles.Remove(cluster);
             }
