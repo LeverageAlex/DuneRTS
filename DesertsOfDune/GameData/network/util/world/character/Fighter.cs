@@ -61,8 +61,9 @@ namespace GameData.network.util.world.character
         /// </summary>
         /// <returns>true, if the action was successful</returns>
         override
-        public bool SwordSpin(Map map, List<Character> charactersHit)
+        public List<Character> SwordSpin(Map map)
         {
+            List<Character> charactersHit = new List<Character>();
             if(this.APcurrent == this.APmax)
             {
                 List<MapField> NeighborFields = map.GetNeighborFields(this.CurrentMapfield);
@@ -79,9 +80,8 @@ namespace GameData.network.util.world.character
                     }
                 }
                 SpentAp(APmax);
-                return true;
             }
-            return false;
+            return charactersHit;
         }
     }
 }

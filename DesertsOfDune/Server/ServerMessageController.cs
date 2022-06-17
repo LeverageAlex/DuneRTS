@@ -14,6 +14,7 @@ using Server.Configuration;
 using Newtonsoft.Json;
 using GameData.server.roundHandler;
 using GameData.network.util.world.mapField;
+using GameData.network.util.world.character;
 
 namespace Server
 {
@@ -412,9 +413,9 @@ namespace Server
                                     }
                                 }
                             }
-                            actionCharacter.AtomicBomb(targetMapField, map, Party.GetInstance().greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse, charactersHit);
+                            charactersHit = actionCharacter.AtomicBomb(targetMapField, map, Noble.greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse);
                             DoSendMapChangeDemand(MapChangeReasons.FAMILY_ATOMICS);
-                            DoSendAtomicsUpdateDemand(msg.clientID, Party.GetInstance().greatHouseConventionBroken, actionCharacter.greatHouse.unusedAtomicBombs);
+                            DoSendAtomicsUpdateDemand(msg.clientID, Noble.greatHouseConventionBroken, actionCharacter.greatHouse.unusedAtomicBombs);
                         }
                         break;
                     case ActionType.SPICE_HOARDING:
@@ -447,7 +448,7 @@ namespace Server
                         if (actionCharacter.APcurrent == actionCharacter.APmax
                             && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.FIGHTER))
                         {
-                            actionCharacter.SwordSpin(map, charactersHit);
+                            charactersHit = actionCharacter.SwordSpin(map);
                         }
                         break;
                     default:
