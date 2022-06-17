@@ -14,7 +14,7 @@ namespace GameData.server.roundHandler
     /// </summary>
     public class SandwormPhase : IGamePhase
     {
-        private Sandworm _sandworm;
+//        private Sandworm _sandworm;
 
         private readonly Map _map;
 
@@ -33,12 +33,12 @@ namespace GameData.server.roundHandler
         public void Execute()
         {
             // check, whether there is a sandworm
-            if (_sandworm != null)
+            if (Sandworm.GetSandworm() != null)
             {
-                Queue<MapField> path = _sandworm.CalculatePathToTarget();
+                Queue<MapField> path = Sandworm.GetSandworm().CalculatePathToTarget();
                 List<MapField> path2 = new List<MapField>(path);
                 path2.Reverse();
-                _sandworm.MoveSandWorm(path2);
+                Sandworm.GetSandworm().MoveSandWorm(path2);
 
             }
             else
@@ -48,7 +48,7 @@ namespace GameData.server.roundHandler
                 if (CheckLoudness(characters))
                 {
                     // there is no sandworm, but loud characters, so spawn one
-                    _sandworm = Sandworm.Spawn(PartyConfiguration.GetInstance().sandWormSpeed, PartyConfiguration.GetInstance().sandWormSpawnDistance, this._map, characters, Party.GetInstance().messageController);
+                    Sandworm.Spawn(PartyConfiguration.GetInstance().sandWormSpeed, PartyConfiguration.GetInstance().sandWormSpawnDistance, this._map, characters, Party.GetInstance().messageController);
                 }
             }
         }
