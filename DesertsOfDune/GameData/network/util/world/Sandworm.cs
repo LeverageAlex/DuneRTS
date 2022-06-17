@@ -171,7 +171,7 @@ namespace GameData.server.roundHandler
                 for (int i = 0; i < _sandWormSpeed; i++)
                 {
                     MapField nextField = path[path.Count - 1];
-                    
+                    path.RemoveAt(path.Count - 1);
                     movedPath.Add(nextField);
                     needToDisappear = MoveSandwormByOneField(nextField);
 
