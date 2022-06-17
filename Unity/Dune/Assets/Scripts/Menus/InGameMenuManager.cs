@@ -225,10 +225,7 @@ public class InGameMenuManager : MonoBehaviour
     /// </summary>
     public void RequestPauseGame()
     {
-
-
-        //TODO send message to server for a pause request
-        DemandPauseGame(false);//TODO delete
+        SessionHandler.messageController.DoRequestPauseGame(true);
     }
 
     /// <summary>
@@ -250,8 +247,7 @@ public class InGameMenuManager : MonoBehaviour
     /// </summary>
     public void RequestUnpauseGame()
     {
-        //TODO send message to server for a unpause request
-        DemandUnpauseGame();//TODO delete
+        SessionHandler.messageController.DoRequestPauseGame(false);
     }
 
     /// <summary>
@@ -281,7 +277,9 @@ public class InGameMenuManager : MonoBehaviour
         EndScreen.SetActive(false);
         SpiceAmountDialog.SetActive(false);
         WaitingScreen.SetActive(false);
-
+        PauseScreenNoButton.SetActive(false);
+        PauseScreenWithButton.SetActive(false);
+        
         if (menuToActivate != null)
         {
             menuToActivate.SetActive(true);
