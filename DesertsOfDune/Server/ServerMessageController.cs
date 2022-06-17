@@ -208,9 +208,9 @@ namespace Server
                 return;
             }
 
-            List<Position> path = msg.specs.path;
+            var path = msg.specs.path;
             bool alreadySteppedOnSandField = false;
-            List<Position> newPath = new List<Position>();
+            var newPath = new List<Position>();
             foreach (var position in path)
             {
                 var party = Party.GetInstance();
@@ -228,6 +228,7 @@ namespace Server
                                 DoSendMovementDemand(msg.clientID, passiveCharacter.CharacterId, new List<Position> { new Position(movingCharacter.CurrentMapfield.XCoordinate, movingCharacter.CurrentMapfield.ZCoordinate) });
                             }
                             movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]); //move character 1 field along its path
+                            movingCharacter.SpentMP(1); // descrease MP by 1
                             //path.Add(position);
                             newPath.Add(position);
                             if (party.map.fields[position.y,  position.x].tileType == TileType.FLAT_SAND.ToString() || party.map.fields[position.y, position.x].tileType == TileType.DUNE.ToString()){
@@ -344,7 +345,7 @@ namespace Server
             if (actionCharacter.APcurrent > 0)
             {
                 var map = Party.GetInstance().map;
-                List<Character> charactersHit = new List<Character>();
+                var charactersHit = new List<Character>();
                 //check which action the player wants to do with his character
                 switch (Enum.Parse(typeof(ActionType), msg.action))
                 {
@@ -359,7 +360,9 @@ namespace Server
                     case ActionType.COLLECT:
                         action = ActionType.COLLECT;
                         actionCharacter.CollectSpice();
+                        //activePlayer.statistics.AddToTotalSpiceCollected(1);
                         DoSendChangeCharacterStatsDemand(msg.clientID, actionCharacter.CharacterId, new CharacterStatistics(actionCharacter));
+                        //DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
                         break;
                     //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
                     case ActionType.KANLY:
@@ -375,7 +378,7 @@ namespace Server
                             && !targetCharacter.IsInSandStorm(map))
                         {
                             actionCharacter.Kanly(targetCharacter);
-                            //charactersHit.Add(targetCharacter);
+                            charactersHit.Add(targetCharacter);
                             DoSendChangeCharacterStatsDemand(msg.clientID, targetCharacter.CharacterId, new CharacterStatistics(targetCharacter));
                         }
                         break;
@@ -406,11 +409,9 @@ namespace Server
                                     }
                                 }
                             }
-                            //actionCharacter.AtomicBomb(targetMapField, map, Party.GetInstance().greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse, charactersHit);
-                            //DoSendMapChangeDemand(MapChangeReasons.FAMILY_ATOMICS);
-                            //DoSendAtomicsUpdateDemand(msg.clientID, Party.GetInstance().greatHouseConventionBroken, actionCharacter.greatHouse.unusedAtomicBombs);
-                            actionCharacter.AtomicBomb(targetMapField, Party.GetInstance().map, Party.GetInstance().greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse);
-                            DoSendAtomicsUpdateDemand(msg.clientID, true, 1);
+                            actionCharacter.AtomicBomb(targetMapField, map, Party.GetInstance().greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse, charactersHit);
+                            DoSendMapChangeDemand(MapChangeReasons.FAMILY_ATOMICS);
+                            DoSendAtomicsUpdateDemand(msg.clientID, Party.GetInstance().greatHouseConventionBroken, actionCharacter.greatHouse.unusedAtomicBombs);
                             Party.GetInstance().greatHouseConventionBroken = true;
                         }
                         break;
@@ -837,7 +838,10 @@ namespace Server
         }
 
 
-        public override void OnJoinAccepted(JoinAcceptedMessage msg) { }
+        public override void OnJoinAccepted(JoinAcceptedMessage msg)
+        {
+            throw new NotImplementedException();
+        }
 
         // the server should not use this method
         public override void OnJoinAcceptedMessage(JoinAcceptedMessage joinAcceptedMessage)

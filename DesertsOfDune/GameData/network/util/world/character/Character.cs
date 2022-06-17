@@ -147,7 +147,7 @@ namespace GameData.network.util.world
             } else
             {
                 healthCurrent = 0;
-                //CurrentMapfield.DisplaceCharacter(this);
+                CurrentMapfield.DisplaceCharacter(this);
                 return false;
             }
         }
@@ -272,7 +272,6 @@ namespace GameData.network.util.world
         /// <returns></returns>
         public bool Movement(MapField startField,MapField goalField)
         {
-            // TODO: implement logic
             int dist = Math.Abs(startField.XCoordinate - goalField.XCoordinate) + Math.Abs(startField.ZCoordinate - goalField.ZCoordinate);
             if (dist > 2)
             {
@@ -348,7 +347,7 @@ namespace GameData.network.util.world
         /// <param name="target"> this is the Field on the Map where the active Noble character aims its atomic bomb to </param>
         /// <returns></returns>
         virtual
-        public bool AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse)
+        public bool AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse, List<Character> charactersHit)
         {
             //Do nothing because only Nobles can perform this move
             return false;

@@ -96,7 +96,6 @@ namespace GameData.server.roundHandler
                     if (character.CharacterId == characterID)
                     {
                         Party.GetInstance().messageController.DoSendTurnDemand(player.ClientID, characterID); //request client to execute a characterTrait
-                        //SetIsTraitActive(true);
                          _timer.Start(); // starts the timer when characterTrait starts
                     }
                 }
