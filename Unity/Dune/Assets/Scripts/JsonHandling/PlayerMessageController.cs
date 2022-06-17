@@ -295,14 +295,20 @@ public class PlayerMessageController : MessageController
     /// <returns></returns>
     public override void OnPauseGameDemandMessage(GamePauseDemandMessage gamePauseDemandMessage)
     {
-        if (gamePauseDemandMessage.pause)
+        IEnumerator pauseGameDem()
         {
-            InGameMenuManager.getInstance().DemandPauseGame(SessionHandler.clientId != gamePauseDemandMessage.requestedByClientID);
+            if (gamePauseDemandMessage.pause)
+            {
+                InGameMenuManager.getInstance().DemandPauseGame(SessionHandler.clientId != gamePauseDemandMessage.requestedByClientID);
+            }
+            else
+            {
+                InGameMenuManager.getInstance().RequestUnpauseGame();
+            }
+            yield return null;
         }
-        else
-        {
-            InGameMenuManager.getInstance().RequestUnpauseGame();
-        }
+
+        UnityMainThreadDispatcher.Instance().Enqueue(pauseGameDem());
     }
 
     /// <summary>

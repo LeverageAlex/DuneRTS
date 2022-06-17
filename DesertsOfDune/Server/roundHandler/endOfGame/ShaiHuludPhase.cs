@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Timers;
 using GameData.network.messages;
 using GameData.network.util.world;
 using GameData.network.util.world.mapField;
@@ -19,7 +20,8 @@ namespace GameData.server.roundHandler
         private readonly Map _map;
         private MapField _currentField;
 
-        private bool _lastCharacterEaten; 
+        private bool _lastCharacterEaten;
+        private static Timer wormDespawnTimer;
 
         /// <summary>
         /// create a new handler for the shai hulud phase
@@ -30,6 +32,10 @@ namespace GameData.server.roundHandler
             this._map = map;
             this._currentField = map.GetRandomDesertField();
             this._lastCharacterEaten = false;
+            wormDespawnTimer = new Timer(1000);
+            wormDespawnTimer.Elapsed += OnTimerDespawnWorm;
+            wormDespawnTimer.AutoReset = false;
+
         }
 
         /// <summary>
@@ -135,7 +141,9 @@ namespace GameData.server.roundHandler
 
                     // despawn the shai hulud
 
-                    Party.GetInstance().messageController.DoDespawnSandwormDemand();
+                    wormDespawnTimer.Start();
+
+
 
                     // after the last character was eaten, there is no character left
                     _lastCharacterEaten = true;
@@ -154,5 +162,13 @@ namespace GameData.server.roundHandler
 
             
         }
+
+
+        private static void OnTimerDespawnWorm(Object source, ElapsedEventArgs e)
+        {
+            Console.WriteLine("Timer triggered");
+            Party.GetInstance().messageController.DoDespawnSandwormDemand();
+        }
+
     }
 }

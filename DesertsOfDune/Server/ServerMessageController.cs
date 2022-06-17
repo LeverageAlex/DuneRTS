@@ -542,6 +542,9 @@ namespace Server
             {
                 activeCharacter.GiftSpice(targetCharacter, msg.amount);
                 DoSendTransferDemand(msg.clientID, msg.characterID, msg.targetID);
+
+                DoSendChangeCharacterStatsDemand(msg.clientID, msg.characterID, new CharacterStatistics(activeCharacter));
+                DoSendChangeCharacterStatsDemand(msg.clientID, msg.targetID, new CharacterStatistics(targetCharacter));
             }
 
             if (activeCharacter.MPcurrent <= 0 && activeCharacter.APcurrent <= 0)
