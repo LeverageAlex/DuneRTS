@@ -55,12 +55,12 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
             {
                 for (int j = 0; j < 5; j++)
                 {
-                    mapFields[i, j] = new FlatSand(false, false, null);
+                    mapFields[i, j] = new FlatSand(false, false);
                 }
             }
             List<Character> characters = new List<Character>();
             Noble nobel1 = new Noble(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true);
-            MapField mapField = new City(1234, false, false, new Position(0,0));
+            MapField mapField = new City(1234, false, false);
                 //new MapField(GameData.network.util.enums.TileType.CITY, GameData.network.util.enums.Elevation.low,false, false, 0, null);
             mapField.XCoordinate = 0;
             mapField.ZCoordinate = 2;
@@ -99,7 +99,7 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
             {
                 for (int j = 0; j < 5; j++)
                 {
-                    mapFields[i, j] = new FlatSand(false, false, null);
+                    mapFields[i, j] = new FlatSand(false, false);
                 }
             }
            // Sandworm sandWorm = Sandworm.Spawn(10, 0, mapFields, null);

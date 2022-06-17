@@ -134,7 +134,7 @@ namespace GameData.server.roundHandler
         /// moves the sandworm along a path
         /// </summary>
         /// <param name="path">the path, on which the sandworm moves (but not complete path, but only a part depending on the speed)</param>
-        public void MoveSandWorm(Queue<MapField> path)
+        public void MoveSandWorm(List<MapField> path)
         {
             // check, whether the targeted character moves on a plateau, so disappear
             if (_targetCharacter.CurrentMapfield.tileType.Equals(TileType.PLATEAU.ToString())){
@@ -170,7 +170,8 @@ namespace GameData.server.roundHandler
                 List<MapField> movedPath = new List<MapField>();
                 for (int i = 0; i < _sandWormSpeed; i++)
                 {
-                    MapField nextField = path.Dequeue();
+                    MapField nextField = path[path.Count - 1];
+                    
                     movedPath.Add(nextField);
                     needToDisappear = MoveSandwormByOneField(nextField);
 
@@ -199,7 +200,7 @@ namespace GameData.server.roundHandler
         /// <returns>true, if the sandworm moved to a field with a character and need to disappear</returns>
         public bool MoveSandwormByOneField(MapField nextField)
         {
-            _currentField = new FlatSand(_currentField.hasSpice, _currentField.isInSandstorm, _currentField.stormEye);
+            _currentField = new FlatSand(_currentField.hasSpice, _currentField.isInSandstorm);
             _currentField.IsApproachable = true;
             _currentField = nextField;
             _currentField.IsApproachable = false;
