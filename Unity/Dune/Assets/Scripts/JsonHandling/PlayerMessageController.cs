@@ -80,6 +80,16 @@ public class PlayerMessageController : MessageController
     }
 
     /// <summary>
+    /// This method is responsible for requesting a the pause of the game
+    /// </summary>
+    /// <param name="pause">true, if the game should be paused. False if the game should be continued</param>
+    public void DoRequestPauseGame(bool pause)
+    {
+        PauseGameRequestMessage pauseGameRequestMessage = new PauseGameRequestMessage(pause);
+        NetworkController.HandleSendingMessage(pauseGameRequestMessage);
+    }
+
+    /// <summary>
     /// This method is responsible for requesting the end of a Turn.
     /// </summary>
     /// <param name="clientID">the id of the client</param>
