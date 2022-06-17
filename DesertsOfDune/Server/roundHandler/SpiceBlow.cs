@@ -45,7 +45,7 @@ namespace GameData.server.roundHandler
                     if (random.NextDouble() < 0.5)
                     {
                         MapField newDune = new Dune(randomField.hasSpice, randomField.isInSandstorm, randomField.stormEye);
-                        newDune.Character = randomField.Character;
+                        newDune.PlaceCharacter(randomField.Character);
 
                         this._map.SetMapFieldAtPosition(newDune, randomField.XCoordinate, randomField.ZCoordinate);
                         wasMapChanged = true;
@@ -53,7 +53,7 @@ namespace GameData.server.roundHandler
                     else
                     {
                         MapField newFlatSand = new FlatSand(randomField.hasSpice, randomField.isInSandstorm, randomField.stormEye);
-                        newFlatSand.Character = randomField.Character;
+                        newFlatSand.PlaceCharacter(randomField.Character);
 
                         this._map.SetMapFieldAtPosition(newFlatSand, randomField.XCoordinate, randomField.ZCoordinate);
                         wasMapChanged = true;

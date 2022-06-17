@@ -79,7 +79,7 @@ namespace GameData.server.roundHandler
                 Log.Error($"There is no player with a character with the character ID {targetCharacter.CharacterId}!");
             }
 
-            _currentField.Character = null;
+            _currentField.DisplaceCharacter(_currentField.Character);
         }
 
         /// <summary>

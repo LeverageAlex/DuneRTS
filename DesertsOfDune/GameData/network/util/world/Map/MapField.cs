@@ -108,10 +108,14 @@ namespace GameData.network.util.world
         public void PlaceCharacter(Character character)
         {
             this.Character = character;
-            this.IsCharacterStayingOnThisField = true;
-            
-            // assign this map field to the character
-            character.CurrentMapfield = this;
+
+            if (character != null)
+            {
+                this.IsCharacterStayingOnThisField = true;
+
+                // assign this map field to the character
+                character.CurrentMapfield = this;
+            }   
         }
 
         public void DisplaceCharacter(Character c)
@@ -120,6 +124,8 @@ namespace GameData.network.util.world
             {
                 this.Character = null;
                 this.IsCharacterStayingOnThisField = false;
+
+                // c.CurrentMapfield = null;
             }
         }
 
