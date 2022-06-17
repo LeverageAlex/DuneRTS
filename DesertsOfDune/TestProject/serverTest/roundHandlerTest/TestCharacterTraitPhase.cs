@@ -81,9 +81,24 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
                 }
             }
             var randomizedCharacters = characterTraitPhase.GenerateTraitSequenze();
-            Assert.AreEqual(characters.Count, randomizedCharacters.Count);
-            Assert.AreNotEqual(characters, randomizedCharacters);
-
+            Assert.AreEqual(characters.Count, randomizedCharacters.Count);          //randomizedCharacter has exact the same number of elements as characters
+            Assert.AreNotEqual(characters, randomizedCharacters);                   //randomizedCharacter is not just a copy of characters
+            foreach (var character in characters) {
+                Assert.IsTrue(randomizedCharacters.Contains(character));            //every character from characters is in randomizedCharacters
+                int characterIndex = randomizedCharacters.IndexOf(character);
+                randomizedCharacters.Remove(character);
+                Assert.IsFalse(randomizedCharacters.Contains(character));           //no character from characters is duplicated in randomizedCharacters
+                randomizedCharacters.Insert(characterIndex, character);
+            }
+            foreach(var character in randomizedCharacters)
+            {
+                Assert.IsTrue(!character.IsDead());                                 //test if every charcter in the initial generated trait sequence is alive
+                Assert.IsTrue(!character.killedBySandworm);                         //character in initial generated trait sequence is also not killed by a sandworm
+                Assert.IsTrue(characters.Contains(character));                      //every character in randomizedCharacters is from the characters list and not created new
+            }
+            var randomizedCharacters2 = characterTraitPhase.GenerateTraitSequenze();
+            Assert.AreNotEqual(randomizedCharacters, randomizedCharacters2);        //tests if the GenerateTraitSequenz is really random (small odds that there are 2 equal lists if they were generated random)
+            
             //TODO: implement test
         }
 
