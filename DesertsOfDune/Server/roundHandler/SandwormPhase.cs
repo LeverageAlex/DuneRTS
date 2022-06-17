@@ -37,6 +37,7 @@ namespace GameData.server.roundHandler
             {
                 Queue<MapField> path = _sandworm.CalculatePathToTarget();
                 List<MapField> path2 = new List<MapField>(path);
+                path2.Reverse();
                 _sandworm.MoveSandWorm(path2);
 
             }

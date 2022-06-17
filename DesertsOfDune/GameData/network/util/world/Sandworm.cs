@@ -168,10 +168,10 @@ namespace GameData.server.roundHandler
                 bool needToDisappear = false;
 
                 List<MapField> movedPath = new List<MapField>();
-                for (int i = 0; i < _sandWormSpeed; i++)
+                for (int i = 1; i < _sandWormSpeed; i++)
                 {
-                    MapField nextField = path[path.Count - 1];
-                    path.RemoveAt(path.Count - 1);
+                    MapField nextField = path[i];
+                    path.RemoveAt(i);
                     movedPath.Add(nextField);
                     needToDisappear = MoveSandwormByOneField(nextField);
 
