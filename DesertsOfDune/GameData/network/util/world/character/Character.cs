@@ -147,6 +147,7 @@ namespace GameData.network.util.world
             } else
             {
                 healthCurrent = 0;
+                CurrentMapfield.DisplaceCharacter(this);
                 return false;
             }
         }
@@ -271,12 +272,12 @@ namespace GameData.network.util.world
         /// <returns></returns>
         public bool Movement(MapField startField,MapField goalField)
         {
-            // TODO: implement logic
             int dist = Math.Abs(startField.XCoordinate - goalField.XCoordinate) + Math.Abs(startField.ZCoordinate - goalField.ZCoordinate);
             if (dist > 2)
             {
                 return false;
             }
+            SpentMP(1);
             CurrentMapfield = goalField;
             startField.DisplaceCharacter(this);
             goalField.PlaceCharacter(this);
@@ -288,12 +289,12 @@ namespace GameData.network.util.world
         /// </summary>
         /// <param name="target">the character targeted by the atack</param>
         /// <returns>true, if attack was possible</returns>
-        public bool Atack(Character target)
+        public bool Attack(Character target)
         {
             int dist = Math.Abs(target.CurrentMapfield.XCoordinate - CurrentMapfield.XCoordinate) + Math.Abs(target.CurrentMapfield.ZCoordinate - CurrentMapfield.ZCoordinate);
             if (APcurrent > 0 && dist <= 2 && target.greatHouse != greatHouse)
             {
-                APcurrent--;
+                SpentAp(1);
                 target.DecreaseHP(attackDamage);
                 return true;
             }
@@ -308,7 +309,7 @@ namespace GameData.network.util.world
         {
             if (APcurrent > 0 && CurrentMapfield.hasSpice && inventoryUsed < inventorySize)
             {
-                APcurrent--;
+                SpentAp(1);
                 inventoryUsed++;
                 CurrentMapfield.hasSpice = false;
                 return true;
@@ -323,7 +324,7 @@ namespace GameData.network.util.world
         /// <returns>true, if action was possible</returns>
         public bool GiftSpice(Character targetCharacter, int amount)
         {
-            APcurrent--;
+            SpentAp(1);
             targetCharacter.inventoryUsed += amount;
             this.inventoryUsed -= amount;
             return false;
@@ -347,7 +348,7 @@ namespace GameData.network.util.world
         /// <param name="target"> this is the Field on the Map where the active Noble character aims its atomic bomb to </param>
         /// <returns></returns>
         virtual
-        public bool AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse)
+        public bool AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse, List<Character> charactersHit)
         {
             //Do nothing because only Nobles can perform this move
             return false;
@@ -381,7 +382,7 @@ namespace GameData.network.util.world
         /// </summary>
         /// <returns></returns>
         virtual
-        public bool SwordSpin(Map map)
+        public bool SwordSpin(Map map, List<Character> charactersHit)
         {
             //Do nothing because only Fighters can perform this move
             return false;

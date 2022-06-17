@@ -62,6 +62,16 @@ namespace GameData.server.roundHandler
                 if (!_currentCharacter.IsDead() && !_currentCharacter.IsInSandStorm(Party.GetInstance().map)) // check if character is dead or staying in storm
                 {
                     _currentCharacter.resetMPandAp();
+                    foreach(var player in Party.GetInstance().GetActivePlayers())
+                    {
+                        foreach(var character in player.UsedGreatHouse.GetCharactersAlive())
+                        {
+                            if(character.CharacterId == _currentCharacter.CharacterId)
+                            {
+                                Party.GetInstance().messageController.DoSendChangeCharacterStatsDemand(player.ClientID, character.CharacterId, new CharacterStatistics(character));
+                            }
+                        }
+                    }
                     RequestClientForNextCharacterTrait(_currentCharacter.CharacterId);
                 }
                 else
@@ -96,7 +106,6 @@ namespace GameData.server.roundHandler
                     if (character.CharacterId == characterID)
                     {
                         Party.GetInstance().messageController.DoSendTurnDemand(player.ClientID, characterID); //request client to execute a characterTrait
-                        //SetIsTraitActive(true);
                          _timer.Start(); // starts the timer when characterTrait starts
                     }
                 }
