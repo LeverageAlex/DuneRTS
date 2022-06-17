@@ -281,7 +281,9 @@ public class InGameMenuManager : MonoBehaviour
         EndScreen.SetActive(false);
         SpiceAmountDialog.SetActive(false);
         WaitingScreen.SetActive(false);
-
+        PauseScreenNoButton.SetActive(false);
+        PauseScreenWithButton.SetActive(false);
+        
         if (menuToActivate != null)
         {
             menuToActivate.SetActive(true);
