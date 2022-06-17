@@ -188,6 +188,9 @@ public class PlayerMessageController : MessageController
             Debug.Log("Soweit Clean");
             MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[0].x, gameConfigMessage.cityToClient[0].y).cityOwnerId = gameConfigMessage.cityToClient[0].clientID;
             MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[1].x, gameConfigMessage.cityToClient[1].y).cityOwnerId = gameConfigMessage.cityToClient[1].clientID;
+
+            InGameMenuManager.getInstance().SwitchToInGameUI();
+            
             yield return null;
         }
         UnityMainThreadDispatcher.Instance().Enqueue(buildMap());
