@@ -52,42 +52,21 @@ namespace GameData.Pathfinder
                 List<MapField> neighb = graph.GetNeighborsOfVertex(current);
                 foreach (MapField neighbor in neighb)
                 {
-                    double gScoreCurrent;
-                    if (gScore.TryGetValue(current, out gScoreCurrent))
+                    double tentativeGScore = gScore.GetValueOrDefault(current, double.MaxValue) + graph.GetWeigthOfEdge(current, neighbor);
+
+                    if (tentativeGScore < gScore.GetValueOrDefault(neighbor, double.MaxValue))
                     {
-                        double tentativeGScore = gScoreCurrent + graph.GetWeigthOfEdge(current, neighbor);
+                        cameFrom[neighbor] = current;
+                        gScore[neighbor] = tentativeGScore;
+                        fScore[neighbor] = tentativeGScore + H(neighbor, targetNode);
 
-                        double gScoreNeighbor;
-                        if (gScore.TryGetValue(neighbor, out gScoreNeighbor))
+                        if (!openSet.Contains(neighbor))
                         {
-                            if (tentativeGScore < gScoreNeighbor)
-                            {
-                                cameFrom[neighbor] = current;
-                                gScore[neighbor] = tentativeGScore;
-                                fScore[neighbor] = tentativeGScore + H(neighbor, targetNode);
-
-                                if (!openSet.Contains(neighbor))
-                                {
-                                    openSet.Add(neighbor);
-                                }
-                            }
-                        } else
-                        {
-                            cameFrom[neighbor] = current;
-                            gScore[neighbor] = tentativeGScore;
-                            fScore[neighbor] = tentativeGScore + H(neighbor, targetNode);
-
-                            if (!openSet.Contains(neighbor))
-                            {
-                                openSet.Add(neighbor);
-                            }
+                            openSet.Add(neighbor);
                         }
-                        
                     }
-                    
                 }
             }
-
             return new Queue<MapField>();
         }
 
@@ -111,15 +90,15 @@ namespace GameData.Pathfinder
         private MapField GetNodeWithLowestFScore(HashSet<MapField> openSet, Dictionary<MapField, double> fScore)
         {
             MapField fieldWithLowestScore = openSet.First();
-            double bestScore = fScore.GetValueOrDefault(fieldWithLowestScore);
+            double bestScore = fScore.GetValueOrDefault(fieldWithLowestScore, double.MaxValue);
 
             foreach (MapField field in openSet)
             {
-                if (fScore.GetValueOrDefault(field) < bestScore)
+                if (fScore.GetValueOrDefault(field, double.MaxValue) < bestScore)
                 {
                     // new map field with a better fscore found
                     fieldWithLowestScore = field;
-                    bestScore = fScore.GetValueOrDefault(field);
+                    bestScore = fScore.GetValueOrDefault(field, double.MaxValue);
                 }
             }
 

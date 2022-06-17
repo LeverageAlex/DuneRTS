@@ -46,19 +46,19 @@ namespace GameData.network.util.world
                     switch(scenarioConfiguration[x][y])
                     {
                         case "DUNE":
-                            fields[y, x] = new Dune(false, false, null);
+                            fields[y, x] = new Dune(false, false);
                             break;
                         case "FLAT_SAND":
-                            fields[y, x] = new FlatSand(false, false, null);
+                            fields[y, x] = new FlatSand(false, false);
                             break;
                         case "MOUNTAINS":
-                            fields[y, x] = new Mountain(false, false, null);
+                            fields[y, x] = new Mountain(false, false);
                             break;
                         case "PLATEAU":
-                            fields[y, x] = new RockPlateau(false, false, null);
+                            fields[y, x] = new RockPlateau(false, false);
                             break;
                         case "CITY":
-                            fields[y, x] = new City(0, false, false, null);
+                            fields[y, x] = new City(0, false, false);
                             break;
                     }
                     fields[y, x].XCoordinate = x;

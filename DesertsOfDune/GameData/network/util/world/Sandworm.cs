@@ -134,14 +134,15 @@ namespace GameData.server.roundHandler
         /// moves the sandworm along a path
         /// </summary>
         /// <param name="path">the path, on which the sandworm moves (but not complete path, but only a part depending on the speed)</param>
-        public void MoveSandWorm(Queue<MapField> path)
+        public void MoveSandWorm(List<MapField> path)
         {
             // check, whether the targeted character moves on a plateau, so disappear
             if (_targetCharacter.CurrentMapfield.tileType.Equals(TileType.PLATEAU.ToString())){
                 Despawn(_messageController);
+                return;
             }
             // check, if there is a path for sandworm to move along
-            else if (path.Count == 0)
+            if (path.Count == 0)
             {
                 // do not move, but disappear and appear on a random desert field
                 List<Character> characters = this._map.GetCharactersOnMap();
@@ -158,31 +159,34 @@ namespace GameData.server.roundHandler
 
 
                 Random rdm = new Random();
-                
-                
-
-
                 _messageController.DoDespawnSandwormDemand();
-                _messageController.DoSpawnSandwormDemand(loudCharacters[rdm.Next(loudCharacters.Count)].CharacterId, _currentField);
-           //TODO Send Despawn and Spawn
+                // _messageController.DoSpawnSandwormDemand(loudCharacters[rdm.Next(loudCharacters.Count)].CharacterId, _currentField);
+                _messageController.DoSpawnSandwormDemand(_targetCharacter.CharacterId, _currentField);
             }
             else
             {
+                bool needToDisappear = false;
+
                 List<MapField> movedPath = new List<MapField>();
                 for (int i = 0; i < _sandWormSpeed; i++)
                 {
-                    MapField nextField = path.Dequeue();
+                    MapField nextField = path[path.Count - 1];
+                    
                     movedPath.Add(nextField);
-                    bool needToDisappear = MoveSandwormByOneField(nextField);
+                    needToDisappear = MoveSandwormByOneField(nextField);
 
                     if (needToDisappear)
                     {
-                        Despawn(_messageController);
                         break;
                     }
                 }
 
                 _messageController.DoMoveSandwormDemand(movedPath);
+
+                if (needToDisappear)
+                {
+                    Despawn(_messageController);
+                }
             }
 
 
@@ -196,7 +200,7 @@ namespace GameData.server.roundHandler
         /// <returns>true, if the sandworm moved to a field with a character and need to disappear</returns>
         public bool MoveSandwormByOneField(MapField nextField)
         {
-            _currentField = new FlatSand(_currentField.hasSpice, _currentField.isInSandstorm, _currentField.stormEye);
+            _currentField = new FlatSand(_currentField.hasSpice, _currentField.isInSandstorm);
             _currentField.IsApproachable = true;
             _currentField = nextField;
             _currentField.IsApproachable = false;
@@ -206,7 +210,7 @@ namespace GameData.server.roundHandler
                 _currentField.Character.KilledBySandworm = true;
                 //TODO: Character statChange
                 _messageController.DoSendChangeCharacterStatsDemand(_currentField.clientID, _currentField.Character.CharacterId, new CharacterStatistics(_currentField.Character));
-                _currentField.Character = null;
+                _currentField.DisplaceCharacter(_currentField.Character);
 
                 return true;
             }

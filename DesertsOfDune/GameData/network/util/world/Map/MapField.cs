@@ -20,16 +20,8 @@ namespace GameData.network.util.world
         public bool hasSpice { get; set; }
         [JsonProperty]
         public bool isInSandstorm { get; set; }
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Position stormEye { get; }
-        private Elevation elevation;
         [JsonIgnore]
-        public Elevation Elevation
-        {
-            get { return elevation; }
-            set { elevation = value; }
-        }
-       
+        public Elevation Elevation { get; set; }
         [JsonIgnore]
         public bool IsApproachable { get; set; }
 
@@ -46,7 +38,7 @@ namespace GameData.network.util.world
         public Character Character { get; set; }
 
         [JsonIgnore]
-        public bool IsCharacterStayingOnThisField { get; set; }
+        public bool IsCharacterStayingOnThisField { get { return Character != null; } }
 
         /// <summary>
         /// Constructor of the class MapField for a City MapField
@@ -55,16 +47,15 @@ namespace GameData.network.util.world
         /// <param name="hasSpice">true, if it countains spice</param>
         /// <param name="isInSandstorm">true, if there is a sandstorm on the field.</param>
         /// <param name="clientID">the id of the client (only to be set for city tiles)</param>
-        /// <param name="stormEye">the center position of the storm can be null</param>
-        
-    /*    public MapField(bool hasSpice, bool isInSandstorm, int clientID, Position stormEye)
-        {
-            this.tileType = Enum.GetName(typeof(TileType),enums.TileType.CITY);
-            this.hasSpice = hasSpice;
-            this.isInSandstorm = isInSandstorm;
-            this.clientID = clientID;
-            this.stormEye = stormEye;
-        }*/
+
+        /*    public MapField(bool hasSpice, bool isInSandstorm, int clientID, Position stormEye)
+            {
+                this.tileType = Enum.GetName(typeof(TileType),enums.TileType.CITY);
+                this.hasSpice = hasSpice;
+                this.isInSandstorm = isInSandstorm;
+                this.clientID = clientID;
+                this.stormEye = stormEye;
+            }*/
 
         /// <summary>
         /// Constructof of the Class MapField for Fields that are not the city
@@ -72,15 +63,13 @@ namespace GameData.network.util.world
         /// <param name="tt">the type of the MapField</param>
         /// <param name="hasSpice">true, if the MapField has spice on it</param>
         /// <param name="isInSandstorm">true, if there is a sandstorm on the MapField</param>
-        /// <param name="stormEye">the Position of the Sandstorm can also be null</param>
         [JsonConstructor]
-        public MapField(TileType tt, Elevation heightLevel, bool hasSpice, bool isInSandstorm, bool isApproachable, Position stormEye)
+        public MapField(TileType tt, Elevation heightLevel, bool hasSpice, bool isInSandstorm, bool isApproachable)
         {
             this.tileType = Enum.GetName(typeof(TileType), tt);
-            this.elevation = heightLevel;
+            this.Elevation = heightLevel;
             this.hasSpice = hasSpice;
             this.isInSandstorm = isInSandstorm;
-            this.stormEye = stormEye;
             this.IsApproachable = isApproachable;
         }
 
@@ -102,16 +91,18 @@ namespace GameData.network.util.world
         /// <param name="elevation">the elevation to set the field to</param>
         public void ChangeElevation(Elevation elevation)
         {
-            this.elevation = elevation;
+            this.Elevation = elevation;
         }
 
         public void PlaceCharacter(Character character)
         {
             this.Character = character;
-            this.IsCharacterStayingOnThisField = true;
-            
-            // assign this map field to the character
-            character.CurrentMapfield = this;
+
+            if (character != null)
+            {
+                // assign this map field to the character
+                character.CurrentMapfield = this;
+            } 
         }
 
         public void DisplaceCharacter(Character c)
@@ -119,7 +110,7 @@ namespace GameData.network.util.world
             if (c == this.Character)
             {
                 this.Character = null;
-                this.IsCharacterStayingOnThisField = false;
+                // c.CurrentMapfield = null;
             }
         }
 

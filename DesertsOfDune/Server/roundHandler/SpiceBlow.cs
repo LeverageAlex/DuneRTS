@@ -44,16 +44,16 @@ namespace GameData.server.roundHandler
                 {
                     if (random.NextDouble() < 0.5)
                     {
-                        MapField newDune = new Dune(randomField.hasSpice, randomField.isInSandstorm, randomField.stormEye);
-                        newDune.Character = randomField.Character;
+                        MapField newDune = new Dune(randomField.hasSpice, randomField.isInSandstorm);
+                        newDune.PlaceCharacter(randomField.Character);
 
                         this._map.SetMapFieldAtPosition(newDune, randomField.XCoordinate, randomField.ZCoordinate);
                         wasMapChanged = true;
                     }
                     else
                     {
-                        MapField newFlatSand = new FlatSand(randomField.hasSpice, randomField.isInSandstorm, randomField.stormEye);
-                        newFlatSand.Character = randomField.Character;
+                        MapField newFlatSand = new FlatSand(randomField.hasSpice, randomField.isInSandstorm);
+                        newFlatSand.PlaceCharacter(randomField.Character);
 
                         this._map.SetMapFieldAtPosition(newFlatSand, randomField.XCoordinate, randomField.ZCoordinate);
                         wasMapChanged = true;

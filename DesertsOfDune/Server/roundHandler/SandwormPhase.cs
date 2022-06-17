@@ -36,7 +36,8 @@ namespace GameData.server.roundHandler
             if (_sandworm != null)
             {
                 Queue<MapField> path = _sandworm.CalculatePathToTarget();
-                _sandworm.MoveSandWorm(path);
+                List<MapField> path2 = new List<MapField>(path);
+                _sandworm.MoveSandWorm(path2);
 
             }
             else

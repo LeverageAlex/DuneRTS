@@ -226,9 +226,16 @@ namespace Server
                                 Character passiveCharacter = party.map.fields[position.y, position.x].GetCharacterStayingOnThisField(party.map.GetCharactersOnMap());
                                 passiveCharacter.Movement(passiveCharacter.CurrentMapfield, movingCharacter.CurrentMapfield);
                                 DoSendMovementDemand(msg.clientID, passiveCharacter.CharacterId, new List<Position> { new Position(movingCharacter.CurrentMapfield.XCoordinate, movingCharacter.CurrentMapfield.ZCoordinate) });
+                                movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]);
+                            } else
+                            {
+                                movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]); //move character 1 field along its path
                             }
+<<<<<<< HEAD
                             movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]); //move character 1 field along its path
                             movingCharacter.SpentMP(1); // descrease MP by 1
+=======
+>>>>>>> origin/develop
                             //path.Add(position);
                             newPath.Add(position);
                             if (party.map.fields[position.y,  position.x].tileType == TileType.FLAT_SAND.ToString() || party.map.fields[position.y, position.x].tileType == TileType.DUNE.ToString()){

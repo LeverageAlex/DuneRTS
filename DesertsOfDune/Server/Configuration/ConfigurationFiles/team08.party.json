@@ -32,7 +32,7 @@
     "healingHP": 6
   },
   "numbOfRounds": 10,
-  "actionTimeUserClient": 5000,
+  "actionTimeUserClient": 500000,
   "actionTimeAiClient": 1000,
   "highGroundBonusRatio": 0.5,
   "lowerGroundMalusRatio": 0.5,
