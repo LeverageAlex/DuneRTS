@@ -233,7 +233,6 @@ namespace Server
                             {
                                 movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]); //move character 1 field along its path
                             }
-                            movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]); //move character 1 field along its path
                             //path.Add(position);
                             newPath.Add(position);
                             if (party.map.fields[position.y, position.x].tileType == TileType.FLAT_SAND.ToString() || party.map.fields[position.y, position.x].tileType == TileType.DUNE.ToString())
