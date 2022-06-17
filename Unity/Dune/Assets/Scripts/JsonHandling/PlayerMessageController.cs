@@ -625,6 +625,7 @@ public class PlayerMessageController : MessageController
         IEnumerator Endgame()
         {
             GUIHandler.BroadcastGameMessage("EndGame has begun!");
+            MapManager.instance.TriggerEarthQuake();
             yield return null;
         }
         // TODO: implement logic
