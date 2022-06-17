@@ -277,6 +277,7 @@ namespace GameData.network.util.world
             {
                 return false;
             }
+            SpentMP(1);
             CurrentMapfield = goalField;
             startField.DisplaceCharacter(this);
             goalField.PlaceCharacter(this);
@@ -293,7 +294,7 @@ namespace GameData.network.util.world
             int dist = Math.Abs(target.CurrentMapfield.XCoordinate - CurrentMapfield.XCoordinate) + Math.Abs(target.CurrentMapfield.ZCoordinate - CurrentMapfield.ZCoordinate);
             if (APcurrent > 0 && dist <= 2 && target.greatHouse != greatHouse)
             {
-                APcurrent--;
+                SpentAp(1);
                 target.DecreaseHP(attackDamage);
                 return true;
             }
@@ -308,7 +309,7 @@ namespace GameData.network.util.world
         {
             if (APcurrent > 0 && CurrentMapfield.hasSpice && inventoryUsed < inventorySize)
             {
-                APcurrent--;
+                SpentAp(1);
                 inventoryUsed++;
                 CurrentMapfield.hasSpice = false;
                 return true;
@@ -323,7 +324,7 @@ namespace GameData.network.util.world
         /// <returns>true, if action was possible</returns>
         public bool GiftSpice(Character targetCharacter, int amount)
         {
-            APcurrent--;
+            SpentAp(1);
             targetCharacter.inventoryUsed += amount;
             this.inventoryUsed -= amount;
             return false;

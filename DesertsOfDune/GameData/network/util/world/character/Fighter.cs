@@ -70,7 +70,7 @@ namespace GameData.network.util.world.character
                 {
                     if (mapfield.IsCharacterStayingOnThisField)
                     {
-                        if(mapfield.Character.greatHouse != this.greatHouse)
+                        if(mapfield.Character.greatHouse != this.greatHouse && !mapfield.Character.IsInSandStorm(map))
                         {
                             Attack(mapfield.Character);
                             charactersHit.Add(mapfield.Character);

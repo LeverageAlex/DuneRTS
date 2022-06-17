@@ -81,7 +81,7 @@ namespace Server
             if (Party.GetInstance().AreTwoPlayersRegistred())
             {
                 Party.GetInstance().PrepareGame();
-              //  DoSendGameConfig();
+                //  DoSendGameConfig();
             }
         }
 
@@ -187,7 +187,7 @@ namespace Server
                 }
             }
 
-            if(activePlayer == null)
+            if (activePlayer == null)
             {
                 throw new NullReferenceException($"Requested player with {msg.clientID} isn't known!");
             }
@@ -202,7 +202,7 @@ namespace Server
                 }
             }
 
-            if(movingCharacter == null)
+            if (movingCharacter == null)
             {
                 DoSendError(005, $"Moving character is null", activePlayer.SessionID);
                 return;
@@ -221,24 +221,22 @@ namespace Server
                         //check if movement is on walkable terrain
                         if (party.map.fields[position.y, position.x].tileType != TileType.MOUNTAINS.ToString() && party.map.fields[position.y, position.x].tileType != TileType.CITY.ToString()) //check needed and not implemented utils
                         {
-                            if(party.map.fields[position.y, position.x].IsCharacterStayingOnThisField)  //if the mapfield is occupied by a character they swap positions
+                            if (party.map.fields[position.y, position.x].IsCharacterStayingOnThisField)  //if the mapfield is occupied by a character they swap positions
                             {
                                 Character passiveCharacter = party.map.fields[position.y, position.x].GetCharacterStayingOnThisField(party.map.GetCharactersOnMap());
                                 passiveCharacter.Movement(passiveCharacter.CurrentMapfield, movingCharacter.CurrentMapfield);
                                 DoSendMovementDemand(msg.clientID, passiveCharacter.CharacterId, new List<Position> { new Position(movingCharacter.CurrentMapfield.XCoordinate, movingCharacter.CurrentMapfield.ZCoordinate) });
                                 movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]);
-                            } else
+                            }
+                            else
                             {
                                 movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]); //move character 1 field along its path
                             }
-<<<<<<< HEAD
                             movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]); //move character 1 field along its path
-                            movingCharacter.SpentMP(1); // descrease MP by 1
-=======
->>>>>>> origin/develop
                             //path.Add(position);
                             newPath.Add(position);
-                            if (party.map.fields[position.y,  position.x].tileType == TileType.FLAT_SAND.ToString() || party.map.fields[position.y, position.x].tileType == TileType.DUNE.ToString()){
+                            if (party.map.fields[position.y, position.x].tileType == TileType.FLAT_SAND.ToString() || party.map.fields[position.y, position.x].tileType == TileType.DUNE.ToString())
+                            {
                                 if (alreadySteppedOnSandField)
                                 {
                                     movingCharacter.SetLoud();
@@ -274,7 +272,7 @@ namespace Server
             DoSendMovementDemand(msg.clientID, msg.characterID, newPath);
             DoSendChangeCharacterStatsDemand(msg.clientID, msg.characterID, new CharacterStatistics(movingCharacter));
 
-            if(movingCharacter.MPcurrent <= 0 && movingCharacter.APcurrent <= 0)
+            if (movingCharacter.MPcurrent <= 0 && movingCharacter.APcurrent <= 0)
             {
                 Party.GetInstance().RoundHandler.GetCharacterTraitPhase().SendRequestForNextCharacter();
             }
@@ -303,7 +301,7 @@ namespace Server
                 }
             }
 
-            if(activePlayer == null)
+            if (activePlayer == null)
             {
                 throw new NullReferenceException($"Requested player with {msg.clientID} isn't known!");
             }
@@ -322,7 +320,7 @@ namespace Server
                 {
                     actionCharacter = character;
                 }
-                if (character.CurrentMapfield.XCoordinate ==  msg.specs.target.x && character.CurrentMapfield.ZCoordinate == msg.specs.target.y)
+                if (character.CurrentMapfield.XCoordinate == msg.specs.target.x && character.CurrentMapfield.ZCoordinate == msg.specs.target.y)
                 {
                     targetCharacter = character;
                     friendlyFire = true; //characters can not attack their allys
@@ -367,9 +365,9 @@ namespace Server
                     case ActionType.COLLECT:
                         action = ActionType.COLLECT;
                         actionCharacter.CollectSpice();
-                        //activePlayer.statistics.AddToTotalSpiceCollected(1);
+                        activePlayer.statistics.AddToTotalSpiceCollected(1);
                         DoSendChangeCharacterStatsDemand(msg.clientID, actionCharacter.CharacterId, new CharacterStatistics(actionCharacter));
-                        //DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
+                        DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
                         break;
                     //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
                     case ActionType.KANLY:
@@ -434,6 +432,7 @@ namespace Server
                     case ActionType.VOICE:
                         action = ActionType.VOICE;
                         if (actionCharacter.APcurrent == actionCharacter.APmax
+                            && !targetCharacter.IsInSandStorm(map)
                             && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.BENE_GESSERIT))
                         {
                             if (targetCharacter == null)
@@ -442,7 +441,7 @@ namespace Server
                             }
                             int InventoryUsedBeforeVoice = actionCharacter.inventoryUsed;
                             actionCharacter.Voice(targetCharacter);
-                            activePlayer.statistics.AddToTotalSpiceCollected(actionCharacter.inventoryUsed-InventoryUsedBeforeVoice);
+                            activePlayer.statistics.AddToTotalSpiceCollected(actionCharacter.inventoryUsed - InventoryUsedBeforeVoice);
                             charactersHit.Add(targetCharacter);
                         }
                         break;
@@ -525,12 +524,16 @@ namespace Server
                 return;
             }
 
-            //get the postion of the characters and check if they stand next to each other
-            int activeCharacterX = activeCharacter.CurrentMapfield.XCoordinate;
-            int activeCharacterY = activeCharacter.CurrentMapfield.ZCoordinate;
-            int targetCharacterX = targetCharacter.CurrentMapfield.XCoordinate;
-            int targetCharacterY = targetCharacter.CurrentMapfield.ZCoordinate;
-            if ((activeCharacterX == targetCharacterX && (activeCharacterY == (targetCharacterY + 1)) || (activeCharacterY == targetCharacterY - 1)) || (activeCharacterY == targetCharacterY && ((activeCharacterX == targetCharacterX + 1) || (activeCharacterX == targetCharacterX - 1))))
+            bool targetCharacterIsOnNeighborfield = false;
+            foreach (var mapfield in Party.GetInstance().map.GetNeighborFields(activeCharacter.CurrentMapfield))
+            {
+                if (mapfield.IsCharacterStayingOnThisField && mapfield.Character.CharacterId == targetCharacter.CharacterId)
+                {
+                    targetCharacterIsOnNeighborfield = true;
+                }
+            }
+
+            if (targetCharacterIsOnNeighborfield && !targetCharacter.IsInSandStorm(Party.GetInstance().map))
             {
                 activeCharacter.GiftSpice(targetCharacter, msg.amount);
                 DoSendTransferDemand(msg.clientID, msg.characterID, msg.targetID);
@@ -721,10 +724,12 @@ namespace Server
             if (player1.UsedGreatHouse.Characters.Contains(attributes))
             {
                 clientID = player1.ClientID;
-            } else if (player2.UsedGreatHouse.Characters.Contains(attributes))
+            }
+            else if (player2.UsedGreatHouse.Characters.Contains(attributes))
             {
                 clientID = player2.ClientID;
-            } else
+            }
+            else
             {
                 Log.Error("Cannot send SPAWN_CHARACTER_DEMAND, because the spawned character do not belong to any player!");
             }
