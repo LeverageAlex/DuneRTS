@@ -15,6 +15,8 @@ using Newtonsoft.Json;
 using GameData.server.roundHandler;
 using GameData.network.util.world.mapField;
 using GameData.network.util.world.character;
+using Server.roundHandler;
+using System.Threading;
 
 namespace Server
 {
@@ -585,15 +587,76 @@ namespace Server
             //int clientID
         }
 
-        public override void OnPauseGameRequestMessage(PauseGameRequestMessage msg)
+        public override void OnPauseGameRequestMessage(PauseGameRequestMessage msg, string sessionID)
         {
-            throw new NotImplementedException("not implemented");
+            // determine the client, who send this message
+            Client requestingClient = Party.GetInstance().GetClientBySessionID(sessionID);
 
-            //request for pause from client
+            // check, whether the requesting client is an ai, so reject the request
+            if (requestingClient.IsActivePlayer && !requestingClient.IsAI)
+            {
+                int clientID = requestingClient.ClientID;
 
-            //bool pause
+                // check, whether it is a "pause request" or a "resumption request"
+                if (msg.pause)
+                {
+                    if (Party.GetInstance().RoundHandler.PauseGame(clientID))
+                    {
+                        Console.WriteLine("Session was paused");
+                        Log.Information($"The party was paused by the client with the ID {clientID}.");
+                        DoSendGamePauseDemand(true);
+                        Thread.Sleep(Timeout.Infinite);
+                    }
+                    else
+                    {
+                        Log.Warning($"The pause request by the client with the ID {clientID} failed.");
+                    }
+                }
+                else
+                {
+                    if (Party.GetInstance().RoundHandler.ContinueGame(clientID))
+                    {
+                        Console.WriteLine("Session was unpaused");
+                        Log.Information($"The party was resumed by the client with the ID {clientID}.");
+                        DoSendGamePauseDemand(false);
+                    }
+                    else
+                    {
+                        Log.Warning($"The resumption request by the client with the ID {clientID} failed.");
+                    }
+                }
+            }
+            else
+            {
+                Log.Warning("The requsting client is either an ai or a spectator and they are not allowed to request a pause!");
+            }
         }
 
+        /// <summary>
+        /// sends a GAME_PAUSE_DEMAND message, so inform all clients whether the party was paused or will be resumed
+        /// </summary>
+        public void DoSendGamePauseDemand(bool pause)
+        {
+            // fetch the pause request and all it's information
+            PauseRequest pauseRequest = Party.GetInstance().RoundHandler.PauseRequest;
+
+            PausGameDemandMessage gamePauseDemandMessage = new PausGameDemandMessage(pauseRequest.ClientID, pause);
+            NetworkController.HandleSendingMessage(gamePauseDemandMessage);
+            Console.WriteLine("gamePauseDemandMessage was sent");
+        }
+
+        /// <summary>
+        /// sends a UNPAUSE_GAME_OFFER message, so inform all clients, that the maximal pause time is exceeded and every player now
+        /// can resume the game
+        /// </summary>
+        public void DoSendUnpauseGameOffer()
+        {
+            // fetch the pause request and all it's information
+            PauseRequest pauseRequest = Party.GetInstance().RoundHandler.PauseRequest;
+
+            UnpauseGameOfferMessage unpauseGameOfferMessage = new UnpauseGameOfferMessage(pauseRequest.ClientID);
+            NetworkController.HandleSendingMessage(unpauseGameOfferMessage);
+        }
 
 
         /// <summary>

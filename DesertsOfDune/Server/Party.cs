@@ -14,6 +14,7 @@ using CommandLine;
 using Server.Configuration;
 using GameData.network.util.world.mapField;
 using GameData.network.util.world.character;
+using System.Threading;
 
 namespace Server
 {
@@ -45,6 +46,8 @@ namespace Server
         /// the round handler for this party, which execute the rounds in the correct order and handles the user input
         /// </summary>
         public RoundHandler RoundHandler { get; }
+
+        public Thread roundHandlerThread { get; private set; }
 
         /// <summary>
         /// the map of this game / party
@@ -137,7 +140,9 @@ namespace Server
             PlaceCharactersAroundCity();
 
             Log.Information("The party was prepared, so both player chose their Greathouse. The party now will start ... ");
-            RoundHandler.NextRound();
+            roundHandlerThread = new Thread(RoundHandler.NextRound);
+            roundHandlerThread.Start();
+       //     RoundHandler.NextRound();
             Log.Debug("Triggered first round by round handler");
         }
 
