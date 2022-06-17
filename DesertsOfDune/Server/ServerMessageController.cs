@@ -366,7 +366,6 @@ namespace Server
                         action = ActionType.COLLECT;
                         actionCharacter.CollectSpice();
                         activePlayer.statistics.AddToTotalSpiceCollected(1);
-                        DoSendChangeCharacterStatsDemand(msg.clientID, actionCharacter.CharacterId, new CharacterStatistics(actionCharacter));
                         DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
                         break;
                     //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
@@ -384,7 +383,6 @@ namespace Server
                         {
                             actionCharacter.Kanly(targetCharacter);
                             charactersHit.Add(targetCharacter);
-                            DoSendChangeCharacterStatsDemand(msg.clientID, targetCharacter.CharacterId, new CharacterStatistics(targetCharacter));
                         }
                         break;
                     case ActionType.FAMILY_ATOMICS:
@@ -396,7 +394,7 @@ namespace Server
                             MapField targetMapField = null;
                             foreach (var mapfield in map.fields)
                             {
-                                if (mapfield.XCoordinate == msg.specs.target.x && mapfield.ZCoordinate == msg.specs.target.y)
+                                if (mapfield.GetMapFieldPosition() == msg.specs.target)
                                 {
                                     targetMapField = mapfield;
                                 }
@@ -417,7 +415,6 @@ namespace Server
                             actionCharacter.AtomicBomb(targetMapField, map, Party.GetInstance().greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse, charactersHit);
                             DoSendMapChangeDemand(MapChangeReasons.FAMILY_ATOMICS);
                             DoSendAtomicsUpdateDemand(msg.clientID, Party.GetInstance().greatHouseConventionBroken, actionCharacter.greatHouse.unusedAtomicBombs);
-                            Party.GetInstance().greatHouseConventionBroken = true;
                         }
                         break;
                     case ActionType.SPICE_HOARDING:
