@@ -19,6 +19,7 @@ public class InGameMenuManager : MonoBehaviour
     public GameObject PauseScreenWithButton;
     public GameObject PauseScreenNoButton;
     public GameObject SpiceAmountDialog;
+    public GameObject WaitingScreen;
         
     public GameObject[] forbiddenMenus;
 
@@ -65,7 +66,7 @@ public class InGameMenuManager : MonoBehaviour
 
     private void Start()
     {
-        ActivateMenu(InGameUI);
+        ActivateMenu(WaitingScreen);
     }
 
     /// <summary>
@@ -279,8 +280,9 @@ public class InGameMenuManager : MonoBehaviour
         RejoinMenu.SetActive(false);
         EndScreen.SetActive(false);
         SpiceAmountDialog.SetActive(false);
+        WaitingScreen.SetActive(false);
 
-        if(menuToActivate != null)
+        if (menuToActivate != null)
         {
             menuToActivate.SetActive(true);
         }
