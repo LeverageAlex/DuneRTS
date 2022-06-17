@@ -26,7 +26,14 @@ namespace GameData.network.util.world
         {
             this.MAP_WIDTH = mapWidth;
             this.MAP_HEIGHT = mapHeight;
-            instance = this;
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Console.WriteLine("Error. There is more than one map. This doesn't make any sense!");
+            }
 
             // check, that the scenarionConfiguration has the correct sizes
             CreateMapFromScenario(scenarioConfiguration);

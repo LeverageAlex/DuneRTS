@@ -13,6 +13,7 @@ using WebSocketSharp;
 using CommandLine;
 using Server.Configuration;
 using GameData.network.util.world.mapField;
+using GameData.network.util.world.character;
 
 namespace Server
 {
@@ -41,11 +42,6 @@ namespace Server
         private readonly List<Client> connectedClients;
 
         /// <summary>
-        /// information if the Great House Convention is already broken
-        /// </summary>
-        public bool greatHouseConventionBroken { get; set; }
-
-        /// <summary>
         /// the round handler for this party, which execute the rounds in the correct order and handles the user input
         /// </summary>
         public RoundHandler RoundHandler { get; }
@@ -67,7 +63,7 @@ namespace Server
             connectedClients = new List<Client>();
             map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
             RoundHandler = new RoundHandler(PartyConfiguration.GetInstance().numbOfRounds, PartyConfiguration.GetInstance().spiceMinimum, map);
-            greatHouseConventionBroken = false;
+            Noble.greatHouseConventionBroken = false;
 
             Log.Debug("A new party was created!");
         }

@@ -72,7 +72,9 @@ namespace GameData.server.roundHandler
             this._sandWormSpawnDistance = sandWormSpawnDistance;
             this._map = map;
             this._targetCharacter = ChooseTargetCharacter(characters);
-            this._currentField = DetermineField(characters);
+            this._currentField = DetermineField();
+            _currentField.IsApproachable = false;
+            Map.instance.SetMapFieldAtPosition(_currentField, _currentField.XCoordinate, _currentField.ZCoordinate);
             this._messageController = messageController;
 
             // get the target character
@@ -85,7 +87,7 @@ namespace GameData.server.roundHandler
         /// <remarks>
         /// Be attentive, because this method uses a while (true)-loop, so it is possible, that it never returns</remarks>
         /// <returns>the spawn position of the SandWorm</returns>
-        private MapField DetermineField(List<Character> characters)
+        private MapField DetermineField()
         {
             MapField positionOfTargetedCharacter = this._targetCharacter.CurrentMapfield;
 
@@ -123,6 +125,8 @@ namespace GameData.server.roundHandler
         /// <returns></returns>
         public Queue<MapField> CalculatePathToTarget()
         {
+            _map.SetMapFieldAtPosition(_currentField, _currentField.XCoordinate, _currentField.ZCoordinate);
+            Console.WriteLine("The current field type is: " + _currentField.tileType);
             MapField targetField = this._targetCharacter.CurrentMapfield;
             AStarPathfinder pathfinder = new AStarPathfinder();
             SandwormGraph graph = new SandwormGraph(_map);
@@ -145,33 +149,25 @@ namespace GameData.server.roundHandler
             if (path.Count == 0)
             {
                 // do not move, but disappear and appear on a random desert field
-                List<Character> characters = this._map.GetCharactersOnMap();
-                List<Character> loudCharacters = new List<Character>();
+                _currentField.IsApproachable = true;
                 _currentField = this._map.GetRandomDesertField();
-
-                foreach (Character character in characters)
-                {
-                    if(character.isLoud)
-                    {
-                        loudCharacters.Add(character);
-                    }
-                }
+                _currentField.IsApproachable = false;
 
 
-                Random rdm = new Random();
-                _messageController.DoDespawnSandwormDemand();
-                // _messageController.DoSpawnSandwormDemand(loudCharacters[rdm.Next(loudCharacters.Count)].CharacterId, _currentField);
+                Despawn(_messageController);
                 _messageController.DoSpawnSandwormDemand(_targetCharacter.CharacterId, _currentField);
             }
             else
             {
                 bool needToDisappear = false;
 
+                //TODO remove first element, because its start point of worm
+                path.RemoveAt(0);
                 List<MapField> movedPath = new List<MapField>();
-                for (int i = 1; i < _sandWormSpeed; i++)
+                for (int i = 0; i < _sandWormSpeed && path.Count > 0; i++)
                 {
-                    MapField nextField = path[i];
-                    path.RemoveAt(i);
+                    MapField nextField = path[0];
+                    path.RemoveAt(0);
                     movedPath.Add(nextField);
                     needToDisappear = MoveSandwormByOneField(nextField);
 
@@ -200,8 +196,13 @@ namespace GameData.server.roundHandler
         /// <returns>true, if the sandworm moved to a field with a character and need to disappear</returns>
         public bool MoveSandwormByOneField(MapField nextField)
         {
+            var oldfield = _currentField;
             _currentField = new FlatSand(_currentField.hasSpice, _currentField.isInSandstorm);
+            _currentField.PlaceCharacter(oldfield.Character);
+
+            Map.instance.SetMapFieldAtPosition(_currentField, oldfield.XCoordinate, oldfield.ZCoordinate);
             _currentField.IsApproachable = true;
+
             _currentField = nextField;
             _currentField.IsApproachable = false;
 
@@ -211,6 +212,7 @@ namespace GameData.server.roundHandler
                 //TODO: Character statChange
                 _messageController.DoSendChangeCharacterStatsDemand(_currentField.clientID, _currentField.Character.CharacterId, new CharacterStatistics(_currentField.Character));
                 _currentField.DisplaceCharacter(_currentField.Character);
+                Console.WriteLine("Sandworm killed Character at x:" + _currentField.XCoordinate  + ", y: " + _currentField.ZCoordinate);
 
                 return true;
             }
@@ -223,8 +225,9 @@ namespace GameData.server.roundHandler
         /// </summary>
         public static void Despawn(MessageController messageController)
         {
+            _sandWormSingleton._currentField.IsApproachable = true;
             _sandWormSingleton = null;
-
+            
             messageController.DoDespawnSandwormDemand();
         }
 

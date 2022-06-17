@@ -14,6 +14,7 @@ using Server.Configuration;
 using Newtonsoft.Json;
 using GameData.server.roundHandler;
 using GameData.network.util.world.mapField;
+using GameData.network.util.world.character;
 
 namespace Server
 {
@@ -232,7 +233,6 @@ namespace Server
                             {
                                 movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]); //move character 1 field along its path
                             }
-                            movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]); //move character 1 field along its path
                             //path.Add(position);
                             newPath.Add(position);
                             if (party.map.fields[position.y, position.x].tileType == TileType.FLAT_SAND.ToString() || party.map.fields[position.y, position.x].tileType == TileType.DUNE.ToString())
@@ -412,9 +412,17 @@ namespace Server
                                     }
                                 }
                             }
-                            actionCharacter.AtomicBomb(targetMapField, map, Party.GetInstance().greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse, charactersHit);
+                            bool greathouseConventionBrokenBeforeAtomicBomb = Noble.greatHouseConventionBroken;
+                            charactersHit = actionCharacter.AtomicBomb(targetMapField, map, Noble.greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse);
                             DoSendMapChangeDemand(MapChangeReasons.FAMILY_ATOMICS);
-                            DoSendAtomicsUpdateDemand(msg.clientID, Party.GetInstance().greatHouseConventionBroken, actionCharacter.greatHouse.unusedAtomicBombs);
+                            if(greathouseConventionBrokenBeforeAtomicBomb != Noble.greatHouseConventionBroken)
+                            {
+                                DoSendAtomicsUpdateDemand(msg.clientID, true, actionCharacter.greatHouse.unusedAtomicBombs);
+                            }
+                            else
+                            {
+                                DoSendAtomicsUpdateDemand(msg.clientID, false, actionCharacter.greatHouse.unusedAtomicBombs);
+                            }
                         }
                         break;
                     case ActionType.SPICE_HOARDING:
@@ -447,7 +455,7 @@ namespace Server
                         if (actionCharacter.APcurrent == actionCharacter.APmax
                             && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.FIGHTER))
                         {
-                            actionCharacter.SwordSpin(map, charactersHit);
+                            charactersHit = actionCharacter.SwordSpin(map);
                         }
                         break;
                     default:

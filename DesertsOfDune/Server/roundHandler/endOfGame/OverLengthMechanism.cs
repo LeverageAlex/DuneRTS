@@ -32,7 +32,10 @@ namespace GameData.network.util.world
             Party.GetInstance().messageController.DoSendMapChangeDemand(MapChangeReasons.ENDGAME);
 
             // despawn the usual sandworm
-            Sandworm.Despawn(Party.GetInstance().messageController);
+            if (Sandworm.GetSandworm() != null)
+            {
+                Sandworm.Despawn(Party.GetInstance().messageController);
+            }
             _shaiHuludPhase = new ShaiHuludPhase(map);
         }
 

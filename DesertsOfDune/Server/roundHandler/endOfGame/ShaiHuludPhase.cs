@@ -124,7 +124,7 @@ namespace GameData.server.roundHandler
                 return true;
             } else
             {
-                if (CheckLastPlayerStanding())
+                if ( ! CheckLastPlayerStanding())
                 {
                     Character target = ChooseTargetCharacter();
 
