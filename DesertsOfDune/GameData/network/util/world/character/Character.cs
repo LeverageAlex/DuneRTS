@@ -348,10 +348,10 @@ namespace GameData.network.util.world
         /// <param name="target"> this is the Field on the Map where the active Noble character aims its atomic bomb to </param>
         /// <returns></returns>
         virtual
-        public bool AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse, List<Character> charactersHit)
+        public List<Character> AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse)
         {
             //Do nothing because only Nobles can perform this move
-            return false;
+            return new List<Character>();
         }
 
         /// <summary>
@@ -382,10 +382,10 @@ namespace GameData.network.util.world
         /// </summary>
         /// <returns></returns>
         virtual
-        public bool SwordSpin(Map map, List<Character> charactersHit)
+        public List<Character> SwordSpin(Map map)
         {
             //Do nothing because only Fighters can perform this move
-            return false;
+            return new List<Character>();
         }
 
         /// <summary>

@@ -78,13 +78,19 @@ namespace GameData.network.util.world.character
         }
 
         /// <summary>
+        /// information if the Great House Convention is already broken
+        /// </summary>
+        public static bool greatHouseConventionBroken { get; set; }
+
+        /// <summary>
         /// This method represents the action FamilyAtomic
         /// </summary>
         /// <param name="target">The target Field for the Atack</param>
         /// <returns>true, if the action was successful</returns>
         override
-        public bool AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse, List<Character> charactersHit)
+        public List<Character> AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse)
         {
+            List<Character> charactersHit = new List<Character>();
             if(this.APcurrent == this.APmax && this.greatHouse.unusedAtomicBombs > 0)
             {
                 var mapFields = map.GetNeighborFields(target);
@@ -144,9 +150,8 @@ namespace GameData.network.util.world.character
                 }
                 SpentAp(APmax);
                 this.greatHouse.unusedAtomicBombs--;
-                return true;
             }
-            return false;
+            return charactersHit;
         }
     }
 }

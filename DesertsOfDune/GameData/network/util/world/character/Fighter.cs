@@ -54,15 +54,17 @@ namespace GameData.network.util.world.character
             this.inventoryUsed = 0;
             this.killedBySandworm = false;
             this.isLoud = false;
+
         }
 
         /// <summary>
         /// This method represents the action SwordSpin of the character type fighter
         /// </summary>
         /// <returns>true, if the action was successful</returns>
-        override
-        public bool SwordSpin(Map map, List<Character> charactersHit)
+        
+        public override List<Character> SwordSpin(Map map)
         {
+            List<Character> charactersHit = new List<Character>();
             if(this.APcurrent == this.APmax)
             {
                 List<MapField> NeighborFields = map.GetNeighborFields(this.CurrentMapfield);
@@ -79,9 +81,8 @@ namespace GameData.network.util.world.character
                     }
                 }
                 SpentAp(APmax);
-                return true;
             }
-            return false;
+            return charactersHit;
         }
     }
 }
