@@ -23,7 +23,7 @@ namespace GameData.server.roundHandler
         public void Execute()
         {
             SetTimer(); //initialize timer
-            GenerateTraitSequenze();
+            _allCharacters = GenerateTraitSequenze();
             _currentCharacterIndex = 0;
             SendRequestForNextCharacter();
         }
@@ -34,19 +34,18 @@ namespace GameData.server.roundHandler
         /// This method gets all characters and randomizes this list for the traitsequenze
         /// </summary>
         /// <returns>Returns the new sorted list of characters.</returns>
-        public bool GenerateTraitSequenze()
+        public List<Character> GenerateTraitSequenze()
         {
-            _allCharacters = new List<Character>();
+            var characters = new List<Character>();
             foreach (var player in Party.GetInstance().GetActivePlayers())
             {
                 foreach (var character in player.UsedGreatHouse.GetCharactersAlive())
                 {
-                    _allCharacters.Add(character);
+                    characters.Add(character);
                 }
             }
             var random = new Random();
-            _allCharacters =_allCharacters.OrderBy(item => random.Next()).ToList<Character>();
-            return true;
+            return characters.OrderBy(item => random.Next()).ToList<Character>();
         }
 
         /// <summary>
