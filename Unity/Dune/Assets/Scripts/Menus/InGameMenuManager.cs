@@ -212,7 +212,7 @@ public class InGameMenuManager : MonoBehaviour
     public void DemandEndHouseSelection()
     {
         //TODO
-        ActivateMenu(InGameUI);
+        ActivateMenu(WaitingScreen);
     }
 
     public void ExitToMainMenu()
