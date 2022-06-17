@@ -63,7 +63,7 @@ namespace GameData.server.roundHandler
             _currentField.IsApproachable = false;
 
             // move the shai hulud
-            Party.GetInstance().messageController.DoMoveSandwormDemand(path);
+            //Party.GetInstance().messageController.DoMoveSandwormDemand(path);
 
             // kill target character and send message, that stats of character changed
             _currentField.Character.KilledBySandworm = true;    
@@ -129,8 +129,8 @@ namespace GameData.server.roundHandler
                     Character target = ChooseTargetCharacter();
 
                     // spawn the shai hulud
-                    Party.GetInstance().messageController.DoSpawnSandwormDemand(target.CharacterId, _currentField);
-
+                    Party.GetInstance().messageController.DoSpawnSandwormDemand(target.CharacterId, target.CurrentMapfield/*_currentField*/);
+                    
                     EatTargetCharacter(target);
 
                     // despawn the shai hulud
@@ -139,6 +139,14 @@ namespace GameData.server.roundHandler
 
                     // after the last character was eaten, there is no character left
                     _lastCharacterEaten = true;
+                    foreach(Character character in Map.instance.GetCharactersOnMap())
+                    {
+                        if ( ! character.killedBySandworm && character.healthCurrent > 0)
+                        {
+                            _lastCharacterEaten = false;
+                            break;
+                        }
+                    }
                 }
 
                 return false;

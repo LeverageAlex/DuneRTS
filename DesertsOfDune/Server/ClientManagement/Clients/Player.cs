@@ -29,7 +29,7 @@ namespace Server.Clients
 
         protected Player(string clientName, string sessionID) : base(clientName, true, sessionID)
         {
-            this.AmountOfStrikes = 0;          
+            this.AmountOfStrikes = 0;
         }
 
         /// <summary>
