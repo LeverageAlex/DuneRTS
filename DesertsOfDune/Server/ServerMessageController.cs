@@ -413,9 +413,17 @@ namespace Server
                                     }
                                 }
                             }
+                            bool greathouseConventionBrokenBeforeAtomicBomb = Noble.greatHouseConventionBroken;
                             charactersHit = actionCharacter.AtomicBomb(targetMapField, map, Noble.greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse);
                             DoSendMapChangeDemand(MapChangeReasons.FAMILY_ATOMICS);
-                            DoSendAtomicsUpdateDemand(msg.clientID, Noble.greatHouseConventionBroken, actionCharacter.greatHouse.unusedAtomicBombs);
+                            if(greathouseConventionBrokenBeforeAtomicBomb != Noble.greatHouseConventionBroken)
+                            {
+                                DoSendAtomicsUpdateDemand(msg.clientID, true, actionCharacter.greatHouse.unusedAtomicBombs);
+                            }
+                            else
+                            {
+                                DoSendAtomicsUpdateDemand(msg.clientID, false, actionCharacter.greatHouse.unusedAtomicBombs);
+                            }
                         }
                         break;
                     case ActionType.SPICE_HOARDING:

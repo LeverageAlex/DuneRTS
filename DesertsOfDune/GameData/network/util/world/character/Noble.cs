@@ -90,7 +90,7 @@ namespace GameData.network.util.world.character
         override
         public List<Character> AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse)
         {
-            List<Character> list = new List<Character>();
+            List<Character> charactersHit = new List<Character>();
             if(this.APcurrent == this.APmax && this.greatHouse.unusedAtomicBombs > 0)
             {
                 var mapFields = map.GetNeighborFields(target);
