@@ -15,7 +15,6 @@ public class DespawnWorld : MonoBehaviour
             charac.SetActive(false);
         }
         Destroy(gameObject);
-
     }
 
 }

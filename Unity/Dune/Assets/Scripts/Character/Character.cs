@@ -44,6 +44,8 @@ public class Character : MonoBehaviour
     private int AD;  //Attack-Damage
     private int spiceInv;
 
+    bool isDead = false;
+
     private int _x;
     private int _z;
     private float _y;
@@ -203,6 +205,15 @@ public class Character : MonoBehaviour
     }
 
 
+
+    public void KillCharacter()
+    {
+        isDead = true;
+        CharacterMgr.instance.removeCharacter(characterId);
+        charAnim.Play(animation_death);
+        Destroy(gameObject, 1.5f);
+    }
+
    
 
 
@@ -231,8 +242,7 @@ public class Character : MonoBehaviour
         {
             //Killing Character
             Debug.Log("Removed Character at x: " + this.X + ", Z: " + this.Z);
-            CharacterMgr.instance.removeCharacter(characterId);
-            Destroy(gameObject);
+            KillCharacter();
             }
     }
 
@@ -826,16 +836,16 @@ public class Character : MonoBehaviour
     /// <param name="character">Attacker</param>
     public IEnumerator PlayDamageAnimation(Character character)
     {
-        Vector3 dir = character.transform.position - transform.position;
-        yield return new WaitForSeconds(0.25f);
-        RotateTowardsVector(dir);
-        charAnim.Play(animation_damage);
-    }
-
-    public void OnDeath()
-    {
-        charAnim.Play(animation_death);
-        Destroy(gameObject, 1f);
+        if (isDead)
+        {
+            Vector3 dir = character.transform.position - transform.position;
+            yield return new WaitForSeconds(0.25f);
+            if (isDead)
+            {
+                RotateTowardsVector(dir);
+                charAnim.Play(animation_damage);
+            }
+        }
     }
 
     /*
