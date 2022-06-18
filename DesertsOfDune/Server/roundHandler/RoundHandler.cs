@@ -159,7 +159,8 @@ namespace GameData.gameObjects
                         Player winner = this._victoryChecker.GetWinnerByCheckWinnerVictoryMetric();
                         int winnerID = winner.ClientID;
                         int loserID = Party.GetInstance().GetActivePlayers().Find(c => c.ClientID != winner.ClientID).ClientID;
-                        Party.GetInstance().messageController.DoGameEndMessage(winnerID, loserID, null);
+                        Statistics[] statistics = { Party.GetInstance().GetPlayerByClientID(winnerID).statistics, Party.GetInstance().GetPlayerByClientID(loserID).statistics };
+                        Party.GetInstance().messageController.DoGameEndMessage(winnerID, loserID, statistics);
 
                         Log.Information("The overlength mechanism was finished, so the game is over! \n The player " + winner.ClientName + " won the game!");
                     }
@@ -216,7 +217,8 @@ namespace GameData.gameObjects
                     {
                         int loserID = player.ClientID;
                         int winnerID = Party.GetInstance().GetActivePlayers().Find(c => c.ClientID != player.ClientID).ClientID;
-                        Party.GetInstance().messageController.DoGameEndMessage(winnerID, loserID, null); //TODO: get stats for both players
+                        Statistics[] statistics = { Party.GetInstance().GetPlayerByClientID(winnerID).statistics, Party.GetInstance().GetPlayerByClientID(loserID).statistics };
+                        Party.GetInstance().messageController.DoGameEndMessage(winnerID, loserID, statistics); //TODO: get stats for both players
                         partyFinished = true;
                         return true;
                     }

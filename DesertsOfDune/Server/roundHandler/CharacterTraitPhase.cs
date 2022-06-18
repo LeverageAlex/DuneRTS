@@ -18,7 +18,7 @@ namespace GameData.server.roundHandler
         private List<Character> _allCharacters;
         private static Character _currentCharacter = null;
         private int _currentCharacterIndex;
-        private static Timer _timer;
+        private Timer _timer;
 
         public void Execute()
         {
@@ -88,9 +88,11 @@ namespace GameData.server.roundHandler
         /// <summary>
         /// stop timer
         /// </summary>
-        public void StopTimer()
+        public static void StopAndResetTimer()
         {
+            int timeInMilliseconds = PartyConfiguration.GetInstance().actionTimeUserClient;
             _timer.Stop();
+            _timer = new Timer(timeInMilliseconds);
         }
 
         /// <summary>
@@ -116,7 +118,7 @@ namespace GameData.server.roundHandler
         /// Starts a new timer with the time from the parameter.
         /// </summary>
         /// <param name="timeInSeconds">Time in seconds how long the timer runs.</param>
-        private static void SetTimer()
+        private void SetTimer()
         {
             int timeInMilliseconds = PartyConfiguration.GetInstance().actionTimeUserClient;
             foreach(var player in Party.GetInstance().GetActivePlayers())
@@ -136,7 +138,7 @@ namespace GameData.server.roundHandler
             }
             _timer = new Timer(timeInMilliseconds);
             _timer.Elapsed += OnTimedEvent;
-            _timer.AutoReset = true;
+            _timer.AutoReset = false;
         }
 
         /// <summary>
@@ -144,7 +146,7 @@ namespace GameData.server.roundHandler
         /// </summary>
         /// <param name="source"></param>
         /// <param name="e"></param>
-        private static void OnTimedEvent(Object source, ElapsedEventArgs e)
+        private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             string sessionID = "";
             foreach (var player in Party.GetInstance().GetActivePlayers())
@@ -157,7 +159,10 @@ namespace GameData.server.roundHandler
                     }
                 }
             }
-            ((ServerConnectionHandler)Party.GetInstance().messageController.NetworkController.connectionHandler).sessionManager.CloseSession(sessionID, WebSocketSharp.CloseStatusCode.Normal, "Timeout happend in characterTraitPhase!");
+            // ((ServerConnectionHandler)Party.GetInstance().messageController.NetworkController.connectionHandler).sessionManager.CloseSession(sessionID, WebSocketSharp.CloseStatusCode.Normal, "Timeout happend in characterTraitPhase!");
+
+            //SendRequestForNextCharacter();
+            Party.GetInstance().messageController.OnEndTurnRequestMessage(new network.messages.EndTurnRequestMessage(Party.GetInstance().GetPlayerByCharacterID(_currentCharacter.CharacterId).ClientID, _currentCharacter.CharacterId));
         }
 
 
@@ -165,11 +170,13 @@ namespace GameData.server.roundHandler
         {
             if(pause)
             {
-                _timer.Stop();
+                _timer.Enabled = false;
+                //_timer.Stop();
             }
             else
             {
-                _timer.Start();
+                _timer.Enabled = true;
+                //_timer.Start();
             }
         }
     }

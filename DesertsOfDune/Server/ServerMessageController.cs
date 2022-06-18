@@ -282,6 +282,7 @@ namespace Server
 
             if (movingCharacter.MPcurrent <= 0 && movingCharacter.APcurrent <= 0)
             {
+                CharacterTraitPhase.StopAndResetTimer();
                 Party.GetInstance().RoundHandler.GetCharacterTraitPhase().SendRequestForNextCharacter();
             }
         }
@@ -362,6 +363,7 @@ namespace Server
                 //check which action the player wants to do with his character
                 if (!actionCharacter.IsInSandStorm(map))
                 {
+
                     switch (Enum.Parse(typeof(ActionType), msg.action))
                     {
                         case ActionType.ATTACK:
@@ -369,6 +371,10 @@ namespace Server
                             if (!friendlyFire && !targetCharacter.IsInSandStorm(map))
                             {
                                 actionCharacter.Attack(targetCharacter);
+                                if (targetCharacter.IsDead()) // if enemy dies from attack, update statistics
+                                {
+                                    activePlayer.statistics.AddToEnemiesDefeated(1);
+                                }
                                 charactersHit.Add(targetCharacter);
                             }
                             break;
@@ -380,6 +386,7 @@ namespace Server
                             break;
                         //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
                         case ActionType.KANLY:
+                            //TODO: success probability
                             action = ActionType.KANLY;
                             if (targetCharacter == null)
                             {
@@ -392,11 +399,12 @@ namespace Server
                                 && !targetCharacter.IsInSandStorm(map))
                             {
                                 actionCharacter.Kanly(targetCharacter);
+                                activePlayer.statistics.AddToEnemiesDefeated(1);
                                 charactersHit.Add(targetCharacter);
-                            }
-                            break;
-                        case ActionType.FAMILY_ATOMICS:
-                            action = ActionType.FAMILY_ATOMICS;
+                            } 
+                        break;
+                    case ActionType.FAMILY_ATOMICS:
+                        action = ActionType.FAMILY_ATOMICS;
                             if (actionCharacter.APcurrent == actionCharacter.APmax
                                 && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE))
                             {
@@ -404,46 +412,49 @@ namespace Server
                                 MapField targetMapField = null;
                                 foreach (var mapfield in map.fields)
                                 {
-                                    if (mapfield.XCoordinate == msg.specs.target.x && mapfield.ZCoordinate == msg.specs.target.y)
-                                    {
-                                        targetMapField = mapfield;
-                                    }
+                                    actionCharacter.Attack(targetCharacter);
+                                    charactersHit.Add(targetCharacter);
                                 }
+                            
 
-                                // if atomic bomb is thrown on sandworm or neighborfield of sandworm then remove the sandworm
-                                if (Sandworm.GetSandworm() != null)
+                            // if atomic bomb is thrown on sandworm or neighborfield of sandworm then remove the sandworm
+                            if (Sandworm.GetSandworm() != null)
+                            {
+                                foreach (var mapField in map.GetNeighborFields(targetMapField))
                                 {
-                                    foreach (var mapField in map.GetNeighborFields(targetMapField))
+                                    if (Sandworm.GetSandworm().GetCurrentField().Equals(mapField) || Sandworm.GetSandworm().GetCurrentField().Equals(targetMapField))
                                     {
-                                        if (Sandworm.GetSandworm().GetCurrentField().Equals(mapField) || Sandworm.GetSandworm().GetCurrentField().Equals(targetMapField))
-                                        {
-                                            Sandworm.Despawn(this);
-                                            break;
-                                        }
+                                        Sandworm.Despawn(this);
+                                        break;
                                     }
-                                }
-                                bool greathouseConventionBrokenBeforeAtomicBomb = Noble.greatHouseConventionBroken;
-                                charactersHit = actionCharacter.AtomicBomb(targetMapField, map, Noble.greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse);
-                                DoSendMapChangeDemand(MapChangeReasons.FAMILY_ATOMICS);
-                                if (greathouseConventionBrokenBeforeAtomicBomb != Noble.greatHouseConventionBroken)
-                                {
-                                    DoSendAtomicsUpdateDemand(msg.clientID, true, actionCharacter.greatHouse.unusedAtomicBombs);
-                                }
-                                else
-                                {
-                                    DoSendAtomicsUpdateDemand(msg.clientID, false, actionCharacter.greatHouse.unusedAtomicBombs);
                                 }
                             }
-                            break;
-                        case ActionType.SPICE_HOARDING:
-                            action = ActionType.SPICE_HOARDING;
+                            bool greathouseConventionBrokenBeforeAtomicBomb = Noble.greatHouseConventionBroken;
+                            charactersHit = actionCharacter.AtomicBomb(targetMapField, map, Noble.greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse);
+                            activePlayer.statistics.AddToEnemiesDefeated(charactersHit.Count);
+                            DoSendMapChangeDemand(MapChangeReasons.FAMILY_ATOMICS);
+                            if(greathouseConventionBrokenBeforeAtomicBomb != Noble.greatHouseConventionBroken)
+                            {
+                                DoSendAtomicsUpdateDemand(msg.clientID, true, actionCharacter.greatHouse.unusedAtomicBombs);
+                            }
+                            else
+                            {
+                                DoSendAtomicsUpdateDemand(msg.clientID, false, actionCharacter.greatHouse.unusedAtomicBombs);
+                            }
+                        }
+                        break;
+                    case ActionType.SPICE_HOARDING:
+                        action = ActionType.SPICE_HOARDING;
                             if (actionCharacter.APcurrent == actionCharacter.APmax
                                 && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.MENTAT))
                             {
+                                int inventoryUsedBeforeSpiceHoarding = actionCharacter.inventoryUsed;
                                 actionCharacter.SpiceHoarding(map);
+                                activePlayer.statistics.AddToTotalSpiceCollected(actionCharacter.inventoryUsed - inventoryUsedBeforeSpiceHoarding);
                                 DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
                             }
                             break;
+                        //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
                         case ActionType.VOICE:
                             action = ActionType.VOICE;
                             if (actionCharacter.APcurrent == actionCharacter.APmax
@@ -466,6 +477,13 @@ namespace Server
                                 && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.FIGHTER))
                             {
                                 charactersHit = actionCharacter.SwordSpin(map);
+                                foreach (var character in charactersHit)
+                                {
+                                    if (character.IsDead())
+                                    {
+                                        activePlayer.statistics.AddToEnemiesDefeated(1);
+                                    }
+                                }
                             }
                             break;
                         default:
@@ -477,6 +495,7 @@ namespace Server
                         if (activePlayer.UsedGreatHouse == character.greatHouse)
                         {
                             DoSendChangeCharacterStatsDemand(activePlayer.ClientID, character.CharacterId, new CharacterStatistics(character));
+
                         }
                         else if (enemyPlayer.UsedGreatHouse == character.greatHouse)
                         {
@@ -494,6 +513,7 @@ namespace Server
 
             if ((actionCharacter.MPcurrent <= 0 && actionCharacter.APcurrent <= 0) || actionCharacter.IsDead())
             {
+                CharacterTraitPhase.StopAndResetTimer();
                 Party.GetInstance().RoundHandler.GetCharacterTraitPhase().SendRequestForNextCharacter();
             }
         }
@@ -568,6 +588,7 @@ namespace Server
 
                 if (activeCharacter.MPcurrent <= 0 && activeCharacter.APcurrent <= 0)
                 {
+                    CharacterTraitPhase.StopAndResetTimer();
                     Party.GetInstance().RoundHandler.GetCharacterTraitPhase().SendRequestForNextCharacter();
                 }
             }
@@ -579,6 +600,7 @@ namespace Server
         /// <param name="msg"></param>
         public override void OnEndTurnRequestMessage(EndTurnRequestMessage msg)
         {
+            CharacterTraitPhase.StopAndResetTimer();
             foreach (var player in Party.GetInstance().GetActivePlayers())
             {
                 if (player.ClientID == msg.clientID)

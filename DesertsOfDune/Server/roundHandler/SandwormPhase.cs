@@ -35,11 +35,22 @@ namespace GameData.server.roundHandler
             // check, whether there is a sandworm
             if (Sandworm.GetSandworm() != null)
             {
+                var players = Party.GetInstance().GetActivePlayers();
+                int greatHouse1CharacterAmount = players[0].UsedGreatHouse.GetCharactersAlive().Count;
+                int greatHouse2CharacterAmount = players[1].UsedGreatHouse.GetCharactersAlive().Count;
                 Queue<MapField> path = Sandworm.GetSandworm().CalculatePathToTarget();
                 List<MapField> path2 = new List<MapField>(path);
                 path2.Reverse();
                 Sandworm.GetSandworm().MoveSandWorm(path2);
-
+                // check if character was swallowed by sandworm, if yes update player statistics
+                if (players[0].UsedGreatHouse.GetCharactersAlive().Count < greatHouse1CharacterAmount)
+                {
+                    players[0].statistics.AddToCharactersSwallowed(1);
+                }
+                else if (players[1].UsedGreatHouse.GetCharactersAlive().Count < greatHouse2CharacterAmount)
+                {
+                    players[1].statistics.AddToCharactersSwallowed(1);
+                }
             }
             else
             {
