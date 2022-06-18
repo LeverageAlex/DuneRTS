@@ -27,6 +27,8 @@ public class CharacterMgr : MonoBehaviour
 
     public GameObject atomicPrefab;
 
+    public GameObject CharacterSpawnEffect;
+
     public GameObject sandwormPrefab;
     public GameObject helicopterPrefab;
 
@@ -98,6 +100,7 @@ public class CharacterMgr : MonoBehaviour
 
         float charSpawnY = MapManager.instance.getNodeFromPos(x,z).heightLvl == Node.HeightLevel.high ? charSpawnHighY : charSpawnLowY;
         GameObject newChar = (GameObject) Instantiate(getCharTypeByEnum(type), new Vector3(x, charSpawnY, z), Quaternion.identity);
+        PlayCharacterSpawnAnimation(newChar);
         characterDict.Add(characterID, ((Character)newChar.GetComponent(typeof(Character))));
         Log.Debug("Added Character to list: " + characterID);
         Log.Debug(characterDict[characterID].charName);
@@ -117,6 +120,13 @@ public class CharacterMgr : MonoBehaviour
         localChar.setMaxAP(APMax);
         localChar.setMaxHP(HPcurrent);
         return true;
+    }
+
+    public void PlayCharacterSpawnAnimation(GameObject newChar)
+    {
+        GameObject spawnEffect = Instantiate(CharacterSpawnEffect, newChar.transform.position, Quaternion.identity);
+        
+        Destroy(spawnEffect, 2);
     }
 
     /**

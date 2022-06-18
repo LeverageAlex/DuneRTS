@@ -81,7 +81,7 @@ namespace GameData.server.roundHandler
             //TODO determine count neigthbors to break loop if necessary
             Random random = new Random();
 
-            int amountOfSpiceToSpread = random.Next(3, 7);
+            int amountOfSpiceToSpread = random.Next(3, 4);
 
             // spread the spice
             PlaceSpiceOnField(randomField, amountOfSpiceToSpread);
@@ -101,8 +101,6 @@ namespace GameData.server.roundHandler
             }
             else
             {
-                // get a random, approachble neighbor field
-                
 
                 if (field == null)
                 {
@@ -111,6 +109,8 @@ namespace GameData.server.roundHandler
                 }
                 else
                 {
+
+                    // get a random, approachble neighbor field
                     MapField nextField = this._map.GetRandomApproachableNeighborField(field);
                     // if there is no spice on this map field, place it and call the method for a approachable neighbor field
                     if (!field.hasSpice)
