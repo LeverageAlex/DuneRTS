@@ -85,7 +85,8 @@ namespace GameData.network.util.world
         /// <returns></returns>
         public bool RemoveFromCharactersAlive(string name)
         {
-            return false;
+            //TODO: implement
+            throw new NotImplementedException();
         }
     }
 }
