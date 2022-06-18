@@ -44,7 +44,7 @@ namespace GameData.network.util.world.character
         /// </summary>
         public override void ResetData()
         {
-            this.characterType = Enum.GetName(characterType.GetType(), characterType);
+            this.characterType = Enum.GetName(typeof(CharacterType), CharacterType.NOBLE);
             this.healthMax = CharacterConfiguration.Noble.maxHP;
             this.healthCurrent = CharacterConfiguration.Noble.maxHP;
             this.healingHP = CharacterConfiguration.Noble.healingHP;

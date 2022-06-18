@@ -845,7 +845,7 @@ public class PlayerMessageController : MessageController
     }
 
     // This method should not be called by the client.
-    public override void DoGameEndMessage(int winnerID, int loserID, Statistics stats)
+    public override void DoGameEndMessage(int winnerID, int loserID, Statistics[] stats)
     {
         throw new System.NotImplementedException();
     }
