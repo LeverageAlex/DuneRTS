@@ -158,7 +158,9 @@ namespace GameData.server.roundHandler
                 }
             }
             // ((ServerConnectionHandler)Party.GetInstance().messageController.NetworkController.connectionHandler).sessionManager.CloseSession(sessionID, WebSocketSharp.CloseStatusCode.Normal, "Timeout happend in characterTraitPhase!");
-            SendRequestForNextCharacter();
+
+            //SendRequestForNextCharacter();
+            Party.GetInstance().messageController.OnEndTurnRequestMessage(new network.messages.EndTurnRequestMessage(Party.GetInstance().GetPlayerByCharacterID(_currentCharacter.CharacterId).ClientID, _currentCharacter.CharacterId));
         }
 
 
