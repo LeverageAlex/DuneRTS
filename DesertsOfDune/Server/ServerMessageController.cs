@@ -438,6 +438,11 @@ namespace Server
                             DoSendMapChangeDemand(MapChangeReasons.FAMILY_ATOMICS);
                             if(greathouseConventionBrokenBeforeAtomicBomb != Noble.greatHouseConventionBroken)
                             {
+                                    int charactersAmount = enemyPlayer.UsedGreatHouse.Characters.Count;
+                                    for (int i = charactersAmount - 1; i > charactersAmount - 5; i--)
+                                    {
+                                        DoSpawnCharacterDemand(enemyPlayer.UsedGreatHouse.Characters[i]);
+                                    }
                                 DoSendAtomicsUpdateDemand(msg.clientID, true, actionCharacter.greatHouse.unusedAtomicBombs);
                             }
                             else

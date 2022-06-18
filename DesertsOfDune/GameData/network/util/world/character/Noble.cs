@@ -86,7 +86,7 @@ namespace GameData.network.util.world.character
         /// This method represents the action FamilyAtomic
         /// </summary>
         /// <param name="target">The target Field for the Atack</param>
-        /// <returns>true, if the action was successful</returns>
+        /// <returns>characters hit by the atomic Bomb</returns>
         override
         public List<Character> AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse)
         {
@@ -139,6 +139,9 @@ namespace GameData.network.util.world.character
                             foreach (var greatHouse in remainingGreatHouses)
                             {
                                 int randomCharacterIndex = rnd.Next(greatHouse.Characters.Count);
+                                MapField fieldForCharacter = map.GetRandomFreeApproachableNeighborField(passivePlayerGreatHouse.City);
+                                fieldForCharacter.PlaceCharacter(greatHouse.Characters[randomCharacterIndex]);
+                                greatHouse.Characters[randomCharacterIndex].CurrentMapfield = fieldForCharacter;
                                 passivePlayerGreatHouse.Characters.Add(greatHouse.Characters[randomCharacterIndex]);
                             }
                         }
