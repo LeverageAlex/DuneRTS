@@ -51,6 +51,7 @@ public class AtomicController : MonoBehaviour
         Debug.Log("Atomic explosion at x: " + targetX.ToString() + ", z: " + targetZ.ToString());
         AudioController.instance.StopPlaying("AtomicFly");
         AudioController.instance.Play("AtomicExplosion");
+        UnityMainThreadDispatcher.allowDequeue = true;
         Destroy(expl, 3.5f);
         Destroy(gameObject);
         Destroy(route);

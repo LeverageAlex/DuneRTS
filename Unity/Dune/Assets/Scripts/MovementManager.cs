@@ -69,6 +69,7 @@ public class MovementManager : MonoBehaviour
             var next = cluster.Next;
             if (cluster.Value == null || !cluster.Value.calledUpdate() )
             {
+                UnityMainThreadDispatcher.allowDequeue = true;
                 OtherMoveAbles.Remove(cluster);
             }
             cluster = next;
