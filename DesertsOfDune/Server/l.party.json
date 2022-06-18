@@ -31,7 +31,7 @@
     "inventorySize": 10,
     "healingHP": 30
   },
-  "numbOfRounds": 20,
+  "numbOfRounds": 10,
   "actionTimeUserClient": 30000,
   "actionTimeAiClient": 30000,
   "highGroundBonusRatio": 0.6,

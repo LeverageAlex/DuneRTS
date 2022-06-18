@@ -74,7 +74,7 @@ namespace GameData.server.roundHandler
             this._targetCharacter = ChooseTargetCharacter(characters);
             this._currentField = DetermineField();
             _currentField.IsApproachable = false;
-            Map.instance.SetMapFieldAtPosition(_currentField, _currentField.XCoordinate, _currentField.ZCoordinate);
+            _map.SetMapFieldAtPosition(_currentField, _currentField.XCoordinate, _currentField.ZCoordinate);
             this._messageController = messageController;
 
             // get the target character
@@ -200,7 +200,7 @@ namespace GameData.server.roundHandler
             _currentField = new FlatSand(_currentField.hasSpice, _currentField.isInSandstorm);
             _currentField.PlaceCharacter(oldfield.Character);
 
-            Map.instance.SetMapFieldAtPosition(_currentField, oldfield.XCoordinate, oldfield.ZCoordinate);
+            _map.SetMapFieldAtPosition(_currentField, oldfield.XCoordinate, oldfield.ZCoordinate);
             _currentField.IsApproachable = true;
 
             _currentField = nextField;

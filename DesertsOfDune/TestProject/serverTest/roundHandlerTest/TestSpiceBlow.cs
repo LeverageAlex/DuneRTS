@@ -15,28 +15,33 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
     /// </summary>
     public class TestSpiceBlow
     {
+        private List<List<string>> scenarioConfiguration;
+        private int scenarioWidth = 10;
+        private int scenarioHeight = 10;
+
+        [SetUp]
+        public void Setup()
+        {
+            scenarioConfiguration = new List<List<string>>();
+            for (int i = 0; i < 10; i++)
+            {
+                List<string> l = new List<string>();
+                for (int j = 0; j < 10; j++)
+                {
+                    l.Add("FLAT_SAND");
+                }
+                scenarioConfiguration.Add(l);
+            }
+
+        }
+
         /// <summary>
         /// This Testcase validates the behaviour of the method PlaceSpiceOnFields
         /// </summary>
         [Test]
         public void TestPlaceSpiceOnFieldsAllFieldsAproachable()
         {
-            List<List<string>> scenarioConfiguration = new List<List<string>>();
-            List<string> list1 = new List<string>();
-            list1.Add("FLAT_SAND");
-            list1.Add("FLAT_SAND");
-            list1.Add("FLAT_SAND");
-            List<string> list2 = new List<string>();
-            list2.Add("FLAT_SAND");
-            list2.Add("FLAT_SAND");
-            list2.Add("FLAT_SAND");
-            List<string> list3 = new List<string>();
-            list3.Add("FLAT_SAND");
-            list3.Add("FLAT_SAND");
-            list3.Add("FLAT_SAND");
-            scenarioConfiguration.Add(list1);
-            scenarioConfiguration.Add(list2);
-            scenarioConfiguration.Add(list3);
+            
             Map map = new Map(3, 3, scenarioConfiguration);
             foreach (MapField mapField in map.fields)
             {
