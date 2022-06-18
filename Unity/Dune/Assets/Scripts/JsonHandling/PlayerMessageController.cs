@@ -85,8 +85,10 @@ public class PlayerMessageController : MessageController
     /// <param name="pause">true, if the game should be paused. False if the game should be continued</param>
     public void DoRequestPauseGame(bool pause)
     {
+        Debug.Log("Start Requesting Pause game with state: " + pause);
         PauseGameRequestMessage pauseGameRequestMessage = new PauseGameRequestMessage(pause);
         NetworkController.HandleSendingMessage(pauseGameRequestMessage);
+        Debug.Log("Sent msg");
     }
 
     /// <summary>
@@ -313,12 +315,25 @@ public class PlayerMessageController : MessageController
             }
             else
             {
-                InGameMenuManager.getInstance().RequestUnpauseGame();
+                InGameMenuManager.getInstance().DemandUnpauseGame();
             }
             yield return null;
         }
 
         UnityMainThreadDispatcher.Instance().Enqueue(pauseGameDem());
+    }
+
+    public override void OnUnpauseOfferDemand(UnpauseGameOfferMessage unpauseGameOfferMessage)
+    {
+        IEnumerator UnpauseOffer() {
+            if (InGameMenuManager.getInstance().IsPaused)
+            {
+                InGameMenuManager.getInstance().DemandPauseGame(false);
+            }
+            yield return null;
+        }
+
+        UnityMainThreadDispatcher.Instance().Enqueue(UnpauseOffer());
     }
 
     /// <summary>
@@ -726,12 +741,6 @@ public class PlayerMessageController : MessageController
     }
 
     // This method should not be called by the client.
-    public override void OnPauseGameRequestMessage(PauseGameRequestMessage msg)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    // This method should not be called by the client.
     public override void DoAcceptJoin(string clientSecret, int clientID, string sessionID)
     {
         throw new System.NotImplementedException();
@@ -870,6 +879,11 @@ public class PlayerMessageController : MessageController
     }
 
     public override void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void OnPauseGameRequestMessage(PauseGameRequestMessage msg, string sessionID)
     {
         throw new NotImplementedException();
     }

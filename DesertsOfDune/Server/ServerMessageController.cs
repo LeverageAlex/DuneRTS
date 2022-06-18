@@ -396,7 +396,7 @@ namespace Server
                             MapField targetMapField = null;
                             foreach (var mapfield in map.fields)
                             {
-                                if (mapfield.GetMapFieldPosition() == msg.specs.target)
+                                if (mapfield.XCoordinate == msg.specs.target.x && mapfield.YCoordinate == msg.specs.target.y)
                                 {
                                     targetMapField = mapfield;
                                 }
@@ -407,7 +407,7 @@ namespace Server
                             {
                                 foreach (var mapField in map.GetNeighborFields(targetMapField))
                                 {
-                                    if (Sandworm.GetSandworm().GetCurrentField() == mapField || Sandworm.GetSandworm().GetCurrentField() == targetMapField)
+                                    if (Sandworm.GetSandworm().GetCurrentField().Equals(mapField) || Sandworm.GetSandworm().GetCurrentField().Equals(targetMapField))
                                     {
                                         Sandworm.Despawn(this);
                                         break;
@@ -605,7 +605,6 @@ namespace Server
                         Console.WriteLine("Session was paused");
                         Log.Information($"The party was paused by the client with the ID {clientID}.");
                         DoSendGamePauseDemand(true);
-                        Thread.Sleep(Timeout.Infinite);
                     }
                     else
                     {
@@ -642,7 +641,6 @@ namespace Server
 
             PausGameDemandMessage gamePauseDemandMessage = new PausGameDemandMessage(pauseRequest.ClientID, pause);
             NetworkController.HandleSendingMessage(gamePauseDemandMessage);
-            Console.WriteLine("gamePauseDemandMessage was sent");
         }
 
         /// <summary>
@@ -1052,6 +1050,11 @@ namespace Server
 
         // the server should not use this method
         public override void OnAtomicsUpdateDemandMessage(AtomicsUpdateDemandMessage atomicUpdateDemandMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnUnpauseOfferDemand(UnpauseGameOfferMessage unpauseGameOfferMessage)
         {
             throw new NotImplementedException();
         }

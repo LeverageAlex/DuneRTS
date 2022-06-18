@@ -42,6 +42,8 @@ public class InGameMenuManager : MonoBehaviour
     private string option1Name;
     private string option2Name;
 
+    public bool IsPaused { get { return PauseScreenWithButton.activeSelf || PauseScreenNoButton.activeSelf; } }
+
 
     private void Awake()
     {

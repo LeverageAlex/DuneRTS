@@ -228,7 +228,7 @@ namespace GameData.gameObjects
         private void SetMaximalPauseOverTimer()
         {
             // Create a timer with a 100 miliseconds interval.
-            maximalPauseOverTimer = new System.Timers.Timer(10000);
+            maximalPauseOverTimer = new System.Timers.Timer(PartyConfiguration.GetInstance().minPauseTime);
             // Hook up the Elapsed event for the timer. 
             maximalPauseOverTimer.Elapsed += OnMaxPauseOverTimedEvent;
             maximalPauseOverTimer.AutoReset = false;
@@ -262,7 +262,12 @@ namespace GameData.gameObjects
             PauseRequest = new PauseRequest(true, clientID);
 
             Party.GetInstance().messageController.NetworkController.GamePaused = true;
+            
             maximalPauseOverTimer.Start();
+            if (characterTraitPhase != null)
+            {
+                characterTraitPhase.freezeTraitPhase(true);
+            }
 
             // TODO: do not used Thread.Sleep() and <thread>.Interrupt()!!
 
@@ -288,7 +293,11 @@ namespace GameData.gameObjects
                     return false;
                 }
             }
-
+            if (characterTraitPhase != null)
+            {
+                characterTraitPhase.freezeTraitPhase(false);
+            }
+            maximalPauseOverTimer.Stop();
             IsPartyPaused = false;
             PauseRequest = new PauseRequest(false, clientID);
 

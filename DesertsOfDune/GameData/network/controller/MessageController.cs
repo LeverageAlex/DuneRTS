@@ -147,6 +147,8 @@ namespace GameData.network.controller
 
         public abstract void OnSandwormDespawnMessage(SandwormDespawnDemandMessage sandwormDespawnDemandMessage);
 
+        public abstract void OnUnpauseOfferDemand(UnpauseGameOfferMessage unpauseGameOfferMessage);
+
         public abstract void OnEndGameMessage(EndGameMessage endGameMessage);
 
         public abstract void OnTransferDemandMessage(TransferDemandMessage transferDemandMessage);

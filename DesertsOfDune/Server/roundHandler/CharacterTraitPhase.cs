@@ -159,5 +159,18 @@ namespace GameData.server.roundHandler
             }
             ((ServerConnectionHandler)Party.GetInstance().messageController.NetworkController.connectionHandler).sessionManager.CloseSession(sessionID, WebSocketSharp.CloseStatusCode.Normal, "Timeout happend in characterTraitPhase!");
         }
+
+
+        public void freezeTraitPhase(bool pause)
+        {
+            if(pause)
+            {
+                _timer.Stop();
+            }
+            else
+            {
+                _timer.Start();
+            }
+        }
     }
 }

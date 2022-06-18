@@ -156,6 +156,7 @@ namespace GameData.network.controller
                     messageController.OnPauseGameDemandMessage((GamePauseDemandMessage)receivedMessage);
                     return true;
                 case MessageType.UNPAUSE_GAME_OFFER:
+                    messageController.OnUnpauseOfferDemand((UnpauseGameOfferMessage)receivedMessage);
                     return true;
                 default:
                     Log.Error("Incoming parsed message has invalid type (" + type + ") and could not be forwarded to the message controller!");
