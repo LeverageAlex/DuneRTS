@@ -250,6 +250,8 @@ namespace Server
             {
                 players[0].City = cities[0];
                 players[1].City = cities[1];
+
+                
             }
             else
             {

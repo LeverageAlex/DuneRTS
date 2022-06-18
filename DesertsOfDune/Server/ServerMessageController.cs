@@ -138,6 +138,7 @@ namespace Server
                 if (requestingPlayer.OfferedGreatHouses.Contains(chosenGreatHouse))
                 {
                     requestingPlayer.UsedGreatHouse = GreatHouseFactory.CreateNewGreatHouse(chosenGreatHouse);
+
                     DoSendHouseAck(requestingPlayer.ClientID, chosenGreatHouse.ToString());
                     Log.Information("The player with the session id: " + sessionID + " chose the great house " + chosenGreatHouse.ToString());
 
@@ -150,6 +151,11 @@ namespace Server
                     {
                         // first player already has great house, so start the game
                         Party.GetInstance().Start();
+                        List<Player> listPlayer =  Party.GetInstance().GetActivePlayers();
+                        foreach (Player player in listPlayer)
+                        {
+                            player.UsedGreatHouse.City = requestingPlayer.City;
+                        }
                     }
                 }
                 else

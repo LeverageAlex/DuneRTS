@@ -24,7 +24,7 @@ namespace GameData.network.util.world
         [JsonProperty (Order = 4)]
         public HouseCharacter[] houseCharacters { get; set; }
         [JsonIgnore]
-        public City City { get; }
+        public City City { get; set; }
         [JsonIgnore]
         public List<Character> Characters { get; }
         [JsonIgnore]
