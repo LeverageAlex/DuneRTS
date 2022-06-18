@@ -370,6 +370,7 @@ namespace Server
                             action = ActionType.ATTACK;
                             if (!friendlyFire && !targetCharacter.IsInSandStorm(map))
                             {
+                                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
                                 actionCharacter.Attack(targetCharacter);
                                 if (targetCharacter.IsDead()) // if enemy dies from attack, update statistics
                                 {
@@ -380,6 +381,7 @@ namespace Server
                             break;
                         case ActionType.COLLECT:
                             action = ActionType.COLLECT;
+                            DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
                             actionCharacter.CollectSpice();
                             activePlayer.statistics.AddToTotalSpiceCollected(1);
                             DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
@@ -410,6 +412,7 @@ namespace Server
                                 && !targetCharacter.IsInSandStorm(map)
                                 && success < PartyConfiguration.GetInstance().kanlySuccessProbability * 100)
                             {
+                                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
                                 actionCharacter.Kanly(targetCharacter);
                                 activePlayer.statistics.AddToEnemiesDefeated(1);
                                 charactersHit.Add(targetCharacter);
@@ -420,6 +423,7 @@ namespace Server
                             if (actionCharacter.APcurrent == actionCharacter.APmax
                                 && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE))
                             {
+                                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
                                 //get the mapfield where the active Character aims to
                                 MapField targetMapField = null;
                                 foreach (var mapfield in map.fields)
@@ -452,12 +456,13 @@ namespace Server
                             DoSendMapChangeDemand(MapChangeReasons.FAMILY_ATOMICS);
                             if(greathouseConventionBrokenBeforeAtomicBomb != Noble.greatHouseConventionBroken)
                             {
+                                    DoSendAtomicsUpdateDemand(msg.clientID, true, actionCharacter.greatHouse.unusedAtomicBombs);
                                     int charactersAmount = enemyPlayer.UsedGreatHouse.Characters.Count;
                                     for (int i = charactersAmount - 1; i > charactersAmount - 5; i--)
                                     {
                                         DoSpawnCharacterDemand(enemyPlayer.UsedGreatHouse.Characters[i]);
                                     }
-                                DoSendAtomicsUpdateDemand(msg.clientID, true, actionCharacter.greatHouse.unusedAtomicBombs);
+
                             }
                             else
                             {
@@ -470,6 +475,7 @@ namespace Server
                             if (actionCharacter.APcurrent == actionCharacter.APmax
                                 && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.MENTAT))
                             {
+                                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
                                 int inventoryUsedBeforeSpiceHoarding = actionCharacter.inventoryUsed;
                                 actionCharacter.SpiceHoarding(map);
                                 activePlayer.statistics.AddToTotalSpiceCollected(actionCharacter.inventoryUsed - inventoryUsedBeforeSpiceHoarding);
@@ -497,6 +503,7 @@ namespace Server
                                 {
                                     DoSendError(005, "Target character is null when voice action is executed!", activePlayer.SessionID);
                                 }
+                                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
                                 int InventoryUsedBeforeVoice = actionCharacter.inventoryUsed;
                                 actionCharacter.Voice(targetCharacter);
                                 activePlayer.statistics.AddToTotalSpiceCollected(actionCharacter.inventoryUsed - InventoryUsedBeforeVoice);
@@ -518,6 +525,7 @@ namespace Server
                             if (actionCharacter.APcurrent == actionCharacter.APmax
                                 && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.FIGHTER))
                             {
+                                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
                                 charactersHit = actionCharacter.SwordSpin(map);
                                 foreach (var character in charactersHit)
                                 {
@@ -531,7 +539,7 @@ namespace Server
                         default:
                             throw new ArgumentException($"Actiontype {msg.action} not supoorted here.");
                     }
-                    DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
+
                     foreach (var character in charactersHit)
                     {
                         if (activePlayer.UsedGreatHouse == character.greatHouse)
