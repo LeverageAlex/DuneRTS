@@ -282,6 +282,7 @@ namespace Server
 
             if (movingCharacter.MPcurrent <= 0 && movingCharacter.APcurrent <= 0)
             {
+                CharacterTraitPhase.StopAndResetTimer();
                 Party.GetInstance().RoundHandler.GetCharacterTraitPhase().SendRequestForNextCharacter();
             }
         }
@@ -486,6 +487,7 @@ namespace Server
 
             if ((actionCharacter.MPcurrent <= 0 && actionCharacter.APcurrent <= 0) || actionCharacter.IsDead())
             {
+                CharacterTraitPhase.StopAndResetTimer();
                 Party.GetInstance().RoundHandler.GetCharacterTraitPhase().SendRequestForNextCharacter();
             }
         }
@@ -557,6 +559,7 @@ namespace Server
 
             if (activeCharacter.MPcurrent <= 0 && activeCharacter.APcurrent <= 0)
             {
+                CharacterTraitPhase.StopAndResetTimer();
                 Party.GetInstance().RoundHandler.GetCharacterTraitPhase().SendRequestForNextCharacter();
             }
         }
@@ -567,6 +570,7 @@ namespace Server
         /// <param name="msg"></param>
         public override void OnEndTurnRequestMessage(EndTurnRequestMessage msg)
         {
+            CharacterTraitPhase.StopAndResetTimer();
             foreach (var player in Party.GetInstance().GetActivePlayers())
             {
                 if (player.ClientID == msg.clientID)

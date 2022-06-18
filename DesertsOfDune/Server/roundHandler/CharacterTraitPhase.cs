@@ -88,9 +88,11 @@ namespace GameData.server.roundHandler
         /// <summary>
         /// stop timer
         /// </summary>
-        public void StopTimer()
+        public static void StopAndResetTimer()
         {
+            int timeInMilliseconds = PartyConfiguration.GetInstance().actionTimeUserClient;
             _timer.Stop();
+            _timer = new Timer(timeInMilliseconds);
         }
 
         /// <summary>
@@ -136,7 +138,7 @@ namespace GameData.server.roundHandler
             }
             _timer = new Timer(timeInMilliseconds);
             _timer.Elapsed += OnTimedEvent;
-            _timer.AutoReset = true;
+            _timer.AutoReset = false;
         }
 
         /// <summary>
@@ -165,11 +167,13 @@ namespace GameData.server.roundHandler
         {
             if(pause)
             {
-                _timer.Stop();
+                _timer.Enabled = false;
+                //_timer.Stop();
             }
             else
             {
-                _timer.Start();
+                _timer.Enabled = true;
+                //_timer.Start();
             }
         }
     }
