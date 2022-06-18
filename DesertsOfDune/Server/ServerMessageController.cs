@@ -154,7 +154,7 @@ namespace Server
                         List<Player> listPlayer =  Party.GetInstance().GetActivePlayers();
                         foreach (Player player in listPlayer)
                         {
-                            player.UsedGreatHouse.City = requestingPlayer.City;
+                            player.UsedGreatHouse.City = player.City;
                         }
                     }
                 }
