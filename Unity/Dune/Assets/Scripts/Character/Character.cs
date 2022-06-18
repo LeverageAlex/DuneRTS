@@ -298,6 +298,22 @@ public class Character : MonoBehaviour
 
     }
 
+   public void OnMouseEnter()
+    {
+        if(turnHandler.CharState == CharacterTurnHandler.Actions.MOVE)
+        {
+            MapManager.instance.getNodeFromPos(X, Z).Colorize(true);
+        }
+    }
+
+    public void OnMouseExit()
+    {
+        if (turnHandler.CharState == CharacterTurnHandler.Actions.MOVE)
+        {
+            MapManager.instance.getNodeFromPos(X, Z).Colorize(false);
+        }
+    }
+
     public void selectChar()
     {
 
@@ -322,6 +338,10 @@ public class Character : MonoBehaviour
         else if (turnHandler.CharState == CharacterTurnHandler.Actions.FAMILY_ATOMICS)
         {
             CharacterTurnHandler.instance.GetSelectedCharacter().Attack_AtomicTrigger(nodeManager.getNodeFromPos(X, Z));
+        }
+       else if(turnHandler.CharState == CharacterTurnHandler.Actions.MOVE)
+        {
+            MapManager.instance.getNodeFromPos(X, Z).SelectNode();
         }
 
 
@@ -361,6 +381,7 @@ public class Character : MonoBehaviour
 
     public void Attack_BasicExecution(Character character)
     {
+        turnHandler.ResetAction();
         Vector3 dir = character.transform.position - transform.position;
         RotateTowardsVector(dir);
         charAnim.Play(animation_attack);

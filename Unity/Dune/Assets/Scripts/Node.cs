@@ -61,11 +61,6 @@ public class Node : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
 
     private void OnMouseEnter()
@@ -145,6 +140,18 @@ public class Node : MonoBehaviour
 
 
 
+    }
+
+    public void Colorize(bool colorize)
+    {
+        if (colorize)
+        {
+            rend.material.color = hoverColor;
+        }
+        else
+        {
+            OnMouseExit();
+        }
     }
 
 
