@@ -368,6 +368,10 @@ namespace Server
                         if (!friendlyFire && !targetCharacter.IsInSandStorm(map))
                         {
                             actionCharacter.Attack(targetCharacter);
+                            if (targetCharacter.IsDead()) // if enemy dies from attack, update statistics
+                            {
+                                activePlayer.statistics.AddToEnemiesDefeated(1);
+                            }
                             charactersHit.Add(targetCharacter);
                         }
                         break;
@@ -379,6 +383,7 @@ namespace Server
                         break;
                     //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
                     case ActionType.KANLY:
+                        //TODO: success probability
                         action = ActionType.KANLY;
                         if (targetCharacter == null)
                         {
@@ -391,6 +396,7 @@ namespace Server
                             && !targetCharacter.IsInSandStorm(map))
                         {
                             actionCharacter.Kanly(targetCharacter);
+                            activePlayer.statistics.AddToEnemiesDefeated(1);
                             charactersHit.Add(targetCharacter);
                         }
                         break;
@@ -423,6 +429,7 @@ namespace Server
                             }
                             bool greathouseConventionBrokenBeforeAtomicBomb = Noble.greatHouseConventionBroken;
                             charactersHit = actionCharacter.AtomicBomb(targetMapField, map, Noble.greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse);
+                            activePlayer.statistics.AddToEnemiesDefeated(charactersHit.Count);
                             DoSendMapChangeDemand(MapChangeReasons.FAMILY_ATOMICS);
                             if(greathouseConventionBrokenBeforeAtomicBomb != Noble.greatHouseConventionBroken)
                             {
@@ -439,7 +446,9 @@ namespace Server
                         if (actionCharacter.APcurrent == actionCharacter.APmax
                             && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.MENTAT))
                         {
+                            int inventoryUsedBeforeSpiceHoarding = actionCharacter.inventoryUsed;
                             actionCharacter.SpiceHoarding(map);
+                            activePlayer.statistics.AddToTotalSpiceCollected(actionCharacter.inventoryUsed - inventoryUsedBeforeSpiceHoarding);
                             DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
                         }
                         break;
@@ -465,6 +474,13 @@ namespace Server
                             && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.FIGHTER))
                         {
                             charactersHit = actionCharacter.SwordSpin(map);
+                            foreach (var character in charactersHit)
+                            {
+                                if (character.IsDead())
+                                {
+                                    activePlayer.statistics.AddToEnemiesDefeated(1);
+                                }
+                            }
                         }
                         break;
                     default:

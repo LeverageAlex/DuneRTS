@@ -23,7 +23,9 @@ namespace GameData.network.util.world
         /// <returns>the statistics</returns>
         public List<String> GetFormatedStatistics()
         {
-            return null;
+            //TODO: not return null
+            throw new NotImplementedException("GetFormatedStatistics is not implemented!");
+            //return null;
         }
 
         /// <summary>
