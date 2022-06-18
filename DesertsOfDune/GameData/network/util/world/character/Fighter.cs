@@ -60,7 +60,7 @@ namespace GameData.network.util.world.character
         /// <summary>
         /// This method represents the action SwordSpin of the character type fighter
         /// </summary>
-        /// <returns>true, if the action was successful</returns>
+        /// <returns>characters hit by the sword spin</returns>
         
         public override List<Character> SwordSpin(Map map)
         {

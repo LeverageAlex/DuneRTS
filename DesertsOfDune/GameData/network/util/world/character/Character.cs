@@ -335,7 +335,7 @@ namespace GameData.network.util.world
         /// This method is needed to get overridden by the Noble class to perform the Kanly special aciton
         /// </summary>
         /// <param name="targetCharacter"> this is the Character who gets Attacked by the active noble character; needs to be a noble </param>
-        /// <returns></returns>
+        /// <returns>true if kanly was successful</returns>
         virtual
         public bool Kanly(Character targetCharacter) 
         {
@@ -347,7 +347,7 @@ namespace GameData.network.util.world
         /// This method is needed to get overriden by the Nobel class to perform the AtomicBomb special action
         /// </summary>
         /// <param name="target"> this is the Field on the Map where the active Noble character aims its atomic bomb to </param>
-        /// <returns></returns>
+        /// <returns>characters hit by the atomic bomb</returns>
         virtual
         public List<Character> AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse)
         {
@@ -358,7 +358,7 @@ namespace GameData.network.util.world
         /// <summary>
         /// This method is needed to get overridden by the Mentat class to perform the SpiceHoarding special action
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true, if spice hoarding was successful</returns>
         virtual
         public bool SpiceHoarding(Map map)
         {
@@ -370,7 +370,7 @@ namespace GameData.network.util.world
         /// This method is needed to get overridden by the BeneGesserit class to perform the Voice special action
         /// </summary>
         /// <param name="target"> this is the character who gets focused by the active Bene Gesserit character </param>
-        /// <returns></returns>
+        /// <returns>true, if voice was successful</returns>
         virtual
         public bool Voice(Character target)
         {
@@ -381,7 +381,7 @@ namespace GameData.network.util.world
         /// <summary>
         /// This method is needed to get overridden by the Fighter class to perform the SwordSpin special attack
         /// </summary>
-        /// <returns></returns>
+        /// <returns>charactes hit by the sword spin</returns>
         virtual
         public List<Character> SwordSpin(Map map)
         {
@@ -393,7 +393,7 @@ namespace GameData.network.util.world
         /// This method is used to check if the Character is staying in the sandstorm
         /// </summary>
         /// <param name="map">The map where the player is</param>
-        /// <returns></returns>
+        /// <returns>true if the characters stands in the sandstorm</returns>
         public bool IsInSandStorm(Map map)
         {
             if(CurrentMapfield.GetMapFieldPosition().x == map.PositionOfEyeOfStorm.x && CurrentMapfield.GetMapFieldPosition().y == map.PositionOfEyeOfStorm.y)
