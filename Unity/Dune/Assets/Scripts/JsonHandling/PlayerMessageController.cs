@@ -113,6 +113,7 @@ public class PlayerMessageController : MessageController
     public void DoRequestTransfer(int clientID, int characterID, int targetID, int amount)
     {
         TransferRequestMessage endTurnRequestMessage = new TransferRequestMessage(clientID, characterID, targetID, amount);
+        Log.Debug("Parsing of RequestTransfer: clientID: " + clientID + ", characterID: " + characterID + ", targetID: " + targetID + ", amount: " + amount);
         NetworkController.HandleSendingMessage(endTurnRequestMessage);
     }
 
@@ -166,7 +167,7 @@ public class PlayerMessageController : MessageController
             {
                 for (int z = 0; z < gameConfigMessage.scenario[0].Count; z++)
                 {
-                    Debug.Log("PreLoop Built x: " + x + " and z: " + z);
+             //       Debug.Log("PreLoop Built x: " + x + " and z: " + z);
                     if (gameConfigMessage.stormEye != null && MapManager.instance.isNodeNeighbour(x, z, gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y))
                     {
                         //Node is in Sandstorm
@@ -176,7 +177,7 @@ public class PlayerMessageController : MessageController
                     {
                         MapManager.instance.UpdateBoard(x, z, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[z][x]), false);
                     }
-                    Debug.Log("Built x: " + x + " and z: " + z);
+              //      Debug.Log("Built x: " + x + " and z: " + z);
                 }
             }
 
@@ -186,8 +187,8 @@ public class PlayerMessageController : MessageController
                 MapManager.instance.getNodeFromPos(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y).SetSandstorm(true);
                 MapManager.instance.SetStormEye(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y);
             }
-            Debug.Log("Checkpoint");
-            Debug.Log("Pre Crash" + gameConfigMessage.cityToClient[0]);
+        //    Debug.Log("Checkpoint");
+         //   Debug.Log("Pre Crash" + gameConfigMessage.cityToClient[0]);
 
             if (gameConfigMessage.cityToClient[0].clientID == SessionHandler.clientId)
             {
@@ -197,7 +198,7 @@ public class PlayerMessageController : MessageController
             {
                 SessionHandler.enemyClientId = gameConfigMessage.cityToClient[0].clientID;
             }
-            Debug.Log("Soweit Clean");
+           // Debug.Log("Soweit Clean");
             MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[0].x, gameConfigMessage.cityToClient[0].y).cityOwnerId = gameConfigMessage.cityToClient[0].clientID;
             MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[1].x, gameConfigMessage.cityToClient[1].y).cityOwnerId = gameConfigMessage.cityToClient[1].clientID;
 
@@ -227,7 +228,7 @@ public class PlayerMessageController : MessageController
 
 
 
-                    Debug.Log("PreLoop Built x: " + x + " and z: " + z);
+                   // Debug.Log("PreLoop Built x: " + x + " and z: " + z);
                     if (mapChangeDemandMessage.stormEye != null && MapManager.instance.isNodeNeighbour(x, z, mapChangeDemandMessage.stormEye.x, mapChangeDemandMessage.stormEye.y))
                     {
 
@@ -238,7 +239,7 @@ public class PlayerMessageController : MessageController
                     {
                         MapManager.instance.UpdateBoard(x, z, MapManager.instance.StringtoNodeEnum(mapChangeDemandMessage.newMap[z, x].tileType), false);
                     }
-                    Debug.Log("Built x: " + x + " and z: " + z);
+                 //   Debug.Log("Built x: " + x + " and z: " + z);
 
 
                     if (mapChangeDemandMessage.newMap[z, x].hasSpice)

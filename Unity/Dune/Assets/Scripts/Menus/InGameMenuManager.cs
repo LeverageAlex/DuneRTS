@@ -83,6 +83,8 @@ public class InGameMenuManager : MonoBehaviour
         SpiceMaxText.text = spiceInv.ToString();
         SpiceAmountSlider.maxValue = spiceInv;
         SpiceAmountSlider.wholeNumbers = true;
+        SpiceTransferButton.onClick.RemoveAllListeners();
+        SpiceCancleButton.onClick.RemoveAllListeners();
         SpiceTransferButton.onClick.AddListener(() => {
             giver.TriggerRequestTransferSpice(receiver, Mathf.RoundToInt(SpiceAmountSlider.value));
             ActivateMenu(InGameUI);

@@ -138,7 +138,7 @@ public class CharacterTurnHandler : MonoBehaviour
     {
         if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
         selectedCharacter.Action_SpiceHoardingTrigger();
-        this.charState = Actions.SPICE_HOARDING;
+        this.charState = Actions.EMPTY;
         ConfirmDeactivate();
     }
 

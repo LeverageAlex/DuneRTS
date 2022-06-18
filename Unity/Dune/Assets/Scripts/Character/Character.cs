@@ -57,7 +57,7 @@ public class Character : MonoBehaviour
 
     public int AP { get { return _AP; } }
 
-    public int CharacterId { get { return characterId; } }
+    //public int CharacterId { get { return characterId; } }
 
 
     private bool isLoud;
@@ -291,13 +291,7 @@ public class Character : MonoBehaviour
     public void selectChar()
     {
 
-        if (!CharacterTurnHandler.CharSelected)  //To ADD: Check whether Character is allowed to move
-        {
-            turnHandler.SelectCharacter(this);
-            // Debug.Log("Node set Character!");
-            Debug.Log("Select new Character");
-        }
-        else if (turnHandler.CharState == CharacterTurnHandler.Actions.ATTACK)
+       if (turnHandler.CharState == CharacterTurnHandler.Actions.ATTACK)
         {
             turnHandler.GetSelectedCharacter().Attack_BasicTrigger(this);
         }
@@ -311,7 +305,9 @@ public class Character : MonoBehaviour
         }
         else if (turnHandler.CharState == CharacterTurnHandler.Actions.TRANSFER)
         {
+            Debug.Log("Transfer Character: " + this.characterId);
             turnHandler.GetSelectedCharacter().Action_TransferSpiceTrigger(this);
+
         }
         else if (turnHandler.CharState == CharacterTurnHandler.Actions.FAMILY_ATOMICS)
         {

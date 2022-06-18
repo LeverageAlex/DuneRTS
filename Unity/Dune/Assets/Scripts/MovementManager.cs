@@ -215,8 +215,8 @@ public class MovementManager : MonoBehaviour
         //    SessionHandler.messageController.DoRequestHouse("ATREIDES");
         //if (!Mode.debugMode)
         //{
-        Log.Debug("DoRequestMovement: for characterID " + CharacterTurnHandler.instance.GetSelectedCharacter().CharacterId);
-        SessionHandler.messageController.DoRequestMovement(SessionHandler.clientId, CharacterTurnHandler.instance.GetSelectedCharacter().CharacterId, selCharPath);
+        Log.Debug("DoRequestMovement: for characterID " + CharacterTurnHandler.instance.GetSelectedCharacter().characterId);
+        SessionHandler.messageController.DoRequestMovement(SessionHandler.clientId, CharacterTurnHandler.instance.GetSelectedCharacter().characterId, selCharPath);
         // }
         //else
         //{
