@@ -271,6 +271,26 @@ namespace GameData.network.util.world
             }
         }
 
+
+        public MapField GetRandomApproachableField()
+        {
+            // as long, as the chosen map field is approachable, choose a random field
+
+            while (true)
+            {
+                // get a random map field on the map
+                Random random = new Random();
+                int randomX = random.Next(MAP_WIDTH);
+                int randomY = random.Next(MAP_HEIGHT);
+
+                MapField chosenField = GetMapFieldAtPosition(randomX, randomY);
+                if (chosenField.IsApproachable)
+                {
+                    return chosenField;
+                }
+            }
+        }
+
         /// <summary>
         /// prints a map to the console for debugging purpose
         /// </summary>

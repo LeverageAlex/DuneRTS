@@ -156,7 +156,11 @@ namespace GameData.network.util.world.character
                     foreach (var greatHouse in remainingGreatHouses)
                     {
                         int randomCharacterIndex = rnd.Next(greatHouse.Characters.Count);
-                        MapField fieldForCharacter = map.GetRandomFreeApproachableNeighborField(passivePlayerGreatHouse.City);
+
+
+                        MapField fieldForCharacter = map.GetRandomApproachableField();
+
+
                         var newCharacter = greatHouse.Characters[randomCharacterIndex];
                         fieldForCharacter.PlaceCharacter(newCharacter);
                         greatHouse.Characters[randomCharacterIndex].CurrentMapfield = fieldForCharacter;
