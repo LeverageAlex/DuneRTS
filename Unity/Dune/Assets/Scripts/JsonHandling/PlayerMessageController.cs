@@ -216,7 +216,7 @@ public class PlayerMessageController : MessageController
         IEnumerator mapchange()
         {
             CharacterTurnHandler.instance.ResetSelection();
-            GUIHandler.BroadcastGameMessage("Map change: " + mapChangeDemandMessage.changeReason);
+            GUIHandler.BroadcastGameMessage(mapChangeDemandMessage.changeReason);
             for (int x = 0; x < mapChangeDemandMessage.newMap.GetLength(0); x++)
             {
                 for (int z = 0; z < mapChangeDemandMessage.newMap.GetLength(1); z++)

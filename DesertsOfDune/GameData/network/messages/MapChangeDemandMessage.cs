@@ -26,6 +26,7 @@ namespace GameData.network.messages
         public MapChangeDemandMessage(MapChangeReasons changeReason, MapField[,] newMap, Position stormEye) : base("1.0", MessageType.MAP_CHANGE_DEMAND)
         {
             this.changeReason = Enum.GetName(typeof(MapChangeReasons), changeReason);
+            this.changeReason = this.changeReason.Replace('_', ' ');
             this.newMap = newMap;
             this.stormEye = stormEye;
         }
