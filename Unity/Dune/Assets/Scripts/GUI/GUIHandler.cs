@@ -27,7 +27,6 @@ public class GUIHandler : MonoBehaviour
         instance = this;
         UpdatePlayerSpice(0);
         UpdateEnemySpice(0);
-        BroadcastGameMessage("5 Gegen Willi");
     }
 
 
@@ -80,7 +79,7 @@ public class GUIHandler : MonoBehaviour
     public IEnumerator deactivateGameMessage()
     {
         string startText = instance.gameMessageText.text;
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(12);
         if (startText.Equals(instance.gameMessageText.text))
         {
             instance.gameMessage.SetActive(false);

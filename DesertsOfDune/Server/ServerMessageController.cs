@@ -370,6 +370,7 @@ namespace Server
                             action = ActionType.ATTACK;
                             if (!friendlyFire && !targetCharacter.IsInSandStorm(map))
                             {
+                                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
                                 actionCharacter.Attack(targetCharacter);
                                 if (targetCharacter.IsDead()) // if enemy dies from attack, update statistics
                                 {
@@ -380,13 +381,25 @@ namespace Server
                             break;
                         case ActionType.COLLECT:
                             action = ActionType.COLLECT;
+                            DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
                             actionCharacter.CollectSpice();
                             activePlayer.statistics.AddToTotalSpiceCollected(1);
                             DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
+                            //deliver spice to city if city is neighborfield
+                            foreach (var mapfield in map.GetNeighborFields(actionCharacter.CurrentMapfield))
+                            {
+                                if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
+                                {
+                                    activePlayer.statistics.AddToHouseSpiceStorage(actionCharacter.inventoryUsed);
+                                    actionCharacter.inventoryUsed = 0;
+                                    DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
+                                }
+                            }
                             break;
                         //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
                         case ActionType.KANLY:
-                            //TODO: success probability
+                            Random rnd = new Random();
+                            int success = rnd.Next(100);
                             action = ActionType.KANLY;
                             if (targetCharacter == null)
                             {
@@ -396,8 +409,10 @@ namespace Server
                                 && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE)
                                 && targetCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE)
                                 && !friendlyFire
-                                && !targetCharacter.IsInSandStorm(map))
+                                && !targetCharacter.IsInSandStorm(map)
+                                && success < PartyConfiguration.GetInstance().kanlySuccessProbability * 100)
                             {
+                                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
                                 actionCharacter.Kanly(targetCharacter);
                                 activePlayer.statistics.AddToEnemiesDefeated(1);
                                 charactersHit.Add(targetCharacter);
@@ -408,17 +423,23 @@ namespace Server
                             if (actionCharacter.APcurrent == actionCharacter.APmax
                                 && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE))
                             {
+                                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
                                 //get the mapfield where the active Character aims to
                                 MapField targetMapField = null;
                                 foreach (var mapfield in map.fields)
                                 {
-                                    actionCharacter.Attack(targetCharacter);
-                                    charactersHit.Add(targetCharacter);
+                                    if (mapfield.XCoordinate == msg.specs.target.x && mapfield.ZCoordinate == msg.specs.target.y)
+                                    {
+                                        targetMapField = mapfield;
+                                    }
                                 }
-                            
+                                if(targetMapField == null)
+                                {
+                                    DoSendError(005, "TargetMapField is null when FamilyAtomics was executed!", activePlayer.SessionID);
+                                }
 
-                            // if atomic bomb is thrown on sandworm or neighborfield of sandworm then remove the sandworm
-                            if (Sandworm.GetSandworm() != null)
+                                // if atomic bomb is thrown on sandworm or neighborfield of sandworm then remove the sandworm
+                                if (Sandworm.GetSandworm() != null)
                             {
                                 foreach (var mapField in map.GetNeighborFields(targetMapField))
                                 {
@@ -435,7 +456,13 @@ namespace Server
                             DoSendMapChangeDemand(MapChangeReasons.FAMILY_ATOMICS);
                             if(greathouseConventionBrokenBeforeAtomicBomb != Noble.greatHouseConventionBroken)
                             {
-                                DoSendAtomicsUpdateDemand(msg.clientID, true, actionCharacter.greatHouse.unusedAtomicBombs);
+                                    DoSendAtomicsUpdateDemand(msg.clientID, true, actionCharacter.greatHouse.unusedAtomicBombs);
+                                    int charactersAmount = enemyPlayer.UsedGreatHouse.Characters.Count;
+                                    for (int i = charactersAmount - 1; i > charactersAmount - 5; i--)
+                                    {
+                                        DoSpawnCharacterDemand(enemyPlayer.UsedGreatHouse.Characters[i]);
+                                    }
+
                             }
                             else
                             {
@@ -448,10 +475,21 @@ namespace Server
                             if (actionCharacter.APcurrent == actionCharacter.APmax
                                 && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.MENTAT))
                             {
+                                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
                                 int inventoryUsedBeforeSpiceHoarding = actionCharacter.inventoryUsed;
                                 actionCharacter.SpiceHoarding(map);
                                 activePlayer.statistics.AddToTotalSpiceCollected(actionCharacter.inventoryUsed - inventoryUsedBeforeSpiceHoarding);
                                 DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
+                                //deliver spice to city if city is neighborfield
+                                foreach (var mapfield in map.GetNeighborFields(actionCharacter.CurrentMapfield))
+                                {
+                                    if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
+                                    {
+                                        activePlayer.statistics.AddToHouseSpiceStorage(actionCharacter.inventoryUsed);
+                                        actionCharacter.inventoryUsed = 0;
+                                        DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
+                                    }
+                                }
                             }
                             break;
                         //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
@@ -465,10 +503,21 @@ namespace Server
                                 {
                                     DoSendError(005, "Target character is null when voice action is executed!", activePlayer.SessionID);
                                 }
+                                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
                                 int InventoryUsedBeforeVoice = actionCharacter.inventoryUsed;
                                 actionCharacter.Voice(targetCharacter);
                                 activePlayer.statistics.AddToTotalSpiceCollected(actionCharacter.inventoryUsed - InventoryUsedBeforeVoice);
                                 charactersHit.Add(targetCharacter);
+                                //deliver spice to city if city is neighborfield
+                                foreach (var mapfield in map.GetNeighborFields(actionCharacter.CurrentMapfield))
+                                {
+                                    if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
+                                    {
+                                        activePlayer.statistics.AddToHouseSpiceStorage(actionCharacter.inventoryUsed);
+                                        actionCharacter.inventoryUsed = 0;
+                                        DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
+                                    }
+                                }
                             }
                             break;
                         case ActionType.SWORD_SPIN:
@@ -476,6 +525,7 @@ namespace Server
                             if (actionCharacter.APcurrent == actionCharacter.APmax
                                 && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.FIGHTER))
                             {
+                                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
                                 charactersHit = actionCharacter.SwordSpin(map);
                                 foreach (var character in charactersHit)
                                 {
@@ -489,7 +539,7 @@ namespace Server
                         default:
                             throw new ArgumentException($"Actiontype {msg.action} not supoorted here.");
                     }
-                    DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
+
                     foreach (var character in charactersHit)
                     {
                         if (activePlayer.UsedGreatHouse == character.greatHouse)
@@ -577,13 +627,23 @@ namespace Server
                     }
                 }
 
-                if (targetCharacterIsOnNeighborfield && !targetCharacter.IsInSandStorm(Party.GetInstance().map))
+                if (targetCharacterIsOnNeighborfield && !targetCharacter.IsInSandStorm(Party.GetInstance().map) && targetCharacter.greatHouse == activeCharacter.greatHouse)
                 {
                     activeCharacter.GiftSpice(targetCharacter, msg.amount);
                     DoSendTransferDemand(msg.clientID, msg.characterID, msg.targetID);
 
                     DoSendChangeCharacterStatsDemand(msg.clientID, msg.characterID, new CharacterStatistics(activeCharacter));
                     DoSendChangeCharacterStatsDemand(msg.clientID, msg.targetID, new CharacterStatistics(targetCharacter));
+                    //deliver spice to city if city is neighborfield
+                    foreach (var mapfield in Party.GetInstance().map.GetNeighborFields(targetCharacter.CurrentMapfield))
+                    {
+                        if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
+                        {
+                            activePlayer.statistics.AddToHouseSpiceStorage(targetCharacter.inventoryUsed);
+                            targetCharacter.inventoryUsed = 0;
+                            DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
+                        }
+                    }
                 }
 
                 if (activeCharacter.MPcurrent <= 0 && activeCharacter.APcurrent <= 0)

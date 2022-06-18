@@ -53,7 +53,7 @@ namespace GameData.server.roundHandler
         /// </summary>
         public void SendRequestForNextCharacter()
         {
-            _timer.Stop();
+           // _timer.Stop();
             if (_currentCharacterIndex < _allCharacters.Count - 1)
             {
                 _currentCharacterIndex++;

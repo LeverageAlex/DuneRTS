@@ -63,7 +63,6 @@ public class PlayerMessageController : MessageController
     {
         MovementRequestMessage movementRequestMessage = new MovementRequestMessage(clientID, characterID, new Specs(null, path));
         NetworkController.HandleSendingMessage(movementRequestMessage);
-        Log.Debug("finished sending MovementMessage");
     }
 
     /// <summary>
@@ -85,10 +84,8 @@ public class PlayerMessageController : MessageController
     /// <param name="pause">true, if the game should be paused. False if the game should be continued</param>
     public void DoRequestPauseGame(bool pause)
     {
-        Debug.Log("Start Requesting Pause game with state: " + pause);
         PauseGameRequestMessage pauseGameRequestMessage = new PauseGameRequestMessage(pause);
         NetworkController.HandleSendingMessage(pauseGameRequestMessage);
-        Debug.Log("Sent msg");
     }
 
     /// <summary>
@@ -113,7 +110,6 @@ public class PlayerMessageController : MessageController
     public void DoRequestTransfer(int clientID, int characterID, int targetID, int amount)
     {
         TransferRequestMessage endTurnRequestMessage = new TransferRequestMessage(clientID, characterID, targetID, amount);
-        Log.Debug("Parsing of RequestTransfer: clientID: " + clientID + ", characterID: " + characterID + ", targetID: " + targetID + ", amount: " + amount);
         NetworkController.HandleSendingMessage(endTurnRequestMessage);
     }
 
@@ -155,7 +151,6 @@ public class PlayerMessageController : MessageController
     public override void OnGameConfigMessage(GameConfigMessage gameConfigMessage)
     {
         // TODO: implement logic
-        Log.Debug("Preparing Debug OnGameConfig");
         IEnumerator buildMap()
         {
 
@@ -220,13 +215,15 @@ public class PlayerMessageController : MessageController
 
         IEnumerator mapchange()
         {
+            CharacterTurnHandler.instance.ResetSelection();
+            GUIHandler.BroadcastGameMessage("Map change: " + mapChangeDemandMessage.changeReason);
             for (int x = 0; x < mapChangeDemandMessage.newMap.GetLength(0); x++)
             {
                 for (int z = 0; z < mapChangeDemandMessage.newMap.GetLength(1); z++)
                 {
 
 
-
+                    
 
                    // Debug.Log("PreLoop Built x: " + x + " and z: " + z);
                     if (mapChangeDemandMessage.stormEye != null && MapManager.instance.isNodeNeighbour(x, z, mapChangeDemandMessage.stormEye.x, mapChangeDemandMessage.stormEye.y))
@@ -327,7 +324,7 @@ public class PlayerMessageController : MessageController
     public override void OnUnpauseOfferDemand(UnpauseGameOfferMessage unpauseGameOfferMessage)
     {
         IEnumerator UnpauseOffer() {
-            if (InGameMenuManager.getInstance().IsPaused)
+            if (InGameMenuManager.getInstance().IsPaused && SessionHandler.isPlayer)
             {
                 InGameMenuManager.getInstance().DemandPauseGame(false);
             }
@@ -501,6 +498,7 @@ public class PlayerMessageController : MessageController
                     character.Attack_KanlyExecution(enemy);
                     break;
                 case "FAMILY_ATOMICS":
+                    UnityMainThreadDispatcher.allowDequeue = false;
                     character.Attack_AtomicExecution(MapManager.instance.getNodeFromPos(actionDemandMessage.specs.target.x, actionDemandMessage.specs.target.y));
                     break;
                 case "SPICE_HOARDING":
@@ -628,6 +626,7 @@ public class PlayerMessageController : MessageController
         // TODO: implement logic
         IEnumerator moveWorm()
         {
+            UnityMainThreadDispatcher.allowDequeue = false;
             CharacterMgr.instance.SandwormMove(sandwormMoveMessage.path);
             yield return null;
         }

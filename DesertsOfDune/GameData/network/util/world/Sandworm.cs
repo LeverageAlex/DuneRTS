@@ -159,7 +159,7 @@ namespace GameData.server.roundHandler
             }
             else
             {
-                bool needToDisappear = false;
+                MapField fieldToKill = null;
 
                 //TODO remove first element, because its start point of worm
                 path.RemoveAt(0);
@@ -169,19 +169,16 @@ namespace GameData.server.roundHandler
                     MapField nextField = path[0];
                     path.RemoveAt(0);
                     movedPath.Add(nextField);
-                    needToDisappear = MoveSandwormByOneField(nextField);
+                    fieldToKill = MoveSandwormByOneField(nextField);
 
-                    if (needToDisappear)
+                    if (fieldToKill != null)
                     {
-                        break;
+                        _messageController.DoMoveSandwormDemand(movedPath);
+                        _messageController.DoSendChangeCharacterStatsDemand(fieldToKill.clientID, fieldToKill.Character.CharacterId, new CharacterStatistics(fieldToKill.Character));
+                        _currentField.DisplaceCharacter(fieldToKill.Character);
+                        Despawn(_messageController);
+
                     }
-                }
-
-                _messageController.DoMoveSandwormDemand(movedPath);
-
-                if (needToDisappear)
-                {
-                    Despawn(_messageController);
                 }
             }
 
@@ -194,7 +191,7 @@ namespace GameData.server.roundHandler
         /// </summary>
         /// <param name="nextField">the field, the sandworm need to move on</param>
         /// <returns>true, if the sandworm moved to a field with a character and need to disappear</returns>
-        public bool MoveSandwormByOneField(MapField nextField)
+        public MapField MoveSandwormByOneField(MapField nextField)
         {
             var oldfield = _currentField;
             _currentField = new FlatSand(_currentField.hasSpice, _currentField.isInSandstorm);
@@ -210,14 +207,14 @@ namespace GameData.server.roundHandler
             {
                 _currentField.Character.KilledBySandworm = true;
                 //TODO: Character statChange
-                _messageController.DoSendChangeCharacterStatsDemand(_currentField.clientID, _currentField.Character.CharacterId, new CharacterStatistics(_currentField.Character));
-                _currentField.DisplaceCharacter(_currentField.Character);
-                Console.WriteLine("Sandworm killed Character at x:" + _currentField.XCoordinate  + ", y: " + _currentField.ZCoordinate);
+                //_messageController.DoSendChangeCharacterStatsDemand(_currentField.clientID, _currentField.Character.CharacterId, new CharacterStatistics(_currentField.Character));
+             //   _currentField.DisplaceCharacter(_currentField.Character);
+            //    Console.WriteLine("Sandworm killed Character at x:" + _currentField.XCoordinate  + ", y: " + _currentField.ZCoordinate);
 
-                return true;
+                return _currentField;
             }
 
-            return false;
+            return null;
         }
 
         /// <summary>

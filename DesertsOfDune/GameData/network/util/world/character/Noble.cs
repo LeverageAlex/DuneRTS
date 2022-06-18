@@ -86,13 +86,14 @@ namespace GameData.network.util.world.character
         /// This method represents the action FamilyAtomic
         /// </summary>
         /// <param name="target">The target Field for the Atack</param>
-        /// <returns>true, if the action was successful</returns>
+        /// <returns>characters hit by the atomic Bomb</returns>
         override
         public List<Character> AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse)
         {
             List<Character> charactersHit = new List<Character>();
             if(this.APcurrent == this.APmax && this.greatHouse.unusedAtomicBombs > 0)
             {
+                bool breakGreatHouseConvention = false;                 //information if this is the atomic bomb which breaks the greathouseConvention
                 var mapFields = map.GetNeighborFields(target);
                 mapFields.Add(target);
 
@@ -113,34 +114,8 @@ namespace GameData.network.util.world.character
                         mapfield.Character.DecreaseHP(mapfield.Character.healthCurrent);
                         if(!greatHouseConventionBroken)
                         {
-                            greatHouseConventionBroken = true;
-                            List<GreatHouse> remainingGreatHouses = new List<GreatHouse>();
-                            if(activePlayerGreatHouse.houseName != "CORRINO" && passivePlayerGreatHouse.houseName != "CORRINO"){
-                                remainingGreatHouses.Add(new Corrino());
-                            }
-                            if (activePlayerGreatHouse.houseName != "ATREIDES" && passivePlayerGreatHouse.houseName != "ATREIDES"){
-                                remainingGreatHouses.Add(new Atreides());
-                            }
-                            if (activePlayerGreatHouse.houseName != "HARKONNEN" && passivePlayerGreatHouse.houseName != "HARKONNEN"){
-                                remainingGreatHouses.Add(new Harkonnen());
-                            }
-                            if (activePlayerGreatHouse.houseName != "ORDOS" && passivePlayerGreatHouse.houseName != "ORDOS"){
-                                remainingGreatHouses.Add(new Ordos());
-                            }
-                            if (activePlayerGreatHouse.houseName != "RICHESE" && passivePlayerGreatHouse.houseName != "RICHESE")
-                            {
-                                remainingGreatHouses.Add(new Richese());
-                            }
-                            if (activePlayerGreatHouse.houseName != "VERNIUS" && passivePlayerGreatHouse.houseName != "VERNIUS")
-                            {
-                                remainingGreatHouses.Add(new Vernius());
-                            }
-                            Random rnd = new Random();
-                            foreach (var greatHouse in remainingGreatHouses)
-                            {
-                                int randomCharacterIndex = rnd.Next(greatHouse.Characters.Count);
-                                passivePlayerGreatHouse.Characters.Add(greatHouse.Characters[randomCharacterIndex]);
-                            }
+                            Noble.greatHouseConventionBroken = true;
+                            breakGreatHouseConvention = true;
                         }
                     }
                     if (mapfield.hasSpice)
@@ -150,6 +125,44 @@ namespace GameData.network.util.world.character
                 }
                 SpentAp(APmax);
                 this.greatHouse.unusedAtomicBombs--;
+                if (breakGreatHouseConvention)
+                {
+                    List<GreatHouse> remainingGreatHouses = new List<GreatHouse>();
+                    if (activePlayerGreatHouse.houseName != "CORRINO" && passivePlayerGreatHouse.houseName != "CORRINO")
+                    {
+                        remainingGreatHouses.Add(new Corrino());
+                    }
+                    if (activePlayerGreatHouse.houseName != "ATREIDES" && passivePlayerGreatHouse.houseName != "ATREIDES")
+                    {
+                        remainingGreatHouses.Add(new Atreides());
+                    }
+                    if (activePlayerGreatHouse.houseName != "HARKONNEN" && passivePlayerGreatHouse.houseName != "HARKONNEN")
+                    {
+                        remainingGreatHouses.Add(new Harkonnen());
+                    }
+                    if (activePlayerGreatHouse.houseName != "ORDOS" && passivePlayerGreatHouse.houseName != "ORDOS")
+                    {
+                        remainingGreatHouses.Add(new Ordos());
+                    }
+                    if (activePlayerGreatHouse.houseName != "RICHESE" && passivePlayerGreatHouse.houseName != "RICHESE")
+                    {
+                        remainingGreatHouses.Add(new Richese());
+                    }
+                    if (activePlayerGreatHouse.houseName != "VERNIUS" && passivePlayerGreatHouse.houseName != "VERNIUS")
+                    {
+                        remainingGreatHouses.Add(new Vernius());
+                    }
+                    Random rnd = new Random();
+                    foreach (var greatHouse in remainingGreatHouses)
+                    {
+                        int randomCharacterIndex = rnd.Next(greatHouse.Characters.Count);
+                        MapField fieldForCharacter = map.GetRandomFreeApproachableNeighborField(passivePlayerGreatHouse.City);
+                        var newCharacter = greatHouse.Characters[randomCharacterIndex];
+                        fieldForCharacter.PlaceCharacter(newCharacter);
+                        greatHouse.Characters[randomCharacterIndex].CurrentMapfield = fieldForCharacter;
+                        passivePlayerGreatHouse.Characters.Add(newCharacter);
+                    }
+                }
             }
             return charactersHit;
         }
