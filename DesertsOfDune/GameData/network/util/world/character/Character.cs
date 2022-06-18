@@ -146,8 +146,9 @@ namespace GameData.network.util.world
                 return true;
             } else
             {
+                Console.WriteLine("Achtung! Es wurde die sehr gefährliche (fehleranfählige!) Methode DecreaseHP aufgerufen. Falls irgendwelche Seiteneffekte was Felder/Positionen betrifft hier nachschauen");
                 healthCurrent = 0;
-                CurrentMapfield.DisplaceCharacter(this);
+                CurrentMapfield.DisplaceCharacter(this);  //Super strange, because no CharacterStatsUpdate is sent bevor update
                 return false;
             }
         }
