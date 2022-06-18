@@ -383,6 +383,16 @@ namespace Server
                             actionCharacter.CollectSpice();
                             activePlayer.statistics.AddToTotalSpiceCollected(1);
                             DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
+                            //deliver spice to city if city is neighborfield
+                            foreach (var mapfield in map.GetNeighborFields(actionCharacter.CurrentMapfield))
+                            {
+                                if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
+                                {
+                                    activePlayer.statistics.AddToHouseSpiceStorage(actionCharacter.inventoryUsed);
+                                    actionCharacter.inventoryUsed = 0;
+                                    DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
+                                }
+                            }
                             break;
                         //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
                         case ActionType.KANLY:
@@ -464,6 +474,16 @@ namespace Server
                                 actionCharacter.SpiceHoarding(map);
                                 activePlayer.statistics.AddToTotalSpiceCollected(actionCharacter.inventoryUsed - inventoryUsedBeforeSpiceHoarding);
                                 DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
+                                //deliver spice to city if city is neighborfield
+                                foreach (var mapfield in map.GetNeighborFields(actionCharacter.CurrentMapfield))
+                                {
+                                    if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
+                                    {
+                                        activePlayer.statistics.AddToHouseSpiceStorage(actionCharacter.inventoryUsed);
+                                        actionCharacter.inventoryUsed = 0;
+                                        DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
+                                    }
+                                }
                             }
                             break;
                         //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
@@ -481,6 +501,16 @@ namespace Server
                                 actionCharacter.Voice(targetCharacter);
                                 activePlayer.statistics.AddToTotalSpiceCollected(actionCharacter.inventoryUsed - InventoryUsedBeforeVoice);
                                 charactersHit.Add(targetCharacter);
+                                //deliver spice to city if city is neighborfield
+                                foreach (var mapfield in map.GetNeighborFields(actionCharacter.CurrentMapfield))
+                                {
+                                    if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
+                                    {
+                                        activePlayer.statistics.AddToHouseSpiceStorage(actionCharacter.inventoryUsed);
+                                        actionCharacter.inventoryUsed = 0;
+                                        DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
+                                    }
+                                }
                             }
                             break;
                         case ActionType.SWORD_SPIN:
@@ -589,13 +619,23 @@ namespace Server
                     }
                 }
 
-                if (targetCharacterIsOnNeighborfield && !targetCharacter.IsInSandStorm(Party.GetInstance().map))
+                if (targetCharacterIsOnNeighborfield && !targetCharacter.IsInSandStorm(Party.GetInstance().map) && targetCharacter.greatHouse == activeCharacter.greatHouse)
                 {
                     activeCharacter.GiftSpice(targetCharacter, msg.amount);
                     DoSendTransferDemand(msg.clientID, msg.characterID, msg.targetID);
 
                     DoSendChangeCharacterStatsDemand(msg.clientID, msg.characterID, new CharacterStatistics(activeCharacter));
                     DoSendChangeCharacterStatsDemand(msg.clientID, msg.targetID, new CharacterStatistics(targetCharacter));
+                    //deliver spice to city if city is neighborfield
+                    foreach (var mapfield in Party.GetInstance().map.GetNeighborFields(targetCharacter.CurrentMapfield))
+                    {
+                        if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
+                        {
+                            activePlayer.statistics.AddToHouseSpiceStorage(targetCharacter.inventoryUsed);
+                            targetCharacter.inventoryUsed = 0;
+                            DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
+                        }
+                    }
                 }
 
                 if (activeCharacter.MPcurrent <= 0 && activeCharacter.APcurrent <= 0)
