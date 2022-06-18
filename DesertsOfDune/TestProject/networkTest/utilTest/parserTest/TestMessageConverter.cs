@@ -148,10 +148,12 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromGameEndMessageEmptyStats()
         {
-            EmptyStatistics statistics = new EmptyStatistics();
+            EmptyStatistics stat1 = new EmptyStatistics();
+            EmptyStatistics stat2 = new EmptyStatistics();
+            Statistics[] statistics = { stat1, stat2 };
             GameEndMessage message = new GameEndMessage(1234, 1235, statistics);
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("{\"type\":\"GAME_END\",\"version\":\"1.0\",\"winnerID\":1234,\"loserID\":1235,\"statistics\":{}}", serializedMessage);
+            Assert.AreEqual("{\"type\":\"GAME_END\",\"version\":\"1.0\",\"winnerID\":1234,\"loserID\":1235,\"statistics\":[{},{}]}", serializedMessage);
         }
 
 
@@ -161,10 +163,22 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromGameEndMessage()
         {
-            Statistics statistics = new Statistics();
+            Statistics stat1 = new Statistics();
+            stat1.HouseSpiceStorage = 10;
+            stat1.TotalSpiceCollected = 12;
+            stat1.EnemiesDefeated = 1;
+            stat1.CharactersSwallowed = 2;
+            stat1.LastCharacterStanding = true;
+            Statistics stat2 = new Statistics();
+            stat2.HouseSpiceStorage = 8;
+            stat2.TotalSpiceCollected = 10;
+            stat2.EnemiesDefeated = 0;
+            stat2.CharactersSwallowed = 1;
+            stat2.LastCharacterStanding = false;
+            Statistics[] statistics = { stat1, stat2 };
             GameEndMessage message = new GameEndMessage(1234, 1235, statistics);
             string serializedMessage = MessageConverter.FromMessage(message);
-            Assert.AreEqual("{\"type\":\"GAME_END\",\"version\":\"1.0\",\"winnerID\":1234,\"loserID\":1235,\"statistics\":{\"HouseSpiceStorage\":0,\"TotalSpiceCollected\":0,\"EnemiesDefeated\":0,\"CharactersSwallowed\":0,\"CharactersAlive\":null,\"LastCharacterStanding\":false}}", serializedMessage);
+            Assert.AreEqual("{\"type\":\"GAME_END\",\"version\":\"1.0\",\"winnerID\":1234,\"loserID\":1235,\"statistics\":[{\"HouseSpiceStorage\":10,\"TotalSpiceCollected\":12,\"EnemiesDefeated\":1,\"CharactersSwallowed\":2,\"CharactersAlive\":null,\"LastCharacterStanding\":true},{\"HouseSpiceStorage\":8,\"TotalSpiceCollected\":10,\"EnemiesDefeated\":0,\"CharactersSwallowed\":1,\"CharactersAlive\":null,\"LastCharacterStanding\":false}]}", serializedMessage);
         }
 
         /// <summary>
@@ -633,19 +647,25 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestToGameEndMessage()
         {
-            string serializedMessage = "{\"type\":\"GAME_END\",\"version\":\"1.0\",\"winnerID\":1234,\"loserID\":1235,\"statistics\":{\"HouseSpiceStorage\":0,\"TotalSpiceCollected\":0,\"EnemiesDefeated\":0,\"CharactersSwallowed\":0,\"CharactersAlive\":null,\"LastCharacterStanding\":false}}";
+            string serializedMessage = "{\"type\":\"GAME_END\",\"version\":\"1.0\",\"winnerID\":1234,\"loserID\":1235,\"statistics\":[{\"HouseSpiceStorage\":2,\"TotalSpiceCollected\":3,\"EnemiesDefeated\":1,\"CharactersSwallowed\":2,\"CharactersAlive\":null,\"LastCharacterStanding\":false},{\"HouseSpiceStorage\":0,\"TotalSpiceCollected\":0,\"EnemiesDefeated\":0,\"CharactersSwallowed\":0,\"CharactersAlive\":null,\"LastCharacterStanding\":false}]}";
             Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
 
             Assert.AreEqual("GAME_END", ((GameEndMessage)deserializedMessage).GetMessageTypeAsString());
             Assert.AreEqual("1.0", ((GameEndMessage)deserializedMessage).version);
             Assert.AreEqual(1234, ((GameEndMessage)deserializedMessage).winnerID);
             Assert.AreEqual(1235, ((GameEndMessage)deserializedMessage).loserID);
-            Assert.AreEqual(0, ((GameEndMessage)deserializedMessage).statistics.HouseSpiceStorage);
-            Assert.AreEqual(0, ((GameEndMessage)deserializedMessage).statistics.TotalSpiceCollected);
-            Assert.AreEqual(0, ((GameEndMessage)deserializedMessage).statistics.EnemiesDefeated);
-            Assert.AreEqual(0, ((GameEndMessage)deserializedMessage).statistics.CharactersSwallowed);
-            Assert.Null(((GameEndMessage)deserializedMessage).statistics.CharactersAlive);
-            Assert.AreEqual(false, ((GameEndMessage)deserializedMessage).statistics.LastCharacterStanding);
+            Assert.AreEqual(2, ((GameEndMessage)deserializedMessage).statistics[0].HouseSpiceStorage);
+            Assert.AreEqual(3, ((GameEndMessage)deserializedMessage).statistics[0].TotalSpiceCollected);
+            Assert.AreEqual(1, ((GameEndMessage)deserializedMessage).statistics[0].EnemiesDefeated);
+            Assert.AreEqual(2, ((GameEndMessage)deserializedMessage).statistics[0].CharactersSwallowed);
+            Assert.Null(((GameEndMessage)deserializedMessage).statistics[0].CharactersAlive);
+            Assert.AreEqual(false, ((GameEndMessage)deserializedMessage).statistics[0].LastCharacterStanding);
+            Assert.AreEqual(0, ((GameEndMessage)deserializedMessage).statistics[1].HouseSpiceStorage);
+            Assert.AreEqual(0, ((GameEndMessage)deserializedMessage).statistics[1].TotalSpiceCollected);
+            Assert.AreEqual(0, ((GameEndMessage)deserializedMessage).statistics[1].EnemiesDefeated);
+            Assert.AreEqual(0, ((GameEndMessage)deserializedMessage).statistics[1].CharactersSwallowed);
+            Assert.Null(((GameEndMessage)deserializedMessage).statistics[1].CharactersAlive);
+            Assert.AreEqual(false, ((GameEndMessage)deserializedMessage).statistics[1].LastCharacterStanding);
         }
 
         /// <summary>

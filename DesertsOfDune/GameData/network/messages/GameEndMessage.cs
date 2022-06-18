@@ -16,7 +16,7 @@ namespace GameData.network.messages
         [JsonProperty]
         public int loserID { get; }
         [JsonProperty]
-        public Statistics statistics { get; }
+        public Statistics[] statistics { get; }
 
         /// <summary>
         /// Constructor of the class GameEndMessage
@@ -24,7 +24,7 @@ namespace GameData.network.messages
         /// <param name="winner">the winner of the game</param>
         /// <param name="loser">the loser of the game</param>
         /// <param name="statistics">the statistics of the game</param>
-        public GameEndMessage(int winnerID, int loserID, Statistics statistics) : base("1.0", MessageType.GAME_END)
+        public GameEndMessage(int winnerID, int loserID, Statistics[] statistics) : base("1.0", MessageType.GAME_END)
         {
             this.winnerID = winnerID;
             this.loserID = loserID;
@@ -37,13 +37,18 @@ namespace GameData.network.messages
         /// <returns></returns>
         public override String ToString()
         {
-            string s = "House storage: " + statistics.HouseSpiceStorage + "Spice collected: " + statistics.TotalSpiceCollected + "Enemies defeated: " + statistics.EnemiesDefeated + "Count swallowed Characters: " + statistics.CharactersSwallowed;
+            string s = "House storage: " + statistics[0].HouseSpiceStorage + "Spice collected: " + statistics[0].TotalSpiceCollected + "Enemies defeated: " + statistics[0].EnemiesDefeated + "Count swallowed Characters: " + statistics[0].CharactersSwallowed;
             StringBuilder sb = new StringBuilder(s);
-            foreach(String character in statistics.CharactersAlive)
+            foreach(String character in statistics[0].CharactersAlive)
             {
                 sb.Append(character);
             }
-            sb.Append("Has last Character standing: " + statistics.LastCharacterStanding);
+            sb.Append("Has last Character standing: " + statistics[0].LastCharacterStanding);
+            sb.AppendLine("House storage: " + statistics[1].HouseSpiceStorage + "Spice collected: " + statistics[1].TotalSpiceCollected + "Enemies defeated: " + statistics[1].EnemiesDefeated + "Count swallowed Characters: " + statistics[1].CharactersSwallowed);
+            foreach (String character in statistics[1].CharactersAlive)
+            {
+                sb.Append(character);
+            }
             return sb.ToString();
         }
     }

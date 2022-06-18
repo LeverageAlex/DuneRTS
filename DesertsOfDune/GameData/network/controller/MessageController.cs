@@ -207,7 +207,7 @@ namespace GameData.network.controller
         /// <param name="winnerID">ID of the winner of the party</param>
         /// <param name="loserID">ID of the loser of the party</param>
         /// <param name="stats">Repräsentation of the statistics of the Game</param>
-        public abstract void DoGameEndMessage(int winnerID, int loserID, Statistics stats);
+        public abstract void DoGameEndMessage(int winnerID, int loserID, Statistics[] stats);
 
         public abstract void DoSendGameState(int clientID, int[] activlyPlayingIDs, String[] history);
 

@@ -882,7 +882,7 @@ namespace Server
         /// <param name="winnerID">ID of the winner of the party</param>
         /// <param name="loserID">ID of the loser of the party</param>
         /// <param name="stats">Repräsentation of the statistics of the Game</param>
-        public override void DoGameEndMessage(int winnerID, int loserID, Statistics stats)
+        public override void DoGameEndMessage(int winnerID, int loserID, Statistics[] stats)
         {
             GameEndMessage gameEndMessage = new GameEndMessage(winnerID, loserID, stats);
             NetworkController.HandleSendingMessage(gameEndMessage);
