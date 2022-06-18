@@ -387,6 +387,8 @@ namespace Server
                         //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
                         case ActionType.KANLY:
                             //TODO: success probability
+                            Random rnd = new Random();
+                            int success = rnd.Next(100);
                             action = ActionType.KANLY;
                             if (targetCharacter == null)
                             {
@@ -396,7 +398,8 @@ namespace Server
                                 && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE)
                                 && targetCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE)
                                 && !friendlyFire
-                                && !targetCharacter.IsInSandStorm(map))
+                                && !targetCharacter.IsInSandStorm(map)
+                                && success < PartyConfiguration.GetInstance().kanlySuccessProbability * 100)
                             {
                                 actionCharacter.Kanly(targetCharacter);
                                 activePlayer.statistics.AddToEnemiesDefeated(1);
