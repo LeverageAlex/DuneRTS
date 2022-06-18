@@ -327,7 +327,7 @@ public class PlayerMessageController : MessageController
     public override void OnUnpauseOfferDemand(UnpauseGameOfferMessage unpauseGameOfferMessage)
     {
         IEnumerator UnpauseOffer() {
-            if (InGameMenuManager.getInstance().IsPaused)
+            if (InGameMenuManager.getInstance().IsPaused && SessionHandler.isPlayer)
             {
                 InGameMenuManager.getInstance().DemandPauseGame(false);
             }
