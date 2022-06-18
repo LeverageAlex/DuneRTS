@@ -18,7 +18,7 @@ namespace GameData.server.roundHandler
         private List<Character> _allCharacters;
         private static Character _currentCharacter = null;
         private int _currentCharacterIndex;
-        private static Timer _timer;
+        private Timer _timer;
 
         public void Execute()
         {
@@ -116,7 +116,7 @@ namespace GameData.server.roundHandler
         /// Starts a new timer with the time from the parameter.
         /// </summary>
         /// <param name="timeInSeconds">Time in seconds how long the timer runs.</param>
-        private static void SetTimer()
+        private void SetTimer()
         {
             int timeInMilliseconds = PartyConfiguration.GetInstance().actionTimeUserClient;
             foreach(var player in Party.GetInstance().GetActivePlayers())
@@ -144,7 +144,7 @@ namespace GameData.server.roundHandler
         /// </summary>
         /// <param name="source"></param>
         /// <param name="e"></param>
-        private static void OnTimedEvent(Object source, ElapsedEventArgs e)
+        private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             string sessionID = "";
             foreach (var player in Party.GetInstance().GetActivePlayers())
@@ -157,7 +157,8 @@ namespace GameData.server.roundHandler
                     }
                 }
             }
-            ((ServerConnectionHandler)Party.GetInstance().messageController.NetworkController.connectionHandler).sessionManager.CloseSession(sessionID, WebSocketSharp.CloseStatusCode.Normal, "Timeout happend in characterTraitPhase!");
+            // ((ServerConnectionHandler)Party.GetInstance().messageController.NetworkController.connectionHandler).sessionManager.CloseSession(sessionID, WebSocketSharp.CloseStatusCode.Normal, "Timeout happend in characterTraitPhase!");
+            SendRequestForNextCharacter();
         }
 
 
