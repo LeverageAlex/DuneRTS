@@ -27,7 +27,7 @@ namespace Server.Clients
 
         public City City { get; set; }
 
-        protected Player(string clientName, string sessionID) : base(clientName, true, sessionID)
+        protected Player(string clientName, string sessionID, bool isAI) : base(clientName, true, sessionID, isAI)
         {
             this.AmountOfStrikes = 0;
             statistics = new Statistics();

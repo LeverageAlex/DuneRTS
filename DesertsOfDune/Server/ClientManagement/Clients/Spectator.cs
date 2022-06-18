@@ -13,7 +13,7 @@ namespace Server
         /// </summary>
         /// <param name="clientName">the name of the spectator</param>
         /// <param name="clientSecret">a secret identifier between the spectator and the server for reconnect</param>
-        public Spectator(string clientName, string sessionID) : base(clientName, false, sessionID)
+        public Spectator(string clientName, string sessionID) : base(clientName, false, sessionID, true)
         {
         }
     }

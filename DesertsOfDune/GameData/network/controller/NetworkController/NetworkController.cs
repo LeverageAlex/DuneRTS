@@ -30,6 +30,8 @@ namespace GameData.network.controller
         protected MessageController messageController { get; }
         protected readonly WebSocketType webSocketType;
 
+        public bool GamePaused { get; set; }
+
         /// <summary>
         /// sets the references needed by the network controller
         /// </summary>

@@ -105,7 +105,7 @@ namespace GameData.network.controller
 
         public abstract void OnGameStateRequestMessage(GameStateRequestMessage msg);
 
-        public abstract void OnPauseGameRequestMessage(PauseGameRequestMessage msg);
+     //   public abstract void OnPauseGameRequestMessage(PauseGameRequestMessage msg);
 
         public abstract void DoSendJoin(string clientName);
 
@@ -122,6 +122,8 @@ namespace GameData.network.controller
         public abstract void OnGameStateMessage(GameStateMessage gameStateMessage);
 
         public abstract void OnPauseGameDemandMessage(GamePauseDemandMessage gamePauseDemandMessage);
+
+        public abstract void OnPauseGameRequestMessage(PauseGameRequestMessage msg, string sessionID);
 
         public abstract void OnHouseOfferMessage(HouseOfferMessage houseOfferMessage);
 
@@ -144,6 +146,8 @@ namespace GameData.network.controller
         public abstract void OnSandwormMoveDemandMessage(SandwormMoveDemandMessage sandwormMoveMessage);
 
         public abstract void OnSandwormDespawnMessage(SandwormDespawnDemandMessage sandwormDespawnDemandMessage);
+
+        public abstract void OnUnpauseOfferDemand(UnpauseGameOfferMessage unpauseGameOfferMessage);
 
         public abstract void OnEndGameMessage(EndGameMessage endGameMessage);
 

@@ -109,8 +109,8 @@ namespace GameData.network.util.world.character
                     }
                     if (mapfield.IsCharacterStayingOnThisField)
                     {
-                        mapfield.Character.DecreaseHP(mapfield.Character.healthCurrent);
                         charactersHit.Add(mapfield.Character);
+                        mapfield.Character.DecreaseHP(mapfield.Character.healthCurrent);
                         if(!greatHouseConventionBroken)
                         {
                             greatHouseConventionBroken = true;

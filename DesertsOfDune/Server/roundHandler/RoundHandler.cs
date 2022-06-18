@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Timers;
 using GameData.network.messages;
 using GameData.network.util.world;
 using GameData.server.roundHandler;
@@ -10,6 +11,7 @@ using Serilog;
 using Server;
 using Server.Clients;
 using Server.Configuration;
+using Server.roundHandler;
 using Server.roundHandler.duneMovementHandler;
 using Server.roundHandler.endOfGame;
 
@@ -78,6 +80,22 @@ namespace GameData.gameObjects
         private bool partyFinished = false;
 
         /// <summary>
+        /// states, whether the party (so the current round) is currently paused or not
+        /// </summary>
+        /// <remarks>
+        /// This is necessary to know, because a paused game cannot be paused again and a game can only
+        /// be resumed, if it is currently paused
+        /// </remarks>
+        public bool IsPartyPaused { get; private set; }
+
+        /// <summary>
+        /// contains the current pause request or is null, if there is no request / active pause
+        /// </summary>
+        public PauseRequest PauseRequest { get; private set; }
+
+        private System.Timers.Timer maximalPauseOverTimer;
+
+        /// <summary>
         /// Constructor of the class RoundHandler
         /// </summary>
         /// <param name="numbOfRounds">the maximum number of rounds specified in the pary config</param>
@@ -99,6 +117,7 @@ namespace GameData.gameObjects
             this._spiceBlow = new SpiceBlow(map);
             this.characterTraitPhase = new CharacterTraitPhase();
 
+            SetMaximalPauseOverTimer();
         }
 
         /// <summary>
@@ -206,24 +225,87 @@ namespace GameData.gameObjects
             return false;
         }
 
-        /// <summary>
-        /// This method is responsible for pausing the game.
-        /// </summary>
-        /// <returns>true, if the game was paused</returns>
-        public bool PauseGame()
+        private void SetMaximalPauseOverTimer()
         {
-            // TODO implement logic
-            return false;
+            // Create a timer with a 100 miliseconds interval.
+            maximalPauseOverTimer = new System.Timers.Timer(PartyConfiguration.GetInstance().minPauseTime);
+            // Hook up the Elapsed event for the timer. 
+            maximalPauseOverTimer.Elapsed += OnMaxPauseOverTimedEvent;
+            maximalPauseOverTimer.AutoReset = false;
+            maximalPauseOverTimer.Enabled = true;
+        }
+
+        private void OnMaxPauseOverTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            // check, whether there is pause and if so, whether the other client can also request a resumption
+            if (PauseRequest != null && PauseRequest.RequestedPause && PauseRequest.CanPauseRepealedByOtherClient())
+            {
+                // send a unpause offer
+                Party.GetInstance().messageController.DoSendUnpauseGameOffer();
+
+            }
         }
 
         /// <summary>
-        /// This method is responsible for continuing the game.
+        /// pauses the game, so create a new pause request
         /// </summary>
-        /// <returns>true, if the game was continued</returns>
-        public bool ContinueGame()
+        /// <param name="clientID">the ID of the client, who requested pausing the game</param>
+        /// <returns>true, if the game was paused</returns>
+        public bool PauseGame(int clientID)
         {
-            // TODO implement logic
-            return false;
+            if (IsPartyPaused)
+            {
+                // party already paused, so it is not possible to pause the game again
+                return false;
+            }
+            IsPartyPaused = true;
+            PauseRequest = new PauseRequest(true, clientID);
+
+            Party.GetInstance().messageController.NetworkController.GamePaused = true;
+            
+            maximalPauseOverTimer.Start();
+            if (characterTraitPhase != null)
+            {
+                characterTraitPhase.freezeTraitPhase(true);
+            }
+
+            // TODO: do not used Thread.Sleep() and <thread>.Interrupt()!!
+
+            return true;
+        }
+
+        /// <summary>
+        /// resumes the game, so create a new "pause" request with the parameter, that this request is used for resumption
+        /// </summary>
+        /// <returns>true, if the game was resumed</returns>
+        public bool ContinueGame(int clientID)
+        {
+            if (!IsPartyPaused)
+            {
+                // party is not paused, so it is not possible to resume the game
+                return false;
+            }
+            if (!PauseRequest.CanPauseRepealedByOtherClient())
+            {
+                // only the client, who requested the pause can resume it
+                if (PauseRequest.ClientID != clientID)
+                {
+                    return false;
+                }
+            }
+            if (characterTraitPhase != null)
+            {
+                characterTraitPhase.freezeTraitPhase(false);
+            }
+            maximalPauseOverTimer.Stop();
+            IsPartyPaused = false;
+            PauseRequest = new PauseRequest(false, clientID);
+
+
+            Party.GetInstance().messageController.NetworkController.GamePaused = false;
+
+            Party.GetInstance().roundHandlerThread.Interrupt();
+            return true;
         }
 
         /// <summary>

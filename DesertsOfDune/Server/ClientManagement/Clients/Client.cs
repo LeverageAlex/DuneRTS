@@ -31,6 +31,11 @@ namespace Server.ClientManagement.Clients
         public bool IsActivePlayer { get; }
 
         /// <summary>
+        /// true, if the client is an ai and false, if it is a human client (spectator or player)
+        /// </summary>
+        public bool IsAI { get; }
+
+        /// <summary>
         /// the client id used for identifying the client
         /// </summary>
         public int ClientID { get; }
@@ -40,11 +45,12 @@ namespace Server.ClientManagement.Clients
         /// </summary>
         public string SessionID { get; set; }
 
-        protected Client(string clientName, bool isActivePlayer, string sessionID)
+        protected Client(string clientName, bool isActivePlayer, string sessionID, bool isAI)
         {
             ClientName = clientName;
             ClientSecret = CreateClientSecret();
             IsActivePlayer = isActivePlayer;
+            IsAI = isAI;
             ClientID = CreateClientID();
             SessionID = sessionID;
         }

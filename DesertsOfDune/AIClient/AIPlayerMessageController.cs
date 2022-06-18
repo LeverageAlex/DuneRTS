@@ -186,6 +186,10 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
+        public override void OnUnpauseOfferDemand(UnpauseGameOfferMessage unpauseGameOfferMessage)
+        {
+            throw new NotImplementedException();
+        }
         public override void OnGameStateRequestMessage(GameStateRequestMessage msg)
         {
             throw new NotImplementedException();
@@ -243,7 +247,7 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
-        public override void OnPauseGameRequestMessage(PauseGameRequestMessage msg)
+        public override void OnPauseGameRequestMessage(PauseGameRequestMessage msg, string sessionID)
         {
             throw new NotImplementedException();
         }
