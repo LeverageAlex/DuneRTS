@@ -113,7 +113,7 @@ namespace GameData.network.util.world.character
                         mapfield.Character.DecreaseHP(mapfield.Character.healthCurrent);
                         if(!greatHouseConventionBroken)
                         {
-                            greatHouseConventionBroken = true;
+                            Noble.greatHouseConventionBroken = true;
                             List<GreatHouse> remainingGreatHouses = new List<GreatHouse>();
                             if(activePlayerGreatHouse.houseName != "CORRINO" && passivePlayerGreatHouse.houseName != "CORRINO"){
                                 remainingGreatHouses.Add(new Corrino());
@@ -140,9 +140,10 @@ namespace GameData.network.util.world.character
                             {
                                 int randomCharacterIndex = rnd.Next(greatHouse.Characters.Count);
                                 MapField fieldForCharacter = map.GetRandomFreeApproachableNeighborField(passivePlayerGreatHouse.City);
-                                fieldForCharacter.PlaceCharacter(greatHouse.Characters[randomCharacterIndex]);
+                                var newCharacter = greatHouse.Characters[randomCharacterIndex];
+                                fieldForCharacter.PlaceCharacter(newCharacter);
                                 greatHouse.Characters[randomCharacterIndex].CurrentMapfield = fieldForCharacter;
-                                passivePlayerGreatHouse.Characters.Add(greatHouse.Characters[randomCharacterIndex]);
+                                passivePlayerGreatHouse.Characters.Add(newCharacter);
                             }
                         }
                     }

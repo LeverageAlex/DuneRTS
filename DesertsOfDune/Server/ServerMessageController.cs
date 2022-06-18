@@ -386,7 +386,6 @@ namespace Server
                             break;
                         //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
                         case ActionType.KANLY:
-                            //TODO: success probability
                             Random rnd = new Random();
                             int success = rnd.Next(100);
                             action = ActionType.KANLY;
@@ -415,13 +414,18 @@ namespace Server
                                 MapField targetMapField = null;
                                 foreach (var mapfield in map.fields)
                                 {
-                                    actionCharacter.Attack(targetCharacter);
-                                    charactersHit.Add(targetCharacter);
+                                    if (mapfield.XCoordinate == msg.specs.target.x && mapfield.ZCoordinate == msg.specs.target.y)
+                                    {
+                                        targetMapField = mapfield;
+                                    }
                                 }
-                            
+                                if(targetMapField == null)
+                                {
+                                    DoSendError(005, "TargetMapField is null when FamilyAtomics was executed!", activePlayer.SessionID);
+                                }
 
-                            // if atomic bomb is thrown on sandworm or neighborfield of sandworm then remove the sandworm
-                            if (Sandworm.GetSandworm() != null)
+                                // if atomic bomb is thrown on sandworm or neighborfield of sandworm then remove the sandworm
+                                if (Sandworm.GetSandworm() != null)
                             {
                                 foreach (var mapField in map.GetNeighborFields(targetMapField))
                                 {
