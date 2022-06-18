@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -162,6 +163,7 @@ namespace GameData.gameObjects
                         Statistics[] statistics = { Party.GetInstance().GetPlayerByClientID(winnerID).statistics, Party.GetInstance().GetPlayerByClientID(loserID).statistics };
                         Party.GetInstance().messageController.DoGameEndMessage(winnerID, loserID, statistics);
 
+                        RestartServer();
                         Log.Information("The overlength mechanism was finished, so the game is over! \n The player " + winner.ClientName + " won the game!");
                     }
                 }
@@ -172,7 +174,9 @@ namespace GameData.gameObjects
                     // call CheckVictory to check if after sandworm phase the last character of one house is gone and the the other player has won
                     if (CheckVictory())
                     {
-                        Log.Information("The game is over. One player has no characters left");
+                           Log.Information("The game is over. One player has no characters left");
+                        RestartServer();
+                        //Party.GetInstance().messageController.OnEndGameMessage(new EndGameMessage());
                     }
                 }
                 _clonePhase.Execute();
@@ -186,6 +190,15 @@ namespace GameData.gameObjects
                 
                //NextRound();
             }
+        }
+
+        private void RestartServer()
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = "Server.exe";
+            startInfo.Arguments = string.Join(' ', Programm.startArguments);
+            Process.Start(startInfo);
+            Process.GetCurrentProcess().Kill();
         }
 
         /// <summary>

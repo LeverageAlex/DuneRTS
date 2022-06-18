@@ -284,7 +284,7 @@ public class PlayerMessageController : MessageController
         // TODO: implement logic
         IEnumerator gameEnd()
         {
-            InGameMenuManager.getInstance().DemandEndGame("The Winner is: " + gameEndMessage.winnerID);
+            InGameMenuManager.getInstance().DemandEndGame("The Winner is: " + gameEndMessage.winnerID + "and the statistics are: " + gameEndMessage.statistics.ToString());
             yield return null;
         }
         UnityMainThreadDispatcher.Instance().Enqueue(gameEnd());

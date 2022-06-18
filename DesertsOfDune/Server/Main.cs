@@ -23,6 +23,7 @@ namespace Server
 
         private static ServerConfiguration configuration;
         private static ServerMessageController serverMessageController;
+        public static  string[] startArguments;
 
         /// <summary>
         /// main method, which is executed when the server was started / executed
@@ -36,6 +37,7 @@ namespace Server
         /// <param name="args">arguments for starting the server (see Commandline args in "Standardisierungskomitee")</param>
         static void Main(string[] args)
         { 
+            startArguments = args;
             InitiliazeLogger();
             Log.Information("Starting server... Everything will be created and configured!");
 

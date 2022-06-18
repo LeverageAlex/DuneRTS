@@ -92,7 +92,7 @@ namespace GameData.server.roundHandler
         /// check, whether there is only one player left on tge map and if, whose character it is
         /// </summary>
         /// <returns>true, if there is only character left</returns>
-        private bool CheckLastPlayerStanding()
+        private void DetermineLastPlayerStanding()
         {
             List<Character> charactersOnMap = this._map.GetCharactersOnMap();
 
@@ -113,10 +113,9 @@ namespace GameData.server.roundHandler
                     players[0].statistics.LastCharacterStanding = true;
                 }
 
-                return true;
             }
 
-            return false;
+
         }
 
         /// <summary>
@@ -130,8 +129,7 @@ namespace GameData.server.roundHandler
                 return true;
             } else
             {
-                if ( ! CheckLastPlayerStanding())
-                {
+                    DetermineLastPlayerStanding();
                     Character target = ChooseTargetCharacter();
 
                     // spawn the shai hulud
@@ -146,13 +144,13 @@ namespace GameData.server.roundHandler
                     _lastCharacterEaten = true;
                     foreach(Character character in Map.instance.GetCharactersOnMap())
                     {
-                        if ( ! character.killedBySandworm && character.healthCurrent > 0)
+                        if ( ! character.killedBySandworm)
                         {
                             _lastCharacterEaten = false;
                             break;
                         }
                     }
-                }
+                
 
                 return false;
             }
