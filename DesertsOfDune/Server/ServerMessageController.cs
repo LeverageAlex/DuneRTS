@@ -396,7 +396,7 @@ namespace Server
                             MapField targetMapField = null;
                             foreach (var mapfield in map.fields)
                             {
-                                if (mapfield.XCoordinate == msg.specs.target.x && mapfield.YCoordinate == msg.specs.target.y)
+                                if (mapfield.XCoordinate == msg.specs.target.x && mapfield.ZCoordinate == msg.specs.target.y)
                                 {
                                     targetMapField = mapfield;
                                 }
