@@ -118,9 +118,10 @@ public class Character : MonoBehaviour
         _y = transform.position.y - nodeManager.getNodeFromPos(X, Z).charHeightOffset;
 
         //SampleCode only
-        BaseHP = 100;
+        
         if (Mode.debugMode)
         {
+            BaseHP = 100;
             initCharacter();
         }
 
