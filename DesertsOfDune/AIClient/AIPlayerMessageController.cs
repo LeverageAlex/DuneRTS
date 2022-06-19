@@ -5,6 +5,7 @@ using GameData.network.controller;
 using GameData.network.messages;
 using GameData.network.util.enums;
 using GameData.network.util.world;
+using GameData.network.util.world.greatHouse;
 using Newtonsoft.Json;
 using Serilog;
 
@@ -130,6 +131,9 @@ namespace AIClient
         /// <summary>
         /// called, when the server sends two great houses to choose between
         /// </summary>
+        /// <remarks>
+        /// If the house offer was for this client, randomly choose one great house and send the decicision back.
+        /// </remarks>
         /// <param name="houseOfferMessage">received HOUSE_OFFER message containing the two great houses</param>
         /// TODO: check, whether it is better to not choose randomly
         public override void OnHouseOfferMessage(HouseOfferMessage houseOfferMessage)
@@ -158,9 +162,22 @@ namespace AIClient
             }            
         }
 
+        /// <summary>
+        /// called, when the server acknowledged the chosen great house
+        /// </summary>
+        /// <remarks>
+        /// Create a new great house for this client
+        /// </remarks>
+        /// <param name="houseAcknowledgementMessage"></param>
         public override void OnHouseAcknowledgementMessage(HouseAcknowledgementMessage houseAcknowledgementMessage)
         {
-            throw new NotImplementedException();
+            Log.Information($"The great house for this client is {houseAcknowledgementMessage.houseName}");
+
+            // create the great house and set it in the party
+            GreatHouseType chosenType = (GreatHouseType) Enum.Parse(typeof(GreatHouseType), houseAcknowledgementMessage.houseName);
+            GreatHouse newGreatHouse = GreatHouseFactory.CreateNewGreatHouse(chosenType);
+
+            Party.GetInstance().AssignedGreatHouse = newGreatHouse;
         }
 
         public override void OnActionDemandMessage(ActionDemandMessage actionDemandMessage)

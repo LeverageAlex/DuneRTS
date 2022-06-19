@@ -36,6 +36,11 @@ namespace AIClient
         /// </summary>
         public Map Map { get; set; }
 
+        /// <summary>
+        /// the assigned (and chosen) great house for this client
+        /// </summary>
+        public GreatHouse AssignedGreatHouse { get; set; }
+
         public AIPlayerMessageController MessageController { get; private set; }
 
         /// <summary>
