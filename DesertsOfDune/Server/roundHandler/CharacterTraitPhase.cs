@@ -1,8 +1,8 @@
 ﻿using GameData.network.controller;
 using GameData.network.util.world;
-using Server;
-using Server.Configuration;
-using Server.roundHandler;
+using GameData;
+using GameData.Configuration;
+using GameData.roundHandler;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.ConstrainedExecution;
 
-namespace Server.Configuration
+namespace GameData.Configuration
 {
     /// <summary>
     /// Configuration of the server, which holds all constants and information needed by the server

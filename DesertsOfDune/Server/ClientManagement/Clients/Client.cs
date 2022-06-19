@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Server.ClientManagement.Clients
+namespace GameData.ClientManagement.Clients
 {
     /// <summary>
     /// Base class for all user clients.

@@ -73,6 +73,18 @@ namespace AIClient
             }
         }
 
+        /// <summary>
+        /// called, when the server send the game config message after both players joined the game and successfully chose
+        /// a great house
+        /// </summary>
+        /// <param name="gameConfigMessage">the received GAMECFG message</param>
+        public override void OnGameConfigMessage(GameConfigMessage gameConfigMessage)
+        {
+            Log.Debug("Received the game configuration from the server");
+
+
+        }
+
         public override void OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
         {
             throw new NotImplementedException();
@@ -112,10 +124,7 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
-        public override void OnGameConfigMessage(GameConfigMessage gameConfigMessage)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public override void OnGameEndMessage(GameEndMessage gameEndMessage)
 

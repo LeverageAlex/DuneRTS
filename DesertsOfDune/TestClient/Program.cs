@@ -3,7 +3,7 @@ using System.Threading;
 using GameData.network.controller;
 using GameData.network.messages;
 using GameData.network.util;
-using Server;
+using GameData;
 
 namespace TestClient
 {

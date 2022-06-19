@@ -4,8 +4,8 @@ using GameData.network.messages;
 using GameData.network.util.enums;
 using GameData.network.util.world;
 using GameData.network.util.world.mapField;
-using Server;
-using Server.roundHandler;
+using GameData;
+using GameData.roundHandler;
 
 namespace GameData.server.roundHandler
 {

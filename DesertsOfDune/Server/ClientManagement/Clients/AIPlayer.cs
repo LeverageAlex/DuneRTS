@@ -1,7 +1,7 @@
 ﻿using System;
-using Server.Clients;
+using GameData.Clients;
 
-namespace Server
+namespace GameData
 {
     /// <summary>
     /// Represents a ai player, which can interact with the game and must send its moves within a certain time interval

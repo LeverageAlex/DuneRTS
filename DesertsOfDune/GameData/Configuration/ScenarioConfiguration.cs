@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Server.Configuration
+namespace GameData.Configuration
 {
     /// <summary>
     /// This class stores the scenario configuration and is used for loading the scenario configuration file.

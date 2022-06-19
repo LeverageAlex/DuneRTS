@@ -1,7 +1,7 @@
 ﻿using System;
-using Server.Clients;
+using GameData.Clients;
 
-namespace Server.roundHandler.endOfGame
+namespace GameData.roundHandler.endOfGame
 {
     /// <summary>
     /// Checks or determines, which player won the game, after it was ended.
