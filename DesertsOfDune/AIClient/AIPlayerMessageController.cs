@@ -34,11 +34,6 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
-        public override void DoGameEndMessage(int winnerID, int loserID, Statistics stats)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void DoGamePauseDemand(int requestedByClientID, bool pause)
         {
             throw new NotImplementedException();
@@ -299,6 +294,11 @@ namespace AIClient
         }
 
         public override void OnUnpauseGameOffer(int requestedByClientID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoGameEndMessage(int winnerID, int loserID, Statistics[] stats)
         {
             throw new NotImplementedException();
         }
