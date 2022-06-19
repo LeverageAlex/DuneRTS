@@ -8,123 +8,45 @@ using Serilog;
 
 namespace AIClient
 {
+    /// <summary>
+    /// Controller for handling all messages send and received by the ai client
+    /// </summary>
+    /// <remarks>
+    /// Therefore this controller inherits the standard message controller and implement
+    /// all necessary methods, that are needed for playing a game with the ai client
+    /// </remarks>
     public class AIPlayerMessageController : MessageController
     {
         public AIPlayerMessageController()
         {
         }
 
-        public override void DoAcceptJoin(string clientSecret, int clientID, string sessionID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void DoChangePlayerSpiceDemand(int clientID, int newSpiceVal)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void DoDespawnSandwormDemand()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void DoEndGame()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void DoGamePauseDemand(int requestedByClientID, bool pause)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void DoMoveSandwormDemand(List<MapField> list)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void DoSendActionDemand(int clientID, int characterID, ActionType action, Position target)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void DoSendAtomicsUpdateDemand(int clientID, bool shunned, int atomicsLeft)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void DoSendChangeCharacterStatsDemand(int clientID, int characterID, CharacterStatistics stats)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void DoSendError(int errorCode, string errorDescription, string sessionID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void DoSendGameConfig()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void DoSendGameState(int clientID, int[] activlyPlayingIDs, string[] history)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void DoSendHouseAck(int clientID, string houseName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void DoSendHouseOffer(int clientID, GreatHouseType[] houses)
-        {
-            throw new NotImplementedException();
-        }
-
+        /// <summary>
+        /// sends a join request with and signalize the server, that this client is an ai and provide the name
+        /// </summary>
+        /// <param name="clientName">the name of the ai client</param>
         public override void DoSendJoin(string clientName)
         {
+            // the ai is an active player and an ai, so set both bool to true
             JoinMessage msg = new JoinMessage(clientName, true, true);
             NetworkController.HandleSendingMessage(msg);
         }
 
-        public override void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons)
+        /// <summary>
+        /// called, when the server send a JOINACCEPTED message, so the join request was accepted. 
+        /// </summary>
+        /// <remarks>
+        /// So set the client id and secret received with this message and prepare the game.
+        /// </remarks>
+        /// <param name="msg">the received JOINACCEPTED message</param>
+        public override void OnJoinAccepted(JoinAcceptedMessage msg)
         {
-            throw new NotImplementedException();
-        }
+            Log.Information($"The join request was accepted. \n The ai client now has the id {msg.clientID}!");
 
-        public override void DoSendMovementDemand(int clientID, int characterID, List<Position> path)
-        {
-            throw new NotImplementedException();
+            // set the id and secret
+            Party.GetInstance().ClientID = msg.clientID;
+            Party.GetInstance().ClientSecret = msg.clientSecret;
         }
-
-        public override void DoSendStrike(int clientID, Message wrongMessage)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void DoSendTransferDemand(int clientID, int characterID, int targetID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void DoSendTurnDemand(int clientID, int characterID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void DoSpawnCharacterDemand(Character attributes)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void DoSpawnSandwormDemand(int characterID, MapField mapField)
-        {
-            throw new NotImplementedException();
-        }
-
 
         public override void OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
         {
@@ -204,17 +126,7 @@ namespace AIClient
         {
             throw new NotImplementedException();
         }
-
-        public override void OnJoinAccepted(JoinAcceptedMessage msg)
-        {
-            Log.Information($"The join requested was successful. The client has now the id {msg.clientID}.");
-        }
-
-        public override void OnJoinAcceptedMessage(JoinAcceptedMessage joinAcceptedMessage)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public override void OnJoinMessage(JoinMessage msg, string sessionID)
         {
             throw new NotImplementedException();
@@ -298,7 +210,116 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
+        public override void DoAcceptJoin(string clientSecret, int clientID, string sessionID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoChangePlayerSpiceDemand(int clientID, int newSpiceVal)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoDespawnSandwormDemand()
+        {
+            throw new NotImplementedException();
+        }
+        public override void DoGamePauseDemand(int requestedByClientID, bool pause)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoMoveSandwormDemand(List<MapField> list)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoSendActionDemand(int clientID, int characterID, ActionType action, Position target)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoSendAtomicsUpdateDemand(int clientID, bool shunned, int atomicsLeft)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoSendChangeCharacterStatsDemand(int clientID, int characterID, CharacterStatistics stats)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoSendError(int errorCode, string errorDescription, string sessionID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoSendGameConfig()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoSendGameState(int clientID, int[] activlyPlayingIDs, string[] history)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoSendHouseAck(int clientID, string houseName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoSendHouseOffer(int clientID, GreatHouseType[] houses)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoSendMovementDemand(int clientID, int characterID, List<Position> path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoSendStrike(int clientID, Message wrongMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoSendTransferDemand(int clientID, int characterID, int targetID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoSendTurnDemand(int clientID, int characterID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoSpawnCharacterDemand(Character attributes)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoSpawnSandwormDemand(int characterID, MapField mapField)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoEndGame()
+        {
+            throw new NotImplementedException();
+        }
+
         public override void DoGameEndMessage(int winnerID, int loserID, Statistics[] stats)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnJoinAcceptedMessage(JoinAcceptedMessage joinAcceptedMessage)
         {
             throw new NotImplementedException();
         }

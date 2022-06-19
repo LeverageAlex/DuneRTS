@@ -20,6 +20,16 @@ namespace AIClient
     {
         private static Party singleton;
 
+        /// <summary>
+        /// the client secret of the ai client playing this party (used for rejoin)
+        /// </summary>
+        public string ClientSecret { get; set; }
+
+        /// <summary>
+        /// the id of the ai client playing this party
+        /// </summary>
+        public int ClientID { get; set; }
+
         public AIPlayerMessageController MessageController { get; private set; }
 
         /// <summary>
@@ -53,6 +63,10 @@ namespace AIClient
             party.MessageController = messageController;
         }
 
+        /// <summary>
+        /// joins a party by sending a join request
+        /// </summary>
+        /// <param name="clientName">the name of this ai</param>
         public void JoinParty(string clientName)
         {
             MessageController.DoSendJoin(clientName);
