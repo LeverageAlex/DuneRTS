@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using GameData.network.controller;
 using Serilog;
+using System.Threading;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -78,12 +79,25 @@ public class MainMenuManager : MonoBehaviour
         Debug.Log("Join: " + name + " " + serverIP + " " + serverPort + " " + active);
 
         //TODO send JOIN message to server with given IP and given port
-        SessionHandler.CreateNetworkModule(serverIP, int.Parse(serverPort));
-        Debug.Log("Successfuly established connection. Now starting join");
-        Log.Debug("Successfuly established connection. Now starting join");
+        
+        for (int i = 0; i < 3; i++)
+        {
+            SessionHandler.CreateNetworkModule(serverIP, int.Parse(serverPort));
+            if (SessionHandler.clientconhandler.ConnectionIsAlive())
+            {
+                Debug.Log("Successfuly established connection. Now starting join");
+                Log.Debug("Successfuly established connection. Now starting join");
+                break;
+            }
+            else
+            {
+                Debug.Log("Error on establishing connection... Reconnecting.");
+                SessionHandler.CloseNetworkModule();
+                Thread.Sleep(250);
+                //SessionHandler.CreateNetworkModule(serverIP, int.Parse(serverPort));
+            }
+        }
         SessionHandler.messageController.DoJoin(name, active, false);
-
-
 
     }
 

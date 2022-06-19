@@ -15,7 +15,7 @@ public static class SessionHandler
     public static int viewerId;
     public static int atomicsLeft;
 
-    private static ClientConnectionHandler clientconhandler;
+    public static ClientConnectionHandler clientconhandler;
 
         public static void CreateNetworkModule(String ip, int port)
         {
