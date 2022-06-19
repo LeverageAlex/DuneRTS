@@ -163,21 +163,14 @@ namespace AIClient
         }
 
         /// <summary>
-        /// called, when the server acknowledged the chosen great house
+        /// called, when the server acknowledged the chosen great house and set the name of the great house
         /// </summary>
-        /// <remarks>
-        /// Create a new great house for this client
-        /// </remarks>
         /// <param name="houseAcknowledgementMessage"></param>
         public override void OnHouseAcknowledgementMessage(HouseAcknowledgementMessage houseAcknowledgementMessage)
         {
             Log.Information($"The great house for this client is {houseAcknowledgementMessage.houseName}");
 
-            // create the great house and set it in the party
-            GreatHouseType chosenType = (GreatHouseType) Enum.Parse(typeof(GreatHouseType), houseAcknowledgementMessage.houseName);
-            GreatHouse newGreatHouse = GreatHouseFactory.CreateNewGreatHouse(chosenType);
-
-            Party.GetInstance().AssignedGreatHouse = newGreatHouse;
+            Party.GetInstance().AssignedGreatHouse = houseAcknowledgementMessage.houseName;
         }
 
         public override void OnActionDemandMessage(ActionDemandMessage actionDemandMessage)

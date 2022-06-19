@@ -309,7 +309,7 @@ namespace GameData.network.util.world
                         builder.Append("C    ");
                     } else
                     {
-                        builder.Append(GetMapFieldAtPosition(x, y).tileType.ToString();
+                        builder.Append(GetMapFieldAtPosition(x, y).tileType.ToString());
                     }
          
                     if (GetMapFieldAtPosition(x, y).isInSandstorm)

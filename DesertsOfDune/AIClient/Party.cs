@@ -42,7 +42,7 @@ namespace AIClient
         /// <summary>
         /// the assigned (and chosen) great house for this client
         /// </summary>
-        public GreatHouse AssignedGreatHouse { get; set; }
+        public string AssignedGreatHouse { get; set; }
 
         public AIPlayerMessageController MessageController { get; private set; }
 
