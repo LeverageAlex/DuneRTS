@@ -44,6 +44,11 @@ namespace AIClient
         /// </summary>
         public string AssignedGreatHouse { get; set; }
 
+        public Position CurrentPositionOfSandworm { get; set; }
+
+        /// <summary>
+        /// the amount of spice, collected and transfered to the city by all characters
+        /// </summary>
         public int CitySpice { get; set; }
 
         public AIPlayerMessageController MessageController { get; private set; }

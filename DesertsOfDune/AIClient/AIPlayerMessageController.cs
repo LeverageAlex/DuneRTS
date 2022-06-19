@@ -268,6 +268,58 @@ namespace AIClient
         }
 
         /// <summary>
+        /// called, when the server send the message, that a new sandworm spawned
+        /// </summary>
+        /// <remarks>
+        /// print the information to the console and set the map field of the sandworm to not approachable
+        /// </remarks>
+        /// <param name="sandwormSpawnDemandMessage">the received SANDWORM_SPAWN_DEMAND message</param>
+        public override void OnSandwormSpawnDemandMessage(SandwormSpawnDemandMessage sandwormSpawnDemandMessage)
+        {
+            Log.Debug($"A new sandworm spawned at ({sandwormSpawnDemandMessage.position.x},{sandwormSpawnDemandMessage.position.y}).");
+
+            // set the map field as not approachable
+            Party.GetInstance().CurrentPositionOfSandworm = sandwormSpawnDemandMessage.position;
+            Party.GetInstance().Map.GetMapFieldAtPosition(sandwormSpawnDemandMessage.position.x, sandwormSpawnDemandMessage.position.y).IsApproachable = false;
+        }
+
+        /// <summary>
+        /// called, when the server send the message, that a new sandworm moved
+        /// </summary>
+        /// <remarks>
+        /// print the information to the console and update the position of the sandworm and that this field is not approachable
+        /// </remarks>
+        /// <param name="sandwormMoveMessage">the received SANDWORM_MOVE_DEMAND message</param>
+        public override void OnSandwormMoveDemandMessage(SandwormMoveDemandMessage sandwormMoveMessage)
+        {
+            Party.GetInstance().Map.GetMapFieldAtPosition(Party.GetInstance().CurrentPositionOfSandworm.x, Party.GetInstance().CurrentPositionOfSandworm.y).IsApproachable = true;
+
+            Position targetPosition = sandwormMoveMessage.path[sandwormMoveMessage.path.Count - 1];
+            Log.Debug($"The sandworm moved to ({targetPosition.x},{targetPosition.y}).");
+
+            // set the map field as not approachable
+            Party.GetInstance().CurrentPositionOfSandworm = targetPosition;
+            Party.GetInstance().Map.GetMapFieldAtPosition(targetPosition.x, targetPosition.y).IsApproachable = false;
+
+        }
+
+        /// <summary>
+        /// called, when the server send the message, that a new sandworm despawned
+        /// </summary>
+        /// <remarks>
+        /// print the information to the console and set the map field of the sandworm to approachable
+        /// </remarks>
+        /// <param name="sandwormDespawnDemandMessage">the received SANDWORM_DESPAWN_DEMAND message</param>
+        public override void OnSandwormDespawnMessage(SandwormDespawnDemandMessage sandwormDespawnDemandMessage)
+        {
+            Log.Debug("The sandworm despawned.");
+
+            // set the map field as not approachable
+            Party.GetInstance().Map.GetMapFieldAtPosition(Party.GetInstance().CurrentPositionOfSandworm.x, Party.GetInstance().CurrentPositionOfSandworm.y).IsApproachable = true;
+
+        }
+
+        /// <summary>
         /// called, when the server sends a pause / resume message
         /// </summary>
         /// <remarks>
@@ -379,21 +431,7 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
-        public override void OnSandwormDespawnMessage(SandwormDespawnDemandMessage sandwormDespawnDemandMessage)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void OnSandwormMoveDemandMessage(SandwormMoveDemandMessage sandwormMoveMessage)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void OnSandwormSpawnDemandMessage(SandwormSpawnDemandMessage sandwormSpawnDemandMessage)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public override void OnStrikeMessage(StrikeMessage strikeMessage)
         {
             throw new NotImplementedException();
