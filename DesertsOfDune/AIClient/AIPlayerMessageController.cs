@@ -173,6 +173,28 @@ namespace AIClient
             Party.GetInstance().AssignedGreatHouse = houseAcknowledgementMessage.houseName;
         }
 
+        /// <summary>
+        /// called, when the server sends a message about the new map
+        /// </summary>
+        /// <remarks>
+        /// changes the map in the party depending on the new map provided by this message and display the new map with the reason in the console
+        /// </remarks>
+        /// <param name="mapChangeDemandMessage">the received MAP_CHANGE_DEMAND message</param>
+        public override void OnMapChangeDemandMessage(MapChangeDemandMessage mapChangeDemandMessage)
+        {
+            // update the map in the party
+            Map map = Party.GetInstance().Map;
+            map.fields = map.GetNewMapFromMessage(mapChangeDemandMessage.newMap);
+            
+
+            Party.GetInstance().Map.PositionOfEyeOfStorm = mapChangeDemandMessage.stormEye;
+
+            // print new map to console
+            Log.Debug($"The map changed because of {mapChangeDemandMessage.changeReason}. The new map is: \n");
+            Party.GetInstance().Map.DrawMapToConsole();
+        }
+
+
         public override void OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
         {
             throw new NotImplementedException();
@@ -247,11 +269,7 @@ namespace AIClient
         }
 
 
-        public override void OnMapChangeDemandMessage(MapChangeDemandMessage mapChangeDemandMessage)
-
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public override void OnMovementDemandMessage(MovementDemandMessage movementDemandMessage)
         {
