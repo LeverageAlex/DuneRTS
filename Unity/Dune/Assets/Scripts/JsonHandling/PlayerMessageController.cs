@@ -54,6 +54,13 @@ public class PlayerMessageController : MessageController
         NetworkController.HandleSendingMessage(houseRequestMessage);
     }
 
+    public void DoRequestRejoin(string clientSecret)
+    {
+        SessionHandler.rejoining = true;
+        RejoinMessage rejoinMessage = new RejoinMessage(clientSecret);
+        NetworkController.HandleSendingMessage(rejoinMessage);
+    }
+
     /// <summary>
     /// This method is responsible for requesting the movement of a Character
     /// </summary>
@@ -137,6 +144,7 @@ public class PlayerMessageController : MessageController
 
         IEnumerator demandPlaygame()
         {
+            SessionHandler.CreateConnectionMonitor();
             MainMenuManager.instance.DemandJoinAccept();
             yield return null;
         }
@@ -298,10 +306,11 @@ public class PlayerMessageController : MessageController
     {
 
 
-        if (!SessionHandler.isPlayer)
+        if (!SessionHandler.isPlayer || SessionHandler.rejoining)
         {
             IEnumerator gamestate()
             {
+                SessionHandler.rejoining = false;
                 Debug.Log("starting deparsing msg");
                 SessionHandler.clientId = gameStateMessage.activelyPlayingIDs[0];
                 SessionHandler.enemyClientId = gameStateMessage.activelyPlayingIDs[1];
@@ -608,6 +617,7 @@ public class PlayerMessageController : MessageController
         UnityMainThreadDispatcher.Instance().Enqueue(changeCharStats());
 
     }
+
 
 
     /// <summary>

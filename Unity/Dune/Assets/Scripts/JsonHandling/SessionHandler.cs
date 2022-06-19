@@ -3,6 +3,7 @@ using System.Threading;
 using GameData.network.controller;
 using GameData.network.util;
 using Serilog;
+using System.Timers;
 
 public static class SessionHandler
 {
@@ -14,11 +15,18 @@ public static class SessionHandler
     public static bool isPlayer = true;
     public static int viewerId;
     public static int atomicsLeft;
+    public static string lastIp;
+    public static int lastPort;
+    public static bool rejoining;
+    private static System.Timers.Timer connectionMonitiorTimer;
 
     public static ClientConnectionHandler clientconhandler;
 
         public static void CreateNetworkModule(String ip, int port)
         {
+        SessionHandler.lastIp = ip;
+        SessionHandler.lastPort = port;
+
         if (messageController == null)
         {
             //   if (logger == null)
@@ -48,8 +56,32 @@ public static class SessionHandler
         Thread.Sleep(100);
 
     }
-      
-    
+
+    public static void CreateConnectionMonitor()
+    {
+        if (connectionMonitiorTimer == null)
+        {
+            connectionMonitiorTimer = new System.Timers.Timer(1000);
+            connectionMonitiorTimer.Elapsed += ConnectionMonitorEvent;
+            connectionMonitiorTimer.AutoReset = true;
+            connectionMonitiorTimer.Enabled = true;
+        }
+    }
+
+    private static void ConnectionMonitorEvent(Object source, ElapsedEventArgs e)
+    {
+        if(!clientconhandler.ConnectionIsAlive())
+        {
+            Log.Debug("ConnectionMonitor: Connection just died. Opening rejoin menu");
+            InGameMenuManager.getInstance().DemandRejoinOption();
+            connectionMonitiorTimer.Enabled = false;
+        }
+    }
+
+    public static void RestartConnectionMonitor()
+    {
+        connectionMonitiorTimer.Enabled = true;
+    }
 
 
 

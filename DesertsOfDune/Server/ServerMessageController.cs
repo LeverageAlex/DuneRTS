@@ -126,6 +126,9 @@ namespace GameData
                     rejoinSuccessful = true;
                     DoAcceptJoin(client.ClientSecret, client.ClientID, client.SessionID);
                     Log.Information($"Rejoin of client: {client.ClientName} was successful.");
+                    //Sending Gamestate for syncing reasons
+                    OnGameStateRequestMessage(new GameStateRequestMessage(client.ClientID));
+
                 }
             }
             if (!rejoinSuccessful)

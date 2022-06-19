@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -59,10 +60,10 @@ public class InGameMenuManager : MonoBehaviour
 
     public static InGameMenuManager getInstance()
     {
-        if(instance == null)
-        {
-            instance = new InGameMenuManager();
-        }
+      //  if(instance == null)
+      //  {
+           // instance = new InGameMenuManager();
+      //  }
         return instance;
     }
 
@@ -113,6 +114,7 @@ public class InGameMenuManager : MonoBehaviour
     /// </summary>
     public void DemandRejoinOption()
     {
+        Debug.Log("Opening rejoin menu");
         ActivateMenu(RejoinMenu);
     }
 
@@ -122,7 +124,36 @@ public class InGameMenuManager : MonoBehaviour
     public void RequestRejoinGame()
     {
         Debug.Log("Rejoining");
-        //TODO send REJOIN
+
+
+
+        for (int i = 0; i < 3; i++)
+        {
+            SessionHandler.CreateNetworkModule(SessionHandler.lastIp, SessionHandler.lastPort);
+            if (SessionHandler.clientconhandler.ConnectionIsAlive())
+            {
+                Debug.Log("Successfuly established connection. Now starting Rejoin");
+                break;
+            }
+            else
+            {
+                Debug.Log("Error on establishing connection... Reconnecting.");
+                SessionHandler.CloseNetworkModule();
+                Thread.Sleep(250);
+                //SessionHandler.CreateNetworkModule(serverIP, int.Parse(serverPort));
+            }
+        }
+        if (SessionHandler.clientconhandler.ConnectionIsAlive())
+        {
+            SessionHandler.messageController.DoRequestRejoin(SessionHandler.clientSecret);
+            RejoinMenu.SetActive(false);
+            SessionHandler.RestartConnectionMonitor();
+            GUIHandler.BroadcastGameMessage("Connected!");
+        }
+        else
+        {
+            GUIHandler.BroadcastGameMessage("Reconnect failed!");
+        }
 
     }
 
