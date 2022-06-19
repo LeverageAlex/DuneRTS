@@ -44,7 +44,8 @@ public class Character : MonoBehaviour
     private int AD;  //Attack-Damage
     private int spiceInv;
 
-    bool isDead = false;
+    private bool isDead = false;
+    public static int semaphoreWalk { get; set; }
 
     private int _x;
     private int _z;
@@ -278,7 +279,11 @@ public class Character : MonoBehaviour
             else
             {
                 SetAnimationToIdle();
-                audioManager.StopPlaying("CharWalk");
+                semaphoreWalk--;
+                if (semaphoreWalk == 0)
+                {
+                    audioManager.StopPlaying("CharWalk");
+                }
                 return false;
             }
         }

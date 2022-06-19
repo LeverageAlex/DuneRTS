@@ -199,7 +199,11 @@ public class MovementManager : MonoBehaviour
 
             updateCharacters.AddLast(character);
             character.SetWalkPath(newPath);
-            AudioController.instance.Play("CharWalk");
+            Character.semaphoreWalk++;
+            if (Character.semaphoreWalk == 1)
+            {
+                AudioController.instance.Play("CharWalk");
+            }
         }
     }
 
