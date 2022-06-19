@@ -173,6 +173,20 @@ namespace AIClient
             Party.GetInstance().AssignedGreatHouse = houseAcknowledgementMessage.houseName;
         }
 
+        /// <summary>
+        /// called, when the server sends a strike messages and print the strike message to the logger
+        /// </summary>
+        /// <param name="strikeMessage"></param>
+        public override void OnStrikeMessage(StrikeMessage strikeMessage)
+        {
+            // check, if the strike message is for this client
+            if (strikeMessage.clientID == Party.GetInstance().ClientID)
+            {
+                Log.Warning($"Got a strike from the server, because of the message: {strikeMessage.wrongMessage}. \n " +
+                    $"This is the strike {strikeMessage.count}");
+            }
+        }
+
         public override void OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
         {
             throw new NotImplementedException();
@@ -298,10 +312,7 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
-        public override void OnStrikeMessage(StrikeMessage strikeMessage)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public override void OnTransferDemandMessage(TransferDemandMessage transferDemandMessage)
 
