@@ -20,7 +20,7 @@ namespace GameData.network.util.world
         [JsonProperty(Order = 0)]
         public int healthCurrent { get; set; }
         [JsonProperty(Order = 1)]
-        public int healingHP { get; }
+        public int healingHP { get; private set; }
         [JsonProperty(Order = 2)]
         public int MPmax;
         [JsonProperty(Order = 3)]
@@ -50,7 +50,11 @@ namespace GameData.network.util.world
         [JsonIgnore]
         public bool KilledBySandworm
         {get { return killedBySandworm; } set { killedBySandworm = value; } }
-        
+
+        [JsonIgnore]
+        public int HealingHP
+        { get { return healingHP; } set { healingHP = value; } }
+
         [JsonIgnore]
         public string CharacterName { get; set; }
 
