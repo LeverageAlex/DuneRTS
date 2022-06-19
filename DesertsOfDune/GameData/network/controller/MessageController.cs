@@ -170,6 +170,11 @@ namespace GameData.network.controller
 
         public abstract void DoSendHouseOffer(int clientID, GreatHouseType[] houses);
 
+        public virtual void DoSendHouseRequest(string houseName)
+        {
+
+        }
+
         public abstract void DoSendHouseAck(int clientID, string houseName);
 
         public abstract void DoSendTurnDemand(int clientID, int characterID);

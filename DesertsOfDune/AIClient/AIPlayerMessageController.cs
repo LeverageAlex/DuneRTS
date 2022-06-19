@@ -35,6 +35,16 @@ namespace AIClient
         }
 
         /// <summary>
+        /// sends a house request with a given great house name
+        /// </summary>
+        /// <param name="houseName">the name of the chosen great house</param>
+        public override void DoSendHouseRequest(string houseName)
+        {
+            HouseRequestMessage msg = new HouseRequestMessage(houseName);
+            NetworkController.HandleSendingMessage(msg);
+        }
+
+        /// <summary>
         /// called, when the server send a JOINACCEPTED message, so the join request was accepted. 
         /// </summary>
         /// <remarks>
@@ -117,6 +127,42 @@ namespace AIClient
 
         }
 
+        /// <summary>
+        /// called, when the server sends two great houses to choose between
+        /// </summary>
+        /// <param name="houseOfferMessage">received HOUSE_OFFER message containing the two great houses</param>
+        /// TODO: check, whether it is better to not choose randomly
+        public override void OnHouseOfferMessage(HouseOfferMessage houseOfferMessage)
+        {
+            // check, whether the message was for this client
+            if (houseOfferMessage.clientID == Party.GetInstance().ClientID)
+            {
+                GreatHouse firstChoice = houseOfferMessage.houses[0];
+                GreatHouse secondChoice = houseOfferMessage.houses[1];
+
+                Log.Information($"The server offered the following two great houses: {firstChoice.houseName} and {secondChoice.houseName}.");
+
+                // choose great house randomly
+                Random random = new Random();
+                if (random.NextDouble() < 0.5)
+                {
+                    // choose first choice
+                    DoSendHouseRequest(firstChoice.houseName);
+                    Log.Debug($"Chose the great house {firstChoice.houseName}");
+                } else
+                {
+                    // choose second choice
+                    DoSendHouseRequest(secondChoice.houseName);
+                    Log.Debug($"Chose the great house {secondChoice.houseName}");
+                }
+            }            
+        }
+
+        public override void OnHouseAcknowledgementMessage(HouseAcknowledgementMessage houseAcknowledgementMessage)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
         {
             throw new NotImplementedException();
@@ -178,15 +224,7 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
-        public override void OnHouseAcknowledgementMessage(HouseAcknowledgementMessage houseAcknowledgementMessage)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void OnHouseOfferMessage(HouseOfferMessage houseOfferMessage)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public override void OnHouseRequestMessage(HouseRequestMessage msg, string sessionID)
         {
