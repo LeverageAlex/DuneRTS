@@ -678,7 +678,7 @@ public class PlayerMessageController : MessageController
             SessionHandler.atomicsLeft = atomicUpdateDemandMessage.atomicsLeft;
             IEnumerator atomicsUpdate()
             {
-                GUIHandler.instance.BroadcastMessage("Atomics left: " + atomicUpdateDemandMessage.atomicsLeft);
+                GUIHandler.BroadcastGameMessage("Atomics left: " + atomicUpdateDemandMessage.atomicsLeft);
                 yield return null;
             }
             UnityMainThreadDispatcher.Instance().Enqueue(atomicsUpdate());
