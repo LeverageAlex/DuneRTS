@@ -39,6 +39,7 @@ namespace GameData
         public override void OnJoinMessage(JoinMessage msg, string sessionID)
         {
             Client client;
+            bool gameHasStarted = Party.GetInstance().AreTwoPlayersRegistred();
 
             // check, whether the new client is a player or spectator
             if (msg.isActive)
@@ -67,7 +68,23 @@ namespace GameData
             {
                 if (!msg.isCpu)
                 {
+
                     client = new Spectator(msg.clientName, sessionID);
+                    Console.WriteLine("Registered new Spectator");
+                    if (gameHasStarted)
+                    {
+                        //Game already running, so need to fix some issues
+                        Party.GetInstance().AddClient(client);
+                        DoAcceptJoin(client.ClientSecret, client.ClientID, sessionID);
+                        // this.DoSendGameConfigToSpectator(client.ClientID.ToString());
+                        //   MapField[,] newMap = Party.GetInstance().map.fields;
+
+                        //  MapChangeDemandMessage mapChangeDemandMessage = new MapChangeDemandMessage(MapChangeReasons.ROUND_PHASE, newMap, new Position(Party.GetInstance().RoundHandler.SandstormPhase.EyeOfStorm.XCoordinate, Party.GetInstance().RoundHandler.SandstormPhase.EyeOfStorm.ZCoordinate));
+                        //   NetworkController.HandleSendingMessage(mapChangeDemandMessage);
+                        OnGameStateRequestMessage(new GameStateRequestMessage(client.ClientID));
+
+                        return;
+                    }
                 }
                 else
                 {
@@ -81,7 +98,7 @@ namespace GameData
             DoAcceptJoin(client.ClientSecret, client.ClientID, sessionID);
 
             // check, if with new client two players are registred and start party
-            if (Party.GetInstance().AreTwoPlayersRegistred())
+            if (Party.GetInstance().AreTwoPlayersRegistred() && !gameHasStarted)
             {
                 Party.GetInstance().PrepareGame();
                 //  DoSendGameConfig();
@@ -680,11 +697,59 @@ namespace GameData
 
         public override void OnGameStateRequestMessage(GameStateRequestMessage msg)
         {
-            throw new NotImplementedException("not implemented");
 
-            //Requirement complete game state
+            if (Party.GetInstance().AreTwoPlayersRegistred())
+            {
+                Console.WriteLine("Beginning parsing GameStateRequest");
+                //   throw new NotImplementedException("not implemented");
 
-            //int clientID
+                //Requirement complete game state
+
+                //First Step: Get active Players
+                var activePlayersList = Party.GetInstance().GetActivePlayers();
+                int[] activePlayerIds = new int[2] { activePlayersList.ElementAt(0).ClientID, activePlayersList.ElementAt(1).ClientID };
+                List<Character> allCharacters = Party.GetInstance().GetAllCharacters();
+                List<Character> aliveCharacters = allCharacters.Where(value => value.healthCurrent > 0 && !value.killedBySandworm).ToList<Character>();
+                int historyOffset = 0;
+                if (Party.GetInstance().RoundHandler.IsOverlengthMechanismActive)
+                {
+                    historyOffset += 1;
+                }
+                string[] history = new string[1 + aliveCharacters.Count + activePlayersList.Count + historyOffset + 1];
+
+                MapChangeDemandMessage mapChangeDemandMessage = new MapChangeDemandMessage(MapChangeReasons.SANDSTORM, Party.GetInstance().map.fields, new Position(Party.GetInstance().RoundHandler.SandstormPhase.EyeOfStorm.XCoordinate, Party.GetInstance().RoundHandler.SandstormPhase.EyeOfStorm.ZCoordinate));
+
+
+                history[0] = MessageConverter.FromMessage(mapChangeDemandMessage); //Append Map´_Change Message
+
+                //Create Spawn of Characters
+                for (int i = 0; i < aliveCharacters.Count; i++)
+                {
+                    var currentChar = allCharacters.ElementAt(i);
+                    history[1 + i] = MessageConverter.FromMessage(new SpawnCharacterDemandMessage(msg.clientID, currentChar.CharacterId, currentChar.CharacterName, new Position(currentChar.CurrentMapfield.XCoordinate, currentChar.CurrentMapfield.ZCoordinate), currentChar));
+
+                }
+
+                int offset = 1 + aliveCharacters.Count;
+                foreach (var player in activePlayersList)
+                {
+                    history[offset] = MessageConverter.FromMessage(new ChangePlayerSpiceDemandMessage(player.ClientID, player.statistics.HouseSpiceStorage));
+                    offset++;
+                }
+                if (Party.GetInstance().RoundHandler.IsOverlengthMechanismActive)
+                {
+                    history[offset] = MessageConverter.FromMessage(new EndGameMessage());
+                    offset++;
+                }
+                history[offset] = MessageConverter.FromMessage(new TurnDemandMessage(Party.GetInstance().RoundHandler.GetCharacterTraitPhase().GetCurrentTurnCharacter().CurrentMapfield.clientID, Party.GetInstance().RoundHandler.GetCharacterTraitPhase().GetCurrentTurnCharacter().CharacterId));
+
+                DoSendGameState(msg.clientID, activePlayerIds, history);
+                Console.WriteLine("Sent GameState");
+            }
+            else
+            {
+                DoSendError(005, "Can't send gamestate because party is not running", msg.clientID.ToString());
+            }
         }
 
         public override void OnPauseGameRequestMessage(PauseGameRequestMessage msg, string sessionID)
@@ -820,6 +885,35 @@ namespace GameData
 
             GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, partyReference, cityToClientArray, stormEye);
             NetworkController.HandleSendingMessage(gameConfigMessage);
+        }
+
+        public void DoSendGameConfigToSpectator(string spectatorID)
+        {
+            // get the scenario loaded by the server
+            List<List<string>> scenario = ScenarioConfiguration.GetInstance().scenario;
+
+            // get the party configuration loaded by the server
+            string partyConfiguration = JsonConvert.SerializeObject(PartyConfiguration.GetInstance());
+            PartyReference partyReference = new PartyReference(partyConfiguration);
+
+            // get the client ids and their city positions
+            int client0ID = Party.GetInstance().GetActivePlayers()[0].ClientID;
+            int client1ID = Party.GetInstance().GetActivePlayers()[1].ClientID;
+
+            // get cities of both players
+            City cityPlayer0 = Party.GetInstance().GetActivePlayers()[0].City;
+            City cityPlayer1 = Party.GetInstance().GetActivePlayers()[1].City;
+
+            CityToClient[] cityToClientArray = new CityToClient[2];
+            cityToClientArray[0] = new CityToClient(client0ID, cityPlayer0.XCoordinate, cityPlayer0.ZCoordinate);
+            cityToClientArray[1] = new CityToClient(client1ID, cityPlayer1.XCoordinate, cityPlayer1.ZCoordinate);
+
+            // get the eye of the storm
+            MapField stormEyeField = Party.GetInstance().RoundHandler.SandstormPhase.EyeOfStorm;
+            Position stormEye = new Position(stormEyeField.XCoordinate, stormEyeField.ZCoordinate);
+
+            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, partyReference, cityToClientArray, stormEye);
+            NetworkController.HandleSendingMessage(gameConfigMessage, spectatorID);
         }
 
         public override void DoSendHouseOffer(int clientID, GreatHouseType[] houses)
@@ -973,7 +1067,7 @@ namespace GameData
         public override void DoSendGameState(int clientID, int[] activlyPlayingIDs, String[] history)
         {
             GameStateMessage gameStateMessage = new GameStateMessage(history, activlyPlayingIDs, clientID);
-            NetworkController.HandleSendingMessage(gameStateMessage);
+            NetworkController.HandleSendingMessage(gameStateMessage, Party.GetInstance().GetSessionIDbyClientID(clientID));
         }
 
         /// <summary>

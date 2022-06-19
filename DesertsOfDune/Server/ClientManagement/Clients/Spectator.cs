@@ -13,7 +13,7 @@ namespace GameData
         /// </summary>
         /// <param name="clientName">the name of the spectator</param>
         /// <param name="clientSecret">a secret identifier between the spectator and the server for reconnect</param>
-        public Spectator(string clientName, string sessionID) : base(clientName, false, sessionID, true)
+        public Spectator(string clientName, string sessionID) : base(clientName, false, sessionID, false)
         {
         }
     }

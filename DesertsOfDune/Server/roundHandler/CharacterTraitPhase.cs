@@ -178,5 +178,10 @@ namespace GameData.server.roundHandler
                 _timer.Start();
             }
         }
+
+        public Character GetCurrentTurnCharacter()
+        {
+            return _currentCharacter;
+        }
     }
 }

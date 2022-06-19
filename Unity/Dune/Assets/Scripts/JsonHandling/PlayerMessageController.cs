@@ -7,6 +7,7 @@ using GameData.network.controller;
 using GameData.network.util.enums;
 using System;
 using Serilog;
+using GameData.network.util.parser;
 
 /// <summary>
 /// This Class Handles all messages for the Client.
@@ -175,28 +176,29 @@ public class PlayerMessageController : MessageController
               //      Debug.Log("Built x: " + x + " and z: " + z);
                 }
             }
-
+            Console.WriteLine("created map");
             Debug.Log("Built Map!");
             if (gameConfigMessage.stormEye != null)
             {
                 MapManager.instance.getNodeFromPos(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y).SetSandstorm(true);
                 MapManager.instance.SetStormEye(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y);
             }
-        //    Debug.Log("Checkpoint");
-         //   Debug.Log("Pre Crash" + gameConfigMessage.cityToClient[0]);
-
-            if (gameConfigMessage.cityToClient[0].clientID == SessionHandler.clientId)
+            //    Debug.Log("Checkpoint");
+            //   Debug.Log("Pre Crash" + gameConfigMessage.cityToClient[0]);
+            if (SessionHandler.isPlayer)
             {
-                SessionHandler.enemyClientId = gameConfigMessage.cityToClient[1].clientID;
+                if (gameConfigMessage.cityToClient[0].clientID == SessionHandler.clientId)
+                {
+                    SessionHandler.enemyClientId = gameConfigMessage.cityToClient[1].clientID;
+                }
+                else
+                {
+                    SessionHandler.enemyClientId = gameConfigMessage.cityToClient[0].clientID;
+                }
+                // Debug.Log("Soweit Clean");
+                MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[0].x, gameConfigMessage.cityToClient[0].y).cityOwnerId = gameConfigMessage.cityToClient[0].clientID;
+                MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[1].x, gameConfigMessage.cityToClient[1].y).cityOwnerId = gameConfigMessage.cityToClient[1].clientID;
             }
-            else
-            {
-                SessionHandler.enemyClientId = gameConfigMessage.cityToClient[0].clientID;
-            }
-           // Debug.Log("Soweit Clean");
-            MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[0].x, gameConfigMessage.cityToClient[0].y).cityOwnerId = gameConfigMessage.cityToClient[0].clientID;
-            MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[1].x, gameConfigMessage.cityToClient[1].y).cityOwnerId = gameConfigMessage.cityToClient[1].clientID;
-
             InGameMenuManager.getInstance().SwitchToInGameUI();
             
             yield return null;
@@ -294,8 +296,75 @@ public class PlayerMessageController : MessageController
     /// <returns></returns>
     public override void OnGameStateMessage(GameStateMessage gameStateMessage)
     {
-        //WE WILL NEVER NEED THIS
-        //Do not implement
+
+
+        if (!SessionHandler.isPlayer)
+        {
+            IEnumerator gamestate()
+            {
+                Debug.Log("starting deparsing msg");
+                SessionHandler.clientId = gameStateMessage.activelyPlayingIDs[0];
+                SessionHandler.enemyClientId = gameStateMessage.activelyPlayingIDs[1];
+
+                TurnDemandMessage turnDmdMsg = null;
+
+
+                //Map needs to be created earlier than other messages
+                
+                foreach (string msgString in gameStateMessage.history)
+                {
+                    Debug.Log("start parsing: " + msgString);
+                    Message convertedMsg = MessageConverter.ToMessage(msgString);
+                    Debug.Log("parsing successfuly");
+                    switch (convertedMsg.type)
+                    {
+                        case "MAP_CHANGE_DEMAND":
+                            MapChangeDemandMessage mapstate = (MapChangeDemandMessage)convertedMsg;
+                            Debug.Log("Successfuly deparsed message");
+                            MapManager.instance.setMapSize(mapstate.newMap.GetLength(0), mapstate.newMap.GetLength(1));
+                            OnMapChangeDemandMessage(mapstate);
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                //Now do the rest
+                foreach (string msgString in gameStateMessage.history)
+                {
+                    Message convertedMsg = MessageConverter.ToMessage(msgString);
+                    switch (convertedMsg.type)
+                    {
+                        case "SPAWN_CHARACTER_DEMAND":
+                            //This might result in displaying Characters having full HP, although they already got hit. The SpawnCharacterDemandMessage needs to get adapted
+                            SpawnCharacterDemandMessage spawnChr = (SpawnCharacterDemandMessage)convertedMsg;
+                            OnSpawnCharacterDemandMessage(spawnChr);
+                            break;
+                        case "CHANGE_PLAYER_SPICE_DEMAND":
+                            OnChangePlayerSpiceDemandMessage((ChangePlayerSpiceDemandMessage)convertedMsg);
+                            break;
+                        case "ENDGAME":
+                            OnEndGameMessage((EndGameMessage)convertedMsg);
+                            break;
+                        case "TURN_DEMAND":
+                            //Needs to be delayed to the end, because player might not has spawned
+                            turnDmdMsg = ((TurnDemandMessage)convertedMsg);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                if (turnDmdMsg != null)
+                {
+                    OnTurnDemandMessage(turnDmdMsg);
+                }
+                yield return null;
+            }
+            UnityMainThreadDispatcher.Instance().Enqueue(gamestate());
+
+        }
+
     }
 
     /// <summary>

@@ -39,7 +39,7 @@ namespace GameData.gameObjects
         /// </summary>
         private OverLengthMechanism _overLengthMechanism;
 
-        private bool IsOverlengthMechanismActive = false;
+        public bool IsOverlengthMechanismActive = false;
 
         /// <summary>
         /// checker, which determines the winner of the party after the overlength mechanism

@@ -235,6 +235,18 @@ namespace GameData
             return player;
         }
 
+
+        public List<Character> GetAllCharacters()
+        {
+            List<Character> list = new List<Character>();
+
+            foreach(Player activePlayer in GetActivePlayers())
+            {
+                list = list.Concat(activePlayer.UsedGreatHouse.Characters).ToList<Character>();
+            }
+            return list;
+        }
+
         /// <summary>
         /// Gets a player by its clientID.
         /// </summary>
@@ -251,6 +263,26 @@ namespace GameData
                 }
             }
             return player;
+        }
+
+
+        /// <summary>
+        /// Gets a player by its clientID.
+        /// </summary>
+        /// <param name="clientID">ID of the client</param>
+        /// <returns></returns>
+        public string GetSessionIDbyClientID(int clientID)
+        {
+            Client client = null;
+            foreach (Client activePlayer in GetConnectedClients())
+            {
+                if (activePlayer.ClientID == clientID)
+                {
+                    client = activePlayer;
+                    break;
+                }
+            }
+            return client.SessionID;
         }
 
         /// <summary>
