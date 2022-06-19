@@ -58,7 +58,7 @@ namespace AIClient
         /// </summary>
         private Party()
         {
-            
+            this.AliveCharacters = new List<Character>();
         }
 
         /// <summary>

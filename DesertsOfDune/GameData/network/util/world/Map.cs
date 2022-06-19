@@ -361,7 +361,7 @@ namespace GameData.network.util.world
 
             builder.Append("\n");
 
-            Log.Debug(builder.ToString());
+            Log.Information(builder.ToString());
         }
 
         /// <summary>
