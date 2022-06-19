@@ -22,6 +22,7 @@ namespace GameData.network.controller
         public WebSocket WebSocket { get; set; }
         private Thread _thread;
         private bool keepThreadAlive = true;
+        private bool connectionOpen;
      //   private readonly ClientSocketErrorHandler ClientPasser;
 
         /// <summary>
@@ -47,7 +48,7 @@ namespace GameData.network.controller
         {
             while (true)
             {
-
+                connectionOpen = true;
                 WebSocket = new WebSocket(GetURL());
                 //  WebSocket.Connect();
                 Log.Debug("Created new websocket, which will connect to " + GetURL());
@@ -63,11 +64,13 @@ namespace GameData.network.controller
                     Thread.Sleep(300);
                 }
                 Log.Debug("Killed Current Connection");
+              //  connectionOpen = false;
                 WebSocket.Close();
                 while (!keepThreadAlive)
                 {
                     Thread.Sleep(70);
                 }
+              //  connectionClosed = false;
                 Log.Debug("Restarting socket");
             }
 
@@ -141,7 +144,7 @@ namespace GameData.network.controller
 
         public bool ConnectionIsAlive()
         {
-            return WebSocket.IsAlive;
+            return connectionOpen;
         }
 
         /// <summary>
@@ -165,6 +168,7 @@ namespace GameData.network.controller
         protected internal override void OnClose(CloseEventArgs e, string sessionID)
         {
             Log.Warning("The connection to the websocket server was closed by the server. The reason is: " + e.Reason);
+            connectionOpen = false;
         }
 
         /// <summary>
@@ -176,6 +180,7 @@ namespace GameData.network.controller
         protected internal override void OnError(ErrorEventArgs e, string sessionID)
         {
             Log.Error("An error occured on the connection to the Websocket server. The error is: " + e.Message);
+            //connectionOpen = false;
             //WebSocket.Close();
         }
 

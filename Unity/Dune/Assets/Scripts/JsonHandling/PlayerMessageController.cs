@@ -29,6 +29,7 @@ public class PlayerMessageController : MessageController
         JoinMessage joinMessage = new JoinMessage(clientName, active, isCpu);
         NetworkController.HandleSendingMessage(joinMessage);
         Log.Debug("Sent JoinMessage!");
+      //  SessionHandler.CreateConnectionMonitor();
         //CharacterMgr.handler.
         //NetworkController.HandleSendingMessage(joinMessage);
         //   Debug.Log(CharacterMgr.handler.WebSocket.ToString());
@@ -143,8 +144,7 @@ public class PlayerMessageController : MessageController
         SessionHandler.clientSecret = joinAcceptedMessage.clientSecret;
 
         IEnumerator demandPlaygame()
-        {
-            SessionHandler.CreateConnectionMonitor();
+        { 
             MainMenuManager.instance.DemandJoinAccept();
             yield return null;
         }

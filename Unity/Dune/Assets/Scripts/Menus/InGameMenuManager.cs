@@ -60,10 +60,10 @@ public class InGameMenuManager : MonoBehaviour
 
     public static InGameMenuManager getInstance()
     {
-      //  if(instance == null)
-      //  {
-           // instance = new InGameMenuManager();
-      //  }
+        if(instance == null)
+        {
+            instance = new InGameMenuManager();
+        }
         return instance;
     }
 
@@ -147,12 +147,13 @@ public class InGameMenuManager : MonoBehaviour
         {
             SessionHandler.messageController.DoRequestRejoin(SessionHandler.clientSecret);
             RejoinMenu.SetActive(false);
-            SessionHandler.RestartConnectionMonitor();
+            StartConnectionWatchdog.instance.RestartConnectionMonitor();
             GUIHandler.BroadcastGameMessage("Connected!");
         }
         else
         {
             GUIHandler.BroadcastGameMessage("Reconnect failed!");
+            Debug.Log("Rejoin failed");
         }
 
     }

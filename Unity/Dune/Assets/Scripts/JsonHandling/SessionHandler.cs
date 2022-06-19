@@ -57,31 +57,7 @@ public static class SessionHandler
 
     }
 
-    public static void CreateConnectionMonitor()
-    {
-        if (connectionMonitiorTimer == null)
-        {
-            connectionMonitiorTimer = new System.Timers.Timer(1000);
-            connectionMonitiorTimer.Elapsed += ConnectionMonitorEvent;
-            connectionMonitiorTimer.AutoReset = true;
-            connectionMonitiorTimer.Enabled = true;
-        }
-    }
 
-    private static void ConnectionMonitorEvent(Object source, ElapsedEventArgs e)
-    {
-        if(!clientconhandler.ConnectionIsAlive())
-        {
-            Log.Debug("ConnectionMonitor: Connection just died. Opening rejoin menu");
-            InGameMenuManager.getInstance().DemandRejoinOption();
-            connectionMonitiorTimer.Enabled = false;
-        }
-    }
-
-    public static void RestartConnectionMonitor()
-    {
-        connectionMonitiorTimer.Enabled = true;
-    }
 
 
 

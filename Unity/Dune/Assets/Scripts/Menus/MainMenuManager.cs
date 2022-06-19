@@ -97,7 +97,10 @@ public class MainMenuManager : MonoBehaviour
                 //SessionHandler.CreateNetworkModule(serverIP, int.Parse(serverPort));
             }
         }
-        SessionHandler.messageController.DoJoin(name, active, false);
+        if (SessionHandler.clientconhandler.ConnectionIsAlive())
+        {
+            SessionHandler.messageController.DoJoin(name, active, false);
+        }
 
     }
 
