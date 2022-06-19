@@ -48,6 +48,31 @@ namespace AIClient
             Party.GetInstance().ClientSecret = msg.clientSecret;
         }
 
+        /// <summary>
+        /// called, when an error occur during the join process, e. g. if the join message was wrong or if there are
+        /// already two active players
+        /// </summary>
+        /// <param name="msg">the received ERROR message</param>
+        public override void OnErrorMessage(ErrorMessage msg)
+        {
+            Log.Error($"An error occured during joining: {msg.ErrorDescription}");
+
+            switch (msg.ErrorCode)
+            {
+                case 1:
+                    Log.Debug("The join message had a bad format, so send it again");
+                    DoSendJoin(Programm.Configuration.Name);
+                    break;
+                case 3:
+                    Log.Debug("There are already two players registred, so terminate this client!");
+                    Environment.Exit(0);
+                    break;
+                default:
+                    Log.Debug($"The error code was {msg.ErrorCode} a could not be proccessed!");
+                    break;
+            }
+        }
+
         public override void OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
         {
             throw new NotImplementedException();

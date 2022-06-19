@@ -27,7 +27,7 @@ namespace AIClient
         /// <summary>
         /// the configuration of the ai client, given by the command line arguements
         /// </summary>
-        private static AIClientConfiguration configuration;
+        public static AIClientConfiguration Configuration { get; }
 
         /// <summary>
         /// main method, which is executed when the ai client was started / executed
@@ -55,7 +55,7 @@ namespace AIClient
 
             // create a new party and initialize the game
             Party.CreateParty(messageController);
-            Party.GetInstance().JoinParty(configuration.Name);
+            Party.GetInstance().JoinParty(Configuration.Name);
             Log.Debug("Created a new party and initialized the join");
         }
 
@@ -75,7 +75,7 @@ namespace AIClient
         {
             messageController = new AIPlayerMessageController();
 
-            ClientConnectionHandler aiClientConnectionHandler = new ClientConnectionHandler(configuration.Address, configuration.Port);
+            ClientConnectionHandler aiClientConnectionHandler = new ClientConnectionHandler(Configuration.Address, Configuration.Port);
             _ = new ClientNetworkController(aiClientConnectionHandler, messageController);
         }
 
@@ -92,7 +92,7 @@ namespace AIClient
                 Log.Debug("The command line arguments of the ai client were parsed sucessfully");
 
                 // get the configuration data
-                configuration = parser.Configuration;
+                Configuration = parser.Configuration;
             }
             else
             {
