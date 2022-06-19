@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using GameData.network.util.world;
-using Server.Configuration;
-using Server.roundHandler;
+using GameData.Configuration;
+using GameData.roundHandler;
 
-namespace Server.roundHandler.duneMovementHandler
+namespace GameData.roundHandler.duneMovementHandler
 {
     /// <summary>
     /// Represents the game phase, which execute the movement of the dunes

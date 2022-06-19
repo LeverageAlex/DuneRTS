@@ -1,7 +1,7 @@
 ﻿using System;
-using Server.ClientManagement.Clients;
+using GameData.ClientManagement.Clients;
 
-namespace Server
+namespace GameData
 {
     /// <summary>
     /// Represents a spectator, who watch the game live and only gets informed about the game but cannot play the game activly

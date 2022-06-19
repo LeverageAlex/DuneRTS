@@ -2,7 +2,7 @@
 using System.IO;
 using Newtonsoft.Json;
 
-namespace Server.Configuration
+namespace GameData.Configuration
 {
     /// <summary>
     /// Loader of the configuration files for the party configuration and the scenario configuration.

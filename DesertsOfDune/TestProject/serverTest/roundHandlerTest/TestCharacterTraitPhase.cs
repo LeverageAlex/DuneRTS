@@ -7,8 +7,8 @@ using GameData.gameObjects;
 using GameData.network.util.world;
 using GameData.network.util.world.greatHouse;
 using NUnit.Framework;
-using Server;
-using Server.Configuration;
+using GameData;
+using GameData.Configuration;
 
 namespace UnitTestSuite.serverTest.roundHandlerTest
 {

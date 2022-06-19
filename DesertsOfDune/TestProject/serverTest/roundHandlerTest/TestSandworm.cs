@@ -9,7 +9,7 @@ using GameData.network.util.world;
 using GameData.network.util.world.mapField;
 using GameData.network.util.world.character;
 using GameData.gameObjects;
-using Server.Configuration;
+using GameData.Configuration;
 
 namespace UnitTestSuite.serverTest.roundHandlerTest
 {

@@ -9,12 +9,12 @@ using GameData.network.messages;
 using GameData.network.util.world;
 using GameData.server.roundHandler;
 using Serilog;
-using Server;
-using Server.Clients;
-using Server.Configuration;
-using Server.roundHandler;
-using Server.roundHandler.duneMovementHandler;
-using Server.roundHandler.endOfGame;
+using GameData;
+using GameData.Clients;
+using GameData.Configuration;
+using GameData.roundHandler;
+using GameData.roundHandler.duneMovementHandler;
+using GameData.roundHandler.endOfGame;
 
 namespace GameData.gameObjects
 {

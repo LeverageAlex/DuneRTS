@@ -3,7 +3,7 @@ using GameData.network.util.parser;
 using GameData.network.messages;
 using GameData.network.util.world;
 using System.Collections.Generic;
-using Server.Configuration;
+using GameData.Configuration;
 using GameData.Configuration;
 using GameData.network.util.world.character;
 using GameData.network.util.enums;

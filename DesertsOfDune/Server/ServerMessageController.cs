@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using GameData.network.controller;
 using GameData.network.messages;
 using GameData.network.util.world;
-using Server.Clients;
+using GameData.Clients;
 using Serilog;
-using Server.ClientManagement.Clients;
+using GameData.ClientManagement.Clients;
 using GameData.network.util.enums;
 using GameData.network.util.world.greatHouse;
 using System.Linq;
 using GameData.network.util.parser;
-using Server.Configuration;
+using GameData.Configuration;
 using Newtonsoft.Json;
 using GameData.server.roundHandler;
 using GameData.network.util.world.mapField;
 using GameData.network.util.world.character;
-using Server.roundHandler;
+using GameData.roundHandler;
 using System.Threading;
 
-namespace Server
+namespace GameData
 {
     public class ServerMessageController : MessageController
     {

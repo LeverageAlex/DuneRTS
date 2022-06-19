@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Server.Clients;
+using GameData.Clients;
 using GameData.gameObjects;
-using Server.ClientManagement.Clients;
+using GameData.ClientManagement.Clients;
 using Serilog;
 using System.Runtime.CompilerServices;
 using GameData.network.util.world;
@@ -11,12 +11,12 @@ using System.Runtime.ExceptionServices;
 using System.Linq;
 using WebSocketSharp;
 using CommandLine;
-using Server.Configuration;
+using GameData.Configuration;
 using GameData.network.util.world.mapField;
 using GameData.network.util.world.character;
 using System.Threading;
 
-namespace Server
+namespace GameData
 {
     /// <summary>
     /// Represents a "Deserts of Dune"-Party, which is used for playing the game, so executing the game logic as well as the game start and ending.

@@ -3,9 +3,9 @@ using GameData.network.util.parser;
 using GameData.parser;
 using GameData.validation;
 using Serilog;
-using Server.Configuration;
+using GameData.Configuration;
 
-namespace Server.parser.commandLineParser
+namespace GameData.parser.commandLineParser
 {
     /// <summary>
     /// Parser for the command line arguments given, when the server is started.

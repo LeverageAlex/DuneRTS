@@ -1,7 +1,7 @@
 ﻿using System;
-using Server.Clients;
+using GameData.Clients;
 
-namespace Server
+namespace GameData
 {
     /// <summary>
     /// Represents a human player, which can interact with the game and pause it.

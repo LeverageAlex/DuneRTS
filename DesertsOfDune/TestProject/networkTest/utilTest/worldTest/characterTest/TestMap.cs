@@ -1,4 +1,4 @@
-﻿using Server.Configuration;
+﻿using GameData.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -4,10 +4,10 @@ using System.Text;
 using GameData.network.util.world;
 using GameData.gameObjects;
 using GameData.network.util.world.mapField;
-using Server.roundHandler;
-using Server.Configuration;
-using Server;
-using Server.Clients;
+using GameData.roundHandler;
+using GameData.Configuration;
+using GameData;
+using GameData.Clients;
 
 namespace GameData.server.roundHandler
 {

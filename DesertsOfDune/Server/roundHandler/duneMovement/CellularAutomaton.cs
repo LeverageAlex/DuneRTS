@@ -7,9 +7,9 @@ using GameData.network.util.enums;
 using GameData.network.util.world;
 using GameData.network.util.world.mapField;
 using Serilog;
-using Server.Configuration;
+using GameData.Configuration;
 
-namespace Server.roundHandler.duneMovementHandler
+namespace GameData.roundHandler.duneMovementHandler
 {
     /// <summary>
     /// Represents a cellular automaton based on the principle of Conway's Game of Life

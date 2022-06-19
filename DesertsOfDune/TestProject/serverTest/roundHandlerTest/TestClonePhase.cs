@@ -7,7 +7,7 @@ using NUnit.Framework;
 using GameData.server.roundHandler;
 using GameData.network.messages;
 using GameData.network.util.world.character;
-using Server.Configuration;
+using GameData.Configuration;
 
 namespace UnitTestSuite.serverTest.roundHandlerTest
 {
