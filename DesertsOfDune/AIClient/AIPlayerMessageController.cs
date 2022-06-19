@@ -194,6 +194,60 @@ namespace AIClient
             Party.GetInstance().Map.DrawMapToConsole();
         }
 
+        /// <summary>
+        /// called, when the server sends a SPAWN_CHARACTER_DEMAND message
+        /// </summary>
+        /// <remarks>
+        /// spawn a new character, so create a new character and add it to the list of alive characters in the party
+        /// </remarks>
+        /// <param name="spawnCharacterDemandMessage">the received SPAWN_CHARACTER_DEMAND message</param>
+        public override void OnSpawnCharacterDemandMessage(SpawnCharacterDemandMessage spawnCharacterDemandMessage)
+        {
+            // check, if the character spawn is for this client
+            if (spawnCharacterDemandMessage.clientID == Party.GetInstance().ClientID)
+            {
+                // create a new character depending on the values
+                CharacterType type = (CharacterType)Enum.Parse(typeof(CharacterType), spawnCharacterDemandMessage.attributes.characterType);
+                Character newCharacter = new Character(spawnCharacterDemandMessage.characterID, spawnCharacterDemandMessage.characterName, type, spawnCharacterDemandMessage.attributes.healthMax, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.healingHP, spawnCharacterDemandMessage.attributes.MPmax, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APmax, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.attackDamage, spawnCharacterDemandMessage.attributes.inventorySize, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.killedBySandworm, spawnCharacterDemandMessage.attributes.isLoud);
+
+                MapField characterMapField = Party.GetInstance().Map.GetMapFieldAtPosition(spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y);
+                characterMapField.PlaceCharacter(newCharacter);
+
+                newCharacter.CurrentMapfield = characterMapField;
+
+                // add new character to list of alive characters
+                Party.GetInstance().AddAliveCharacter(newCharacter);
+            }
+        }
+
+        /// <summary>
+        /// called, when the server send a message, which indicates, that one character has new values / statistics
+        /// </summary>
+        /// <remarks>
+        /// checks, whether the character belongs to this clients and if so, update the values with the given values
+        /// </remarks>
+        /// <param name="changeCharacterStatisticsDemandMessage">the received CHARACTER_STAT_CHANGE_DEMAND message</param>
+        public override void OnChangeCharacterStatisticsDemandMessage(ChangeCharacterStatisticsDemandMessage changeCharacterStatisticsDemandMessage)
+        {
+            // check, if the character statistics change is for this client
+            if (changeCharacterStatisticsDemandMessage.clientID == Party.GetInstance().ClientID)
+            {
+                // find the character with the given id
+                foreach (Character character in Party.GetInstance().AliveCharacters)
+                {
+                    if (character.CharacterId == changeCharacterStatisticsDemandMessage.characterID)
+                    {
+                        // change values of this character
+                        character.healthCurrent = changeCharacterStatisticsDemandMessage.stats.HP;
+                        character.MPcurrent = changeCharacterStatisticsDemandMessage.stats.MP;
+                        character.APcurrent = changeCharacterStatisticsDemandMessage.stats.AP;
+                        character.inventoryUsed = changeCharacterStatisticsDemandMessage.stats.spice;
+                        character.KilledBySandworm = changeCharacterStatisticsDemandMessage.stats.isSwallowed;
+                        character.isLoud = changeCharacterStatisticsDemandMessage.stats.isLoud;
+                    }
+                }  
+            }
+        }
 
         public override void OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
         {
@@ -211,12 +265,6 @@ namespace AIClient
         {
             throw new NotImplementedException();
         }
-
-        public override void OnChangeCharacterStatisticsDemandMessage(ChangeCharacterStatisticsDemandMessage changeCharacterStatisticsDemandMessage)
-        {
-            throw new NotImplementedException();
-        }
-
 
         public override void OnChangePlayerSpiceDemandMessage(ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage)
         {
@@ -311,10 +359,7 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
-        public override void OnSpawnCharacterDemandMessage(SpawnCharacterDemandMessage spawnCharacterDemandMessage)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public override void OnStrikeMessage(StrikeMessage strikeMessage)
         {
