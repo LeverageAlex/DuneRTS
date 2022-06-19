@@ -153,13 +153,14 @@ namespace AIClient
                     // choose first choice
                     DoSendHouseRequest(firstChoice.houseName);
                     Log.Debug($"Chose the great house {firstChoice.houseName}");
-                } else
+                }
+                else
                 {
                     // choose second choice
                     DoSendHouseRequest(secondChoice.houseName);
                     Log.Debug($"Chose the great house {secondChoice.houseName}");
                 }
-            }            
+            }
         }
 
         /// <summary>
@@ -185,7 +186,7 @@ namespace AIClient
             // update the map in the party
             Map map = Party.GetInstance().Map;
             map.fields = map.GetNewMapFromMessage(mapChangeDemandMessage.newMap);
-            
+
 
             Party.GetInstance().Map.PositionOfEyeOfStorm = mapChangeDemandMessage.stormEye;
 
@@ -245,9 +246,61 @@ namespace AIClient
                         character.KilledBySandworm = changeCharacterStatisticsDemandMessage.stats.isSwallowed;
                         character.isLoud = changeCharacterStatisticsDemandMessage.stats.isLoud;
                     }
-                }  
+                }
             }
         }
+
+        /// <summary>
+        /// called, when the server sends a message, that contains the new spice value of a city / client
+        /// </summary>
+        /// <remarks>
+        /// checks, whether this message is for this client and if so, set the new value and print it to the console
+        /// </remarks>
+        /// <param name="changePlayerSpiceDemandMessage">the received CHANGE_PLAYER_SPICE_DEMAND message</param>
+        public override void OnChangePlayerSpiceDemandMessage(ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage)
+        {
+            // check, if the spice change is for this client
+            if (changePlayerSpiceDemandMessage.clientID == Party.GetInstance().ClientID)
+            {
+                Party.GetInstance().CitySpice = changePlayerSpiceDemandMessage.newSpiceValue;
+                Log.Information($"This city has now a spice amount of {changePlayerSpiceDemandMessage.newSpiceValue}!");
+            }
+        }
+
+        /// <summary>
+        /// called, when the server sends a pause / resume message
+        /// </summary>
+        /// <remarks>
+        /// informs the client, that the game was paused / resumed and print this to the console
+        /// </remarks>
+        /// <param name="gamePauseDemandMessage">the received GAME_PAUSE_DEMAND message</param>
+        public override void OnPauseGameDemandMessage(GamePauseDemandMessage gamePauseDemandMessage)
+        {
+            if (gamePauseDemandMessage.pause)
+            {
+                Log.Information($"The game was paused by the client with the id {gamePauseDemandMessage.requestedByClientID}.");
+            }
+            else
+            {
+                Log.Information($"The game was resumed by the client with the id {gamePauseDemandMessage.requestedByClientID}.");
+            }
+        }
+
+
+        /// <summary>
+        /// called, when the server sends a resume offer
+        /// </summary>
+        /// <remarks>
+        /// informs the client, that the game can be resumed and print this to the console.
+        /// Because the ai client is not allowed to resume a game, no resume demand is send!
+        /// </remarks>
+        /// <param name="unpauseGameOfferMessage">the received UNPAUSE_GAME_OFFER message</param>
+        public override void OnUnpauseOfferDemand(UnpauseGameOfferMessage unpauseGameOfferMessage)
+        {
+            Log.Debug($"The pause requested by the client with the id {unpauseGameOfferMessage.requestedByClientID} can be resumed by any client (except for ai clients).");
+        }
+
+
 
         public override void OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
         {
@@ -266,10 +319,7 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
-        public override void OnChangePlayerSpiceDemandMessage(ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public override void OnEndGameMessage(EndGameMessage endGameMessage)
 
@@ -282,8 +332,6 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
-        
-
         public override void OnGameEndMessage(GameEndMessage gameEndMessage)
 
         {
@@ -295,29 +343,21 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
-        public override void OnUnpauseOfferDemand(UnpauseGameOfferMessage unpauseGameOfferMessage)
-        {
-            throw new NotImplementedException();
-        }
+
         public override void OnGameStateRequestMessage(GameStateRequestMessage msg)
         {
             throw new NotImplementedException();
         }
 
-       
-
         public override void OnHouseRequestMessage(HouseRequestMessage msg, string sessionID)
         {
             throw new NotImplementedException();
         }
-        
+
         public override void OnJoinMessage(JoinMessage msg, string sessionID)
         {
             throw new NotImplementedException();
         }
-
-
-        
 
         public override void OnMovementDemandMessage(MovementDemandMessage movementDemandMessage)
         {
@@ -325,11 +365,6 @@ namespace AIClient
         }
 
         public override void OnMovementRequestMessage(MovementRequestMessage msg)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void OnPauseGameDemandMessage(GamePauseDemandMessage gamePauseDemandMessage)
         {
             throw new NotImplementedException();
         }
@@ -358,8 +393,6 @@ namespace AIClient
         {
             throw new NotImplementedException();
         }
-
-        
 
         public override void OnStrikeMessage(StrikeMessage strikeMessage)
         {

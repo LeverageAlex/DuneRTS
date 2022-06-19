@@ -44,6 +44,8 @@ namespace AIClient
         /// </summary>
         public string AssignedGreatHouse { get; set; }
 
+        public int CitySpice { get; set; }
+
         public AIPlayerMessageController MessageController { get; private set; }
 
         /// <summary>
