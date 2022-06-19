@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using GameData.network.util.world;
 
@@ -35,6 +36,8 @@ namespace AIClient
         /// the map, the ai client is playing on
         /// </summary>
         public Map Map { get; set; }
+
+        public List<Character> AliveCharacters { get; private set; }
 
         /// <summary>
         /// the assigned (and chosen) great house for this client
@@ -82,5 +85,22 @@ namespace AIClient
         {
             MessageController.DoSendJoin(clientName);
         }
+
+        /// <summary>
+        /// adds a new character to the alive characters of the ai client
+        /// </summary>
+        /// <param name="character">the character to add to the list</param>
+        /// <returns>true, if the character could be added, because there are less than six alive characters and otherwise false</returns>
+        public bool AddAliveCharacter(Character character)
+        {
+            if (AliveCharacters.Count >= 6)
+            {
+                return false;
+            } else
+            {
+                AliveCharacters.Add(character);
+                return true;
+            }
+        } 
     }
 }
