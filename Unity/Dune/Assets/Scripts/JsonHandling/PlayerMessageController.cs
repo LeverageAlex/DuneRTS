@@ -306,6 +306,8 @@ public class PlayerMessageController : MessageController
                 SessionHandler.clientId = gameStateMessage.activelyPlayingIDs[0];
                 SessionHandler.enemyClientId = gameStateMessage.activelyPlayingIDs[1];
 
+                InGameMenuManager.getInstance().SwitchToInGameUI();
+
                 TurnDemandMessage turnDmdMsg = null;
 
 
@@ -514,7 +516,7 @@ public class PlayerMessageController : MessageController
         UnityMainThreadDispatcher.Instance().Enqueue(deselectDemand());
 
         Log.Debug("Triggered TurnDemandMessage");
-        if (SessionHandler.clientId == turnDemandMessage.clientID)
+        if (SessionHandler.clientId == turnDemandMessage.clientID && SessionHandler.isPlayer)
         {
             IEnumerator turnDemand()
             {
