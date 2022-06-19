@@ -79,6 +79,14 @@ namespace AIClient
         /// called, when the server send the game config message after both players joined the game and successfully chose
         /// a great house
         /// </summary>
+        /// <remarks>
+        /// In this callback the following things are done:
+        /// <list type="bullet">
+        /// <item>processing and creating a party configuration</item>
+        /// <item>create a map, the client is playing on</item>
+        /// <item>set the position of the storm eye on the map</item>
+        /// </list>
+        /// </remarks>
         /// <param name="gameConfigMessage">the received GAMECFG message</param>
         public override void OnGameConfigMessage(GameConfigMessage gameConfigMessage)
         {
