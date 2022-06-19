@@ -78,18 +78,13 @@ public class MainMenuManager : MonoBehaviour
         Debug.Log("Join: " + name + " " + serverIP + " " + serverPort + " " + active);
 
         //TODO send JOIN message to server with given IP and given port
-        if (!Mode.debugMode)
-        {
-            SessionHandler.CreateNetworkModule(serverIP, int.Parse(serverPort));
-            SessionHandler.messageController.DoJoin(name, active, false);
+        SessionHandler.CreateNetworkModule(serverIP, int.Parse(serverPort));
+        Debug.Log("Successfuly established connection. Now starting join");
+        Log.Debug("Successfuly established connection. Now starting join");
+        SessionHandler.messageController.DoJoin(name, active, false);
 
 
-        }
-        else
-        {
 
-            DemandPlayGame();//TODO delete, just temporary for testing
-        }
     }
 
 

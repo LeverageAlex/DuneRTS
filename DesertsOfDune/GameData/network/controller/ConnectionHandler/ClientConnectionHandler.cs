@@ -20,6 +20,9 @@ namespace GameData.network.controller
         /// the reference to the websocket
         /// </summary>
         public WebSocket WebSocket { get; set; }
+        private Thread _thread;
+        private bool keepThreadAlive = true;
+     //   private readonly ClientSocketErrorHandler ClientPasser;
 
         /// <summary>
         /// creates a new client connection handler and initializes the connection to the websocket server,
@@ -30,8 +33,11 @@ namespace GameData.network.controller
         public ClientConnectionHandler(string ServerAddress, int Port) : base(ServerAddress, Port)
         {
             // initialize the websocket and connect it to the server (but not block the programm because to waiting for websocket to be closed
-            Thread t = new Thread(InitializeWebSocket);
-            t.Start();
+            //   this.ClientPasser = ClientPasser;
+            keepThreadAlive = true;
+            _thread = new Thread(InitializeWebSocket);
+            _thread.Start();
+
         }
 
         /// <summary>
@@ -39,19 +45,45 @@ namespace GameData.network.controller
         /// </summary>
         public void InitializeWebSocket()
         {
-            WebSocket = new WebSocket(GetURL());
-            Log.Debug("Created new websocket, which will connect to " + GetURL());
+            while (true)
+            {
 
-            SetCallbackFunctionsToInternalEventHandler();
+                WebSocket = new WebSocket(GetURL());
+                //  WebSocket.Connect();
+                Log.Debug("Created new websocket, which will connect to " + GetURL());
 
-            // connect to websocket server
-            ConnectToWebsocketServer();
+                SetCallbackFunctionsToInternalEventHandler();
 
-            
+                // connect to websocket server
+                ConnectToWebsocketServer();
+
+
+                while (keepThreadAlive)
+                {
+                    Thread.Sleep(300);
+                }
+                Log.Debug("Killed Current Connection");
+                WebSocket.Close();
+                while (!keepThreadAlive)
+                {
+                    Thread.Sleep(70);
+                }
+                Log.Debug("Restarting socket");
+            }
+
             // wait for a signal from the user, to close the connection to the server
             // TODO: implement logic, which holds the websocket alive and close it by user client
-            Console.ReadKey();
+           // Console.ReadKey();
             //CloseConnectionToWebsocketServer(CloseStatusCode.Away, "User closed the connection via the command line");
+
+        }
+
+        public void ReconnectSocket(string ServerAddress, int Port)
+        {
+            this.SERVER_ADDRESS = ServerAddress;
+            this.PORT = Port;
+            keepThreadAlive = true;
+
         }
 
         /// <summary>
@@ -62,11 +94,13 @@ namespace GameData.network.controller
             WebSocket.OnClose += (sender, e) =>
             {
                 OnClose(e, "");
+           //     ClientPasser.HandleOnCloseMessage();
             };
 
             WebSocket.OnError += (sender, e) =>
             {
                 OnError(e, "");
+          //     ClientPasser.HandleErrorMessage();
             };
 
             WebSocket.OnMessage += (sender, e) =>
@@ -86,7 +120,7 @@ namespace GameData.network.controller
         public void ConnectToWebsocketServer()
         {
             WebSocket.Connect();
-            //Log.Information("The client " + WebSocket.Credentials.Domain + " connect to the websocket server at " + GetURL());
+     //       Log.Information("The client " + WebSocket.Credentials.Domain + " connect to the websocket server at " + GetURL());
         }
 
         // TODO: hide the CloseStatusCode and implement own variant, which can be exposed --> map own codes on CloseStatusCode
@@ -97,6 +131,17 @@ namespace GameData.network.controller
         public void CloseConnectionToWebsocketServer(CloseStatusCode statusCode)
         {
             WebSocket.Close(statusCode);
+
+        }
+
+        public void CloseConnectionToWebsocketServer()
+        {
+            keepThreadAlive = false;
+        }
+
+        public bool ConnectionIsAlive()
+        {
+            return WebSocket.IsAlive;
         }
 
         /// <summary>
@@ -131,6 +176,7 @@ namespace GameData.network.controller
         protected internal override void OnError(ErrorEventArgs e, string sessionID)
         {
             Log.Error("An error occured on the connection to the Websocket server. The error is: " + e.Message);
+            //WebSocket.Close();
         }
 
         /// <summary>

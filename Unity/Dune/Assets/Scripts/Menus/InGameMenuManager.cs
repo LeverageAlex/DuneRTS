@@ -221,6 +221,7 @@ public class InGameMenuManager : MonoBehaviour
 
     public void ExitToMainMenu()
     {
+        SessionHandler.CloseNetworkModule();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 
