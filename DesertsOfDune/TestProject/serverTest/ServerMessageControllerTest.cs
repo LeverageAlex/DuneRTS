@@ -7,9 +7,9 @@ using GameData.network.messages;
 using GameData.network.util.enums;
 using GameData.network.util.world;
 using NUnit.Framework;
-using Server;
-using Server.Clients;
-using Server.Configuration;
+using GameData;
+using GameData.Clients;
+using GameData.Configuration;
 
 namespace UnitTestSuite.serverTest
 {

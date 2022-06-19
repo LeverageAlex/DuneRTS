@@ -1,7 +1,7 @@
 ﻿using System;
-using Server.Configuration;
+using GameData.Configuration;
 
-namespace Server.roundHandler
+namespace GameData.roundHandler
 {
     /// <summary>
     /// Represents the pause of a client

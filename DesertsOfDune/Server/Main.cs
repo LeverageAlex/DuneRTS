@@ -8,11 +8,11 @@ using GameData.network.util;
 using GameData.network.util.world;
 using GameData.server.roundHandler;
 using Serilog;
-using Server.Configuration;
-using Server.parser.commandLineParser;
-using Server.roundHandler.duneMovementHandler;
+using GameData.Configuration;
+using GameData.parser.commandLineParser;
+using GameData.roundHandler.duneMovementHandler;
 
-namespace Server
+namespace GameData
 {
     /// <summary>
     /// The main class for configuring and starting the server. \n

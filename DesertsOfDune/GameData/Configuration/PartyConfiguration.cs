@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using GameData.network.util.world;
 using Newtonsoft.Json;
 
-namespace Server.Configuration
+namespace GameData.Configuration
 {
     /// <summary>
     /// This class stores the party configuration and is used for loading the match configuration file.

@@ -170,6 +170,11 @@ namespace GameData.network.controller
 
         public abstract void DoSendHouseOffer(int clientID, GreatHouseType[] houses);
 
+        public virtual void DoSendHouseRequest(string houseName)
+        {
+
+        }
+
         public abstract void DoSendHouseAck(int clientID, string houseName);
 
         public abstract void DoSendTurnDemand(int clientID, int characterID);
@@ -221,5 +226,10 @@ namespace GameData.network.controller
         public abstract void DoGamePauseDemand(int requestedByClientID, bool pause);
 
         public abstract void OnUnpauseGameOffer(int requestdByClient);
+
+        public virtual void OnErrorMessage(ErrorMessage msg)
+        {
+            // Method intentionally left empty.
+        }
     }
 }

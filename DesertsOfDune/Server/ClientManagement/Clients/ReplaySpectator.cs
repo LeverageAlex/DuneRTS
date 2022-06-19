@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Server
+namespace GameData
 {
     public class ReplaySpectator
     {

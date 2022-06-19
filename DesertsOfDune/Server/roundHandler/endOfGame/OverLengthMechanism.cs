@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using GameData.network.messages;
 using GameData.server.roundHandler;
-using Server;
-using Server.roundHandler;
+using GameData;
+using GameData.roundHandler;
 
 namespace GameData.network.util.world
 {
