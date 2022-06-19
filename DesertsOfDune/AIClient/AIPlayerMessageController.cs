@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using GameData.Configuration;
 using GameData.network.controller;
 using GameData.network.messages;
 using GameData.network.util.enums;
 using GameData.network.util.world;
+using Newtonsoft.Json;
 using Serilog;
 
 namespace AIClient
@@ -82,6 +84,28 @@ namespace AIClient
         {
             Log.Debug("Received the game configuration from the server");
 
+            // load the party configuration and create a new party configuration class
+            PartyConfiguration partyConfiguration = JsonConvert.DeserializeObject<PartyConfiguration>(gameConfigMessage.party.refr);
+            PartyConfiguration.SetInstance(partyConfiguration);
+
+            //Initialization for greatHouses in GameData project
+            GameData.Configuration.Configuration.InitializeConfigurations();
+
+            // Initialization for the character configurations in GameData project
+            GameData.Configuration.Configuration.InitializeCharacterConfiguration(
+                PartyConfiguration.GetInstance().noble,
+                PartyConfiguration.GetInstance().mentat,
+                PartyConfiguration.GetInstance().beneGesserit,
+                PartyConfiguration.GetInstance().fighter);
+
+            // set the map of the ai client
+            int mapWidth = gameConfigMessage.scenario[0].Count;
+            int mapHeight = gameConfigMessage.scenario.Count;
+            Party.GetInstance().Map = new Map(mapWidth, mapHeight, gameConfigMessage.scenario);
+
+            Party.GetInstance().Map.PositionOfEyeOfStorm = gameConfigMessage.stormEye;
+
+            // TODO: process the cityToClient information
 
         }
 

@@ -27,7 +27,7 @@ namespace AIClient
         /// <summary>
         /// the configuration of the ai client, given by the command line arguements
         /// </summary>
-        public static AIClientConfiguration Configuration { get; }
+        public static AIClientConfiguration Configuration { get; private set; }
 
         /// <summary>
         /// main method, which is executed when the ai client was started / executed

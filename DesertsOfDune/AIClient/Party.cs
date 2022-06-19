@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography.X509Certificates;
+using GameData.network.util.world;
 
 namespace AIClient
 {
@@ -29,6 +30,11 @@ namespace AIClient
         /// the id of the ai client playing this party
         /// </summary>
         public int ClientID { get; set; }
+
+        /// <summary>
+        /// the map, the ai client is playing on
+        /// </summary>
+        public Map Map { get; set; }
 
         public AIPlayerMessageController MessageController { get; private set; }
 
