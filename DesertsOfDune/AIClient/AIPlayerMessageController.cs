@@ -352,6 +352,49 @@ namespace AIClient
             Log.Debug($"The pause requested by the client with the id {unpauseGameOfferMessage.requestedByClientID} can be resumed by any client (except for ai clients).");
         }
 
+        /// <summary>
+        /// called, when the server sends the message, that the normal game ended and the overlength mechanism is triggered and print this to console
+        /// </summary>
+        /// <param name="endGameMessage">the received ENDGAME message</param>
+        public override void OnEndGameMessage(EndGameMessage endGameMessage)
+        {
+            Log.Information("The number of rounds reached the maximum number, so the normal is game is finished and the overlength mechanism is triggered!");
+        }
+
+        /// <summary>
+        /// called, when the game is finally finished and the server sends the winner / loser and the game statistics
+        /// </summary>
+        /// <remarks>
+        /// print the information to the console and check, whether this client won or the other won
+        /// </remarks>
+        /// <param name="gameEndMessage">the received GAME_END message</param>
+        public override void OnGameEndMessage(GameEndMessage gameEndMessage)
+        {
+            Log.Debug($"The id of the winner is {gameEndMessage.winnerID} and of the loser {gameEndMessage.loserID}!");
+
+            Statistics statistics;
+
+            // checks, whos id is the winner id
+            if (gameEndMessage.winnerID == Party.GetInstance().ClientID)
+            {
+                Log.Information("Congratulations! You won the game!");
+                statistics = gameEndMessage.statistics[0];
+            } else
+            {
+                Log.Information("You lost the game! Maybe the next time.");
+                statistics = gameEndMessage.statistics[1];
+            }
+
+
+            // print the game statistics
+            Log.Information("---------------- GAME STATISTICS (YOU) ---------------- \n" +
+                $"Your current spice amount:                            {statistics.HouseSpiceStorage}\n" +
+                $"Your total collected spice amount:                    {statistics.TotalSpiceCollected}\n" +
+                $"The amount of enemies, you defeated:                  {statistics.EnemiesDefeated}\n" +
+                $"The amount of your characters, who were swallowed:    {statistics.CharactersSwallowed}\n" +
+                $"Did you have the last character standing:             {(statistics.LastCharacterStanding ? "Yes" : "No")} \n" +
+                            "------------------------------------------------------");
+        }
 
 
         public override void OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
@@ -370,25 +413,14 @@ namespace AIClient
         {
             throw new NotImplementedException();
         }
-
-
-
-        public override void OnEndGameMessage(EndGameMessage endGameMessage)
-
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public override void OnEndTurnRequestMessage(EndTurnRequestMessage msg)
         {
             throw new NotImplementedException();
         }
 
-        public override void OnGameEndMessage(GameEndMessage gameEndMessage)
-
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public override void OnGameStateMessage(GameStateMessage gameStateMessage)
         {
