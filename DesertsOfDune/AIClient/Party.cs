@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 
 namespace AIClient
 {
@@ -19,11 +20,14 @@ namespace AIClient
     {
         private static Party singleton;
 
+        public AIPlayerMessageController MessageController { get; private set; }
+
         /// <summary>
-        /// hide default constructor for implementing the singleton pattern
+        /// hide default constructor for implementing the singleton pattern and sets the message controller used in the party by getting it from the main class
         /// </summary>
         private Party()
         {
+            
         }
 
         /// <summary>
@@ -39,6 +43,19 @@ namespace AIClient
             return singleton;
         }
 
-        public 
+        /// <summary>
+        /// creates a new party
+        /// </summary>
+        /// <param name="messageController">the message controller used in this party</param>
+        public static void CreateParty(AIPlayerMessageController messageController)
+        {
+            Party party = GetInstance();
+            party.MessageController = messageController;
+        }
+
+        public void JoinParty(string clientName)
+        {
+            MessageController.DoSendJoin(clientName);
+        }
     }
 }

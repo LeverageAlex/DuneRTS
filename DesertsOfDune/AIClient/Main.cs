@@ -51,9 +51,12 @@ namespace AIClient
             Log.Debug("Parsed the command line arguments and configuring the ai client");
 
             CreateNetworkModule();
-            Log.Debug("Created network module in ai client and connect to the server");  
+            Log.Debug("Created network module in ai client and connect to the server");
 
-            messageController.DoSendJoin(configuration.Name);
+            // create a new party and initialize the game
+            Party.CreateParty(messageController);
+            Party.GetInstance().JoinParty(configuration.Name);
+            Log.Debug("Created a new party and initialized the join");
         }
 
         /// <summary>
