@@ -729,7 +729,7 @@ public class PlayerMessageController : MessageController
                     break;
             }
             Debug.Log("Selection successful");
-            CharacterMgr.instance.spawnCharacter(spawnCharacterDemandMessage.clientID, spawnCharacterDemandMessage.characterID, type, spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.APmax, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.KilledBySandworm, spawnCharacterDemandMessage.attributes.IsLoud());
+            CharacterMgr.instance.spawnCharacter(spawnCharacterDemandMessage.clientID, spawnCharacterDemandMessage.characterID, type, spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.healthMax,spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.APmax, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.KilledBySandworm, spawnCharacterDemandMessage.attributes.IsLoud());
             yield return null;
         }
         UnityMainThreadDispatcher.Instance().Enqueue(spawnCharacters());
