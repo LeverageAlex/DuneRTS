@@ -316,8 +316,12 @@ namespace AIClient
                 case MoveTypes.MOVE_DOWN:
                 case MoveTypes.MOVE_LEFT_DOWN:
                 case MoveTypes.MOVE_LEFT:
-                    Position[] path = { Position.Move(characterPosition, ((Movement)move).DeltaX, ((Movement)move).DeltaY};
+                    Position[] path = { Position.Move(characterPosition, ((Movement)move).DeltaX, ((Movement)move).DeltaY)};
                     DoSendMovementRequest(character.CharacterId, path);
+                    break;
+                case MoveTypes.TRANSFER_SPICE:
+                    TransferSpice transferSpice = (TransferSpice)move;
+                    DoSendTransferRequest(character.CharacterId, transferSpice.CharacterId, transferSpice.AmountOfSpice);
                     break;
                 case MoveTypes.END_TURN:
                     DoSendEndTurnRequest(character.CharacterId);

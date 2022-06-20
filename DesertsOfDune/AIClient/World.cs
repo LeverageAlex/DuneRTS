@@ -95,10 +95,14 @@ namespace AIClient
             {
                 if (CanTransferSpice(character, i))
                 {
-                    possibleMoves.Add(new Moves.Action(MoveTypes.TRANSFER_SPICE));
+                    foreach (int neighborCharacter in GetCharacterIdsOfFriendlyNeighbors(character))
+                    {
+
+                        possibleMoves.Add(new TransferSpice(neighborCharacter, i));
+                    }
                 }
             }
-            
+
             if (CanDoKanly(character))
             {
                 possibleMoves.Add(new Moves.Action(MoveTypes.KANLY));
@@ -176,7 +180,7 @@ namespace AIClient
             }
 
             // moving downwards
-            Movement moveDown= new Movement(MoveTypes.MOVE_DOWN);
+            Movement moveDown = new Movement(MoveTypes.MOVE_DOWN);
             if (MovementIsValid(moveDown, currentPosition))
             {
                 possibleDirections.Add(moveDown);
@@ -460,6 +464,32 @@ namespace AIClient
                 }
             }
             return false;
+        }
+
+
+        /// <summary>
+        /// get a list of all ids of characters, that are in the same great house like the given character and are standing to the next field
+        /// </summary>
+        /// <param name="character">the character whose friendly neighbors should be determined</param>
+        /// <returns>a list of all ids of friendly neighbor characters</returns>
+        private List<int> GetCharacterIdsOfFriendlyNeighbors(Character character)
+        {
+            List<int> characterIds = new List<int>();
+
+            // check enemy on neighbor field
+            List<MapField> neighborFields = Party.GetInstance().World.Map.GetNeighborFields(character.CurrentMapfield);
+            foreach (MapField neighbor in neighborFields)
+            {
+                if (neighbor.IsCharacterStayingOnThisField)
+                {
+                    if (Party.GetInstance().World.AliveCharacters.Contains(neighbor.Character))
+                    {
+                        characterIds.Add(neighbor.Character.CharacterId);
+                    }
+                }
+            }
+
+            return characterIds;
         }
     }
 }
