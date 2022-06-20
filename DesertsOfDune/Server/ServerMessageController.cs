@@ -374,7 +374,7 @@ namespace GameData
             }
 
             //set Attack as standard enum and change it if needed
-            ActionType action = ActionType.ATTACK;
+            ActionType action;
 
             if (actionCharacter.APcurrent > 0)
             {
@@ -419,7 +419,7 @@ namespace GameData
                         //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
                         case ActionType.KANLY:
                             Random rnd = new Random();
-                            int success = rnd.Next(100);
+                            double success = rnd.NextDouble();
                             action = ActionType.KANLY;
                             if (targetCharacter == null)
                             {
@@ -430,7 +430,7 @@ namespace GameData
                                 && targetCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE)
                                 && !friendlyFire
                                 && !targetCharacter.IsInSandStorm(map)
-                                && success < PartyConfiguration.GetInstance().kanlySuccessProbability * 100)
+                                && success < PartyConfiguration.GetInstance().kanlySuccessProbability)
                             {
                                 DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
                                 actionCharacter.Kanly(targetCharacter);
@@ -482,7 +482,6 @@ namespace GameData
                                     {
                                         DoSpawnCharacterDemand(enemyPlayer.UsedGreatHouse.Characters[i]);
                                     }
-
                             }
                             else
                             {

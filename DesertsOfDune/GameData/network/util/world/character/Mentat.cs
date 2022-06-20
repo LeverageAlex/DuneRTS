@@ -85,7 +85,7 @@ namespace GameData.network.util.world.character
                     NeighborFields.Remove(spiceField);
                    //  = NeighborFields[rnd.Next(NeighborFields.Count)];
                 }
-              //  SpentAp(APmax);
+                SpentAp(APmax);
                 
                 return true;
             }
