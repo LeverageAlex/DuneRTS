@@ -250,6 +250,38 @@ public class MapManager : MonoBehaviour
         enemiesOnBoard = new GameObject[nodes.Length];
     }
 
+    /// <summary>
+    /// Whipes whole local map. Only needed if GameState is totaly reloaded
+    /// </summary>
+    public void ClearOldMapData()
+    {
+        if (nodes != null)
+        {
+            for (int i = 0; i < nodes.Length; i++)
+            {
+                Destroy(nodes[i].gameObject);
+                if (enemiesOnBoard[i] != null)
+                {
+                    Destroy(enemiesOnBoard[i]);
+                }
+            }
+
+            for (int x = 0; x < spiceCrumbs.GetLength(0); x++)
+            {
+                for (int z = 0; z < spiceCrumbs.GetLength(1); z++)
+                {
+                    if (spiceCrumbs[z, x] != null)
+                    {
+                        Destroy(spiceCrumbs[z, x]);
+                    }
+                }
+            }
+
+            CharacterMgr.instance.ClearCharDictionary();
+        }
+
+    }
+
     public void SetStormEye(int x, int z)
     {
         if (SandstormEffect == null || ((int)Mathf.Round(SandstormEffect.transform.position.x)) != x || ((int)Mathf.Round(SandstormEffect.transform.position.z)) != z)

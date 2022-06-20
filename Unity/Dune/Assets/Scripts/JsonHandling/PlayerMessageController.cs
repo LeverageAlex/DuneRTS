@@ -305,15 +305,16 @@ public class PlayerMessageController : MessageController
     public override void OnGameStateMessage(GameStateMessage gameStateMessage)
     {
 
-
+        Log.Debug("Received GameState Message");
         if (!SessionHandler.isPlayer || SessionHandler.rejoining)
         {
             IEnumerator gamestate()
             {
+
                 SessionHandler.rejoining = false;
-                Debug.Log("starting deparsing msg");
-                SessionHandler.clientId = gameStateMessage.activelyPlayingIDs[0];
-                SessionHandler.enemyClientId = gameStateMessage.activelyPlayingIDs[1];
+                Log.Debug("starting deparsing msg");
+           //     SessionHandler.clientId = gameStateMessage.activelyPlayingIDs[0];
+            //    SessionHandler.enemyClientId = gameStateMessage.activelyPlayingIDs[1];
 
                 InGameMenuManager.getInstance().SwitchToInGameUI();
 
@@ -324,16 +325,51 @@ public class PlayerMessageController : MessageController
                 
                 foreach (string msgString in gameStateMessage.history)
                 {
-                    Debug.Log("start parsing: " + msgString);
+                    Log.Debug("start parsing: " + msgString);
                     Message convertedMsg = MessageConverter.ToMessage(msgString);
-                    Debug.Log("parsing successfuly");
+                    Log.Debug("parsing successfuly");
                     switch (convertedMsg.type)
                     {
                         case "MAP_CHANGE_DEMAND":
-                            MapChangeDemandMessage mapstate = (MapChangeDemandMessage)convertedMsg;
-                            Debug.Log("Successfuly deparsed message");
-                            MapManager.instance.setMapSize(mapstate.newMap.GetLength(0), mapstate.newMap.GetLength(1));
-                            OnMapChangeDemandMessage(mapstate);
+                            MapChangeDemandMessage mapChangeDemandMessage = (MapChangeDemandMessage)convertedMsg;
+                            Log.Debug("Successfuly deparsed message");
+                      //      MapManager.instance.ClearOldMapData();
+                            MapManager.instance.setMapSize(mapChangeDemandMessage.newMap.GetLength(0), mapChangeDemandMessage.newMap.GetLength(1));
+                            // OnMapChangeDemandMessage(mapstate);
+
+                            CharacterTurnHandler.instance.ResetSelection();
+                            GUIHandler.BroadcastGameMessage(mapChangeDemandMessage.changeReason);
+                            for (int x = 0; x < mapChangeDemandMessage.newMap.GetLength(0); x++)
+                            {
+                                for (int z = 0; z < mapChangeDemandMessage.newMap.GetLength(1); z++)
+                                {
+
+                                    // Debug.Log("PreLoop Built x: " + x + " and z: " + z);
+                                    if (mapChangeDemandMessage.stormEye != null && MapManager.instance.isNodeNeighbour(x, z, mapChangeDemandMessage.stormEye.x, mapChangeDemandMessage.stormEye.y))
+                                    {
+
+                                        //Node is in Sandstorm
+                                        MapManager.instance.UpdateBoard(x, z, MapManager.instance.StringtoNodeEnum(mapChangeDemandMessage.newMap[z, x].tileType), true);
+                                    }
+                                    else
+                                    {
+                                        MapManager.instance.UpdateBoard(x, z, MapManager.instance.StringtoNodeEnum(mapChangeDemandMessage.newMap[z, x].tileType), false);
+                                    }
+                                    //   Debug.Log("Built x: " + x + " and z: " + z);
+
+
+                                    if (mapChangeDemandMessage.newMap[z, x].hasSpice)
+                                    {
+
+                                        MapManager.instance.SpawnSpiceCrumOn(x, 0.5f, z);
+                                    }
+                                    else
+                                    {
+                                        MapManager.instance.CollectSpice(x, z);
+                                    }
+                                }
+                            }
+                            MapManager.instance.SetStormEye(mapChangeDemandMessage.stormEye.x, mapChangeDemandMessage.stormEye.y);
                             break;
 
                         default:
@@ -349,8 +385,30 @@ public class PlayerMessageController : MessageController
                     {
                         case "SPAWN_CHARACTER_DEMAND":
                             //This might result in displaying Characters having full HP, although they already got hit. The SpawnCharacterDemandMessage needs to get adapted
-                            SpawnCharacterDemandMessage spawnChr = (SpawnCharacterDemandMessage)convertedMsg;
-                            OnSpawnCharacterDemandMessage(spawnChr);
+                            SpawnCharacterDemandMessage spawnCharacterDemandMessage = (SpawnCharacterDemandMessage)convertedMsg;
+                            //OnSpawnCharacterDemandMessage(spawnChr);
+
+                            Debug.Log("Character Attributes: " + (spawnCharacterDemandMessage.attributes == null));
+                            CharTypeEnum type;
+                            switch (spawnCharacterDemandMessage.attributes.characterType)
+                            {
+                                case "FIGHTER":
+                                    type = CharTypeEnum.FIGHTER;
+                                    break;
+                                case "NOBLE":
+                                    type = CharTypeEnum.NOBLE;
+                                    break;
+                                case "MENTAT":
+                                    type = CharTypeEnum.MENTANT;
+                                    break;
+                                default:
+                                    type = CharTypeEnum.BENEGESSERIT;
+                                    break;
+                            }
+                            Debug.Log("Selection successful. Spawn Character for: " + spawnCharacterDemandMessage.clientID);
+                            CharacterMgr.instance.spawnCharacter(spawnCharacterDemandMessage.clientID, spawnCharacterDemandMessage.characterID, type, spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.APmax, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.KilledBySandworm, spawnCharacterDemandMessage.attributes.IsLoud());
+
+
                             break;
                         case "CHANGE_PLAYER_SPICE_DEMAND":
                             OnChangePlayerSpiceDemandMessage((ChangePlayerSpiceDemandMessage)convertedMsg);
@@ -368,8 +426,21 @@ public class PlayerMessageController : MessageController
                 }
                 if (turnDmdMsg != null)
                 {
-                    OnTurnDemandMessage(turnDmdMsg);
-                }
+                   // OnTurnDemandMessage(turnDmdMsg);
+                    // TODO: implement logic
+
+                        CharacterTurnHandler.instance.ResetSelection();
+
+                    if (SessionHandler.clientId == turnDmdMsg.clientID && SessionHandler.isPlayer)
+                    {
+
+                            CharacterTurnHandler.instance.SelectCharacter(CharacterMgr.instance.getCharScriptByID(turnDmdMsg.characterID));
+                    }
+                    else
+                    {
+                        CharacterTurnHandler.instance.SelectAlienCharacter(CharacterMgr.instance.getCharScriptByID(turnDmdMsg.characterID));
+                    }
+                    }
                 yield return null;
             }
             UnityMainThreadDispatcher.Instance().Enqueue(gamestate());
@@ -525,15 +596,22 @@ public class PlayerMessageController : MessageController
         UnityMainThreadDispatcher.Instance().Enqueue(deselectDemand());
 
         Log.Debug("Triggered TurnDemandMessage");
-        if (SessionHandler.clientId == turnDemandMessage.clientID && SessionHandler.isPlayer)
-        {
+       
             IEnumerator turnDemand()
             {
+            if (SessionHandler.clientId == turnDemandMessage.clientID && SessionHandler.isPlayer)
+            {
                 CharacterTurnHandler.instance.SelectCharacter(CharacterMgr.instance.getCharScriptByID(turnDemandMessage.characterID));
-                yield return null;
+
             }
-            UnityMainThreadDispatcher.Instance().Enqueue(turnDemand());
+            else
+            {
+                CharacterTurnHandler.instance.SelectAlienCharacter(CharacterMgr.instance.getCharScriptByID(turnDemandMessage.characterID));
+            }
+            yield return null;
         }
+            UnityMainThreadDispatcher.Instance().Enqueue(turnDemand());
+        
     }
 
     /// <summary>

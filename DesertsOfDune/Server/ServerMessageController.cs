@@ -724,12 +724,22 @@ namespace GameData
 
 
                 history[0] = MessageConverter.FromMessage(mapChangeDemandMessage); //Append Map´_Change Message
-
+                int clientID = 0;
                 //Create Spawn of Characters
                 for (int i = 0; i < aliveCharacters.Count; i++)
                 {
                     var currentChar = allCharacters.ElementAt(i);
-                    history[1 + i] = MessageConverter.FromMessage(new SpawnCharacterDemandMessage(msg.clientID, currentChar.CharacterId, currentChar.CharacterName, new Position(currentChar.CurrentMapfield.XCoordinate, currentChar.CurrentMapfield.ZCoordinate), currentChar));
+                    clientID = 0;
+                    if (activePlayersList.ElementAt(0).UsedGreatHouse.Characters.Contains(currentChar))
+                    {
+                        clientID = activePlayersList.ElementAt(0).ClientID;
+                    }
+                    else if (activePlayersList.ElementAt(1).UsedGreatHouse.Characters.Contains(currentChar))
+                    {
+                        clientID = activePlayersList.ElementAt(1).ClientID;
+                    }
+
+                    history[1 + i] = MessageConverter.FromMessage(new SpawnCharacterDemandMessage(currentChar.greatHouse.City.clientID, currentChar.CharacterId, currentChar.CharacterName, new Position(currentChar.CurrentMapfield.XCoordinate, currentChar.CurrentMapfield.ZCoordinate), currentChar));
 
                 }
 
@@ -744,7 +754,18 @@ namespace GameData
                     history[offset] = MessageConverter.FromMessage(new EndGameMessage());
                     offset++;
                 }
-                history[offset] = MessageConverter.FromMessage(new TurnDemandMessage(Party.GetInstance().RoundHandler.GetCharacterTraitPhase().GetCurrentTurnCharacter().CurrentMapfield.clientID, Party.GetInstance().RoundHandler.GetCharacterTraitPhase().GetCurrentTurnCharacter().CharacterId));
+
+                clientID = 0;
+                if (activePlayersList.ElementAt(0).UsedGreatHouse.Characters.Contains(Party.GetInstance().RoundHandler.GetCharacterTraitPhase().GetCurrentTurnCharacter()))
+                {
+                    clientID = activePlayersList.ElementAt(0).ClientID;
+                }
+                else if (activePlayersList.ElementAt(1).UsedGreatHouse.Characters.Contains(Party.GetInstance().RoundHandler.GetCharacterTraitPhase().GetCurrentTurnCharacter()))
+                {
+                    clientID = activePlayersList.ElementAt(1).ClientID;
+                }
+
+                history[offset] = MessageConverter.FromMessage(new TurnDemandMessage(clientID, Party.GetInstance().RoundHandler.GetCharacterTraitPhase().GetCurrentTurnCharacter().CharacterId));
 
                 DoSendGameState(msg.clientID, activePlayerIds, history);
                 Console.WriteLine("Sent GameState");

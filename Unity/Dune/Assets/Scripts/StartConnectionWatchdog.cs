@@ -15,6 +15,14 @@ public class StartConnectionWatchdog : MonoBehaviour
         CreateConnectionMonitor();
     }
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.C))
+        {
+            SessionHandler.CloseNetworkModule();
+        }
+    }
+
 
     public void CreateConnectionMonitor()
     {

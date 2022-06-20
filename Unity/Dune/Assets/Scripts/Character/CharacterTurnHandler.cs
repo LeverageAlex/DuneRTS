@@ -60,6 +60,13 @@ public class CharacterTurnHandler : MonoBehaviour
         selectedCharacter.DrawStats();
     }
 
+    public void SelectAlienCharacter(Character character)
+    {
+        selectedCharacter = character;
+        selectedArrow.SetActive(true);
+        updateSelectionArrow();
+    }
+
 
     public Character GetSelectedCharacter()
     {

@@ -166,6 +166,11 @@ public class CharacterMgr : MonoBehaviour
         }
     }
 
+    public void ClearCharDictionary()
+    {
+        characterDict.Clear();
+    }
+
 
     /**
      * Inits a Sandworm at given pos
