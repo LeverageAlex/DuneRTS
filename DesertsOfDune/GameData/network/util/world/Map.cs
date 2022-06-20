@@ -83,7 +83,8 @@ namespace GameData.network.util.world
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    MapField mapField = mapFields[y, x];
+                    // MapField mapField = mapFields[y, x];
+                    MapField mapField = GetMapFieldAtPosition(x, y);
 
                     switch (mapField.tileType)
                     {
@@ -109,7 +110,6 @@ namespace GameData.network.util.world
                     newMap[y, x].PlaceCharacter(mapField.Character);
                 }
             }
-
             return newMap;
         }
 
@@ -354,6 +354,12 @@ namespace GameData.network.util.world
                     {
                         builder.Append(" x ");
                     }
+
+                    if (GetMapFieldAtPosition(x, y).hasSpice)
+                    {
+                        builder.Append(" s ");
+                    }
+
                     builder.Append(", ");
                 }
                 builder.Append("\n");

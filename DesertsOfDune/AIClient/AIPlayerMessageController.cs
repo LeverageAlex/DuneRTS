@@ -407,21 +407,28 @@ namespace AIClient
         /// <param name="movementDemandMessage">the received MOVEMENT_DEMAND message</param>
         public override void OnMovementDemandMessage(MovementDemandMessage movementDemandMessage)
         {
-            Position targetPosition = movementDemandMessage.specs.path[movementDemandMessage.specs.path.Count - 1];
-
-            Log.Debug($"The character with the id {movementDemandMessage.characterID} is moving to ({targetPosition.x},{targetPosition.y}).");
-
-            // get the character, who is moving
-            foreach (Character character in Party.GetInstance().World.Map.GetCharactersOnMap())
+            // check, whether path is not empty
+            if (movementDemandMessage.specs.path.Count > 0)
             {
-                if (character.CharacterId == movementDemandMessage.characterID)
+                Position targetPosition = movementDemandMessage.specs.path[movementDemandMessage.specs.path.Count - 1];
+
+                Log.Debug($"The character with the id {movementDemandMessage.characterID} is moving to ({targetPosition.x},{targetPosition.y}).");
+
+                // get the character, who is moving
+                foreach (Character character in Party.GetInstance().World.Map.GetCharactersOnMap())
                 {
-                    // move the character to the targetPosition
-                    character.CurrentMapfield.DisplaceCharacter(character);
-                    MapField newPosition = Party.GetInstance().World.Map.GetMapFieldAtPosition(targetPosition.x, targetPosition.y);
-                    newPosition.PlaceCharacter(character);
-                    character.CurrentMapfield = newPosition;
+                    if (character.CharacterId == movementDemandMessage.characterID)
+                    {
+                        // move the character to the targetPosition
+                        character.CurrentMapfield.DisplaceCharacter(character);
+                        MapField newPosition = Party.GetInstance().World.Map.GetMapFieldAtPosition(targetPosition.x, targetPosition.y);
+                        newPosition.PlaceCharacter(character);
+                        character.CurrentMapfield = newPosition;
+                    }
                 }
+            } else
+            {
+                Log.Warning($"The walking path for the character {movementDemandMessage.characterID} is empty.");
             }
 
             // check, if the demand message is for this client
@@ -634,7 +641,7 @@ namespace AIClient
         public override void OnAtomicsUpdateDemandMessage(AtomicsUpdateDemandMessage atomicUpdateDemandMessage)
 
         {
-            throw new NotImplementedException();
+            Log.Information("ATOMICS");
         }
         
 
