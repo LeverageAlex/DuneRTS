@@ -29,6 +29,7 @@ public class Helicopter : MonoBehaviour
         MapManager.instance.RemoveObjectOnNode(CharacterToTransport.X, CharacterToTransport.Z);
 
         CharacterToTransport.ReplaceCharacterOnPosition((int)Mathf.Round(target.x), (int)Mathf.Round(target.z));
+        AudioController.instance.Play("HelicopterFly");
 
         if (crash)
         {
@@ -62,7 +63,7 @@ public class Helicopter : MonoBehaviour
 
                 CharacterTurnHandler.instance.HideSelectedArrow(false);
                 CharacterTurnHandler.instance.updateSelectionArrow();
-
+                AudioController.instance.StopPlaying("HelicopterFly");
                 Destroy(gameObject);
             }
         }
