@@ -387,7 +387,6 @@ public class PlayerMessageController : MessageController
                             //This might result in displaying Characters having full HP, although they already got hit. The SpawnCharacterDemandMessage needs to get adapted
                             SpawnCharacterDemandMessage spawnCharacterDemandMessage = (SpawnCharacterDemandMessage)convertedMsg;
                             //OnSpawnCharacterDemandMessage(spawnChr);
-
                             Debug.Log("Character Attributes: " + (spawnCharacterDemandMessage.attributes == null));
                             CharTypeEnum type;
                             switch (spawnCharacterDemandMessage.attributes.characterType)
@@ -406,7 +405,8 @@ public class PlayerMessageController : MessageController
                                     break;
                             }
                             Debug.Log("Selection successful. Spawn Character for: " + spawnCharacterDemandMessage.clientID);
-                            CharacterMgr.instance.spawnCharacter(spawnCharacterDemandMessage.clientID, spawnCharacterDemandMessage.characterID, type, spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.APmax, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.KilledBySandworm, spawnCharacterDemandMessage.attributes.IsLoud());
+
+                            CharacterMgr.instance.spawnCharacter(spawnCharacterDemandMessage.clientID, spawnCharacterDemandMessage.characterID, type, spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.healthMax, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.APmax, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.KilledBySandworm, spawnCharacterDemandMessage.attributes.IsLoud());
 
 
                             break;

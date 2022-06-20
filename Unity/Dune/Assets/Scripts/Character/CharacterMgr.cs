@@ -92,7 +92,7 @@ public class CharacterMgr : MonoBehaviour
     /*
      * To be filled after open question regarding standardDocument has ben resolved
   */
-    public bool spawnCharacter(int clientId, int characterID, CharTypeEnum type,int x, int z,int HPcurrent, int MPcurrent, int APcurrent, int APMax, int inventorySize, bool killedBySandworm, bool loud)
+    public bool spawnCharacter(int clientId, int characterID, CharTypeEnum type,int x, int z,int HPcurrent, int healthMax, int MPcurrent, int APcurrent, int APMax, int inventorySize, bool killedBySandworm, bool loud)
     {
         if (characterDict.ContainsKey(characterID))
             return false;
@@ -118,7 +118,7 @@ public class CharacterMgr : MonoBehaviour
         }
         localChar.SetMatColorToHouse();
         localChar.setMaxAP(APMax);
-        localChar.setMaxHP(HPcurrent);
+        localChar.setMaxHP(healthMax);
         return true;
     }
 
