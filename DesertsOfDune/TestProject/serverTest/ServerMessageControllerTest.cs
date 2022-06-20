@@ -10,6 +10,8 @@ using NUnit.Framework;
 using GameData;
 using GameData.Clients;
 using GameData.Configuration;
+using System.Diagnostics;
+using GameData.network.controller;
 
 namespace UnitTestSuite.serverTest
 {
@@ -42,8 +44,12 @@ namespace UnitTestSuite.serverTest
         [Test]
         public void TestOnJoinMessage()
         {
-            //ServerMessageController serverMessageController = new ServerMessageController();
-            //serverMessageController.OnJoinMessage(new JoinMessage("client123", true, false), "session123");
+            ServerMessageController serverMessageController = new ServerMessageController();
+            serverMessageController.OnJoinMessage(new JoinMessage("client1", true, false), "session1");
+            Assert.AreEqual(1, Party.GetInstance().GetActivePlayers().Count);
+            serverMessageController.OnJoinMessage(new JoinMessage("client1", true, false), "session2");
+            Assert.AreEqual(2, Party.GetInstance().GetActivePlayers().Count);
+            //fails at DoAcceptJoin because the NetworkController is null
         }
 
         [Test]

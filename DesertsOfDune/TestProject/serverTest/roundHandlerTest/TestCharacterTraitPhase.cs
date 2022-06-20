@@ -111,7 +111,10 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
         [Test]
         public void TestStopTimer()
         {
-            //TODO: implement test
+            var characterTraitPhase = roundHandler.GetCharacterTraitPhase();
+            characterTraitPhase.SetTimer();
+            characterTraitPhase.StopTimer();
+            Assert.AreEqual(false, characterTraitPhase.GetTimer().Enabled);
         }
 
         [Test]
@@ -123,13 +126,26 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
         [Test]
         public void TestSetTimer()
         {
-            //TODO: implement test
+            var characterTraitPhase = roundHandler.GetCharacterTraitPhase();
+            characterTraitPhase.SetTimer();
+            Assert.IsNotNull(characterTraitPhase.GetTimer());
         }
 
         [Test]
         public void TestOnTimedEvent()
         {
             //TODO: implement test
+        }
+
+        [Test]
+        public void TestFreezeTraitPhase()
+        {
+            var characterTraitPhase = roundHandler.GetCharacterTraitPhase();
+            characterTraitPhase.SetTimer();
+            characterTraitPhase.freezeTraitPhase(true);
+            Assert.AreEqual(false, characterTraitPhase.GetTimer().Enabled);
+            characterTraitPhase.freezeTraitPhase(false);
+            Assert.AreEqual(true, characterTraitPhase.GetTimer().Enabled);
         }
     }
 }
