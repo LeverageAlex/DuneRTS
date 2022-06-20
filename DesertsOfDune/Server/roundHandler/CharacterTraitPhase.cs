@@ -117,7 +117,7 @@ namespace GameData.server.roundHandler
         /// Starts a new timer with the time from the parameter.
         /// </summary>
         /// <param name="timeInSeconds">Time in seconds how long the timer runs.</param>
-        private void SetTimer()
+        public void SetTimer()
         {
             int timeInMilliseconds = PartyConfiguration.GetInstance().actionTimeUserClient;
             foreach (var player in Party.GetInstance().GetActivePlayers())
@@ -149,7 +149,7 @@ namespace GameData.server.roundHandler
         /// <param name="e"></param>
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
-            string sessionID = "";
+            /**string sessionID = "";
             foreach (var player in Party.GetInstance().GetActivePlayers())
             {
                 foreach (var character in player.UsedGreatHouse.Characters)
@@ -161,7 +161,7 @@ namespace GameData.server.roundHandler
                 }
             }
             // ((ServerConnectionHandler)Party.GetInstance().messageController.NetworkController.connectionHandler).sessionManager.CloseSession(sessionID, WebSocketSharp.CloseStatusCode.Normal, "Timeout happend in characterTraitPhase!");
-           // SendRequestForNextCharacter();
+           // SendRequestForNextCharacter(); */
 
             Party.GetInstance().messageController.OnEndTurnRequestMessage(new network.messages.EndTurnRequestMessage(Party.GetInstance().GetPlayerByCharacterID(_currentCharacter.CharacterId).ClientID, _currentCharacter.CharacterId));
         }
@@ -182,6 +182,11 @@ namespace GameData.server.roundHandler
         public Character GetCurrentTurnCharacter()
         {
             return _currentCharacter;
+        }
+
+        public Timer GetTimer()
+        {
+            return this._timer;
         }
     }
 }
