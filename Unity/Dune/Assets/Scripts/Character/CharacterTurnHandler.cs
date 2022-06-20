@@ -82,6 +82,11 @@ public class CharacterTurnHandler : MonoBehaviour
         ButtonToggles();
     }
 
+    public void HideSelectedArrow(bool hide)
+    {
+        selectedArrow.SetActive(!hide);
+    }
+
     
 
     public void ResetAction()

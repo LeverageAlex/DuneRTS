@@ -907,4 +907,13 @@ public class Character : MonoBehaviour
     {
         BaseHP = maxHP;
     }
+
+
+    public void ReplaceCharacterOnPosition(int x, int z)
+    {
+        _x = x;
+        _z = z;
+        this.transform.position = new Vector3(x, BaseY + MapManager.instance.getNodeFromPos(x, z).charHeightOffset, z);
+
+    }
 }

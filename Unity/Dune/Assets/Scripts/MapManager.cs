@@ -291,6 +291,11 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    public Vector3 GetStormEyePosition()
+    {
+            return SandstormEffect.transform.position;
+    }
+
     /**
      * Will spawn the effect in the mid of map
      */
@@ -321,11 +326,11 @@ public class MapManager : MonoBehaviour
                 return NodeTypeEnum.FLATROCK;
             case "FLAT_SAND":
                 return NodeTypeEnum.FLATDUNE;
-            //case "DUNE":
-            default:
+            case "DUNE":
+         //   default:
                 return NodeTypeEnum.DUNE;
-            //default:
-           //    return NodeTypeEnum.HELIPORT;
+            default:
+               return NodeTypeEnum.HELIPORT;
         }
     }
 }

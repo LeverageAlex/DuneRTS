@@ -1136,6 +1136,11 @@ namespace GameData
             NetworkController.HandleSendingMessage(unpauseGameOfferMessage);
         }
 
+        public override void OnHeliRequestMessage(HeliRequestMessage heliRequestMessage)
+        {
+            //TODO implement heliRequestMessage
+            throw new NotImplementedException();
+        }
 
         public override void OnJoinAccepted(JoinAcceptedMessage msg)
         {
@@ -1276,5 +1281,11 @@ namespace GameData
         {
             throw new NotImplementedException();
         }
+
+        public override void OnHeliDemandMessage(HeliDemandMessage msg)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

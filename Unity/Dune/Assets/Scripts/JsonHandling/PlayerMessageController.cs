@@ -108,6 +108,18 @@ public class PlayerMessageController : MessageController
         NetworkController.HandleSendingMessage(endTurnRequestMessage);
     }
 
+    /// <summary>
+    /// Sends Helirequest message to server
+    /// </summary>
+    /// <param name="clientID"></param>
+    /// <param name="characterID"></param>
+    /// <param name="target"></param>
+    public void DoRequestHeliport(int clientID, int characterID, Position target)
+    {
+        HeliRequestMessage heliRequestMessage = new HeliRequestMessage(clientID, characterID, target);
+        NetworkController.HandleSendingMessage(heliRequestMessage);
+    }
+
 
     /// <summary>
     /// This method is responsible for requesting the Transfer of spice.
@@ -844,6 +856,16 @@ public class PlayerMessageController : MessageController
         }
     }
 
+    public override void OnHeliDemandMessage(HeliDemandMessage heliDemandMessage)
+    {
+        IEnumerator helidemand()
+        {
+            CharacterMgr.instance.spawnHelicopter(CharacterMgr.instance.getCharScriptByID(heliDemandMessage.characterID), heliDemandMessage.target, heliDemandMessage.crash);
+            yield return null;
+        }
+        UnityMainThreadDispatcher.Instance().Enqueue(helidemand());
+    }
+
     // This method should not be called by the client.
     public override void OnJoinMessage(JoinMessage msg, string sessionID)
     {
@@ -1043,6 +1065,11 @@ public class PlayerMessageController : MessageController
     }
 
     public override void OnPauseGameRequestMessage(PauseGameRequestMessage msg, string sessionID)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void OnHeliRequestMessage(HeliRequestMessage heliRequestMessage)
     {
         throw new NotImplementedException();
     }
