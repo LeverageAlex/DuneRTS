@@ -46,6 +46,8 @@ namespace AIClient
 
         public World World { get; private set; }
 
+        public Character CurrentCharacter { get; set; }
+
         /// <summary>
         /// hide default constructor for implementing the singleton pattern and sets the message controller used in the party by getting it from the main class
         /// </summary>

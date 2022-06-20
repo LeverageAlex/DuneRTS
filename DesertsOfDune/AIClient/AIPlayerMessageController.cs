@@ -278,15 +278,9 @@ namespace AIClient
 
                 if (characterToDoMove != null)
                 {
-                    List<Move> possibleMoves = Party.GetInstance().World.GetAvailableMoves(characterToDoMove);
+                    Party.GetInstance().CurrentCharacter = characterToDoMove;
 
-                    // get random move
-                    Random random = new Random();
-                    Move randomMove = possibleMoves[random.Next(possibleMoves.Count)];
-
-                    Log.Information($"Demand the following move: {randomMove.Type}");
-
-                    SendRequestMessageDependingOnMoveType(randomMove, characterToDoMove);
+                    SendRequestMessageDependingOnMoveType(GetNextMove(characterToDoMove), characterToDoMove);
                     
                 } else
                 {
@@ -295,6 +289,24 @@ namespace AIClient
 
                 
             }
+        }
+
+        /// <summary>
+        /// determines the next move
+        /// </summary>
+        /// <param name="character">character, which should do this move</param>
+        /// <returns>the next move</returns>
+        private Move GetNextMove(Character character)
+        {
+            List<Move> possibleMoves = Party.GetInstance().World.GetAvailableMoves(character);
+
+            // get random move
+            Random random = new Random();
+            Move randomMove = possibleMoves[random.Next(possibleMoves.Count)];
+
+            Log.Information($"Demand the following move: {randomMove.Type}");
+
+            return randomMove;
         }
 
         /// <summary>
@@ -389,7 +401,8 @@ namespace AIClient
         /// called, when the server acknowledges a movement request and wants to inform the client, that an action is happening
         /// </summary>
         /// <remarks>
-        /// print the information to the console and moves the character on the map
+        /// print the information to the console and moves the character on the map.
+        /// If the demand message is for this client, it can do the next move with the current character.
         /// </remarks>
         /// <param name="movementDemandMessage">the received MOVEMENT_DEMAND message</param>
         public override void OnMovementDemandMessage(MovementDemandMessage movementDemandMessage)
@@ -410,13 +423,21 @@ namespace AIClient
                     character.CurrentMapfield = newPosition;
                 }
             }
+
+            // check, if the demand message is for this client
+            if (movementDemandMessage.clientID == Party.GetInstance().ClientID)
+            {
+                // do the next move
+                SendRequestMessageDependingOnMoveType(GetNextMove(Party.GetInstance().CurrentCharacter), Party.GetInstance().CurrentCharacter);
+            }
         }
 
         /// <summary>
         /// called, when the server acknowledges a action request and wants to inform the client, that an action is happening
         /// </summary>
         /// <remarks>
-        /// print the information to the console
+        /// print the information to the console.
+        /// If the demand message is for this client, it can do the next move with the current character.
         /// </remarks>
         /// <param name="actionDemandMessage">the received ACTION_DEMAND message</param>
         public override void OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
@@ -426,18 +447,33 @@ namespace AIClient
             {
                 Log.Debug($"The target of the action is ({actionDemandMessage.specs.target.x}, {actionDemandMessage.specs.target.y}).");
             }
+
+            // check, if the demand message is for this client
+            if (actionDemandMessage.clientID == Party.GetInstance().ClientID)
+            {
+                // do the next move
+                SendRequestMessageDependingOnMoveType(GetNextMove(Party.GetInstance().CurrentCharacter), Party.GetInstance().CurrentCharacter);
+            }
         }
 
         /// <summary>
         /// called, when the server acknowledges a transfer request and wants to inform the client, that a spice transfer is happening
         /// </summary>
         /// <remarks>
-        /// print the information to the console
+        /// print the information to the console.
+        /// If the demand message is for this client, it can do the next move with the current character.
         /// </remarks>
         /// <param name="transferDemandMessage">the received TRANSFER_DEMAND message</param>
         public override void OnTransferDemandMessage(TransferDemandMessage transferDemandMessage)
         {
             Log.Debug($"The character with the id {transferDemandMessage.characterID} will transfer spice to the character with the id {transferDemandMessage.targetID}");
+
+            // check, if the demand message is for this client
+            if (transferDemandMessage.clientID == Party.GetInstance().ClientID)
+            {
+                // do the next move
+                SendRequestMessageDependingOnMoveType(GetNextMove(Party.GetInstance().CurrentCharacter), Party.GetInstance().CurrentCharacter);
+            }
         }
 
         /// <summary>

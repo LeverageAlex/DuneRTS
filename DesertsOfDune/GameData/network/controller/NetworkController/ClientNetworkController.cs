@@ -38,21 +38,16 @@ namespace GameData.network.controller
         public override bool HandleSendingMessage(Message message)
         {
             // parsing the message
-            Log.Debug("Entered handleSendingMessage!");
             string parsedMessage = MessageConverter.FromMessage(message);
-            Log.Debug("parsing successfuly: " + parsedMessage);
             // check, whether the parsing was successful
             if (parsedMessage != null)
             {
                 // broadcast parsed message to all active sessions so clients
-                Log.Debug("Message not null");
                 ((ClientConnectionHandler)connectionHandler).WebSocket.Send(parsedMessage);
-                Log.Debug("sent!");
                 return true;
             }
             else
             {
-                Log.Debug("Could not send message cause parsedMessage null");
                 Log.Warning("Could not send message " + message.ToString() + " from " + webSocketType.ToString() + " because it could not be converted to a JSON-String");
                 return false;
             }
