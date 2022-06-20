@@ -83,7 +83,11 @@ namespace AIClient
 
             if (CanAttack(character))
             {
-                possibleMoves.Add(new Moves.Action(MoveTypes.ATTACK));
+                foreach (Character neighborCharacter in GetCharacterOfEnemyNeighbors(character))
+                {
+                    Position neighborPosition = new Position(neighborCharacter.CurrentMapfield.XCoordinate, neighborCharacter.CurrentMapfield.ZCoordinate);
+                    possibleMoves.Add(new Moves.Action(MoveTypes.ATTACK, neighborPosition));
+                }
             }
 
             if (CanCollectSpice(character))
@@ -95,22 +99,32 @@ namespace AIClient
             {
                 if (CanTransferSpice(character, i))
                 {
-                    foreach (int neighborCharacter in GetCharacterIdsOfFriendlyNeighbors(character))
+                    foreach (Character neighborCharacter in GetCharacterOfFriendlyNeighbors(character))
                     {
 
-                        possibleMoves.Add(new TransferSpice(neighborCharacter, i));
+                        possibleMoves.Add(new TransferSpice(neighborCharacter.CharacterId, i));
                     }
                 }
             }
 
             if (CanDoKanly(character))
             {
-                possibleMoves.Add(new Moves.Action(MoveTypes.KANLY));
+                foreach (Character neighborCharacter in GetCharacterOfEnemyNeighbors(character))
+                {
+                    if (neighborCharacter.characterType.Equals(CharacterType.NOBLE.ToString()))
+                    {
+                        Position neighborPosition = new Position(neighborCharacter.CurrentMapfield.XCoordinate, neighborCharacter.CurrentMapfield.ZCoordinate);
+                        possibleMoves.Add(new Moves.Action(MoveTypes.KANLY, neighborPosition));
+                    }
+                }
             }
 
             if (CanDoFamilyAtomics(character))
             {
-                possibleMoves.Add(new Moves.Action(MoveTypes.FAMILY_ATOMICS));
+                // TODO: do not use random field as target of the bomb, but a strategic target
+                Random random = new Random();
+                Position targetPosition = new Position(random.Next(Party.GetInstance().World.Map.MAP_WIDTH), random.Next(Party.GetInstance().World.Map.MAP_HEIGHT);
+                possibleMoves.Add(new Moves.Action(MoveTypes.FAMILY_ATOMICS, targetPosition));
             }
 
             if (CanDoSpiceHoarding(character))
@@ -120,7 +134,17 @@ namespace AIClient
 
             if (CanDoVoice(character))
             {
-                possibleMoves.Add(new Moves.Action(MoveTypes.VOICE));
+                foreach(Character neighborCharacter in GetCharacterOfEnemyNeighbors(character))
+                {
+                    Position neighborPosition = new Position(neighborCharacter.CurrentMapfield.XCoordinate, neighborCharacter.CurrentMapfield.ZCoordinate);
+                    possibleMoves.Add(new Moves.Action(MoveTypes.VOICE, neighborPosition));
+                }
+
+                foreach (Character neighborCharacter in GetCharacterOfFriendlyNeighbors(character))
+                {
+                    Position neighborPosition = new Position(neighborCharacter.CurrentMapfield.XCoordinate, neighborCharacter.CurrentMapfield.ZCoordinate);
+                    possibleMoves.Add(new Moves.Action(MoveTypes.VOICE, neighborPosition));
+                }
             }
 
             if (CanDoSwordSpin(character))
@@ -468,13 +492,13 @@ namespace AIClient
 
 
         /// <summary>
-        /// get a list of all ids of characters, that are in the same great house like the given character and are standing to the next field
+        /// get a list of all characters, that are in the same great house like the given character and are standing to the next field
         /// </summary>
         /// <param name="character">the character whose friendly neighbors should be determined</param>
-        /// <returns>a list of all ids of friendly neighbor characters</returns>
-        private List<int> GetCharacterIdsOfFriendlyNeighbors(Character character)
+        /// <returns>a list of all friendly neighbor characters</returns>
+        private List<Character> GetCharacterOfFriendlyNeighbors(Character character)
         {
-            List<int> characterIds = new List<int>();
+            List<Character> characters = new List<Character>();
 
             // check enemy on neighbor field
             List<MapField> neighborFields = Party.GetInstance().World.Map.GetNeighborFields(character.CurrentMapfield);
@@ -484,12 +508,37 @@ namespace AIClient
                 {
                     if (Party.GetInstance().World.AliveCharacters.Contains(neighbor.Character))
                     {
-                        characterIds.Add(neighbor.Character.CharacterId);
+                        characters.Add(neighbor.Character);
                     }
                 }
             }
 
-            return characterIds;
+            return characters;
+        }
+
+        /// <summary>
+        /// get a list of all characters, that are in the other great house like the given character and are standing to the next field
+        /// </summary>
+        /// <param name="character">the character whose enemy neighbors should be determined</param>
+        /// <returns>a list of all enemy neighbor characters</returns>
+        private List<Character> GetCharacterOfEnemyNeighbors(Character character)
+        {
+            List<Character> characters = new List<Character>();
+
+            // check enemy on neighbor field
+            List<MapField> neighborFields = Party.GetInstance().World.Map.GetNeighborFields(character.CurrentMapfield);
+            foreach (MapField neighbor in neighborFields)
+            {
+                if (neighbor.IsCharacterStayingOnThisField)
+                {
+                    if (!Party.GetInstance().World.AliveCharacters.Contains(neighbor.Character))
+                    {
+                        characters.Add(neighbor.Character);
+                    }
+                }
+            }
+
+            return characters;
         }
     }
 }

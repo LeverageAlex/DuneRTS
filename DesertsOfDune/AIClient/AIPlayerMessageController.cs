@@ -323,6 +323,16 @@ namespace AIClient
                     TransferSpice transferSpice = (TransferSpice)move;
                     DoSendTransferRequest(character.CharacterId, transferSpice.CharacterId, transferSpice.AmountOfSpice);
                     break;
+                case MoveTypes.ATTACK:
+                case MoveTypes.COLLECT_SPICE:
+                case MoveTypes.KANLY:
+                case MoveTypes.FAMILY_ATOMICS:
+                case MoveTypes.SPICE_HOARDING:
+                case MoveTypes.VOICE:
+                case MoveTypes.SWORD_SPIN:
+                    Moves.Action specialAction = (Moves.Action)move;
+                    DoSendActionRequest(character.CharacterId, specialAction.ActionType, specialAction.Target);
+                    break;
                 case MoveTypes.END_TURN:
                     DoSendEndTurnRequest(character.CharacterId);
                     break;
