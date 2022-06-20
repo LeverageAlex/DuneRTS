@@ -120,9 +120,9 @@ namespace AIClient
             // set the map of the ai client
             int mapWidth = gameConfigMessage.scenario[0].Count;
             int mapHeight = gameConfigMessage.scenario.Count;
-            Party.GetInstance().Map = new Map(mapWidth, mapHeight, gameConfigMessage.scenario);
+            Party.GetInstance().World.Map = new Map(mapWidth, mapHeight, gameConfigMessage.scenario);
 
-            Party.GetInstance().Map.PositionOfEyeOfStorm = gameConfigMessage.stormEye;
+            Party.GetInstance().World.Map.PositionOfEyeOfStorm = gameConfigMessage.stormEye;
 
             // TODO: process the cityToClient information
 
@@ -171,7 +171,7 @@ namespace AIClient
         {
             Log.Information($"The great house for this client is {houseAcknowledgementMessage.houseName}");
 
-            Party.GetInstance().AssignedGreatHouse = houseAcknowledgementMessage.houseName;
+            Party.GetInstance().World.AssignedGreatHouse = houseAcknowledgementMessage.houseName;
         }
 
         /// <summary>
@@ -184,15 +184,15 @@ namespace AIClient
         public override void OnMapChangeDemandMessage(MapChangeDemandMessage mapChangeDemandMessage)
         {
             // update the map in the party
-            Map map = Party.GetInstance().Map;
+            Map map = Party.GetInstance().World.Map;
             map.fields = map.GetNewMapFromMessage(mapChangeDemandMessage.newMap);
 
 
-            Party.GetInstance().Map.PositionOfEyeOfStorm = mapChangeDemandMessage.stormEye;
+            Party.GetInstance().World.Map.PositionOfEyeOfStorm = mapChangeDemandMessage.stormEye;
 
             // print new map to console
             Log.Debug($"The map changed because of {mapChangeDemandMessage.changeReason}. The new map is: \n");
-            Party.GetInstance().Map.DrawMapToConsole();
+            Party.GetInstance().World.Map.DrawMapToConsole();
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace AIClient
                 CharacterType type = (CharacterType)Enum.Parse(typeof(CharacterType), spawnCharacterDemandMessage.attributes.characterType);
                 Character newCharacter = new Character(spawnCharacterDemandMessage.characterID, spawnCharacterDemandMessage.characterName, type, spawnCharacterDemandMessage.attributes.healthMax, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.healingHP, spawnCharacterDemandMessage.attributes.MPmax, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APmax, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.attackDamage, spawnCharacterDemandMessage.attributes.inventorySize, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.killedBySandworm, spawnCharacterDemandMessage.attributes.isLoud);
 
-                MapField characterMapField = Party.GetInstance().Map.GetMapFieldAtPosition(spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y);
+                MapField characterMapField = Party.GetInstance().World.Map.GetMapFieldAtPosition(spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y);
                 characterMapField.PlaceCharacter(newCharacter);
 
                 newCharacter.CurrentMapfield = characterMapField;
@@ -234,7 +234,7 @@ namespace AIClient
             if (changeCharacterStatisticsDemandMessage.clientID == Party.GetInstance().ClientID)
             {
                 // find the character with the given id
-                foreach (Character character in Party.GetInstance().AliveCharacters)
+                foreach (Character character in Party.GetInstance().World.AliveCharacters)
                 {
                     if (character.CharacterId == changeCharacterStatisticsDemandMessage.characterID)
                     {
@@ -279,8 +279,8 @@ namespace AIClient
             Log.Debug($"A new sandworm spawned at ({sandwormSpawnDemandMessage.position.x},{sandwormSpawnDemandMessage.position.y}).");
 
             // set the map field as not approachable
-            Party.GetInstance().CurrentPositionOfSandworm = sandwormSpawnDemandMessage.position;
-            Party.GetInstance().Map.GetMapFieldAtPosition(sandwormSpawnDemandMessage.position.x, sandwormSpawnDemandMessage.position.y).IsApproachable = false;
+            Party.GetInstance().World.CurrentPositionOfSandworm = sandwormSpawnDemandMessage.position;
+            Party.GetInstance().World.Map.GetMapFieldAtPosition(sandwormSpawnDemandMessage.position.x, sandwormSpawnDemandMessage.position.y).IsApproachable = false;
         }
 
         /// <summary>
@@ -292,14 +292,14 @@ namespace AIClient
         /// <param name="sandwormMoveMessage">the received SANDWORM_MOVE_DEMAND message</param>
         public override void OnSandwormMoveDemandMessage(SandwormMoveDemandMessage sandwormMoveMessage)
         {
-            Party.GetInstance().Map.GetMapFieldAtPosition(Party.GetInstance().CurrentPositionOfSandworm.x, Party.GetInstance().CurrentPositionOfSandworm.y).IsApproachable = true;
+            Party.GetInstance().World.Map.GetMapFieldAtPosition(Party.GetInstance().World.CurrentPositionOfSandworm.x, Party.GetInstance().World.CurrentPositionOfSandworm.y).IsApproachable = true;
 
             Position targetPosition = sandwormMoveMessage.path[sandwormMoveMessage.path.Count - 1];
             Log.Debug($"The sandworm moved to ({targetPosition.x},{targetPosition.y}).");
 
             // set the map field as not approachable
-            Party.GetInstance().CurrentPositionOfSandworm = targetPosition;
-            Party.GetInstance().Map.GetMapFieldAtPosition(targetPosition.x, targetPosition.y).IsApproachable = false;
+            Party.GetInstance().World.CurrentPositionOfSandworm = targetPosition;
+            Party.GetInstance().World.Map.GetMapFieldAtPosition(targetPosition.x, targetPosition.y).IsApproachable = false;
 
         }
 
@@ -315,7 +315,7 @@ namespace AIClient
             Log.Debug("The sandworm despawned.");
 
             // set the map field as not approachable
-            Party.GetInstance().Map.GetMapFieldAtPosition(Party.GetInstance().CurrentPositionOfSandworm.x, Party.GetInstance().CurrentPositionOfSandworm.y).IsApproachable = true;
+            Party.GetInstance().World.Map.GetMapFieldAtPosition(Party.GetInstance().World.CurrentPositionOfSandworm.x, Party.GetInstance().World.CurrentPositionOfSandworm.y).IsApproachable = true;
 
         }
 

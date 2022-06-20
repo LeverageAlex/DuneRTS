@@ -33,32 +33,20 @@ namespace AIClient
         public int ClientID { get; set; }
 
         /// <summary>
-        /// the map, the ai client is playing on
-        /// </summary>
-        public Map Map { get; set; }
-
-        public List<Character> AliveCharacters { get; private set; }
-
-        /// <summary>
-        /// the assigned (and chosen) great house for this client
-        /// </summary>
-        public string AssignedGreatHouse { get; set; }
-
-        public Position CurrentPositionOfSandworm { get; set; }
-
-        /// <summary>
         /// the amount of spice, collected and transfered to the city by all characters
         /// </summary>
         public int CitySpice { get; set; }
 
         public AIPlayerMessageController MessageController { get; private set; }
 
+        public World World { get; private set; }
+
         /// <summary>
         /// hide default constructor for implementing the singleton pattern and sets the message controller used in the party by getting it from the main class
         /// </summary>
         private Party()
         {
-            this.AliveCharacters = new List<Character>();
+            this.World = new World();
         }
 
         /// <summary>
