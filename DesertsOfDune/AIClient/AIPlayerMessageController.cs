@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using AIClient.Moves;
 using GameData.Configuration;
 using GameData.network.controller;
 using GameData.network.messages;
@@ -251,6 +253,126 @@ namespace AIClient
         }
 
         /// <summary>
+        /// called, when the server demands this client to do it's character turn (/turns)
+        /// </summary>
+        /// <remarks>
+        /// determine one! random move from all possible moves and send the corresponding request
+        /// TODO: change and do not use one random move
+        /// </remarks>
+        /// <param name="turnDemandMessage">the received TURN_DEMAND message</param>
+        public override void OnTurnDemandMessage(TurnDemandMessage turnDemandMessage)
+        {
+            // check, if the turn demand is for this client
+            if (turnDemandMessage.clientID == Party.GetInstance().ClientID)
+            {
+                Character characterToDoMove = null;
+
+                // get character, who's turn it is
+                foreach (Character character in Party.GetInstance().World.AliveCharacters)
+                {
+                    if (character.CharacterId == turnDemandMessage.characterID)
+                    {
+                        characterToDoMove = character;
+                    }
+                }
+
+                if (characterToDoMove != null)
+                {
+                    List<Move> possibleMoves = Party.GetInstance().World.GetAvailableMoves(characterToDoMove);
+
+                    // get random move
+                    Random random = new Random();
+                    Move randomMove = possibleMoves[random.Next(possibleMoves.Count)];
+
+                    Log.Information($"Demand the following move: {randomMove.Type}");
+
+                    SendRequestMessageDependingOnMoveType(randomMove, characterToDoMove);
+                    
+                } else
+                {
+                    Log.Error($"The character with the id {turnDemandMessage.characterID} is demanded to do a move, but cannot be found in the alive characters of this client!");
+                }
+
+                
+            }
+        }
+
+        /// <summary>
+        /// sends the request depending on the given move, so check the type and decide which message to send with which parameters
+        /// </summary>
+        /// <param name="move">the move</param>
+        /// <param name="character">the character, who wants to do the move</param>
+        private void SendRequestMessageDependingOnMoveType(Move move, Character character)
+        {
+            Position characterPosition = new Position(character.CurrentMapfield.XCoordinate, character.CurrentMapfield.ZCoordinate);
+
+            switch (move.Type)
+            {
+                case MoveTypes.MOVE_LEFT_UP:
+                case MoveTypes.MOVE_UP:
+                case MoveTypes.MOVE_RIGHT_UP:
+                case MoveTypes.MOVE_RIGHT:
+                case MoveTypes.MOVE_RIGHT_DOWN:
+                case MoveTypes.MOVE_DOWN:
+                case MoveTypes.MOVE_LEFT_DOWN:
+                case MoveTypes.MOVE_LEFT:
+                    Position[] path = { Position.Move(characterPosition, ((Movement)move).DeltaX, ((Movement)move).DeltaY};
+                    DoSendMovementRequest(character.CharacterId, path);
+                    break;
+                case MoveTypes.END_TURN:
+                    DoSendEndTurnRequest(character.CharacterId);
+                    break;
+            }
+
+        }
+
+        /// <summary>
+        /// sends a movement request of a given character, who wants to move a given path
+        /// </summary>
+        /// <param name="characterId">the id of the character, who wants to move</param>
+        /// <param name="path">the positions, the characters wants to move along</param>
+        public override void DoSendMovementRequest(int characterId, Position[] path)
+        {
+            Specs movementPath = new Specs(null, path.ToList());
+            MovementRequestMessage msg = new MovementRequestMessage(Party.GetInstance().ClientID, characterId, movementPath);
+            NetworkController.HandleSendingMessage(msg);
+        }
+
+        /// <summary>
+        /// sends a action request of a given character, who wants to do a certain action
+        /// </summary>
+        /// <param name="characterId">the id of the character, who wants to move</param>
+        /// <param name="path">the positions, the characters wants to move along</param>
+        public override void DoSendActionRequest(int characterId, ActionType actionType, Position target)
+        {
+            Specs movementPath = new Specs(target, null);
+            ActionRequestMessage msg = new ActionRequestMessage(Party.GetInstance().ClientID, characterId, actionType, movementPath);
+            NetworkController.HandleSendingMessage(msg);
+        }
+
+        /// <summary>
+        /// sends a request to transfer spice from one character to another (both identified by their ids)
+        /// </summary>
+        /// <param name="characterId">id of the character who want to spend the spice</param>
+        /// <param name="characterId2">id of the character, who should receive the spice</param>
+        /// <param name="amount">the amount of spice, that should be transferred</param>
+        public override void DoSendTransferRequest(int characterId, int characterId2, int amount)
+        {
+            TransferRequestMessage msg = new TransferRequestMessage(Party.GetInstance().ClientID, characterId, characterId2, amount);
+            NetworkController.HandleSendingMessage(msg);
+        }
+
+        /// <summary>
+        /// sends a request to end the turn of a certain character
+        /// </summary>
+        /// <param name="characterId">the id of the character, who wants to end its turn</param>
+        public override void DoSendEndTurnRequest(int characterId)
+        {
+            EndTurnRequestMessage msg = new EndTurnRequestMessage(Party.GetInstance().ClientID, characterId);
+            NetworkController.HandleSendingMessage(msg);
+        }
+
+        /// <summary>
         /// called, when the server sends a message, that contains the new spice value of a city / client
         /// </summary>
         /// <remarks>
@@ -480,10 +602,7 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
-        public override void OnTurnDemandMessage(TurnDemandMessage turnDemandMessage)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public override void OnUnpauseGameOffer(int requestedByClientID)
         {
