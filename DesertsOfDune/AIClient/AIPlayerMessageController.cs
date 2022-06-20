@@ -206,18 +206,18 @@ namespace AIClient
         /// <param name="spawnCharacterDemandMessage">the received SPAWN_CHARACTER_DEMAND message</param>
         public override void OnSpawnCharacterDemandMessage(SpawnCharacterDemandMessage spawnCharacterDemandMessage)
         {
+            // create a new character depending on the values
+            CharacterType type = (CharacterType)Enum.Parse(typeof(CharacterType), spawnCharacterDemandMessage.attributes.characterType);
+            Character newCharacter = new Character(spawnCharacterDemandMessage.characterID, spawnCharacterDemandMessage.characterName, type, spawnCharacterDemandMessage.attributes.healthMax, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.healingHP, spawnCharacterDemandMessage.attributes.MPmax, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APmax, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.attackDamage, spawnCharacterDemandMessage.attributes.inventorySize, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.killedBySandworm, spawnCharacterDemandMessage.attributes.isLoud);
+
+            MapField characterMapField = Party.GetInstance().World.Map.GetMapFieldAtPosition(spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y);
+            characterMapField.PlaceCharacter(newCharacter);
+
+            newCharacter.CurrentMapfield = characterMapField;
+
             // check, if the character spawn is for this client
             if (spawnCharacterDemandMessage.clientID == Party.GetInstance().ClientID)
             {
-                // create a new character depending on the values
-                CharacterType type = (CharacterType)Enum.Parse(typeof(CharacterType), spawnCharacterDemandMessage.attributes.characterType);
-                Character newCharacter = new Character(spawnCharacterDemandMessage.characterID, spawnCharacterDemandMessage.characterName, type, spawnCharacterDemandMessage.attributes.healthMax, spawnCharacterDemandMessage.attributes.healthCurrent, spawnCharacterDemandMessage.attributes.healingHP, spawnCharacterDemandMessage.attributes.MPmax, spawnCharacterDemandMessage.attributes.MPcurrent, spawnCharacterDemandMessage.attributes.APmax, spawnCharacterDemandMessage.attributes.APcurrent, spawnCharacterDemandMessage.attributes.attackDamage, spawnCharacterDemandMessage.attributes.inventorySize, spawnCharacterDemandMessage.attributes.inventoryUsed, spawnCharacterDemandMessage.attributes.killedBySandworm, spawnCharacterDemandMessage.attributes.isLoud);
-
-                MapField characterMapField = Party.GetInstance().World.Map.GetMapFieldAtPosition(spawnCharacterDemandMessage.position.x, spawnCharacterDemandMessage.position.y);
-                characterMapField.PlaceCharacter(newCharacter);
-
-                newCharacter.CurrentMapfield = characterMapField;
-
                 // add new character to list of alive characters
                 Party.GetInstance().World.AddAliveCharacter(newCharacter);
             }
@@ -337,7 +337,6 @@ namespace AIClient
                     DoSendEndTurnRequest(character.CharacterId);
                     break;
             }
-
         }
 
         /// <summary>
@@ -384,6 +383,61 @@ namespace AIClient
         {
             EndTurnRequestMessage msg = new EndTurnRequestMessage(Party.GetInstance().ClientID, characterId);
             NetworkController.HandleSendingMessage(msg);
+        }
+
+        /// <summary>
+        /// called, when the server acknowledges a movement request and wants to inform the client, that an action is happening
+        /// </summary>
+        /// <remarks>
+        /// print the information to the console and moves the character on the map
+        /// </remarks>
+        /// <param name="movementDemandMessage">the received MOVEMENT_DEMAND message</param>
+        public override void OnMovementDemandMessage(MovementDemandMessage movementDemandMessage)
+        {
+            Position targetPosition = movementDemandMessage.specs.path[movementDemandMessage.specs.path.Count - 1];
+
+            Log.Debug($"The character with the id {movementDemandMessage.characterID} is moving to ({targetPosition.x},{targetPosition.y}).");
+
+            // get the character, who is moving
+            foreach (Character character in Party.GetInstance().World.Map.GetCharactersOnMap())
+            {
+                if (character.CharacterId == movementDemandMessage.characterID)
+                {
+                    // move the character to the targetPosition
+                    character.CurrentMapfield.DisplaceCharacter(character);
+                    MapField newPosition = Party.GetInstance().World.Map.GetMapFieldAtPosition(targetPosition.x, targetPosition.y);
+                    newPosition.PlaceCharacter(character);
+                    character.CurrentMapfield = newPosition;
+                }
+            }
+        }
+
+        /// <summary>
+        /// called, when the server acknowledges a action request and wants to inform the client, that an action is happening
+        /// </summary>
+        /// <remarks>
+        /// print the information to the console
+        /// </remarks>
+        /// <param name="actionDemandMessage">the received ACTION_DEMAND message</param>
+        public override void OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
+        {
+            Log.Debug($"The character with the id {actionDemandMessage.characterID} will perform the action: {actionDemandMessage.action}.");
+            if (actionDemandMessage.specs.target != null)
+            {
+                Log.Debug($"The target of the action is ({actionDemandMessage.specs.target.x}, {actionDemandMessage.specs.target.y}).");
+            }
+        }
+
+        /// <summary>
+        /// called, when the server acknowledges a transfer request and wants to inform the client, that a spice transfer is happening
+        /// </summary>
+        /// <remarks>
+        /// print the information to the console
+        /// </remarks>
+        /// <param name="transferDemandMessage">the received TRANSFER_DEMAND message</param>
+        public override void OnTransferDemandMessage(TransferDemandMessage transferDemandMessage)
+        {
+            Log.Debug($"The character with the id {transferDemandMessage.characterID} will transfer spice to the character with the id {transferDemandMessage.targetID}");
         }
 
         /// <summary>
@@ -533,10 +587,7 @@ namespace AIClient
         }
 
 
-        public override void OnActionDemandMessage(ActionDemandMessage actionDemandMessage)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public override void OnActionRequestMessage(ActionRequestMessage msg)
         {
@@ -579,11 +630,6 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
-        public override void OnMovementDemandMessage(MovementDemandMessage movementDemandMessage)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void OnMovementRequestMessage(MovementRequestMessage msg)
         {
             throw new NotImplementedException();
@@ -605,11 +651,7 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
-        public override void OnTransferDemandMessage(TransferDemandMessage transferDemandMessage)
-
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public override void OnTransferRequestMessage(TransferRequestMessage msg)
         {
