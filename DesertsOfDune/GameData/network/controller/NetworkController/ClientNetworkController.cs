@@ -158,6 +158,9 @@ namespace GameData.network.controller
                 case MessageType.UNPAUSE_GAME_OFFER:
                     messageController.OnUnpauseOfferDemand((UnpauseGameOfferMessage)receivedMessage);
                     return true;
+                case MessageType.HELI_DEMAND:
+                    messageController.OnHeliDemandMessage((HeliDemandMessage)receivedMessage);
+                    return true;
                 default:
                     Log.Error("Incoming parsed message has invalid type (" + type + ") and could not be forwarded to the message controller!");
                     break;

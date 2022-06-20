@@ -105,6 +105,8 @@ namespace GameData.network.controller
 
         public abstract void OnGameStateRequestMessage(GameStateRequestMessage msg);
 
+        public abstract void OnHeliDemandMessage(HeliDemandMessage msg);
+
      //   public abstract void OnPauseGameRequestMessage(PauseGameRequestMessage msg);
 
         public abstract void DoSendJoin(string clientName);
@@ -176,6 +178,8 @@ namespace GameData.network.controller
         }
 
         public abstract void DoSendHouseAck(int clientID, string houseName);
+
+        public abstract void OnHeliRequestMessage(HeliRequestMessage heliRequestMessage);
 
         public abstract void DoSendTurnDemand(int clientID, int characterID);
 

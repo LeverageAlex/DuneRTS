@@ -53,9 +53,9 @@ namespace GameData.network.util.parser
                     TurnDemandMessage turnDemandMessage = (TurnDemandMessage)message;
                     return JsonConvert.SerializeObject(turnDemandMessage);
                 case MessageType.MOVEMENT_REQUEST:
-                    Log.Debug("Start Movement Deserialization");
+                  //  Log.Debug("Start Movement Deserialization");
                     MovementRequestMessage movementRequestMessage = (MovementRequestMessage)message;
-                    Log.Debug("Finishied parsing. Returning.");
+              //      Log.Debug("Finishied parsing. Returning.");
                     return JsonConvert.SerializeObject(movementRequestMessage);
                 case MessageType.ACTION_REQUEST:
                     ActionRequestMessage actionRequestMessage = (ActionRequestMessage)message;
@@ -65,7 +65,6 @@ namespace GameData.network.util.parser
                     return JsonConvert.SerializeObject(transferReuqestMessage);
                 case MessageType.MOVEMENT_DEMAND:
                     MovementDemandMessage movementMessage = (MovementDemandMessage)message;
-
                     return JsonConvert.SerializeObject(movementMessage);
                 case MessageType.ACTION_DEMAND:
                     ActionDemandMessage actionDemandMessage = (ActionDemandMessage)message;
@@ -124,6 +123,12 @@ namespace GameData.network.util.parser
                 case MessageType.UNPAUSE_GAME_OFFER:
                     UnpauseGameOfferMessage unpauseGameOfferMessage = (UnpauseGameOfferMessage)message;
                     return JsonConvert.SerializeObject(unpauseGameOfferMessage);
+                case MessageType.HELI_REQUEST:
+                    HeliRequestMessage heliRequestMessage = (HeliRequestMessage)message;
+                    return JsonConvert.SerializeObject(heliRequestMessage);
+                case MessageType.HELI_DEMAND:
+                    HeliDemandMessage heliDemandMessage = (HeliDemandMessage)message;
+                    return JsonConvert.SerializeObject(heliDemandMessage);
                 default:
                     throw new ArgumentException($"The given message type: {message.GetMessageType()} is not implemented");
             }
@@ -216,6 +221,10 @@ namespace GameData.network.util.parser
                     return JsonConvert.DeserializeObject<GamePauseDemandMessage>(message);
                 case MessageType.UNPAUSE_GAME_OFFER:
                     return JsonConvert.DeserializeObject<UnpauseGameOfferMessage>(message);
+                case MessageType.HELI_REQUEST:
+                    return JsonConvert.DeserializeObject<HeliRequestMessage>(message);
+                case MessageType.HELI_DEMAND:
+                    return JsonConvert.DeserializeObject<HeliDemandMessage>(message);
                 default:
                     throw new ArgumentException($"The given message type: {messageType} is not implemented");
             }

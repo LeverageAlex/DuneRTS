@@ -1,3 +1,4 @@
+using GameData.network.util.world;
 using System.Collections;
 using System.Collections.Generic;
 using System.Timers;
@@ -15,13 +16,23 @@ public class StartConnectionWatchdog : MonoBehaviour
         CreateConnectionMonitor();
     }
 
-   /* private void Update()
+    private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.C))
+        /* if(Input.GetKeyDown(KeyCode.C))
+         {
+             SessionHandler.CloseNetworkModule();
+         }*/
+       
+        if (Input.GetKeyDown(KeyCode.C))
         {
-            SessionHandler.CloseNetworkModule();
+            SessionHandler.messageController.OnHeliDemandMessage(new GameData.network.messages.HeliDemandMessage(SessionHandler.clientId, CharacterMgr.instance.randomChar().characterId, new Position(5, 5),true));
         }
-    }*/
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            SessionHandler.messageController.OnHeliDemandMessage(new GameData.network.messages.HeliDemandMessage(SessionHandler.clientId, CharacterMgr.instance.randomChar().characterId, new Position(10, 10), false));
+        }
+    }
 
 
     public void CreateConnectionMonitor()

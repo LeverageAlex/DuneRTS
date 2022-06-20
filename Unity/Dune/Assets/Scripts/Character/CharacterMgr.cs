@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Serilog;
-
+using System.Linq;
 
 /**
  * This class provides functionality to maintain characters on the map:
@@ -232,6 +232,12 @@ public class CharacterMgr : MonoBehaviour
         }
     }
 
+    public Character randomChar()
+    {
+        List<Character> values = Enumerable.ToList(characterDict.Values);
+        return values.ElementAt(0);
+    }
+
 
     public void SetPlayerHouse(HouseEnum house)
     {
@@ -247,6 +253,12 @@ public class CharacterMgr : MonoBehaviour
     {
         characterDict.Remove(charID);
     }
-
+    public Helicopter spawnHelicopter(Character charToTransport, Position target, bool crash)
+    {
+        GameObject obj = Instantiate(helicopterPrefab, new Vector3(charToTransport.X, 0f, charToTransport.Z), Quaternion.identity);
+        Helicopter copterScript = (Helicopter)obj.GetComponent(typeof(Helicopter));
+        copterScript.InitHelicopter(charToTransport, new Vector3(target.x, 0f, target.y), crash);
+        return copterScript;
+    }
 
 }

@@ -37,6 +37,8 @@
         GAME_PAUSE_DEMAND,
         UNPAUSE_GAME_OFFER,
         GAME_END,
-        TURN_DEMAND
+        TURN_DEMAND,
+        HELI_REQUEST,
+        HELI_DEMAND
     }
 }

@@ -161,6 +161,9 @@ namespace GameData.network.controller
 
                         messageController.OnPauseGameRequestMessage((PauseGameRequestMessage)receivedMessage, sessionID);
                         return true;
+                    case MessageType.HELI_REQUEST:
+                        messageController.OnHeliRequestMessage((HeliRequestMessage)receivedMessage);
+                        return true;
                     default:
                         Log.Error("Incoming parsed message has invalid type (" + type + ") and could not be forwarded to the message controller!");
                         break;
