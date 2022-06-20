@@ -37,6 +37,11 @@ namespace AIClient
         /// </summary>
         public int CitySpice { get; set; }
 
+        /// <summary>
+        /// the number of used family atomics in this party
+        /// </summary>
+        public int UsedFamilyAtomics { get; }
+
         public AIPlayerMessageController MessageController { get; private set; }
 
         public World World { get; private set; }
@@ -47,6 +52,7 @@ namespace AIClient
         private Party()
         {
             this.World = new World();
+            this.UsedFamilyAtomics = 0;
         }
 
         /// <summary>
@@ -80,22 +86,5 @@ namespace AIClient
         {
             MessageController.DoSendJoin(clientName);
         }
-
-        /// <summary>
-        /// adds a new character to the alive characters of the ai client
-        /// </summary>
-        /// <param name="character">the character to add to the list</param>
-        /// <returns>true, if the character could be added, because there are less than six alive characters and otherwise false</returns>
-        public bool AddAliveCharacter(Character character)
-        {
-            if (AliveCharacters.Count >= 6)
-            {
-                return false;
-            } else
-            {
-                AliveCharacters.Add(character);
-                return true;
-            }
-        } 
     }
 }

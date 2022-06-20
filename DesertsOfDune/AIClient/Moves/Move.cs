@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace AIClient.Moves
 {
     /// <summary>
@@ -7,6 +10,7 @@ namespace AIClient.Moves
     public abstract class Move
     {
         public MoveTypes Type { get; private set; }
+
 
         public Move(MoveTypes type)
         {

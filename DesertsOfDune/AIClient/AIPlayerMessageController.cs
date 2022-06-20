@@ -217,7 +217,7 @@ namespace AIClient
                 newCharacter.CurrentMapfield = characterMapField;
 
                 // add new character to list of alive characters
-                Party.GetInstance().AddAliveCharacter(newCharacter);
+                Party.GetInstance().World.AddAliveCharacter(newCharacter);
             }
         }
 
