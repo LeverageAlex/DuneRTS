@@ -818,11 +818,6 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
-        public override void OnMapChangeDemandMessage(MapChangeDemandMessage mapChangeDemandMessage)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void OnPauseGameRequestMessage(PauseGameRequestMessage msg, string sessionID)
         {
             throw new NotImplementedException();
