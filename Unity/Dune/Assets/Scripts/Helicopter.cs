@@ -35,7 +35,7 @@ public class Helicopter : MonoBehaviour
         AudioController.instance.Play("HelicopterFly");
 
         crashAnimator.enabled = false;
-        helicopterModel.active = true;
+        helicopterModel.SetActive(true);
         crashParticle.Pause();
 
         if (crash)
@@ -58,7 +58,12 @@ public class Helicopter : MonoBehaviour
             {
                 //Entered StormEye
                 currentState = helicopterState.animatingInStorm;
-                StartCoroutine(heliStormAnimation());
+                currentState = helicopterState.moveToTarget;
+
+                crashAnimator.enabled = true;
+                crashAnimator.Play("helicopterCrash");
+
+                crashParticle.Play();
             }
         }
         else if(currentState == helicopterState.moveToTarget)
@@ -72,29 +77,14 @@ public class Helicopter : MonoBehaviour
                 CharacterTurnHandler.instance.updateSelectionArrow();
                 AudioController.instance.StopPlaying("HelicopterFly");
 
-                DespwanHelicopter();
+                DespawnHelicopter();
             }
         }
     }
 
-
-    IEnumerator heliStormAnimation()
+    private void DespawnHelicopter()
     {
-        //Start animation here
-        //yield return new WaitForSeconds(2);
-        currentState = helicopterState.moveToTarget;
-
-        crashAnimator.enabled = true;
-        crashAnimator.Play("helicopterCrash");
-
-        crashParticle.Play();
-
-        yield return null;
-    }
-
-    private void DespwanHelicopter()
-    {
-        helicopterModel.active = false;
+        helicopterModel.SetActive(false);
         crashParticle.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         Destroy(gameObject, crashParticle.startLifetime);
     }
