@@ -6,6 +6,7 @@ public class Helicopter : MonoBehaviour
 {
     public Animator crashAnimator;
     public ParticleSystem crashParticle;
+    public GameObject helicopterModel;
 
     private Vector3 target;
 
@@ -34,6 +35,7 @@ public class Helicopter : MonoBehaviour
         AudioController.instance.Play("HelicopterFly");
 
         crashAnimator.enabled = false;
+        helicopterModel.active = true;
         crashParticle.Pause();
 
         if (crash)
@@ -69,7 +71,8 @@ public class Helicopter : MonoBehaviour
                 CharacterTurnHandler.instance.HideSelectedArrow(false);
                 CharacterTurnHandler.instance.updateSelectionArrow();
                 AudioController.instance.StopPlaying("HelicopterFly");
-                Destroy(gameObject);
+
+                DespwanHelicopter();
             }
         }
     }
@@ -89,7 +92,12 @@ public class Helicopter : MonoBehaviour
         yield return null;
     }
 
-
+    private void DespwanHelicopter()
+    {
+        helicopterModel.active = false;
+        crashParticle.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        Destroy(gameObject, crashParticle.startLifetime);
+    }
 
 
     /*

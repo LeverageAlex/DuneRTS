@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   crashAnimator: {fileID: 3072748582585359453}
   crashParticle: {fileID: 8744924639567238381}
+  helicopterModel: {fileID: 2926561381796801245}
 --- !u!95 &3072748582585359453
 Animator:
   serializedVersion: 3
@@ -281,6 +282,11 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 701a49cf4af894e4ea2290853532a540, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e731a1ac8914e2548ae80adaba4759b1, type: 3}
+--- !u!1 &2926561381796801245 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100002, guid: e731a1ac8914e2548ae80adaba4759b1, type: 3}
+  m_PrefabInstance: {fileID: 2926561381796703359}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2926561381796312829 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: e731a1ac8914e2548ae80adaba4759b1, type: 3}
