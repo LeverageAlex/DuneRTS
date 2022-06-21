@@ -424,6 +424,9 @@ namespace GameData.network.util.world
         /// <returns></returns>
         public bool HasSandstormOnPath(MapField startField, Position targetPosition)
         {
+            bool horicontal = startField.XCoordinate != targetPosition.x;
+            bool vertical = startField.ZCoordinate != targetPosition.y;
+
             //first Point
             float a = startField.XCoordinate;
             float b = startField.ZCoordinate;
@@ -432,16 +435,23 @@ namespace GameData.network.util.world
             float d = targetPosition.y;
 
             //building f(x) = mx * x + tx and f(y) = my * y + ty
-            float mx = (a < b) ? (d - b) / (c - a) : (b - d) / (a - c);//slope of f(x)
-            float tx = b - mx * a; 
-            
-            float my = (b < d) ? (c - a) / (d - b) : (a - c) / (b - d);//slope of f(y)
-            float ty = a - my * b;
+            float mx = 0, my = 0, tx = 0, ty = 0;
+            if (horicontal)
+            {
+                mx = (a < b) ? (d - b) / (c - a) : (b - d) / (a - c);//slope of f(x)
+                tx = b - mx * a;
+            }
+
+            if (vertical)
+            {
+                my = (b < d) ? (c - a) / (d - b) : (a - c) / (b - d);//slope of f(y)
+                ty = a - my * b;
+            }
 
             //check if sandstormFields get cut by the pathLine
             foreach(MapField m in GetSandstormFieldsOnMap())
             {
-                if(IsFieldCutByLine(m.XCoordinate, m.ZCoordinate, mx, tx, my, ty, a == c, b == d)) return true;
+                if(IsFieldCutByLine(m.XCoordinate, m.ZCoordinate, mx, tx, my, ty, horicontal, vertical)) return true;
             }
                        
             return false;
@@ -457,15 +467,15 @@ namespace GameData.network.util.world
         /// <param name="tx"></param>
         /// <param name="my"></param>
         /// <param name="ty"></param>
-        /// <param name="onlyHoricontal"></param>
-        /// <param name="onlyVertical"></param>
+        /// <param name="horicontal"></param>
+        /// <param name="vertical"></param>
         /// <returns></returns>
-        private bool IsFieldCutByLine(float x, float y, float mx, float tx, float my, float ty, bool onlyHoricontal, bool onlyVertical)
+        private bool IsFieldCutByLine(float x, float y, float mx, float tx, float my, float ty, bool horicontal, bool vertical)
         {
             int cuts = 0;
 
             //checking all 4 edges of the square
-            if (!onlyVertical)
+            if (horicontal)
             {
                 //left edge
                 float yleft = (x - 0.5f) * mx + tx;//f(x)
@@ -476,7 +486,7 @@ namespace GameData.network.util.world
                 if (yright > (y - 0.5f) && yright <= (y + 0.5f)) cuts++;//checking bounds
             }
 
-            if (!onlyHoricontal) { 
+            if (vertical) { 
                 //bottom edge
                 float xbottom = (y - 0.5f) * my + ty;//f(y)
                 if (xbottom > (x - 0.5f) && xbottom <= (x + 0.5f)) cuts++;//checking bounds

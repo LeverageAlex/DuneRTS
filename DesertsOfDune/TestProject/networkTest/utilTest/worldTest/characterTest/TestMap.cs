@@ -278,6 +278,7 @@ namespace UnitTestSuite.networkTest.utilTest.worldTest.characterTest
             map.GetNeighborFields(stormField).ForEach((x) => x.isInSandstorm = true);
 
             MapField start = map.GetMapFieldAtPosition(0, 0);
+
             Position target = new Position(4, 4);
             for (int i = 1; i < 5; i++)
             {
@@ -288,10 +289,32 @@ namespace UnitTestSuite.networkTest.utilTest.worldTest.characterTest
                 Assert.True(map.HasSandstormOnPath(start, target));
             }
 
-            target = new Position(0, 5);
+            target = new Position(0, 4);
             Assert.False(map.HasSandstormOnPath(start, target));
 
-            target = new Position(5, 0);
+            target = new Position(4, 0);
+            Assert.False(map.HasSandstormOnPath(start, target));
+
+
+            start = map.GetMapFieldAtPosition(3, 4);
+
+            for (int i = 0; i < 4; i++)
+            {
+                target = new Position(i, 0);
+                Assert.True(map.HasSandstormOnPath(start, target));
+
+                target = new Position(0, i);
+                Assert.True(map.HasSandstormOnPath(start, target));
+            }
+
+            target = new Position(4, 4);
+            Assert.False(map.HasSandstormOnPath(start, target));
+
+            target = new Position(0, 4);
+            Assert.False(map.HasSandstormOnPath(start, target));
+
+            //cornerHit
+            target = new Position(4, 3);
             Assert.False(map.HasSandstormOnPath(start, target));
         }
 
