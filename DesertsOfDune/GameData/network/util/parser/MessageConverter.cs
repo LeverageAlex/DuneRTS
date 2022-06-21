@@ -150,7 +150,6 @@ namespace GameData.network.util.parser
 
             MessageType msgType = (MessageType)Enum.Parse(typeof(MessageType), messageType);
 
-            Console.WriteLine("the match: " + messageType);
             switch (msgType)
             {
                 case MessageType.DEBUG:

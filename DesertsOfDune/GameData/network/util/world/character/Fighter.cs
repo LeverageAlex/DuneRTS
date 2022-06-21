@@ -44,7 +44,7 @@ namespace GameData.network.util.world.character
             this.characterType = Enum.GetName(typeof(CharacterType), CharacterType.FIGHTER);
             this.healthMax = CharacterConfiguration.Fighter.maxHP;
             this.healthCurrent = CharacterConfiguration.Fighter.maxHP;
-            this.healingHP = CharacterConfiguration.Fighter.healingHP;
+            this.HealingHP = CharacterConfiguration.Fighter.healingHP;
             this.MPmax = CharacterConfiguration.Fighter.maxMP;
             this.MPcurrent = CharacterConfiguration.Fighter.maxMP;
             this.APmax = CharacterConfiguration.Fighter.maxAP;

@@ -20,7 +20,7 @@ namespace GameData.network.util.world
         [JsonProperty(Order = 0)]
         public int healthCurrent { get; set; }
         [JsonProperty(Order = 1)]
-        protected int healingHP;
+        public int healingHP { get; private set; }
         [JsonProperty(Order = 2)]
         public int MPmax;
         [JsonProperty(Order = 3)]
@@ -50,9 +50,13 @@ namespace GameData.network.util.world
         [JsonIgnore]
         public bool KilledBySandworm
         {get { return killedBySandworm; } set { killedBySandworm = value; } }
-        
+
         [JsonIgnore]
-        public string CharacterName { get; }
+        public int HealingHP
+        { get { return healingHP; } set { healingHP = value; } }
+
+        [JsonIgnore]
+        public string CharacterName { get; set; }
 
 
         /// <summary>
@@ -74,6 +78,25 @@ namespace GameData.network.util.world
         [JsonConstructor]
         public Character(CharacterType characterType, int healthMax, int healthCurrent, int healingHP, int MPmax, int MPcurrent, int APmax, int APcurrent, int attackDamage, int inventorySize, int inventoryUsed, bool killedBySandworm, bool isLoud)
         {
+            this.characterType = Enum.GetName(characterType.GetType(), characterType);
+            this.healthMax = healthMax;
+            this.healthCurrent = healthCurrent;
+            this.healingHP = healingHP;
+            this.MPmax = MPmax;
+            this.MPcurrent = MPcurrent;
+            this.APmax = APmax;
+            this.APcurrent = APcurrent;
+            this.attackDamage = attackDamage;
+            this.inventorySize = inventorySize;
+            this.inventoryUsed = inventoryUsed;
+            this.killedBySandworm = killedBySandworm;
+            this.isLoud = isLoud;
+        }
+
+        public Character(int characterId, string characterName, CharacterType characterType, int healthMax, int healthCurrent, int healingHP, int MPmax, int MPcurrent, int APmax, int APcurrent, int attackDamage, int inventorySize, int inventoryUsed, bool killedBySandworm, bool isLoud)
+        {
+            this.CharacterId = characterId;
+            this.CharacterName = characterName;
             this.characterType = Enum.GetName(characterType.GetType(), characterType);
             this.healthMax = healthMax;
             this.healthCurrent = healthCurrent;
