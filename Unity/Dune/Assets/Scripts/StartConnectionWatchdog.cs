@@ -25,7 +25,7 @@ public class StartConnectionWatchdog : MonoBehaviour
        
         if (Input.GetKeyDown(KeyCode.C))
         {
-            SessionHandler.messageController.OnHeliDemandMessage(new GameData.network.messages.HeliDemandMessage(SessionHandler.clientId, CharacterMgr.instance.randomChar().characterId, new Position(5, 5),true));
+            SessionHandler.messageController.OnHeliDemandMessage(new GameData.network.messages.HeliDemandMessage(SessionHandler.clientId, CharacterMgr.instance.randomChar().characterId, new Position(0, 0),true));
         }
 
         if (Input.GetKeyDown(KeyCode.V))

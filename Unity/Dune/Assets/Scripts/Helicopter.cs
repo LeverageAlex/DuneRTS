@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Helicopter : MonoBehaviour
 {
+    public Animator crashAnimator;
+    public ParticleSystem crashParticle;
 
     private Vector3 target;
 
@@ -31,6 +33,9 @@ public class Helicopter : MonoBehaviour
         CharacterToTransport.ReplaceCharacterOnPosition((int)Mathf.Round(target.x), (int)Mathf.Round(target.z));
         AudioController.instance.Play("HelicopterFly");
 
+        crashAnimator.enabled = false;
+        crashParticle.Pause();
+
         if (crash)
         {
             currentState = helicopterState.moveToStorm;
@@ -39,7 +44,7 @@ public class Helicopter : MonoBehaviour
         {
             currentState = helicopterState.moveToTarget;
         }
-}
+    }
 
     // Start is called before the first frame update
     private void Update()
@@ -73,9 +78,15 @@ public class Helicopter : MonoBehaviour
     IEnumerator heliStormAnimation()
     {
         //Start animation here
-        yield return new WaitForSeconds(2);
+        //yield return new WaitForSeconds(2);
         currentState = helicopterState.moveToTarget;
 
+        crashAnimator.enabled = true;
+        crashAnimator.Play("helicopterCrash");
+
+        crashParticle.Play();
+
+        yield return null;
     }
 
 
