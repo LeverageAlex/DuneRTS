@@ -26,7 +26,7 @@ public class MapManager : MonoBehaviour
 
     [Header("Nodes:")]
     public Node[] nodes;
-    public GameObject cityNodePrefab, duneNodePrefab, FlatDuneNodePrefab, FlatRockNodePrefab, rockNodePrefab;
+    public GameObject cityNodePrefab, duneNodePrefab, FlatDuneNodePrefab, FlatRockNodePrefab, rockNodePrefab, heliNodePrefab;
 
     
     [Header("Spice:")]
@@ -231,6 +231,7 @@ public class MapManager : MonoBehaviour
                 case NodeTypeEnum.ROCK: nodePrefab = rockNodePrefab; break;
                 case NodeTypeEnum.FLATROCK: nodePrefab = FlatRockNodePrefab; break;
                 case NodeTypeEnum.CITY: nodePrefab = cityNodePrefab; break;
+                case NodeTypeEnum.HELIPORT: nodePrefab = heliNodePrefab; break;
             }
             currentNode = (Node)Instantiate(nodePrefab, new Vector3(x, 0, z), Quaternion.identity).GetComponent(typeof(Node));
             nodes[z + GridSizeZ * x] = currentNode;

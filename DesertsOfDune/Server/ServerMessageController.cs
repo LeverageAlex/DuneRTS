@@ -171,7 +171,7 @@ namespace GameData
                     {
                         // first player already has great house, so start the game
                         Party.GetInstance().Start();
-                        List<Player> listPlayer =  Party.GetInstance().GetActivePlayers();
+                        List<Player> listPlayer = Party.GetInstance().GetActivePlayers();
                         foreach (Player player in listPlayer)
                         {
                             player.UsedGreatHouse.City = player.City;
@@ -302,7 +302,7 @@ namespace GameData
 
             if (movingCharacter.MPcurrent <= 0 && movingCharacter.APcurrent <= 0)
             {
-              //  CharacterTraitPhase.StopAndResetTimer();
+                //  CharacterTraitPhase.StopAndResetTimer();
                 Party.GetInstance().RoundHandler.GetCharacterTraitPhase().SendRequestForNextCharacter();
             }
         }
@@ -378,7 +378,7 @@ namespace GameData
 
             if (actionCharacter.APcurrent > 0)
             {
-                var map = Party.GetInstance().map;
+                GameData.network.util.world.Map map = Party.GetInstance().map;
                 var charactersHit = new List<Character>();
                 //check which action the player wants to do with his character
                 if (!actionCharacter.IsInSandStorm(map))
@@ -436,10 +436,10 @@ namespace GameData
                                 actionCharacter.Kanly(targetCharacter);
                                 activePlayer.statistics.AddToEnemiesDefeated(1);
                                 charactersHit.Add(targetCharacter);
-                            } 
-                        break;
-                    case ActionType.FAMILY_ATOMICS:
-                        action = ActionType.FAMILY_ATOMICS;
+                            }
+                            break;
+                        case ActionType.FAMILY_ATOMICS:
+                            action = ActionType.FAMILY_ATOMICS;
                             if (actionCharacter.APcurrent == actionCharacter.APmax
                                 && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE))
                             {
@@ -453,44 +453,44 @@ namespace GameData
                                         targetMapField = mapfield;
                                     }
                                 }
-                                if(targetMapField == null)
+                                if (targetMapField == null)
                                 {
                                     DoSendError(005, "TargetMapField is null when FamilyAtomics was executed!", activePlayer.SessionID);
                                 }
 
                                 // if atomic bomb is thrown on sandworm or neighborfield of sandworm then remove the sandworm
                                 if (Sandworm.GetSandworm() != null)
-                            {
-                                foreach (var mapField in map.GetNeighborFields(targetMapField))
                                 {
-                                    if (Sandworm.GetSandworm().GetCurrentField().Equals(mapField) || Sandworm.GetSandworm().GetCurrentField().Equals(targetMapField))
+                                    foreach (var mapField in map.GetNeighborFields(targetMapField))
                                     {
-                                        Sandworm.Despawn(this);
-                                        break;
+                                        if (Sandworm.GetSandworm().GetCurrentField().Equals(mapField) || Sandworm.GetSandworm().GetCurrentField().Equals(targetMapField))
+                                        {
+                                            Sandworm.Despawn(this);
+                                            break;
+                                        }
                                     }
                                 }
-                            }
-                            bool greathouseConventionBrokenBeforeAtomicBomb = Noble.greatHouseConventionBroken;
-                            charactersHit = actionCharacter.AtomicBomb(targetMapField, map, Noble.greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse);
-                            activePlayer.statistics.AddToEnemiesDefeated(charactersHit.Count);
-                            DoSendMapChangeDemand(MapChangeReasons.FAMILY_ATOMICS);
-                            if(greathouseConventionBrokenBeforeAtomicBomb != Noble.greatHouseConventionBroken)
-                            {
+                                bool greathouseConventionBrokenBeforeAtomicBomb = Noble.greatHouseConventionBroken;
+                                charactersHit = actionCharacter.AtomicBomb(targetMapField, map, Noble.greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse);
+                                activePlayer.statistics.AddToEnemiesDefeated(charactersHit.Count);
+                                DoSendMapChangeDemand(MapChangeReasons.FAMILY_ATOMICS);
+                                if (greathouseConventionBrokenBeforeAtomicBomb != Noble.greatHouseConventionBroken)
+                                {
                                     DoSendAtomicsUpdateDemand(msg.clientID, true, actionCharacter.greatHouse.unusedAtomicBombs);
                                     int charactersAmount = enemyPlayer.UsedGreatHouse.Characters.Count;
                                     for (int i = charactersAmount - 1; i > charactersAmount - 5; i--)
                                     {
                                         DoSpawnCharacterDemand(enemyPlayer.UsedGreatHouse.Characters[i]);
                                     }
+                                }
+                                else
+                                {
+                                    DoSendAtomicsUpdateDemand(msg.clientID, false, actionCharacter.greatHouse.unusedAtomicBombs);
+                                }
                             }
-                            else
-                            {
-                                DoSendAtomicsUpdateDemand(msg.clientID, false, actionCharacter.greatHouse.unusedAtomicBombs);
-                            }
-                        }
-                        break;
-                    case ActionType.SPICE_HOARDING:
-                        action = ActionType.SPICE_HOARDING;
+                            break;
+                        case ActionType.SPICE_HOARDING:
+                            action = ActionType.SPICE_HOARDING;
                             if (actionCharacter.APcurrent == actionCharacter.APmax
                                 && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.MENTAT))
                             {
@@ -572,7 +572,8 @@ namespace GameData
                         }
                     }
                     DoSendChangeCharacterStatsDemand(activePlayer.ClientID, actionCharacter.CharacterId, new CharacterStatistics(actionCharacter));
-                } else
+                }
+                else
                 {
                     //Character is in Sandstorm
                     actionCharacter.MPcurrent = 0;
@@ -582,7 +583,7 @@ namespace GameData
 
             if ((actionCharacter.MPcurrent <= 0 && actionCharacter.APcurrent <= 0) || actionCharacter.IsDead())
             {
-          //      CharacterTraitPhase.StopAndResetTimer();
+                //      CharacterTraitPhase.StopAndResetTimer();
                 Party.GetInstance().RoundHandler.GetCharacterTraitPhase().SendRequestForNextCharacter();
             }
         }
@@ -608,8 +609,8 @@ namespace GameData
                 throw new NullReferenceException($"Requested player with {msg.clientID} isn't known!");
             }
 
-                //get the characters which are involved in the transfer
-                Character activeCharacter = null;
+            //get the characters which are involved in the transfer
+            Character activeCharacter = null;
             Character targetCharacter = null;
             foreach (var character in activePlayer.UsedGreatHouse.Characters)
             {
@@ -1129,6 +1130,13 @@ namespace GameData
             NetworkController.HandleSendingMessage(gamePauseDemandMessage);
         }
 
+        public void DoSendHeliDemand(int clientID, int characterID, Position target, bool crash)
+        {
+            HeliDemandMessage heliDemandMessage = new HeliDemandMessage(clientID, characterID, target, crash);
+            NetworkController.HandleSendingMessage(heliDemandMessage);
+        }
+
+
         public override void OnUnpauseGameOffer(int requestedByClientID)
         {
             UnpauseGameOfferMessage unpauseGameOfferMessage = new UnpauseGameOfferMessage(requestedByClientID);
@@ -1138,7 +1146,91 @@ namespace GameData
         public override void OnHeliRequestMessage(HeliRequestMessage heliRequestMessage)
         {
             //TODO implement heliRequestMessage
-            throw new NotImplementedException();
+            Player activePlayer = null;
+            foreach (var player in Party.GetInstance().GetActivePlayers())
+            {
+                if (player.ClientID == heliRequestMessage.clientID)
+                {
+                    activePlayer = player;
+                }
+            }
+
+            if (activePlayer == null)
+            {
+                throw new NullReferenceException($"Requested player with {heliRequestMessage.clientID} isn't known!");
+            }
+
+            //get the character which should be moved
+            Character portingChar = null;
+            foreach (var character in activePlayer.UsedGreatHouse.GetCharactersAlive())
+            {
+                if (character.CharacterId == heliRequestMessage.characterID)
+                {
+                    portingChar = character;
+                }
+            }
+
+            if (portingChar == null)
+            {
+                DoSendError(005, $"Moving character is null", activePlayer.SessionID);
+                return;
+            }
+
+
+            Party party = Party.GetInstance();
+
+
+            if (heliRequestMessage.target.x >= 0 && heliRequestMessage.target.x < party.map.MAP_WIDTH && heliRequestMessage.target.y >= 0 && heliRequestMessage.target.y < party.map.MAP_HEIGHT) //check if movement is in bounds of the map
+            {
+                //check if movement is on walkable terrain
+                if (party.map.fields[heliRequestMessage.target.y, heliRequestMessage.target.x].tileType.Equals(TileType.HELIPORT.ToString()))
+                {
+
+                    //Only if flying through storm
+                    Random rdm = new Random();
+                    bool crash;
+                    MapField targetField;
+                    //TODO insert crash-probability from config
+                    if (rdm.NextDouble() < 0.5)
+                    {
+                        //Crash
+                        targetField = Map.instance.GetRandomApproachableField();
+                        crash = true;
+                    }
+                    else
+                    {
+                        if (!party.map.fields[heliRequestMessage.target.y, heliRequestMessage.target.x].IsCharacterStayingOnThisField)  //if the mapfield is occupied by a character they swap positions
+                        {
+                            targetField = Map.instance.GetMapFieldAtPosition(heliRequestMessage.target.x, heliRequestMessage.target.y);
+                        }
+                        else
+                        {
+                            //Character staying on target field. Choose random Neighbour
+                            targetField = Map.instance.GetRandomApproachableNeighborField(party.map.fields[heliRequestMessage.target.y, heliRequestMessage.target.x]);
+                        }
+                        crash = false;
+                    }
+                    portingChar.CurrentMapfield.DisplaceCharacter(portingChar);
+                    portingChar.CurrentMapfield = targetField;
+                    targetField.PlaceCharacter(portingChar);
+
+                    DoSendHeliDemand(activePlayer.ClientID, heliRequestMessage.characterID, new Position(targetField.XCoordinate, targetField.ZCoordinate), crash);
+
+                    // DoSendMovementDemand(msg.clientID, passiveCharacter.CharacterId, new List<Position> { new Position(movingCharacter.CurrentMapfield.XCoordinate, movingCharacter.CurrentMapfield.ZCoordinate) });
+                    // movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]);
+                    //   }
+                    //  else
+                    //  {
+                    //movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]); //move character 1 field along its path
+                    // }
+                    //path.Add(position);
+
+
+
+
+                    // throw new NotImplementedException();
+                }
+            }
         }
 
         public override void OnJoinAccepted(JoinAcceptedMessage msg)

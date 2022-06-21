@@ -67,6 +67,9 @@ namespace GameData.network.util.world
                         case "CITY":
                             fields[y, x] = new City(0, false, false);
                             break;
+                        case "HELIPORT":
+                            fields[y, x] = new Heliport(false, false);
+                            break;
                     }
                     fields[y, x].XCoordinate = x;
                     fields[y, x].ZCoordinate = y;

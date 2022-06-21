@@ -280,6 +280,8 @@ public class Character : MonoBehaviour
             {
                 SetAnimationToIdle();
                 semaphoreWalk--;
+                //Needed for check if eligible for Heliport
+                turnHandler.HeliportCheck();
                 if (semaphoreWalk == 0)
                 {
                     audioManager.StopPlaying("CharWalk");
@@ -345,6 +347,10 @@ public class Character : MonoBehaviour
             CharacterTurnHandler.instance.GetSelectedCharacter().Attack_AtomicTrigger(nodeManager.getNodeFromPos(X, Z));
         }
        else if(turnHandler.CharState == CharacterTurnHandler.Actions.MOVE)
+        {
+            MapManager.instance.getNodeFromPos(X, Z).SelectNode();
+        }
+       else if(turnHandler.CharState == CharacterTurnHandler.Actions.HELIPORT)
         {
             MapManager.instance.getNodeFromPos(X, Z).SelectNode();
         }
@@ -780,8 +786,8 @@ public class Character : MonoBehaviour
 
     public void Action_HeliportTrigger(Node targetNode)
     {
-        Node startNode = nodeManager.getNodeFromPos(X, Z);
-
+        SessionHandler.messageController.DoRequestHeliport(SessionHandler.clientId, characterId, new GameData.network.util.world.Position(targetNode.X, targetNode.Z));
+        turnHandler.ResetAction();
     }
 
     public void Action_HeliportExecution()

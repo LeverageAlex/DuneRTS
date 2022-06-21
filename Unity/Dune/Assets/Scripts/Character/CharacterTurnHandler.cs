@@ -23,7 +23,7 @@ public class CharacterTurnHandler : MonoBehaviour
     [Header("Actions:")]
     public GameObject characterAttacksPanel;
     public GameObject confirmationPanel;
-    public GameObject kanlyButton, voiceButton, swordSpinButton, atomicsButton, spiceHoardingButton;
+    public GameObject kanlyButton, voiceButton, swordSpinButton, atomicsButton, spiceHoardingButton, heliportButton;
     
 
     [Header("Stats:")]
@@ -208,6 +208,22 @@ public class CharacterTurnHandler : MonoBehaviour
         
     }
 
+
+    public void HeliportCheck()
+    {
+        if (SessionHandler.isPlayer)
+        {
+            if (MapManager.instance.getNodeFromPos(selectedCharacter.X, selectedCharacter.Z).nodeTypeEnum == NodeTypeEnum.HELIPORT)
+            {
+                heliportButton.SetActive(true);
+            }
+            else
+            {
+                heliportButton.SetActive(false);
+            }
+        }
+    }
+
     //Button activation/deactivation
     public void ButtonToggles()
     {
@@ -242,6 +258,16 @@ public class CharacterTurnHandler : MonoBehaviour
         }
         if (SessionHandler.isPlayer)
         {
+            if (MapManager.instance.getNodeFromPos(selectedCharacter.X, selectedCharacter.Z).nodeTypeEnum == NodeTypeEnum.HELIPORT)
+            {
+                heliportButton.SetActive(true);
+            }
+            else
+            {
+                heliportButton.SetActive(false);
+            }
+
+
             if (!selectedCharacter.isEligibleForSpecialAction())
             {
                 //special

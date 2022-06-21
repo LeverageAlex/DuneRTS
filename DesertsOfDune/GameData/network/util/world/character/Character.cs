@@ -40,8 +40,8 @@ namespace GameData.network.util.world
         public bool killedBySandworm { get; set; }
         [JsonProperty(Order = 10)]
         public bool isLoud { get; set; }
-       // [JsonIgnore]
-       // protected MapField currentMapfield;
+        // [JsonIgnore]
+        // protected MapField currentMapfield;
         [JsonIgnore]
         public MapField CurrentMapfield { get; set; }
         [JsonIgnore]
@@ -50,7 +50,7 @@ namespace GameData.network.util.world
         public GreatHouse greatHouse { get; set; }
         [JsonIgnore]
         public bool KilledBySandworm
-        {get { return killedBySandworm; } set { killedBySandworm = value; } }
+        { get { return killedBySandworm; } set { killedBySandworm = value; } }
 
         [JsonIgnore]
         public int HealingHP
@@ -146,7 +146,7 @@ namespace GameData.network.util.world
 
             Random random = new Random();
             this.CharacterId = random.Next(int.MaxValue);
-            
+
         }
 
         /// <summary>
@@ -168,7 +168,8 @@ namespace GameData.network.util.world
             {
                 healthCurrent -= hp;
                 return true;
-            } else
+            }
+            else
             {
                 Console.WriteLine("Achtung! Es wurde die sehr gefährliche (fehleranfählige!) Methode DecreaseHP aufgerufen. Falls irgendwelche Seiteneffekte was Felder/Positionen betrifft hier nachschauen");
                 healthCurrent = 0;
@@ -187,7 +188,8 @@ namespace GameData.network.util.world
             {
                 this.healthCurrent = healthCurrent + healingHP;
                 return true;
-            } else
+            }
+            else
             {
                 this.healthCurrent = healthMax;
                 return false;
@@ -256,7 +258,7 @@ namespace GameData.network.util.world
         {
             return isLoud;
         }
-        
+
         /// <summary>
         /// This method is used to set a character to loud
         /// </summary>
@@ -295,7 +297,7 @@ namespace GameData.network.util.world
         /// <param name="startField">the start field of the character</param>
         /// <param name="goalField">the goal field of the character</param>
         /// <returns></returns>
-        public bool Movement(MapField startField,MapField goalField)
+        public bool Movement(MapField startField, MapField goalField)
         {
             int dist = Math.Abs(startField.XCoordinate - goalField.XCoordinate) + Math.Abs(startField.ZCoordinate - goalField.ZCoordinate);
             if (dist > 2)
@@ -307,6 +309,12 @@ namespace GameData.network.util.world
             startField.DisplaceCharacter(this);
             goalField.PlaceCharacter(this);
             return true;
+        }
+
+        public void Teleport(MapField targetField)
+        {
+            CurrentMapfield.DisplaceCharacter(this);
+            CurrentMapfield = targetField;
         }
 
         /// <summary>
@@ -324,13 +332,13 @@ namespace GameData.network.util.world
                 {
                     target.DecreaseHP(attackDamage);
                 }
-                else if(CurrentMapfield.Elevation == Elevation.high && target.CurrentMapfield.Elevation == Elevation.low)
+                else if (CurrentMapfield.Elevation == Elevation.high && target.CurrentMapfield.Elevation == Elevation.low)
                 {
-                    target.DecreaseHP((int) Math.Round(attackDamage * PartyConfiguration.GetInstance().highGroundBonusRatio));
+                    target.DecreaseHP((int)Math.Round(attackDamage * PartyConfiguration.GetInstance().highGroundBonusRatio));
                 }
-                else if(CurrentMapfield.Elevation == Elevation.low && target.CurrentMapfield.Elevation == Elevation.high)
+                else if (CurrentMapfield.Elevation == Elevation.low && target.CurrentMapfield.Elevation == Elevation.high)
                 {
-                    target.DecreaseHP((int) Math.Round(attackDamage * PartyConfiguration.GetInstance().lowerGroundMalusRatio));
+                    target.DecreaseHP((int)Math.Round(attackDamage * PartyConfiguration.GetInstance().lowerGroundMalusRatio));
                 }
                 return true;
             }
@@ -372,7 +380,7 @@ namespace GameData.network.util.world
         /// <param name="targetCharacter"> this is the Character who gets Attacked by the active noble character; needs to be a noble </param>
         /// <returns>true if kanly was successful</returns>
         virtual
-        public bool Kanly(Character targetCharacter) 
+        public bool Kanly(Character targetCharacter)
         {
             //Do nothing because only Nobles can perform this move
             return false;
@@ -431,13 +439,13 @@ namespace GameData.network.util.world
         /// <returns>true if the characters stands in the sandstorm</returns>
         public bool IsInSandStorm(Map map)
         {
-            if(CurrentMapfield.GetMapFieldPosition().x == map.PositionOfEyeOfStorm.x && CurrentMapfield.GetMapFieldPosition().y == map.PositionOfEyeOfStorm.y)
+            if (CurrentMapfield.GetMapFieldPosition().x == map.PositionOfEyeOfStorm.x && CurrentMapfield.GetMapFieldPosition().y == map.PositionOfEyeOfStorm.y)
             {
                 return true;
             }
-            foreach(var mapfield in map.GetNeighborFields(CurrentMapfield))
+            foreach (var mapfield in map.GetNeighborFields(CurrentMapfield))
             {
-                if(mapfield.GetMapFieldPosition().x == map.PositionOfEyeOfStorm.x && mapfield.GetMapFieldPosition().y == map.PositionOfEyeOfStorm.y)
+                if (mapfield.GetMapFieldPosition().x == map.PositionOfEyeOfStorm.x && mapfield.GetMapFieldPosition().y == map.PositionOfEyeOfStorm.y)
                 {
                     return true;
                 }
