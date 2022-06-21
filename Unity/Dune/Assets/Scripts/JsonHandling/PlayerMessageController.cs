@@ -237,7 +237,11 @@ public class PlayerMessageController : MessageController
 
         IEnumerator mapchange()
         {
-            CharacterTurnHandler.instance.ResetSelection();
+            if(!(mapChangeDemandMessage.changeReason.Equals("ROUND_PHASE") || mapChangeDemandMessage.changeReason.Equals("ROUND PHASE")))
+            {
+                CharacterTurnHandler.instance.ResetSelection();
+            }
+
             GUIHandler.BroadcastGameMessage(mapChangeDemandMessage.changeReason);
             for (int x = 0; x < mapChangeDemandMessage.newMap.GetLength(0); x++)
             {
