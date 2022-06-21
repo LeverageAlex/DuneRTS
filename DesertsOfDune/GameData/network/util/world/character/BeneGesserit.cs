@@ -48,7 +48,7 @@ namespace GameData.network.util.world.character
             this.characterType = Enum.GetName(typeof(CharacterType), CharacterType.BENE_GESSERIT);
             this.healthMax = CharacterConfiguration.BeneGesserit.maxHP;
             this.healthCurrent = CharacterConfiguration.BeneGesserit.maxHP;
-            this.healingHP = CharacterConfiguration.BeneGesserit.healingHP;
+            this.HealingHP = CharacterConfiguration.BeneGesserit.healingHP;
             this.MPmax = CharacterConfiguration.BeneGesserit.maxMP;
             this.MPcurrent = CharacterConfiguration.BeneGesserit.maxMP;
             this.APmax = CharacterConfiguration.BeneGesserit.maxAP;

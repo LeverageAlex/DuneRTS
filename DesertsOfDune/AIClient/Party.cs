@@ -33,25 +33,28 @@ namespace AIClient
         public int ClientID { get; set; }
 
         /// <summary>
-        /// the map, the ai client is playing on
+        /// the amount of spice, collected and transfered to the city by all characters
         /// </summary>
-        public Map Map { get; set; }
-
-        public List<Character> AliveCharacters { get; private set; }
+        public int CitySpice { get; set; }
 
         /// <summary>
-        /// the assigned (and chosen) great house for this client
+        /// the number of used family atomics in this party
         /// </summary>
-        public string AssignedGreatHouse { get; set; }
+        public int UsedFamilyAtomics { get; }
 
         public AIPlayerMessageController MessageController { get; private set; }
+
+        public World World { get; private set; }
+
+        public Character CurrentCharacter { get; set; }
 
         /// <summary>
         /// hide default constructor for implementing the singleton pattern and sets the message controller used in the party by getting it from the main class
         /// </summary>
         private Party()
         {
-            
+            this.World = new World();
+            this.UsedFamilyAtomics = 0;
         }
 
         /// <summary>
@@ -85,22 +88,5 @@ namespace AIClient
         {
             MessageController.DoSendJoin(clientName);
         }
-
-        /// <summary>
-        /// adds a new character to the alive characters of the ai client
-        /// </summary>
-        /// <param name="character">the character to add to the list</param>
-        /// <returns>true, if the character could be added, because there are less than six alive characters and otherwise false</returns>
-        public bool AddAliveCharacter(Character character)
-        {
-            if (AliveCharacters.Count >= 6)
-            {
-                return false;
-            } else
-            {
-                AliveCharacters.Add(character);
-                return true;
-            }
-        } 
     }
 }

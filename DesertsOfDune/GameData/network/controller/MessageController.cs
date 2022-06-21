@@ -235,5 +235,25 @@ namespace GameData.network.controller
         {
             // Method intentionally left empty.
         }
+
+        public virtual void DoSendEndTurnRequest(int characterId)
+        {
+
+        }
+
+        public virtual void DoSendMovementRequest(int characterId, Position[] path)
+        {
+
+        }
+
+        public virtual void DoSendActionRequest(int characterId, ActionType actionType, Position target)
+        {
+
+        }
+
+        public virtual void DoSendTransferRequest(int characterId, int characterId2, int amount)
+        {
+
+        }
     }
 }

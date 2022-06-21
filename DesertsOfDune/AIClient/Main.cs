@@ -65,7 +65,7 @@ namespace AIClient
         private static void InitiliazeLogger()
         {
             Logger logger = new Logger();
-            logger.CreateDebugLogger();
+            logger.CreateDefaultLogger();
         }
 
         /// <summary>

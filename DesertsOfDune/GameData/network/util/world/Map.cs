@@ -50,7 +50,7 @@ namespace GameData.network.util.world
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    switch(scenarioConfiguration[x][y])
+                    switch (scenarioConfiguration[x][y])
                     {
                         case "DUNE":
                             fields[y, x] = new Dune(false, false);
@@ -70,9 +70,47 @@ namespace GameData.network.util.world
                     }
                     fields[y, x].XCoordinate = x;
                     fields[y, x].ZCoordinate = y;
-                  //  fields[y, x] = new MapField(scenarioConfiguration[x][(MAP_HEIGHT - 1) - y], x, y);
+                    //  fields[y, x] = new MapField(scenarioConfiguration[x][(MAP_HEIGHT - 1) - y], x, y);
                 }
             }
+        }
+
+        public MapField[,] GetNewMapFromMessage(MapField[,] mapFields)
+        {
+            MapField[,] newMap = new MapField[MAP_HEIGHT, MAP_WIDTH];
+
+            for (int x = 0; x < MAP_WIDTH; x++)
+            {
+                for (int y = 0; y < MAP_HEIGHT; y++)
+                {
+                    // MapField mapField = mapFields[y, x];
+                    MapField mapField = GetMapFieldAtPosition(x, y);
+
+                    switch (mapField.tileType)
+                    {
+                        case "DUNE":
+                            newMap[y, x] = new Dune(mapField.hasSpice, mapField.isInSandstorm);
+                            break;
+                        case "FLAT_SAND":
+                            newMap[y, x] = new FlatSand(mapField.hasSpice, mapField.isInSandstorm);
+                            break;
+                        case "MOUNTAINS":
+                            newMap[y, x] = new Mountain(mapField.hasSpice, mapField.isInSandstorm);
+                            break;
+                        case "PLATEAU":
+                            newMap[y, x] = new RockPlateau(mapField.hasSpice, mapField.isInSandstorm);
+                            break;
+                        case "CITY":
+                            newMap[y, x] = new City(mapField.clientID, mapField.hasSpice, mapField.isInSandstorm);
+                            break;
+                    }
+                    newMap[y, x].XCoordinate = x;
+                    newMap[y, x].ZCoordinate = y;
+
+                    newMap[y, x].PlaceCharacter(mapField.Character);
+                }
+            }
+            return newMap;
         }
 
         /// <summary>
@@ -316,6 +354,12 @@ namespace GameData.network.util.world
                     {
                         builder.Append(" x ");
                     }
+
+                    if (GetMapFieldAtPosition(x, y).hasSpice)
+                    {
+                        builder.Append(" s ");
+                    }
+
                     builder.Append(", ");
                 }
                 builder.Append("\n");
@@ -323,7 +367,7 @@ namespace GameData.network.util.world
 
             builder.Append("\n");
 
-            Log.Debug(builder.ToString());
+            Log.Information(builder.ToString());
         }
 
         /// <summary>

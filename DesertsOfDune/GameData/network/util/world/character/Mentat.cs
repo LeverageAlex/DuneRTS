@@ -47,7 +47,7 @@ namespace GameData.network.util.world.character
             this.characterType = Enum.GetName(typeof(CharacterType), CharacterType.NOBLE);
             this.healthMax = CharacterConfiguration.Mentat.maxHP;
             this.healthCurrent = CharacterConfiguration.Mentat.maxHP;
-            this.healingHP = CharacterConfiguration.Mentat.healingHP;
+            this.HealingHP = CharacterConfiguration.Mentat.healingHP;
             this.MPmax = CharacterConfiguration.Mentat.maxMP;
             this.MPcurrent = CharacterConfiguration.Mentat.maxMP;
             this.APmax = CharacterConfiguration.Mentat.maxAP;
