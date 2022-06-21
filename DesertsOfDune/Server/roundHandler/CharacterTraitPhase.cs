@@ -54,10 +54,9 @@ namespace GameData.server.roundHandler
         public void SendRequestForNextCharacter()
         {
            // _timer.Stop();
-            if (_currentCharacterIndex < _allCharacters.Count - 1)
+            if (_currentCharacterIndex < _allCharacters.Count)
             {
-                _currentCharacterIndex++;
-                _currentCharacter = _allCharacters[_currentCharacterIndex];
+                _currentCharacter = _allCharacters[_currentCharacterIndex++];
                 _currentCharacter.SetSilent();
                 if (!_currentCharacter.IsDead() && !_currentCharacter.KilledBySandworm && !_currentCharacter.IsInSandStorm(Party.GetInstance().map)) // check if character is dead or staying in storm
                 {
@@ -78,6 +77,7 @@ namespace GameData.server.roundHandler
                 {
                     SendRequestForNextCharacter();
                 }
+
             }
             else
             {

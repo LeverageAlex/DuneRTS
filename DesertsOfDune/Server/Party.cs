@@ -298,14 +298,17 @@ namespace GameData
             if (random.NextDouble() < 0.5)
             {
                 players[0].City = cities[0];
+                players[0].City.clientID = players[0].ClientID;
                 players[1].City = cities[1];
+                players[1].City.clientID = players[1].ClientID;
 
-                
             }
             else
             {
                 players[0].City = cities[1];
+                players[0].City.clientID = players[0].ClientID;
                 players[1].City = cities[0];
+                players[1].City.clientID = players[1].ClientID;
             }
 
         }

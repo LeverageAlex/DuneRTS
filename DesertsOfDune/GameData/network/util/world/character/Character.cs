@@ -5,6 +5,7 @@ using GameData.network.messages;
 using Newtonsoft.Json;
 using GameData.network.util.enums;
 using System.Numerics;
+using GameData.Configuration;
 
 namespace GameData.network.util.world
 {
@@ -319,7 +320,18 @@ namespace GameData.network.util.world
             if (APcurrent > 0 && dist <= 2 && target.greatHouse != greatHouse)
             {
                 SpentAp(1);
-                target.DecreaseHP(attackDamage);
+                if (CurrentMapfield.Elevation == target.CurrentMapfield.Elevation)
+                {
+                    target.DecreaseHP(attackDamage);
+                }
+                else if(CurrentMapfield.Elevation == Elevation.high && target.CurrentMapfield.Elevation == Elevation.low)
+                {
+                    target.DecreaseHP((int) Math.Round(attackDamage * PartyConfiguration.GetInstance().highGroundBonusRatio));
+                }
+                else if(CurrentMapfield.Elevation == Elevation.low && target.CurrentMapfield.Elevation == Elevation.high)
+                {
+                    target.DecreaseHP((int) Math.Round(attackDamage * PartyConfiguration.GetInstance().lowerGroundMalusRatio));
+                }
                 return true;
             }
             return false;
