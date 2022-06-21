@@ -265,5 +265,64 @@ namespace UnitTestSuite.networkTest.utilTest.worldTest.characterTest
             Assert.AreEqual(1, characters.Count);
             Assert.True(characters[0].CharacterName.Equals("some name"));
         }
+
+        [Test]
+        public void TestHasSandstormOnPath()
+        {
+            Map map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
+            Assume.That(ScenarioConfiguration.SCENARIO_WIDTH >= 5);
+            Assume.That(ScenarioConfiguration.SCENARIO_HEIGHT >= 5);
+            //preparing sandstorm
+            MapField stormField = map.GetMapFieldAtPosition(2, 2);
+            stormField.isInSandstorm = true;
+            map.GetNeighborFields(stormField).ForEach((x) => x.isInSandstorm = true);
+
+            MapField start = map.GetMapFieldAtPosition(0, 0);
+            Position target = new Position(4, 4);
+            for (int i = 1; i < 5; i++)
+            {
+                target = new Position(i, 4);
+                Assert.True(map.HasSandstormOnPath(start, target));
+
+                target = new Position(4, i);
+                Assert.True(map.HasSandstormOnPath(start, target));
+            }
+
+            target = new Position(0, 5);
+            Assert.False(map.HasSandstormOnPath(start, target));
+
+            target = new Position(5, 0);
+            Assert.False(map.HasSandstormOnPath(start, target));
+        }
+
+        [Test]
+        public void TestGetSandstormFieldsOnMap()
+        {
+            Map map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
+            Assume.That(ScenarioConfiguration.SCENARIO_WIDTH >= 5);
+            Assume.That(ScenarioConfiguration.SCENARIO_HEIGHT >= 5);
+            //preparing sandstorm
+            MapField stormField = map.GetMapFieldAtPosition(3, 3);
+            List<MapField> stormFields = map.GetNeighborFields(stormField);
+            stormFields.Add(stormField);
+            foreach(MapField sf in stormFields)
+            {
+                sf.isInSandstorm = true;
+            }
+
+            List<MapField> result = map.GetSandstormFieldsOnMap();
+
+            foreach (MapField f in map.fields)
+            {
+                if (stormFields.Contains(f))
+                {
+                    Assert.True(f.isInSandstorm);
+                }
+                else
+                {
+                    Assert.False(f.isInSandstorm);
+                }
+            }
+        }
     }
 }

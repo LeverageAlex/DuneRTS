@@ -1185,13 +1185,13 @@ namespace GameData
                 //check if movement is on walkable terrain
                 if (party.map.fields[heliRequestMessage.target.y, heliRequestMessage.target.x].tileType.Equals(TileType.HELIPORT.ToString()))
                 {
-
-                    //Only if flying through storm
+                    
                     Random rdm = new Random();
                     bool crash;
                     MapField targetField;
+                    //Only if flying through storm
                     //TODO insert crash-probability from config
-                    if (rdm.NextDouble() < 0.5)
+                    if (rdm.NextDouble() < 0.5 && Map.instance.HasSandstormOnPath(portingChar.CurrentMapfield, heliRequestMessage.target))
                     {
                         //Crash
                         targetField = Map.instance.GetRandomApproachableField();
@@ -1199,6 +1199,7 @@ namespace GameData
                     }
                     else
                     {
+                        //no Crash
                         if (!party.map.fields[heliRequestMessage.target.y, heliRequestMessage.target.x].IsCharacterStayingOnThisField)  
                         {
                             targetField = Map.instance.GetMapFieldAtPosition(heliRequestMessage.target.x, heliRequestMessage.target.y);
@@ -1215,8 +1216,6 @@ namespace GameData
                     targetField.PlaceCharacter(portingChar);
 
                     DoSendHeliDemand(activePlayer.ClientID, heliRequestMessage.characterID, new Position(targetField.XCoordinate, targetField.ZCoordinate), crash);
-
-
 
                 }
             }

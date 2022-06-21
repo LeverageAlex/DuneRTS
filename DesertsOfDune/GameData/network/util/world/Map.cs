@@ -416,5 +416,97 @@ namespace GameData.network.util.world
             return characters;
         }
 
+        /// <summary>
+        /// calculates wheter a sandstorm is on the pathLine between two Points
+        /// </summary>
+        /// <param name="startField"> point 1 </param>
+        /// <param name="targetPosition"> point 2 </param>
+        /// <returns></returns>
+        public bool HasSandstormOnPath(MapField startField, Position targetPosition)
+        {
+            //first Point
+            float a = startField.XCoordinate;
+            float b = startField.ZCoordinate;
+            //second Point
+            float c = targetPosition.x;
+            float d = targetPosition.y;
+
+            //building f(x) = mx * x + tx and f(y) = my * y + ty
+            float mx = (a < b) ? (d - b) / (c - a) : (b - d) / (a - c);//slope of f(x)
+            float tx = b - mx * a; 
+            
+            float my = (b < d) ? (c - a) / (d - b) : (a - c) / (b - d);//slope of f(y)
+            float ty = a - my * b;
+
+            //check if sandstormFields get cut by the pathLine
+            foreach(MapField m in GetSandstormFieldsOnMap())
+            {
+                if(IsFieldCutByLine(m.XCoordinate, m.ZCoordinate, mx, tx, my, ty, a == c, b == d)) return true;
+            }
+                       
+            return false;
+        }
+
+        /// <summary>
+        /// calculates wheter a 1x1-Square with ceter of (x,y) gets cut by a line given trough
+        /// f(x) = mx * x + tx and f(y) = my * y + ty
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="mx"></param>
+        /// <param name="tx"></param>
+        /// <param name="my"></param>
+        /// <param name="ty"></param>
+        /// <param name="onlyHoricontal"></param>
+        /// <param name="onlyVertical"></param>
+        /// <returns></returns>
+        private bool IsFieldCutByLine(float x, float y, float mx, float tx, float my, float ty, bool onlyHoricontal, bool onlyVertical)
+        {
+            int cuts = 0;
+
+            //checking all 4 edges of the square
+            if (!onlyVertical)
+            {
+                //left edge
+                float yleft = (x - 0.5f) * mx + tx;//f(x)
+                if (yleft >= (y - 0.5f) && yleft < (y + 0.5f)) cuts++;//checking bounds
+
+                //right edge
+                float yright = (x + 0.5f) * mx + tx;//f(x)
+                if (yright > (y - 0.5f) && yright <= (y + 0.5f)) cuts++;//checking bounds
+            }
+
+            if (!onlyHoricontal) { 
+                //bottom edge
+                float xbottom = (y - 0.5f) * my + ty;//f(y)
+                if (xbottom > (x - 0.5f) && xbottom <= (x + 0.5f)) cuts++;//checking bounds
+
+                //top edge
+                float xtop = (y + 0.5f) * my + ty;//f(y)
+                if (xtop >= (x - 0.5f) && xtop < (x + 0.5f)) cuts++;//checking bounds
+            }
+
+            return cuts >= 2;
+        }
+
+        /// <summary>
+        /// returns all MapFields with isInSandstorm = true
+        /// </summary>
+        /// <returns></returns>
+        public List<MapField> GetSandstormFieldsOnMap()
+        {
+            List<MapField> sandstormFields = new List<MapField>();
+            for (int x = 0; x < MAP_WIDTH; x++)
+            {
+                for (int y = 0; y < MAP_HEIGHT; y++)
+                {
+                    if (fields[y, x].isInSandstorm)
+                    {
+                        sandstormFields.Add(fields[y, x]);
+                    }
+                }
+            }
+            return sandstormFields;
+        }
     }
 }
