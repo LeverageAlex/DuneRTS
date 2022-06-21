@@ -720,7 +720,7 @@ namespace GameData
                 }
                 string[] history = new string[1 + aliveCharacters.Count + activePlayersList.Count + historyOffset + 1];
 
-                MapChangeDemandMessage mapChangeDemandMessage = new MapChangeDemandMessage(MapChangeReasons.SANDSTORM, Party.GetInstance().map.fields, new Position(Party.GetInstance().RoundHandler.SandstormPhase.EyeOfStorm.XCoordinate, Party.GetInstance().RoundHandler.SandstormPhase.EyeOfStorm.ZCoordinate));
+                MapChangeDemandMessage mapChangeDemandMessage = new MapChangeDemandMessage(MapChangeReasons.ROUND_PHASE, Party.GetInstance().map.fields, new Position(Party.GetInstance().RoundHandler.SandstormPhase.EyeOfStorm.XCoordinate, Party.GetInstance().RoundHandler.SandstormPhase.EyeOfStorm.ZCoordinate));
 
 
                 history[0] = MessageConverter.FromMessage(mapChangeDemandMessage); //Append Map´_Change Message

@@ -237,7 +237,7 @@ public class PlayerMessageController : MessageController
 
         IEnumerator mapchange()
         {
-            if(!(mapChangeDemandMessage.changeReason.Equals("ROUND_PHASE") || mapChangeDemandMessage.changeReason.Equals("ROUND PHASE")))
+            if(!(mapChangeDemandMessage.changeReason.Equals("ROUND_PHASE") || mapChangeDemandMessage.changeReason.Equals("FAMILY_ATOMICS")))
             {
                 CharacterTurnHandler.instance.ResetSelection();
             }

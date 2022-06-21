@@ -25,14 +25,9 @@ namespace GameData.network.messages
         /// <param name="newMap">the new Map that is send.</param>
         public MapChangeDemandMessage(MapChangeReasons changeReason, MapField[,] newMap, Position stormEye) : base("1.0", MessageType.MAP_CHANGE_DEMAND)
         {
-            if (changeReason == MapChangeReasons.ROUND_PHASE)
-            {
-                this.changeReason = "ROUND_PHASE";
-            }
-            else
-            {
-                this.changeReason = Enum.GetName(typeof(MapChangeReasons), changeReason);
-            }
+
+                this.changeReason = changeReason.ToString();
+            
             this.newMap = newMap;
             this.stormEye = stormEye;
         }
