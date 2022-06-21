@@ -1737,7 +1737,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -12703,7 +12703,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6682074575721881228, guid: 72bb88d6a0f1860489fa55cf2b5657d0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 185
       objectReference: {fileID: 0}
     - target: {fileID: 6682074575721881228, guid: 72bb88d6a0f1860489fa55cf2b5657d0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -15289,7 +15289,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -16356,7 +16356,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -17925,6 +17925,7 @@ MonoBehaviour:
   FlatDuneNodePrefab: {fileID: 8286822676461262659, guid: 247329e93289e0142812fd102e478994, type: 3}
   FlatRockNodePrefab: {fileID: 2841477226448814277, guid: 4768c0b39769c8c4dbfecd23f9cc22bc, type: 3}
   rockNodePrefab: {fileID: 3107263321164118083, guid: 4208559f8aceb8f41a5b29f5c05c769e, type: 3}
+  heliNodePrefab: {fileID: 2841477226448814277, guid: 6f8fe1dbc673a7a4aa35c67120881570, type: 3}
   spicePrefab: {fileID: 4714282301104811527, guid: 1361dd36a2141fe4587095399b603f7f, type: 3}
   SandstormEffectPrefab: {fileID: 760085439421024995, guid: 68d80a7a8d9f2834b87a3d48a993d6a6, type: 3}
   EarthQuakePrefab: {fileID: 760085439421024995, guid: 7fcf349474785f242bbd2c86c3c30ed3, type: 3}
@@ -21040,7 +21041,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 1499132021786397764, guid: 6e1f0bde7b03d534aa9b8c3c9d985c3d, type: 3}
       propertyPath: m_AnchoredPosition.y
