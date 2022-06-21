@@ -157,10 +157,17 @@ namespace GameData.network.util.world.character
                     {
                         int randomCharacterIndex = rnd.Next(greatHouse.Characters.Count);
 
-
-                        MapField fieldForCharacter = map.GetRandomApproachableField();
-
-
+                        MapField fieldForCharacter = null;
+                        bool emptyFieldFound = false;
+                        while (!emptyFieldFound)
+                        {
+                            fieldForCharacter = map.GetRandomApproachableField();
+                            if (!fieldForCharacter.IsCharacterStayingOnThisField)
+                            {
+                                emptyFieldFound = true;
+                            }
+                        }
+                        
                         var newCharacter = greatHouse.Characters[randomCharacterIndex];
                         fieldForCharacter.PlaceCharacter(newCharacter);
                         greatHouse.Characters[randomCharacterIndex].CurrentMapfield = fieldForCharacter;
