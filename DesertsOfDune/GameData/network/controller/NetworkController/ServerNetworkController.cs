@@ -51,6 +51,7 @@ namespace GameData.network.controller
                 {
                     Log.Information("{ message: " + parsedMessage + " }, \"direction\": \"send\" } \n");
                 }
+
                 // broadcast parsed message to all active sessions so clients
                 ((ServerConnectionHandler)connectionHandler).sessionManager.Broadcast(parsedMessage);
                 return true;

@@ -119,13 +119,13 @@ namespace AIClient
                 }
             }
 
-            if (CanDoFamilyAtomics(character))
+            /*if (CanDoFamilyAtomics(character))
             {
                 // TODO: do not use random field as target of the bomb, but a strategic target
                 Random random = new Random();
                 Position targetPosition = new Position(random.Next(Party.GetInstance().World.Map.MAP_WIDTH), random.Next(Party.GetInstance().World.Map.MAP_HEIGHT));
                 possibleMoves.Add(new Moves.Action(MoveTypes.FAMILY_ATOMICS, targetPosition));
-            }
+            }*/
 
             if (CanDoSpiceHoarding(character))
             {

@@ -643,9 +643,8 @@ namespace AIClient
         }
 
         public override void OnAtomicsUpdateDemandMessage(AtomicsUpdateDemandMessage atomicUpdateDemandMessage)
-
         {
-            Log.Information("ATOMICS");
+
         }
         
 
