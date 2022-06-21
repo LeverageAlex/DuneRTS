@@ -1199,7 +1199,7 @@ namespace GameData
                     }
                     else
                     {
-                        if (!party.map.fields[heliRequestMessage.target.y, heliRequestMessage.target.x].IsCharacterStayingOnThisField)  //if the mapfield is occupied by a character they swap positions
+                        if (!party.map.fields[heliRequestMessage.target.y, heliRequestMessage.target.x].IsCharacterStayingOnThisField)  
                         {
                             targetField = Map.instance.GetMapFieldAtPosition(heliRequestMessage.target.x, heliRequestMessage.target.y);
                         }
@@ -1216,19 +1216,8 @@ namespace GameData
 
                     DoSendHeliDemand(activePlayer.ClientID, heliRequestMessage.characterID, new Position(targetField.XCoordinate, targetField.ZCoordinate), crash);
 
-                    // DoSendMovementDemand(msg.clientID, passiveCharacter.CharacterId, new List<Position> { new Position(movingCharacter.CurrentMapfield.XCoordinate, movingCharacter.CurrentMapfield.ZCoordinate) });
-                    // movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]);
-                    //   }
-                    //  else
-                    //  {
-                    //movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]); //move character 1 field along its path
-                    // }
-                    //path.Add(position);
 
 
-
-
-                    // throw new NotImplementedException();
                 }
             }
         }
