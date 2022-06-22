@@ -10,7 +10,8 @@ namespace GameData.network.util.world
     /// </summary>
     public class PartyReference
     {
-        [JsonProperty]
+
+        [JsonProperty("$ref")]
         public string refr;
 
         public PartyReference(string refr)

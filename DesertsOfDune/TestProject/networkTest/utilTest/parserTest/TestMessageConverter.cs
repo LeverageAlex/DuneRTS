@@ -139,7 +139,7 @@ namespace TestProject.networkTest.utilTest.parserTest
             GameConfigMessage message = new GameConfigMessage(scenario, party, citiesToClients, new Position(0, 1));
             string serializedMessage = MessageConverter.FromMessage(message);
 
-            Assert.AreEqual("{\"type\":\"GAMECFG\",\"version\":\"1.1\",\"scenario\":[[\"String\",\"String\"],[\"String\",\"String\"]],\"party\":{\"refr\":\"#/definitions/partiekonfigschema\"},\"playerInfo\":[{\"clientID\":1234,\"clientName\":\"someName\",\"x\":2,\"y\":3},{\"clientID\":1234,\"clientName\":\"differentName\",\"x\":6,\"y\":6}],\"stormEye\":{\"x\":0,\"y\":1}}", serializedMessage);
+            Assert.AreEqual("{\"type\":\"GAMECFG\",\"version\":\"1.1\",\"scenario\":[[\"String\",\"String\"],[\"String\",\"String\"]],\"party\":{\"$ref\":\"#/definitions/partiekonfigschema\"},\"playerInfo\":[{\"clientID\":1234,\"clientName\":\"someName\",\"x\":2,\"y\":3},{\"clientID\":1234,\"clientName\":\"differentName\",\"x\":6,\"y\":6}],\"stormEye\":{\"x\":0,\"y\":1}}", serializedMessage);
         }
 
         /// <summary>
