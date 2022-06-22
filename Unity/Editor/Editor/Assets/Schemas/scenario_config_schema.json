@@ -2,7 +2,7 @@
     "type": "object",
     "title": "The Scenarioconfiguration",
     "description": "This is the json schema of the scenario configuration",
-    "required": ["scenario"],
+    "required": [ "scenario" ],
     "maxProperties": 1,
     "additionalProperties": true,
     "properties": {
@@ -28,10 +28,11 @@
                         "MOUNTAINS",
                         "PLATEAU",
                         "DUNE",
-                        "FLAT_SAND"
+                        "FLAT_SAND",
+                        "HELIPORT"
                     ]
                 }
- 		 	}
-	    }
+            }
+        }
     }
 }
