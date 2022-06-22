@@ -4,7 +4,6 @@ using GameData.network.messages;
 using GameData.network.util.world;
 using System.Collections.Generic;
 using GameData.Configuration;
-using GameData.Configuration;
 using GameData.network.util.world.character;
 using GameData.network.util.enums;
 using GameData.network.util.world.mapField;
@@ -38,6 +37,7 @@ namespace TestProject.networkTest.utilTest.parserTest
                 PartyConfiguration.GetInstance().mentat,
                 PartyConfiguration.GetInstance().beneGesserit,
                 PartyConfiguration.GetInstance().fighter);
+
         }
 
         // The following tests validate the FromMessage Method
@@ -135,12 +135,12 @@ namespace TestProject.networkTest.utilTest.parserTest
             scenario.Add(new List<string>(arr2));
             string party = JsonConvert.SerializeObject(PartyConfiguration.GetInstance());
             PlayerInfo cityToClient1 = new PlayerInfo(1234, "someName", 2, 3);
-        PlayerInfo cityToClient2 = new PlayerInfo(1234, "differentName", 6, 6);
-        PlayerInfo[] citiesToClients = { cityToClient1, cityToClient2 };
-        GameConfigMessage message = new GameConfigMessage(scenario, PartyConfiguration.GetInstance(), citiesToClients, new Position(0, 1));
-        string serializedMessage = MessageConverter.FromMessage(message);
+            PlayerInfo cityToClient2 = new PlayerInfo(1234, "differentName", 6, 6);
+            PlayerInfo[] citiesToClients = { cityToClient1, cityToClient2 };
+            GameConfigMessage message = new GameConfigMessage(scenario, PartyConfiguration.GetInstance(), citiesToClients, new Position(0, 1));
+            string serializedMessage = MessageConverter.FromMessage(message);
 
-        Assert.AreEqual("{\"type\":\"GAMECFG\",\"version\":\"1.1\",\"scenario\":[[\"String\",\"String\"],[\"String\",\"String\"]],\"party\":{\"noble\":{\"maxHP\":20,\"maxMP\":21,\"maxAP\":22,\"damage\":4,\"inventorySize\":8,\"healingHP\":6},\"mentat\":{\"maxHP\":20,\"maxMP\":21,\"maxAP\":22,\"damage\":4,\"inventorySize\":8,\"healingHP\":6},\"beneGesserit\":{\"maxHP\":20,\"maxMP\":21,\"maxAP\":22,\"damage\":4,\"inventorySize\":8,\"healingHP\":6},\"fighter\":{\"maxHP\":20,\"maxMP\":21,\"maxAP\":22,\"damage\":4,\"inventorySize\":8,\"healingHP\":6},\"numbOfRounds\":10,\"actionTimeUserClient\":5000,\"actionTimeAiClient\":1000,\"highGroundBonusRatio\":0.5,\"lowerGroundMalusRatio\":0.5,\"kanlySuccessProbability\":0.5,\"spiceMinimum\":10,\"cellularAutomaton\":\"B2/S23\",\"sandWormSpeed\":10,\"sandWormSpawnDistance\":10,\"cloneProbability\":0.5,\"minPauseTime\":10},\"playerInfo\":[{\"clientID\":1234,\"clientName\":\"someName\",\"x\":2,\"y\":3},{\"clientID\":1234,\"clientName\":\"differentName\",\"x\":6,\"y\":6}],\"stormEye\":{\"x\":0,\"y\":1}}", serializedMessage);
+            Assert.AreEqual("{\"type\":\"GAMECFG\",\"version\":\"1.1\",\"scenario\":[[\"String\",\"String\"],[\"String\",\"String\"]],\"party\":{\"noble\":{\"maxHP\":20,\"maxMP\":21,\"maxAP\":22,\"damage\":4,\"inventorySize\":8,\"healingHP\":6},\"mentat\":{\"maxHP\":20,\"maxMP\":21,\"maxAP\":22,\"damage\":4,\"inventorySize\":8,\"healingHP\":6},\"beneGesserit\":{\"maxHP\":20,\"maxMP\":21,\"maxAP\":22,\"damage\":4,\"inventorySize\":8,\"healingHP\":6},\"fighter\":{\"maxHP\":20,\"maxMP\":21,\"maxAP\":22,\"damage\":4,\"inventorySize\":8,\"healingHP\":6},\"numbOfRounds\":10,\"actionTimeUserClient\":5000,\"actionTimeAiClient\":1000,\"highGroundBonusRatio\":0.5,\"lowerGroundMalusRatio\":0.5,\"kanlySuccessProbability\":0.5,\"spiceMinimum\":10,\"cellularAutomaton\":\"B2/S23\",\"sandWormSpeed\":10,\"sandWormSpawnDistance\":10,\"cloneProbability\":0.5,\"minPauseTime\":10,\"crashProbability\":0.0},\"playerInfo\":[{\"clientID\":1234,\"clientName\":\"someName\",\"x\":2,\"y\":3},{\"clientID\":1234,\"clientName\":\"differentName\",\"x\":6,\"y\":6}],\"stormEye\":{\"x\":0,\"y\":1}}", serializedMessage);
         }
 
     /// <summary>
@@ -633,7 +633,8 @@ namespace TestProject.networkTest.utilTest.parserTest
     [Test]
     public void TestToGameConfigMessage()
     {
-        string serializedMessage = "{\"type\":\"GAMECFG\",\"version\":\"1.1\",\"scenario\":[[\"String\",\"String\"],[\"String\",\"String\"]],\"party\":{\"noble\":{\"maxHP\": 20,\"maxMP\": 21,\"maxAP\": 22,\"damage\": 4,\"inventorySize\": 8,\"healingHP\": 6},\"mentat\": {\"maxHP\": 20,\"maxMP\": 21,\"maxAP\": 22,\"damage\": 4,\"inventorySize\": 8,\"healingHP\": 6},\"beneGesserit\": {\"maxHP\": 20,\"maxMP\": 21,\"maxAP\": 22,\"damage\": 4,\"inventorySize\": 8,\"healingHP\": 6},\"fighter\": {\"maxHP\": 20,\"maxMP\": 21,\"maxAP\": 22,\"damage\": 4,\"inventorySize\": 8,\"healingHP\": 6},\"numbOfRounds\": 10,\"actionTimeUserClient\": 5000,\"actionTimeAiClient\": 1000,\"highGroundBonusRatio\": 0.5,\"lowerGroundMalusRatio\": 0.5,\"kanlySuccessProbability\": 0.5,\"spiceMinimum\": 10,\"cellularAutomaton\": \"B2/S23\",\"sandWormSpeed\": 10,\"sandWormSpawnDistance\": 10,\"cloneProbability\": 0.5,\"minPauseTime\": 10},\"playerInfo\":[{\"clientID\":1234,\"clientName\":\"someName\",\"x\":2,\"y\":3},{\"clientID\":1234,\"clientName\":\"differentName\",\"x\":6,\"y\":6}],\"stormEye\":{\"x\":0,\"y\":1}}";
+            string serializedMessage = "{\"type\":\"GAMECFG\",\"version\":\"1.1\",\"scenario\":[[\"String\",\"String\"],[\"String\",\"String\"]],\"party\":{\"noble\":{\"maxHP\":20,\"maxMP\":21,\"maxAP\":22,\"damage\":4,\"inventorySize\":8,\"healingHP\":6},\"mentat\":{\"maxHP\":20,\"maxMP\":21,\"maxAP\":22,\"damage\":4,\"inventorySize\":8,\"healingHP\":6},\"beneGesserit\":{\"maxHP\":20,\"maxMP\":21,\"maxAP\":22,\"damage\":4,\"inventorySize\":8,\"healingHP\":6},\"fighter\":{\"maxHP\":20,\"maxMP\":21,\"maxAP\":22,\"damage\":4,\"inventorySize\":8,\"healingHP\":6},\"numbOfRounds\":10,\"actionTimeUserClient\":5000,\"actionTimeAiClient\":1000,\"highGroundBonusRatio\":0.5,\"lowerGroundMalusRatio\":0.5,\"kanlySuccessProbability\":0.5,\"spiceMinimum\":10,\"cellularAutomaton\":\"B2/S23\",\"sandWormSpeed\":10,\"sandWormSpawnDistance\":10,\"cloneProbability\":0.5,\"minPauseTime\":10,\"crashProbability\":0.0},\"playerInfo\":[{\"clientID\":1234,\"clientName\":\"someName\",\"x\":2,\"y\":3},{\"clientID\":1234,\"clientName\":\"differentName\",\"x\":6,\"y\":6}],\"stormEye\":{\"x\":0,\"y\":1}}";
+        //string serializedMessage = "{\"type\":\"GAMECFG\",\"version\":\"1.1\",\"scenario\":[[\"String\",\"String\"],[\"String\",\"String\"]],\"party\":{\"noble\":{\"maxHP\": 20,\"maxMP\": 21,\"maxAP\": 22,\"damage\": 4,\"inventorySize\": 8,\"healingHP\": 6},\"mentat\": {\"maxHP\": 20,\"maxMP\": 21,\"maxAP\": 22,\"damage\": 4,\"inventorySize\": 8,\"healingHP\": 6},\"beneGesserit\": {\"maxHP\": 20,\"maxMP\": 21,\"maxAP\": 22,\"damage\": 4,\"inventorySize\": 8,\"healingHP\": 6},\"fighter\": {\"maxHP\": 20,\"maxMP\": 21,\"maxAP\": 22,\"damage\": 4,\"inventorySize\": 8,\"healingHP\": 6},\"numbOfRounds\": 10,\"actionTimeUserClient\": 5000,\"actionTimeAiClient\": 1000,\"highGroundBonusRatio\": 0.5,\"lowerGroundMalusRatio\": 0.5,\"kanlySuccessProbability\": 0.5,\"spiceMinimum\": 10,\"cellularAutomaton\": \"B2/S23\",\"sandWormSpeed\": 10,\"sandWormSpawnDistance\": 10,\"cloneProbability\": 0.5,\"minPauseTime\": 10},\"playerInfo\":[{\"clientID\":1234,\"clientName\":\"someName\",\"x\":2,\"y\":3},{\"clientID\":1234,\"clientName\":\"differentName\",\"x\":6,\"y\":6}],\"stormEye\":{\"x\":0,\"y\":1}}";
         Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
 
         Assert.AreEqual("GAMECFG", ((GameConfigMessage)deserializedMessage).GetMessageTypeAsString());
@@ -655,7 +656,7 @@ namespace TestProject.networkTest.utilTest.parserTest
         Assert.AreEqual(1234, ((GameConfigMessage)deserializedMessage).playerInfo[1].clientID);
         Assert.AreEqual(0, ((GameConfigMessage)deserializedMessage).stormEye.x);
         Assert.AreEqual(1, ((GameConfigMessage)deserializedMessage).stormEye.y);
-
+        Assert.AreEqual(0, ((GameConfigMessage)deserializedMessage).party.crashProbability);
     }
 
     /// <summary>
