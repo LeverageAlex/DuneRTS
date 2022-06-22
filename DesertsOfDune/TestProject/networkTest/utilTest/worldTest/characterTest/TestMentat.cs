@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using GameData.network.util.world.character;
+using GameData.Configuration;
+using GameData.network.util.world;
 
 namespace UnitTestSuite.networkTest.utilTest.worldTest.characterTest
 {
@@ -16,127 +18,25 @@ namespace UnitTestSuite.networkTest.utilTest.worldTest.characterTest
         [SetUp]
         public void Setup()
         {
+            ConfigurationFileLoader loader = new ConfigurationFileLoader();
+
+            // load scenario and create a new scenario configuration
+            ScenarioConfiguration scenarioConfiguration = loader.LoadScenarioConfiguration("../.././../ConfigurationFiles/team08.scenario.json");
+            ScenarioConfiguration.CreateInstance(scenarioConfiguration);
+
+            // load the party configuration and create a new party configuration class
+            PartyConfiguration partyConfiguration = loader.LoadPartyConfiguration("../.././../ConfigurationFiles/team08.party.json");
+            PartyConfiguration.SetInstance(partyConfiguration);
+
+            //Initialization for greatHouses in GameData project
+            GameData.Configuration.Configuration.InitializeConfigurations();
+            // Initialization for the character configurations in GameData project
+            GameData.Configuration.Configuration.InitializeCharacterConfiguration(
+                PartyConfiguration.GetInstance().noble,
+                PartyConfiguration.GetInstance().mentat,
+                PartyConfiguration.GetInstance().beneGesserit,
+                PartyConfiguration.GetInstance().fighter);
         }
-
-        /// <summary>
-        /// This Testcase validates the behavior of the method atack
-        /// </summary>
-        [Test]
-        public void TestAtack()
-        {
-            // TODO: implement logic
-        }
-
-        /// <summary>
-        /// This Testcase validates the behavior of the method DecreaseHP
-        /// </summary>
-        [Test]
-        public void TestDecreaseHP()
-        {
-            // TODO: implement logic
-        }
-
-        /// <summary>
-        /// This Testcase validates the behavior of the method IsDead
-        /// </summary>
-        [Test]
-        public void TestIsDead()
-        {
-            // TODO: implement logic
-        }
-
-
-        /// <summary>
-        /// This Testcase validates the behavior of the method IsLoud
-        /// </summary>
-        [Test]
-        public void Testloud()
-        {
-            BeneGesserit bene = new BeneGesserit(1, 2, 3, 4, 5, 6, 7, 8, 9, 8, true, false);
-            bool loud = bene.IsLoud();
-            Assert.IsTrue(loud);
-        }
-
-        /// <summary>
-        /// This Testcase validates the behavior of the method CollectSpice
-        /// </summary>
-        [Test]
-        public void TestCollectSpice()
-        {
-            BeneGesserit bene = new BeneGesserit(1, 2, 3, 4, 5, 6, 7, 8, 9, 8, true, false);
-            bool loud = bene.CollectSpice();
-            Assert.IsTrue(loud);
-        }
-
-
-
-        /// <summary>
-        /// This Testcase validates the behavior of the method HealIfHasntMoved
-        /// </summary>
-        [Test]
-        public void TestHealIfHasntMoved()
-        {
-            // TODO: implement logic
-        }
-
-        /// <summary>
-        /// This Testcase validates the behavior of the method SpentMP
-        /// </summary>
-        [Test]
-        public void TestSpentMP()
-        {
-            // TODO: implement logic
-        }
-
-
-        /// <summary>
-        /// This Testcase validates the behavior of the method SpentAp
-        /// </summary>
-        [Test]
-        public void TestSpentAp()
-        {
-            // TODO: implement logic
-        }
-
-
-        /// <summary>
-        /// This Testcase validates the behavior of the method resetMPandAp
-        /// </summary>
-        [Test]
-        public void TestresetMPandAp()
-        {
-            // TODO: implement logic
-        }
-
-
-        /// <summary>
-        /// This Testcase validates the behavior of the method StandingNextToCityField
-        /// </summary>
-        [Test]
-        public void TestStandingNextToCityField()
-        {
-            // TODO: implement logic
-        }
-
-
-        /// <summary>
-        /// This Testcase validates the behavior of the method Movement
-        /// </summary>
-        [Test]
-        public void TestMovement()
-        {
-            // TODO: implement logic
-        }
-
-        /// <summary>
-        /// This Testcase validates the behavior of the method GiftSpice
-        /// </summary>
-        [Test]
-        public void TestGiftSpice()
-        {
-            // TODO: implement logic
-        }
-
 
         /// <summary>
         /// This Testcase validates the behavior of the method SpiceHoarding
@@ -144,8 +44,16 @@ namespace UnitTestSuite.networkTest.utilTest.worldTest.characterTest
         [Test]
         public void TestSpiceHoarding()
         {
-            // TODO: implement logic
+            Mentat mentat = new Mentat("");
+            Map map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
+            mentat.CurrentMapfield = map.fields[0, 1];
+            map.fields[0, 2].hasSpice = true;
+            Assert.True(map.fields[0, 2].hasSpice);
+            Assert.AreEqual(0, mentat.inventoryUsed);
+            bool actionPossible = mentat.SpiceHoarding(map);
+            Assert.AreEqual(1,mentat.inventoryUsed);
+            Assert.False(map.fields[0, 2].hasSpice);
+            Assert.True(actionPossible);
         }
-        
     }
 }
