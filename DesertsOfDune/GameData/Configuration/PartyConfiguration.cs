@@ -43,6 +43,8 @@ namespace GameData.Configuration
         public double cloneProbability { get; set; }
         [JsonProperty]
         public int minPauseTime { get; set; }
+        [JsonProperty]
+        public double crashProbability { get; set; }
 
         private static PartyConfiguration singleton;
 
