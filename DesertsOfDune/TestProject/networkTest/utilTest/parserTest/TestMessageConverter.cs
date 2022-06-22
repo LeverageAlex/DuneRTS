@@ -632,7 +632,7 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestToGameConfigMessage()
         {
-            string serializedMessage = "{\"type\":\"GAMECFG\",\"version\":\"1.1\",\"scenario\":[[\"String\",\"String\"],[\"String\",\"String\"]],\"party\":{\"refr\":\"#/definitions/partiekonfigschema\"},\"cityToClient\":[{\"clientID\":1234,\"x\":2,\"y\":3},{\"clientID\":1234,\"x\":6,\"y\":6}],\"stormEye\":{\"x\":0,\"y\":1}}";
+            string serializedMessage = "{\"type\":\"GAMECFG\",\"version\":\"1.1\",\"scenario\":[[\"String\",\"String\"],[\"String\",\"String\"]],\"party\":{\"refr\":\"#/definitions/partiekonfigschema\"},\"playerInfo\":[{\"clientID\":1234,\"clientName\":\"someName\",\"x\":2,\"y\":3},{\"clientID\":1234,\"clientName\":\"differentName\",\"x\":6,\"y\":6}],\"stormEye\":{\"x\":0,\"y\":1}}";
             Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
 
             Assert.AreEqual("GAMECFG", ((GameConfigMessage)deserializedMessage).GetMessageTypeAsString());
@@ -645,9 +645,11 @@ namespace TestProject.networkTest.utilTest.parserTest
             Assert.AreEqual("#/definitions/partiekonfigschema", ((GameConfigMessage)deserializedMessage).party.refr);
             Assert.AreEqual(2, ((GameConfigMessage)deserializedMessage).playerInfo[0].x);
             Assert.AreEqual(3, ((GameConfigMessage)deserializedMessage).playerInfo[0].y);
+            Assert.AreEqual("someName", ((GameConfigMessage)deserializedMessage).playerInfo[0].clientName);
             Assert.AreEqual(1234, ((GameConfigMessage)deserializedMessage).playerInfo[0].clientID);
             Assert.AreEqual(6, ((GameConfigMessage)deserializedMessage).playerInfo[1].x);
             Assert.AreEqual(6, ((GameConfigMessage)deserializedMessage).playerInfo[1].y);
+            Assert.AreEqual("differentName", ((GameConfigMessage)deserializedMessage).playerInfo[1].clientName);
             Assert.AreEqual(1234, ((GameConfigMessage)deserializedMessage).playerInfo[1].clientID);
             Assert.AreEqual(0, ((GameConfigMessage)deserializedMessage).stormEye.x);
             Assert.AreEqual(1, ((GameConfigMessage)deserializedMessage).stormEye.y);
