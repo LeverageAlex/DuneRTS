@@ -207,17 +207,17 @@ public class PlayerMessageController : MessageController
             //   Debug.Log("Pre Crash" + gameConfigMessage.cityToClient[0]);
             if (SessionHandler.isPlayer)
             {
-                if (gameConfigMessage.cityToClient[0].clientID == SessionHandler.clientId)
+                if (gameConfigMessage.playerInfo[0].clientID == SessionHandler.clientId)
                 {
-                    SessionHandler.enemyClientId = gameConfigMessage.cityToClient[1].clientID;
+                    SessionHandler.enemyClientId = gameConfigMessage.playerInfo[1].clientID;
                 }
                 else
                 {
-                    SessionHandler.enemyClientId = gameConfigMessage.cityToClient[0].clientID;
+                    SessionHandler.enemyClientId = gameConfigMessage.playerInfo[0].clientID;
                 }
                 // Debug.Log("Soweit Clean");
-                MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[0].x, gameConfigMessage.cityToClient[0].y).cityOwnerId = gameConfigMessage.cityToClient[0].clientID;
-                MapManager.instance.getNodeFromPos(gameConfigMessage.cityToClient[1].x, gameConfigMessage.cityToClient[1].y).cityOwnerId = gameConfigMessage.cityToClient[1].clientID;
+                MapManager.instance.getNodeFromPos(gameConfigMessage.playerInfo[0].x, gameConfigMessage.playerInfo[0].y).cityOwnerId = gameConfigMessage.playerInfo[0].clientID;
+                MapManager.instance.getNodeFromPos(gameConfigMessage.playerInfo[1].x, gameConfigMessage.playerInfo[1].y).cityOwnerId = gameConfigMessage.playerInfo[1].clientID;
             }
             InGameMenuManager.getInstance().SwitchToInGameUI();
             
