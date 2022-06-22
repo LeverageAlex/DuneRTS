@@ -879,6 +879,7 @@ public class PlayerMessageController : MessageController
     {
         IEnumerator helidemand()
         {
+            CharacterTurnHandler.instance.heliportButton.SetActive(false);
             CharacterMgr.instance.spawnHelicopter(CharacterMgr.instance.getCharScriptByID(heliDemandMessage.characterID), heliDemandMessage.target, heliDemandMessage.crash);
             yield return null;
         }

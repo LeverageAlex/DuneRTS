@@ -258,15 +258,7 @@ public class CharacterTurnHandler : MonoBehaviour
         }
         if (SessionHandler.isPlayer)
         {
-            if (MapManager.instance.getNodeFromPos(selectedCharacter.X, selectedCharacter.Z).nodeTypeEnum == NodeTypeEnum.HELIPORT)
-            {
-                heliportButton.SetActive(true);
-            }
-            else
-            {
-                heliportButton.SetActive(false);
-            }
-
+            heliportButton.SetActive(false);
 
             if (!selectedCharacter.isEligibleForSpecialAction())
             {
