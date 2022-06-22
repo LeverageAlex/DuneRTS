@@ -24,6 +24,7 @@ public class PlayerMessageController : MessageController
     /// <param name="isCpu">weather the client is a cpu or not</param>
     public void DoJoin(string clientName, bool active, bool isCpu)
     {
+        SessionHandler.endGame = false;
         Log.Debug("Starting Join!");
         SessionHandler.isPlayer = active;
         JoinMessage joinMessage = new JoinMessage(clientName, active, isCpu);
@@ -323,6 +324,7 @@ public class PlayerMessageController : MessageController
         IEnumerator gameEnd()
         {
             InGameMenuManager.getInstance().DemandEndGame("The Winner is: " + gameEndMessage.winnerID + "and the statistics are: " + gameEndMessage.statistics.ToString());
+            SessionHandler.endGame = true;
             yield return null;
         }
         UnityMainThreadDispatcher.Instance().Enqueue(gameEnd());
@@ -705,7 +707,7 @@ public class PlayerMessageController : MessageController
                     enemy = MapManager.instance.GetCharOnNode(actionDemandMessage.specs.target.x, actionDemandMessage.specs.target.y);
                     character.Action_VoiceExecution(enemy);
                     break;
-                case "SWORDSPIN":
+                case "SWORD_SPIN":
                     character.Attack_SwordSpinExecution();
                     break;
             }
@@ -824,7 +826,10 @@ public class PlayerMessageController : MessageController
         // TODO: implement logic
         IEnumerator moveWorm()
         {
-            UnityMainThreadDispatcher.allowDequeue = false;
+            if (!SessionHandler.endGame)
+            {
+                UnityMainThreadDispatcher.allowDequeue = false;
+            }
             CharacterMgr.instance.SandwormMove(sandwormMoveMessage.path);
             yield return null;
         }

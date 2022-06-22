@@ -409,7 +409,7 @@ namespace GameData
                     {
                         case ActionType.ATTACK:
                             action = ActionType.ATTACK;
-                            if (!friendlyFire && !targetCharacter.IsInSandStorm(map))
+                            if (!friendlyFire && targetCharacter != null && !targetCharacter.IsInSandStorm(map))
                             {
                                 DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
                                 actionCharacter.Attack(targetCharacter);
@@ -562,6 +562,7 @@ namespace GameData
                             {
                                 DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
                                 charactersHit = actionCharacter.SwordSpin(map);
+                                actionCharacter.SpentAp(actionCharacter.APcurrent);
                                 foreach (var character in charactersHit)
                                 {
                                     if (character.IsDead())

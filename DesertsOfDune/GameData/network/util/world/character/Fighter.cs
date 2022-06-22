@@ -74,13 +74,13 @@ namespace GameData.network.util.world.character
                     {
                         if(mapfield.Character.greatHouse != this.greatHouse && !mapfield.Character.IsInSandStorm(map))
                         {
-                            Attack(mapfield.Character);
                             charactersHit.Add(mapfield.Character);
+                            Attack(mapfield.Character);
+
                         }
 
                     }
                 }
-                SpentAp(APmax);
             }
             return charactersHit;
         }
