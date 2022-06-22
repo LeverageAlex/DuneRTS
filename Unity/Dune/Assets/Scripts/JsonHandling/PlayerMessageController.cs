@@ -219,6 +219,12 @@ public class PlayerMessageController : MessageController
                 MapManager.instance.getNodeFromPos(gameConfigMessage.playerInfo[0].x, gameConfigMessage.playerInfo[0].y).cityOwnerId = gameConfigMessage.playerInfo[0].clientID;
                 MapManager.instance.getNodeFromPos(gameConfigMessage.playerInfo[1].x, gameConfigMessage.playerInfo[1].y).cityOwnerId = gameConfigMessage.playerInfo[1].clientID;
             }
+            else
+            {
+                SessionHandler.enemyClientId = gameConfigMessage.playerInfo[1].clientID;
+                SessionHandler.clientId = gameConfigMessage.playerInfo[0].clientID;
+
+            }
             InGameMenuManager.getInstance().SwitchToInGameUI();
             
             yield return null;
