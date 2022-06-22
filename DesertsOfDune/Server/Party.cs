@@ -136,9 +136,9 @@ namespace GameData
             PlaceCharactersAroundCity();
 
             Log.Information("The party was prepared, so both player chose their Greathouse. The party now will start ... ");
-            //roundHandlerThread = new Thread(RoundHandler.NextRound);
-            //roundHandlerThread.Start();
-            RoundHandler.NextRound();
+            roundHandlerThread = new Thread(RoundHandler.NextRound);
+            roundHandlerThread.Start();
+          //  RoundHandler.NextRound();
             Log.Debug("Triggered first round by round handler");
         }
 
