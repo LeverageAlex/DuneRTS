@@ -110,7 +110,11 @@ namespace GameData.network.util.world
                     newMap[y, x].XCoordinate = x;
                     newMap[y, x].ZCoordinate = y;
 
-                    newMap[y, x].PlaceCharacter(GetMapFieldAtPosition(x,y).Character);
+                    if (GetMapFieldAtPosition(x, y).Character != null && !GetMapFieldAtPosition(x, y).Character.KilledBySandworm)
+                    {
+                        newMap[y, x].PlaceCharacter(GetMapFieldAtPosition(x, y).Character);
+                    }
+
                 }
             }
             return newMap;
@@ -168,7 +172,8 @@ namespace GameData.network.util.world
             if (amountOfNeighbors == 0)
             {
                 return null;
-            } else
+            }
+            else
             {
                 int index = random.Next(amountOfNeighbors);
                 return neighbors[index];
@@ -227,7 +232,7 @@ namespace GameData.network.util.world
             }
             else
             {
-                
+
                 return null;
             }
         }
@@ -348,11 +353,12 @@ namespace GameData.network.util.world
                     if (GetMapFieldAtPosition(x, y).IsCharacterStayingOnThisField)
                     {
                         builder.Append("  C  ");
-                    } else
+                    }
+                    else
                     {
                         builder.Append(GetMapFieldAtPosition(x, y).tileType.ToString());
                     }
-         
+
                     if (GetMapFieldAtPosition(x, y).isInSandstorm)
                     {
                         builder.Append(" x ");
@@ -449,11 +455,11 @@ namespace GameData.network.util.world
             }
 
             //check if sandstormFields get cut by the pathLine
-            foreach(MapField m in GetSandstormFieldsOnMap())
+            foreach (MapField m in GetSandstormFieldsOnMap())
             {
-                if(IsFieldCutByLine(m.XCoordinate, m.ZCoordinate, mx, tx, my, ty, horicontal, vertical)) return true;
+                if (IsFieldCutByLine(m.XCoordinate, m.ZCoordinate, mx, tx, my, ty, horicontal, vertical)) return true;
             }
-                       
+
             return false;
         }
 
@@ -486,7 +492,8 @@ namespace GameData.network.util.world
                 if (yright > (y - 0.5f) && yright <= (y + 0.5f)) cuts++;//checking bounds
             }
 
-            if (vertical) { 
+            if (vertical)
+            {
                 //bottom edge
                 float xbottom = (y - 0.5f) * my + ty;//f(y)
                 if (xbottom > (x - 0.5f) && xbottom <= (x + 0.5f)) cuts++;//checking bounds

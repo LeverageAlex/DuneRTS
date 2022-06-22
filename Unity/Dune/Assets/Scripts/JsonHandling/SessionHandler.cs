@@ -14,6 +14,7 @@ public static class SessionHandler
     public static string clientSecret;
     public static string clientName;
     public static string enemyName;
+    public static bool endGame;
     public static bool isPlayer = true;
     public static int viewerId;
     public static int atomicsLeft;

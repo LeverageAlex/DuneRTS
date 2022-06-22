@@ -409,7 +409,7 @@ namespace GameData
                     {
                         case ActionType.ATTACK:
                             action = ActionType.ATTACK;
-                            if (!friendlyFire && !targetCharacter.IsInSandStorm(map))
+                            if (!friendlyFire && targetCharacter != null && !targetCharacter.IsInSandStorm(map))
                             {
                                 DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
                                 actionCharacter.Attack(targetCharacter);

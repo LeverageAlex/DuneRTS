@@ -32,7 +32,7 @@ namespace GameData.server.roundHandler
             this._map = map;
             this._currentField = map.GetRandomDesertField();
             this._lastCharacterEaten = false;
-            wormDespawnTimer = new Timer(5);
+            wormDespawnTimer = new Timer(500);
             wormDespawnTimer.Elapsed += OnTimerDespawnWorm;
             wormDespawnTimer.AutoReset = false;
 
@@ -71,7 +71,7 @@ namespace GameData.server.roundHandler
             _currentField.IsApproachable = false;
 
             // move the shai hulud
-            Party.GetInstance().messageController.DoMoveSandwormDemand(path);
+            // Party.GetInstance().messageController.DoMoveSandwormDemand(path);
 
             // kill target character and send message, that stats of character changed
             _currentField.Character.KilledBySandworm = true;
