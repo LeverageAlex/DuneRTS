@@ -250,6 +250,8 @@ namespace GameData
                         //check if movement is on walkable terrain
                         if (party.map.fields[position.y, position.x].tileType != TileType.MOUNTAINS.ToString() && party.map.fields[position.y, position.x].tileType != TileType.CITY.ToString()) //check needed and not implemented utils
                         {
+                            bool movementWasAllowed = false;
+
                             if (party.map.fields[position.y, position.x].IsCharacterStayingOnThisField)  //if the mapfield is occupied by a character they swap positions
                             {
                                 // TODO: check this!
@@ -258,34 +260,37 @@ namespace GameData
                                 {
                                     passiveCharacter.Movement(passiveCharacter.CurrentMapfield, movingCharacter.CurrentMapfield);
                                     DoSendMovementDemand(msg.clientID, passiveCharacter.CharacterId, new List<Position> { new Position(movingCharacter.CurrentMapfield.XCoordinate, movingCharacter.CurrentMapfield.ZCoordinate) });
-                                    movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]);
+                                    movementWasAllowed = movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]);
                                 }
                             }
                             else
                             {
-                                movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]); //move character 1 field along its path
+                                movementWasAllowed = movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]); //move character 1 field along its path
                             }
                             //path.Add(position);
-                            newPath.Add(position);
-                            if (party.map.fields[position.y, position.x].tileType == TileType.FLAT_SAND.ToString() || party.map.fields[position.y, position.x].tileType == TileType.DUNE.ToString())
+                            if (movementWasAllowed)
                             {
-                                if (alreadySteppedOnSandField)
+                                newPath.Add(position);
+                                if (party.map.fields[position.y, position.x].tileType == TileType.FLAT_SAND.ToString() || party.map.fields[position.y, position.x].tileType == TileType.DUNE.ToString())
                                 {
-                                    movingCharacter.SetLoud();
+                                    if (alreadySteppedOnSandField)
+                                    {
+                                        movingCharacter.SetLoud();
+                                    }
+                                    else
+                                    {
+                                        alreadySteppedOnSandField = true;
+                                    }
                                 }
-                                else
+                                //deliver spice to city if city is neighborfield
+                                foreach (var mapfield in party.map.GetNeighborFields(movingCharacter.CurrentMapfield))
                                 {
-                                    alreadySteppedOnSandField = true;
-                                }
-                            }
-                            //deliver spice to city if city is neighborfield
-                            foreach (var mapfield in party.map.GetNeighborFields(movingCharacter.CurrentMapfield))
-                            {
-                                if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
-                                {
-                                    activePlayer.statistics.AddToHouseSpiceStorage(movingCharacter.inventoryUsed);
-                                    movingCharacter.inventoryUsed = 0;
-                                    DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
+                                    if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
+                                    {
+                                        activePlayer.statistics.AddToHouseSpiceStorage(movingCharacter.inventoryUsed);
+                                        movingCharacter.inventoryUsed = 0;
+                                        DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
+                                    }
                                 }
                             }
                         }
@@ -301,9 +306,13 @@ namespace GameData
                 }
             }
 
-            DoSendMovementDemand(msg.clientID, msg.characterID, newPath);
-            DoSendChangeCharacterStatsDemand(msg.clientID, msg.characterID, new CharacterStatistics(movingCharacter));
+            if (newPath.Count != 0)
+            {
+                DoSendMovementDemand(msg.clientID, msg.characterID, newPath);
+                DoSendChangeCharacterStatsDemand(msg.clientID, msg.characterID, new CharacterStatistics(movingCharacter));
 
+                // TODO: movement request was invalid, so end the game!!!!!!
+            }
             if (movingCharacter.MPcurrent <= 0 && movingCharacter.APcurrent <= 0)
             {
                 //  CharacterTraitPhase.StopAndResetTimer();

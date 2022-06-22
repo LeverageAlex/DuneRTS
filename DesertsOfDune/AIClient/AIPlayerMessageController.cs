@@ -28,7 +28,7 @@ namespace AIClient
 
         public AIPlayerMessageController()
         {
-            _timer = new System.Timers.Timer(1500);
+            _timer = new System.Timers.Timer(1000);
             _timer.Elapsed += OnTimedEvent;
             _timer.AutoReset = true;
         }
@@ -461,10 +461,8 @@ namespace AIClient
             {
                 Position targetPosition = movementDemandMessage.specs.path[movementDemandMessage.specs.path.Count - 1];
 
-                Log.Debug($"The character with the id {movementDemandMessage.characterID} is moving to ({targetPosition.x},{targetPosition.y}).");
-
                 // get the character, who is moving
-                foreach (Character character in Party.GetInstance().World.Map.GetCharactersOnMap())
+                foreach (Character character in Party.GetInstance().World.AliveCharacters)
                 {
                     if (character.CharacterId == movementDemandMessage.characterID)
                     {
@@ -472,7 +470,6 @@ namespace AIClient
                         character.CurrentMapfield.DisplaceCharacter(character);
                         MapField newPosition = Party.GetInstance().World.Map.GetMapFieldAtPosition(targetPosition.x, targetPosition.y);
                         newPosition.PlaceCharacter(character);
-                        character.CurrentMapfield = newPosition;
                     }
                 }
             }
@@ -482,7 +479,7 @@ namespace AIClient
             }
 
             // check, if the demand message is for this client
-            if (movementDemandMessage.clientID == Party.GetInstance().ClientID)
+            if (movementDemandMessage.characterID == Party.GetInstance().CurrentCharacter.CharacterId)
             {
                 // do the next move
                 // SendRequestMessageDependingOnMoveType(GetNextMove(Party.GetInstance().CurrentCharacter), Party.GetInstance().CurrentCharacter);

@@ -309,11 +309,13 @@ namespace GameData.network.util.world
         /// <returns></returns>
         public bool Movement(MapField startField, MapField goalField)
         {
-            int dist = Math.Abs(startField.XCoordinate - goalField.XCoordinate) + Math.Abs(startField.ZCoordinate - goalField.ZCoordinate);
-            if (dist > 2)
+            double dist = Math.Sqrt(Math.Pow(Math.Abs(startField.XCoordinate - goalField.XCoordinate), 2) + Math.Pow(Math.Abs(startField.ZCoordinate - goalField.ZCoordinate), 2));
+            if (dist >= 2)
             {
                 return false;
             }
+
+
             SpentMP(1);
             CurrentMapfield = goalField;
             startField.DisplaceCharacter(this);
