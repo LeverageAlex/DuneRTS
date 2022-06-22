@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using AIClient.Moves;
 using GameData.Configuration;
 using GameData.network.controller;
@@ -171,9 +172,12 @@ namespace AIClient
         /// <param name="houseAcknowledgementMessage"></param>
         public override void OnHouseAcknowledgementMessage(HouseAcknowledgementMessage houseAcknowledgementMessage)
         {
-            Log.Information($"The great house for this client is {houseAcknowledgementMessage.houseName}");
+            if (houseAcknowledgementMessage.clientID == Party.GetInstance().ClientID)
+            {
+                Log.Information($"The great house for this client is {houseAcknowledgementMessage.houseName}");
 
-            Party.GetInstance().World.AssignedGreatHouse = houseAcknowledgementMessage.houseName;
+                Party.GetInstance().World.AssignedGreatHouse = houseAcknowledgementMessage.houseName;
+            }
         }
 
         /// <summary>
