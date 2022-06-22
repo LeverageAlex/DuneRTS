@@ -52,7 +52,7 @@ namespace GameData.server.roundHandler
         /// </summary>
         public void SendRequestForNextCharacter()
         {
-           // _timer.Stop();
+            _timer.Stop();
             if (_currentCharacterIndex < _allCharacters.Count)
             {
                 _currentCharacter = _allCharacters[_currentCharacterIndex++];
@@ -72,6 +72,8 @@ namespace GameData.server.roundHandler
                         }
                     }
                     RequestClientForNextCharacterTrait(_currentCharacter.CharacterId);
+
+
                 }
                 else
                 {
@@ -106,7 +108,7 @@ namespace GameData.server.roundHandler
                     if (character.CharacterId == characterID)
                     {
                         Party.GetInstance().messageController.DoSendTurnDemand(player.ClientID, characterID); //request client to execute a characterTrait
-                        // _timer.Start(); // starts the timer when characterTrait starts
+                         _timer.Start(); // starts the timer when characterTrait starts
                     }
                 }
             }
@@ -139,7 +141,7 @@ namespace GameData.server.roundHandler
             }
             _timer = new Timer(timeInMilliseconds);
             _timer.Elapsed += OnTimedEvent;
-            _timer.AutoReset = true;
+            _timer.AutoReset = false;
         }
 
         /// <summary>
