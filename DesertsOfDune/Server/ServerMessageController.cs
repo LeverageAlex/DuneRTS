@@ -899,15 +899,15 @@ namespace GameData
             City cityPlayer0 = Party.GetInstance().GetActivePlayers()[0].City;
             City cityPlayer1 = Party.GetInstance().GetActivePlayers()[1].City;
 
-            PlayerInfo[] cityToClientArray = new PlayerInfo[2];
-            cityToClientArray[0] = new PlayerInfo(client0ID,"", cityPlayer0.XCoordinate, cityPlayer0.ZCoordinate);
-            cityToClientArray[1] = new PlayerInfo(client1ID,"", cityPlayer1.XCoordinate, cityPlayer1.ZCoordinate);
+            PlayerInfo[] playerInfo = new PlayerInfo[2];
+            playerInfo[0] = new PlayerInfo(client0ID,"", cityPlayer0.XCoordinate, cityPlayer0.ZCoordinate);
+            playerInfo[1] = new PlayerInfo(client1ID,"", cityPlayer1.XCoordinate, cityPlayer1.ZCoordinate);
 
             // get the eye of the storm
             MapField stormEyeField = Party.GetInstance().RoundHandler.SandstormPhase.EyeOfStorm;
             Position stormEye = new Position(stormEyeField.XCoordinate, stormEyeField.ZCoordinate);
 
-            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, partyReference, cityToClientArray, stormEye);
+            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, partyReference, playerInfo, stormEye);
             NetworkController.HandleSendingMessage(gameConfigMessage);
         }
 
@@ -928,15 +928,15 @@ namespace GameData
             City cityPlayer0 = Party.GetInstance().GetActivePlayers()[0].City;
             City cityPlayer1 = Party.GetInstance().GetActivePlayers()[1].City;
 
-            PlayerInfo[] cityToClientArray = new PlayerInfo[2];
-            cityToClientArray[0] = new PlayerInfo(client0ID,"", cityPlayer0.XCoordinate, cityPlayer0.ZCoordinate);
-            cityToClientArray[1] = new PlayerInfo(client1ID,"", cityPlayer1.XCoordinate, cityPlayer1.ZCoordinate);
+            PlayerInfo[] playerInfo = new PlayerInfo[2];
+            playerInfo[0] = new PlayerInfo(client0ID,"", cityPlayer0.XCoordinate, cityPlayer0.ZCoordinate);
+            playerInfo[1] = new PlayerInfo(client1ID,"", cityPlayer1.XCoordinate, cityPlayer1.ZCoordinate);
 
             // get the eye of the storm
             MapField stormEyeField = Party.GetInstance().RoundHandler.SandstormPhase.EyeOfStorm;
             Position stormEye = new Position(stormEyeField.XCoordinate, stormEyeField.ZCoordinate);
 
-            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, partyReference, cityToClientArray, stormEye);
+            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, partyReference, playerInfo, stormEye);
             NetworkController.HandleSendingMessage(gameConfigMessage, spectatorID);
         }
 
