@@ -64,15 +64,22 @@ namespace GameData.network.util.world.character
         /// </summary>
         /// <param name="target">the Nobel that is targeted by the atack</param>
         /// <returns>true, if action was successful</returns>
-        override
-        public bool Kanly(Character target)
+        public override bool Kanly(Character target)
         {
-            int dist = Math.Abs(target.CurrentMapfield.XCoordinate - CurrentMapfield.XCoordinate) + Math.Abs(target.CurrentMapfield.ZCoordinate - CurrentMapfield.ZCoordinate);
-            if (dist <= 2 && target.greatHouse != this.greatHouse && this.APcurrent == this.APmax)
+            if ("NOBLE".Equals(target.characterType))
             {
-                target.DecreaseHP(target.healthCurrent);
-                SpentAp(APmax);
-                return true;
+                int dist = Math.Abs(target.CurrentMapfield.XCoordinate - CurrentMapfield.XCoordinate) + Math.Abs(target.CurrentMapfield.ZCoordinate - CurrentMapfield.ZCoordinate);
+                if (dist <= 2 && target.greatHouse != this.greatHouse && this.APcurrent == this.APmax)
+                {
+                    Random random = new Random();
+                    double randomValue = random.NextDouble();
+                    SpentAp(APmax);
+                    if (PartyConfiguration.GetInstance().kanlySuccessProbability >= randomValue)
+                    {
+                        target.DecreaseHP(target.healthCurrent);
+                    }
+                    return true;
+                }
             }
             return false;
         }
