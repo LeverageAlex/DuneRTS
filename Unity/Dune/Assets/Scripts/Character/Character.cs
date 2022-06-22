@@ -150,7 +150,7 @@ public class Character : MonoBehaviour
             animation_attack = "Male Attack 1";
             animation_pickUpSpice = "Male Attack 3";
             animation_walk = "Male_Walk";
-            animation_swordSpin = "";
+          //  animation_swordSpin = "";
             animation_kanly = "Male Attack 3";
             animation_spiceHoarding = "Male Sword Roll";
             animation_transferSpice = "Male Attack 2";
@@ -528,13 +528,9 @@ public class Character : MonoBehaviour
             // just fill data the node has to be a parameter of Atack_SwordSpin
 
            
-            if (Mode.debugMode)
-            {
-                Attack_SwordSpinExecution();
-            }
-            else {
+         
                 SessionHandler.messageController.DoRequestAction(SessionHandler.clientId, characterId, ActionType.SWORD_SPIN, new GameData.network.util.world.Position(X, Z));
-            }
+            
             //TODO: Send Attack to Server
             //TODO: wait for response from server
 
@@ -554,18 +550,9 @@ public class Character : MonoBehaviour
     public void Attack_SwordSpinExecution()
     {
         Debug.Log("Attack_SwordSpin");
-        
-        charAnim.Play(animation_swordSpin);
 
-        if (Mode.debugMode)
-        {
-            CharacterTurnHandler.EndTurn();
-        }
-        //reset 
-        if (Mode.debugMode)
-        {
-            turnHandler.ResetSelection();
-        }
+        charAnim.Play(animation_spiceHoarding);
+        audioManager.Play("SpiceHoarding");
     }
 
     /*

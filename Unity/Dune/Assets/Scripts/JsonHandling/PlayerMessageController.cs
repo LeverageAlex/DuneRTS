@@ -707,7 +707,7 @@ public class PlayerMessageController : MessageController
                     enemy = MapManager.instance.GetCharOnNode(actionDemandMessage.specs.target.x, actionDemandMessage.specs.target.y);
                     character.Action_VoiceExecution(enemy);
                     break;
-                case "SWORDSPIN":
+                case "SWORD_SPIN":
                     character.Attack_SwordSpinExecution();
                     break;
             }

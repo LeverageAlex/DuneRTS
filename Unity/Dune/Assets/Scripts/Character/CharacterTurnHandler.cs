@@ -160,7 +160,6 @@ public class CharacterTurnHandler : MonoBehaviour
     {
         if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
         selectedCharacter.Attack_SwordSpinTrigger();
-        EndTurn();
         ConfirmDeactivate();
     }
     public void SetCharStateAtomics()

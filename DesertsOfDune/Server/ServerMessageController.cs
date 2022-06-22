@@ -562,6 +562,7 @@ namespace GameData
                             {
                                 DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
                                 charactersHit = actionCharacter.SwordSpin(map);
+                                actionCharacter.SpentAp(actionCharacter.APcurrent);
                                 foreach (var character in charactersHit)
                                 {
                                     if (character.IsDead())
