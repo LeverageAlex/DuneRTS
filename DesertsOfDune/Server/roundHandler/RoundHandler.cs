@@ -27,7 +27,7 @@ namespace GameData.gameObjects
         /// <summary>
         /// the counter, which state the current round number
         /// </summary>
-        private int _roundCounter;
+        public int _roundCounter { get; private set; }
 
         /// <summary>
         /// the maximum number of rounds, that should be played.
@@ -166,8 +166,6 @@ namespace GameData.gameObjects
                     bool finishedGame = _overLengthMechanism.Execute();
                     Log.Debug("Executed one round in the overlength mechanism.");
 
-                    Thread.Sleep(1000);
-
                     if (finishedGame)
                     {
                         Player winner = this._victoryChecker.GetWinnerByCheckWinnerVictoryMetric();
@@ -197,7 +195,7 @@ namespace GameData.gameObjects
 
                 Log.Debug("Execute the character trait phase...");
                 _roundCounter++;
-                 characterTraitPhase.Execute();
+                characterTraitPhase.Execute();
                 
                 // increase round counter, because the round was finished
             }

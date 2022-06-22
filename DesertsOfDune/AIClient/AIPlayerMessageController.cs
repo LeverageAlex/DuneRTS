@@ -28,7 +28,7 @@ namespace AIClient
 
         public AIPlayerMessageController()
         {
-            _timer = new System.Timers.Timer(1000);
+            _timer = new System.Timers.Timer(500);
             _timer.Elapsed += OnTimedEvent;
             _timer.AutoReset = true;
         }
@@ -349,6 +349,8 @@ namespace AIClient
         {
             List<Move> possibleMoves = Party.GetInstance().World.GetAvailableMoves(character);
 
+            Log.Warning($"Anzahl Züge {possibleMoves.Count}");
+
             // get random move
             Random random = new Random();
             Move randomMove = possibleMoves[random.Next(possibleMoves.Count)];
@@ -479,12 +481,16 @@ namespace AIClient
             }
 
             // check, if the demand message is for this client
-            if (movementDemandMessage.characterID == Party.GetInstance().CurrentCharacter.CharacterId)
+            if (movementDemandMessage.clientID == Party.GetInstance().ClientID)
             {
-                // do the next move
-                // SendRequestMessageDependingOnMoveType(GetNextMove(Party.GetInstance().CurrentCharacter), Party.GetInstance().CurrentCharacter);
-                _timer.Start();
+                if (movementDemandMessage.characterID == Party.GetInstance().CurrentCharacter.CharacterId)
+                {
+                    // do the next move
+                    // SendRequestMessageDependingOnMoveType(GetNextMove(Party.GetInstance().CurrentCharacter), Party.GetInstance().CurrentCharacter);
+                    _timer.Start();
+                }
             }
+            
         }
 
         /// <summary>

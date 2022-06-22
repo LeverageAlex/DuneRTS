@@ -362,20 +362,28 @@ namespace GameData
                 {
                     actionCharacter = character;
                 }
-                if (character.CurrentMapfield.XCoordinate == msg.specs.target.x && character.CurrentMapfield.ZCoordinate == msg.specs.target.y)
-                {
-                    targetCharacter = character;
-                    friendlyFire = true; //characters can not attack their allys
-                }
-            }
-            //get the target character from enemy player if the target character is not an ally
-            if (targetCharacter == null)
-            {
-                foreach (var character in enemyPlayer.UsedGreatHouse.GetCharactersAlive())
+
+                if (msg.specs.target != null)
                 {
                     if (character.CurrentMapfield.XCoordinate == msg.specs.target.x && character.CurrentMapfield.ZCoordinate == msg.specs.target.y)
                     {
                         targetCharacter = character;
+                        friendlyFire = true; //characters can not attack their allys
+                    }
+                }
+            }
+            //get the target character from enemy player if the target character is not an ally
+
+            if (msg.specs.target != null)
+            {
+                if (targetCharacter == null)
+                {
+                    foreach (var character in enemyPlayer.UsedGreatHouse.GetCharactersAlive())
+                    {
+                        if (character.CurrentMapfield.XCoordinate == msg.specs.target.x && character.CurrentMapfield.ZCoordinate == msg.specs.target.y)
+                        {
+                            targetCharacter = character;
+                        }
                     }
                 }
             }
