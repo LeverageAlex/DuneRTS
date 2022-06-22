@@ -155,6 +155,8 @@ namespace GameData.gameObjects
                     bool finishedGame = _overLengthMechanism.Execute();
                     Log.Debug("Executed one round in the overlength mechanism.");
 
+                    Thread.Sleep(1000);
+
                     if (finishedGame)
                     {
                         Player winner = this._victoryChecker.GetWinnerByCheckWinnerVictoryMetric();
@@ -187,8 +189,6 @@ namespace GameData.gameObjects
                  characterTraitPhase.Execute();
                 
                 // increase round counter, because the round was finished
-                
-               //NextRound();
             }
         }
 

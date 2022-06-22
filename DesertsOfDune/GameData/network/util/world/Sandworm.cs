@@ -222,10 +222,13 @@ namespace GameData.server.roundHandler
         /// </summary>
         public static void Despawn(MessageController messageController)
         {
-            _sandWormSingleton._currentField.IsApproachable = true;
-            _sandWormSingleton = null;
-            
-            messageController.DoDespawnSandwormDemand();
+            if (_sandWormSingleton != null)
+            {
+                _sandWormSingleton._currentField.IsApproachable = true;
+                _sandWormSingleton = null;
+
+                messageController.DoDespawnSandwormDemand();
+            }
         }
 
         /// <summary>

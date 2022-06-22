@@ -86,8 +86,8 @@ namespace GameData.network.util.world
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    // MapField mapField = mapFields[y, x];
-                    MapField mapField = GetMapFieldAtPosition(x, y);
+                    MapField mapField = mapFields[y, x];
+                    // MapField mapField = GetMapFieldAtPosition(x, y);
 
                     switch (mapField.tileType)
                     {
@@ -110,7 +110,7 @@ namespace GameData.network.util.world
                     newMap[y, x].XCoordinate = x;
                     newMap[y, x].ZCoordinate = y;
 
-                    newMap[y, x].PlaceCharacter(mapField.Character);
+                    newMap[y, x].PlaceCharacter(GetMapFieldAtPosition(x,y).Character);
                 }
             }
             return newMap;
@@ -347,7 +347,7 @@ namespace GameData.network.util.world
                 {
                     if (GetMapFieldAtPosition(x, y).IsCharacterStayingOnThisField)
                     {
-                        builder.Append("C    ");
+                        builder.Append("  C  ");
                     } else
                     {
                         builder.Append(GetMapFieldAtPosition(x, y).tileType.ToString());

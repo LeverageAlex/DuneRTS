@@ -49,7 +49,7 @@ namespace GameData.network.controller
                 // logging the sending message
                 using (LogContext.PushProperty("Direction", "send"))
                 {
-                    Log.Information("{ message: " + parsedMessage + " }, \"direction\": \"send\" } \n");
+                    // Log.Information("{ message: " + parsedMessage + " }, \"direction\": \"send\" } \n");
                 }
 
                 // broadcast parsed message to all active sessions so clients
@@ -80,7 +80,7 @@ namespace GameData.network.controller
                 // logging the sending message
                 using (LogContext.PushProperty("Direction", "send"))
                 {
-                    Log.Information("{ message: " + parsedMessage + " }, \"direction\": \"send\" } \n");
+                    // Log.Information("{ message: " + parsedMessage + " }, \"direction\": \"send\" } \n");
                 }
 
                 // broadcast parsed message to all active sessions so clients

@@ -32,7 +32,7 @@ namespace GameData.server.roundHandler
             this._map = map;
             this._currentField = map.GetRandomDesertField();
             this._lastCharacterEaten = false;
-            wormDespawnTimer = new Timer(1000);
+            wormDespawnTimer = new Timer(5);
             wormDespawnTimer.Elapsed += OnTimerDespawnWorm;
             wormDespawnTimer.AutoReset = false;
 
@@ -41,7 +41,7 @@ namespace GameData.server.roundHandler
         /// <summary>
         /// choose a random character on the map 
         /// </summary>
-        /// <returns>the chosen random character on the map</returns>
+        /// <returns>the chosen random character on the map</returxns>
         private Character ChooseTargetCharacter()
         {
             Random random = new Random();
@@ -61,18 +61,20 @@ namespace GameData.server.roundHandler
             path.Add(targetCharacter.CurrentMapfield);
 
             _currentField = new FlatSand(_currentField.hasSpice, _currentField.isInSandstorm);
+            _currentField.IsApproachable = true;
+
+            _map.SetMapFieldAtPosition(_currentField, _currentField.XCoordinate, _currentField.ZCoordinate);
 
             // send map change for updating the map in the user client
             Party.GetInstance().messageController.DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
-            _currentField.IsApproachable = true;
             _currentField = targetCharacter.CurrentMapfield;
             _currentField.IsApproachable = false;
 
             // move the shai hulud
-            //Party.GetInstance().messageController.DoMoveSandwormDemand(path);
+            Party.GetInstance().messageController.DoMoveSandwormDemand(path);
 
             // kill target character and send message, that stats of character changed
-            _currentField.Character.KilledBySandworm = true;    
+            _currentField.Character.KilledBySandworm = true;
 
             // get the id the client, whose character the target character is
             Player player = Party.GetInstance().GetPlayerByCharacterID(targetCharacter.CharacterId);
@@ -106,7 +108,8 @@ namespace GameData.server.roundHandler
                     // player 1 has no characters left, so player 2 has the last standing player
                     players[0].statistics.LastCharacterStanding = false;
                     players[1].statistics.LastCharacterStanding = true;
-                } else
+                }
+                else
                 {
                     // player 2 has no characters left, so player 1 has the last standing player
                     players[1].statistics.LastCharacterStanding = false;
@@ -127,35 +130,34 @@ namespace GameData.server.roundHandler
             if (_lastCharacterEaten)
             {
                 return true;
-            } else
+            }
+            else
             {
-                    DetermineLastPlayerStanding();
-                    Character target = ChooseTargetCharacter();
+                DetermineLastPlayerStanding();
+                Character target = ChooseTargetCharacter();
 
-                    // spawn the shai hulud
-                    Party.GetInstance().messageController.DoSpawnSandwormDemand(target.CharacterId, target.CurrentMapfield/*_currentField*/);
-                    
-                    EatTargetCharacter(target);
+                // spawn the shai hulud
+                Party.GetInstance().messageController.DoSpawnSandwormDemand(target.CharacterId, target.CurrentMapfield/*_currentField*/);
 
-                    // despawn the shai hulud
-                    wormDespawnTimer.Start();
+                EatTargetCharacter(target);
 
-                    // after the last character was eaten, there is no character left
-                    _lastCharacterEaten = true;
-                    foreach(Character character in Map.instance.GetCharactersOnMap())
+                // despawn the shai hulud
+                wormDespawnTimer.Start();
+
+                // after the last character was eaten, there is no character left
+                _lastCharacterEaten = true;
+                foreach (Character character in Map.instance.GetCharactersOnMap())
+                {
+                    if (!character.killedBySandworm)
                     {
-                        if ( ! character.killedBySandworm)
-                        {
-                            _lastCharacterEaten = false;
-                            break;
-                        }
+                        _lastCharacterEaten = false;
+                        break;
                     }
-                
-
+                }
                 return false;
             }
 
-            
+
         }
 
 

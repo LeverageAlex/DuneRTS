@@ -252,10 +252,14 @@ namespace GameData
                         {
                             if (party.map.fields[position.y, position.x].IsCharacterStayingOnThisField)  //if the mapfield is occupied by a character they swap positions
                             {
+                                // TODO: check this!
                                 Character passiveCharacter = party.map.fields[position.y, position.x].GetCharacterStayingOnThisField(party.map.GetCharactersOnMap());
-                                passiveCharacter.Movement(passiveCharacter.CurrentMapfield, movingCharacter.CurrentMapfield);
-                                DoSendMovementDemand(msg.clientID, passiveCharacter.CharacterId, new List<Position> { new Position(movingCharacter.CurrentMapfield.XCoordinate, movingCharacter.CurrentMapfield.ZCoordinate) });
-                                movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]);
+                                if (passiveCharacter != null)
+                                {
+                                    passiveCharacter.Movement(passiveCharacter.CurrentMapfield, movingCharacter.CurrentMapfield);
+                                    DoSendMovementDemand(msg.clientID, passiveCharacter.CharacterId, new List<Position> { new Position(movingCharacter.CurrentMapfield.XCoordinate, movingCharacter.CurrentMapfield.ZCoordinate) });
+                                    movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]);
+                                }
                             }
                             else
                             {
