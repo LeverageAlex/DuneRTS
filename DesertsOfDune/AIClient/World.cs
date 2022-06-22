@@ -237,8 +237,14 @@ namespace AIClient
             Position newPosition = Position.Move(currentPosition, movement.DeltaX, movement.DeltaY);
             MapField newMapField = Party.GetInstance().World.Map.GetMapFieldAtPosition(newPosition.x, newPosition.y);
 
+            
+
             if (newMapField != null)
             {
+                if (newMapField.isInSandstorm)
+                {
+                    return false;
+                }
                 return newMapField.IsApproachable;
             }
             return false;

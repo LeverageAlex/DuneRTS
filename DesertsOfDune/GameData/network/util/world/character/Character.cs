@@ -309,11 +309,13 @@ namespace GameData.network.util.world
         /// <returns></returns>
         public bool Movement(MapField startField, MapField goalField)
         {
-            int dist = Math.Abs(startField.XCoordinate - goalField.XCoordinate) + Math.Abs(startField.ZCoordinate - goalField.ZCoordinate);
-            if (dist > 2)
+            double dist = Math.Sqrt(Math.Pow(Math.Abs(startField.XCoordinate - goalField.XCoordinate), 2) + Math.Pow(Math.Abs(startField.ZCoordinate - goalField.ZCoordinate), 2));
+            if (dist >= 2)
             {
                 return false;
             }
+
+
             SpentMP(1);
             CurrentMapfield = goalField;
             startField.DisplaceCharacter(this);
@@ -378,9 +380,13 @@ namespace GameData.network.util.world
         /// <returns>true, if action was possible</returns>
         public bool GiftSpice(Character targetCharacter, int amount)
         {
-            SpentAp(1);
-            targetCharacter.inventoryUsed += amount;
-            this.inventoryUsed -= amount;
+            if (this.inventoryUsed - amount >= 0)
+            {
+                SpentAp(1);
+                targetCharacter.inventoryUsed += amount;
+                this.inventoryUsed -= amount;
+                return true;
+            }
             return false;
         }
 

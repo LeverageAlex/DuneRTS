@@ -8,7 +8,7 @@ using GameData.ClientManagement.Clients;
 
 namespace GameData.Clients
 {
-    abstract public class Player : Client
+    public abstract class Player : Client
     {
 
         /// <summary>

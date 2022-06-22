@@ -146,7 +146,7 @@ namespace GameData.network.controller
         /// <param name="sessionID">not necessary</param>
         protected internal override void OnMessage(MessageEventArgs e, String sessionID)
         {
-            Log.Debug("Received new message from a client. The message is: " + e.Data);
+            // Log.Debug("Received new message from a client. The message is: " + e.Data);
             ((ServerNetworkController)NetworkController).HandleReceivedMessage(e.Data, sessionID);
         }
 

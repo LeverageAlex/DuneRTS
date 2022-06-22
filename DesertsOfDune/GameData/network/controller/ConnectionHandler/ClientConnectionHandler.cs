@@ -192,7 +192,7 @@ namespace GameData.network.controller
         /// <param name="sessionID">not necessary, because every websocket server is unique</param>
         protected internal override void OnMessage(MessageEventArgs e, string sessionID)
         {
-            Log.Debug("Received new message from the Websocket server. The message is: " + e.Data);
+            // Log.Debug("Received new message from the Websocket server. The message is: " + e.Data);
             NetworkController.HandleReceivedMessage(e.Data, sessionID);
         }
 

@@ -8,6 +8,9 @@ using GameData.server.roundHandler;
 using GameData.network.messages;
 using GameData.network.util.world.character;
 using GameData.Configuration;
+using GameData.network.util.world;
+using GameData;
+using GameData.Clients;
 
 namespace UnitTestSuite.serverTest.roundHandlerTest
 {
@@ -22,11 +25,11 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
             ConfigurationFileLoader loader = new ConfigurationFileLoader();
 
             // load scenario and create a new scenario configuration
-            ScenarioConfiguration scenarioConfiguration = loader.LoadScenarioConfiguration("");
+            ScenarioConfiguration scenarioConfiguration = loader.LoadScenarioConfiguration("../.././../ConfigurationFiles/team08.scenario.json");
             ScenarioConfiguration.CreateInstance(scenarioConfiguration);
 
             // load the party configuration and create a new party configuration class
-            PartyConfiguration partyConfiguration = loader.LoadPartyConfiguration("");
+            PartyConfiguration partyConfiguration = loader.LoadPartyConfiguration("../.././../ConfigurationFiles/team08.party.json");
             PartyConfiguration.SetInstance(partyConfiguration);
 
             //Initialization for greatHouses in GameData project
@@ -41,16 +44,22 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
 
 
         /// <summary>
-        /// This Testcase validates the behaviour of the method CloneCharacter
+        /// This Testcase validates the behaviour of the method Execute
         /// </summary>
         [Test]
-        public void TestCloneCharacter()
+        public void TestExecute()
         {
-            // implement logic
-         /*   ClonePhase clonePhase = new ClonePhase();
-            Noble character = new Noble(2, 1, 4, 5, 6, 7, 8, 8, 5, 4, true, true);
-            clonePhase.CloneCharacter(character, null); */
+            Map map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
+            ClonePhase clonePhase = new ClonePhase(map, PartyConfiguration.GetInstance().cloneProbability);
+            Party.GetInstance().AddClient(new HumanPlayer("client1", "1234"));
+            Party.GetInstance().AddClient(new HumanPlayer("client2", "4321"));
+            GreatHouse greatHousePlayer2 = Party.GetInstance().GetActivePlayers()[1].UsedGreatHouse;
+            Party.GetInstance().GetActivePlayers()[1].UsedGreatHouse = new Atreides();
+            Party.GetInstance().GetActivePlayers()[0].UsedGreatHouse = new Harkonnen();
+            Party.GetInstance().GetActivePlayers()[1].UsedGreatHouse.Characters[0].healthCurrent = 0;
+
+            clonePhase.Execute();
         }
-        
+
     }
 }

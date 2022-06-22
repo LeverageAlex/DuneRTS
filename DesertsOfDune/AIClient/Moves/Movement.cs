@@ -23,15 +23,15 @@ namespace AIClient.Moves
             {
                 case MoveTypes.MOVE_LEFT_UP:
                     DeltaX = -1;
-                    DeltaY = -1;
+                    DeltaY = 1;
                     break;
                 case MoveTypes.MOVE_UP:
                     DeltaX = 0;
-                    DeltaY = -1;
+                    DeltaY = 1;
                     break;
                 case MoveTypes.MOVE_RIGHT_UP:
                     DeltaX = 1;
-                    DeltaY = -1;
+                    DeltaY = 1;
                     break;
                 case MoveTypes.MOVE_RIGHT:
                     DeltaX = 1;
@@ -39,15 +39,15 @@ namespace AIClient.Moves
                     break;
                 case MoveTypes.MOVE_RIGHT_DOWN:
                     DeltaX = 1;
-                    DeltaY = 1;
+                    DeltaY = -1;
                     break;
                 case MoveTypes.MOVE_DOWN:
                     DeltaX = 0;
-                    DeltaY = 1;
+                    DeltaY = -1;
                     break;
                 case MoveTypes.MOVE_LEFT_DOWN:
                     DeltaX = -1;
-                    DeltaY = 1;
+                    DeltaY = -1;
                     break;
                 case MoveTypes.MOVE_LEFT:
                     DeltaX = -1;

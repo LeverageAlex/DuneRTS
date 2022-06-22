@@ -49,7 +49,7 @@ namespace GameData.network.controller
                 // logging the sending message
                 using (LogContext.PushProperty("Direction", "send"))
                 {
-                    // Log.Information("{ message: " + parsedMessage + " }, \"direction\": \"send\" } \n");
+                    Log.Information("{ message: " + parsedMessage + " }, \"direction\": \"send\" } \n");
                 }
 
                 // broadcast parsed message to all active sessions so clients
@@ -80,7 +80,7 @@ namespace GameData.network.controller
                 // logging the sending message
                 using (LogContext.PushProperty("Direction", "send"))
                 {
-                    // Log.Information("{ message: " + parsedMessage + " }, \"direction\": \"send\" } \n");
+                    Log.Information("{ message: " + parsedMessage + " }, \"direction\": \"send\" } \n");
                 }
 
                 // broadcast parsed message to all active sessions so clients
@@ -102,7 +102,7 @@ namespace GameData.network.controller
         /// <returns>true, if the message could successfully parsed and forwarded to the message controller</returns>
         public override bool HandleReceivedMessage(string message, string sessionID)
         {
-            Log.Debug("Server parsing the received message: " + message);
+            // Log.Debug("Server parsing the received message: " + message);
 
             // get Message-Object from JSON-String message
             Message receivedMessage = MessageConverter.ToMessage(message);
