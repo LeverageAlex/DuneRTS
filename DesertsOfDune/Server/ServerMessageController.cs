@@ -477,11 +477,6 @@ namespace GameData
                                 if (greathouseConventionBrokenBeforeAtomicBomb != Noble.greatHouseConventionBroken)
                                 {
                                     DoSendAtomicsUpdateDemand(msg.clientID, true, actionCharacter.greatHouse.unusedAtomicBombs);
-                                    int charactersAmount = enemyPlayer.UsedGreatHouse.Characters.Count;
-                                    for (int i = charactersAmount - 1; i > charactersAmount - 5; i--)
-                                    {
-                                        DoSpawnCharacterDemand(enemyPlayer.UsedGreatHouse.Characters[i]);
-                                    }
                                 }
                                 else
                                 {

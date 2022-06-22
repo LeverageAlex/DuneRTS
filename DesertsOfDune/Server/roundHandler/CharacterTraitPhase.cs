@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
+using GameData.network.util.world.character;
+using GameData.Clients;
 
 namespace GameData.server.roundHandler
 {
@@ -19,16 +21,69 @@ namespace GameData.server.roundHandler
         private static Character _currentCharacter = null;
         private int _currentCharacterIndex;
         private Timer _timer;
+        private bool GreatHouseConventionBroken = false;
 
         public void Execute()
         {
             SetTimer(); //initialize timer
+            if (GreatHouseConventionBroken != Noble.greatHouseConventionBroken)
+            {
+                GreatHouseConventionBroken = true;
+                AddCharactersFromAtomic();
+            }
             _allCharacters = GenerateTraitSequenze();
             _currentCharacterIndex = 0;
             SendRequestForNextCharacter();
         }
 
 
+        /// <summary>
+        /// This methods adds new characters after the greatHouseConvention gets broken for the first time.
+        /// </summary>
+        private void AddCharactersFromAtomic()
+        {
+            Player harmedPlayer = null;
+            foreach (var character in Party.GetInstance().GetAllCharacters())
+            {
+                if (character.Shunned)
+                {
+                    var player = Party.GetInstance().GetPlayerByCharacterID(character.CharacterId);
+                    if (player.Equals(Party.GetInstance().GetActivePlayers()[0]))
+                    {
+                        harmedPlayer = Party.GetInstance().GetActivePlayers()[1];
+                    }
+                    else
+                    {
+                        harmedPlayer = Party.GetInstance().GetActivePlayers()[0];
+                    }
+                    break;
+                }
+            }
+
+            if (harmedPlayer == null)
+            {
+                throw new Exception("Exception happend at spwaning new characters because of atomic action in the next round.");
+            }
+
+            foreach (var character in Character.CharactersToAddAfterAtomics)
+            {
+                MapField fieldForCharacter = null;
+                bool emptyFieldFound = false;
+                while (!emptyFieldFound)
+                {
+                    fieldForCharacter = Party.GetInstance().map.GetRandomApproachableField();
+                    if (!fieldForCharacter.IsCharacterStayingOnThisField)
+                    {
+                        emptyFieldFound = true;
+                    }
+                }
+                fieldForCharacter.PlaceCharacter(character);
+                character.CurrentMapfield = fieldForCharacter;
+                harmedPlayer.UsedGreatHouse.Characters.Add(character);
+                Party.GetInstance().messageController.DoSpawnCharacterDemand(character);
+            }
+            Character.CharactersToAddAfterAtomics.Clear();
+        }
 
         /// <summary>
         /// This method gets all characters and randomizes this list for the traitsequenze

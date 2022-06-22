@@ -127,6 +127,7 @@ namespace GameData.network.util.world.character
                 this.greatHouse.unusedAtomicBombs--;
                 if (breakGreatHouseConvention)
                 {
+                    this.Shunned = true;
                     List<GreatHouse> remainingGreatHouses = new List<GreatHouse>();
                     if (activePlayerGreatHouse.houseName != "CORRINO" && passivePlayerGreatHouse.houseName != "CORRINO")
                     {
@@ -153,25 +154,12 @@ namespace GameData.network.util.world.character
                         remainingGreatHouses.Add(new Vernius());
                     }
                     Random rnd = new Random();
+                    CharactersToAddAfterAtomics = new List<Character>();
                     foreach (var greatHouse in remainingGreatHouses)
                     {
                         int randomCharacterIndex = rnd.Next(greatHouse.Characters.Count);
-
-                        MapField fieldForCharacter = null;
-                        bool emptyFieldFound = false;
-                        while (!emptyFieldFound)
-                        {
-                            fieldForCharacter = map.GetRandomApproachableField();
-                            if (!fieldForCharacter.IsCharacterStayingOnThisField)
-                            {
-                                emptyFieldFound = true;
-                            }
-                        }
                         
-                        var newCharacter = greatHouse.Characters[randomCharacterIndex];
-                        fieldForCharacter.PlaceCharacter(newCharacter);
-                        greatHouse.Characters[randomCharacterIndex].CurrentMapfield = fieldForCharacter;
-                        passivePlayerGreatHouse.Characters.Add(newCharacter);
+                        CharactersToAddAfterAtomics.Add(greatHouse.Characters[randomCharacterIndex]);
                     }
                 }
             }

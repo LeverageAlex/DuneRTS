@@ -59,6 +59,15 @@ namespace GameData.network.util.world
         [JsonIgnore]
         public string CharacterName { get; set; }
 
+        [JsonIgnore]
+        public bool Shunned { get; set; }
+
+        /// <summary>
+        /// This list is used for the characters which should be add after greatHouseHouseConvention gets broken for the first time.
+        /// </summary>
+        [JsonIgnore]
+        public static List<Character> CharactersToAddAfterAtomics { get; set; }
+
 
         /// <summary>
         /// This is the Constructor of the Class Character
@@ -111,6 +120,7 @@ namespace GameData.network.util.world
             this.inventoryUsed = inventoryUsed;
             this.killedBySandworm = killedBySandworm;
             this.isLoud = isLoud;
+            this.Shunned = false;
         }
 
         /// <summary>
@@ -146,7 +156,7 @@ namespace GameData.network.util.world
 
             Random random = new Random();
             this.CharacterId = random.Next(int.MaxValue);
-
+            this.Shunned = false;
         }
 
         /// <summary>
