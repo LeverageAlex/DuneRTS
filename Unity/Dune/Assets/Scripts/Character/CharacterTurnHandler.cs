@@ -174,7 +174,7 @@ public class CharacterTurnHandler : MonoBehaviour
         if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
         this.charState = Actions.HELIPORT;
         ConfirmDeactivate();
-        DisableSelectionBox();
+      //  DisableSelectionBox();
     }
 
 
@@ -322,12 +322,12 @@ public class CharacterTurnHandler : MonoBehaviour
 
     public void DisableSelectionBox()
     {
-        PlayerText.SetActive(true);
-        SpiceText.SetActive(true);
-        CharacterText.SetActive(false);
-        HPText.SetActive(false);
-        MPText.SetActive(false);
-        APText.SetActive(false);
+        PlayerText.SetActive(false);
+        SpiceText.SetActive(false);
+        CharacterText.SetActive(true);
+        HPText.SetActive(true);
+        MPText.SetActive(true);
+        APText.SetActive(true);
         SpiceInventoryText.SetActive(false);
     }
 
