@@ -15,7 +15,7 @@ namespace GameData.network.messages
         /// </summary>
         /// <param name="errorCode">Type of error</param>
         /// <param name="errorDescription">Description of the error.</param>
-        public ErrorMessage(int errorCode, string errorDescription) : base("1.0", MessageType.ERROR)
+        public ErrorMessage(int errorCode, string errorDescription) : base("1.1", MessageType.ERROR)
         {
             this.ErrorCode = errorCode;
             this.ErrorDescription = errorDescription;

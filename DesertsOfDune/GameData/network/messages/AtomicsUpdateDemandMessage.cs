@@ -21,7 +21,7 @@ namespace GameData.network.messages
         /// <param name="clientID">The ID of the client.</param>
         /// <param name="shunned">Determines, if player is outlawed after using Atomics action.</param>
         /// <param name="atomicsLeft">Determines, how much atomics actions the player can use.</param>
-        public AtomicsUpdateDemandMessage(int clientID, bool shunned, int atomicsLeft) : base("1.0", MessageType.ATOMICS_UPDATE_DEMAND)
+        public AtomicsUpdateDemandMessage(int clientID, bool shunned, int atomicsLeft) : base("1.1", MessageType.ATOMICS_UPDATE_DEMAND)
         {
             this.clientID = clientID;
             this.shunned = shunned;

@@ -9,6 +9,7 @@
         ROUND_PHASE,
         FAMILY_ATOMICS,
         DUNEWALKING,
-        ENDGAME
+        ENDGAME,
+        HELI_CRASH
     }
 }

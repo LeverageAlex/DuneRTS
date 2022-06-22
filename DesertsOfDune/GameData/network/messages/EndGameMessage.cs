@@ -12,7 +12,7 @@ namespace GameData.network.messages
         /// <summary>
         /// Constructor of the class EndGameMessage
         /// </summary>
-        public EndGameMessage() : base("1.0", MessageType.ENDGAME)
+        public EndGameMessage() : base("1.1", MessageType.ENDGAME)
         {
 
         }

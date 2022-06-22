@@ -14,7 +14,7 @@ namespace GameData.network.util.world
         /// <summary>
         /// create a new Great house of type "Richese" with the characters from the "Standisierungsdokument"
         /// </summary>
-        public Richese() : base("RICHESE", "SILBER", GreatHouseConfiguration.HouseCharactersRichese, true)
+        public Richese() : base("RICHESE", "SILVER", GreatHouseConfiguration.HouseCharactersRichese, true)
         {
         }
     }

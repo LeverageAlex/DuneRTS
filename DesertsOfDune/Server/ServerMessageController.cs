@@ -899,9 +899,9 @@ namespace GameData
             City cityPlayer0 = Party.GetInstance().GetActivePlayers()[0].City;
             City cityPlayer1 = Party.GetInstance().GetActivePlayers()[1].City;
 
-            CityToClient[] cityToClientArray = new CityToClient[2];
-            cityToClientArray[0] = new CityToClient(client0ID, cityPlayer0.XCoordinate, cityPlayer0.ZCoordinate);
-            cityToClientArray[1] = new CityToClient(client1ID, cityPlayer1.XCoordinate, cityPlayer1.ZCoordinate);
+            PlayerInfo[] cityToClientArray = new PlayerInfo[2];
+            cityToClientArray[0] = new PlayerInfo(client0ID,"", cityPlayer0.XCoordinate, cityPlayer0.ZCoordinate);
+            cityToClientArray[1] = new PlayerInfo(client1ID,"", cityPlayer1.XCoordinate, cityPlayer1.ZCoordinate);
 
             // get the eye of the storm
             MapField stormEyeField = Party.GetInstance().RoundHandler.SandstormPhase.EyeOfStorm;
@@ -928,9 +928,9 @@ namespace GameData
             City cityPlayer0 = Party.GetInstance().GetActivePlayers()[0].City;
             City cityPlayer1 = Party.GetInstance().GetActivePlayers()[1].City;
 
-            CityToClient[] cityToClientArray = new CityToClient[2];
-            cityToClientArray[0] = new CityToClient(client0ID, cityPlayer0.XCoordinate, cityPlayer0.ZCoordinate);
-            cityToClientArray[1] = new CityToClient(client1ID, cityPlayer1.XCoordinate, cityPlayer1.ZCoordinate);
+            PlayerInfo[] cityToClientArray = new PlayerInfo[2];
+            cityToClientArray[0] = new PlayerInfo(client0ID,"", cityPlayer0.XCoordinate, cityPlayer0.ZCoordinate);
+            cityToClientArray[1] = new PlayerInfo(client1ID,"", cityPlayer1.XCoordinate, cityPlayer1.ZCoordinate);
 
             // get the eye of the storm
             MapField stormEyeField = Party.GetInstance().RoundHandler.SandstormPhase.EyeOfStorm;

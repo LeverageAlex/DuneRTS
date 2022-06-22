@@ -14,7 +14,7 @@ namespace GameData.network.messages
         [JsonProperty]
         public int amount { get; set; }
 
-        public TransferRequestMessage(int clientID, int characterID, int targetID, int amount) : base("1.0", MessageType.TRANSFER_REQUEST)
+        public TransferRequestMessage(int clientID, int characterID, int targetID, int amount) : base("1.1", MessageType.TRANSFER_REQUEST)
         {
             this.clientID = clientID;
             this.characterID = characterID;

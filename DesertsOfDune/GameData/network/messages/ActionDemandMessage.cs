@@ -27,7 +27,6 @@ namespace GameData.network.messages
         {
             this.action = Enum.GetName(typeof(ActionType), action);
             Specs s = new Specs(target, null);
-            //s.target = target;
             this.specs = s;
         }
 

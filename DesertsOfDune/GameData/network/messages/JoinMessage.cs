@@ -20,7 +20,7 @@ namespace GameData.network.messages
         /// <param name="clientName">the name of the client</param>
         /// <param name="isActive">whether the client who connects is active player or spectator</param>
         /// <param name="isCpu">true, if the client is a cpu</param>
-        public JoinMessage(string clientName, bool isActive, bool isCpu) : base("1.0", MessageType.JOIN)
+        public JoinMessage(string clientName, bool isActive, bool isCpu) : base("1.1", MessageType.JOIN)
         {
             this.clientName = clientName;
             this.isActive = isActive;

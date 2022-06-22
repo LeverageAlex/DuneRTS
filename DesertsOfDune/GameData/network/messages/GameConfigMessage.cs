@@ -16,7 +16,7 @@ namespace GameData.network.messages
         [JsonProperty]
         public PartyReference party { get; }
         [JsonProperty]
-        public CityToClient[] cityToClient { get; }
+        public PlayerInfo[] playerInfo { get; }
         [JsonProperty]
         public Position stormEye { get; }
 
@@ -25,14 +25,13 @@ namespace GameData.network.messages
         /// </summary>
         /// <param name="scenario">the scenario configuration</param>
         /// <param name="party">the party configuration</param>
-        /// <param name="cityToClient">The id or the client and the coordinates of his cityt</param>
-        /// <param name="stormEye"></param>
-        /// <param name="client1ID"></param>
-        public GameConfigMessage(List<List<string>> scenario, PartyReference party, CityToClient[] cityToClient, Position stormEye) : base("1.0", MessageType.GAMECFG)
+        /// <param name="playerInfo">The id or the client and the coordinates of his cityt</param>
+        /// <param name="stormEye">The Position of the Stormeye on the map</param>
+        public GameConfigMessage(List<List<string>> scenario, PartyReference party, PlayerInfo[] playerInfo, Position stormEye) : base("1.1", MessageType.GAMECFG)
         {
             this.scenario = scenario;
             this.party = party;
-            this.cityToClient = cityToClient;
+            this.playerInfo = playerInfo;
             this.stormEye = stormEye;
         }
     }

@@ -6,10 +6,20 @@ using System.Text;
 
 namespace GameData.network.messages
 {
+    /// <summary>
+    /// This message class is used to comunicate the request of a helicopter
+    /// </summary>
     public class HeliRequestMessage : TurnMessage
     {
-        //This has to be done, because the HELIPORT message doesn't contain a version (don't ask why)
+
         public Position target { get; }
+
+        /// <summary>
+        /// Constructor of the class HeliRequestMessage
+        /// </summary>
+        /// <param name="clientID">the id of the client</param>
+        /// <param name="characterID">the id of the character</param>
+        /// <param name="target">the target position of the heli</param>
         public HeliRequestMessage(int clientID, int characterID, Position target) : base(characterID, clientID, MessageType.HELI_REQUEST)
         {
             this.target = target;
