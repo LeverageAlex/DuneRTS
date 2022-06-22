@@ -188,11 +188,11 @@ public class PlayerMessageController : MessageController
                     if (gameConfigMessage.stormEye != null && MapManager.instance.isNodeNeighbour(x, z, gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y))
                     {
                         //Node is in Sandstorm
-                        MapManager.instance.UpdateBoard(x, z, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[z][x]), true);
+                        MapManager.instance.UpdateBoard(x, z, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), true);
                     }
                     else
                     {
-                        MapManager.instance.UpdateBoard(x, z, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[z][x]), false);
+                        MapManager.instance.UpdateBoard(x, z, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), false);
                     }
               //      Debug.Log("Built x: " + x + " and z: " + z);
                 }
