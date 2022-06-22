@@ -378,9 +378,13 @@ namespace GameData.network.util.world
         /// <returns>true, if action was possible</returns>
         public bool GiftSpice(Character targetCharacter, int amount)
         {
-            SpentAp(1);
-            targetCharacter.inventoryUsed += amount;
-            this.inventoryUsed -= amount;
+            if (this.inventoryUsed - amount >= 0)
+            {
+                SpentAp(1);
+                targetCharacter.inventoryUsed += amount;
+                this.inventoryUsed -= amount;
+                return true;
+            }
             return false;
         }
 

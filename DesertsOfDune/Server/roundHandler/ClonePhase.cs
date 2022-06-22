@@ -86,6 +86,9 @@ namespace GameData.server.roundHandler
             }
         }
 
+        /// <summary>
+        /// This method executes the ClonePhase
+        /// </summary>
         public void Execute()
         {
             // get both active player
