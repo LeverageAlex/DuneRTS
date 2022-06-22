@@ -107,8 +107,7 @@ namespace AIClient
             Log.Debug("Received the game configuration from the server");
 
             // load the party configuration and create a new party configuration class
-            PartyConfiguration partyConfiguration = JsonConvert.DeserializeObject<PartyConfiguration>(gameConfigMessage.party.refr);
-            PartyConfiguration.SetInstance(partyConfiguration);
+            PartyConfiguration.SetInstance(gameConfigMessage.party);
 
             //Initialization for greatHouses in GameData project
             GameData.Configuration.Configuration.InitializeConfigurations();

@@ -889,7 +889,6 @@ namespace GameData
 
             // get the party configuration loaded by the server
             string partyConfiguration = JsonConvert.SerializeObject(PartyConfiguration.GetInstance());
-            PartyReference partyReference = new PartyReference(partyConfiguration);
 
             // get the client ids and their city positions
             int client0ID = Party.GetInstance().GetActivePlayers()[0].ClientID;
@@ -907,7 +906,7 @@ namespace GameData
             MapField stormEyeField = Party.GetInstance().RoundHandler.SandstormPhase.EyeOfStorm;
             Position stormEye = new Position(stormEyeField.XCoordinate, stormEyeField.ZCoordinate);
 
-            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, partyReference, playerInfo, stormEye);
+            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, PartyConfiguration.GetInstance(), playerInfo, stormEye); ;
             NetworkController.HandleSendingMessage(gameConfigMessage);
         }
 
@@ -918,7 +917,6 @@ namespace GameData
 
             // get the party configuration loaded by the server
             string partyConfiguration = JsonConvert.SerializeObject(PartyConfiguration.GetInstance());
-            PartyReference partyReference = new PartyReference(partyConfiguration);
 
             // get the client ids and their city positions
             int client0ID = Party.GetInstance().GetActivePlayers()[0].ClientID;
@@ -936,7 +934,7 @@ namespace GameData
             MapField stormEyeField = Party.GetInstance().RoundHandler.SandstormPhase.EyeOfStorm;
             Position stormEye = new Position(stormEyeField.XCoordinate, stormEyeField.ZCoordinate);
 
-            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, partyReference, playerInfo, stormEye);
+            GameConfigMessage gameConfigMessage = new GameConfigMessage(scenario, PartyConfiguration.GetInstance(), playerInfo, stormEye);
             NetworkController.HandleSendingMessage(gameConfigMessage, spectatorID);
         }
 

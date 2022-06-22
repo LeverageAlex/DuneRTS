@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
 using GameData.network.util.world;
+using GameData.Configuration;
 
 namespace GameData.network.messages
 {
@@ -14,7 +15,7 @@ namespace GameData.network.messages
         [JsonProperty]
         public List<List<string>> scenario { get; }
         [JsonProperty]
-        public PartyReference party { get; }
+        public PartyConfiguration party { get; }
         [JsonProperty]
         public PlayerInfo[] playerInfo { get; }
         [JsonProperty]
@@ -27,7 +28,7 @@ namespace GameData.network.messages
         /// <param name="party">the party configuration</param>
         /// <param name="playerInfo">The id or the client and the coordinates of his cityt</param>
         /// <param name="stormEye">The Position of the Stormeye on the map</param>
-        public GameConfigMessage(List<List<string>> scenario, PartyReference party, PlayerInfo[] playerInfo, Position stormEye) : base("1.1", MessageType.GAMECFG)
+        public GameConfigMessage(List<List<string>> scenario, PartyConfiguration party, PlayerInfo[] playerInfo, Position stormEye) : base("1.1", MessageType.GAMECFG)
         {
             this.scenario = scenario;
             this.party = party;
