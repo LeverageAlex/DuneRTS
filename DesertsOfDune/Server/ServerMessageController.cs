@@ -898,8 +898,8 @@ namespace GameData
             City cityPlayer1 = Party.GetInstance().GetActivePlayers()[1].City;
 
             PlayerInfo[] playerInfo = new PlayerInfo[2];
-            playerInfo[0] = new PlayerInfo(client0ID,"", cityPlayer0.XCoordinate, cityPlayer0.ZCoordinate);
-            playerInfo[1] = new PlayerInfo(client1ID,"", cityPlayer1.XCoordinate, cityPlayer1.ZCoordinate);
+            playerInfo[0] = new PlayerInfo(client0ID, Party.GetInstance().GetActivePlayers()[0].ClientName, cityPlayer0.XCoordinate, cityPlayer0.ZCoordinate);
+            playerInfo[1] = new PlayerInfo(client1ID, Party.GetInstance().GetActivePlayers()[1].ClientName, cityPlayer1.XCoordinate, cityPlayer1.ZCoordinate);
 
             // get the eye of the storm
             MapField stormEyeField = Party.GetInstance().RoundHandler.SandstormPhase.EyeOfStorm;

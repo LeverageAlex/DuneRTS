@@ -28,7 +28,7 @@ namespace AIClient
 
         public AIPlayerMessageController()
         {
-            _timer = new System.Timers.Timer(1500);
+            _timer = new System.Timers.Timer(2500);
             _timer.Elapsed += OnTimedEvent;
             _timer.AutoReset = true;
         }

@@ -7,16 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
-<<<<<<< HEAD
 using GameData.network.util.world.character;
 using GameData.Clients;
 using Serilog;
-
-=======
-using GameData.network.util.world.character;
-using GameData.Clients;
-
->>>>>>> a3acd9dd3ca21a7b27390cb731904cda9971ddd1
 namespace GameData.server.roundHandler
 {
     /// <summary>

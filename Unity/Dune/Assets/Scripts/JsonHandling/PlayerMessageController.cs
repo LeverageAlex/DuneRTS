@@ -211,11 +211,19 @@ public class PlayerMessageController : MessageController
                 if (gameConfigMessage.playerInfo[0].clientID == SessionHandler.clientId)
                 {
                     SessionHandler.enemyClientId = gameConfigMessage.playerInfo[1].clientID;
+                    SessionHandler.enemyName = gameConfigMessage.playerInfo[1].clientName;
+                    SessionHandler.clientName = gameConfigMessage.playerInfo[0].clientName;
+
                 }
                 else
                 {
                     SessionHandler.enemyClientId = gameConfigMessage.playerInfo[0].clientID;
+                    SessionHandler.enemyName = gameConfigMessage.playerInfo[0].clientName;
+                    SessionHandler.clientName = gameConfigMessage.playerInfo[1].clientName;
+                    
                 }
+                CharacterTurnHandler.instance.ClientName.text = SessionHandler.clientName;
+                CharacterTurnHandler.instance.EnemyName.text = SessionHandler.enemyName;
                 // Debug.Log("Soweit Clean");
                 MapManager.instance.getNodeFromPos(gameConfigMessage.playerInfo[0].x, gameConfigMessage.playerInfo[0].y).cityOwnerId = gameConfigMessage.playerInfo[0].clientID;
                 MapManager.instance.getNodeFromPos(gameConfigMessage.playerInfo[1].x, gameConfigMessage.playerInfo[1].y).cityOwnerId = gameConfigMessage.playerInfo[1].clientID;
