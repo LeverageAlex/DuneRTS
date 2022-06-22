@@ -130,11 +130,7 @@ namespace GameData
         /// </summary>
         public void Start()
         {
-            Log.Debug("Matching the cities to the players...");
-            MatchGreatHouseToCity();
 
-            // cities were matched to the characters, so send the game config message to the clients
-            messageController.DoSendGameConfig();
 
             Log.Debug("Place the characters of each player around it's city...");
             PlaceCharactersAroundCity();
@@ -151,6 +147,13 @@ namespace GameData
         /// </summary>
         public void PrepareGame()
         {
+            Log.Debug("Matching the cities to the players...");
+            MatchGreatHouseToCity();
+
+            // cities were matched to the characters, so send the game config message to the clients
+            messageController.DoSendGameConfig();
+
+
             Log.Information("Preparing Game");
             // get two disjoint sets of each two great houses and offer them to the client
             GreatHouseType[] firstSet;

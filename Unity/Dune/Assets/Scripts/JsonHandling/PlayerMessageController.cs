@@ -175,6 +175,7 @@ public class PlayerMessageController : MessageController
         IEnumerator buildMap()
         {
 
+
             Debug.Log("Start Building map!");
             //Second list contains z size
             MapManager.instance.setMapSize(gameConfigMessage.scenario.Count, gameConfigMessage.scenario[0].Count);
@@ -225,7 +226,7 @@ public class PlayerMessageController : MessageController
                 SessionHandler.clientId = gameConfigMessage.playerInfo[0].clientID;
 
             }
-            InGameMenuManager.getInstance().SwitchToInGameUI();
+           // InGameMenuManager.getInstance().SwitchToInGameUI();
             
             yield return null;
         }
@@ -326,7 +327,7 @@ public class PlayerMessageController : MessageController
     /// <returns></returns>
     public override void OnGameStateMessage(GameStateMessage gameStateMessage)
     {
-
+        SessionHandler.isIngame = true;
         Log.Debug("Received GameState Message");
         if (!SessionHandler.isPlayer || SessionHandler.rejoining)
         {
@@ -517,7 +518,7 @@ public class PlayerMessageController : MessageController
     {
         //Log.Debug("Entered OnHouseOffer");
         // Debug.Log("Received clientId: " + houseOfferMessage.clientID + "; expected: " + SessionHandler.clientId);
-        if (SessionHandler.clientId == houseOfferMessage.clientID)
+        if (SessionHandler.clientId == houseOfferMessage.clientID && SessionHandler.isPlayer)
         {
             Log.Debug("Entered House Offer Method");
             // TODO: implement logic
@@ -583,6 +584,7 @@ public class PlayerMessageController : MessageController
         {
             CharacterMgr.instance.SetEnemyHouse(house);
         }
+
     }
 
     /// <summary>
@@ -612,6 +614,13 @@ public class PlayerMessageController : MessageController
         // TODO: implement logic
         IEnumerator deselectDemand()
         {
+            if (!SessionHandler.isIngame)
+            {
+                InGameMenuManager.getInstance().SwitchToInGameUI();
+                SessionHandler.isIngame = true;
+            }
+
+
             CharacterTurnHandler.instance.ResetSelection();
             yield return null;
         }
