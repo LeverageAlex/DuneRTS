@@ -1184,7 +1184,7 @@ namespace GameData
                     MapField targetField;
                     //Only if flying through storm
                     //TODO insert crash-probability from config
-                    if (rdm.NextDouble() < 0.5 && Map.instance.HasSandstormOnPath(portingChar.CurrentMapfield, heliRequestMessage.target))
+                    if (rdm.NextDouble() < PartyConfiguration.GetInstance().crashProbability && Map.instance.HasSandstormOnPath(portingChar.CurrentMapfield, heliRequestMessage.target))
                     {
                         //Crash
                         targetField = Map.instance.GetRandomApproachableField();
