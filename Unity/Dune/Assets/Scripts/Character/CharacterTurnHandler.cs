@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 /**
  * - stores in an state-machine the current state of selected char in turn
@@ -24,7 +24,9 @@ public class CharacterTurnHandler : MonoBehaviour
     public GameObject characterAttacksPanel;
     public GameObject confirmationPanel;
     public GameObject kanlyButton, voiceButton, swordSpinButton, atomicsButton, spiceHoardingButton, heliportButton;
-    
+
+
+    public Text ClientName, EnemyName;
 
     [Header("Stats:")]
     public GameObject playerStatsPanel;

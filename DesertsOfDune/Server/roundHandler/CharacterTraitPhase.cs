@@ -7,9 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
-using GameData.network.util.world.character;
-using GameData.Clients;
-
 namespace GameData.server.roundHandler
 {
     /// <summary>
