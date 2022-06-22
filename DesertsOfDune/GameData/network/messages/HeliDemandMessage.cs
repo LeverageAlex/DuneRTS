@@ -6,7 +6,7 @@ using System.Text;
 namespace GameData.network.messages
 {
     /// <summary>
-    /// This message class is used to comunicate the demand of a helicopter
+    /// This message class is used to comunicate the demand to a helicopter
     /// </summary>
     public class HeliDemandMessage : TurnMessage
     {

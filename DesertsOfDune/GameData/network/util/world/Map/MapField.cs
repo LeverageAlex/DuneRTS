@@ -31,6 +31,7 @@ namespace GameData.network.util.world
         [JsonIgnore]
         public int ZCoordinate { get; set; } 
 
+        [JsonIgnore]
         public bool IsCityField;
 
 

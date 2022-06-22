@@ -224,25 +224,16 @@ namespace TestProject.networkTest.utilTest.parserTest
         [Test]
         public void TestFromHouseOfferMessage()
         {
+            Corrino c = new Corrino();
+            Atreides a = new Atreides();
             GreatHouse[] houses = new GreatHouse[2];
-
-            HouseCharacter houseCharacter1 = new HouseCharacter("Emperor Shaddam IV Corrino", "NOBLE");
-            HouseCharacter houseCharacter2 = new HouseCharacter("Princess Irulan Corrino", "BENE_GESSERIT");
-            HouseCharacter houseCharacter3 = new HouseCharacter("Count Hasimir Fenring", "MENTAT");
-            HouseCharacter houseCharacter4 = new HouseCharacter("Lady Margot Fenring", "BENE_GESSERIT");
-            HouseCharacter houseCharacter5 = new HouseCharacter("Reverend Mother Gaius Helen Mohiam", "BENE_GESSERIT");
-            HouseCharacter houseCharacter6 = new HouseCharacter("Captain Aramsham", "BENE_GESSERIT");
-
-            HouseCharacter[] characters = new HouseCharacter[] { houseCharacter1, houseCharacter2, houseCharacter3, houseCharacter4, houseCharacter5, houseCharacter6 };
-            Corrino c = new Corrino(characters);
-
             houses[0] = c;
-
+            houses[1] = a;
 
             HouseOfferMessage message = new HouseOfferMessage(1234, houses);
             string serializedMessage = MessageConverter.FromMessage(message);
 
-            Assert.AreEqual("{\"type\":\"HOUSE_OFFER\",\"version\":\"1.1\",\"clientID\":1234,\"houses\":[{\"houseName\":\"CORRINO\",\"houseColor\":\"GOLD\",\"houseCharacters\":[{\"characterName\":\"Emperor Shaddam IV Corrino\",\"characterClass\":\"NOBLE\"},{\"characterName\":\"Princess Irulan Corrino\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Count Hasimir Fenring\",\"characterClass\":\"MENTAT\"},{\"characterName\":\"Lady Margot Fenring\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Reverend Mother Gaius Helen Mohiam\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Captain Aramsham\",\"characterClass\":\"BENE_GESSERIT\"}]},null]}", serializedMessage);
+            Assert.AreEqual("{\"type\":\"HOUSE_OFFER\",\"version\":\"1.1\",\"clientID\":1234,\"houses\":[{\"houseName\":\"CORRINO\",\"houseColor\":\"GOLD\",\"houseCharacters\":[{\"characterName\":\"Emperor Shaddam IV Corrino\",\"characterClass\":\"NOBLE\"},{\"characterName\":\"Princess Irulan Corrino\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Count Hasimir Fenring\",\"characterClass\":\"MENTAT\"},{\"characterName\":\"Lady Margot Fenring\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Reverend Mother Gaius Helen Mohiam\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Captain Aramsham\",\"characterClass\":\"FIGHTER\"}]},{\"houseName\":\"ATREIDES\",\"houseColor\":\"GREEN\",\"houseCharacters\":[{\"characterName\":\"Duke Leto Atreides\",\"characterClass\":\"NOBLE\"},{\"characterName\":\"Paul Atreides\",\"characterClass\":\"NOBLE\"},{\"characterName\":\"Lady Jessica\",\"characterClass\":\"BENE_GESSERIT\"},{\"characterName\":\"Thufir Hawat\",\"characterClass\":\"MENTAT\"},{\"characterName\":\"Gurney Halleck\",\"characterClass\":\"FIGHTER\"},{\"characterName\":\"Space Pug, Duke Letos tapferer Mopshund\",\"characterClass\":\"FIGHTER\"}]}]}", serializedMessage);
         }
 
         /// <summary>
@@ -287,10 +278,10 @@ namespace TestProject.networkTest.utilTest.parserTest
             MapField[,] map = new MapField[1, 2];
             map[0, 0] = new GameData.network.util.world.mapField.City(1234, false, false);
             map[0, 1] = new Dune(false, false);
-            MapChangeDemandMessage message = new MapChangeDemandMessage(MapChangeReasons.FAMILY_ATOMICS, map, new Position(1,2));
+            MapChangeDemandMessage message = new MapChangeDemandMessage(MapChangeReasons.FAMILY_ATOMICS, map, new Position(4,5));
             string serializedMessage = MessageConverter.FromMessage(message);
 
-            Assert.AreEqual("{\"type\":\"MAP_CHANGE_DEMAND\",\"version\":\"1.1\",\"changeReason\":\"FAMILY_ATOMICS\",\"newMap\":[[{\"tileType\":\"CITY\",\"clientID\":1234,\"hasSpice\":false,\"isInSandstorm\":false},{\"tileType\":\"DUNE\",\"hasSpice\":false,\"isInSandstorm\":false}]],\"stormEye\":{\"x\":1,\"y\":2}}", serializedMessage);
+            Assert.AreEqual("{\"type\":\"MAP_CHANGE_DEMAND\",\"version\":\"1.1\",\"changeReason\":\"FAMILY_ATOMICS\",\"newMap\":[[{\"tileType\":\"CITY\",\"clientID\":1234,\"hasSpice\":false,\"isInSandstorm\":false},{\"tileType\":\"DUNE\",\"hasSpice\":false,\"isInSandstorm\":false}]],\"stormEye\":{\"x\":4,\"y\":5}}", serializedMessage);
         }
 
         /// <summary>
@@ -937,6 +928,41 @@ namespace TestProject.networkTest.utilTest.parserTest
             Assert.AreEqual("1.1", ((SpawnCharacterDemandMessage)deserializedMessage).version);
             Assert.AreEqual(1234, ((SpawnCharacterDemandMessage)deserializedMessage).clientID);
             Assert.AreEqual(12, ((SpawnCharacterDemandMessage)deserializedMessage).characterID);
+        }
+
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message HeliRequestMessage
+        /// </summary>
+        [Test]
+        public void TestToHeliRequestMessage()
+        {
+            string serializedMessage = "{\"type\":\"HELI_REQUEST\",\"version\":\"1.1\",\"clientID\":1234,\"characterID\":12,\"target\":{\"x\":2,\"y\":3}}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+
+            Assert.AreEqual("HELI_REQUEST", ((HeliRequestMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.1", ((HeliRequestMessage)deserializedMessage).version);
+            Assert.AreEqual(1234, ((HeliRequestMessage)deserializedMessage).clientID);
+            Assert.AreEqual(12, ((HeliRequestMessage)deserializedMessage).characterID);
+            Assert.AreEqual(2, ((HeliRequestMessage)deserializedMessage).target.x);
+            Assert.AreEqual(3, ((HeliRequestMessage)deserializedMessage).target.y);
+        }
+
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message HeliDemandMessage
+        /// </summary>
+        [Test]
+        public void TestToHeliDemandMessage()
+        {
+            string serializedMessage = "{\"type\":\"HELI_DEMAND\",\"version\":\"1.1\",\"clientID\":1234,\"characterID\":12,\"target\":{\"x\":2,\"y\":3},\"crash\":true}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+
+            Assert.AreEqual("HELI_DEMAND", ((HeliDemandMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.1", ((HeliDemandMessage)deserializedMessage).version);
+            Assert.AreEqual(1234, ((HeliDemandMessage)deserializedMessage).clientID);
+            Assert.AreEqual(12, ((HeliDemandMessage)deserializedMessage).characterID);
+            Assert.AreEqual(2, ((HeliDemandMessage)deserializedMessage).target.x);
+            Assert.AreEqual(3, ((HeliDemandMessage)deserializedMessage).target.y);
+            Assert.AreEqual(true, ((HeliDemandMessage)deserializedMessage).crash);
         }
 
         // SandwormSpawnDemandMessage
