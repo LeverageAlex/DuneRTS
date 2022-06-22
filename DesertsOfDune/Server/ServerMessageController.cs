@@ -250,38 +250,47 @@ namespace GameData
                         //check if movement is on walkable terrain
                         if (party.map.fields[position.y, position.x].tileType != TileType.MOUNTAINS.ToString() && party.map.fields[position.y, position.x].tileType != TileType.CITY.ToString()) //check needed and not implemented utils
                         {
+                            bool movementWasAllowed = false;
+
                             if (party.map.fields[position.y, position.x].IsCharacterStayingOnThisField)  //if the mapfield is occupied by a character they swap positions
                             {
+                                // TODO: check this!
                                 Character passiveCharacter = party.map.fields[position.y, position.x].GetCharacterStayingOnThisField(party.map.GetCharactersOnMap());
-                                passiveCharacter.Movement(passiveCharacter.CurrentMapfield, movingCharacter.CurrentMapfield);
-                                DoSendMovementDemand(msg.clientID, passiveCharacter.CharacterId, new List<Position> { new Position(movingCharacter.CurrentMapfield.XCoordinate, movingCharacter.CurrentMapfield.ZCoordinate) });
-                                movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]);
+                                if (passiveCharacter != null)
+                                {
+                                    passiveCharacter.Movement(passiveCharacter.CurrentMapfield, movingCharacter.CurrentMapfield);
+                                    DoSendMovementDemand(msg.clientID, passiveCharacter.CharacterId, new List<Position> { new Position(movingCharacter.CurrentMapfield.XCoordinate, movingCharacter.CurrentMapfield.ZCoordinate) });
+                                    movementWasAllowed = movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]);
+                                }
                             }
                             else
                             {
-                                movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]); //move character 1 field along its path
+                                movementWasAllowed = movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]); //move character 1 field along its path
                             }
                             //path.Add(position);
-                            newPath.Add(position);
-                            if (party.map.fields[position.y, position.x].tileType == TileType.FLAT_SAND.ToString() || party.map.fields[position.y, position.x].tileType == TileType.DUNE.ToString())
+                            if (movementWasAllowed)
                             {
-                                if (alreadySteppedOnSandField)
+                                newPath.Add(position);
+                                if (party.map.fields[position.y, position.x].tileType == TileType.FLAT_SAND.ToString() || party.map.fields[position.y, position.x].tileType == TileType.DUNE.ToString())
                                 {
-                                    movingCharacter.SetLoud();
+                                    if (alreadySteppedOnSandField)
+                                    {
+                                        movingCharacter.SetLoud();
+                                    }
+                                    else
+                                    {
+                                        alreadySteppedOnSandField = true;
+                                    }
                                 }
-                                else
+                                //deliver spice to city if city is neighborfield
+                                foreach (var mapfield in party.map.GetNeighborFields(movingCharacter.CurrentMapfield))
                                 {
-                                    alreadySteppedOnSandField = true;
-                                }
-                            }
-                            //deliver spice to city if city is neighborfield
-                            foreach (var mapfield in party.map.GetNeighborFields(movingCharacter.CurrentMapfield))
-                            {
-                                if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
-                                {
-                                    activePlayer.statistics.AddToHouseSpiceStorage(movingCharacter.inventoryUsed);
-                                    movingCharacter.inventoryUsed = 0;
-                                    DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
+                                    if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
+                                    {
+                                        activePlayer.statistics.AddToHouseSpiceStorage(movingCharacter.inventoryUsed);
+                                        movingCharacter.inventoryUsed = 0;
+                                        DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
+                                    }
                                 }
                             }
                         }
@@ -297,9 +306,13 @@ namespace GameData
                 }
             }
 
-            DoSendMovementDemand(msg.clientID, msg.characterID, newPath);
-            DoSendChangeCharacterStatsDemand(msg.clientID, msg.characterID, new CharacterStatistics(movingCharacter));
+            if (newPath.Count != 0)
+            {
+                DoSendMovementDemand(msg.clientID, msg.characterID, newPath);
+                DoSendChangeCharacterStatsDemand(msg.clientID, msg.characterID, new CharacterStatistics(movingCharacter));
 
+                // TODO: movement request was invalid, so end the game!!!!!!
+            }
             if (movingCharacter.MPcurrent <= 0 && movingCharacter.APcurrent <= 0)
             {
                 //  CharacterTraitPhase.StopAndResetTimer();
@@ -349,20 +362,28 @@ namespace GameData
                 {
                     actionCharacter = character;
                 }
-                if (character.CurrentMapfield.XCoordinate == msg.specs.target.x && character.CurrentMapfield.ZCoordinate == msg.specs.target.y)
-                {
-                    targetCharacter = character;
-                    friendlyFire = true; //characters can not attack their allys
-                }
-            }
-            //get the target character from enemy player if the target character is not an ally
-            if (targetCharacter == null)
-            {
-                foreach (var character in enemyPlayer.UsedGreatHouse.GetCharactersAlive())
+
+                if (msg.specs.target != null)
                 {
                     if (character.CurrentMapfield.XCoordinate == msg.specs.target.x && character.CurrentMapfield.ZCoordinate == msg.specs.target.y)
                     {
                         targetCharacter = character;
+                        friendlyFire = true; //characters can not attack their allys
+                    }
+                }
+            }
+            //get the target character from enemy player if the target character is not an ally
+
+            if (msg.specs.target != null)
+            {
+                if (targetCharacter == null)
+                {
+                    foreach (var character in enemyPlayer.UsedGreatHouse.GetCharactersAlive())
+                    {
+                        if (character.CurrentMapfield.XCoordinate == msg.specs.target.x && character.CurrentMapfield.ZCoordinate == msg.specs.target.y)
+                        {
+                            targetCharacter = character;
+                        }
                     }
                 }
             }
@@ -894,8 +915,8 @@ namespace GameData
             City cityPlayer1 = Party.GetInstance().GetActivePlayers()[1].City;
 
             PlayerInfo[] playerInfo = new PlayerInfo[2];
-            playerInfo[0] = new PlayerInfo(client0ID,"", cityPlayer0.XCoordinate, cityPlayer0.ZCoordinate);
-            playerInfo[1] = new PlayerInfo(client1ID,"", cityPlayer1.XCoordinate, cityPlayer1.ZCoordinate);
+            playerInfo[0] = new PlayerInfo(client0ID, Party.GetInstance().GetActivePlayers()[0].ClientName, cityPlayer0.XCoordinate, cityPlayer0.ZCoordinate);
+            playerInfo[1] = new PlayerInfo(client1ID, Party.GetInstance().GetActivePlayers()[1].ClientName, cityPlayer1.XCoordinate, cityPlayer1.ZCoordinate);
 
             // get the eye of the storm
             MapField stormEyeField = Party.GetInstance().RoundHandler.SandstormPhase.EyeOfStorm;
@@ -1184,7 +1205,7 @@ namespace GameData
                     MapField targetField;
                     //Only if flying through storm
                     //TODO insert crash-probability from config
-                    if (rdm.NextDouble() < 0.5 && Map.instance.HasSandstormOnPath(portingChar.CurrentMapfield, heliRequestMessage.target))
+                    if (rdm.NextDouble() < PartyConfiguration.GetInstance().crashProbability && Map.instance.HasSandstormOnPath(portingChar.CurrentMapfield, heliRequestMessage.target))
                     {
                         //Crash
                         targetField = Map.instance.GetRandomApproachableField();

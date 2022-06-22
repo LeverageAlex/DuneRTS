@@ -175,6 +175,7 @@ public class PlayerMessageController : MessageController
         IEnumerator buildMap()
         {
 
+
             Debug.Log("Start Building map!");
             //Second list contains z size
             MapManager.instance.setMapSize(gameConfigMessage.scenario.Count, gameConfigMessage.scenario[0].Count);
@@ -187,11 +188,11 @@ public class PlayerMessageController : MessageController
                     if (gameConfigMessage.stormEye != null && MapManager.instance.isNodeNeighbour(x, z, gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y))
                     {
                         //Node is in Sandstorm
-                        MapManager.instance.UpdateBoard(x, z, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[z][x]), true);
+                        MapManager.instance.UpdateBoard(x, z, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), true);
                     }
                     else
                     {
-                        MapManager.instance.UpdateBoard(x, z, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[z][x]), false);
+                        MapManager.instance.UpdateBoard(x, z, MapManager.instance.StringtoNodeEnum(gameConfigMessage.scenario[x][z]), false);
                     }
               //      Debug.Log("Built x: " + x + " and z: " + z);
                 }
@@ -210,11 +211,19 @@ public class PlayerMessageController : MessageController
                 if (gameConfigMessage.playerInfo[0].clientID == SessionHandler.clientId)
                 {
                     SessionHandler.enemyClientId = gameConfigMessage.playerInfo[1].clientID;
+                    SessionHandler.enemyName = gameConfigMessage.playerInfo[1].clientName;
+                    SessionHandler.clientName = gameConfigMessage.playerInfo[0].clientName;
+
                 }
                 else
                 {
                     SessionHandler.enemyClientId = gameConfigMessage.playerInfo[0].clientID;
+                    SessionHandler.enemyName = gameConfigMessage.playerInfo[0].clientName;
+                    SessionHandler.clientName = gameConfigMessage.playerInfo[1].clientName;
+                    
                 }
+                CharacterTurnHandler.instance.ClientName.text = SessionHandler.clientName;
+                CharacterTurnHandler.instance.EnemyName.text = SessionHandler.enemyName;
                 // Debug.Log("Soweit Clean");
                 MapManager.instance.getNodeFromPos(gameConfigMessage.playerInfo[0].x, gameConfigMessage.playerInfo[0].y).cityOwnerId = gameConfigMessage.playerInfo[0].clientID;
                 MapManager.instance.getNodeFromPos(gameConfigMessage.playerInfo[1].x, gameConfigMessage.playerInfo[1].y).cityOwnerId = gameConfigMessage.playerInfo[1].clientID;
@@ -225,7 +234,7 @@ public class PlayerMessageController : MessageController
                 SessionHandler.clientId = gameConfigMessage.playerInfo[0].clientID;
 
             }
-            InGameMenuManager.getInstance().SwitchToInGameUI();
+           // InGameMenuManager.getInstance().SwitchToInGameUI();
             
             yield return null;
         }
@@ -326,7 +335,7 @@ public class PlayerMessageController : MessageController
     /// <returns></returns>
     public override void OnGameStateMessage(GameStateMessage gameStateMessage)
     {
-
+        SessionHandler.isIngame = true;
         Log.Debug("Received GameState Message");
         if (!SessionHandler.isPlayer || SessionHandler.rejoining)
         {
@@ -517,7 +526,7 @@ public class PlayerMessageController : MessageController
     {
         //Log.Debug("Entered OnHouseOffer");
         // Debug.Log("Received clientId: " + houseOfferMessage.clientID + "; expected: " + SessionHandler.clientId);
-        if (SessionHandler.clientId == houseOfferMessage.clientID)
+        if (SessionHandler.clientId == houseOfferMessage.clientID && SessionHandler.isPlayer)
         {
             Log.Debug("Entered House Offer Method");
             // TODO: implement logic
@@ -583,6 +592,7 @@ public class PlayerMessageController : MessageController
         {
             CharacterMgr.instance.SetEnemyHouse(house);
         }
+
     }
 
     /// <summary>
@@ -612,6 +622,13 @@ public class PlayerMessageController : MessageController
         // TODO: implement logic
         IEnumerator deselectDemand()
         {
+            if (!SessionHandler.isIngame)
+            {
+                InGameMenuManager.getInstance().SwitchToInGameUI();
+                SessionHandler.isIngame = true;
+            }
+
+
             CharacterTurnHandler.instance.ResetSelection();
             yield return null;
         }
@@ -870,6 +887,7 @@ public class PlayerMessageController : MessageController
     {
         IEnumerator helidemand()
         {
+            CharacterTurnHandler.instance.heliportButton.SetActive(false);
             CharacterMgr.instance.spawnHelicopter(CharacterMgr.instance.getCharScriptByID(heliDemandMessage.characterID), heliDemandMessage.target, heliDemandMessage.crash);
             yield return null;
         }

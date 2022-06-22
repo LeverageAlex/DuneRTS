@@ -7,8 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
-using GameData.network.util.world.character;
-using GameData.Clients;
+using Serilog;
 
 namespace GameData.server.roundHandler
 {
@@ -57,6 +56,7 @@ namespace GameData.server.roundHandler
             if (_currentCharacterIndex < _allCharacters.Count)
             {
                 _currentCharacter = _allCharacters[_currentCharacterIndex++];
+                Log.Warning($"Charakter nummer {_currentCharacterIndex} ist in der Runde {Party.GetInstance().RoundHandler._roundCounter} dran.");
                 _currentCharacter.SetSilent();
                 if (!_currentCharacter.IsDead() && !_currentCharacter.KilledBySandworm && !_currentCharacter.IsInSandStorm(Party.GetInstance().map)) // check if character is dead or staying in storm
                 {
@@ -106,7 +106,7 @@ namespace GameData.server.roundHandler
                     if (character.CharacterId == characterID)
                     {
                         Party.GetInstance().messageController.DoSendTurnDemand(player.ClientID, characterID); //request client to execute a characterTrait
-                        _timer.Start(); // starts the timer when characterTrait starts
+                        // _timer.Start(); // starts the timer when characterTrait starts
                     }
                 }
             }

@@ -130,19 +130,15 @@ namespace GameData
         /// </summary>
         public void Start()
         {
-            Log.Debug("Matching the cities to the players...");
-            MatchGreatHouseToCity();
 
-            // cities were matched to the characters, so send the game config message to the clients
-            messageController.DoSendGameConfig();
 
             Log.Debug("Place the characters of each player around it's city...");
             PlaceCharactersAroundCity();
 
             Log.Information("The party was prepared, so both player chose their Greathouse. The party now will start ... ");
-            roundHandlerThread = new Thread(RoundHandler.NextRound);
-            roundHandlerThread.Start();
-       //     RoundHandler.NextRound();
+            //roundHandlerThread = new Thread(RoundHandler.NextRound);
+            //roundHandlerThread.Start();
+            RoundHandler.NextRound();
             Log.Debug("Triggered first round by round handler");
         }
 
@@ -151,6 +147,13 @@ namespace GameData
         /// </summary>
         public void PrepareGame()
         {
+            Log.Debug("Matching the cities to the players...");
+            MatchGreatHouseToCity();
+
+            // cities were matched to the characters, so send the game config message to the clients
+            messageController.DoSendGameConfig();
+
+
             Log.Information("Preparing Game");
             // get two disjoint sets of each two great houses and offer them to the client
             GreatHouseType[] firstSet;

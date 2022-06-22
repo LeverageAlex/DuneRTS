@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 /**
  * - stores in an state-machine the current state of selected char in turn
@@ -24,7 +24,9 @@ public class CharacterTurnHandler : MonoBehaviour
     public GameObject characterAttacksPanel;
     public GameObject confirmationPanel;
     public GameObject kanlyButton, voiceButton, swordSpinButton, atomicsButton, spiceHoardingButton, heliportButton;
-    
+
+
+    public Text ClientName, EnemyName;
 
     [Header("Stats:")]
     public GameObject playerStatsPanel;
@@ -174,7 +176,7 @@ public class CharacterTurnHandler : MonoBehaviour
         if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
         this.charState = Actions.HELIPORT;
         ConfirmDeactivate();
-        DisableSelectionBox();
+      //  DisableSelectionBox();
     }
 
 
@@ -258,15 +260,7 @@ public class CharacterTurnHandler : MonoBehaviour
         }
         if (SessionHandler.isPlayer)
         {
-            if (MapManager.instance.getNodeFromPos(selectedCharacter.X, selectedCharacter.Z).nodeTypeEnum == NodeTypeEnum.HELIPORT)
-            {
-                heliportButton.SetActive(true);
-            }
-            else
-            {
-                heliportButton.SetActive(false);
-            }
-
+            heliportButton.SetActive(false);
 
             if (!selectedCharacter.isEligibleForSpecialAction())
             {
@@ -330,12 +324,12 @@ public class CharacterTurnHandler : MonoBehaviour
 
     public void DisableSelectionBox()
     {
-        PlayerText.SetActive(true);
-        SpiceText.SetActive(true);
-        CharacterText.SetActive(false);
-        HPText.SetActive(false);
-        MPText.SetActive(false);
-        APText.SetActive(false);
+        PlayerText.SetActive(false);
+        SpiceText.SetActive(false);
+        CharacterText.SetActive(true);
+        HPText.SetActive(true);
+        MPText.SetActive(true);
+        APText.SetActive(true);
         SpiceInventoryText.SetActive(false);
     }
 

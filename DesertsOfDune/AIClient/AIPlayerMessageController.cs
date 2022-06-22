@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Timers;
 using AIClient.Moves;
 using GameData.Configuration;
 using GameData.network.controller;
@@ -23,8 +24,19 @@ namespace AIClient
     /// </remarks>
     public class AIPlayerMessageController : MessageController
     {
+        private System.Timers.Timer _timer;
+
         public AIPlayerMessageController()
         {
+            _timer = new System.Timers.Timer(500);
+            _timer.Elapsed += OnTimedEvent;
+            _timer.AutoReset = true;
+        }
+
+        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            SendRequestMessageDependingOnMoveType(GetNextMove(Party.GetInstance().CurrentCharacter), Party.GetInstance().CurrentCharacter);
+            _timer.Stop();
         }
 
         /// <summary>
@@ -237,6 +249,8 @@ namespace AIClient
                 // add new character to list of alive characters
                 Party.GetInstance().World.AddAliveCharacter(newCharacter);
             }
+
+            Party.GetInstance().World.Map.DrawMapToConsole();
         }
 
         /// <summary>
@@ -266,6 +280,23 @@ namespace AIClient
                     }
                 }
             }
+
+            // find the character with the given id
+            foreach (Character character in Party.GetInstance().World.Map.GetCharactersOnMap())
+            {
+                if (character.CharacterId == changeCharacterStatisticsDemandMessage.characterID)
+                {
+                    // change values of this character
+                    character.healthCurrent = changeCharacterStatisticsDemandMessage.stats.HP;
+                    character.MPcurrent = changeCharacterStatisticsDemandMessage.stats.MP;
+                    character.APcurrent = changeCharacterStatisticsDemandMessage.stats.AP;
+                    character.inventoryUsed = changeCharacterStatisticsDemandMessage.stats.spice;
+                    character.KilledBySandworm = changeCharacterStatisticsDemandMessage.stats.isSwallowed;
+                    character.isLoud = changeCharacterStatisticsDemandMessage.stats.isLoud;
+                }
+            }
+
+            Party.GetInstance().World.Map.DrawMapToConsole();
         }
 
         /// <summary>
@@ -296,14 +327,16 @@ namespace AIClient
                 {
                     Party.GetInstance().CurrentCharacter = characterToDoMove;
 
-                    SendRequestMessageDependingOnMoveType(GetNextMove(characterToDoMove), characterToDoMove);
-                    
-                } else
+                    _timer.Start();
+                    // SendRequestMessageDependingOnMoveType(GetNextMove(characterToDoMove), characterToDoMove);
+
+                }
+                else
                 {
                     Log.Error($"The character with the id {turnDemandMessage.characterID} is demanded to do a move, but cannot be found in the alive characters of this client!");
                 }
 
-                
+
             }
         }
 
@@ -315,6 +348,8 @@ namespace AIClient
         private Move GetNextMove(Character character)
         {
             List<Move> possibleMoves = Party.GetInstance().World.GetAvailableMoves(character);
+
+            Log.Warning($"Anzahl Züge {possibleMoves.Count}");
 
             // get random move
             Random random = new Random();
@@ -344,7 +379,7 @@ namespace AIClient
                 case MoveTypes.MOVE_DOWN:
                 case MoveTypes.MOVE_LEFT_DOWN:
                 case MoveTypes.MOVE_LEFT:
-                    Position[] path = { Position.Move(characterPosition, ((Movement)move).DeltaX, ((Movement)move).DeltaY)};
+                    Position[] path = { Position.Move(characterPosition, ((Movement)move).DeltaX, ((Movement)move).DeltaY) };
                     DoSendMovementRequest(character.CharacterId, path);
                     break;
                 case MoveTypes.TRANSFER_SPICE:
@@ -428,10 +463,8 @@ namespace AIClient
             {
                 Position targetPosition = movementDemandMessage.specs.path[movementDemandMessage.specs.path.Count - 1];
 
-                Log.Debug($"The character with the id {movementDemandMessage.characterID} is moving to ({targetPosition.x},{targetPosition.y}).");
-
                 // get the character, who is moving
-                foreach (Character character in Party.GetInstance().World.Map.GetCharactersOnMap())
+                foreach (Character character in Party.GetInstance().World.AliveCharacters)
                 {
                     if (character.CharacterId == movementDemandMessage.characterID)
                     {
@@ -439,10 +472,10 @@ namespace AIClient
                         character.CurrentMapfield.DisplaceCharacter(character);
                         MapField newPosition = Party.GetInstance().World.Map.GetMapFieldAtPosition(targetPosition.x, targetPosition.y);
                         newPosition.PlaceCharacter(character);
-                        character.CurrentMapfield = newPosition;
                     }
                 }
-            } else
+            }
+            else
             {
                 Log.Warning($"The walking path for the character {movementDemandMessage.characterID} is empty.");
             }
@@ -450,9 +483,14 @@ namespace AIClient
             // check, if the demand message is for this client
             if (movementDemandMessage.clientID == Party.GetInstance().ClientID)
             {
-                // do the next move
-                SendRequestMessageDependingOnMoveType(GetNextMove(Party.GetInstance().CurrentCharacter), Party.GetInstance().CurrentCharacter);
+                if (movementDemandMessage.characterID == Party.GetInstance().CurrentCharacter.CharacterId)
+                {
+                    // do the next move
+                    // SendRequestMessageDependingOnMoveType(GetNextMove(Party.GetInstance().CurrentCharacter), Party.GetInstance().CurrentCharacter);
+                    _timer.Start();
+                }
             }
+            
         }
 
         /// <summary>
@@ -475,7 +513,8 @@ namespace AIClient
             if (actionDemandMessage.clientID == Party.GetInstance().ClientID)
             {
                 // do the next move
-                SendRequestMessageDependingOnMoveType(GetNextMove(Party.GetInstance().CurrentCharacter), Party.GetInstance().CurrentCharacter);
+                // SendRequestMessageDependingOnMoveType(GetNextMove(Party.GetInstance().CurrentCharacter), Party.GetInstance().CurrentCharacter);
+                _timer.Start();
             }
         }
 
@@ -495,7 +534,8 @@ namespace AIClient
             if (transferDemandMessage.clientID == Party.GetInstance().ClientID)
             {
                 // do the next move
-                SendRequestMessageDependingOnMoveType(GetNextMove(Party.GetInstance().CurrentCharacter), Party.GetInstance().CurrentCharacter);
+                // SendRequestMessageDependingOnMoveType(GetNextMove(Party.GetInstance().CurrentCharacter), Party.GetInstance().CurrentCharacter);
+                _timer.Start();
             }
         }
 
@@ -628,7 +668,8 @@ namespace AIClient
             {
                 Log.Information("Congratulations! You won the game!");
                 statistics = gameEndMessage.statistics[0];
-            } else
+            }
+            else
             {
                 Log.Information("You lost the game! Maybe the next time.");
                 statistics = gameEndMessage.statistics[1];
@@ -636,27 +677,27 @@ namespace AIClient
 
 
             // print the game statistics
-            Log.Information("---------------- GAME STATISTICS (YOU) ---------------- \n" +
+            Log.Information("\n---------------- GAME STATISTICS (YOU) ----------------\n" +
                 $"Your current spice amount:                            {statistics.HouseSpiceStorage}\n" +
                 $"Your total collected spice amount:                    {statistics.TotalSpiceCollected}\n" +
                 $"The amount of enemies, you defeated:                  {statistics.EnemiesDefeated}\n" +
                 $"The amount of your characters, who were swallowed:    {statistics.CharactersSwallowed}\n" +
                 $"Did you have the last character standing:             {(statistics.LastCharacterStanding ? "Yes" : "No")} \n" +
-                            "------------------------------------------------------");
+                             "------------------------------------------------------");
         }
 
         public override void OnAtomicsUpdateDemandMessage(AtomicsUpdateDemandMessage atomicUpdateDemandMessage)
         {
 
         }
-        
+
 
         public override void OnEndTurnRequestMessage(EndTurnRequestMessage msg)
         {
             throw new NotImplementedException();
         }
 
-        
+
 
         public override void OnGameStateMessage(GameStateMessage gameStateMessage)
         {
@@ -694,7 +735,7 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
-        
+
 
         public override void OnUnpauseGameOffer(int requestedByClientID)
         {
