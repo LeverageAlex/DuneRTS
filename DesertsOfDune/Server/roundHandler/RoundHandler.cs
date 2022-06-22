@@ -15,6 +15,7 @@ using GameData.Configuration;
 using GameData.roundHandler;
 using GameData.roundHandler.duneMovementHandler;
 using GameData.roundHandler.endOfGame;
+using GameData.network.util.world.character;
 
 namespace GameData.gameObjects
 {
@@ -97,6 +98,11 @@ namespace GameData.gameObjects
         private System.Timers.Timer maximalPauseOverTimer;
 
         /// <summary>
+        /// false at the beginning; needed to check if the great house convention got broken in the last round
+        /// </summary>
+        private bool GreatHouseConventionBroken = false;
+
+        /// <summary>
         /// Constructor of the class RoundHandler
         /// </summary>
         /// <param name="numbOfRounds">the maximum number of rounds specified in the pary config</param>
@@ -127,6 +133,11 @@ namespace GameData.gameObjects
         public void NextRound()
         {
             // check, whether a spice blow is necessary
+            if (GreatHouseConventionBroken != Noble.greatHouseConventionBroken)
+            {
+                GreatHouseConventionBroken = true;
+                AddCharactersFromAtomic();
+            }
             if (_spiceBlow.IsSpiceBlowNecessary(this._spiceMinimum, this._map.GetAmountOfSpiceOnMap()))
             {
                 _spiceBlow.Execute();
@@ -331,5 +342,53 @@ namespace GameData.gameObjects
         {
             return this.characterTraitPhase;
         }
-    }
+        
+        /// <summary>
+        /// This methods adds new characters after the greatHouseConvention gets broken for the first time.
+        /// </summary>
+        private void AddCharactersFromAtomic()
+        {
+            Player harmedPlayer = null;
+            foreach (var character in Party.GetInstance().GetAllCharacters())
+            {
+                if (character.Shunned)
+                {
+                    var player = Party.GetInstance().GetPlayerByCharacterID(character.CharacterId);
+                    if (player.Equals(Party.GetInstance().GetActivePlayers()[0]))
+                    {
+                        harmedPlayer = Party.GetInstance().GetActivePlayers()[1];
+                    }
+                    else
+                    {
+                        harmedPlayer = Party.GetInstance().GetActivePlayers()[0];
+                    }
+                    break;
+                }
+            }
+
+            if (harmedPlayer == null)
+            {
+                throw new Exception("Exception happend at spwaning new characters because of atomic action in the next round.");
+            }
+
+            foreach (var character in Character.CharactersToAddAfterAtomics)
+            {
+                MapField fieldForCharacter = null;
+                bool emptyFieldFound = false;
+                while (!emptyFieldFound)
+                {
+                    fieldForCharacter = Party.GetInstance().map.GetRandomApproachableField();
+                    if (!fieldForCharacter.IsCharacterStayingOnThisField)
+                    {
+                        emptyFieldFound = true;
+                    }
+                }
+                fieldForCharacter.PlaceCharacter(character);
+                character.CurrentMapfield = fieldForCharacter;
+                harmedPlayer.UsedGreatHouse.Characters.Add(character);
+                Party.GetInstance().messageController.DoSpawnCharacterDemand(character);
+            }
+            Character.CharactersToAddAfterAtomics.Clear();
+        }
+    }  
 }

@@ -24,14 +24,14 @@ public class PartieConfigModel
 
     public int minPauseTime { get; }
     public int maxStrikes { get; }
-    public float heliCrashProbability { get; }
+    public float crashProbability { get; }
 
 
     public PartieConfigModel(CharacterValuesModel Noble, CharacterValuesModel Mentat, 
         CharacterValuesModel BeneGeserit, CharacterValuesModel Fighter,
         int numberOfRounds, int actionTimeUserClient, int actionTimeAiClient, float highGroundBonusRatio, float lowGroundMalusRatio,
         float kanlySuccessProbability, int spiceMinimum, string cellularAutomate, int sandWormSpeed, 
-        int sandWormSpawnDistance, float cloneProbability, int minPauseTime, int maxStrikes, float heliCrashProbability) {
+        int sandWormSpawnDistance, float cloneProbability, int minPauseTime, int maxStrikes, float crashProbability) {
         
         this.Noble = Noble;
         this.Mentat = Mentat;
@@ -50,7 +50,7 @@ public class PartieConfigModel
         this.cloneProbability = cloneProbability;
         this.minPauseTime = minPauseTime;
         this.maxStrikes = maxStrikes;
-        this.heliCrashProbability = heliCrashProbability;
+        this.crashProbability = crashProbability;
     }
 
     public int getHealthPoints(CharacterType type) {
@@ -111,7 +111,7 @@ public class PartieConfigModel
             cloneProbability: 0.2f,
             minPauseTime: 0,
             maxStrikes: 10,
-            heliCrashProbability: 0.25f
+            crashProbability: 0.25f
             ) ;
     }
 }

@@ -150,7 +150,7 @@ public static class ConfigJSONLink
             partieConfigModel.cloneProbability,
             partieConfigModel.minPauseTime,
             partieConfigModel.maxStrikes,
-            partieConfigModel.heliCrashProbability);
+            partieConfigModel.crashProbability);
 
         Debug.WriteLine("[JSON CONVERT] Number of Rounds: " + partieConfigModel.numberOfRounds);
         Debug.WriteLine("[JSON CONVERT] actionTime: " + partieConfigModel.actionTimeUserClient);

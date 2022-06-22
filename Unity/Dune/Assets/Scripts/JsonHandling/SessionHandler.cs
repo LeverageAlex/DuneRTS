@@ -18,7 +18,8 @@ public static class SessionHandler
     public static string lastIp;
     public static int lastPort;
     public static bool rejoining;
-    private static System.Timers.Timer connectionMonitiorTimer;
+    public static bool isIngame;
+  //  private static System.Timers.Timer connectionMonitiorTimer;
 
     public static ClientConnectionHandler clientconhandler;
 
