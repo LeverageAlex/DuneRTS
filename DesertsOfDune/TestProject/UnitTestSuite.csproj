@@ -23,4 +23,7 @@
     <Folder Include="networkTest\messagesTest\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="ReportGenerator" />
+  </ItemGroup>
 </Project>
