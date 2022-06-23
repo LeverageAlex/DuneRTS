@@ -204,17 +204,8 @@ namespace GameData
         /// <exception cref="NotImplementedException"></exception>
         public override void OnMovementRequestMessage(MovementRequestMessage msg)
         {
-            //request from client to move a character
-
             //get the player who wants to move his character
-            Player activePlayer = null;
-            foreach (var player in Party.GetInstance().GetActivePlayers())
-            {
-                if (player.ClientID == msg.clientID)
-                {
-                    activePlayer = player;
-                }
-            }
+            Player activePlayer = Party.GetInstance().GetPlayerByClientID(msg.clientID);
 
             if (activePlayer == null)
             {
@@ -222,14 +213,7 @@ namespace GameData
             }
 
             //get the character which should be moved
-            Character movingCharacter = null;
-            foreach (var character in activePlayer.UsedGreatHouse.GetCharactersAlive())
-            {
-                if (character.CharacterId == msg.characterID)
-                {
-                    movingCharacter = character;
-                }
-            }
+            Character movingCharacter = GetCharacterFromPlayerById(activePlayer, msg.characterID);
 
             if (movingCharacter == null)
             {
@@ -282,16 +266,7 @@ namespace GameData
                                         alreadySteppedOnSandField = true;
                                     }
                                 }
-                                //deliver spice to city if city is neighborfield
-                                foreach (var mapfield in party.map.GetNeighborFields(movingCharacter.CurrentMapfield))
-                                {
-                                    if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
-                                    {
-                                        activePlayer.statistics.AddToHouseSpiceStorage(movingCharacter.inventoryUsed);
-                                        movingCharacter.inventoryUsed = 0;
-                                        DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
-                                    }
-                                }
+                                DeliverSpiceToCity(activePlayer, movingCharacter);
                             }
                         }
                     }
@@ -313,9 +288,27 @@ namespace GameData
 
                 // TODO: movement request was invalid, so end the game!!!!!!
             }
-            if (movingCharacter.MPcurrent <= 0 && movingCharacter.APcurrent <= 0)
+            if (movingCharacter.MPcurrent <= 0 && movingCharacter.APcurrent <= 0) // all ap and mp were used in this characterTrait -> end turn
             {
                 Party.GetInstance().RoundHandler.GetCharacterTraitPhase().SendRequestForNextCharacter();
+            }
+        }
+
+        /// <summary>
+        /// Check if character is on neighborfield of the city. If yes deliver all spice to the city.
+        /// </summary>
+        /// <param name="activePlayer">The active player</param>
+        /// <param name="movingCharacter">The moving character</param>
+        private void DeliverSpiceToCity(Player activePlayer, Character movingCharacter)
+        {
+            foreach (var mapfield in Party.GetInstance().map.GetNeighborFields(movingCharacter.CurrentMapfield))
+            {
+                if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
+                {
+                    activePlayer.statistics.AddToHouseSpiceStorage(movingCharacter.inventoryUsed);
+                    movingCharacter.inventoryUsed = 0;
+                    DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
+                }
             }
         }
 
