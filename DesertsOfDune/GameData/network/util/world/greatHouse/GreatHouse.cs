@@ -128,5 +128,18 @@ namespace GameData.network.util.world
             }
             return charactersAlive;
         }
+
+        public List<Character> GetCharactersNotSwallowedBySandworm()
+        {
+            var charactersNotSwallowed = new List<Character>();
+            foreach (var character in this.Characters)
+            {
+                if (!character.killedBySandworm)
+                {
+                    charactersNotSwallowed.Add(character);
+                }
+            }
+            return charactersNotSwallowed;
+        }
     }
 }

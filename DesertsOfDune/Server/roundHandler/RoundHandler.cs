@@ -132,12 +132,12 @@ namespace GameData.gameObjects
         /// </summary>
         public void NextRound()
         {
-            // check, whether a spice blow is necessary
             if (GreatHouseConventionBroken != Noble.greatHouseConventionBroken)
             {
                 GreatHouseConventionBroken = true;
                 AddCharactersFromAtomic();
             }
+            // check, whether a spice blow is necessary
             if (_spiceBlow.IsSpiceBlowNecessary(this._spiceMinimum, this._map.GetAmountOfSpiceOnMap()))
             {
                 _spiceBlow.Execute();
@@ -185,7 +185,7 @@ namespace GameData.gameObjects
                     // call CheckVictory to check if after sandworm phase the last character of one house is gone and the the other player has won
                     if (CheckVictory())
                     {
-                           Log.Information("The game is over. One player has no characters left");
+                        Log.Information("The game is over. One player has no characters left");
                         RestartServer();
                         //Party.GetInstance().messageController.OnEndGameMessage(new EndGameMessage());
                     }
@@ -235,12 +235,12 @@ namespace GameData.gameObjects
             {
                 foreach (var player in Party.GetInstance().GetActivePlayers())
                 {
-                    if (player.UsedGreatHouse.Characters.Count == 0) //TODO: check, if in Characters.count are also defeated characters which are not cloned again yet
+                    if (player.UsedGreatHouse.GetCharactersNotSwallowedBySandworm().Count <= 0)
                     {
                         int loserID = player.ClientID;
                         int winnerID = Party.GetInstance().GetActivePlayers().Find(c => c.ClientID != player.ClientID).ClientID;
                         Statistics[] statistics = { Party.GetInstance().GetPlayerByClientID(winnerID).statistics, Party.GetInstance().GetPlayerByClientID(loserID).statistics };
-                        Party.GetInstance().messageController.DoGameEndMessage(winnerID, loserID, statistics); //TODO: get stats for both players
+                        Party.GetInstance().messageController.DoGameEndMessage(winnerID, loserID, statistics);
                         partyFinished = true;
                         return true;
                     }
