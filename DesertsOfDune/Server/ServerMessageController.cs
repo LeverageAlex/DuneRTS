@@ -266,7 +266,7 @@ namespace GameData
                                         alreadySteppedOnSandField = true;
                                     }
                                 }
-                                DeliverSpiceToCity(activePlayer, movingCharacter);
+                                TryDeliverSpiceToCity(activePlayer, movingCharacter);
                             }
                         }
                     }
@@ -299,7 +299,7 @@ namespace GameData
         /// </summary>
         /// <param name="activePlayer">The active player</param>
         /// <param name="movingCharacter">The moving character</param>
-        private void DeliverSpiceToCity(Player activePlayer, Character movingCharacter)
+        private void TryDeliverSpiceToCity(Player activePlayer, Character movingCharacter)
         {
             foreach (var mapfield in Party.GetInstance().map.GetNeighborFields(movingCharacter.CurrentMapfield))
             {
@@ -388,7 +388,7 @@ namespace GameData
                             break;
                         case ActionType.COLLECT:
                             action = ActionType.COLLECT;
-                            ExecuteCollectSpice(msg, activePlayer, actionCharacter, action, map);
+                            ExecuteCollectSpice(msg, activePlayer, actionCharacter, action);
                             break;
                         //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
                         case ActionType.KANLY:
@@ -472,7 +472,6 @@ namespace GameData
             {
                 if (character.CharacterId == msg.characterID)
                 {
-                    activeCharacter = character;
                     activeCharacter = character;
                 }
                 if (character.CharacterId == msg.targetID)
@@ -1287,16 +1286,7 @@ namespace GameData
                 actionCharacter.Voice(targetCharacter);
                 activePlayer.statistics.AddToTotalSpiceCollected(actionCharacter.inventoryUsed - InventoryUsedBeforeVoice);
                 charactersHit.Add(targetCharacter);
-                //deliver spice to city if city is neighborfield
-                foreach (var mapfield in map.GetNeighborFields(actionCharacter.CurrentMapfield))
-                {
-                    if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
-                    {
-                        activePlayer.statistics.AddToHouseSpiceStorage(actionCharacter.inventoryUsed);
-                        actionCharacter.inventoryUsed = 0;
-                        DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
-                    }
-                }
+                TryDeliverSpiceToCity(activePlayer, actionCharacter);
             }
         }
 
@@ -1319,15 +1309,7 @@ namespace GameData
                 activePlayer.statistics.AddToTotalSpiceCollected(actionCharacter.inventoryUsed - inventoryUsedBeforeSpiceHoarding);
                 DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
                 //deliver spice to city if city is neighborfield
-                foreach (var mapfield in map.GetNeighborFields(actionCharacter.CurrentMapfield))
-                {
-                    if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
-                    {
-                        activePlayer.statistics.AddToHouseSpiceStorage(actionCharacter.inventoryUsed);
-                        actionCharacter.inventoryUsed = 0;
-                        DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
-                    }
-                }
+                TryDeliverSpiceToCity(activePlayer, actionCharacter);
             }
         }
 
@@ -1430,22 +1412,13 @@ namespace GameData
         /// <param name="actionCharacter">The character who executes the action</param>
         /// <param name="action">The action type</param>
         /// <param name="map">The current map</param>
-        private void ExecuteCollectSpice(ActionRequestMessage msg, Player activePlayer, Character actionCharacter, ActionType action, Map map)
+        private void ExecuteCollectSpice(ActionRequestMessage msg, Player activePlayer, Character actionCharacter, ActionType action)
         {
             DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
             actionCharacter.CollectSpice();
             activePlayer.statistics.AddToTotalSpiceCollected(1);
             DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
-            //deliver spice to city if city is neighborfield
-            foreach (var mapfield in map.GetNeighborFields(actionCharacter.CurrentMapfield))
-            {
-                if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
-                {
-                    activePlayer.statistics.AddToHouseSpiceStorage(actionCharacter.inventoryUsed);
-                    actionCharacter.inventoryUsed = 0;
-                    DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
-                }
-            }
+            TryDeliverSpiceToCity(activePlayer, actionCharacter);
         }
 
         /// <summary>
