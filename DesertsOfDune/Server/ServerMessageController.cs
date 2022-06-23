@@ -213,7 +213,7 @@ namespace GameData
             }
 
             //get the character which should be moved
-            Character movingCharacter = GetCharacterFromPlayerById(activePlayer, msg.characterID);
+            Character movingCharacter = GetCharacterByIdFromPlayer(activePlayer, msg.characterID);
 
             if (movingCharacter == null)
             {
@@ -318,7 +318,7 @@ namespace GameData
         /// <param name="player">The player from where to get the character</param>
         /// <param name="characterID">The id of the character</param>
         /// <returns>Return the found character</returns>
-        private Character GetCharacterFromPlayerById(Player player, int characterID)
+        private Character GetCharacterByIdFromPlayer(Player player, int characterID)
         {
             foreach (var character in player.UsedGreatHouse.GetCharactersAlive())
             {
@@ -352,7 +352,7 @@ namespace GameData
             }
 
             //get the characters which are involved in the action
-            Character actionCharacter = GetCharacterFromPlayerById(activePlayer, msg.characterID);
+            Character actionCharacter = GetCharacterByIdFromPlayer(activePlayer, msg.characterID);
             Character targetCharacter = null;
             //get the target character from enemy player if the target character is not an ally
             if (msg.specs.target != null)
@@ -390,7 +390,6 @@ namespace GameData
                             action = ActionType.COLLECT;
                             ExecuteCollectSpice(msg, activePlayer, actionCharacter, action);
                             break;
-                        //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
                         case ActionType.KANLY:
                             action = ActionType.KANLY;
                             ExecuteKanlyAction(msg, activePlayer, targetCharacter, actionCharacter, action, map, charactersHit);
@@ -403,7 +402,6 @@ namespace GameData
                             action = ActionType.SPICE_HOARDING;
                             ExecuteSpiceHoarding(msg, activePlayer, actionCharacter, action, map);
                             break;
-                        //check in every special action if the character is from the right character type to do the special action and check if his ap is full
                         case ActionType.VOICE:
                             action = ActionType.VOICE;
                             ExecuteVoice(msg, activePlayer, targetCharacter, actionCharacter, action, map, charactersHit);
@@ -415,20 +413,7 @@ namespace GameData
                         default:
                             throw new ArgumentException($"Actiontype {msg.action} not supoorted here.");
                     }
-
-                    foreach (var character in charactersHit)
-                    {
-                        if (activePlayer.UsedGreatHouse == character.greatHouse)
-                        {
-                            DoSendChangeCharacterStatsDemand(activePlayer.ClientID, character.CharacterId, new CharacterStatistics(character));
-
-                        }
-                        else if (enemyPlayer.UsedGreatHouse == character.greatHouse)
-                        {
-                            DoSendChangeCharacterStatsDemand(enemyPlayer.ClientID, character.CharacterId, new CharacterStatistics(character));
-                        }
-                    }
-                    DoSendChangeCharacterStatsDemand(activePlayer.ClientID, actionCharacter.CharacterId, new CharacterStatistics(actionCharacter));
+                    UpdateCharacterStatistics(activePlayer, enemyPlayer, actionCharacter, charactersHit);
                 }
                 else
                 {
@@ -445,20 +430,37 @@ namespace GameData
         }
 
         /// <summary>
+        /// Sends the changed character statistics to the client.
+        /// </summary>
+        /// <param name="activePlayer">The active player</param>
+        /// <param name="enemyPlayer">The enemy player</param>
+        /// <param name="actionCharacter">The action character</param>
+        /// <param name="charactersHit">The list of hittet characters</param>
+        private void UpdateCharacterStatistics(Player activePlayer, Player enemyPlayer, Character actionCharacter, List<Character> charactersHit)
+        {
+            foreach (var character in charactersHit)
+            {
+                if (activePlayer.UsedGreatHouse == character.greatHouse)
+                {
+                    DoSendChangeCharacterStatsDemand(activePlayer.ClientID, character.CharacterId, new CharacterStatistics(character));
+
+                }
+                else if (enemyPlayer.UsedGreatHouse == character.greatHouse)
+                {
+                    DoSendChangeCharacterStatsDemand(enemyPlayer.ClientID, character.CharacterId, new CharacterStatistics(character));
+                }
+            }
+            DoSendChangeCharacterStatsDemand(activePlayer.ClientID, actionCharacter.CharacterId, new CharacterStatistics(actionCharacter));
+        }
+
+        /// <summary>
         /// executed if the player wants to transfer spice from one character to another
         /// </summary>
         /// <param name="msg">contains information about the player who wants to transfer spice, the character who already has the spice, the character who should get the spice and the amount of spice he wants to transfer</param>
         public override void OnTransferRequestMessage(TransferRequestMessage msg)
         {
             //get the player who wants to do the transfer
-            Player activePlayer = null;
-            foreach (var player in Party.GetInstance().GetActivePlayers())
-            {
-                if (player.ClientID == msg.clientID)
-                {
-                    activePlayer = player;
-                }
-            }
+            Player activePlayer = Party.GetInstance().GetPlayerByClientID(msg.clientID);
 
             if (activePlayer == null)
             {
@@ -466,33 +468,22 @@ namespace GameData
             }
 
             //get the characters which are involved in the transfer
-            Character activeCharacter = null;
-            Character targetCharacter = null;
-            foreach (var character in activePlayer.UsedGreatHouse.Characters)
+            Character activeCharacter = GetCharacterByIdFromPlayer(activePlayer, msg.characterID);
+            Character targetCharacter = GetCharacterByIdFromPlayer(activePlayer, msg.targetID);
+
+            if (activeCharacter == null)
             {
-                if (character.CharacterId == msg.characterID)
-                {
-                    activeCharacter = character;
-                }
-                if (character.CharacterId == msg.targetID)
-                {
-                    targetCharacter = character;
-                }
+                DoSendError(005, "Active character is null", activePlayer.SessionID);
+                return;
+            }
+            if (targetCharacter == null)
+            {
+                DoSendError(005, "TargetCharacter is null", activePlayer.SessionID);
+                return;
             }
 
             if (!activeCharacter.IsInSandStorm(Map.instance) && !targetCharacter.IsInSandStorm(Map.instance))
             {
-                if (activeCharacter == null)
-                {
-                    DoSendError(005, "Active character is null", activePlayer.SessionID);
-                    return;
-                }
-                if (targetCharacter == null)
-                {
-                    DoSendError(005, "TargetCharacter is null", activePlayer.SessionID);
-                    return;
-                }
-
                 bool targetCharacterIsOnNeighborfield = false;
                 foreach (var mapfield in Party.GetInstance().map.GetNeighborFields(activeCharacter.CurrentMapfield))
                 {
@@ -509,16 +500,7 @@ namespace GameData
 
                     DoSendChangeCharacterStatsDemand(msg.clientID, msg.characterID, new CharacterStatistics(activeCharacter));
                     DoSendChangeCharacterStatsDemand(msg.clientID, msg.targetID, new CharacterStatistics(targetCharacter));
-                    //deliver spice to city if city is neighborfield
-                    foreach (var mapfield in Party.GetInstance().map.GetNeighborFields(targetCharacter.CurrentMapfield))
-                    {
-                        if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
-                        {
-                            activePlayer.statistics.AddToHouseSpiceStorage(targetCharacter.inventoryUsed);
-                            targetCharacter.inventoryUsed = 0;
-                            DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
-                        }
-                    }
+                    TryDeliverSpiceToCity(activePlayer, targetCharacter);
                 }
 
                 if (activeCharacter.MPcurrent <= 0 && activeCharacter.APcurrent <= 0)
@@ -534,7 +516,6 @@ namespace GameData
         /// <param name="msg"></param>
         public override void OnEndTurnRequestMessage(EndTurnRequestMessage msg)
         {
-            //CharacterTraitPhase.StopAndResetTimer();
             foreach (var player in Party.GetInstance().GetActivePlayers())
             {
                 if (player.ClientID == msg.clientID)
@@ -558,7 +539,6 @@ namespace GameData
             if (Party.GetInstance().AreTwoPlayersRegistred())
             {
                 Console.WriteLine("Beginning parsing GameStateRequest");
-                //   throw new NotImplementedException("not implemented");
 
                 //Requirement complete game state
 
