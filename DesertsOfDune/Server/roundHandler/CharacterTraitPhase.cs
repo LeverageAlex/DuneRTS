@@ -56,7 +56,6 @@ namespace GameData.server.roundHandler
             if (_currentCharacterIndex < _allCharacters.Count)
             {
                 _currentCharacter = _allCharacters[_currentCharacterIndex++];
-                Log.Warning($"Charakter nummer {_currentCharacterIndex} ist in der Runde {Party.GetInstance().RoundHandler._roundCounter} dran.");
                 _currentCharacter.SetSilent();
                 if (!_currentCharacter.IsDead() && !_currentCharacter.KilledBySandworm && !_currentCharacter.IsInSandStorm(Party.GetInstance().map)) // check if character is dead or staying in storm
                 {
@@ -164,6 +163,7 @@ namespace GameData.server.roundHandler
             }
             // ((ServerConnectionHandler)Party.GetInstance().messageController.NetworkController.connectionHandler).sessionManager.CloseSession(sessionID, WebSocketSharp.CloseStatusCode.Normal, "Timeout happend in characterTraitPhase!");
            // SendRequestForNextCharacter(); */
+            Log.Warning($"Timeout for the client {_currentCharacter.CharacterId}");
 
             Party.GetInstance().messageController.OnEndTurnRequestMessage(new network.messages.EndTurnRequestMessage(Party.GetInstance().GetPlayerByCharacterID(_currentCharacter.CharacterId).ClientID, _currentCharacter.CharacterId));
         }
