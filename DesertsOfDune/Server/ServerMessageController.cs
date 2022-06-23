@@ -396,7 +396,7 @@ namespace GameData
                             break;
                         case ActionType.FAMILY_ATOMICS:
                             action = ActionType.FAMILY_ATOMICS;
-                            charactersHit = ExecuteAtomics(msg, activePlayer, enemyPlayer, actionCharacter, action, map, charactersHit);
+                            charactersHit = ExecuteAtomics(msg, activePlayer, enemyPlayer, actionCharacter, action, map);
                             break;
                         case ActionType.SPICE_HOARDING:
                             action = ActionType.SPICE_HOARDING;
@@ -408,7 +408,7 @@ namespace GameData
                             break;
                         case ActionType.SWORD_SPIN:
                             action = ActionType.SWORD_SPIN;
-                            charactersHit = ExecuteSwordSpin(msg, activePlayer, actionCharacter, action, map, charactersHit);
+                            charactersHit = ExecuteSwordSpin(msg, activePlayer, actionCharacter, action, map);
                             break;
                         default:
                             throw new ArgumentException($"Actiontype {msg.action} not supoorted here.");
@@ -1208,15 +1208,15 @@ namespace GameData
         /// <param name="action">The action type</param>
         /// <param name="map">The current map</param>
         /// <param name="charactersHit">The List of hittet characters</param>
-        /// <returns></returns>
-        private List<Character> ExecuteSwordSpin(ActionRequestMessage msg, Player activePlayer, Character actionCharacter, ActionType action, Map map, List<Character> charactersHit)
+        /// <returns>The list of hittet characters</returns>
+        private List<Character> ExecuteSwordSpin(ActionRequestMessage msg, Player activePlayer, Character actionCharacter, ActionType action, Map map)
         {
+            var charactersHit = new List<Character>();
             if (actionCharacter.APcurrent == actionCharacter.APmax
                                             && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.FIGHTER))
             {
                 DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
                 charactersHit = actionCharacter.SwordSpin(map);
-                actionCharacter.SpentAp(actionCharacter.APcurrent);
                 foreach (var character in charactersHit)
                 {
                     if (character.IsDead())
@@ -1304,8 +1304,9 @@ namespace GameData
         /// <param name="map">The current map</param>
         /// <param name="charactersHit">The list of hittet characters</param>
         /// <returns>The list of hittet characters</returns>
-        private List<Character> ExecuteAtomics(ActionRequestMessage msg, Player activePlayer, Player enemyPlayer, Character actionCharacter, ActionType action, Map map, List<Character> charactersHit)
+        private List<Character> ExecuteAtomics(ActionRequestMessage msg, Player activePlayer, Player enemyPlayer, Character actionCharacter, ActionType action, Map map)
         {
+            var charactersHit = new List<Character>();
             if (actionCharacter.APcurrent == actionCharacter.APmax
                                             && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE))
             {

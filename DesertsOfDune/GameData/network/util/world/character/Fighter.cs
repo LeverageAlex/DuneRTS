@@ -65,6 +65,7 @@ namespace GameData.network.util.world.character
         public override List<Character> SwordSpin(Map map)
         {
             List<Character> charactersHit = new List<Character>();
+            bool atLeastOneCharacterHittet = false;
             if(this.APcurrent == this.APmax)
             {
                 List<MapField> NeighborFields = map.GetNeighborFields(this.CurrentMapfield);
@@ -76,10 +77,13 @@ namespace GameData.network.util.world.character
                         {
                             charactersHit.Add(mapfield.Character);
                             Attack(mapfield.Character);
-
+                            atLeastOneCharacterHittet = true;
                         }
-
                     }
+                }
+                if (atLeastOneCharacterHittet)
+                {
+                    SpentAp(this.APcurrent);
                 }
             }
             return charactersHit;
