@@ -315,9 +315,26 @@ namespace GameData
             }
             if (movingCharacter.MPcurrent <= 0 && movingCharacter.APcurrent <= 0)
             {
-                //  CharacterTraitPhase.StopAndResetTimer();
                 Party.GetInstance().RoundHandler.GetCharacterTraitPhase().SendRequestForNextCharacter();
             }
+        }
+
+        /// <summary>
+        /// Gets a character by its id from a player
+        /// </summary>
+        /// <param name="player">The player from where to get the character</param>
+        /// <param name="characterID">The id of the character</param>
+        /// <returns>Return the found character</returns>
+        private Character GetCharacterFromPlayerById(Player player, int characterID)
+        {
+            foreach (var character in player.UsedGreatHouse.GetCharactersAlive())
+            {
+                if (character.CharacterId == characterID)
+                {
+                    return character;
+                }
+            }
+            return null;
         }
 
         /// <summary>
@@ -329,19 +346,8 @@ namespace GameData
             //request from client to run an action
 
             //get the player who wants to do the action
-            Player activePlayer = null;
-            Player enemyPlayer = null;
-            foreach (var player in Party.GetInstance().GetActivePlayers())
-            {
-                if (player.ClientID == msg.clientID)
-                {
-                    activePlayer = player;
-                }
-                if (player.ClientID != msg.clientID)
-                {
-                    enemyPlayer = player;
-                }
-            }
+            Player activePlayer = Party.GetInstance().GetPlayerByClientID(msg.clientID);
+            Player enemyPlayer = Party.GetInstance().GetActivePlayers().Find(c => c.ClientID != activePlayer.ClientID);
 
             if (activePlayer == null)
             {
@@ -353,37 +359,16 @@ namespace GameData
             }
 
             //get the characters which are involved in the action
-            Character actionCharacter = null;
+            Character actionCharacter = GetCharacterFromPlayerById(activePlayer, msg.characterID);
             Character targetCharacter = null;
-            bool friendlyFire = false;
-            foreach (var character in activePlayer.UsedGreatHouse.GetCharactersAlive())
+            //get the target character from enemy player if the target character is not an ally
+            if (msg.specs.target != null)
             {
-                if (character.CharacterId == msg.characterID)
-                {
-                    actionCharacter = character;
-                }
-
-                if (msg.specs.target != null)
+                foreach (var character in enemyPlayer.UsedGreatHouse.GetCharactersAlive())
                 {
                     if (character.CurrentMapfield.XCoordinate == msg.specs.target.x && character.CurrentMapfield.ZCoordinate == msg.specs.target.y)
                     {
                         targetCharacter = character;
-                        friendlyFire = true; //characters can not attack their allys
-                    }
-                }
-            }
-            //get the target character from enemy player if the target character is not an ally
-
-            if (msg.specs.target != null)
-            {
-                if (targetCharacter == null)
-                {
-                    foreach (var character in enemyPlayer.UsedGreatHouse.GetCharactersAlive())
-                    {
-                        if (character.CurrentMapfield.XCoordinate == msg.specs.target.x && character.CurrentMapfield.ZCoordinate == msg.specs.target.y)
-                        {
-                            targetCharacter = character;
-                        }
                     }
                 }
             }
@@ -394,183 +379,45 @@ namespace GameData
                 return;
             }
 
-            //set Attack as standard enum and change it if needed
             ActionType action;
-
             if (actionCharacter.APcurrent > 0)
             {
-                GameData.network.util.world.Map map = Party.GetInstance().map;
+                var map = Party.GetInstance().map;
                 var charactersHit = new List<Character>();
                 //check which action the player wants to do with his character
                 if (!actionCharacter.IsInSandStorm(map))
                 {
-
                     switch (Enum.Parse(typeof(ActionType), msg.action))
                     {
                         case ActionType.ATTACK:
                             action = ActionType.ATTACK;
-                            if (!friendlyFire && targetCharacter != null && !targetCharacter.IsInSandStorm(map))
-                            {
-                                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
-                                actionCharacter.Attack(targetCharacter);
-                                if (targetCharacter.IsDead()) // if enemy dies from attack, update statistics
-                                {
-                                    activePlayer.statistics.AddToEnemiesDefeated(1);
-                                }
-                                charactersHit.Add(targetCharacter);
-                            }
+                            ExecuteAttack(msg, activePlayer, actionCharacter, targetCharacter, action, map, charactersHit);
                             break;
                         case ActionType.COLLECT:
                             action = ActionType.COLLECT;
-                            DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
-                            actionCharacter.CollectSpice();
-                            activePlayer.statistics.AddToTotalSpiceCollected(1);
-                            DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
-                            //deliver spice to city if city is neighborfield
-                            foreach (var mapfield in map.GetNeighborFields(actionCharacter.CurrentMapfield))
-                            {
-                                if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
-                                {
-                                    activePlayer.statistics.AddToHouseSpiceStorage(actionCharacter.inventoryUsed);
-                                    actionCharacter.inventoryUsed = 0;
-                                    DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
-                                }
-                            }
+                            ExecuteCollectSpice(msg, activePlayer, actionCharacter, action, map);
                             break;
                         //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
                         case ActionType.KANLY:
-                            Random rnd = new Random();
-                            double success = rnd.NextDouble();
                             action = ActionType.KANLY;
-                            if (targetCharacter == null)
-                            {
-                                DoSendError(005, "Target character is null when kanly action is executed!", activePlayer.SessionID);
-                            }
-                            else if (actionCharacter.APcurrent == actionCharacter.APmax
-                                && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE)
-                                && targetCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE)
-                                && !friendlyFire
-                                && !targetCharacter.IsInSandStorm(map)
-                                && success < PartyConfiguration.GetInstance().kanlySuccessProbability)
-                            {
-                                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
-                                actionCharacter.Kanly(targetCharacter);
-                                activePlayer.statistics.AddToEnemiesDefeated(1);
-                                charactersHit.Add(targetCharacter);
-                            }
+                            ExecuteKanlyAction(msg, activePlayer, targetCharacter, actionCharacter, action, map, charactersHit);
                             break;
                         case ActionType.FAMILY_ATOMICS:
                             action = ActionType.FAMILY_ATOMICS;
-                            if (actionCharacter.APcurrent == actionCharacter.APmax
-                                && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE))
-                            {
-                                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
-                                //get the mapfield where the active Character aims to
-                                MapField targetMapField = null;
-                                foreach (var mapfield in map.fields)
-                                {
-                                    if (mapfield.XCoordinate == msg.specs.target.x && mapfield.ZCoordinate == msg.specs.target.y)
-                                    {
-                                        targetMapField = mapfield;
-                                    }
-                                }
-                                if (targetMapField == null)
-                                {
-                                    DoSendError(005, "TargetMapField is null when FamilyAtomics was executed!", activePlayer.SessionID);
-                                }
-
-                                // if atomic bomb is thrown on sandworm or neighborfield of sandworm then remove the sandworm
-                                if (Sandworm.GetSandworm() != null)
-                                {
-                                    foreach (var mapField in map.GetNeighborFields(targetMapField))
-                                    {
-                                        if (Sandworm.GetSandworm().GetCurrentField().Equals(mapField) || Sandworm.GetSandworm().GetCurrentField().Equals(targetMapField))
-                                        {
-                                            Sandworm.Despawn(this);
-                                            break;
-                                        }
-                                    }
-                                }
-                                bool greathouseConventionBrokenBeforeAtomicBomb = Noble.greatHouseConventionBroken;
-                                charactersHit = actionCharacter.AtomicBomb(targetMapField, map, Noble.greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse);
-                                activePlayer.statistics.AddToEnemiesDefeated(charactersHit.Count);
-                                DoSendMapChangeDemand(MapChangeReasons.FAMILY_ATOMICS);
-                                if (greathouseConventionBrokenBeforeAtomicBomb != Noble.greatHouseConventionBroken)
-                                {
-                                    DoSendAtomicsUpdateDemand(msg.clientID, true, actionCharacter.greatHouse.unusedAtomicBombs);
-                                }
-                                else
-                                {
-                                    DoSendAtomicsUpdateDemand(msg.clientID, false, actionCharacter.greatHouse.unusedAtomicBombs);
-                                }
-                            }
+                            charactersHit = ExecuteAtomics(msg, activePlayer, enemyPlayer, actionCharacter, action, map, charactersHit);
                             break;
                         case ActionType.SPICE_HOARDING:
                             action = ActionType.SPICE_HOARDING;
-                            if (actionCharacter.APcurrent == actionCharacter.APmax
-                                && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.MENTAT))
-                            {
-                                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
-                                int inventoryUsedBeforeSpiceHoarding = actionCharacter.inventoryUsed;
-                                actionCharacter.SpiceHoarding(map);
-                                activePlayer.statistics.AddToTotalSpiceCollected(actionCharacter.inventoryUsed - inventoryUsedBeforeSpiceHoarding);
-                                DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
-                                //deliver spice to city if city is neighborfield
-                                foreach (var mapfield in map.GetNeighborFields(actionCharacter.CurrentMapfield))
-                                {
-                                    if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
-                                    {
-                                        activePlayer.statistics.AddToHouseSpiceStorage(actionCharacter.inventoryUsed);
-                                        actionCharacter.inventoryUsed = 0;
-                                        DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
-                                    }
-                                }
-                            }
+                            ExecuteSpiceHoarding(msg, activePlayer, actionCharacter, action, map);
                             break;
-                        //check in every special action if the character is from the right character type to do the special aciton and check if his ap is full
+                        //check in every special action if the character is from the right character type to do the special action and check if his ap is full
                         case ActionType.VOICE:
                             action = ActionType.VOICE;
-                            if (actionCharacter.APcurrent == actionCharacter.APmax
-                                && !targetCharacter.IsInSandStorm(map)
-                                && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.BENE_GESSERIT))
-                            {
-                                if (targetCharacter == null)
-                                {
-                                    DoSendError(005, "Target character is null when voice action is executed!", activePlayer.SessionID);
-                                }
-                                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
-                                int InventoryUsedBeforeVoice = actionCharacter.inventoryUsed;
-                                actionCharacter.Voice(targetCharacter);
-                                activePlayer.statistics.AddToTotalSpiceCollected(actionCharacter.inventoryUsed - InventoryUsedBeforeVoice);
-                                charactersHit.Add(targetCharacter);
-                                //deliver spice to city if city is neighborfield
-                                foreach (var mapfield in map.GetNeighborFields(actionCharacter.CurrentMapfield))
-                                {
-                                    if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
-                                    {
-                                        activePlayer.statistics.AddToHouseSpiceStorage(actionCharacter.inventoryUsed);
-                                        actionCharacter.inventoryUsed = 0;
-                                        DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
-                                    }
-                                }
-                            }
+                            ExecuteVoice(msg, activePlayer, targetCharacter, actionCharacter, action, map, charactersHit);
                             break;
                         case ActionType.SWORD_SPIN:
                             action = ActionType.SWORD_SPIN;
-                            if (actionCharacter.APcurrent == actionCharacter.APmax
-                                && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.FIGHTER))
-                            {
-                                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
-                                charactersHit = actionCharacter.SwordSpin(map);
-                                actionCharacter.SpentAp(actionCharacter.APcurrent);
-                                foreach (var character in charactersHit)
-                                {
-                                    if (character.IsDead())
-                                    {
-                                        activePlayer.statistics.AddToEnemiesDefeated(1);
-                                    }
-                                }
-                            }
+                            charactersHit = ExecuteSwordSpin(msg, activePlayer, actionCharacter, action, map, charactersHit);
                             break;
                         default:
                             throw new ArgumentException($"Actiontype {msg.action} not supoorted here.");
@@ -600,7 +447,6 @@ namespace GameData
 
             if ((actionCharacter.MPcurrent <= 0 && actionCharacter.APcurrent <= 0) || actionCharacter.IsDead())
             {
-                //      CharacterTraitPhase.StopAndResetTimer();
                 Party.GetInstance().RoundHandler.GetCharacterTraitPhase().SendRequestForNextCharacter();
             }
         }
@@ -685,7 +531,6 @@ namespace GameData
 
                 if (activeCharacter.MPcurrent <= 0 && activeCharacter.APcurrent <= 0)
                 {
-                    //CharacterTraitPhase.StopAndResetTimer();
                     Party.GetInstance().RoundHandler.GetCharacterTraitPhase().SendRequestForNextCharacter();
                 }
             }
@@ -1381,5 +1226,257 @@ namespace GameData
             throw new NotImplementedException();
         }
 
+
+        /// <summary>
+        /// Executes the Sword spin attack
+        /// </summary>
+        /// <param name="msg">The ActionRequestMessage</param>
+        /// <param name="activePlayer">The active player</param>
+        /// <param name="actionCharacter">The character who executes the action</param>
+        /// <param name="action">The action type</param>
+        /// <param name="map">The current map</param>
+        /// <param name="charactersHit">The List of hittet characters</param>
+        /// <returns></returns>
+        private List<Character> ExecuteSwordSpin(ActionRequestMessage msg, Player activePlayer, Character actionCharacter, ActionType action, Map map, List<Character> charactersHit)
+        {
+            if (actionCharacter.APcurrent == actionCharacter.APmax
+                                            && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.FIGHTER))
+            {
+                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
+                charactersHit = actionCharacter.SwordSpin(map);
+                actionCharacter.SpentAp(actionCharacter.APcurrent);
+                foreach (var character in charactersHit)
+                {
+                    if (character.IsDead())
+                    {
+                        activePlayer.statistics.AddToEnemiesDefeated(1);
+                    }
+                }
+            }
+
+            return charactersHit;
+        }
+
+        /// <summary>
+        /// Executes the voice attack
+        /// </summary>
+        /// <param name="msg">The ActionRequestMessage</param>
+        /// <param name="activePlayer">The active player</param>
+        /// <param name="targetCharacter">The character who gets attacked</param>
+        /// <param name="actionCharacter">The character who executes the action</param>
+        /// <param name="action">The action type</param>
+        /// <param name="map">The current map</param>
+        /// <param name="charactersHit">The list of hittet characters</param>
+        private void ExecuteVoice(ActionRequestMessage msg, Player activePlayer, Character targetCharacter, Character actionCharacter, ActionType action, Map map, List<Character> charactersHit)
+        {
+            if (targetCharacter == null)
+            {
+                foreach (var character in activePlayer.UsedGreatHouse.GetCharactersAlive())
+                {
+                    if (msg.specs.target != null
+                        && character.CurrentMapfield.XCoordinate == msg.specs.target.x
+                        && character.CurrentMapfield.ZCoordinate == msg.specs.target.y)
+                    {
+                        targetCharacter = character;
+                    }
+                }
+            }
+            if (targetCharacter == null)
+            {
+                DoSendError(005, "Target character is null when voice action is executed!", activePlayer.SessionID);
+            }
+            if (actionCharacter.APcurrent == actionCharacter.APmax
+                && !targetCharacter.IsInSandStorm(map)
+                && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.BENE_GESSERIT))
+            {
+                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
+                int InventoryUsedBeforeVoice = actionCharacter.inventoryUsed;
+                actionCharacter.Voice(targetCharacter);
+                activePlayer.statistics.AddToTotalSpiceCollected(actionCharacter.inventoryUsed - InventoryUsedBeforeVoice);
+                charactersHit.Add(targetCharacter);
+                //deliver spice to city if city is neighborfield
+                foreach (var mapfield in map.GetNeighborFields(actionCharacter.CurrentMapfield))
+                {
+                    if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
+                    {
+                        activePlayer.statistics.AddToHouseSpiceStorage(actionCharacter.inventoryUsed);
+                        actionCharacter.inventoryUsed = 0;
+                        DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Executes the spice hoarding attack
+        /// </summary>
+        /// <param name="msg">The ActionRequestMessage</param>
+        /// <param name="activePlayer">The active player</param>
+        /// <param name="actionCharacter">The character who executes the action</param>
+        /// <param name="action">The action type</param>
+        /// <param name="map">The current map</param>
+        private void ExecuteSpiceHoarding(ActionRequestMessage msg, Player activePlayer, Character actionCharacter, ActionType action, Map map)
+        {
+            if (actionCharacter.APcurrent == actionCharacter.APmax
+                                            && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.MENTAT))
+            {
+                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
+                int inventoryUsedBeforeSpiceHoarding = actionCharacter.inventoryUsed;
+                actionCharacter.SpiceHoarding(map);
+                activePlayer.statistics.AddToTotalSpiceCollected(actionCharacter.inventoryUsed - inventoryUsedBeforeSpiceHoarding);
+                DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
+                //deliver spice to city if city is neighborfield
+                foreach (var mapfield in map.GetNeighborFields(actionCharacter.CurrentMapfield))
+                {
+                    if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
+                    {
+                        activePlayer.statistics.AddToHouseSpiceStorage(actionCharacter.inventoryUsed);
+                        actionCharacter.inventoryUsed = 0;
+                        DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Executes the family atomics action
+        /// </summary>
+        /// <param name="msg">The ActionRequestMessage</param>
+        /// <param name="activePlayer">The active player</param>
+        /// <param name="enemyPlayer">The enemy player</param>
+        /// <param name="actionCharacter">The action character</param>
+        /// <param name="action">The action type</param>
+        /// <param name="map">The current map</param>
+        /// <param name="charactersHit">The list of hittet characters</param>
+        /// <returns>The list of hittet characters</returns>
+        private List<Character> ExecuteAtomics(ActionRequestMessage msg, Player activePlayer, Player enemyPlayer, Character actionCharacter, ActionType action, Map map, List<Character> charactersHit)
+        {
+            if (actionCharacter.APcurrent == actionCharacter.APmax
+                                            && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE))
+            {
+                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
+                //get the mapfield where the active Character aims to
+                MapField targetMapField = null;
+                foreach (var mapfield in map.fields)
+                {
+                    if (mapfield.XCoordinate == msg.specs.target.x && mapfield.ZCoordinate == msg.specs.target.y)
+                    {
+                        targetMapField = mapfield;
+                    }
+                }
+                if (targetMapField == null)
+                {
+                    DoSendError(005, "TargetMapField is null when FamilyAtomics was executed!", activePlayer.SessionID);
+                }
+
+                // if atomic bomb is thrown on sandworm or neighborfield of sandworm then remove the sandworm
+                if (Sandworm.GetSandworm() != null)
+                {
+                    foreach (var mapField in map.GetNeighborFields(targetMapField))
+                    {
+                        if (Sandworm.GetSandworm().GetCurrentField().Equals(mapField) || Sandworm.GetSandworm().GetCurrentField().Equals(targetMapField))
+                        {
+                            Sandworm.Despawn(this);
+                            break;
+                        }
+                    }
+                }
+                bool greathouseConventionBrokenBeforeAtomicBomb = Noble.greatHouseConventionBroken;
+                charactersHit = actionCharacter.AtomicBomb(targetMapField, map, Noble.greatHouseConventionBroken, activePlayer.UsedGreatHouse, enemyPlayer.UsedGreatHouse);
+                activePlayer.statistics.AddToEnemiesDefeated(charactersHit.Count);
+                DoSendMapChangeDemand(MapChangeReasons.FAMILY_ATOMICS);
+                if (greathouseConventionBrokenBeforeAtomicBomb != Noble.greatHouseConventionBroken)
+                {
+                    DoSendAtomicsUpdateDemand(msg.clientID, true, actionCharacter.greatHouse.unusedAtomicBombs);
+                }
+                else
+                {
+                    DoSendAtomicsUpdateDemand(msg.clientID, false, actionCharacter.greatHouse.unusedAtomicBombs);
+                }
+            }
+
+            return charactersHit;
+        }
+
+        /// <summary>
+        /// Executes the kanly action of a character
+        /// </summary>
+        /// <param name="msg">The ActionRequestMessage</param>
+        /// <param name="activePlayer">The active player</param>
+        /// <param name="targetCharacter">The target character</param>
+        /// <param name="actionCharacter">The character who executes the action</param>
+        /// <param name="action">The action type</param>
+        /// <param name="map">The current map</param>
+        /// <param name="charactersHit">The list of hittet characters</param>
+        private void ExecuteKanlyAction(ActionRequestMessage msg, Player activePlayer, Character targetCharacter, Character actionCharacter, ActionType action, Map map, List<Character> charactersHit)
+        {
+            Random rnd = new Random();
+            double success = rnd.NextDouble();
+            if (targetCharacter == null)
+            {
+                DoSendError(005, "Target character is null when kanly action is executed!", activePlayer.SessionID);
+            }
+            else if (actionCharacter.APcurrent == actionCharacter.APmax
+                && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE)
+                && targetCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE)
+                && !targetCharacter.IsInSandStorm(map)
+                && success < PartyConfiguration.GetInstance().kanlySuccessProbability)
+            {
+                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
+                actionCharacter.Kanly(targetCharacter);
+                activePlayer.statistics.AddToEnemiesDefeated(1);
+                charactersHit.Add(targetCharacter);
+            }
+        }
+
+        /// <summary>
+        /// Executes the collect spice action from a character.
+        /// </summary>
+        /// <param name="msg">The ActionRequestMessage</param>
+        /// <param name="activePlayer">The active player</param>
+        /// <param name="actionCharacter">The character who executes the action</param>
+        /// <param name="action">The action type</param>
+        /// <param name="map">The current map</param>
+        private void ExecuteCollectSpice(ActionRequestMessage msg, Player activePlayer, Character actionCharacter, ActionType action, Map map)
+        {
+            DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
+            actionCharacter.CollectSpice();
+            activePlayer.statistics.AddToTotalSpiceCollected(1);
+            DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
+            //deliver spice to city if city is neighborfield
+            foreach (var mapfield in map.GetNeighborFields(actionCharacter.CurrentMapfield))
+            {
+                if (mapfield.IsCityField && mapfield.clientID == activePlayer.ClientID)
+                {
+                    activePlayer.statistics.AddToHouseSpiceStorage(actionCharacter.inventoryUsed);
+                    actionCharacter.inventoryUsed = 0;
+                    DoChangePlayerSpiceDemand(activePlayer.ClientID, activePlayer.statistics.HouseSpiceStorage);
+                }
+            }
+        }
+
+        /// <summary>
+        /// This method executes the basic attack in OnActionRequestMessage
+        /// </summary>
+        /// <param name="msg">The ActionRequestMessage</param>
+        /// <param name="activePlayer">The active player</param>
+        /// <param name="actionCharacter">The action character</param>
+        /// <param name="targetCharacter">The target character</param>
+        /// <param name="action">The ActionType</param>
+        /// <param name="map">The current map</param>
+        /// <param name="charactersHit">The List of hittet characters</param>
+        private void ExecuteAttack(ActionRequestMessage msg, Player activePlayer, Character actionCharacter, Character targetCharacter, ActionType action, Map map, List<Character> charactersHit)
+        {
+            if (targetCharacter != null && !targetCharacter.IsInSandStorm(map))
+            {
+                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
+                actionCharacter.Attack(targetCharacter);
+                if (targetCharacter.IsDead()) // if enemy dies from attack, update statistics
+                {
+                    activePlayer.statistics.AddToEnemiesDefeated(1);
+                }
+                charactersHit.Add(targetCharacter);
+            }
+        }
     }
 }
