@@ -16,7 +16,7 @@ using Server.ClientManagement.Clients;
 namespace UnitTestSuite.serverTest.roundHandlerTest
 {
     /// <summary>
-    /// This Class is used to Test the class ShaiHuludPhase
+    /// Test the ShaiHuludPhase
     /// </summary>
     public class TestShaiHuludPhase : Setup
     {
