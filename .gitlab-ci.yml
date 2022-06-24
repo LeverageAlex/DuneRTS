@@ -2,6 +2,7 @@ stages:
   - analysis
   - build
   - test
+  - deploy
 
 variables:
   # Feel free to choose the image that suits you best.
@@ -15,6 +16,9 @@ variables:
   LATEX_IMAGE: listx/texlive:2020
   PFLICHTENHEFT_TEX_PATH: "./Documentation/Requirement_specification_document/"
   BENUTZERHANDBUCH_TEX_PATH: "./Documentation/"
+  CONFIGURATION: "Debug"
+  COVERAGE_FLAG: "XPlat Code Coverage"
+  PUBLIC_URL: "/-/$CI_PROJECT_NAME/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public"
 
 create_requirements_document:
   image: $LATEX_IMAGE
@@ -66,3 +70,38 @@ sonarqube-check:
   allow_failure: true
   only:
     - develop # or the name of your main branch
+
+test-with-coverage:
+  image: mcr.microsoft.com/dotnet/sdk:5.0-alpine
+  stage: test
+  
+  script:
+    - 'dotnet test
+            -c $CONFIGURATION
+            -r $CI_PROJECT_DIR/cobertura
+            --collect:"$COVERAGE_FLAG"
+
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/cobertura/*/coverage.cobertura.xml
+    reports:
+      cobertura:
+        - $CI_PROJECT_DIR/cobertura/*/coverage.cobertura.xml
+
+deploy-coverage-report:
+  image: mcr.microsoft.com/dotnet/sdk:5.0-alpine
+  stage: deploy
+  needs:
+    - job: test-with-coverage
+      artifacts: true
+  environment:
+    name: testing
+    url: "$https://gitlab.informatik.uni-ulm.de/sopra/ws21-deserts-of-dune/teams/team08/-/environments/jobs/$CI_JOB_ID/artifacts/coverageReport/index.html"
+  script:
+    - dotnet tool install --tool-path . dotnet-reportgenerator-globaltool
+    - mkdir -p coverageReport
+    - ./reportgenerator "-reports:$CI_PROJECT_DIR/cobertura/*/coverage.cobertura.xml" "-targetdir:coverageReport" "-reporttypes:Html"
+  artifacts:
+    paths:
+      - coverageReport
+
