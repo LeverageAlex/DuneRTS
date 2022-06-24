@@ -76,7 +76,7 @@ test-with-coverage:
   stage: test
   
   script:
-    - 'dotnet test -c $CONFIGURATION -r $CI_PROJECT_DIR/cobertura --collect:"$COVERAGE_FLAG"'
+    - 'dotnet test DesertsOfDune/TestProject/UnitTestSuite.csproj -c $CONFIGURATION -r $CI_PROJECT_DIR/cobertura --collect:"$COVERAGE_FLAG"'
 
   artifacts:
     paths:
