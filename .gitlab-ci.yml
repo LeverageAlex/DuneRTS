@@ -35,7 +35,7 @@ create_user_manual:
   image: $LATEX_IMAGE
   stage: build
   script:
-    - cd $PFLICHTENHEFT_TEX_PATH
+    - cd $BENUTZERHANDBUCH_TEX_PATH
     - latexmk -pdf Benutzerhandbuch.tex
 
   artifacts:
