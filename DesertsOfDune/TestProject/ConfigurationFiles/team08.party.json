@@ -1,7 +1,7 @@
 {
   "noble": {
     "maxHP": 20,
-    "maxMP": 11,
+    "maxMP": 21,
     "maxAP": 22,
     "damage": 4,
     "inventorySize": 8,
@@ -9,7 +9,7 @@
   },
   "mentat": {
     "maxHP": 20,
-    "maxMP": 11,
+    "maxMP": 21,
     "maxAP": 22,
     "damage": 4,
     "inventorySize": 8,
@@ -17,7 +17,7 @@
   },
   "beneGesserit": {
     "maxHP": 20,
-    "maxMP": 11,
+    "maxMP": 21,
     "maxAP": 22,
     "damage": 4,
     "inventorySize": 8,
@@ -25,13 +25,13 @@
   },
   "fighter": {
     "maxHP": 20,
-    "maxMP": 11,
+    "maxMP": 21,
     "maxAP": 22,
     "damage": 4,
     "inventorySize": 8,
     "healingHP": 6
   },
-  "numbOfRounds": 3,
+  "numbOfRounds": 10,
   "actionTimeUserClient": 5000,
   "actionTimeAiClient": 1000,
   "highGroundBonusRatio": 0.5,

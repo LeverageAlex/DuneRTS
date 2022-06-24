@@ -46,14 +46,14 @@ namespace UnitTestSuite.networkTest.utilTest.worldTest.characterTest
         [Test]
         public void TestSwordSpin()
         {
-            Fighter fighter = new Fighter("fighter");
+            /*Fighter fighter = new Fighter("fighter");
             fighter.greatHouse = new Ordos();
             Map map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
             fighter.CurrentMapfield = map.fields[2, 2];
             map.fields[1, 2].Character = new BeneGesserit("");
             map.fields[1, 2].Character.greatHouse = new Harkonnen();
             map.PositionOfEyeOfStorm = new Position(4, 4);
-            fighter.SwordSpin(map);
+            fighter.SwordSpin(map); */
         }
     }
 }
