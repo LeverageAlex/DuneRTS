@@ -18,7 +18,6 @@ variables:
   BENUTZERHANDBUCH_TEX_PATH: "./Documentation/"
   CONFIGURATION: "Debug"
   COVERAGE_FLAG: "XPlat Code Coverage"
-  PUBLIC_URL: "/-/$CI_PROJECT_NAME/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public"
 
 create_requirements_document:
   image: $LATEX_IMAGE
@@ -93,7 +92,8 @@ deploy-coverage-report:
     - job: test-with-coverage
       artifacts: true
   environment:
-    name: CoverageReport
+    name: coverageReport
+    url: "https://gitlab.informatik.uni-ulm.de/sopra/ws21-deserts-of-dune/teams/team08/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
   script:
     - dotnet tool install --tool-path . dotnet-reportgenerator-globaltool
     - mkdir -p coverageReport
