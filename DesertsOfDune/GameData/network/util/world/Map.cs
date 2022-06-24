@@ -207,6 +207,37 @@ namespace GameData.network.util.world
         }
 
         /// <summary>
+        /// Spread spice on field and its neighbours
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="amount"></param>
+        public void SpreadSpiceOnFields(MapField field, int amount)
+        {
+            var random = new Random();
+                //field.hasSpice = true;
+               // amount--;
+            
+            List<MapField> neighbours = GetNeighborFields(field).Where(item => item.IsApproachable && !item.hasSpice && !item.IsCharacterStayingOnThisField).OrderBy(item => random.Next()).ToList<MapField>();
+            foreach (var neighb in neighbours)
+            {
+                if(amount > 0)
+                {
+                    neighb.hasSpice = true;
+                    amount--;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            if(amount > 0)
+            {
+                SpreadSpiceOnFields(neighbours.ElementAt(random.Next(neighbours.Count)), amount);
+            }
+        }
+
+
+        /// <summary>
         /// checks, wether a field specified through its x- and y-coordinate on the map, so whether the coordinates are x,y > 0 and x,y < maxX, maxY
         /// </summary>
         /// <param name="x"><the x-coordinate of the mapfield/param>

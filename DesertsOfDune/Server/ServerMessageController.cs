@@ -414,6 +414,20 @@ namespace GameData
                             throw new ArgumentException($"Actiontype {msg.action} not supoorted here.");
                     }
                     UpdateCharacterStatistics(activePlayer, enemyPlayer, actionCharacter, charactersHit);
+                    bool hit = false;
+                    foreach (var localChar in charactersHit)
+                    {
+                        if (localChar.healthCurrent <= 0 && localChar.inventoryUsed > 0)
+                        {
+                            //Drop Spice
+                            Map.instance.SpreadSpiceOnFields(localChar.CurrentMapfield, localChar.inventoryUsed);
+                            hit = true;
+                        }
+                    }
+                    if(hit)
+                    {
+                        DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
+                    }
                 }
                 else
                 {
@@ -1027,6 +1041,8 @@ namespace GameData
                     {
                         //Crash
                         targetField = Map.instance.GetRandomApproachableField();
+                        Map.instance.SpreadSpiceOnFields(targetField, portingChar.inventoryUsed);
+                        portingChar.inventoryUsed = 0;
                         crash = true;
                     }
                     else
@@ -1048,6 +1064,12 @@ namespace GameData
                     targetField.PlaceCharacter(portingChar);
 
                     DoSendHeliDemand(activePlayer.ClientID, heliRequestMessage.characterID, new Position(targetField.XCoordinate, targetField.ZCoordinate), crash);
+
+                    if(crash)
+                    {
+                        DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
+                        DoSendChangeCharacterStatsDemand(activePlayer.ClientID, portingChar.CharacterId, new CharacterStatistics(portingChar));
+                    }
 
                 }
             }
