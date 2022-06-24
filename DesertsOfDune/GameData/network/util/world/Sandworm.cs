@@ -150,12 +150,11 @@ namespace GameData.server.roundHandler
             {
                 // do not move, but disappear and appear on a random desert field
                 _currentField.IsApproachable = true;
-                _currentField = this._map.GetRandomDesertField();
-                _currentField.IsApproachable = false;
+                
 
 
                 Despawn(_messageController);
-                _messageController.DoSpawnSandwormDemand(_targetCharacter.CharacterId, _currentField);
+                Spawn(_sandWormSpeed, _sandWormSpawnDistance, _map, new List<Character> {_targetCharacter}, _messageController);
             }
             else
             {
