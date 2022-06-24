@@ -68,6 +68,14 @@ namespace GameData.network.util.world
         }
 
         /// <summary>
+        /// constructor used for tests (ClientForTests)
+        /// </summary>
+        public GreatHouse(List<Character> characters)
+        {
+            this.Characters = characters;
+        }
+
+        /// <summary>
         /// Getter for field illegalAtomicUsage
         /// </summary>
         /// <returns>true, if house used illegalAtomicUsage</returns>

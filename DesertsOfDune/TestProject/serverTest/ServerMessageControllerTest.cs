@@ -15,6 +15,7 @@ using GameData.network.controller;
 
 namespace UnitTestSuite.serverTest
 {
+
     class ServerMessageControllerTest
     {
 
