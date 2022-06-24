@@ -41,64 +41,7 @@
     
 \newcommand{\class}[1]{\textit{#1}-Klasse}
 \newcommand{\method}[1]{\textit{#1}-Methode}    
-    
-\newcounter{fa}
-\newcounter{nfa}
-
-\newcommand{\fa}[7]{
-\refstepcounter{fa}\label{#7}
-\begin{tabularx}{16cm}{l|X}
-\textbf{ID} & \textbf{FA\arabic{fa}} \\
-\hline
-TITEL: & #1 \\
-\hline
-BESCHREIBUNG: & #2 \\
-\hline
-BEGRÜNDUNG & #3 \\ 
-\hline
-ABHÄNGIGKEITEN & #4\\ 
-\hline 
-PRIORITÄT & #5\\ 
-\hline 
-AKTEUR & #6
-\end{tabularx}
-\vspace*{0.75cm}
-}
-
-\newcommand{\nfa}[7]{
-\refstepcounter{nfa}\label{#7}
-\begin{tabularx}{16cm}{l|X}
-\textbf{ID} & \textbf{QA\arabic{nfa}} \\
-\hline
-TITEL: & #1 \\
-\hline
-BESCHREIBUNG: & #2 \\
-\hline
-BEGRÜNDUNG & #3 \\ 
-\hline
-ABHÄNGIGKEITEN & #4\\ 
-\hline 
-PRIORITÄT & #5\\ 
-\hline 
-AKTEUR & #6
-\end{tabularx}
-\vspace*{0.75cm}
-}
-
-\newcommand{\akteur}[4]{
-\labeltext{#2}{#1}
-\begin{tabularx}{16cm}{|l|X|}
-%\label{#1}
-\hline 
-AKTEUR: & #2 \\
-\hline
-BESCHREIBUNG: & #3 \\
-\hline
-ROLLE: & #4 \\ 
-\hline
-\end{tabularx}
-}
-
+ 
 \newcommand{\myrule}[1]{
 	\begin{tikzpicture}
 		\draw[{Diamond[open]}-{Diamond[open]}, ultra thick] (0,0) to (#1, 0);
