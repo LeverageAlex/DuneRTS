@@ -25,7 +25,7 @@ create_requirements_document:
 
   artifacts:
     paths:
-      - $PFLICHTENHEFT_TEX_PATH/Pflichtenheft.pdf
+      - Pflichtenheft.pdf
 
   only: 
     changes:
@@ -40,7 +40,7 @@ create_user_manual:
 
   artifacts:
     paths:
-      - $PFLICHTENHEFT_TEX_PATH/Benutzerhandbuch.pdf
+      - Benutzerhandbuch.pdf
 
   only: 
     changes:
