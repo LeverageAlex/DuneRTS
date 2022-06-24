@@ -21,6 +21,9 @@ namespace GameData.server.roundHandler
         private int _currentCharacterIndex;
         private Timer _timer;
 
+        /// <summary>
+        /// This method executes the Character trait phase
+        /// </summary>
         public void Execute()
         {
             SetTimer(); //initialize timer
@@ -28,6 +31,7 @@ namespace GameData.server.roundHandler
             _currentCharacterIndex = 0;
             SendRequestForNextCharacter();
         }
+
 
         /// <summary>
         /// This method gets all characters and randomizes this list for the traitsequenze
@@ -84,7 +88,6 @@ namespace GameData.server.roundHandler
             {
                 Party.GetInstance().RoundHandler.NextRound();
             }
-
         }
 
         /// <summary>
@@ -98,6 +101,7 @@ namespace GameData.server.roundHandler
         /// <summary>
         /// Sends a message to the client who has the next turn with the ID of the character, whos turn it is.
         /// </summary>
+        ///<param name="characterID">the character which is on turn</param>
         public void RequestClientForNextCharacterTrait(int characterID)
         {
             foreach (var player in Party.GetInstance().GetActivePlayers())
@@ -107,7 +111,7 @@ namespace GameData.server.roundHandler
                     if (character.CharacterId == characterID)
                     {
                         Party.GetInstance().messageController.DoSendTurnDemand(player.ClientID, characterID); //request client to execute a characterTrait
-                         _timer.Start(); // starts the timer when characterTrait starts
+                        _timer.Start(); // starts the timer when characterTrait starts
                     }
                 }
             }
@@ -117,7 +121,6 @@ namespace GameData.server.roundHandler
         /// <summary>
         /// Starts a new timer with the time from the parameter.
         /// </summary>
-        /// <param name="timeInSeconds">Time in seconds how long the timer runs.</param>
         public void SetTimer()
         {
             int timeInMilliseconds = PartyConfiguration.GetInstance().actionTimeUserClient;
@@ -168,7 +171,10 @@ namespace GameData.server.roundHandler
             Party.GetInstance().messageController.OnEndTurnRequestMessage(new network.messages.EndTurnRequestMessage(Party.GetInstance().GetPlayerByCharacterID(_currentCharacter.CharacterId).ClientID, _currentCharacter.CharacterId));
         }
 
-
+        /// <summary>
+        /// This method freezes the timer if the player pauses the game
+        /// </summary>
+        /// <param name="pause">bool if the player pauses or unpauses the game</param>
         public void freezeTraitPhase(bool pause)
         {
             if (pause)
@@ -181,11 +187,19 @@ namespace GameData.server.roundHandler
             }
         }
 
+        /// <summary>
+        /// Get the current character which is on turn
+        /// </summary>
+        /// <returns>return the current character</returns>
         public Character GetCurrentTurnCharacter()
         {
             return _currentCharacter;
         }
 
+        /// <summary>
+        /// Get the timer which is currently setted
+        /// </summary>
+        /// <returns>return the current timer</returns>
         public Timer GetTimer()
         {
             return this._timer;

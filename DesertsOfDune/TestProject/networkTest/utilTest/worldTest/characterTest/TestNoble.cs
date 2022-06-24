@@ -14,30 +14,13 @@ namespace UnitTestSuite.networkTest.utilTest.worldTest.characterTest
     /// <summary>
     /// This Class is used to tests the methods of the class Nobel
     /// </summary>
-    public class TestNoble
+    public class TestNoble : Setup
     {
 
         [SetUp]
         public void Setup()
         {
-            ConfigurationFileLoader loader = new ConfigurationFileLoader();
-
-            // load scenario and create a new scenario configuration
-            ScenarioConfiguration scenarioConfiguration = loader.LoadScenarioConfiguration("../.././../ConfigurationFiles/team08.scenario.json");
-            ScenarioConfiguration.CreateInstance(scenarioConfiguration);
-
-            // load the party configuration and create a new party configuration class
-            PartyConfiguration partyConfiguration = loader.LoadPartyConfiguration("../.././../ConfigurationFiles/team08.party.json");
-            PartyConfiguration.SetInstance(partyConfiguration);
-
-            //Initialization for greatHouses in GameData project
-            GameData.Configuration.Configuration.InitializeConfigurations();
-            // Initialization for the character configurations in GameData project
-            GameData.Configuration.Configuration.InitializeCharacterConfiguration(
-                PartyConfiguration.GetInstance().noble,
-                PartyConfiguration.GetInstance().mentat,
-                PartyConfiguration.GetInstance().beneGesserit,
-                PartyConfiguration.GetInstance().fighter);
+            ConfigurationSetUp();
         }
 
         /// <summary>
@@ -75,17 +58,31 @@ namespace UnitTestSuite.networkTest.utilTest.worldTest.characterTest
         [Test]
         public void TestAtomicBomb()
         {
-            /*Map map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
+            Ordos ordos = new Ordos();
+            Corrino corrino = new Corrino();
+            Map map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
             MapField target = map.fields[0, 1];
+            map.fields[1, 1].hasSpice = true;
+            BeneGesserit bene = new BeneGesserit("");
+            bene.CurrentMapfield = map.fields[0, 2];
+            map.fields[0, 2].Character = bene;
             Noble noble = new Noble("");
-            noble.AtomicBomb(target, map, false, null, null); */
+            noble.greatHouse = ordos;
+            Assert.AreEqual("MOUNTAINS", map.fields[1, 0].tileType);
+            Assert.AreEqual("FLAT_SAND", map.fields[1, 1].tileType);
+            noble.AtomicBomb(target, map, false, ordos, corrino);
+            Assert.AreEqual("PLATEAU", map.fields[1, 0].tileType);
+            Assert.AreEqual("FLAT_SAND", map.fields[1, 1].tileType);
+            Assert.False(map.fields[1, 1].hasSpice);
+            Assert.IsNull(map.fields[0, 2].Character);
+            Assert.True(bene.IsDead());
         }
 
         /// <summary>
         /// This Testcase validates the behavior of the method ResetData
         /// </summary>
         [Test]
-        public void ResetData()
+        public void TestResetData()
         {
             Noble noble = new Noble("");
             noble.characterType = Enum.GetName(typeof(CharacterType), CharacterType.BENE_GESSERIT);
