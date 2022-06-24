@@ -93,8 +93,9 @@ deploy-coverage-report:
       artifacts: true
   environment:
     name: coverageReport
-    url: "https://gitlab.informatik.uni-ulm.de/sopra/ws21-deserts-of-dune/teams/team08/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
+    url: "https://$CI_PROJECT_ROOT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
   script:
+    - echo "https://$CI_PROJECT_ROOT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
     - dotnet tool install --tool-path . dotnet-reportgenerator-globaltool
     - mkdir -p public
     - ./reportgenerator "-reports:$CI_PROJECT_DIR/cobertura/*/coverage.cobertura.xml" "-targetdir:public" "-reporttypes:Html"
