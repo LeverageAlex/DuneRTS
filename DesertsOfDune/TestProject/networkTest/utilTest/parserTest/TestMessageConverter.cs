@@ -968,19 +968,30 @@ namespace TestProject.networkTest.utilTest.parserTest
         Assert.AreEqual(true, ((HeliDemandMessage)deserializedMessage).crash);
     }
 
-    // SandwormSpawnDemandMessage
 
-    // SpawnCharacterDemandMessage
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message StrikeMessage
+        /// </summary>
+        [Test]
+        public void TestToStrikeMessage()
+        {
+            string serializedMessage = "{\"type\":\"STRIKE\",\"version\":\"0.1\",\"clientID\":1234,\"wrongMessage\":\"*fehlerhafteMessagealsString*\",\"count\":4}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
 
-    // StrikeMessage
+            Assert.AreEqual("STRIKE", ((StrikeMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.1", ((StrikeMessage)deserializedMessage).version);
+            Assert.AreEqual(1234, ((StrikeMessage)deserializedMessage).clientID);
+            Assert.AreEqual(4, ((StrikeMessage)deserializedMessage).count);
+            Assert.AreEqual("*fehlerhafteMessagealsString*", ((StrikeMessage)deserializedMessage).wrongMessage);
+        }
 
-    // TurnDemandMessage
+        // TurnDemandMessage
 
-    // TurnRequestMessage
+        // TurnRequestMessage
 
-    // RejoinMessage
+        // RejoinMessage
 
-    // AtomicsUpdateDemandMessage
+        // AtomicsUpdateDemandMessage
 
-}
+    }
 }
