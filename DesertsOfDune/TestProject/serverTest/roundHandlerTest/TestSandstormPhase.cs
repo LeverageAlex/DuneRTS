@@ -46,7 +46,6 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
             
             map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
 
-            Party.GetInstance().messageController = new ServerMessageController();
         }
 
         /// <summary>
