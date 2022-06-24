@@ -75,8 +75,27 @@ namespace GameData.network.controller
         /// <summary>
         /// creates a dummy connection handler, which do not open any connection
         /// </summary>
-        public ServerConnectionHandler() : base("", 0)
+        public ServerConnectionHandler(string ServerAddress, int Port, bool noThread) : base(ServerAddress, Port)
         {
+            if (noThread)
+            {
+                // initialize the websocket on the given url
+
+                WebSocketServer webSocketServer = new WebSocketServer(GetURL());
+
+                // add services
+                webSocketServer.AddWebSocketService<GameService>("/", () => new GameService(this));
+
+                // start the websocket server
+                webSocketServer.Start();
+                Log.Information("Started websocket on " + GetURL() + "/");
+
+                _isServerStopped = false;
+
+                // set the session mananger
+                sessionManager = webSocketServer.WebSocketServices["/"].Sessions;
+
+            }
         }
 
         /// <summary>

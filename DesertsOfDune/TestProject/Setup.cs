@@ -58,7 +58,7 @@ namespace UnitTestSuite
                 // TODO: eventually change to message controller
                 ServerMessageController messageController = new ServerMessageController();
 
-                ServerConnectionHandler serverConnectionHandler = new ServerConnectionHandler("127.0.0.1", 8000);
+                ServerConnectionHandler serverConnectionHandler = new ServerConnectionHandler("127.0.0.1", 8000, true);
                 _ = new ServerNetworkController(serverConnectionHandler, messageController);
 
                 Party.GetInstance().messageController = messageController;
