@@ -22,4 +22,4 @@ Das Pflichtenheft wird durch eine Pipeline automatisch gebaut, das heißt die en
 Für Abgaben oder sonstige Information ist immer dieses Pflichtenheft zu verwenden.
 
 # Test
-Der aktuelle Testreport befindet sich [hier](https://gitlab.informatik.uni-ulm.de/sopra/ws21-deserts-of-dune/teams/team08/-/jobs/artifacts/refactor/pipeline/raw/public/index.html?job=deploy-coverage-report)
+Der aktuelle Testreport befindet sich [hier](https://gitlab.informatik.uni-ulm.de/sopra/ws21-deserts-of-dune/teams/team08/-/jobs/artifacts/refactor/pipeline/raw/public?job=deploy-coverage-report)
