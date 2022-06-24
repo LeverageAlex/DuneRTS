@@ -27,9 +27,9 @@ create_requirements_document:
     paths:
       - PFLICHTENHEFT_TEX_PATH/Pflichtenheft.pdf
 
-  only: 
-    changes:
-      - Documentation
+  #only: 
+  #  changes:
+  #    - Documentation
 
 create_user_manual:
   image: $LATEX_IMAGE
@@ -42,9 +42,9 @@ create_user_manual:
     paths:
       - BENUTZERHANDBUCH_TEX_PATH/Benutzerhandbuch.pdf
 
-  only: 
-    changes:
-      - Documentation
+  #only: 
+  #  changes:
+  #    - Documentation
 
 sonarqube-check:
   image: mcr.microsoft.com/dotnet/core/sdk:latest
