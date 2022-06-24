@@ -40,7 +40,7 @@ namespace GameData
         /// <summary>
         /// list of all players connected to this party
         /// </summary>
-        private readonly List<Client> connectedClients;
+        public List<Client> ConnectedClients { get; private set; }
 
         /// <summary>
         /// the round handler for this party, which execute the rounds in the correct order and handles the user input
@@ -63,12 +63,25 @@ namespace GameData
         /// </remarks>
         private Party()
         {
-            connectedClients = new List<Client>();
+            ConnectedClients = new List<Client>();
             map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
             RoundHandler = new RoundHandler(PartyConfiguration.GetInstance().numbOfRounds, PartyConfiguration.GetInstance().spiceMinimum, map);
             Noble.greatHouseConventionBroken = false;
 
             Log.Debug("A new party was created!");
+        }
+
+        /// <summary>
+        /// resets a party, so set the singleton reference to null
+        /// </summary>
+        public static void Reset()
+        {
+            singleton = null;
+        }
+
+        public void ResetClients()
+        {
+            ConnectedClients = new List<Client>();
         }
 
         /// <summary>
@@ -90,7 +103,7 @@ namespace GameData
         /// <param name="client"></param>
         public void AddClient(Client client)
         {
-            connectedClients.Add(client);
+            ConnectedClients.Add(client);
         }
 
         /// <summary>
@@ -99,7 +112,7 @@ namespace GameData
         /// <returns>true, if there are already two players registred</returns>
         public bool AreTwoPlayersRegistred()
         {
-            return connectedClients.FindAll(client => client.IsActivePlayer).Count == 2;
+            return ConnectedClients.FindAll(client => client.IsActivePlayer).Count == 2;
         }
 
         /// <summary>
@@ -109,7 +122,7 @@ namespace GameData
         public List<Player> GetActivePlayers()
         {
             List<Player> foundActiveClients = new List<Player>();
-            foreach (var activePlayer in connectedClients)
+            foreach (var activePlayer in ConnectedClients)
             {
                 if (activePlayer.IsActivePlayer)
                 {
@@ -192,7 +205,7 @@ namespace GameData
         /// <returns>the reference to the client or null, if the client was not found</returns>
         public Client GetClientBySessionID(string sessionID)
         {
-            return connectedClients.Find(client => client.SessionID == sessionID);
+            return ConnectedClients.Find(client => client.SessionID == sessionID);
         }
 
 
@@ -350,7 +363,7 @@ namespace GameData
 
         public List<Client> GetConnectedClients()
         {
-            return this.connectedClients;
+            return this.ConnectedClients;
         }
     }
 }

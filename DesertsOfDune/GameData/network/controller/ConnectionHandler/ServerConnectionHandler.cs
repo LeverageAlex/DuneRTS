@@ -72,6 +72,12 @@ namespace GameData.network.controller
             Thread t = new Thread(InitializeWebSocketServer);
             t.Start();
         }
+        /// <summary>
+        /// creates a dummy connection handler, which do not open any connection
+        /// </summary>
+        public ServerConnectionHandler() : base("", 0)
+        {
+        }
 
         /// <summary>
         /// create, initialize and start the websocket server

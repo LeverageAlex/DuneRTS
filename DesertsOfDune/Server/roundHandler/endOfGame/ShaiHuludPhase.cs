@@ -15,13 +15,34 @@ namespace GameData.server.roundHandler
     /// <summary>
     /// Represents the game phases, which handles the Shai-Hulud
     /// </summary>
+    /// <remarks>
+    /// So in the execution of one shai hulud round, the following things will be done:
+    /// <list type="bullet">
+    /// <item>Check, whether the shai hulud already eaten the last character and the game can be finished</item>
+    /// <item>If the game need to be continued, choose a new target character</item>
+    /// <item>and eat the target character, so move the shai hulud to the character and kill the character</item>
+    /// <item>Check, whether this character was the last character standing on the map</item>
+    /// </list>
+    /// </remarks>
     public class ShaiHuludPhase
     {
         private readonly Map _map;
-        private MapField _currentField;
 
+        /// <summary>
+        /// the current map field of the shai hulud
+        /// </summary>
+        public MapField CurrentField { get; private set; }
+
+        /// <summary>
+        /// states, whether the last character was eaten (if so, the round handler will be informed and finish the game)
+        /// </summary>
         private bool _lastCharacterEaten;
-        private static Timer wormDespawnTimer;
+
+        /// <summary>
+        /// the time, which need to pass, until the server informs the clients about the despawn of the shai hulud (in ms)
+        /// </summary>
+        private readonly int _timeUntilShaiHuludDespawn = 500;
+        private readonly Timer _wormDespawnTimer;
 
         /// <summary>
         /// create a new handler for the shai hulud phase
@@ -29,74 +50,90 @@ namespace GameData.server.roundHandler
         /// <param name="map">the map, the overlength mechanism is working on</param>
         public ShaiHuludPhase(Map map)
         {
-            this._map = map;
-            this._currentField = map.GetRandomDesertField();
-            this._lastCharacterEaten = false;
-            wormDespawnTimer = new Timer(500);
-            wormDespawnTimer.Elapsed += OnTimerDespawnWorm;
-            wormDespawnTimer.AutoReset = false;
+            _map = map;
+            CurrentField = map.GetRandomFieldWithoutCharacter();
+            CurrentField.IsApproachable = false;
+            _lastCharacterEaten = false;
 
+            _wormDespawnTimer = new Timer(_timeUntilShaiHuludDespawn);
+            _wormDespawnTimer.Elapsed += OnTimerDespawnWorm;
+            _wormDespawnTimer.AutoReset = false;
+
+        }
+
+        /// <summary>
+        /// trigger the server message controller to despawn the shai hulud
+        /// </summary>
+        private static void OnTimerDespawnWorm(Object source, ElapsedEventArgs e)
+        {
+            Party.GetInstance().messageController.DoDespawnSandwormDemand();
         }
 
         /// <summary>
         /// choose a random character on the map 
         /// </summary>
-        /// <returns>the chosen random character on the map</returxns>
+        /// <returns>the chosen random character on the map or null, if there is no character on the map</returxns>
         private Character ChooseTargetCharacter()
         {
             Random random = new Random();
-            List<Character> charactersOnMap = this._map.GetCharactersOnMap();
+            List<Character> charactersOnMap = _map.GetCharactersOnMap();
 
+            if (charactersOnMap.Count == 0)
+            {
+                // TODO: do not return null
+                return null;
+            }
             return charactersOnMap[random.Next(charactersOnMap.Count)];
         }
 
         /// <summary>
-        /// move the shai hulud to the target character and eat it
+        /// moves the shai hulud to a given target character and therefore set the current field new
         /// </summary>
-        /// <param name="targetCharacter">the targeted character, who will be eaten</param>
-        private void EatTargetCharacter(Character targetCharacter)
+        /// <param name="targetCharacter"></param>
+        private void MoveToTargetCharacter(Character targetCharacter)
         {
-            List<MapField> path = new List<MapField>();
-            path.Add(_currentField);
-            path.Add(targetCharacter.CurrentMapfield);
-
-            _currentField = new FlatSand(_currentField.hasSpice, _currentField.isInSandstorm);
-            _currentField.IsApproachable = true;
-
-            _map.SetMapFieldAtPosition(_currentField, _currentField.XCoordinate, _currentField.ZCoordinate);
+            _map.SetMapFieldAtPosition(new FlatSand(CurrentField.hasSpice, CurrentField.isInSandstorm), CurrentField.XCoordinate, CurrentField.ZCoordinate);
+            _map.GetMapFieldAtPosition(CurrentField.XCoordinate, CurrentField.ZCoordinate).IsApproachable = true;
 
             // send map change for updating the map in the user client
             Party.GetInstance().messageController.DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
-            _currentField = targetCharacter.CurrentMapfield;
-            _currentField.IsApproachable = false;
+            CurrentField = targetCharacter.CurrentMapfield;
+            CurrentField.IsApproachable = false;
+        }
 
-            // move the shai hulud
-            // Party.GetInstance().messageController.DoMoveSandwormDemand(path);
-
-            // kill target character and send message, that stats of character changed
-            _currentField.Character.KilledBySandworm = true;
-
+        /// <summary>
+        /// eat a given character so kill it
+        /// </summary>
+        /// <param name="targetCharacter">the targeted character, who will be eaten</param>
+        /// <return>true, if the character could be eaten, otherwise false</return>
+        private bool EatTargetCharacter(Character targetCharacter)
+        {
             // get the id the client, whose character the target character is
             Player player = Party.GetInstance().GetPlayerByCharacterID(targetCharacter.CharacterId);
             if (player != null)
             {
+                // kill target character and send message, that stats of character changed
+                targetCharacter.KilledBySandworm = true;
+                player.UsedGreatHouse.Characters.Remove(targetCharacter);
                 Party.GetInstance().messageController.DoSendChangeCharacterStatsDemand(player.ClientID, targetCharacter.CharacterId, new CharacterStatistics(targetCharacter));
+
+                CurrentField.DisplaceCharacter(targetCharacter);
+                return true;
             }
             else
             {
                 Log.Error($"There is no player with a character with the character ID {targetCharacter.CharacterId}!");
-            }
-
-            _currentField.DisplaceCharacter(_currentField.Character);
+                return false;
+            }  
         }
 
         /// <summary>
-        /// check, whether there is only one player left on tge map and if, whose character it is
+        /// check, whether there is only one player left on the map and if, whose character it is
         /// </summary>
         /// <returns>true, if there is only character left</returns>
-        private void DetermineLastPlayerStanding()
+        private bool DetermineLastPlayerStanding()
         {
-            List<Character> charactersOnMap = this._map.GetCharactersOnMap();
+            List<Character> charactersOnMap = _map.GetCharactersOnMap();
 
             if (charactersOnMap.Count == 1)
             {
@@ -115,10 +152,9 @@ namespace GameData.server.roundHandler
                     players[1].statistics.LastCharacterStanding = false;
                     players[0].statistics.LastCharacterStanding = true;
                 }
-
+                return true;
             }
-
-
+            return false;
         }
 
         /// <summary>
@@ -137,16 +173,17 @@ namespace GameData.server.roundHandler
                 Character target = ChooseTargetCharacter();
 
                 // spawn the shai hulud
-                Party.GetInstance().messageController.DoSpawnSandwormDemand(target.CharacterId, target.CurrentMapfield/*_currentField*/);
+                Party.GetInstance().messageController.DoSpawnSandwormDemand(target.CharacterId, target.CurrentMapfield);
 
+                MoveToTargetCharacter(target);
                 EatTargetCharacter(target);
 
                 // despawn the shai hulud
-                wormDespawnTimer.Start();
+                _wormDespawnTimer.Start();
 
                 // after the last character was eaten, there is no character left
                 _lastCharacterEaten = true;
-                foreach (Character character in Map.instance.GetCharactersOnMap())
+                foreach (Character character in Party.GetInstance().map.GetCharactersOnMap())
                 {
                     if (!character.killedBySandworm)
                     {
@@ -156,15 +193,6 @@ namespace GameData.server.roundHandler
                 }
                 return false;
             }
-
-
         }
-
-
-        private static void OnTimerDespawnWorm(Object source, ElapsedEventArgs e)
-        {
-            Party.GetInstance().messageController.DoDespawnSandwormDemand();
-        }
-
     }
 }

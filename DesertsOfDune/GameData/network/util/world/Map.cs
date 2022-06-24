@@ -212,7 +212,7 @@ namespace GameData.network.util.world
         /// <param name="x"><the x-coordinate of the mapfield/param>
         /// <param name="y">the y-coordinate of the mapfield</param>
         /// <returns></returns>
-        private bool IsFieldOnMap(int x, int y)
+        public bool IsFieldOnMap(int x, int y)
         {
             return x >= 0 && y >= 0 && x < MAP_WIDTH && y < MAP_HEIGHT;
         }
@@ -311,6 +311,33 @@ namespace GameData.network.util.world
 
                 MapField chosenField = GetMapFieldAtPosition(randomX, randomY);
                 if (IsMapFieldADesertField(chosenField))
+                {
+                    return chosenField;
+                }
+            }
+        }
+
+        /// <summary>
+        /// gets a random field from the map, where no character is standing on
+        /// </summary>
+        /// <remarks>
+        /// Be cautious when using this method, because it uses a while (true)-loop, so theoretically it is possible, that this method never return,
+        /// if there is no desert field on the map
+        /// </remarks>
+        /// <returns>a random map field, where no character is standing on</returns>
+        public MapField GetRandomFieldWithoutCharacter()
+        {
+            // as long, as the chosen map field has a character standing on
+
+            while (true)
+            {
+                // get a random map field on the map
+                Random random = new Random();
+                int randomX = random.Next(MAP_WIDTH);
+                int randomY = random.Next(MAP_HEIGHT);
+
+                MapField chosenField = GetMapFieldAtPosition(randomX, randomY);
+                if (!chosenField.IsCharacterStayingOnThisField)
                 {
                     return chosenField;
                 }
@@ -524,6 +551,24 @@ namespace GameData.network.util.world
                 }
             }
             return sandstormFields;
+        }
+
+        /// <summary>
+        /// removes all characters from the map (used for tests!)
+        /// </summary>
+        public void RemoveCharactersFromMap()
+        {
+            for(int x = 0; x < MAP_WIDTH; x++)
+            {
+                for (int y = 0; y < MAP_HEIGHT; y++)
+                {
+                    MapField field = GetMapFieldAtPosition(x, y);
+                    if (field.IsCharacterStayingOnThisField)
+                    {
+                        field.DisplaceCharacter(field.Character);
+                    }
+                }
+            }
         }
     }
 }

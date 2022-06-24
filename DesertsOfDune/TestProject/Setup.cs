@@ -35,11 +35,11 @@ namespace UnitTestSuite
             ConfigurationFileLoader loader = new ConfigurationFileLoader();
 
             // load scenario and create a new scenario configuration
-            ScenarioConfiguration scenarioConfiguration = loader.LoadScenarioConfiguration("./ConfigurationFiles/team08.scenario.json");
+            ScenarioConfiguration scenarioConfiguration = loader.LoadScenarioConfiguration("../../../ConfigurationFiles/team08.scenario.json");
             ScenarioConfiguration.CreateInstance(scenarioConfiguration);
 
             // load the party configuration and create a new party configuration class
-            PartyConfiguration partyConfiguration = loader.LoadPartyConfiguration("./ConfigurationFiles/team08.party.json");
+            PartyConfiguration partyConfiguration = loader.LoadPartyConfiguration("../../../ConfigurationFiles/team08.party.json");
             PartyConfiguration.SetInstance(partyConfiguration);
 
             // initialization for greatHouses in GameData project
@@ -51,19 +51,18 @@ namespace UnitTestSuite
                 PartyConfiguration.GetInstance().beneGesserit,
                 PartyConfiguration.GetInstance().fighter);
 
-            // set up a dummy network module running on 127.0.0.1:8000
-
-            // TODO: eventually change to message controller
-            ServerMessageController messageController = new ServerMessageController();
-
-            string serverAddress = "127.0.0.1";
-            int port = 80000;
-
-            ServerConnectionHandler serverConnectionHandler = new ServerConnectionHandler(serverAddress, port);
-            _ = new ServerNetworkController(serverConnectionHandler, messageController);
-
             // create a new party and set the message controller
-            Party.GetInstance().messageController = messageController;
+            if (Party.GetInstance().messageController == null)
+            {
+                // TODO: eventually change to message controller
+                ServerMessageController messageController = new ServerMessageController();
+
+                ServerConnectionHandler serverConnectionHandler = new ServerConnectionHandler("127.0.0.1", 8000);
+                _ = new ServerNetworkController(serverConnectionHandler, messageController);
+
+                Party.GetInstance().messageController = messageController;
+            }
+
         }
     }
 }
