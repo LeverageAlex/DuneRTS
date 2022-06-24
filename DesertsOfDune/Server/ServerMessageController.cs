@@ -422,6 +422,7 @@ namespace GameData
                             //Drop Spice
                             Map.instance.SpreadSpiceOnFields(localChar.CurrentMapfield, localChar.inventoryUsed);
                             hit = true;
+                            localChar.inventoryUsed = 0;
                         }
                     }
                     if(hit)
