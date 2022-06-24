@@ -49,13 +49,5 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
             }
         }
 
-        /// <summary>
-        /// This Testcase validates the behaviour of the method RemoveSandworm
-        /// </summary>
-        [Test]
-        public void TestRemoveSandworm()
-        {
-            // implement logic
-        }
     }
 }
