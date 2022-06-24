@@ -146,53 +146,6 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
             }
         }
 
-        /*
-        [Test]
-        public void TestExecuteWithSandwormInstance()
-        {
-            MapField[,] mapFields = new MapField[5, 5];
-            for (int i = 0; i < 5; i++)
-            {
-                for (int j = 0; j < 5; j++)
-                {
-                    mapFields[i, j] = new FlatSand(false, false, null);
-                }
-            }
-            List<Character> characters = new List<Character>();
-            Noble nobel1 = new Noble(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true);
-            MapField mapField = new MapField(false, false, 0, null);
-            mapField.XCoordinate = 0;
-            mapField.ZCoordinate = 2;
-            nobel1.CurrentMapfield = mapField;
-            characters.Add(nobel1);
-            Sandworm sandWorm = new Sandworm();
-            sandWorm = sandWorm.Execute(mapFields, characters);
-            sandWorm.Execute(mapFields, characters); 
-        }
-
-        [Test]
-        public void TestExecuteWithOutSandwormInstance()
-        {
-            MapField[,] mapFields = new MapField[5, 5];
-            for (int i = 0; i < 5; i++)
-            {
-                for (int j = 0; j < 5; j++)
-                {
-                    mapFields[i, j] = new FlatSand(false, false);
-                }
-            }
-            List<Character> characters = new List<Character>();
-            Noble nobel1 = new Noble(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true);
-            MapField mapField = new City(1234, false, false);
-                //new MapField(GameData.network.util.enums.TileType.CITY, GameData.network.util.enums.Elevation.low,false, false, 0, null);
-            mapField.XCoordinate = 0;
-            mapField.ZCoordinate = 2;
-            nobel1.CurrentMapfield = mapField;
-            characters.Add(nobel1);
-            Sandworm sandWorm = new Sandworm();
-            //sandWorm.Execute(mapFields, characters);
-        }
-        */
 
         [Test]
         public void TestChooseTargetCharacter()
@@ -225,17 +178,17 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
         [Test]
         public void TestMoveSandWormByOneField()
         {
-            MethodInfo method = typeof(Sandworm).GetMethod("MoveSandWormByOneField", BindingFlags.NonPublic | BindingFlags.Instance);
-            if (method != null)
-            {
-                MapField current = worm.GetCurrentField();
-                MapField[] neighbors = map.GetNeighborFields(current).ToArray();
-                MapField next = neighbors[rnd.Next(neighbors.Length)];
+            worm = Sandworm.Spawn(PartyConfiguration.GetInstance().sandWormSpeed, PartyConfiguration.GetInstance().sandWormSpawnDistance, map, map.GetCharactersOnMap(), Party.GetInstance().messageController);
+            Assume.That(worm != null);
 
-                method.Invoke(worm, new object[] { next });
+            MapField current = worm.GetCurrentField();
+            MapField[] neighbors = map.GetNeighborFields(current).ToArray();
+            MapField next = neighbors[rnd.Next(neighbors.Length)];
 
-                Assert.True(worm.GetCurrentField().Equals(next));
-            }
+            worm.MoveSandwormByOneField(next);
+
+            Assert.True(worm.GetCurrentField() == next);
+            
         }
     }
 }
