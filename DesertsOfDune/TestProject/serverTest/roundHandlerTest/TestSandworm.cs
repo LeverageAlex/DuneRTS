@@ -13,6 +13,7 @@ using GameData.Configuration;
 using System.Reflection;
 using GameData;
 using Server.ClientManagement.Clients;
+using GameData.network.util.enums;
 
 namespace UnitTestSuite.serverTest.roundHandlerTest
 {
@@ -117,10 +118,32 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
             Assert.Null(Sandworm.GetSandworm());
         }
 
+        /// <summary>
+        /// tests moveSandworm
+        /// </summary>
         [Test]
         public void TestMoveSandworm()
         {
+            worm = Sandworm.Spawn(PartyConfiguration.GetInstance().sandWormSpeed, PartyConfiguration.GetInstance().sandWormSpawnDistance, map, map.GetCharactersOnMap(), Party.GetInstance().messageController);
+            Assume.That(worm != null);
 
+            Character target = worm.GetTarget();
+            if(target.CurrentMapfield.tileType.Equals(TileType.PLATEAU.ToString()))
+            {
+                worm.MoveSandWorm(null);
+                Assert.Null(Sandworm.GetSandworm());
+            } 
+            else
+            {
+                Queue<MapField> path = Sandworm.GetSandworm().CalculatePathToTarget();
+                List<MapField> path2 = new List<MapField>(path);
+
+                if(path2.Count > PartyConfiguration.GetInstance().sandWormSpeed)
+                {
+                    int count = path2.Count - 1;
+                    Assert.True(count - PartyConfiguration.GetInstance().sandWormSpeed == path2.Count || Sandworm.GetSandworm() == null);
+                }
+            }
         }
 
         /*
