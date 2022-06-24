@@ -95,7 +95,7 @@ deploy-coverage-report:
     name: coverageReport
     url: "https://$CI_PROJECT_ROOT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
   script:
-    - echo "https://$CI_PROJECT_ROOT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
+    - echo https://$CI_PROJECT_ROOT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html
     - dotnet tool install --tool-path . dotnet-reportgenerator-globaltool
     - mkdir -p public
     - ./reportgenerator "-reports:$CI_PROJECT_DIR/cobertura/*/coverage.cobertura.xml" "-targetdir:public" "-reporttypes:Html"
