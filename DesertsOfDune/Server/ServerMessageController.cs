@@ -116,7 +116,7 @@ namespace GameData
             bool rejoinSuccessful = false;
             foreach (var client in connectedClients)
             {
-                if (client.ClientSecret == msg.ClientSecret)
+                if (client.ClientSecret == msg.clientSecret)
                 {
                     client.SessionID = sessionID; //new sessionID for the rejoined client
                     if (client.IsActivePlayer)

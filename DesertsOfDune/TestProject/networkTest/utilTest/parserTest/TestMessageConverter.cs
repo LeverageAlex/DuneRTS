@@ -478,12 +478,24 @@ namespace TestProject.networkTest.utilTest.parserTest
         Assert.AreEqual("{\"type\":\"HELI_DEMAND\",\"version\":\"1.1\",\"clientID\":1234,\"characterID\":12,\"target\":{\"x\":2,\"y\":3},\"crash\":true}", serializedMessage);
     }
 
-    // The following tests are validating the ToMessage Method
-
     /// <summary>
-    /// This Testcase validates the deserialization of the Message TurnDemandMessage
+    /// This Testcase validates the serialization of the Message RejoinMessage
     /// </summary>
     [Test]
+    public void TestFromRejoinMessage()
+    {
+        RejoinMessage message = new RejoinMessage("the secret");
+        string serializedMessage = MessageConverter.FromMessage(message);
+        Assert.AreEqual("{\"type\":\"REJOIN\",\"version\":\"1.1\",\"clientSecret\":\"the secret\"}", serializedMessage);
+    }
+
+
+        // The following tests are validating the ToMessage Method
+
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message TurnDemandMessage
+        /// </summary>
+        [Test]
     public void TestToMessageActionDemandMessage()
     {
         string serializedMessage = "{\"type\":\"ACTION_DEMAND\",\"version\":\"1.1\",\"clientID\":1234,\"characterID\":12,\"action\":\"ATTACK\",\"specs\":{\"target\":{\"x\":2,\"y\":3}}}";
@@ -985,13 +997,50 @@ namespace TestProject.networkTest.utilTest.parserTest
             Assert.AreEqual("*fehlerhafteMessagealsString*", ((StrikeMessage)deserializedMessage).wrongMessage);
         }
 
-        // TurnDemandMessage
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message TurnDemandMessage
+        /// </summary>
+        [Test]
+        public void TestToTurnDemandMessage()
+        {
+            string serializedMessage = "{\"type\":\"TURN_DEMAND\",\"version\":\"1.1\",\"clientID\":1234,\"characterID\":12}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
 
-        // TurnRequestMessage
+            Assert.AreEqual("TURN_DEMAND", ((TurnDemandMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.1", ((TurnDemandMessage)deserializedMessage).version);
+            Assert.AreEqual(1234, ((TurnDemandMessage)deserializedMessage).clientID);
+            Assert.AreEqual(12, ((TurnDemandMessage)deserializedMessage).characterID);
+        }
 
-        // RejoinMessage
 
-        // AtomicsUpdateDemandMessage
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message RejoinMessage
+        /// </summary>
+        [Test]
+        public void TestToRejoinMessage()
+        {
+            string serializedMessage = "{\"type\":\"REJOIN\",\"version\":\"1.1\",\"clientSecret\":\"secret1234\"}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
 
+            Assert.AreEqual("REJOIN", ((RejoinMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.1", ((RejoinMessage)deserializedMessage).version);
+            Assert.AreEqual("secret1234", ((RejoinMessage)deserializedMessage).clientSecret);
+        }
+
+        /// <summary>
+        /// This Testcase validates the deserialization of the Message AtomicsUpdateDemandMessage
+        /// </summary>
+        [Test]
+        public void TestToAtomicsUpdateDemandMessage()
+        {
+            string serializedMessage = "{\"type\":\"ATOMICS_UPDATE_DEMAND\",\"version\":\"1.1\",\"clientID\":1234,\"shunned\":false,\"atomicsLeft\":2}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+
+            Assert.AreEqual("ATOMICS_UPDATE_DEMAND", ((AtomicsUpdateDemandMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.1", ((AtomicsUpdateDemandMessage)deserializedMessage).version);
+            Assert.AreEqual(1234, ((AtomicsUpdateDemandMessage)deserializedMessage).clientID);
+            Assert.IsFalse(((AtomicsUpdateDemandMessage)deserializedMessage).shunned);
+            Assert.AreEqual(2, ((AtomicsUpdateDemandMessage)deserializedMessage).atomicsLeft);
+        }
     }
 }
