@@ -7,6 +7,7 @@ using NUnit.Framework;
 using GameData.network.util.world.character;
 using GameData.Configuration;
 using GameData.network.util.world;
+using GameData.network.messages;
 
 namespace UnitTestSuite.networkTest.utilTest.worldTest.characterTest
 {
@@ -68,12 +69,54 @@ namespace UnitTestSuite.networkTest.utilTest.worldTest.characterTest
             Assert.True(n2.healthMax == n2.healthCurrent && noble.APcurrent == 0 || 0 == n2.healthCurrent && noble.APcurrent == 0);
         }
 
+        /// <summary>
         /// This Testcase validates the behavior of the method AtomicBomb
         /// </summary>
         [Test]
         public void TestAtomicBomb()
         {
-            // TODO: implement logic
+            /*Map map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
+            MapField target = map.fields[0, 1];
+            Noble noble = new Noble("");
+            noble.AtomicBomb(target, map, false, null, null); */
+        }
+
+        /// <summary>
+        /// This Testcase validates the behavior of the method ResetData
+        /// </summary>
+        [Test]
+        public void ResetData()
+        {
+            Noble noble = new Noble("");
+            noble.characterType = Enum.GetName(typeof(CharacterType), CharacterType.BENE_GESSERIT);
+            noble.healthMax = 0;
+            noble.healthCurrent = 0;
+            noble.HealingHP = 0;
+            noble.MPmax = 0;
+            noble.MPcurrent = 0;
+            noble.APmax = 0;
+            noble.APcurrent = 0;
+            noble.attackDamage = 0;
+            noble.inventorySize = 0;
+            noble.inventoryUsed = 0;
+            noble.killedBySandworm = false;
+            noble.isLoud = false;
+            noble.ResetData();
+            Assert.AreEqual(Enum.GetName(typeof(CharacterType), CharacterType.NOBLE), noble.characterType);
+            Assert.AreEqual(CharacterConfiguration.Mentat.maxHP, noble.healthMax);
+            Assert.AreEqual(CharacterConfiguration.Mentat.maxHP, noble.healthCurrent);
+            Assert.AreEqual(CharacterConfiguration.Mentat.healingHP, noble.HealingHP);
+            Assert.AreEqual(CharacterConfiguration.Mentat.maxMP, noble.MPmax);
+            Assert.AreEqual(CharacterConfiguration.Mentat.maxMP, noble.MPcurrent);
+            Assert.AreEqual(CharacterConfiguration.Mentat.maxAP, noble.APmax);
+            Assert.AreEqual(CharacterConfiguration.Mentat.maxAP, noble.APcurrent);
+            Assert.AreEqual(CharacterConfiguration.Mentat.damage, noble.attackDamage);
+            Assert.AreEqual(CharacterConfiguration.Mentat.inventorySize, noble.inventorySize);
+            Assert.AreEqual(0, noble.inventoryUsed);
+            Assert.AreEqual(0, noble.inventoryUsed);
+            Assert.AreEqual(false, noble.killedBySandworm);
+            Assert.AreEqual(false, noble.isLoud);
+            noble.ResetData();
         }
     }
 }
