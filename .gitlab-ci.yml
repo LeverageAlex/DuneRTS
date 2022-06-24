@@ -93,7 +93,7 @@ deploy-coverage-report:
     - job: test-with-coverage
       artifacts: true
   environment:
-    name: testing
+    name: CoverageReport
     url: "$https://gitlab.informatik.uni-ulm.de/sopra/ws21-deserts-of-dune/teams/team08/-/environments/jobs/$CI_JOB_ID/artifacts/coverageReport/index.html"
   script:
     - dotnet tool install --tool-path . dotnet-reportgenerator-globaltool
