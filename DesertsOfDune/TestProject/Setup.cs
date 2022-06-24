@@ -68,6 +68,32 @@ namespace UnitTestSuite
             Party.GetInstance().Reset();
             
         }
+
+        /// <summary>
+        /// this method sets the configuration up.
+        /// </summary>
+        [SetUp]
+        public void ConfigurationSetUp()
+        {
+            ConfigurationFileLoader loader = new ConfigurationFileLoader();
+
+            // load scenario and create a new scenario configuration
+            ScenarioConfiguration scenarioConfiguration = loader.LoadScenarioConfiguration("../.././../ConfigurationFiles/team08.scenario.json");
+            ScenarioConfiguration.CreateInstance(scenarioConfiguration);
+
+            // load the party configuration and create a new party configuration class
+            PartyConfiguration partyConfiguration = loader.LoadPartyConfiguration("../.././../ConfigurationFiles/team08.party.json");
+            PartyConfiguration.SetInstance(partyConfiguration);
+
+            //Initialization for greatHouses in GameData project
+            GameData.Configuration.Configuration.InitializeConfigurations();
+            // Initialization for the character configurations in GameData project
+            GameData.Configuration.Configuration.InitializeCharacterConfiguration(
+                PartyConfiguration.GetInstance().noble,
+                PartyConfiguration.GetInstance().mentat,
+                PartyConfiguration.GetInstance().beneGesserit,
+                PartyConfiguration.GetInstance().fighter);
+        }
     }
 }
 
