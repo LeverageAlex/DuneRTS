@@ -337,8 +337,9 @@ namespace GameData.network.util.world
                 int randomY = random.Next(MAP_HEIGHT);
 
                 MapField chosenField = GetMapFieldAtPosition(randomX, randomY);
-                if (!chosenField.IsCharacterStayingOnThisField)
+                if (!chosenField.IsCharacterStayingOnThisField && !chosenField.IsCityField)
                 {
+
                     return chosenField;
                 }
             }

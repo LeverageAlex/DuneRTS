@@ -262,5 +262,10 @@ namespace GameData.server.roundHandler
         {
             return _sandWormSingleton;
         }
+
+        public Character GetTarget()
+        {
+            return _targetCharacter;
+        }
     }
 }

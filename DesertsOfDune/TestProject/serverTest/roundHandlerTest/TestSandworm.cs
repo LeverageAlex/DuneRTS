@@ -10,65 +10,111 @@ using GameData.network.util.world.mapField;
 using GameData.network.util.world.character;
 using GameData.gameObjects;
 using GameData.Configuration;
+using System.Reflection;
+using GameData;
+using Server.ClientManagement.Clients;
 
 namespace UnitTestSuite.serverTest.roundHandlerTest
 {
     /// <summary>
     /// This Class is used to Test the class Sandworm
     /// </summary>
-    public class TestSandworm
+    public class TestSandworm : Setup
     {
         private RoundHandler roundHandler;
         private Random rnd;
-        private List<Character> rndCharacters;
         private Map map;
+        private List<Character> characters;
+
+        private Sandworm worm;
+        private ClientForTests testPlayer1, testPlayer2;
 
         [SetUp]
         public void Setup()
         {
-            ConfigurationFileLoader loader = new ConfigurationFileLoader();
-
-            // load scenario and create a new scenario configuration
-            ScenarioConfiguration scenarioConfiguration = loader.LoadScenarioConfiguration("../.././../ConfigurationFiles/team08.scenario.json");
-            ScenarioConfiguration.CreateInstance(scenarioConfiguration);
-
-            // load the party configuration and create a new party configuration class
-            PartyConfiguration partyConfiguration = loader.LoadPartyConfiguration("../.././../ConfigurationFiles/team08.party.json");
-            PartyConfiguration.SetInstance(partyConfiguration);
-
-            //Initialization for greatHouses in GameData project
-            GameData.Configuration.Configuration.InitializeConfigurations();
-            // Initialization for the character configurations in GameData project
-            GameData.Configuration.Configuration.InitializeCharacterConfiguration(
-                PartyConfiguration.GetInstance().noble,
-                PartyConfiguration.GetInstance().mentat,
-                PartyConfiguration.GetInstance().beneGesserit,
-                PartyConfiguration.GetInstance().fighter);
+            base.NetworkAndConfigurationSetUp();
 
             map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
             roundHandler = new RoundHandler(PartyConfiguration.GetInstance().numbOfRounds, PartyConfiguration.GetInstance().spiceMinimum, map);
 
             rnd = new Random();
 
-            rndCharacters = new List<Character>();
+            testPlayer1 = new ClientForTests(new List<Character>());
+            Party.GetInstance().AddClient(testPlayer1);
+
+            testPlayer2 = new ClientForTests(new List<Character>());
+            Party.GetInstance().AddClient(testPlayer2);
+
+            //Characters
+            characters = new List<Character>();
             for (int i = 0; i < 10; i++)
             {
+                MapField field = map.GetRandomFieldWithoutCharacter();
                 switch (rnd.Next(4))
                 {
                     case 0: 
-                        rndCharacters.Add(new Noble(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, rnd.Next(1) == 0)); 
+                        field.PlaceCharacter(new Noble(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true));
                         break;
                     case 1:
-                        rndCharacters.Add(new Mentat(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, rnd.Next(1) == 0));
+                        field.PlaceCharacter(new Mentat(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true));
                         break;
                     case 2:
-                        rndCharacters.Add(new BeneGesserit(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, rnd.Next(1) == 0));
+                        field.PlaceCharacter(new BeneGesserit(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true));
                         break;
                     default:
-                        rndCharacters.Add(new Fighter(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, rnd.Next(1) == 0));
+                        field.PlaceCharacter(new Fighter(1, 2, 3, 4, 5, 6, 7, 8, 9, 4, false, true));
                         break;
                 }
+                
+                if(i % 2 == 0)
+                {
+                    testPlayer1.UsedGreatHouse.Characters.Add(field.Character);
+                }
+                else
+                {
+                    testPlayer2.UsedGreatHouse.Characters.Add(field.Character);
+                }
+
+                characters.Add(field.Character);
             }
+
+           
+        }
+
+        /// <summary>
+        /// test sandworm spwan 
+        /// and indirectly ChooseTargetCharacter, DetermineField
+        /// </summary>
+        [Test]
+        public void TestSpawnSandworm()
+        {
+            worm = Sandworm.Spawn(PartyConfiguration.GetInstance().sandWormSpeed, PartyConfiguration.GetInstance().sandWormSpawnDistance, map, characters, Party.GetInstance().messageController);
+            Assert.NotNull(worm);
+            Assert.NotNull(worm.GetCurrentField());
+            Assert.NotNull(worm.GetTarget());
+            Assert.False(worm.GetCurrentField().IsApproachable);
+
+            foreach(Character c in characters){
+                c.SetSilent();
+            }
+            Character loudChar = characters[rnd.Next(characters.Count)];
+            loudChar.SetLoud();
+            Sandworm.Despawn(Party.GetInstance().messageController);
+
+            worm = Sandworm.Spawn(PartyConfiguration.GetInstance().sandWormSpeed, PartyConfiguration.GetInstance().sandWormSpawnDistance, map, characters, Party.GetInstance().messageController);
+
+            Assert.True(loudChar == worm.GetTarget());
+        }
+
+        [Test]
+        public void TestDespawn()
+        {
+            worm = Sandworm.Spawn(PartyConfiguration.GetInstance().sandWormSpeed, PartyConfiguration.GetInstance().sandWormSpawnDistance, map, map.GetCharactersOnMap(), Party.GetInstance().messageController);
+            Assume.That(worm != null);
+
+            Sandworm.Despawn(Party.GetInstance().messageController);
+
+            Assert.Null(Sandworm.GetSandworm());
         }
 
         /// <summary>
@@ -145,14 +191,23 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
             Assert.False(target == nobel3);
         }
 
+        /// <summary>
+        /// test wheather sandworm lands on the given field
+        /// </summary>
         [Test]
         public void TestMoveSandWormByOneField()
         {
-            //Sandworm sandWorm = Sandworm.Spawn(10, 1, map, rndCharacters, null);
+            MethodInfo method = typeof(Sandworm).GetMethod("MoveSandWormByOneField", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (method != null)
+            {
+                MapField current = worm.GetCurrentField();
+                MapField[] neighbors = map.GetNeighborFields(current).ToArray();
+                MapField next = neighbors[rnd.Next(neighbors.Length)];
 
+                method.Invoke(worm, new object[] { next });
 
-            // TODO: implement test
-
+                Assert.True(worm.GetCurrentField().Equals(next));
+            }
         }
     }
 }
