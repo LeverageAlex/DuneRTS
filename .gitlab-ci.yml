@@ -72,7 +72,7 @@ sonarqube-check:
     - develop # or the name of your main branch
 
 test-with-coverage:
-  image: mcr.microsoft.com/dotnet/core/sdk:latest
+  image: mcr.microsoft.com/dotnet/sdk:latest
   stage: test
   
   script:
@@ -87,7 +87,7 @@ test-with-coverage:
         path: $CI_PROJECT_DIR/cobertura/*/coverage.cobertura.xml
 
 deploy-coverage-report:
-  image: mcr.microsoft.com/dotnet/core/sdk:latest
+  image: mcr.microsoft.com/dotnet/sdk:latest
   stage: deploy
   needs:
     - job: test-with-coverage
