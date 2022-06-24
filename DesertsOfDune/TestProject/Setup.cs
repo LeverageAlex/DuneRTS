@@ -2,6 +2,7 @@
 using GameData;
 using GameData.Configuration;
 using GameData.network.controller;
+using GameData.network.util.world;
 using NUnit.Framework;
 
 namespace UnitTestSuite
@@ -63,6 +64,9 @@ namespace UnitTestSuite
                 Party.GetInstance().messageController = messageController;
             }
 
+            // reset partymap
+            Party.GetInstance().Reset();
+            
         }
     }
 }

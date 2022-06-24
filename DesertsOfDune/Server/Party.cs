@@ -45,14 +45,14 @@ namespace GameData
         /// <summary>
         /// the round handler for this party, which execute the rounds in the correct order and handles the user input
         /// </summary>
-        public RoundHandler RoundHandler { get; }
+        public RoundHandler RoundHandler { get; private set; }
 
         public Thread roundHandlerThread { get; private set; }
 
         /// <summary>
         /// the map of this game / party
         /// </summary>
-        public Map map { get; }
+        public Map map { get; private set; }
 
         /// <summary>
         /// hides the constructor for implementing the singleton pattern and create all necessary instances
@@ -72,11 +72,14 @@ namespace GameData
         }
 
         /// <summary>
-        /// resets a party, so set the singleton reference to null
+        /// resets a party
         /// </summary>
-        public static void Reset()
+        public void Reset()
         {
-            singleton = null;
+            ConnectedClients = new List<Client>();
+            map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
+            RoundHandler = new RoundHandler(PartyConfiguration.GetInstance().numbOfRounds, PartyConfiguration.GetInstance().spiceMinimum, map);
+            Noble.greatHouseConventionBroken = false;
         }
 
         public void ResetClients()
