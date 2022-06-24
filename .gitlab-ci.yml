@@ -76,17 +76,15 @@ test-with-coverage:
   stage: test
   
   script:
-    - 'dotnet test
-            -c $CONFIGURATION
-            -r $CI_PROJECT_DIR/cobertura
-            --collect:"$COVERAGE_FLAG"
+    - 'dotnet test -c $CONFIGURATION -r $CI_PROJECT_DIR/cobertura --collect:"$COVERAGE_FLAG"'
 
   artifacts:
     paths:
       - $CI_PROJECT_DIR/cobertura/*/coverage.cobertura.xml
     reports:
-      cobertura:
-        - $CI_PROJECT_DIR/cobertura/*/coverage.cobertura.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: $CI_PROJECT_DIR/cobertura/*/coverage.cobertura.xml
 
 deploy-coverage-report:
   image: mcr.microsoft.com/dotnet/sdk:5.0-alpine
@@ -104,4 +102,3 @@ deploy-coverage-report:
   artifacts:
     paths:
       - coverageReport
-
