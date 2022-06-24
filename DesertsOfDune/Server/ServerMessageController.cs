@@ -227,7 +227,7 @@ namespace GameData
             foreach (var position in path)
             {
                 var party = Party.GetInstance();
-                if (movingCharacter.MPcurrent > 0 && !movingCharacter.IsInSandStorm(Map.instance)) //check if Character has enough Movement Points
+                if (movingCharacter.MPcurrent > 0 /*&& !movingCharacter.IsInSandStorm(Map.instance)*/) //check if Character has enough Movement Points
                 {
                     if (position.x >= 0 && position.x < party.map.MAP_WIDTH && position.y >= 0 && position.y < party.map.MAP_HEIGHT) //check if movement is in bounds of the map
                     {

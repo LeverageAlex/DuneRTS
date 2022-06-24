@@ -214,8 +214,6 @@ namespace GameData.network.util.world
         public void SpreadSpiceOnFields(MapField field, int amount)
         {
             var random = new Random();
-                //field.hasSpice = true;
-               // amount--;
             
             List<MapField> neighbours = GetNeighborFields(field).Where(item => item.IsApproachable && !item.hasSpice && !item.IsCharacterStayingOnThisField).OrderBy(item => random.Next()).ToList<MapField>();
             foreach (var neighb in neighbours)
