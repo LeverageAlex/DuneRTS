@@ -1115,5 +1115,6 @@ namespace TestProject.networkTest.utilTest.parserTest
             Assert.AreEqual("1.1", ((UnpauseGameOfferMessage)deserializedMessage).version);
             Assert.AreEqual(1234, ((UnpauseGameOfferMessage)deserializedMessage).requestedByClientID);
         }
+
     }
 }
