@@ -217,21 +217,93 @@ namespace UnitTestSuite.serverTest
             Assert.AreEqual(activePlayer.UsedGreatHouse.Characters[0].MPmax, activePlayer.UsedGreatHouse.Characters[0].MPcurrent);
         }
 
+        /// <summary>
+        /// This testcase validates the behaviour of the method OnActionRequestMessage.
+        /// </summary>
         [Test]
-        public void TestOnActionRequestMessage()
+        public void TestOnActionRequestAtackMessageTargetCharacter()
         {
-            /*string action = "ATTACK";
-            switch (Enum.Parse(typeof(ActionType), action))
-            {
-                case ActionType.ATTACK:
-                    actionCharacter.Atack(targetCharacter);
-                    Console.WriteLine("Test");
-                    break;
+            Player activePlayer = new HumanPlayer("client1", "session1");
+            Player passivePlayer = new HumanPlayer("client2", "session2");
+            Party.GetInstance().AddClient(activePlayer);
+            Party.GetInstance().AddClient(passivePlayer);
+            Party.GetInstance().PrepareGame();
 
-                case ActionType.COLLECT:
-                    actionCharacter.CollectSpice();
-                    break;
-            }*/
+            Map map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
+            activePlayer.UsedGreatHouse = GreatHouseFactory.CreateNewGreatHouse(GameData.network.util.enums.GreatHouseType.CORRINO);
+            passivePlayer.UsedGreatHouse = GreatHouseFactory.CreateNewGreatHouse(GameData.network.util.enums.GreatHouseType.RICHESE);
+            activePlayer.UsedGreatHouse.Characters[0].CurrentMapfield = map.fields[0, 1];
+            passivePlayer.UsedGreatHouse.Characters[0].CurrentMapfield = map.fields[1, 1];
+            passivePlayer.UsedGreatHouse.Characters[1].CurrentMapfield = map.fields[0, 3];
+            passivePlayer.UsedGreatHouse.Characters[2].CurrentMapfield = map.fields[0, 4];
+            passivePlayer.UsedGreatHouse.Characters[3].CurrentMapfield = map.fields[2, 2];
+            passivePlayer.UsedGreatHouse.Characters[4].CurrentMapfield = map.fields[2, 3];
+            passivePlayer.UsedGreatHouse.Characters[5].CurrentMapfield = map.fields[3, 3];
+
+            Party.GetInstance().messageController.OnActionRequestMessage(new ActionRequestMessage(activePlayer.ClientID, activePlayer.UsedGreatHouse.Characters[0].CharacterId, ActionType.ATTACK, new Specs(new Position(1, 1),null)));
+            Map m = Party.GetInstance().map;
+            if (passivePlayer.UsedGreatHouse.Characters[0].IsInSandStorm(m) || activePlayer.UsedGreatHouse.Characters[0].IsInSandStorm(m))
+            {
+                Assert.AreEqual(activePlayer.UsedGreatHouse.Characters[0].APmax, activePlayer.UsedGreatHouse.Characters[0].APcurrent);
+                Assert.AreEqual(passivePlayer.UsedGreatHouse.Characters[0].healthMax, passivePlayer.UsedGreatHouse.Characters[0].healthCurrent);
+            } else
+            {
+                Assert.AreEqual(activePlayer.UsedGreatHouse.Characters[0].APmax-1, activePlayer.UsedGreatHouse.Characters[0].APcurrent);
+                Assert.AreEqual(passivePlayer.UsedGreatHouse.Characters[0].healthMax - activePlayer.UsedGreatHouse.Characters[0].attackDamage, passivePlayer.UsedGreatHouse.Characters[0].healthCurrent);
+            }
+        }
+
+        /// <summary>
+        /// This testcase validates the behaviour of the method OnActionRequestMessage.
+        /// </summary>
+        [Test]
+        public void TestOnActionRequestVoiceMessageOwnHouseCharacter()
+        {
+            Player activePlayer = new HumanPlayer("client1", "session1");
+            Player passivePlayer = new HumanPlayer("client2", "session2");
+            Party.GetInstance().AddClient(activePlayer);
+            Party.GetInstance().AddClient(passivePlayer);
+            Party.GetInstance().PrepareGame();
+
+            Map map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
+            activePlayer.UsedGreatHouse = GreatHouseFactory.CreateNewGreatHouse(GameData.network.util.enums.GreatHouseType.CORRINO);
+            passivePlayer.UsedGreatHouse = GreatHouseFactory.CreateNewGreatHouse(GameData.network.util.enums.GreatHouseType.RICHESE);
+            activePlayer.UsedGreatHouse.Characters[0].CurrentMapfield = map.fields[3, 3];
+            activePlayer.UsedGreatHouse.Characters[0].inventoryUsed = 3;
+            activePlayer.UsedGreatHouse.Characters[1].CurrentMapfield = map.fields[2, 2];
+            activePlayer.UsedGreatHouse.Characters[1].inventoryUsed = 0;
+            activePlayer.UsedGreatHouse.Characters[2].CurrentMapfield = map.fields[1, 1];
+            activePlayer.UsedGreatHouse.Characters[3].CurrentMapfield = map.fields[1, 1];
+            activePlayer.UsedGreatHouse.Characters[4].CurrentMapfield = map.fields[1, 1];
+            activePlayer.UsedGreatHouse.Characters[5].CurrentMapfield = map.fields[1, 1];
+
+            passivePlayer.UsedGreatHouse.Characters[0].CurrentMapfield = map.fields[2, 0];
+            passivePlayer.UsedGreatHouse.Characters[1].CurrentMapfield = map.fields[0, 3];
+            passivePlayer.UsedGreatHouse.Characters[2].CurrentMapfield = map.fields[0, 4];
+            passivePlayer.UsedGreatHouse.Characters[3].CurrentMapfield = map.fields[4, 4];
+            passivePlayer.UsedGreatHouse.Characters[4].CurrentMapfield = map.fields[2, 3];
+            passivePlayer.UsedGreatHouse.Characters[5].CurrentMapfield = map.fields[4, 3];
+            map.PositionOfEyeOfStorm = new Position(0, 0);
+
+            Party.GetInstance().messageController.OnActionRequestMessage(new ActionRequestMessage(activePlayer.ClientID, activePlayer.UsedGreatHouse.Characters[1].CharacterId, ActionType.VOICE, new Specs(new Position(3, 3), null)));
+            
+            Map m = Party.GetInstance().map;
+            if (activePlayer.UsedGreatHouse.Characters[1].IsInSandStorm(m))
+            {
+                Assert.AreEqual(0, activePlayer.UsedGreatHouse.Characters[1].inventoryUsed);
+                Assert.AreEqual(3, activePlayer.UsedGreatHouse.Characters[0].inventoryUsed);
+                Assert.AreEqual(0, activePlayer.UsedGreatHouse.Characters[1].APcurrent);
+            }  else if (activePlayer.UsedGreatHouse.Characters[0].IsInSandStorm(m))
+            {
+                Assert.AreEqual(0, activePlayer.UsedGreatHouse.Characters[1].inventoryUsed);
+                Assert.AreEqual(3, activePlayer.UsedGreatHouse.Characters[0].inventoryUsed);
+                Assert.AreEqual(activePlayer.UsedGreatHouse.Characters[1].APmax, activePlayer.UsedGreatHouse.Characters[1].APcurrent);
+            } else
+            {
+                Assert.AreEqual(3, activePlayer.UsedGreatHouse.Characters[1].inventoryUsed);
+                Assert.AreEqual(0, activePlayer.UsedGreatHouse.Characters[0].inventoryUsed);
+                Assert.AreEqual(0, activePlayer.UsedGreatHouse.Characters[1].APcurrent);
+            }
         }
 
         [Test]

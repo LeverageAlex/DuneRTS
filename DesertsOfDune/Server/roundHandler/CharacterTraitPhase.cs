@@ -56,37 +56,41 @@ namespace GameData.server.roundHandler
         /// </summary>
         public void SendRequestForNextCharacter()
         {
-            _timer.Stop();
-            if (_currentCharacterIndex < _allCharacters.Count)
+            if (_timer != null)
             {
-                _currentCharacter = _allCharacters[_currentCharacterIndex++];
-                _currentCharacter.SetSilent();
-                if (!_currentCharacter.IsDead() && !_currentCharacter.KilledBySandworm && !_currentCharacter.IsInSandStorm(Party.GetInstance().map)) // check if character is dead or staying in storm
+                _timer.Stop();
+
+                if (_currentCharacterIndex < _allCharacters.Count)
                 {
-                    _currentCharacter.resetMPandAp();
-                    foreach (var player in Party.GetInstance().GetActivePlayers())
+                    _currentCharacter = _allCharacters[_currentCharacterIndex++];
+                    _currentCharacter.SetSilent();
+                    if (!_currentCharacter.IsDead() && !_currentCharacter.KilledBySandworm && !_currentCharacter.IsInSandStorm(Party.GetInstance().map)) // check if character is dead or staying in storm
                     {
-                        foreach (var character in player.UsedGreatHouse.GetCharactersAlive())
+                        _currentCharacter.resetMPandAp();
+                        foreach (var player in Party.GetInstance().GetActivePlayers())
                         {
-                            if (character.CharacterId == _currentCharacter.CharacterId)
+                            foreach (var character in player.UsedGreatHouse.GetCharactersAlive())
                             {
-                                Party.GetInstance().messageController.DoSendChangeCharacterStatsDemand(player.ClientID, character.CharacterId, new CharacterStatistics(character));
+                                if (character.CharacterId == _currentCharacter.CharacterId)
+                                {
+                                    Party.GetInstance().messageController.DoSendChangeCharacterStatsDemand(player.ClientID, character.CharacterId, new CharacterStatistics(character));
+                                }
                             }
                         }
-                    }
-                    RequestClientForNextCharacterTrait(_currentCharacter.CharacterId);
+                        RequestClientForNextCharacterTrait(_currentCharacter.CharacterId);
 
+
+                    }
+                    else
+                    {
+                        SendRequestForNextCharacter();
+                    }
 
                 }
                 else
                 {
-                    SendRequestForNextCharacter();
+                    Party.GetInstance().RoundHandler.NextRound();
                 }
-
-            }
-            else
-            {
-                Party.GetInstance().RoundHandler.NextRound();
             }
         }
 

@@ -71,7 +71,7 @@ namespace GameData.network.util.world.character
             int dist = Math.Abs(target.CurrentMapfield.XCoordinate - CurrentMapfield.XCoordinate) + Math.Abs(target.CurrentMapfield.ZCoordinate - CurrentMapfield.ZCoordinate);
             int inventoryFree = this.inventorySize - this.inventoryUsed;
             int spiceGift = 0;
-            if (dist <= 2 && target.greatHouse != this.greatHouse 
+            if (dist <= 2 
                 && this.APcurrent == this.APmax
                 && inventoryFree > 0
                 && target.inventoryUsed > 0)
