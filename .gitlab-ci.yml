@@ -1,10 +1,9 @@
-# This file is a template, and might need editing before it works on your project.
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/LaTeX.gitlab-ci.yml
+stages:
+  - analysis
+  - build
+  - test
+  - deploy
 
----
 variables:
   # Feel free to choose the image that suits you best.
   # blang/latex:latest ... Former image used in this template. No longer maintained by author.
@@ -16,6 +15,9 @@ variables:
   # adnrv/texlive
   LATEX_IMAGE: listx/texlive:2020
   PFLICHTENHEFT_TEX_PATH: "./Documentation/Requirement_specification_document/"
+  BENUTZERHANDBUCH_TEX_PATH: "./Documentation/"
+  CONFIGURATION: "Debug"
+  COVERAGE_FLAG: "XPlat Code Coverage"
 
 create_requirements_document:
   image: $LATEX_IMAGE
@@ -26,9 +28,25 @@ create_requirements_document:
 
   artifacts:
     paths:
-      - $PFLICHTENHEFT_TEX_PATH/Pflichtenheft.pdf
+      - PFLICHTENHEFT_TEX_PATH/Pflichtenheft.pdf
 
   only: 
+    changes:
+      - Documentation
+
+create_user_manual:
+  image: $LATEX_IMAGE
+  stage: build
+  script:
+    - cd $BENUTZERHANDBUCH_TEX_PATH
+    - latexmk -pdf Benutzerhandbuch.tex
+
+  artifacts:
+    paths:
+      - BENUTZERHANDBUCH_TEX_PATH/Benutzerhandbuch.pdf
+
+  only: 
+    changes:
       - Documentation
 
 sonarqube-check:
@@ -51,3 +69,36 @@ sonarqube-check:
   allow_failure: true
   only:
     - develop # or the name of your main branch
+
+test-with-coverage:
+  image: mcr.microsoft.com/dotnet/sdk:latest
+  stage: test
+  
+  script:
+    - 'dotnet test DesertsOfDune/TestProject/UnitTestSuite.csproj -c $CONFIGURATION -r $CI_PROJECT_DIR/cobertura --collect:"$COVERAGE_FLAG"'
+
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/cobertura/*/coverage.cobertura.xml
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: $CI_PROJECT_DIR/cobertura/*/coverage.cobertura.xml
+
+deploy-coverage-report:
+  image: mcr.microsoft.com/dotnet/sdk:latest
+  stage: deploy
+  needs:
+    - job: test-with-coverage
+      artifacts: true
+  environment:
+    name: coverageReport
+    url: "https://$CI_PROJECT_ROOT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
+  script:
+    - echo https://$CI_PROJECT_ROOT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html
+    - dotnet tool install --tool-path . dotnet-reportgenerator-globaltool
+    - mkdir -p public
+    - ./reportgenerator "-reports:$CI_PROJECT_DIR/cobertura/*/coverage.cobertura.xml" "-targetdir:public" "-reporttypes:Html"
+  artifacts:
+    paths:
+      - public
