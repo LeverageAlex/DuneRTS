@@ -6,9 +6,9 @@ namespace GameData.network.messages
     public class ErrorMessage : Message
     {
         [JsonProperty]
-        public int ErrorCode { get; }
+        public int errorCode { get; }
         [JsonProperty]
-        public string ErrorDescription { get; }
+        public string errorDescription { get; }
 
         /// <summary>
         /// If an error happens while login or relogin, the server sends this error message to the client.
@@ -17,8 +17,8 @@ namespace GameData.network.messages
         /// <param name="errorDescription">Description of the error.</param>
         public ErrorMessage(int errorCode, string errorDescription) : base("1.1", MessageType.ERROR)
         {
-            this.ErrorCode = errorCode;
-            this.ErrorDescription = errorDescription;
+            this.errorCode = errorCode;
+            this.errorDescription = errorDescription;
         }
     }
 }

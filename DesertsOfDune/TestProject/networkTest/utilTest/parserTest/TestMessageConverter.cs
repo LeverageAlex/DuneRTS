@@ -489,13 +489,24 @@ namespace TestProject.networkTest.utilTest.parserTest
         Assert.AreEqual("{\"type\":\"REJOIN\",\"version\":\"1.1\",\"clientSecret\":\"the secret\"}", serializedMessage);
     }
 
+    /// <summary>
+    /// This Testcase validates the serialization of the Message ErrorMessage
+    /// </summary>
+    [Test]
+    public void TestFromErrorMessage()
+    {
+        ErrorMessage message = new ErrorMessage(1, "fehlerBeschreibung");
+        string serializedMessage = MessageConverter.FromMessage(message);
+        Assert.AreEqual("{\"type\":\"ERROR\",\"version\":\"1.1\",\"errorCode\":1,\"errorDescription\":\"fehlerBeschreibung\"}", serializedMessage);
+    }
 
-        // The following tests are validating the ToMessage Method
 
-        /// <summary>
-        /// This Testcase validates the deserialization of the Message TurnDemandMessage
-        /// </summary>
-        [Test]
+    // The following tests are validating the ToMessage Method
+
+    /// <summary>
+    /// This Testcase validates the deserialization of the Message TurnDemandMessage
+    /// </summary>
+    [Test]
     public void TestToMessageActionDemandMessage()
     {
         string serializedMessage = "{\"type\":\"ACTION_DEMAND\",\"version\":\"1.1\",\"clientID\":1234,\"characterID\":12,\"action\":\"ATTACK\",\"specs\":{\"target\":{\"x\":2,\"y\":3}}}";
@@ -1041,6 +1052,68 @@ namespace TestProject.networkTest.utilTest.parserTest
             Assert.AreEqual(1234, ((AtomicsUpdateDemandMessage)deserializedMessage).clientID);
             Assert.IsFalse(((AtomicsUpdateDemandMessage)deserializedMessage).shunned);
             Assert.AreEqual(2, ((AtomicsUpdateDemandMessage)deserializedMessage).atomicsLeft);
+        }
+
+        /// <summary>
+        /// This Testcase validates the serialization of the Message ErrorMessage
+        /// </summary>
+        [Test]
+        public void TestToErrorMessage()
+        {
+            string serializedMessage = "{\"type\":\"ERROR\",\"version\":\"1.1\",\"errorCode\":1,\"errorDescription\":\"fehlerBeschreibung\"}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+
+            Assert.AreEqual("ERROR", ((ErrorMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.1", ((ErrorMessage)deserializedMessage).version);
+            Assert.AreEqual(1, ((ErrorMessage)deserializedMessage).errorCode);
+            Assert.AreEqual("fehlerBeschreibung", ((ErrorMessage)deserializedMessage).errorDescription);
+        }
+
+        /// <summary>
+        /// This Testcase validates the serialization of the Message TransferRequestMessage
+        /// </summary>
+        [Test]
+        public void TestToTransferRequestMessage()
+        {
+            string serializedMessage = "{\"type\":\"TRANSFER_REQUEST\",\"version\":\"1.1\",\"clientID\":1234,\"characterID\":12,\"targetID\":13,\"amount\":10}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+
+            Assert.AreEqual("TRANSFER_REQUEST", ((TransferRequestMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.1", ((TransferRequestMessage)deserializedMessage).version);
+            Assert.AreEqual(1234, ((TransferRequestMessage)deserializedMessage).clientID);
+            Assert.AreEqual(12, ((TransferRequestMessage)deserializedMessage).characterID);
+            Assert.AreEqual(13, ((TransferRequestMessage)deserializedMessage).targetID);
+            Assert.AreEqual(10, ((TransferRequestMessage)deserializedMessage).amount);
+        }
+
+        /// <summary>
+        /// This Testcase validates the serialization of the Message TransferDemandMessage
+        /// </summary>
+        [Test]
+        public void TestToTransferDemandMessage()
+        {
+            string serializedMessage = "{\"type\":\"TRANSFER_DEMAND\",\"version\":\"1.1\",\"clientID\":1234,\"characterID\":12,\"targetID\":13}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+
+            Assert.AreEqual("TRANSFER_DEMAND", ((TransferDemandMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.1", ((TransferDemandMessage)deserializedMessage).version);
+            Assert.AreEqual(1234, ((TransferDemandMessage)deserializedMessage).clientID);
+            Assert.AreEqual(12, ((TransferDemandMessage)deserializedMessage).characterID);
+            Assert.AreEqual(13, ((TransferDemandMessage)deserializedMessage).targetID);
+        }
+
+        /// <summary>
+        /// This Testcase validates the serialization of the Message TransferDemandMessage
+        /// </summary>
+        [Test]
+        public void TestToUnpauseGameOfferMessage()
+        {
+            string serializedMessage = "{\"type\":\"UNPAUSE_GAME_OFFER\",\"version\":\"1.1\",\"requestedByClientID\":1234}";
+            Message deserializedMessage = MessageConverter.ToMessage(serializedMessage);
+
+            Assert.AreEqual("UNPAUSE_GAME_OFFER", ((UnpauseGameOfferMessage)deserializedMessage).GetMessageTypeAsString());
+            Assert.AreEqual("1.1", ((UnpauseGameOfferMessage)deserializedMessage).version);
+            Assert.AreEqual(1234, ((UnpauseGameOfferMessage)deserializedMessage).requestedByClientID);
         }
     }
 }

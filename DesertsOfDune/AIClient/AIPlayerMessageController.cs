@@ -83,9 +83,9 @@ namespace AIClient
         /// <param name="msg">the received ERROR message</param>
         public override void OnErrorMessage(ErrorMessage msg)
         {
-            Log.Error($"An error occured during joining: {msg.ErrorDescription}");
+            Log.Error($"An error occured during joining: {msg.errorDescription}");
 
-            switch (msg.ErrorCode)
+            switch (msg.errorCode)
             {
                 case 1:
                     Log.Debug("The join message had a bad format, so send it again");
@@ -96,7 +96,7 @@ namespace AIClient
                     Environment.Exit(0);
                     break;
                 default:
-                    Log.Debug($"The error code was {msg.ErrorCode} a could not be proccessed!");
+                    Log.Debug($"The error code was {msg.errorCode} a could not be proccessed!");
                     break;
             }
         }
