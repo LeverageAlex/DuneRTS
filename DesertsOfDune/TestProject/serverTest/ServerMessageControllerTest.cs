@@ -306,16 +306,63 @@ namespace UnitTestSuite.serverTest
             }
         }
 
+        /// <summary>
+        /// This testcase validates the behaviour of the method TransferSpice
+        /// </summary>
         [Test]
         public void TestOnTransferRequestMessage()
         {
+            Player activePlayer = new HumanPlayer("client1", "session1");
+            Player passivePlayer = new HumanPlayer("client2", "session2");
+            Party.GetInstance().AddClient(activePlayer);
+            Party.GetInstance().AddClient(passivePlayer);
+            Party.GetInstance().PrepareGame();
 
+            Map map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
+            activePlayer.UsedGreatHouse = GreatHouseFactory.CreateNewGreatHouse(GameData.network.util.enums.GreatHouseType.CORRINO);
+            passivePlayer.UsedGreatHouse = GreatHouseFactory.CreateNewGreatHouse(GameData.network.util.enums.GreatHouseType.RICHESE);
+            activePlayer.UsedGreatHouse.Characters[0].inventoryUsed = 1;
+            activePlayer.UsedGreatHouse.Characters[0].CurrentMapfield = map.fields[2, 0];
+            activePlayer.UsedGreatHouse.Characters[1].CurrentMapfield = map.fields[2, 1];
+            Party.GetInstance().map.fields[2, 1].Character = activePlayer.UsedGreatHouse.Characters[1];
+            Party.GetInstance().messageController.OnTransferRequestMessage(new TransferRequestMessage(activePlayer.ClientID, activePlayer.UsedGreatHouse.Characters[0].CharacterId, activePlayer.UsedGreatHouse.Characters[1].CharacterId,1));
+            if (activePlayer.UsedGreatHouse.Characters[0].IsInSandStorm(Map.instance))
+            {
+                Assert.AreEqual(activePlayer.UsedGreatHouse.Characters[0].APmax, activePlayer.UsedGreatHouse.Characters[0].APcurrent);
+                Assert.AreEqual(1, activePlayer.UsedGreatHouse.Characters[0].inventoryUsed);
+                Assert.AreEqual(0, activePlayer.UsedGreatHouse.Characters[1].inventoryUsed);
+            } else if (activePlayer.UsedGreatHouse.Characters[1].IsInSandStorm(Map.instance))
+            {
+                Assert.AreEqual(activePlayer.UsedGreatHouse.Characters[1].APmax, activePlayer.UsedGreatHouse.Characters[0].APcurrent);
+                Assert.AreEqual(1, activePlayer.UsedGreatHouse.Characters[0].inventoryUsed);
+                Assert.AreEqual(0, activePlayer.UsedGreatHouse.Characters[1].inventoryUsed);
+            } else if (!activePlayer.UsedGreatHouse.Characters[0].IsInSandStorm(Map.instance) && !activePlayer.UsedGreatHouse.Characters[1].IsInSandStorm(Map.instance))
+            {
+                Assert.AreEqual(activePlayer.UsedGreatHouse.Characters[0].APmax -1, activePlayer.UsedGreatHouse.Characters[0].APcurrent);
+                Assert.AreEqual(0, activePlayer.UsedGreatHouse.Characters[0].inventoryUsed);
+                Assert.AreEqual(1, activePlayer.UsedGreatHouse.Characters[1].inventoryUsed);
+            }
         }
 
+        /// <summary>
+        /// This testcase validates the behaviour of the method OnEndTurnReustMessage
+        /// </summary>
         [Test]
         public void TestOnEndTurnRequestMessage()
         {
+            Player activePlayer = new HumanPlayer("client1", "session1");
+            Player passivePlayer = new HumanPlayer("client2", "session2");
+            Party.GetInstance().AddClient(activePlayer);
+            Party.GetInstance().AddClient(passivePlayer);
+            Party.GetInstance().PrepareGame();
 
+            Map map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
+            activePlayer.UsedGreatHouse = GreatHouseFactory.CreateNewGreatHouse(GameData.network.util.enums.GreatHouseType.CORRINO);
+            activePlayer.UsedGreatHouse.Characters[0].inventoryUsed = 1;
+            activePlayer.UsedGreatHouse.Characters[0].CurrentMapfield = map.fields[2, 0];
+            activePlayer.UsedGreatHouse.Characters[0].healthCurrent = 1;
+            Party.GetInstance().messageController.OnEndTurnRequestMessage(new EndTurnRequestMessage(activePlayer.ClientID, activePlayer.UsedGreatHouse.Characters[0].CharacterId));
+            Assert.AreEqual(1 + activePlayer.UsedGreatHouse.Characters[0].healingHP, activePlayer.UsedGreatHouse.Characters[0].healthCurrent);
         }
 
         [Test]
