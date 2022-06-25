@@ -14,6 +14,7 @@ using System.Diagnostics;
 using GameData.network.controller;
 using Server.ClientManagement.Clients;
 using GameData.network.util.world.character;
+using GameData.network.util.world.greatHouse;
 
 namespace UnitTestSuite.serverTest
 {
@@ -119,28 +120,102 @@ namespace UnitTestSuite.serverTest
         [Test]
         public void TestOnMovementRequestMessage()
         {
-            /*
-            Player player1 = new HumanPlayer("client1", "session1");
+            
+            Player activePlayer = new HumanPlayer("client1", "session1");
             Player player2 = new HumanPlayer("client2", "session2");
-            Party.GetInstance().AddClient(player1);
+            Party.GetInstance().AddClient(activePlayer);
             Party.GetInstance().AddClient(player2);
             Party.GetInstance().PrepareGame();
 
             var path = new List<Position>();
-            path.Add(new Position(2, 2));
-            path.Add(new Position(2, 3));
-            path.Add(new Position(2, 4));
-            path.Add(new Position(2, 4));
+            path.Add(new Position(2, 0));
 
-            Player activePlayer = player1;
             Map map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
-            BeneGesserit beneGesserit = new BeneGesserit("");
-            map.fields[0, 1].Character = beneGesserit;
+            activePlayer.UsedGreatHouse = GreatHouseFactory.CreateNewGreatHouse(GameData.network.util.enums.GreatHouseType.CORRINO);
+            activePlayer.UsedGreatHouse.Characters[0].CurrentMapfield = map.fields[0, 1];
 
-            Party.GetInstance().messageController.OnMovementRequestMessage(new MovementRequestMessage(player1.ClientID, beneGesserit.CharacterId, new Specs(new Position(1, 2), path)));
-            */
-            // TODO finish this test.
-            }
+            Assert.AreEqual(activePlayer.UsedGreatHouse.Characters[0].MPmax, activePlayer.UsedGreatHouse.Characters[0].MPcurrent);
+            Assert.AreEqual(map.fields[0, 1], activePlayer.UsedGreatHouse.Characters[0].CurrentMapfield);
+            Party.GetInstance().messageController.OnMovementRequestMessage(new MovementRequestMessage(activePlayer.ClientID, activePlayer.UsedGreatHouse.Characters[0].CharacterId, new Specs(new Position(1, 2), path)));
+            Assert.AreEqual(activePlayer.UsedGreatHouse.Characters[0].MPmax-1, activePlayer.UsedGreatHouse.Characters[0].MPcurrent);
+            Assert.AreEqual(map.fields[0, 2], activePlayer.UsedGreatHouse.Characters[0].CurrentMapfield);
+        }
+
+        /// <summary>
+        /// This testcase validates the behaviour of the method OnMovementRequestMessage.
+        /// </summary>
+        [Test]
+        public void TestOnMovementRequestMessageInValidPath()
+        {
+            Player activePlayer = new HumanPlayer("client1", "session1");
+            Player player2 = new HumanPlayer("client2", "session2");
+            Party.GetInstance().AddClient(activePlayer);
+            Party.GetInstance().AddClient(player2);
+            Party.GetInstance().PrepareGame();
+
+            var path = new List<Position>();
+            path.Add(new Position(4, 0));
+
+            Map map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
+            activePlayer.UsedGreatHouse = GreatHouseFactory.CreateNewGreatHouse(GameData.network.util.enums.GreatHouseType.CORRINO);
+            activePlayer.UsedGreatHouse.Characters[0].CurrentMapfield = map.fields[0, 1];
+
+            Assert.AreEqual(activePlayer.UsedGreatHouse.Characters[0].MPmax, activePlayer.UsedGreatHouse.Characters[0].MPcurrent);
+            Assert.AreEqual(map.fields[0, 1], activePlayer.UsedGreatHouse.Characters[0].CurrentMapfield);
+            Party.GetInstance().messageController.OnMovementRequestMessage(new MovementRequestMessage(activePlayer.ClientID, activePlayer.UsedGreatHouse.Characters[0].CharacterId, new Specs(new Position(1, 2), path)));
+            Assert.AreEqual(activePlayer.UsedGreatHouse.Characters[0].MPmax, activePlayer.UsedGreatHouse.Characters[0].MPcurrent);
+            Assert.AreEqual(map.fields[0, 1], activePlayer.UsedGreatHouse.Characters[0].CurrentMapfield);
+        }
+
+        /// <summary>
+        /// This testcase validates the behaviour of the method OnMovementRequestMessage.
+        /// </summary>
+        [Test]
+        public void TestOnMovementRequestMessageWithoutMP()
+        {
+            Player activePlayer = new HumanPlayer("client1", "session1");
+            Player player2 = new HumanPlayer("client2", "session2");
+            Party.GetInstance().AddClient(activePlayer);
+            Party.GetInstance().AddClient(player2);
+            Party.GetInstance().PrepareGame();
+
+            var path = new List<Position>();
+            path.Add(new Position(2, 0));
+
+            Map map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
+            activePlayer.UsedGreatHouse = GreatHouseFactory.CreateNewGreatHouse(GameData.network.util.enums.GreatHouseType.CORRINO);
+            activePlayer.UsedGreatHouse.Characters[0].CurrentMapfield = map.fields[0, 1];
+            activePlayer.UsedGreatHouse.Characters[0].MPcurrent = 0;
+
+            Assert.AreEqual(map.fields[0, 1], activePlayer.UsedGreatHouse.Characters[0].CurrentMapfield);
+            Party.GetInstance().messageController.OnMovementRequestMessage(new MovementRequestMessage(activePlayer.ClientID, activePlayer.UsedGreatHouse.Characters[0].CharacterId, new Specs(new Position(1, 2), path)));
+            Assert.AreEqual(map.fields[0, 1], activePlayer.UsedGreatHouse.Characters[0].CurrentMapfield);
+        }
+
+        /// <summary>
+        /// This testcase validates the behaviour of the method OnMovementRequestMessage.
+        /// </summary>
+        [Test]
+        public void TestOnMovementRequestMessageWithOldPositionAsTarget()
+        {
+            Player activePlayer = new HumanPlayer("client1", "session1");
+            Player player2 = new HumanPlayer("client2", "session2");
+            Party.GetInstance().AddClient(activePlayer);
+            Party.GetInstance().AddClient(player2);
+            Party.GetInstance().PrepareGame();
+
+            var path = new List<Position>();
+            path.Add(new Position(1, 0));
+
+            Map map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
+            activePlayer.UsedGreatHouse = GreatHouseFactory.CreateNewGreatHouse(GameData.network.util.enums.GreatHouseType.CORRINO);
+            activePlayer.UsedGreatHouse.Characters[0].CurrentMapfield = map.fields[0, 1];
+
+            Assert.AreEqual(map.fields[0, 1], activePlayer.UsedGreatHouse.Characters[0].CurrentMapfield);
+            Party.GetInstance().messageController.OnMovementRequestMessage(new MovementRequestMessage(activePlayer.ClientID, activePlayer.UsedGreatHouse.Characters[0].CharacterId, new Specs(new Position(1, 2), path)));
+            Assert.AreEqual(map.fields[0, 1], activePlayer.UsedGreatHouse.Characters[0].CurrentMapfield);
+            Assert.AreEqual(activePlayer.UsedGreatHouse.Characters[0].MPmax, activePlayer.UsedGreatHouse.Characters[0].MPcurrent);
+        }
 
         [Test]
         public void TestOnActionRequestMessage()

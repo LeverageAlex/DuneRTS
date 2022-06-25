@@ -251,7 +251,6 @@ namespace GameData
                             {
                                 movementWasAllowed = movingCharacter.Movement(movingCharacter.CurrentMapfield, party.map.fields[position.y, position.x]); //move character 1 field along its path
                             }
-                            //path.Add(position);
                             if (movementWasAllowed)
                             {
                                 newPath.Add(position);
