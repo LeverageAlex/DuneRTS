@@ -14,7 +14,6 @@ public class MainMenuManager : MonoBehaviour
     [Header("Menus:")]
     public GameObject MainMenu;
     public GameObject OptionsMenu;
-    public GameObject PlayOptionsMenu;
     public GameObject JoinGameMenu;
 
     [Header("Create/Join Game:")]
@@ -127,7 +126,6 @@ public class MainMenuManager : MonoBehaviour
     {
         MainMenu.SetActive(false);
         OptionsMenu.SetActive(false);
-        PlayOptionsMenu.SetActive(false);
         JoinGameMenu.SetActive(false);
 
         if (menuToActivate != null)
@@ -153,14 +151,6 @@ public class MainMenuManager : MonoBehaviour
     public void SwitchToOptionsMenu()
     {
         ActivateMenu(OptionsMenu);
-    }
-
-    /// <summary>
-    /// this method is called by a BUTTON to switch to the PlayOptionsMenu
-    /// </summary>
-    public void SwitchToPlayOptionsMenu()
-    {
-        ActivateMenu(PlayOptionsMenu);
     }
 
     /// <summary>

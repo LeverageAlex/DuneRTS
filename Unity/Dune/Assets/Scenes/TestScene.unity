@@ -13463,6 +13463,8 @@ MonoBehaviour:
   atomicsButton: {fileID: 381916848}
   spiceHoardingButton: {fileID: 130079119}
   heliportButton: {fileID: 1915522464}
+  ClientName: {fileID: 0}
+  EnemyName: {fileID: 0}
   playerStatsPanel: {fileID: 250596101}
   PlayerText: {fileID: 1671628593}
   SpiceText: {fileID: 967792892}
@@ -19500,6 +19502,7 @@ GameObject:
   - component: {fileID: 2042428092}
   - component: {fileID: 2042428091}
   - component: {fileID: 2042428090}
+  - component: {fileID: 2042428094}
   m_Layer: 0
   m_Name: Groundplane
   m_TagString: Untagged
@@ -19583,6 +19586,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2042428094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2042428089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46e3dd3221da37f44b4d22bfb70c9b55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spicy: {fileID: 3426209433421688339, guid: 35ed86cde7772734ca83fd45b5cbca9a, type: 3}
 --- !u!1001 &2048114110
 PrefabInstance:
   m_ObjectHideFlags: 0

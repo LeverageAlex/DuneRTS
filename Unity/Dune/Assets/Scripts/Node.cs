@@ -81,12 +81,14 @@ public class Node : MonoBehaviour
 
     private void OnMouseOver()
     {
+        /*
         if (Input.GetKeyDown("l"))
         {
             if (heightLvl == HeightLevel.high)
                 MapManager.instance.SpawnSpiceCrumOn(_X, offsetSpiceHighY, _Z);
             else MapManager.instance.SpawnSpiceCrumOn(_X, offsetSpiceLowY, _Z);
         }
+        */
     }
 
     private void OnMouseDown()
