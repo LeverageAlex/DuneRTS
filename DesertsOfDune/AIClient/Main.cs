@@ -41,8 +41,8 @@ namespace AIClient
         /// <param name="args">arguments for starting the server (see Commandline args in "Standardisierungskomitee")</param>
         static void Main(string[] args)
         {
-            // wait 2 seconds for configuring everything
-            Thread.Sleep(2000);
+            // wait 4 seconds for configuring everything
+            Thread.Sleep(4000);
 
             InitiliazeLogger();
             Log.Information("Starting ai client... Everything will be created and configured.");

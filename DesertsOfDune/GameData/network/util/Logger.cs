@@ -48,7 +48,7 @@ namespace GameData.network.util
             levelSwitch.MinimumLevel = LogEventLevel.Debug;
             Log.Logger = new LoggerConfiguration()
                  .MinimumLevel.ControlledBy(levelSwitch)
-                 .WriteTo.Console(outputTemplate: "[Timestamp:wHH:mm:ss.fff}{Level:u3}]\t{Message}{NewLine}{Exception}")
+                 .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss.fff}\t{Level:u3}]  {Message}{NewLine}{Exception}")
                  .CreateLogger();
         }
 
