@@ -1397,13 +1397,16 @@ namespace GameData
             else if (actionCharacter.APcurrent == actionCharacter.APmax
                 && actionCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE)
                 && targetCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE)
-                && !targetCharacter.IsInSandStorm(map)
-                && success < PartyConfiguration.GetInstance().kanlySuccessProbability)
+                && !targetCharacter.IsInSandStorm(map))
             {
-                DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
-                actionCharacter.Kanly(targetCharacter);
-                activePlayer.statistics.AddToEnemiesDefeated(1);
-                charactersHit.Add(targetCharacter);
+                targetCharacter.SpentAp(targetCharacter.APmax);
+                if (success < PartyConfiguration.GetInstance().kanlySuccessProbability)
+                {
+                    DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
+                    actionCharacter.Kanly(targetCharacter);
+                    activePlayer.statistics.AddToEnemiesDefeated(1);
+                    charactersHit.Add(targetCharacter);
+                }
             }
         }
 

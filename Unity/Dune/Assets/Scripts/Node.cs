@@ -18,9 +18,6 @@ public class Node : MonoBehaviour
     public int X { get { return _X; } }
     public int Z { get { return _Z; } }
 
-    private float offsetSpiceLowY = 0.35f;
-    private float offsetSpiceHighY = 0.525f;
-
     public float charHeightOffset = 0f;
 
     public HeightLevel heightLvl = HeightLevel.low;

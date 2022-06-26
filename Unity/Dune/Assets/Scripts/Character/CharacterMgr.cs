@@ -41,11 +41,8 @@ public class CharacterMgr : MonoBehaviour
     public Sprite emblemOrdos;
     public Sprite emblemCorinno;
 
-
-
     private float charSpawnLowY = 0.35f;
     private float charSpawnHighY = 0.525f;
-
     private float wormHeightOffset = 0.35f;
 
     private HouseEnum playerHouse;
@@ -57,33 +54,18 @@ public class CharacterMgr : MonoBehaviour
     private int mentatMaxHP;
 
     public static ClientConnectionHandler handler;
-
     public static CharacterMgr instance;
-
-
-
-
 
 
     // Start is called before the first frame update
     void Awake()
     {
         //Example to show Method
-        //spawnCharacter(175, "FIGHTER", 15, 15, 4, 10, 4, 4, 3, 6, false, false);
         if(instance == null)
         {
             instance = this;
         }
         
-    }
-
-    private void Start()
-    {
-        /*LinkedList<Vector3> path = new LinkedList<Vector3>();
-        path.AddLast(new Vector3(1, 0.6f, 1));
-        path.AddLast(new Vector3(8, 0.6f, 9));
-        SpawnSandworm(5, 5);
-        SandwormMove(path);*/
     }
 
 

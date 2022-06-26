@@ -73,7 +73,6 @@ namespace GameData.network.util.world.character
                 {
                     Random random = new Random();
                     double randomValue = random.NextDouble();
-                    SpentAp(APmax);
                     if (PartyConfiguration.GetInstance().kanlySuccessProbability >= randomValue)
                     {
                         target.DecreaseHP(target.healthCurrent);
