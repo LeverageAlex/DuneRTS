@@ -49,7 +49,7 @@ namespace UnitTestSuite.networkTest.utilTest.worldTest.characterTest
             noble.CurrentMapfield = map.fields[1, 1];
             n2.greatHouse = new Ordos();
             bool possible = noble.Kanly(n2);
-            Assert.True(n2.healthMax == n2.healthCurrent && noble.APcurrent == 0 || 0 == n2.healthCurrent && noble.APcurrent == 0);
+            Assert.True(n2.healthMax == n2.healthCurrent || 0 == n2.healthCurrent);
         }
 
         /// <summary>

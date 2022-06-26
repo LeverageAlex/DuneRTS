@@ -1399,7 +1399,7 @@ namespace GameData
                 && targetCharacter.characterType == Enum.GetName(typeof(CharacterType), CharacterType.NOBLE)
                 && !targetCharacter.IsInSandStorm(map))
             {
-                targetCharacter.SpentAp(targetCharacter.APmax);
+                targetCharacter.SpentAp(targetCharacter.APcurrent);
                 if (success < PartyConfiguration.GetInstance().kanlySuccessProbability)
                 {
                     DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
