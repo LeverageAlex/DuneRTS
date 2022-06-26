@@ -387,7 +387,7 @@ namespace GameData.network.util.world
                 int randomY = random.Next(MAP_HEIGHT);
 
                 MapField chosenField = GetMapFieldAtPosition(randomX, randomY);
-                if (chosenField.IsApproachable && chosenField.IsCharacterStayingOnThisField)
+                if (chosenField.IsApproachable && !chosenField.IsCharacterStayingOnThisField)
                 {
                     return chosenField;
                 }
