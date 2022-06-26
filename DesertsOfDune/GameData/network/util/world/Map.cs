@@ -514,7 +514,16 @@ namespace GameData.network.util.world
             //check if sandstormFields get cut by the pathLine
             foreach (MapField m in GetSandstormFieldsOnMap())
             {
-                if (IsFieldCutByLine(m.XCoordinate, m.ZCoordinate, mx, tx, my, ty, horicontal, vertical)) return true;
+                if ((a <= c && a <= m.XCoordinate && m.XCoordinate <= c) || (c <= a && c <= m.XCoordinate && m.XCoordinate <= a))
+                {
+                    if ((b <= d && b <= m.ZCoordinate && m.ZCoordinate <= d) || (d <= b && d <= m.ZCoordinate && m.ZCoordinate <= b))
+                    {
+                        if (IsFieldCutByLine(m.XCoordinate, m.ZCoordinate, mx, tx, my, ty, horicontal, vertical))
+                        {
+                            return true;
+                        }
+                    }
+                }
             }
 
             return false;
