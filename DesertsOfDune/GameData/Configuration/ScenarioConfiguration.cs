@@ -49,8 +49,8 @@ namespace GameData.Configuration
         {
             singleton = (ScenarioConfiguration)scenarioConfigObject.MemberwiseClone();
 
-            SCENARIO_WIDTH = scenarioConfigObject.scenario[0].Count;
-            SCENARIO_HEIGHT = scenarioConfigObject.scenario.Count;
+            SCENARIO_WIDTH = scenarioConfigObject.scenario.Count;
+            SCENARIO_HEIGHT = scenarioConfigObject.scenario[0].Count;
         }
     }
 }

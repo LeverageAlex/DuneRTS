@@ -259,9 +259,9 @@ public class PlayerMessageController : MessageController
             }
 
             GUIHandler.BroadcastGameMessage(mapChangeDemandMessage.changeReason);
-            for (int x = 0; x < mapChangeDemandMessage.newMap.GetLength(0); x++)
+            for (int x = 0; x < MapManager.instance.GridSizeX; x++)
             {
-                for (int z = 0; z < mapChangeDemandMessage.newMap.GetLength(1); z++)
+                for (int z = 0; z < MapManager.instance.GridSizeZ; z++)
                 {
 
 
