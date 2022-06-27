@@ -177,7 +177,7 @@ public class PlayerMessageController : MessageController
         {
 
 
-            Debug.Log("Start Building map!");
+            Log.Debug("Start Building map!");
             //Second list contains z size
             MapManager.instance.setMapSize(gameConfigMessage.scenario.Count, gameConfigMessage.scenario[0].Count);
 
@@ -198,14 +198,13 @@ public class PlayerMessageController : MessageController
               //      Debug.Log("Built x: " + x + " and z: " + z);
                 }
             }
-            Console.WriteLine("created map");
-            Debug.Log("Built Map!");
+            Log.Debug("Built Map!");
             if (gameConfigMessage.stormEye != null)
             {
                 MapManager.instance.getNodeFromPos(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y).SetSandstorm(true);
                 MapManager.instance.SetStormEye(gameConfigMessage.stormEye.x, gameConfigMessage.stormEye.y);
             }
-            //    Debug.Log("Checkpoint");
+                Log.Debug("Checkpoint");
             //   Debug.Log("Pre Crash" + gameConfigMessage.cityToClient[0]);
             if (SessionHandler.isPlayer)
             {
@@ -221,21 +220,23 @@ public class PlayerMessageController : MessageController
                     SessionHandler.enemyClientId = gameConfigMessage.playerInfo[0].clientID;
                     SessionHandler.enemyName = gameConfigMessage.playerInfo[0].clientName;
                     SessionHandler.clientName = gameConfigMessage.playerInfo[1].clientName;
-                    
+                    Log.Debug("Client Name set");
+                    Log.Debug("Clientname is: " + SessionHandler.clientName);
                 }
-                CharacterTurnHandler.instance.ClientName.text = SessionHandler.clientName;
-                CharacterTurnHandler.instance.EnemyName.text = SessionHandler.enemyName;
-                // Debug.Log("Soweit Clean");
-                MapManager.instance.getNodeFromPos(gameConfigMessage.playerInfo[0].x, gameConfigMessage.playerInfo[0].y).cityOwnerId = gameConfigMessage.playerInfo[0].clientID;
-                MapManager.instance.getNodeFromPos(gameConfigMessage.playerInfo[1].x, gameConfigMessage.playerInfo[1].y).cityOwnerId = gameConfigMessage.playerInfo[1].clientID;
-            }
-            else
-            {
-                SessionHandler.enemyClientId = gameConfigMessage.playerInfo[1].clientID;
-                SessionHandler.clientId = gameConfigMessage.playerInfo[0].clientID;
+                    CharacterTurnHandler.instance.ClientName.text = SessionHandler.clientName;
+                    CharacterTurnHandler.instance.EnemyName.text = SessionHandler.enemyName;
+                     Log.Debug("Soweit Clean");
+                    MapManager.instance.getNodeFromPos(gameConfigMessage.playerInfo[0].x, gameConfigMessage.playerInfo[0].y).cityOwnerId = gameConfigMessage.playerInfo[0].clientID;
+                    MapManager.instance.getNodeFromPos(gameConfigMessage.playerInfo[1].x, gameConfigMessage.playerInfo[1].y).cityOwnerId = gameConfigMessage.playerInfo[1].clientID;
+                    Log.Debug("Map placements alright");
+                }
+                else
+                {
+                    SessionHandler.enemyClientId = gameConfigMessage.playerInfo[1].clientID;
+                    SessionHandler.clientId = gameConfigMessage.playerInfo[0].clientID;
 
-            }
-           // InGameMenuManager.getInstance().SwitchToInGameUI();
+                }
+                // InGameMenuManager.getInstance().SwitchToInGameUI();
             
             yield return null;
         }

@@ -1,48 +1,48 @@
 {
-    "noble": {
-        "maxHP": 1,
-        "maxMP": 10,
-        "maxAP": 10,
-        "damage": 5,
-        "inventorySize": 10,
-        "healingHP": 5
-    },
-    "mentat": {
-        "maxHP": 1,
-        "maxMP": 10,
-        "maxAP": 10,
-        "damage": 10,
-        "inventorySize": 10,
-        "healingHP": 10
-    },
-    "beneGesserit": {
-        "maxHP": 1,
-        "maxMP": 10,
-        "maxAP": 10,
-        "damage": 20,
-        "inventorySize": 10,
-        "healingHP": 20
-    },
-    "fighter": {
-        "maxHP": 1,
-        "maxMP": 10,
-        "maxAP": 10,
-        "damage": 30,
-        "inventorySize": 10,
-        "healingHP": 30
-    },
-    "numbOfRounds": 8,
-    "actionTimeUserClient": 50000000,
-    "actionTimeAiClient": 30000,
-    "highGroundBonusRatio": 0.6,
-    "lowerGroundMalusRatio": 0.4,
-    "kanlySuccessProbability": 0.5,
-    "spiceMinimum": 20,
-    "cellularAutomaton": "B3/S2",
-    "crashProbability": 0.5,
-    "sandWormSpeed": 3,
-    "sandWormSpawnDistance": 4,
-    "cloneProbability": 0.5,
-    "minPauseTime": 25000,
-    "maxStrikes": 5
+  "noble": {
+    "maxHP": 50,
+    "maxMP": 20,
+    "maxAP": 2,
+    "damage": 10,
+    "inventorySize": 5,
+    "healingHP": 5
+  },
+  "mentat": {
+    "maxHP": 37,
+    "maxMP": 20,
+    "maxAP": 3,
+    "damage": 5,
+    "inventorySize": 10,
+    "healingHP": 5
+  },
+  "beneGesserit": {
+    "maxHP": 75,
+    "maxMP": 30,
+    "maxAP": 2,
+    "damage": 10,
+    "inventorySize": 5,
+    "healingHP": 10
+  },
+  "fighter": {
+    "maxHP": 100,
+    "maxMP": 20,
+    "maxAP": 2,
+    "damage": 20,
+    "inventorySize": 3,
+    "healingHP": 10
+  },
+  "numbOfRounds": 0,
+  "actionTimeUserClient": 543918,
+  "actionTimeAiClient": 1000,
+  "highGroundBonusRatio": 0.3,
+  "lowerGroundMalusRatio": 0.3,
+  "kanlySuccessProbability": 0.33,
+  "spiceMinimum": 12,
+  "cellularAutomaton": "B3/S2",
+  "sandWormSpeed": 3,
+  "sandWormSpawnDistance": 5,
+  "cloneProbability": 0.18,
+  "minPauseTime": 95840,
+  "maxStrikes": 3,
+  "crashProbability": 1.0
 }

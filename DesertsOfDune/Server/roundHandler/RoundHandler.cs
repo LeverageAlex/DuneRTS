@@ -203,6 +203,7 @@ namespace GameData.gameObjects
 
         private void RestartServer()
         {
+            Thread.Sleep(60000);
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "Server.exe";
             startInfo.Arguments = string.Join(' ', Programm.startArguments);

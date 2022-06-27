@@ -60,10 +60,6 @@ public class InGameMenuManager : MonoBehaviour
 
     public static InGameMenuManager getInstance()
     {
-        if(instance == null)
-        {
-            instance = new InGameMenuManager();
-        }
         return instance;
     }
 

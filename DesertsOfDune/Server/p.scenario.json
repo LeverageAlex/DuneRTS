@@ -167,6 +167,20 @@
       "PLATEAU",
       "PLATEAU",
       "PLATEAU"
+    ],
+	[
+      "FLAT_SAND",
+      "DUNE",
+      "FLAT_SAND",
+      "DUNE",
+      "FLAT_SAND",
+      "DUNE",
+      "HELIPORT",
+      "DUNE",
+      "DUNE",
+      "PLATEAU",
+      "PLATEAU",
+      "PLATEAU"
     ]
   ]
 }
