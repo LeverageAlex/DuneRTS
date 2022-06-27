@@ -80,6 +80,10 @@ namespace GameData.network.util.world.character
                         inventoryUsed++;
                         spiceField.hasSpice = false;
                         inventoryFree--;
+                        if (spiceField.tileType == "DUNE" || spiceField.tileType == "FLAT_SAND")
+                        {
+                            this.SetLoud();
+                        }
                     }
                     NeighborFields.Remove(spiceField);
                 }

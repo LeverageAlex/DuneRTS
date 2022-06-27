@@ -1422,6 +1422,10 @@ namespace GameData
         {
             DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
             actionCharacter.CollectSpice();
+            if (actionCharacter.CurrentMapfield.tileType == "DUNE" || actionCharacter.CurrentMapfield.tileType == "FLAT_SAND")
+            {
+                actionCharacter.SetLoud();
+            }
             activePlayer.statistics.AddToTotalSpiceCollected(1);
             DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
             TryDeliverSpiceToCity(activePlayer, actionCharacter);
