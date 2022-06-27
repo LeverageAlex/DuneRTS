@@ -66,14 +66,15 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
             var randomizedCharacters = characterTraitPhase.GenerateTraitSequenze();
             Assert.AreEqual(characters.Count, randomizedCharacters.Count);          //randomizedCharacter has exact the same number of elements as characters
             Assert.AreNotEqual(characters, randomizedCharacters);                   //randomizedCharacter is not just a copy of characters
-            foreach (var character in characters) {
+            foreach (var character in characters)
+            {
                 Assert.IsTrue(randomizedCharacters.Contains(character));            //every character from characters is in randomizedCharacters
                 int characterIndex = randomizedCharacters.IndexOf(character);
                 randomizedCharacters.Remove(character);
                 Assert.IsFalse(randomizedCharacters.Contains(character));           //no character from characters is duplicated in randomizedCharacters
                 randomizedCharacters.Insert(characterIndex, character);
             }
-            foreach(var character in randomizedCharacters)
+            foreach (var character in randomizedCharacters)
             {
                 Assert.IsTrue(!character.IsDead());                                 //test if every charcter in the initial generated trait sequence is alive
                 Assert.IsTrue(!character.killedBySandworm);                         //character in initial generated trait sequence is also not killed by a sandworm
@@ -99,7 +100,7 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
             {
                 Assert.IsFalse(character.IsLoud());                                         //every Character gets set to silent at the beginning of the characterTraitPhase
                 character.CurrentMapfield = Map.instance.fields[0, 1];
-                if(!character.IsDead() && !character.KilledBySandworm && !character.IsInSandStorm(Party.GetInstance().map))
+                if (!character.IsDead() && !character.KilledBySandworm && !character.IsInSandStorm(Party.GetInstance().map))
                 {
                     Assert.AreEqual(character.APmax, character.APcurrent);                  //if the character can do a turn, its AP gets resetted   
                     Assert.AreEqual(character.MPmax, character.MPcurrent);                  //if the character can do a turn, its MP gets resetted
@@ -122,7 +123,8 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
         [Test]
         public void TestRequestClientForNextCharacterTrait()
         {
-            /*var characterTraitPhase = roundHandler.GetCharacterTraitPhase();
+            var characterTraitPhase = roundHandler.GetCharacterTraitPhase();
+            characterTraitPhase.SetTimer();
             var p1 = new HumanPlayer("client1", "session1");
             var p2 = new HumanPlayer("client2", "session2");
             Party.GetInstance().AddClient(p1);
@@ -130,13 +132,12 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
             p1.UsedGreatHouse = GreatHouseFactory.CreateNewGreatHouse(GameData.network.util.enums.GreatHouseType.CORRINO);
             p2.UsedGreatHouse = GreatHouseFactory.CreateNewGreatHouse(GameData.network.util.enums.GreatHouseType.ATREIDES);
             var randomizedCharacters = characterTraitPhase.GenerateTraitSequenze();
-            foreach(var character in randomizedCharacters)
+            foreach (var character in randomizedCharacters)
             {
                 characterTraitPhase.RequestClientForNextCharacterTrait(character.CharacterId);                //test if RequestClientForNextCharacterTrait is successful for each character
-                //Assert.IsTrue(characterTraitPhase.GetTimer().Enabled);                                        //test if the timer starts, when RequestClientForNextCharacterTrait is executed
-                //characterTraitPhase.GetTimer().Stop();
-            } */
-            // this test still had misstakes and was removed therefore.
+                Assert.IsTrue(characterTraitPhase.GetTimer().Enabled);                                        //test if the timer starts, when RequestClientForNextCharacterTrait is executed
+                characterTraitPhase.GetTimer().Stop();
+            }
             //TODO: implement test
         }
 
