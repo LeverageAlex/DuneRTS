@@ -62,6 +62,9 @@ namespace GameData.network.util.world
         [JsonIgnore]
         public bool Shunned { get; set; }
 
+        [JsonIgnore]
+        public bool SteppedOnSandfield { get; set; }
+
         /// <summary>
         /// This list is used for the characters which should be add after greatHouseHouseConvention gets broken for the first time.
         /// </summary>
@@ -157,6 +160,7 @@ namespace GameData.network.util.world
             Random random = new Random();
             this.CharacterId = random.Next(int.MaxValue);
             this.Shunned = false;
+            SteppedOnSandfield = false;
         }
 
         /// <summary>
