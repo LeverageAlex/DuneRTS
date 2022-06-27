@@ -222,7 +222,6 @@ namespace GameData
             }
 
             var path = msg.specs.path;
-            bool alreadySteppedOnSandField = false;
             var newPath = new List<Position>();
             foreach (var position in path)
             {
@@ -256,13 +255,13 @@ namespace GameData
                                 newPath.Add(position);
                                 if (party.map.fields[position.y, position.x].tileType == TileType.FLAT_SAND.ToString() || party.map.fields[position.y, position.x].tileType == TileType.DUNE.ToString())
                                 {
-                                    if (alreadySteppedOnSandField)
+                                    if(movingCharacter.SteppedOnSandfield)
                                     {
                                         movingCharacter.SetLoud();
                                     }
                                     else
                                     {
-                                        alreadySteppedOnSandField = true;
+                                        movingCharacter.SteppedOnSandfield = true;
                                     }
                                 }
                                 TryDeliverSpiceToCity(activePlayer, movingCharacter);
@@ -1422,6 +1421,10 @@ namespace GameData
         {
             DoSendActionDemand(msg.clientID, msg.characterID, action, msg.specs.target);
             actionCharacter.CollectSpice();
+            if (actionCharacter.CurrentMapfield.tileType == "DUNE" || actionCharacter.CurrentMapfield.tileType == "FLAT_SAND")
+            {
+                actionCharacter.SetLoud();
+            }
             activePlayer.statistics.AddToTotalSpiceCollected(1);
             DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
             TryDeliverSpiceToCity(activePlayer, actionCharacter);

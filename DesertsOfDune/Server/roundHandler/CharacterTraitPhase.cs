@@ -67,6 +67,7 @@ namespace GameData.server.roundHandler
                     if (!_currentCharacter.IsDead() && !_currentCharacter.KilledBySandworm && !_currentCharacter.IsInSandStorm(Party.GetInstance().map)) // check if character is dead or staying in storm
                     {
                         _currentCharacter.resetMPandAp();
+                        _currentCharacter.SteppedOnSandfield = false;
                         foreach (var player in Party.GetInstance().GetActivePlayers())
                         {
                             foreach (var character in player.UsedGreatHouse.GetCharactersAlive())
