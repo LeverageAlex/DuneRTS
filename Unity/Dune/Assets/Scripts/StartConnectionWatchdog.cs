@@ -48,7 +48,7 @@ public class StartConnectionWatchdog : MonoBehaviour
 
     public void ConnectionMonitorEvent(object source, ElapsedEventArgs e)
     {
-        if (!SessionHandler.clientconhandler.ConnectionIsAlive())
+        if (!SessionHandler.clientconhandler.ConnectionIsAlive() && !SessionHandler.endGame)
         {
             SessionHandler.CloseNetworkModule();
             connectionMonitiorTimer.Stop();
