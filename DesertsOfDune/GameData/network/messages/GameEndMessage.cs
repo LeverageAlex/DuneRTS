@@ -35,7 +35,7 @@ namespace GameData.network.messages
         /// This method is used to create a String out of 
         /// </summary>
         /// <returns></returns>
-        public override String ToString()
+        public override string ToString()
         {
             string s = "House storage: " + statistics[0].HouseSpiceStorage + "Spice collected: " + statistics[0].TotalSpiceCollected + "Enemies defeated: " + statistics[0].EnemiesDefeated + "Count swallowed Characters: " + statistics[0].CharactersSwallowed;
             StringBuilder sb = new StringBuilder(s);

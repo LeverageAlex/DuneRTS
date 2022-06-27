@@ -323,7 +323,16 @@ public class PlayerMessageController : MessageController
         // TODO: implement logic
         IEnumerator gameEnd()
         {
-            InGameMenuManager.getInstance().DemandEndGame("The Winner is: " + gameEndMessage.winnerID + "and the statistics are: " + gameEndMessage.statistics.ToString());
+            string winnerName = "";
+            if (gameEndMessage.winnerID == SessionHandler.clientId)
+            {
+                winnerName = SessionHandler.clientName;
+            }
+            else if (gameEndMessage.winnerID == SessionHandler.enemyClientId)
+            {
+                winnerName = SessionHandler.enemyName;
+            }
+            InGameMenuManager.getInstance().DemandEndGame("The Winner is: " + winnerName + "and the statistics are: " + gameEndMessage.ToString());
             SessionHandler.endGame = true;
             yield return null;
         }
