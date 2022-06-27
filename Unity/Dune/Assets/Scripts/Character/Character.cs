@@ -855,11 +855,11 @@ public class Character : MonoBehaviour
     /// <param name="character">Attacker</param>
     public IEnumerator PlayDamageAnimation(Character character)
     {
-        if (isDead)
+        if (!isDead)
         {
             Vector3 dir = character.transform.position - transform.position;
             yield return new WaitForSeconds(0.25f);
-            if (isDead)
+            if (!isDead)
             {
                 RotateTowardsVector(dir);
                 charAnim.Play(animation_damage);

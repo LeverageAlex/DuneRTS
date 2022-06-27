@@ -376,14 +376,14 @@ public class PlayerMessageController : MessageController
                             MapChangeDemandMessage mapChangeDemandMessage = (MapChangeDemandMessage)convertedMsg;
                             Log.Debug("Successfuly deparsed message");
                       //      MapManager.instance.ClearOldMapData();
-                            MapManager.instance.setMapSize(mapChangeDemandMessage.newMap.GetLength(0), mapChangeDemandMessage.newMap.GetLength(1));
+                            MapManager.instance.setMapSize(mapChangeDemandMessage.newMap.GetLength(1), mapChangeDemandMessage.newMap.GetLength(0));
                             // OnMapChangeDemandMessage(mapstate);
 
                             CharacterTurnHandler.instance.ResetSelection();
                             GUIHandler.BroadcastGameMessage(mapChangeDemandMessage.changeReason);
-                            for (int x = 0; x < mapChangeDemandMessage.newMap.GetLength(0); x++)
+                            for (int x = 0; x < mapChangeDemandMessage.newMap.GetLength(1); x++)
                             {
-                                for (int z = 0; z < mapChangeDemandMessage.newMap.GetLength(1); z++)
+                                for (int z = 0; z < mapChangeDemandMessage.newMap.GetLength(0); z++)
                                 {
 
                                     // Debug.Log("PreLoop Built x: " + x + " and z: " + z);
