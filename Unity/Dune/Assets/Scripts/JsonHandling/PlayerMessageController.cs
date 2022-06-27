@@ -333,11 +333,13 @@ public class PlayerMessageController : MessageController
             {
                 winnerName = SessionHandler.enemyName;
             }
-            InGameMenuManager.getInstance().DemandEndGame("The Winner is: " + winnerName + "and the statistics are: " + gameEndMessage.ToString());
-            SessionHandler.endGame = true;
+            InGameMenuManager.getInstance().DemandEndGame("The Winner is: " + winnerName + " and the statistics are:\n" + gameEndMessage.ToString());
+
             yield return null;
         }
+        SessionHandler.endGame = true;
         UnityMainThreadDispatcher.Instance().Enqueue(gameEnd());
+
     }
 
     /// <summary>

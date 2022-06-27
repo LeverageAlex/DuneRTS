@@ -37,18 +37,9 @@ namespace GameData.network.messages
         /// <returns></returns>
         public override string ToString()
         {
-            string s = "House storage: " + statistics[0].HouseSpiceStorage + "Spice collected: " + statistics[0].TotalSpiceCollected + "Enemies defeated: " + statistics[0].EnemiesDefeated + "Count swallowed Characters: " + statistics[0].CharactersSwallowed;
+            string s = "Player 1 House storage: " + statistics[0].HouseSpiceStorage + "Spice collected: " + statistics[0].TotalSpiceCollected + "\nEnemies defeated: " + statistics[0].EnemiesDefeated + "\nCount swallowed Characters: " + statistics[0].CharactersSwallowed;
             StringBuilder sb = new StringBuilder(s);
-            foreach(String character in statistics[0].CharactersAlive)
-            {
-                sb.Append(character);
-            }
-            sb.Append("Has last Character standing: " + statistics[0].LastCharacterStanding);
-            sb.AppendLine("House storage: " + statistics[1].HouseSpiceStorage + "Spice collected: " + statistics[1].TotalSpiceCollected + "Enemies defeated: " + statistics[1].EnemiesDefeated + "Count swallowed Characters: " + statistics[1].CharactersSwallowed);
-            foreach (String character in statistics[1].CharactersAlive)
-            {
-                sb.Append(character);
-            }
+            sb.AppendLine( "\nPlayer 2 House storage: " + statistics[1].HouseSpiceStorage + "\nSpice collected: " + statistics[1].TotalSpiceCollected + "\nEnemies defeated: " + statistics[1].EnemiesDefeated + "\nCount swallowed Characters: " + statistics[1].CharactersSwallowed);
             return sb.ToString();
         }
     }
