@@ -10,25 +10,24 @@ using Serilog;
  * - Helps creating the movement path of chars
  * - Moves Characters according to path
  */
+
 [Serializable]
 public class MovementManager : MonoBehaviour
 {
 
     public static MovementManager instance;
-    // private Character selectedChar;
     private LinkedList<Character> updateCharacters;
     private LinkedList<MoveAbles> OtherMoveAbles;
     [SerializeField]
     private List<Position> selCharPath;
 
-    // public static bool charSelected { get { return instance.selectedChar != null; } }
     public static bool isAnimating { get { return instance.updateCharacters.Count != 0; } }
 
-    /**
-     * This class shall manage the movement of the characters
-     */
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// This class shall manage the movement of the characters.
+    /// Start is called before the first frame update
+    /// </summary>
     void Awake()
     {
         if (instance == null)
@@ -43,7 +42,10 @@ public class MovementManager : MonoBehaviour
 
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Update is called once per frame. 
+    /// Moves and removes all objects in animation queues.
+    /// </summary>
     void Update()
     {
 
@@ -75,36 +77,22 @@ public class MovementManager : MonoBehaviour
             cluster = next;
         }
 
-        //Test code
-        //Starts animation on key b
-
-        /*if (Input.GetKeyDown(KeyCode.Return) && selCharPath.Count > 0)
-            {
-            // AnimateChar(character, MovementManager.instance.getSelCharPath);
-            RequestMovement();
-            } */
 
     }
 
-
-    /*  public void selectCharacter(Character character)
-      {
-          selectedChar = character;
-      }*/
-
-    //Ignores all other functions within class
-    public void addCharacterToAnimate(Character character, List<Vector3> pathing)
-    {
-        updateCharacters.AddLast(character);
-        CharacterTurnHandler.instance.GetSelectedCharacter().SetWalkPath(pathing);
-    }
-
+    /// <summary>
+    /// Add a MoveAble like Sandworm to the animation-queue.
+    /// </summary>
+    /// <param name="moveAble"></param>
     public void addOtherToAnimate(MoveAbles moveAble)
     {
         OtherMoveAbles.AddLast(moveAble);
     }
 
 
+    /// <summary>
+    /// Clears the selected Path
+    /// </summary>
     public void unselectCharacter()
     {
         selCharPath.Clear();
@@ -123,13 +111,14 @@ public class MovementManager : MonoBehaviour
     }
 
 
-    /*
-     * Will check whether the MP limit is reached and if point is in range.
-     * Currently deactivated for easier testing, but should be activated later
-     */
+    /// <summary>
+    /// Checks whether the MP limit is reached and if point is in range.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="z"></param>
+    /// <returns>True if node can be added. False otherwise</returns>
     public bool IsWaypointAttachable(int x, int z)
     {
-        //Debug.Log("IsWayPoint Attachable: Current MP: " + CharacterTurnHandler.instance.GetSelectedCharacter().MP + " and selCharPath size: " + selCharPath.Count);
         if (selCharPath.Count == 0)
         { // distinction needed at the first node to select
             return selCharPath.Count < CharacterTurnHandler.instance.GetSelectedCharacter().MP && MapManager.instance.isNodeNeighbour(CharacterTurnHandler.instance.GetSelectedCharacter().X,
@@ -141,47 +130,13 @@ public class MovementManager : MonoBehaviour
                x, z);
         }
 
-        // return true;
     }
 
-    //public void AnimateSelectedChar()
-    //{
-    // if (!isAnimating)
-    // {
-    /* if (selCharPath.Count > 0)
-     {
-         Character selectedChar = CharacterTurnHandler.instance.GetSelectedCharacter();
-         updateCharacters.AddLast(selectedChar);
-
-         // PlayerController.doRequestMovement(ClientID, CharacterId, path); 
-        // PlayerMessageController.DoMovementRequest(1234, selectedChar.GetInstanceID(), selCharPath);
-
-         // Message = PlayerController.OnMovement((Movement)Message)
-
-         // Sollte erst ausgeführt werden, wenn die aktion ausgeführt werden darf.
-         selectedChar.SetWalkPath(selCharPath);
-         selectedChar.ReduceMP(selCharPath.Count);
-         selCharPath = new List<Position>();
-         CharacterTurnHandler.instance.ResetSelection();
-     AudioController.instance.Play("CharWalk");
-     }*/
-    //}
-
-    private LinkedList<Vector3> convertVector(List<Position> path)
-    {
-        LinkedList<Vector3> newPos = new LinkedList<Vector3>();
-
-        Vector3 tmp;
-        foreach (Position p in path)
-        {
-
-            tmp = new Vector3(p.x, 0, p.y);
-            newPos.AddLast(tmp);
-        }
-
-        return newPos;
-    }
-
+    /// <summary>
+    /// Used by PlayerMessageController to add a character to the AnimationMoveQueue.
+    /// </summary>
+    /// <param name="character"></param>
+    /// <param name="path"></param>
     public void AnimateChar(Character character, List<Position> path)
     {
         if (path.Count > 0)
@@ -208,26 +163,13 @@ public class MovementManager : MonoBehaviour
     }
 
 
-    public List<Position> getSelCharPath()
-    {
-        return selCharPath;
-    }
-
-
+    /// <summary>
+    /// Passes all needed parameters for a movement-request to the PlayerMessageController
+    /// </summary>
     public void RequestMovement()
     {
-        //   Log.Debug("Button getriggert. Sende Nachricht");
-        //    SessionHandler.messageController.DoRequestHouse("ATREIDES");
-        //if (!Mode.debugMode)
-        //{
         Log.Debug("DoRequestMovement: for characterID " + CharacterTurnHandler.instance.GetSelectedCharacter().characterId);
         SessionHandler.messageController.DoRequestMovement(SessionHandler.clientId, CharacterTurnHandler.instance.GetSelectedCharacter().characterId, selCharPath);
-        // }
-        //else
-        //{
-        //     AnimateChar(CharacterTurnHandler.instance.GetSelectedCharacter(), selCharPath);
-        //    selCharPath.Clear();
-        // }
     }
 
 

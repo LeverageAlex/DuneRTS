@@ -31,17 +31,11 @@ public class Character : MonoBehaviour
 
     public CharTypeEnum characterType;
     public HouseEnum house = HouseEnum.VERNIUS;
-    //TODO
-    //Wird nur während des erstellen von noch nicht selbstgenerierten Leveln benötigt (da so im UnityEditor gewählt werden kann).
-    //Sollte später durch einfach durch eine direkte Referenz ersetzt
-    //Es fehlt die Zuordnung zum Haus
 
     private int HP;  //Health Points
-    private int healingHP;
     private int BaseAP;
     private int _AP;  //Attack Points
     private int _MP; //Movement Points
-    private int AD;  //Attack-Damage
     private int spiceInv;
 
     private bool isDead = false;
@@ -90,7 +84,6 @@ public class Character : MonoBehaviour
     private string animation_walk;
     private string animation_voice;
     private string animation_kanly;
-    private string animation_swordSpin;
     private string animation_spiceHoarding;
     private string animation_transferSpice;
     private string animation_damage;
@@ -101,16 +94,9 @@ public class Character : MonoBehaviour
     private int BaseHP;
 
 
-    // public Transform t;
-
-
-
-
-
-
-
-
-    // Start is called before the first frame update
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// </summary>
     void Start()
     {
         nodeManager = MapManager.instance;
@@ -119,20 +105,7 @@ public class Character : MonoBehaviour
         _x = (int)Mathf.Round(transform.position.x);
         _z = (int)Mathf.Round(transform.position.z);
         _y = transform.position.y - nodeManager.getNodeFromPos(X, Z).charHeightOffset;
-
-        //SampleCode only
-        
-        if (Mode.debugMode)
-        {
-            BaseHP = 100;
-            initCharacter();
-        }
-
-        //Update Nodes references on start (only needed because of editor)
-        //gameManager.getNodeFromPos((int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z)).placeObjectOnNode(gameObject);
         nodeManager.placeObjectOnNode(gameObject, (int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z));
-        //Debug.Log("HP " + HP + ", AP " + AP);
-        //Debug.Log("Object name: " + gameObject.name);
         BaseAP = _AP;
         emblem_rotation = emblemLogo.transform.rotation;
         healthBar_rotation = healthBar.transform.rotation;
@@ -143,6 +116,10 @@ public class Character : MonoBehaviour
         SetMatColorToHouse();
     }
 
+
+    /// <summary>
+    /// Sets the animation-names. Needed because of the distinct animation-names of models.
+    /// </summary>
     public void initAnimations()
     {
         if (charSex == charSexEnum.MALE) {
@@ -150,7 +127,6 @@ public class Character : MonoBehaviour
             animation_attack = "Male Attack 1";
             animation_pickUpSpice = "Male Attack 3";
             animation_walk = "Male_Walk";
-          //  animation_swordSpin = "";
             animation_kanly = "Male Attack 3";
             animation_spiceHoarding = "Male Sword Roll";
             animation_transferSpice = "Male Attack 2";
@@ -169,44 +145,23 @@ public class Character : MonoBehaviour
             animation_death = "Female Die";
         }
         
-
-
-
-
     }
 
-    /*
-     * Will be called within movementManager.
-     */
+    /// <summary>
+    /// Will be called within movementManager to move the character by some pixels
+    /// </summary>
+    /// <returns></returns>
     public bool calledUpdate()
     {
         return MoveToPoint();
 
-        // moveToPoint(t);
-    }
-
-
-    public void initCharacter()
-    {
-       if(characterType == CharTypeEnum.NOBLE)
-        {
-            UpdateCharStats(100, 100, 2, 5, false, false);
-        } else if(characterType == CharTypeEnum.FIGHTER)
-        {
-            UpdateCharStats(200, 100, 3, 3, false, false);
-
-        } else if(characterType== CharTypeEnum.MENTANT)
-        {
-            UpdateCharStats(75, 100, 2, 10, false, false);
-        } else if(characterType==CharTypeEnum.BENEGESSERIT)
-        {
-            UpdateCharStats(150, 100, 2, 5, false, false);
-        }
-        SetMatColorToHouse();
     }
 
 
 
+    /// <summary>
+    /// Triggers death-animation and removes character from dictionary.
+    /// </summary>
     public void KillCharacter()
     {
         isDead = true;
@@ -217,13 +172,20 @@ public class Character : MonoBehaviour
 
    
 
-
+    /// <summary>
+    /// Updates the stats of the character. If hp <= 0 or isSwallowed == true then calls KillCharacter()
+    /// </summary>
+    /// <param name="HP"></param>
+    /// <param name="MP"></param>
+    /// <param name="AP"></param>
+    /// <param name="spiceInv"></param>
+    /// <param name="isLoud"></param>
+    /// <param name="isSwallowed"></param>
     public void UpdateCharStats(int HP, int MP, int AP, int spiceInv, bool isLoud, bool isSwallowed)
     {
         if (HP > 0 && !isSwallowed)
         {
             this.HP = HP;
-            //this.healingHP = HealHP;
             this._AP = AP;
             this._MP = MP;
             this.spiceInv = spiceInv;
@@ -247,10 +209,10 @@ public class Character : MonoBehaviour
             }
     }
 
-    /*
-     * Moves Character to a specific point with very little speed. Needs to be called over and over again to finish animation
-     * @return: True, if Character is still moving, False if last wayPoint has been reached
-     */
+    /// <summary>
+    /// Moves Character to a specific point with very little speed. Needs to be called over and over again to finish animation.
+    /// </summary>
+    /// <returns>True, if Character is still moving, False if last wayPoint has been reached</returns>
     public bool MoveToPoint()
     {
         Vector3 dir = walkPath[0] - transform.position;
@@ -258,9 +220,10 @@ public class Character : MonoBehaviour
         charAnim.Play(animation_walk);
         RotateTowardsVector(dir);
         turnHandler.updateSelectionArrow();
-        // ReduceMP(1);
         if (Vector3.Distance(transform.position, walkPath[0]) <= 0.06f)
         {
+
+            //The character reached a new point in walkPath. Now remove the point from list and update position of character.
             walkPath.RemoveAt(0);
             MapManager.instance.placeObjectOnNode(gameObject, (int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z));
 
@@ -278,6 +241,7 @@ public class Character : MonoBehaviour
             }
             else
             {
+                //there is no path to go, so stop animation and return false.
                 SetAnimationToIdle();
                 semaphoreWalk--;
                 //Needed for check if eligible for Heliport
@@ -292,11 +256,18 @@ public class Character : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// Sets the path to walk.
+    /// </summary>
+    /// <param name="way"></param>
     public void SetWalkPath(List<Vector3> way)
     {
         walkPath = way;
     }
 
+    /// <summary>
+    /// Triggers the selection of a character, if there is no other object over the object like GUI etc.
+    /// </summary>
     public void OnMouseDown()
     {
         if (EventSystem.current.IsPointerOverGameObject()) return;
@@ -305,6 +276,9 @@ public class Character : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Triggered if mouse enters character. If Current turnState is Move, mark current node.
+    /// </summary>
    public void OnMouseEnter()
     {
         if(turnHandler.CharState == CharacterTurnHandler.Actions.MOVE)
@@ -313,6 +287,10 @@ public class Character : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Called on exit of mouse. Resets the color of field.
+    /// </summary>
     public void OnMouseExit()
     {
         if (turnHandler.CharState == CharacterTurnHandler.Actions.MOVE)
@@ -321,6 +299,10 @@ public class Character : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called if there is a mouseClick on Character.
+    /// Responds in a appropriate manner according to the current state, e. g. passes the character itself as target of an action.
+    /// </summary>
     public void selectChar()
     {
 
@@ -359,9 +341,13 @@ public class Character : MonoBehaviour
         }
 
 
+    /// <summary>
+    /// Sends BasicAttack-Message Request to Server
+    /// </summary>
+    /// <param name="character">target character</param>
+    /// <returns></returns>
     public bool Attack_BasicTrigger(Character character)
     {
-        //secondCharacter = character;
         Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
         Node secondNode = nodeManager.getNodeFromPos(character.X, character.Z);
         
@@ -369,9 +355,6 @@ public class Character : MonoBehaviour
         if (nodeManager.isNodeNeighbour(selectedNode, secondNode) && !character.IsMemberOfHouse(house))
         {
 
-            //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.ATTACK, selectedNode);
-            // TODO wait for Server response.
-            //TODO execute attack
             if (Mode.debugMode)
             {
                 Attack_BasicExecution(character);
@@ -390,6 +373,11 @@ public class Character : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Plays attack and damage animation.
+    /// </summary>
+    /// <param name="character">target character</param>
     public void Attack_BasicExecution(Character character)
     {
         turnHandler.ResetAction();
@@ -413,12 +401,14 @@ public class Character : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Sends CollectSpice-Message Request to Server and audio
+    /// </summary>
+    /// <returns>whether there was spice on the field to collect.</returns>
     public bool Action_CollectSpiceTrigger()
     {
         if (nodeManager.IsSpiceOn(X, Z))
         {
-            //PlayerMessageController.DoActionRequest(1234, characterId, Enums.ActionType.COLLECT, nodeManager.getNodeFromPos(X, Z));
-            // just fill data the node should be available here.
             if (Mode.debugMode)
             {
                 Action_CollectSpiceExecution();
@@ -441,6 +431,9 @@ public class Character : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// Plays collection of spice animation and audio
+    /// </summary>
     public void Action_CollectSpiceExecution()
     {
         StartCoroutine(SwordDeAndActivation());
@@ -454,6 +447,12 @@ public class Character : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Sends ActionTransfer-Message request to Server
+    /// </summary>
+    /// <param name="character"></param>
+    /// <returns>whether the character to transfer to belongs to the own house</returns>
     public bool Action_TransferSpiceTrigger(Character character)
     {
         Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
@@ -472,6 +471,9 @@ public class Character : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Resets player action
+    /// </summary>
     public void CancleRequstTransferSpice()
     {
         turnHandler.ResetAction();
@@ -485,7 +487,6 @@ public class Character : MonoBehaviour
     /// <param name="spiceAmount"></param>
     public void TriggerRequestTransferSpice(Character character, int spiceAmount)
     {
-        //TODO execute attack
         if (Mode.debugMode)
         {
             Action_TransferSpiceExecution(character);
@@ -493,12 +494,14 @@ public class Character : MonoBehaviour
         else
         {
             Debug.Log("action transferSpice: " + SessionHandler.clientId);
-            //SessionHandler.messageController.DoRequestAction(SessionHandler.clientId, characterId, ActionType.TRANSFER, new GameData.network.util.world.Position(character.X, character.Z));
             SessionHandler.messageController.DoRequestTransfer(SessionHandler.clientId, characterId, character.characterId, spiceAmount);
         }      
     }
 
-    
+    /// <summary>
+    /// Plays TransferSpice animation and audio
+    /// </summary>
+    /// <param name="character"></param>
     public void Action_TransferSpiceExecution(Character character)
     {
         Debug.Log("Transfer!");
@@ -518,21 +521,16 @@ public class Character : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Sends SwordSpin-Message request to Server
+    /// </summary>
+    /// <returns></returns>
     public bool Attack_SwordSpinTrigger()
     {
-        //secondCharacter = character;
         if (characterType == CharTypeEnum.FIGHTER)
         {
-            //Node selectedNode = nodeManager.getNodeFromPos(turnHandler.GetSelectedCharacter().X, turnHandler.GetSelectedCharacter().Z);
 
-            // just fill data the node has to be a parameter of Atack_SwordSpin
-
-           
-         
                 SessionHandler.messageController.DoRequestAction(SessionHandler.clientId, characterId, ActionType.SWORD_SPIN, new GameData.network.util.world.Position(X, Z));
-            
-            //TODO: Send Attack to Server
-            //TODO: wait for response from server
 
             return true;
         }
@@ -547,6 +545,9 @@ public class Character : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Plays SwordSpin animation and audio
+    /// </summary>
     public void Attack_SwordSpinExecution()
     {
         Debug.Log("Attack_SwordSpin");
@@ -555,14 +556,16 @@ public class Character : MonoBehaviour
         audioManager.Play("SpiceHoarding");
     }
 
-    /*
-    * @param target node
-    */
+
+    /// <summary>
+    /// Sends AtomicAction-Message request to Server
+    /// </summary>
+    /// <param name="node">target node</param>
+    /// <returns></returns>
     public bool Attack_AtomicTrigger(Node node)
     {
         if (characterType == CharTypeEnum.NOBLE)
-        {
-            //Check, if there are atomics left in House
+        { 
 
             
             if (Mode.debugMode)
@@ -583,6 +586,11 @@ public class Character : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Creates the atomic-Object from prefab, which will fly towards the given target node from the current selected node. It uses a bezier-curve to calculate flying-curve.
+    /// </summary>
+    /// <param name="node">target node, where the atomic is exploding on.</param>
     public void Attack_AtomicExecution(Node node)
     {
         GameObject atomicInst = Instantiate(CharacterMgr.instance.atomicPrefab, new Vector3(X, 0.5f, Z), Quaternion.identity);
@@ -594,18 +602,18 @@ public class Character : MonoBehaviour
         {
             if (_AP <= 0) CharacterTurnHandler.EndTurn();
         }
-        //CharacterTurnHandler.EndTurn();
 
-        //reset 
         if (Mode.debugMode)
         {
             turnHandler.ResetSelection();
         }
     }
 
-    /*
-    * @param target of action
-    */
+    /// <summary>
+    /// Sends Kanly-Message request to Server
+    /// </summary>
+    /// <param name="character">target of action</param>
+    /// <returns></returns>
     public bool Attack_KanlyTrigger(Character character)
     {
 
@@ -640,6 +648,10 @@ public class Character : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Plays Kanly animation and audio
+    /// </summary>
+    /// <param name="character"></param>
     public void Attack_KanlyExecution(Character character)
     {
         Debug.Log("Kanly fight!");
@@ -652,20 +664,22 @@ public class Character : MonoBehaviour
             if (_AP <= 0) CharacterTurnHandler.EndTurn();
         }
         
-        //reset 
         if (Mode.debugMode)
         {
             turnHandler.ResetSelection();
         }
     }
 
+
+    /// <summary>
+    /// Sends Action_SpiceHoarding-Message request to Server
+    /// </summary>
+    /// <returns></returns>
     public bool Action_SpiceHoardingTrigger()
     {
-        //TODO Vorraussetzung zum aufsammeln prüfen?
         if (characterType == CharTypeEnum.MENTANT)
         {
 
-            // just fill data the selected node should be available here.
 
             if (Mode.debugMode)
             {
@@ -684,6 +698,9 @@ public class Character : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Plays SpiceHoarding animation and audio
+    /// </summary>
     public void Action_SpiceHoardingExecution()
     {
         charAnim.Play(animation_spiceHoarding);
@@ -695,7 +712,6 @@ public class Character : MonoBehaviour
             CharacterTurnHandler.EndTurn();
         }
 
-        //reset 
         if (Mode.debugMode)
         {
             for (int i = -1; i <= 1; i++)
@@ -714,9 +730,11 @@ public class Character : MonoBehaviour
         }
     }
 
-    /*
-     * @param Target of Action
-     */
+    /// <summary>
+    /// Sends VoiceAction-Message to server.
+    /// </summary>
+    /// <param name="character">target of Action</param>
+    /// <returns>whether neighbour could be attacked</returns>
     public bool Action_VoiceTrigger(Character character)
     {
         if (characterType == CharTypeEnum.BENEGESSERIT)
@@ -728,7 +746,6 @@ public class Character : MonoBehaviour
             {
 
 
-                //TODO: wait for response from server
                 if (Mode.debugMode)
                 {
                     Action_VoiceExecution(character);
@@ -754,6 +771,10 @@ public class Character : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Plays Voice animation and audio.
+    /// </summary>
+    /// <param name="character"></param>
     public void Action_VoiceExecution(Character character)
     {
         Vector3 dir = character.transform.position - transform.position;
@@ -762,7 +783,6 @@ public class Character : MonoBehaviour
         Debug.Log("Voice!");
 
 
-        //reset 
         if (Mode.debugMode)
         {
             turnHandler.ResetSelection();
@@ -770,19 +790,21 @@ public class Character : MonoBehaviour
         }
        
     }
-
+    /// <summary>
+    /// Sends heliport request to server
+    /// </summary>
+    /// <param name="targetNode"></param>
     public void Action_HeliportTrigger(Node targetNode)
     {
         SessionHandler.messageController.DoRequestHeliport(SessionHandler.clientId, characterId, new GameData.network.util.world.Position(targetNode.X, targetNode.Z));
         turnHandler.ResetAction();
     }
 
-    public void Action_HeliportExecution()
-    {
 
-    }
-
-
+    /// <summary>
+    /// Coroutine used for async activation and deactivation of sword
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator SwordDeAndActivation()
     {
         swordObject.SetActive(false);
@@ -809,41 +831,40 @@ public class Character : MonoBehaviour
         return _AP > 0;
     }
 
+    /// <summary>
+    /// Sets house-emblem according to house enum.
+    /// </summary>
     public void SetMatColorToHouse()
     {
-       // Color col = Color.gray;
         Sprite img = null;
         switch(house)
         {
             case HouseEnum.CORRINO: //Gold
-               // col = new Color(255, 215, 0);
                 img = CharacterMgr.instance.emblemCorinno;
                 break;
             case HouseEnum.ATREIDES:
-              //  col = Color.green;
                 img = CharacterMgr.instance.emblemAtreides;
                 break;
             case HouseEnum.HARKONNEN:
-               // col = Color.red;
                 img = CharacterMgr.instance.emblemHarkonnen;
                 break;
             case HouseEnum.ORDOS:
-                //col = Color.blue;
                 img = CharacterMgr.instance.emblemOrdos;
                 break;
             case HouseEnum.RICHESE: //Silver
-                //col = new Color(192, 192, 192);
                 img = CharacterMgr.instance.emblemRichese;
                 break;
             case HouseEnum.VERNIUS:
-                //col = new Color(128, 0, 128); //Purple
                 img = CharacterMgr.instance.emblemVernius;
                 break;
         }
-        //GetComponent<Renderer>().material.color = col;
         ((Image)(emblemLogo.GetComponent(typeof(Image)))).sprite = img;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="houseEnum"></param>
+    /// <returns>true if character is member of house</returns>
     public bool IsMemberOfHouse(HouseEnum houseEnum)
     {
         return houseEnum == house;
@@ -867,9 +888,9 @@ public class Character : MonoBehaviour
         }
     }
 
-    /*
-     * Is used to update and set the values of the Char-Stats HUD
-     */
+    /// <summary>
+    /// Is used to update and set the values of the Char-Stats HUD
+    /// </summary>
     public void DrawStats()
     {
         GUIHandler.UpdateHP(HP);
@@ -878,6 +899,11 @@ public class Character : MonoBehaviour
         GUIHandler.UpdateCharSpice(spiceInv);
     }
 
+
+    /// <summary>
+    /// Rotates character towards a Vector3.
+    /// </summary>
+    /// <param name="dir"></param>
     public void RotateTowardsVector(Vector3 dir)
     {
         transform.rotation = Quaternion.LookRotation(dir);
@@ -891,17 +917,29 @@ public class Character : MonoBehaviour
         charAnim.Play(animation_idle);
     }
 
+    /// <summary>
+    /// Sets maxAP
+    /// </summary>
+    /// <param name="maxAP"></param>
     public void setMaxAP(int maxAP)
     {
         BaseAP = maxAP;
     }
 
+    /// <summary>
+    /// Sets maxHP
+    /// </summary>
+    /// <param name="maxHP"></param>
     public void setMaxHP(int maxHP)
     {
         BaseHP = maxHP;
     }
 
-
+    /// <summary>
+    /// Sets the characters transform the the given position. The heigh is calculated from the node height.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="z"></param>
     public void ReplaceCharacterOnPosition(int x, int z)
     {
         _x = x;
