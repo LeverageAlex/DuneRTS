@@ -23,7 +23,6 @@ namespace GameData.network.messages
         public MovementDemandMessage(int clientID, int characterID, Specs specs) : base(characterID,clientID,MessageType.MOVEMENT_DEMAND)
         {
           this.specs = specs;
-          //  specs.path = path;
         }
     }
 }

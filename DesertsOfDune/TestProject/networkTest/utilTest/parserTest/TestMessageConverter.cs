@@ -62,7 +62,6 @@ namespace TestProject.networkTest.utilTest.parserTest
         {
             ActionRequestMessage message = new ActionRequestMessage(1234, 12, ActionType.VOICE, new Specs(new Position(2, 3), null));
             string serializedMessage = MessageConverter.FromMessage(message);
-            // {\"type\":\"ACTION_REQUEST\",\"version\":\"0.1\",\"clientID\":1234,\"characterID\":12,\"action\":\"VOICE\",\"specs\":{\"target\":{\"x\":2,\"y\":3}}}
             Assert.AreEqual("{\"type\":\"ACTION_REQUEST\",\"version\":\"1.1\",\"clientID\":1234,\"characterID\":12,\"action\":\"VOICE\",\"specs\":{\"target\":{\"x\":2,\"y\":3}}}", serializedMessage);
         }
 
@@ -535,7 +534,6 @@ namespace TestProject.networkTest.utilTest.parserTest
         Assert.AreEqual(1234, ((ActionRequestMessage)deserializedMessage).clientID);
         Assert.AreEqual(12, ((ActionRequestMessage)deserializedMessage).characterID);
         Assert.AreEqual("VOICE", ((ActionRequestMessage)deserializedMessage).action);
-        //Assert.Null(((ActionRequestMessage)deserializedMessage).specs);
         Assert.AreEqual(2, ((ActionRequestMessage)deserializedMessage).specs.target.x);
         Assert.AreEqual(3, ((ActionRequestMessage)deserializedMessage).specs.target.y);
     }

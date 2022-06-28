@@ -11,7 +11,7 @@ namespace GameData.network.messages
     /// </summary>
     public class HeliRequestMessage : TurnMessage
     {
-
+        [JsonProperty]
         public Position target { get; }
 
         /// <summary>
