@@ -514,6 +514,7 @@ namespace GameData.network.util.world
             //check if sandstormFields get cut by the pathLine
             foreach (MapField m in GetSandstormFieldsOnMap())
             {
+                //checking if x is between a and c and if y is between b and d
                 if ((a <= c && a <= m.XCoordinate && m.XCoordinate <= c) || (c <= a && c <= m.XCoordinate && m.XCoordinate <= a))
                 {
                     if ((b <= d && b <= m.ZCoordinate && m.ZCoordinate <= d) || (d <= b && d <= m.ZCoordinate && m.ZCoordinate <= b))
