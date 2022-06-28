@@ -501,13 +501,13 @@ namespace GameData.network.util.world
             float mx = 0, my = 0, tx = 0, ty = 0;
             if (horicontal)
             {
-                mx = (a < b) ? (d - b) / (c - a) : (b - d) / (a - c);//slope of f(x)
+                mx = (d - b) / (c - a);//slope of f(x)
                 tx = b - mx * a;
             }
 
             if (vertical)
             {
-                my = (b < d) ? (c - a) / (d - b) : (a - c) / (b - d);//slope of f(y)
+                my = (c - a) / (d - b);//slope of f(y)
                 ty = a - my * b;
             }
 
