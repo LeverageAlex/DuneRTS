@@ -17,7 +17,6 @@ namespace GameData.network.util.parser
         /// </summary>
         /// <param name="message">the Message-Object</param>
         /// <returns>the parsed JSON-String of the Object or "null" if the parsing was not possible (possible reasons: message has invalid type)</returns>
-        /// TODO: change the default behaviour and do not return null, but throw a "ParsingMessageToJSONStringNotPossible"-Exception
         static public String FromMessage(Message message)
         {
             switch (message.GetMessageType())
@@ -53,9 +52,7 @@ namespace GameData.network.util.parser
                     TurnDemandMessage turnDemandMessage = (TurnDemandMessage)message;
                     return JsonConvert.SerializeObject(turnDemandMessage);
                 case MessageType.MOVEMENT_REQUEST:
-                  //  Log.Debug("Start Movement Deserialization");
                     MovementRequestMessage movementRequestMessage = (MovementRequestMessage)message;
-              //      Log.Debug("Finishied parsing. Returning.");
                     return JsonConvert.SerializeObject(movementRequestMessage);
                 case MessageType.ACTION_REQUEST:
                     ActionRequestMessage actionRequestMessage = (ActionRequestMessage)message;
@@ -140,7 +137,6 @@ namespace GameData.network.util.parser
         /// <param name="message">the message as a JSON-String, which should be converted to the fitting Message-Object</param>
         /// <returns>the Message object, which is "equivalent to the JSON-String or null if JSON-String could not be reassambled to a Message-Object
         /// (possible reasons: invalid JSON syntax, not a message string, not expected data in JSON-String)</returns>
-        /// TODO: change the default behaviour and do not return null, but throw a "ParsingJSONStringToMessageObjectNotPossible"-Exception
         static public Message ToMessage(String message)
         {
             string pattern = "{\"type\":\"([A-Z]*_*[A-Z]*_*[A-Z]*_*[A-Z]*)";
@@ -165,8 +161,6 @@ namespace GameData.network.util.parser
                 case MessageType.GAMECFG:
                     return JsonConvert.DeserializeObject<GameConfigMessage>(message);
                 case MessageType.HOUSE_OFFER:
-                  //  return new HouseOfferMessage(123, null); //TODO: finish deserialization of HouseOfferMessage
-
                     return JsonConvert.DeserializeObject<HouseOfferMessage>(message);
                 case MessageType.HOUSE_REQUEST:
                     return JsonConvert.DeserializeObject<HouseRequestMessage>(message);

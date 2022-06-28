@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace GameData.network.messages
 {
@@ -11,7 +12,9 @@ namespace GameData.network.messages
     public class HeliDemandMessage : TurnMessage
     {
 
+        [JsonProperty]
         public Position target { get; }
+        [JsonProperty]
         public bool crash { get; }
 
         /// <summary>

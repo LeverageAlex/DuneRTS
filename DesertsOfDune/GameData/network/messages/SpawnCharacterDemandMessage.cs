@@ -33,10 +33,5 @@ namespace GameData.network.messages
             this.position = position;
             this.attributes = attributes;
         }
-
-        public string[] GetAttributesFromCharacter()
-        {
-            return null; //TODO
-        }
     }
 }
