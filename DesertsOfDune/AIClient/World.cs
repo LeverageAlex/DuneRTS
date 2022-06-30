@@ -95,6 +95,30 @@ namespace AIClient
                 }
             }
 
+
+            // check, whether the character can move with the heli
+
+            if (character.MPcurrent > 0)
+            {
+                List<MapField> heliports = Party.GetInstance().World.Map.GetHeliPortsOnMap();
+
+                Position currentPosition = new Position(character.CurrentMapfield.XCoordinate, character.CurrentMapfield.ZCoordinate);
+
+                // check, character is standing on a heliport
+                // TODO: only move, when character is activly moving on this field
+                if (heliports.Contains(character.CurrentMapfield))
+                {
+                    foreach (MapField targetField in heliports)
+                    {
+                        if (targetField != character.CurrentMapfield)
+                        {
+                            possibleMoves.Add(new HeliMovement(currentPosition, new Position(targetField.XCoordinate, targetField.ZCoordinate)));
+                        }
+                    }
+                }
+
+            }
+
             // check, which actions the character can do and if it has enough action points
 
             if (CanAttack(character))

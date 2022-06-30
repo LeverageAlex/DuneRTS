@@ -9,8 +9,8 @@ namespace AIClient.Moves
     /// </summary>
     public class Movement : Move
     {
-        public int DeltaX { get; }
-        public int DeltaY { get; }
+        public int DeltaX { get; protected set; }
+        public int DeltaY { get; protected set; }
 
         /// <summary>
         /// creates a new movement move and set the delta x and y movement of this move depending on the type

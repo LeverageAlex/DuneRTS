@@ -15,6 +15,7 @@ namespace AIClient.Moves
         MOVE_DOWN,
         MOVE_LEFT_DOWN,
         MOVE_LEFT,
+        MOVE_WITH_HELI,
         ATTACK,
         COLLECT_SPICE,
         TRANSFER_SPICE,

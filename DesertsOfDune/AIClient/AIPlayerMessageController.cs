@@ -398,6 +398,11 @@ namespace AIClient
                     Position[] path = { Position.Move(characterPosition, ((Movement)move).DeltaX, ((Movement)move).DeltaY) };
                     DoSendMovementRequest(character.CharacterId, path);
                     break;
+                case MoveTypes.MOVE_WITH_HELI:
+                    HeliMovement movement = (HeliMovement)move;
+                    Position target = Position.Move(characterPosition, movement.DeltaX, movement.DeltaY);
+                    DoSendHeliDemand(character.CharacterId, target);
+                    break;
                 case MoveTypes.TRANSFER_SPICE:
                     TransferSpice transferSpice = (TransferSpice)move;
                     DoSendTransferRequest(character.CharacterId, transferSpice.CharacterId, transferSpice.AmountOfSpice);
@@ -430,9 +435,15 @@ namespace AIClient
             NetworkController.HandleSendingMessage(msg);
         }
 
-        public void DoSendHeliDemand()
+        /// <summary>
+        /// sends a special movement request for moving via the heliports
+        /// </summary>
+        /// <param name="characterId">the id of the character, who wants to use the heli</param>
+        /// <param name="targetPosition">the position of the other heliport field</param>
+        public void DoSendHeliDemand(int characterId, Position targetPosition)
         {
-
+            HeliRequestMessage msg = new HeliRequestMessage(Party.GetInstance().ClientID, characterId, targetPosition);
+            NetworkController.HandleSendingMessage(msg);
         }
 
         /// <summary>
@@ -514,9 +525,35 @@ namespace AIClient
 
         }
 
+        /// <summary>
+        /// called, when a character used the heliports to move
+        /// </summary>
+        /// <param name="msg">the received HELI_DEMAND message</param>
         public override void OnHeliDemandMessage(HeliDemandMessage msg)
         {
-            
+            // check, if moving character is from this client
+            if (msg.clientID == Party.GetInstance().ClientID)
+            {
+                foreach (Character character in Party.GetInstance().World.AliveCharacters)
+                {
+                    if (character.CharacterId == msg.characterID)
+                    {
+                        MapField targetField = Party.GetInstance().World.Map.GetMapFieldAtPosition(msg.target.x, msg.target.y);
+                        character.Movement(character.CurrentMapfield, targetField);
+                    }
+                }
+            }
+            else
+            {
+                foreach (Character character in Party.GetInstance().World.AliveEnemies)
+                {
+                    if (character.CharacterId == msg.characterID)
+                    {
+                        MapField targetField = Party.GetInstance().World.Map.GetMapFieldAtPosition(msg.target.x, msg.target.y);
+                        character.Movement(character.CurrentMapfield, targetField);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -574,7 +611,7 @@ namespace AIClient
         /// <param name="atomicUpdateDemandMessage">the received ATOMICS_UPDATE_DEMAND message</param>
         public override void OnAtomicsUpdateDemandMessage(AtomicsUpdateDemandMessage atomicUpdateDemandMessage)
         {
-            // check, if the spice change is for this client
+            // check, if the message is for this client
             if (atomicUpdateDemandMessage.clientID == Party.GetInstance().ClientID)
             {
                 Party.GetInstance().UsedFamilyAtomics = 3 - atomicUpdateDemandMessage.atomicsLeft;
@@ -584,7 +621,8 @@ namespace AIClient
                     character.Shunned = atomicUpdateDemandMessage.shunned;
                 }
                 Log.Information($"This client has now {atomicUpdateDemandMessage.atomicsLeft} atomic bombs left. \n This great was {(atomicUpdateDemandMessage.shunned ? "shunned" : "not shunned")}.");
-            } else
+            }
+            else
             {
                 foreach (Character character in Party.GetInstance().World.AliveEnemies)
                 {
@@ -741,7 +779,7 @@ namespace AIClient
                              "------------------------------------------------------");
         }
 
-        
+
 
 
         public override void OnEndTurnRequestMessage(EndTurnRequestMessage msg)
@@ -908,7 +946,7 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
-        
+
 
         public override void OnPauseGameRequestMessage(PauseGameRequestMessage msg, string sessionID)
         {

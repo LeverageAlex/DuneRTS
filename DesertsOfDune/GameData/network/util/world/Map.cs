@@ -594,6 +594,26 @@ namespace GameData.network.util.world
         }
 
         /// <summary>
+        /// returns all heliport fields from the map
+        /// </summary>
+        /// <returns>a list of all heliports on the map</returns>
+        public List<MapField> GetHeliPortsOnMap()
+        {
+            List<MapField> heliports = new List<MapField>();
+            for (int x = 0; x < MAP_WIDTH; x++)
+            {
+                for (int y = 0; y < MAP_HEIGHT; y++)
+                {
+                    if (GetMapFieldAtPosition(x, y).tileType.Equals(TileType.HELIPORT.ToString()))
+                    {
+                        heliports.Add(GetMapFieldAtPosition(x, y));
+                    }
+                }
+            }
+            return heliports;
+        }
+
+        /// <summary>
         /// removes all characters from the map (used for tests!)
         /// </summary>
         public void RemoveCharactersFromMap()
