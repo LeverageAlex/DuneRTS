@@ -21,9 +21,11 @@
   <ItemGroup>
     <Folder Include="networkTest\controllerTest\" />
     <Folder Include="networkTest\messagesTest\" />
+    <Folder Include="serverTest\clientManagementTest\" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="ReportGenerator" />
+    <None Remove="serverTest\clientManagementTest\" />
   </ItemGroup>
 </Project>
