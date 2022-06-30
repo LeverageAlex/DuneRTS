@@ -22,6 +22,8 @@ namespace AIClient
 
         public List<Character> AliveCharacters { get; private set; }
 
+        public List<Character> AliveEnemies { get; private set; }
+
         /// <summary>
         /// the assigned (and chosen) great house for this client
         /// </summary>
@@ -34,6 +36,7 @@ namespace AIClient
         public World()
         {
             this.AliveCharacters = new List<Character>();
+            this.AliveEnemies = new List<Character>();
             AllMoveTypes = ((MoveTypes[])Enum.GetValues(typeof(MoveTypes))).ToList();
         }
 
@@ -51,6 +54,19 @@ namespace AIClient
             else
             {
                 AliveCharacters.Add(character);
+                return true;
+            }
+        }
+
+        public bool AddAliveEnemy(Character character)
+        {
+            if (AliveEnemies.Count >= 6)
+            {
+                return false;
+            }
+            else
+            {
+                AliveEnemies.Add(character);
                 return true;
             }
         }
@@ -119,13 +135,13 @@ namespace AIClient
                 }
             }
 
-            /*if (CanDoFamilyAtomics(character))
+            if (CanDoFamilyAtomics(character))
             {
                 // TODO: do not use random field as target of the bomb, but a strategic target
                 Random random = new Random();
                 Position targetPosition = new Position(random.Next(Party.GetInstance().World.Map.MAP_WIDTH), random.Next(Party.GetInstance().World.Map.MAP_HEIGHT));
                 possibleMoves.Add(new Moves.Action(MoveTypes.FAMILY_ATOMICS, targetPosition));
-            }*/
+            }
 
             if (CanDoSpiceHoarding(character))
             {

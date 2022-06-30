@@ -40,13 +40,16 @@ namespace AIClient
         /// <summary>
         /// the number of used family atomics in this party
         /// </summary>
-        public int UsedFamilyAtomics { get; }
+        public int UsedFamilyAtomics { get; set; }
 
         public AIPlayerMessageController MessageController { get; private set; }
 
         public World World { get; private set; }
 
         public Character CurrentCharacter { get; set; }
+
+
+        public int IDOfSecondPlayer { get; internal set; }
 
         /// <summary>
         /// hide default constructor for implementing the singleton pattern and sets the message controller used in the party by getting it from the main class

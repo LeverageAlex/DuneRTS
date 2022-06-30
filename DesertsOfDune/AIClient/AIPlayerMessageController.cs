@@ -12,6 +12,7 @@ using GameData.network.util.world;
 using GameData.network.util.world.greatHouse;
 using Newtonsoft.Json;
 using Serilog;
+using AIClient;
 
 namespace AIClient
 {
@@ -138,7 +139,19 @@ namespace AIClient
 
             Party.GetInstance().World.Map.PositionOfEyeOfStorm = gameConfigMessage.stormEye;
 
-            // TODO: process the cityToClient information
+            PlayerInfo[] playerInfos = gameConfigMessage.playerInfo;
+
+            if (playerInfos[0].clientID != Party.GetInstance().ClientID)
+            {
+                Party.GetInstance().IDOfSecondPlayer = playerInfos[0].clientID;
+            }
+            else
+            {
+                Party.GetInstance().IDOfSecondPlayer = playerInfos[1].clientID;
+            }
+
+            Party.GetInstance().World.Map.GetMapFieldAtPosition(playerInfos[0].x, playerInfos[0].y).clientID = playerInfos[0].clientID;
+            Party.GetInstance().World.Map.GetMapFieldAtPosition(playerInfos[1].x, playerInfos[1].y).clientID = playerInfos[1].clientID;
 
         }
 
@@ -249,6 +262,10 @@ namespace AIClient
                 // add new character to list of alive characters
                 Party.GetInstance().World.AddAliveCharacter(newCharacter);
             }
+            else
+            {
+                Party.GetInstance().World.AddAliveEnemy(newCharacter);
+            }
 
             Party.GetInstance().World.Map.DrawMapToConsole();
         }
@@ -280,19 +297,21 @@ namespace AIClient
                     }
                 }
             }
-
-            // find the character with the given id
-            foreach (Character character in Party.GetInstance().World.Map.GetCharactersOnMap())
+            else
             {
-                if (character.CharacterId == changeCharacterStatisticsDemandMessage.characterID)
+                // find the enemy with the given id
+                foreach (Character character in Party.GetInstance().World.AliveEnemies)
                 {
-                    // change values of this character
-                    character.healthCurrent = changeCharacterStatisticsDemandMessage.stats.HP;
-                    character.MPcurrent = changeCharacterStatisticsDemandMessage.stats.MP;
-                    character.APcurrent = changeCharacterStatisticsDemandMessage.stats.AP;
-                    character.inventoryUsed = changeCharacterStatisticsDemandMessage.stats.spice;
-                    character.KilledBySandworm = changeCharacterStatisticsDemandMessage.stats.isSwallowed;
-                    character.isLoud = changeCharacterStatisticsDemandMessage.stats.isLoud;
+                    if (character.CharacterId == changeCharacterStatisticsDemandMessage.characterID)
+                    {
+                        // change values of this character
+                        character.healthCurrent = changeCharacterStatisticsDemandMessage.stats.HP;
+                        character.MPcurrent = changeCharacterStatisticsDemandMessage.stats.MP;
+                        character.APcurrent = changeCharacterStatisticsDemandMessage.stats.AP;
+                        character.inventoryUsed = changeCharacterStatisticsDemandMessage.stats.spice;
+                        character.KilledBySandworm = changeCharacterStatisticsDemandMessage.stats.isSwallowed;
+                        character.isLoud = changeCharacterStatisticsDemandMessage.stats.isLoud;
+                    }
                 }
             }
 
@@ -347,13 +366,10 @@ namespace AIClient
         /// <returns>the next move</returns>
         private Move GetNextMove(Character character)
         {
-            List<Move> possibleMoves = Party.GetInstance().World.GetAvailableMoves(character);
+            List<Move> moves = Party.GetInstance().World.GetAvailableMoves(character);
 
-            Log.Warning($"Anzahl Züge {possibleMoves.Count}");
-
-            // get random move
             Random random = new Random();
-            Move randomMove = possibleMoves[random.Next(possibleMoves.Count)];
+            Move randomMove = moves[random.Next(moves.Count)];
 
             Log.Information($"Demand the following move: {randomMove.Type}");
 
@@ -412,6 +428,11 @@ namespace AIClient
             Specs movementPath = new Specs(null, path.ToList());
             MovementRequestMessage msg = new MovementRequestMessage(Party.GetInstance().ClientID, characterId, movementPath);
             NetworkController.HandleSendingMessage(msg);
+        }
+
+        public void DoSendHeliDemand()
+        {
+
         }
 
         /// <summary>
@@ -490,6 +511,11 @@ namespace AIClient
                     _timer.Start();
                 }
             }
+
+        }
+
+        public override void OnHeliDemandMessage(HeliDemandMessage msg)
+        {
             
         }
 
@@ -536,6 +562,35 @@ namespace AIClient
                 // do the next move
                 // SendRequestMessageDependingOnMoveType(GetNextMove(Party.GetInstance().CurrentCharacter), Party.GetInstance().CurrentCharacter);
                 _timer.Start();
+            }
+        }
+
+        /// <summary>
+        /// called, when the an atomic bomb was used and the server want to inform the clients about all changes
+        /// <remarks>
+        /// checks, whether this message is for this client and if so, set the new values and print it to the console
+        /// </remarks>
+        /// </summary>
+        /// <param name="atomicUpdateDemandMessage">the received ATOMICS_UPDATE_DEMAND message</param>
+        public override void OnAtomicsUpdateDemandMessage(AtomicsUpdateDemandMessage atomicUpdateDemandMessage)
+        {
+            // check, if the spice change is for this client
+            if (atomicUpdateDemandMessage.clientID == Party.GetInstance().ClientID)
+            {
+                Party.GetInstance().UsedFamilyAtomics = 3 - atomicUpdateDemandMessage.atomicsLeft;
+
+                foreach (Character character in Party.GetInstance().World.AliveCharacters)
+                {
+                    character.Shunned = atomicUpdateDemandMessage.shunned;
+                }
+                Log.Information($"This client has now {atomicUpdateDemandMessage.atomicsLeft} atomic bombs left. \n This great was {(atomicUpdateDemandMessage.shunned ? "shunned" : "not shunned")}.");
+            } else
+            {
+                foreach (Character character in Party.GetInstance().World.AliveEnemies)
+                {
+                    character.Shunned = atomicUpdateDemandMessage.shunned;
+                }
+                Log.Information($"The other client has now {atomicUpdateDemandMessage.atomicsLeft} atomic bombs left. \n It's great was {(atomicUpdateDemandMessage.shunned ? "shunned" : "not shunned")}.");
             }
         }
 
@@ -686,10 +741,7 @@ namespace AIClient
                              "------------------------------------------------------");
         }
 
-        public override void OnAtomicsUpdateDemandMessage(AtomicsUpdateDemandMessage atomicUpdateDemandMessage)
-        {
-
-        }
+        
 
 
         public override void OnEndTurnRequestMessage(EndTurnRequestMessage msg)
@@ -856,10 +908,7 @@ namespace AIClient
             throw new NotImplementedException();
         }
 
-        public override void OnHeliDemandMessage(HeliDemandMessage msg)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public override void OnPauseGameRequestMessage(PauseGameRequestMessage msg, string sessionID)
         {
