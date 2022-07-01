@@ -474,7 +474,35 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\nThis is an explenation of the game DUNE:\n\nRules:\n\t1)...\n\t2)...\n\t3)...\nControls:\n...\ndfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+  m_Text: "\nCamera Controls:\r\n\nUse W, A, S, D to move the camera to the TOP,
+    LEFT, BOTTOM, RIGHT\r.\n\nUse the scroll wheel to zoom in and out.\n\n\nAction
+    Controls:\n\nYou need to have enough AP / MP to execute an action.\n\nUse the
+    buttons to trigger an action and additionally select a target if needed. For
+    example for the character movement you need to click the tiles on the floor to
+    mark the desired path.\n\nYou may have to additionally press the confirm button.\n\n\nGoal
+    of the game:\n\nThe goal is to collect as much spice (red balls) on the map as
+    possible and to bring it back to your own city tile (colored blue).\n\nTo drop
+    of spice at your own city the character only needs to stand on top of a neighbor
+    tile of the city. The spice gets automatically dropped of.\n\n\nRound phases:\n\nThe
+    game is divided in 5 phases:\n\n1. Dune-movement:\nThe dunes in the desert wander
+    around.\n\n2. Sandstorm\nA sandstorm wanders around in which characters can not
+    be involved in actions (except movement)\n\r\n3. Sandworm\r\nIf a character has
+    made to much noise a sandworm appears and chases the loud character, until it
+    reached its target or by chance had swallowed another character. The sandworm
+    also disappears when its target no longer stands on a desert-tile.\n\n4. Cloning\nDead
+    characters that haven't been swallowed by the sandworm have a chance to be cloned
+    next to the city.\n\r\n5. Character-turns\r\nAll characters get to execute their
+    turn in a random order.\nEvery character has access to a view basic actions and
+    each character-type has special actions that cost all their AP to execute.\n\n\nEnd
+    of the game:\n\nThe game ends when all characters of one house have been swallowed
+    by the sandworm.\n\nAfter a certain amount of rounds a huge earthquake transforms
+    all tiles into desert-tiles and each round one random character gets swallowed
+    by the great Shai-Hulud.\n\n\nDetermination of the winner:\n\nWhen the game ends
+    before the earthquake happens, the winner is the player which still has characters
+    that have not been swallowed by the sandworm.\n\nOtherwise the winner gets determined
+    by the following criteria:\n\n1. Most spice in the city\n2. Most spice collected
+    by characters i general\n3. Most enemies defeated in combat\n4. Less characters
+    lost to the regular sandworm\n5. Last character standing on the map in the Shai-Hulud-phase"
 --- !u!114 &5968513352826681979
 MonoBehaviour:
   m_ObjectHideFlags: 0
