@@ -132,6 +132,7 @@ namespace GameData.gameObjects
         /// </summary>
         public void NextRound()
         {
+            //check if greatHouseConvention is broken and spawn characters if needed
             if (GreatHouseConventionBroken != Noble.greatHouseConventionBroken)
             {
                 GreatHouseConventionBroken = true;
