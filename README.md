@@ -28,7 +28,7 @@ Der aktuelle Testreport befindet sich [hier](https://gitlab.informatik.uni-ulm.d
 # Lizenzen
 ## Models
 "bomb" (https://skfb.ly/6y6wE) by lostsoundzz is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/) <br>
-Sandworm: https://sketchfab.com/3d-models/death-worm-8054ab29b40e4cdbb3b2daf9cacc5688 CC-BY-4.0
+Sandworm: https://sketchfab.com/3d-models/death-worm-8054ab29b40e4cdbb3b2daf9cacc5688 CC-BY-4.0 <br>
 Häuser-Embleme: https://dune.fandom.com/de/wiki/H%C3%A4userwappen CC-BY-SA 
 
 Standard Unity Asset Store EULA: <br>
