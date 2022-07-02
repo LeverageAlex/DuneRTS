@@ -27,13 +27,13 @@ Der aktuelle Testreport befindet sich [hier](https://gitlab.informatik.uni-ulm.d
 
 # Lizenzen
 ## Models
-"bomb" (https://skfb.ly/6y6wE) by lostsoundzz is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+"bomb" (https://skfb.ly/6y6wE) by lostsoundzz is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/) <br>
+Sandworm: https://sketchfab.com/3d-models/death-worm-8054ab29b40e4cdbb3b2daf9cacc5688 CC-BY-4.0
 
 Standard Unity Asset Store EULA: <br>
 Explosion particles: https://assetstore.unity.com/packages/essentials/asset-packs/standard-assets-for-unity-2018-4-32351 <br>
 Helicopter: https://assetstore.unity.com/packages/3d/vehicles/air/military-helicopter-ii-9472 <br>
-Character Models: https://assetstore.unity.com/packages/3d/characters/medieval-cartoon-warriors-90079 <br>
-Sandworm: https://sketchfab.com/3d-models/death-worm-8054ab29b40e4cdbb3b2daf9cacc5688 CC-BY-4.0
+Character Models: https://assetstore.unity.com/packages/3d/characters/medieval-cartoon-warriors-90079
 
 ## Audio
 Sword sound: https://mixkit.co/free-sound-effects/sword/  Mixkit Sound Effects Free License <br>
