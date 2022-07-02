@@ -91,19 +91,24 @@ namespace GameData.network.util.world.character
         /// <summary>
         /// This method represents the action FamilyAtomic
         /// </summary>
-        /// <param name="target">The target Field for the Atack</param>
+        /// <param name="target">The target Field for the Attack</param>
+        /// <param name="map">the current map</param>
+        /// <param name="greatHouseConventionBroken">information if the greatHouseConvention was already broken before this atomic was thrown</param>
+        /// <param name="activePlayerGreatHouse">the great house of the player who did throw the atomic</param>
+        /// <param name="passivePlayerGreatHouse">the great house of the player who didn't throw the atomic</param>
         /// <returns>characters hit by the atomic Bomb</returns>
         public override List<Character> AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse)
         {
             List<Character> charactersHit = new List<Character>();
             if(this.APcurrent == this.APmax && this.greatHouse.unusedAtomicBombs > 0)
             {
-                bool breakGreatHouseConvention = false;                 //information if this is the atomic bomb which breaks the greathouseConvention
+                bool breakGreatHouseConvention = false;                 //information if this is the atomic bomb which breaks the greatHouseConvention
                 var mapFields = map.GetNeighborFields(target);
                 mapFields.Add(target);
 
                 foreach (var mapfield in mapFields)
                 {
+                    //change dune to flat sand and mountains to plateus
                     switch (Enum.Parse(typeof(TileType), mapfield.tileType))
                     {
                         case TileType.DUNE:
@@ -113,16 +118,19 @@ namespace GameData.network.util.world.character
                             mapfield.tileType = Enum.GetName(typeof(TileType), TileType.PLATEAU);
                             break;
                     }
+                    //check if the atomic hits characters
                     if (mapfield.IsCharacterStayingOnThisField)
                     {
                         charactersHit.Add(mapfield.Character);
                         mapfield.Character.DecreaseHP(mapfield.Character.healthCurrent);
+                        //if the greatHouseConvention is not already broken this atomic breaks it
                         if(!greatHouseConventionBroken)
                         {
                             Noble.greatHouseConventionBroken = true;
                             breakGreatHouseConvention = true;
                         }
                     }
+                    //if atomic hits spice remove it
                     if (mapfield.hasSpice)
                     {
                         mapfield.hasSpice = false;
@@ -130,6 +138,7 @@ namespace GameData.network.util.world.character
                 }
                 SpentAp(APmax);
                 this.greatHouse.unusedAtomicBombs--;
+                //get the great houses which are not used by any player
                 if (breakGreatHouseConvention)
                 {
                     this.Shunned = true;
@@ -158,6 +167,7 @@ namespace GameData.network.util.world.character
                     {
                         remainingGreatHouses.Add(new Vernius());
                     }
+                    //select a random character from each unused great house
                     Random rnd = new Random();
                     CharactersToAddAfterAtomics = new List<Character>();
                     foreach (var greatHouse in remainingGreatHouses)

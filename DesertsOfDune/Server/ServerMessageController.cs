@@ -1401,11 +1401,11 @@ namespace GameData
                 DoSendMapChangeDemand(MapChangeReasons.FAMILY_ATOMICS);
                 if (greathouseConventionBrokenBeforeAtomicBomb != Noble.greatHouseConventionBroken)
                 {
-                    DoSendAtomicsUpdateDemand(msg.clientID, true, actionCharacter.greatHouse.unusedAtomicBombs);
+                    DoSendAtomicsUpdateDemand(msg.clientID, true, actionCharacter.greatHouse.unusedAtomicBombs);        //character which threw the atomic is shunned now
                 }
                 else
                 {
-                    DoSendAtomicsUpdateDemand(msg.clientID, false, actionCharacter.greatHouse.unusedAtomicBombs);
+                    DoSendAtomicsUpdateDemand(msg.clientID, false, actionCharacter.greatHouse.unusedAtomicBombs);       //character which threw the atomic is not shunned
                 }
             }
 
