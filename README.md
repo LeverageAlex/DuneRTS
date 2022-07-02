@@ -29,14 +29,14 @@ Der aktuelle Testreport befindet sich [hier](https://gitlab.informatik.uni-ulm.d
 ## Models
 "bomb" (https://skfb.ly/6y6wE) by lostsoundzz is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
-Standard Unity Asset Store EULA:
-Explosion particles: https://assetstore.unity.com/packages/essentials/asset-packs/standard-assets-for-unity-2018-4-32351
-Helicopter: https://assetstore.unity.com/packages/3d/vehicles/air/military-helicopter-ii-9472
+Standard Unity Asset Store EULA: <br>
+Explosion particles: https://assetstore.unity.com/packages/essentials/asset-packs/standard-assets-for-unity-2018-4-32351 <br>
+Helicopter: https://assetstore.unity.com/packages/3d/vehicles/air/military-helicopter-ii-9472 <br>
 Character Models: https://assetstore.unity.com/packages/3d/characters/medieval-cartoon-warriors-90079
 
-## audio
-Sword sound: https://mixkit.co/free-sound-effects/sword/  Mixkit Sound Effects Free License
-Spice pickup-sound: https://www.zapsplat.com/music/game-sound-high-pitched-ping-plonky-synth/ (Sound from Zapsplat.com)
-Atomic fly sound: https://www.youtube.com/watch?v=MZwsO6H_FYo free
-Music from <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=music&amp;utm_content=18816">Pixabay</a>
-Helicopter https://www.youtube.com/watch?v=2RtDgTm6rn4 free
+## Audio
+Sword sound: https://mixkit.co/free-sound-effects/sword/  Mixkit Sound Effects Free License <br>
+Spice pickup-sound: https://www.zapsplat.com/music/game-sound-high-pitched-ping-plonky-synth/ (Sound from Zapsplat.com) <br>
+Atomic fly sound: https://www.youtube.com/watch?v=MZwsO6H_FYo free <br>
+Music from <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=music&amp;utm_content=18816">Pixabay</a> <br>
+Helicopter https://www.youtube.com/watch?v=2RtDgTm6rn4 free <br>
