@@ -133,8 +133,8 @@ namespace AIClient
                 PartyConfiguration.GetInstance().fighter);
 
             // set the map of the ai client
-            int mapWidth = gameConfigMessage.scenario[0].Count;
-            int mapHeight = gameConfigMessage.scenario.Count;
+            int mapWidth = gameConfigMessage.scenario.Count;
+            int mapHeight = gameConfigMessage.scenario[0].Count;
             Party.GetInstance().World.Map = new Map(mapWidth, mapHeight, gameConfigMessage.scenario);
 
             Party.GetInstance().World.Map.PositionOfEyeOfStorm = gameConfigMessage.stormEye;

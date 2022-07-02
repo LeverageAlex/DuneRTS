@@ -106,6 +106,9 @@ namespace GameData.network.util.world
                         case "CITY":
                             newMap[y, x] = new City(mapField.clientID, mapField.hasSpice, mapField.isInSandstorm);
                             break;
+                        case "HELIPORT":
+                            newMap[y, x] = new Heliport(mapField.hasSpice, mapField.isInSandstorm);
+                            break;
                     }
                     newMap[y, x].XCoordinate = x;
                     newMap[y, x].ZCoordinate = y;
