@@ -74,7 +74,7 @@ namespace GameData.server.roundHandler
         /// </summary>
         private void CloneCharacter(Character character, City city)
         {
-            MapField spawnField = this._map.GetRandomFreeApproachableNeighborField(city);
+            MapField spawnField = _map.GetRandomFreeApproachableNeighborField(city);
 
             if (spawnField != null)
             {
