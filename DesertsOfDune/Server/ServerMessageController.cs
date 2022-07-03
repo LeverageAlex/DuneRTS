@@ -492,7 +492,7 @@ namespace GameData
                     }
                 }
 
-                if (targetCharacterIsOnNeighborfield && !targetCharacter.IsInSandStorm(Party.GetInstance().map) && targetCharacter.greatHouse == activeCharacter.greatHouse)
+                if (targetCharacterIsOnNeighborfield && targetCharacter.greatHouse == activeCharacter.greatHouse)
                 {
                     activeCharacter.GiftSpice(targetCharacter, msg.amount);
                     DoSendTransferDemand(msg.clientID, msg.characterID, msg.targetID);

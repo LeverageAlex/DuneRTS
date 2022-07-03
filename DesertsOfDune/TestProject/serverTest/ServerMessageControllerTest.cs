@@ -324,6 +324,7 @@ namespace UnitTestSuite.serverTest
             activePlayer.UsedGreatHouse.Characters[0].inventoryUsed = 1;
             activePlayer.UsedGreatHouse.Characters[0].CurrentMapfield = map.fields[2, 0];
             activePlayer.UsedGreatHouse.Characters[1].CurrentMapfield = map.fields[2, 1];
+            Party.GetInstance().map.fields[2, 0].Character = activePlayer.UsedGreatHouse.Characters[0];
             Party.GetInstance().map.fields[2, 1].Character = activePlayer.UsedGreatHouse.Characters[1];
             Party.GetInstance().messageController.OnTransferRequestMessage(new TransferRequestMessage(activePlayer.ClientID, activePlayer.UsedGreatHouse.Characters[0].CharacterId, activePlayer.UsedGreatHouse.Characters[1].CharacterId,1));
             if (activePlayer.UsedGreatHouse.Characters[0].IsInSandStorm(Map.instance))
@@ -338,7 +339,7 @@ namespace UnitTestSuite.serverTest
                 Assert.AreEqual(0, activePlayer.UsedGreatHouse.Characters[1].inventoryUsed);
             } else if (!activePlayer.UsedGreatHouse.Characters[0].IsInSandStorm(Map.instance) && !activePlayer.UsedGreatHouse.Characters[1].IsInSandStorm(Map.instance))
             {
-                Assert.AreEqual(activePlayer.UsedGreatHouse.Characters[0].APmax -1, activePlayer.UsedGreatHouse.Characters[0].APcurrent);
+                Assert.AreEqual(activePlayer.UsedGreatHouse.Characters[0].APmax - 1, activePlayer.UsedGreatHouse.Characters[0].APcurrent);
                 Assert.AreEqual(0, activePlayer.UsedGreatHouse.Characters[0].inventoryUsed);
                 Assert.AreEqual(1, activePlayer.UsedGreatHouse.Characters[1].inventoryUsed);
             }
