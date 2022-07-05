@@ -265,8 +265,6 @@ namespace GameData
             {
                 DoSendMovementDemand(msg.clientID, msg.characterID, newPath);
                 DoSendChangeCharacterStatsDemand(msg.clientID, msg.characterID, new CharacterStatistics(movingCharacter));
-
-                // TODO: movement request was invalid, so end the game!!!!!!
             }
             if (movingCharacter.MPcurrent <= 0 && movingCharacter.APcurrent <= 0) // all ap and mp were used in this characterTrait -> end turn
             {

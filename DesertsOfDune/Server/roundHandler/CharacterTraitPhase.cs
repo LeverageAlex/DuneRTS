@@ -71,7 +71,7 @@ namespace GameData.server.roundHandler
             {
                 _timer.Stop();
 
-                if (_currentCharacterIndex < _allCharacters.Count) // check if it wasn't the character in the list of all characters
+                if (_currentCharacterIndex < _allCharacters.Count) // check if a trait of one or more characters is left
                 {
                     ExecuteTraitForNextCharacter();
                 }
@@ -123,17 +123,16 @@ namespace GameData.server.roundHandler
         ///<param name="characterID">the character which is on turn</param>
         public void RequestClientForNextCharacterTrait(int characterID)
         {
-            foreach (var player in Party.GetInstance().GetActivePlayers())
+            var player = Party.GetInstance().GetPlayerByCharacterID(characterID);
+            foreach (var character in player.UsedGreatHouse.GetCharactersAlive())
             {
-                foreach (var character in player.UsedGreatHouse.GetCharactersAlive())
+                if (character.CharacterId == characterID)
                 {
-                    if (character.CharacterId == characterID)
+                    Party.GetInstance().messageController.DoSendTurnDemand(player.ClientID, characterID); //request client to execute a characterTrait
+                    if (_timer != null)
                     {
-                        Party.GetInstance().messageController.DoSendTurnDemand(player.ClientID, characterID); //request client to execute a characterTrait
-                        if (_timer != null)
-                        {
-                            _timer.Start(); // starts the timer when characterTrait starts
-                        }
+                        SetTimer();
+                        _timer.Start(); // starts the timer when characterTrait starts
                     }
                 }
             }
@@ -141,26 +140,20 @@ namespace GameData.server.roundHandler
 
 
         /// <summary>
-        /// Starts a new timer with the time from the parameter.
+        /// Initialize a new timer with the time from the party configuration.
         /// </summary>
         public void SetTimer()
         {
             int timeInMilliseconds = PartyConfiguration.GetInstance().actionTimeUserClient;
-            foreach (var player in Party.GetInstance().GetActivePlayers())
-            {
-                foreach (var character in player.UsedGreatHouse.GetCharactersAlive())
+            if (_currentCharacter != null) {
+                var player = Party.GetInstance().GetPlayerByCharacterID(_currentCharacter.CharacterId);
+                if (player is HumanPlayer)
                 {
-                    if (character == _currentCharacter)
-                    {
-                        if (player is HumanPlayer)
-                        {
-                            timeInMilliseconds = PartyConfiguration.GetInstance().actionTimeUserClient;
-                        }
-                        else if (player is AIPlayer)
-                        {
-                            timeInMilliseconds = PartyConfiguration.GetInstance().actionTimeAiClient;
-                        }
-                    }
+                    timeInMilliseconds = PartyConfiguration.GetInstance().actionTimeUserClient;
+                }
+                else if (player is AIPlayer)
+                {
+                    timeInMilliseconds = PartyConfiguration.GetInstance().actionTimeAiClient;
                 }
             }
             _timer = new Timer(timeInMilliseconds);
