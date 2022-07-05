@@ -242,9 +242,17 @@ namespace UnitTestSuite.serverTest
 
             Party.GetInstance().messageController.OnActionRequestMessage(new ActionRequestMessage(activePlayer.ClientID, activePlayer.UsedGreatHouse.Characters[0].CharacterId, ActionType.ATTACK, new Specs(new Position(1, 1),null)));
             Map m = Party.GetInstance().map;
-            if (passivePlayer.UsedGreatHouse.Characters[0].IsInSandStorm(m) || activePlayer.UsedGreatHouse.Characters[0].IsInSandStorm(m))
+            if (passivePlayer.UsedGreatHouse.Characters[0].IsInSandStorm(m) && activePlayer.UsedGreatHouse.Characters[0].IsInSandStorm(m))
+            {
+                Assert.AreEqual(0, activePlayer.UsedGreatHouse.Characters[0].APcurrent);
+                Assert.AreEqual(passivePlayer.UsedGreatHouse.Characters[0].healthMax, passivePlayer.UsedGreatHouse.Characters[0].healthCurrent);
+            } else if (passivePlayer.UsedGreatHouse.Characters[0].IsInSandStorm(m))
             {
                 Assert.AreEqual(activePlayer.UsedGreatHouse.Characters[0].APmax, activePlayer.UsedGreatHouse.Characters[0].APcurrent);
+                Assert.AreEqual(passivePlayer.UsedGreatHouse.Characters[0].healthMax, passivePlayer.UsedGreatHouse.Characters[0].healthCurrent);
+            } else if (activePlayer.UsedGreatHouse.Characters[0].IsInSandStorm(m))
+            {
+                Assert.AreEqual(0, activePlayer.UsedGreatHouse.Characters[0].APcurrent);
                 Assert.AreEqual(passivePlayer.UsedGreatHouse.Characters[0].healthMax, passivePlayer.UsedGreatHouse.Characters[0].healthCurrent);
             } else
             {
