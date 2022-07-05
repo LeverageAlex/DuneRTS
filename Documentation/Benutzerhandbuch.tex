@@ -144,9 +144,10 @@ Die Durchführung des Projektes findet im Rahmen des Informatik-Studiums statt. 
 
 
 \section{Der Server}
+\label{sec:Server}
 
 \subsection{Allgemeines}
-Dieses Handbuch behandelt die Handhabung des Servers, welcher von Team 08 im Rahmen des Softwaregrundprojekt im
+Dieser Abschnitt behandelt die Handhabung des Servers, welcher von Team 08 im Rahmen des Softwaregrundprojekt im
 WISE 2021/2022 und SOSE 2022 an der Universität Ulm entwickelt wurde.
 
 \subsection{Installation und Einrichtung}
@@ -178,23 +179,31 @@ Server zu Server individuell.
 \textbf{port:} Fordert nachfolgend eine (gültige) Portnummer, wird keine angegeben oder sollte dieser Parameter
 nicht unterstützt werden, so wird die Portnummer 10191 ausgewählt.
 
+\subsubsection{Architektur und Funktionsweise des Servers}
+Die Projektmappe des Servers besteht aus einem \textbf{GameData} Modul und einem \textbf{Server} Modul. Das GameData Modul beinhaltet unter anderem ein Netzwerkmodul, welches für die Serialisierung und Deserialisierung von Nachrichten verantwortlich ist. Zudem kümmert sich das Netzwerkmodul um die Konnektivität von Client und Server. Außerdem beinhaltet das Netzwerkmodul einen Ordner util, welcher wichtige Spieldaten, die sowohl für den Client als auch für den Server relevant sind, beinhaltet. Zu diesen gehören beispielsweise Charaktere, die Karte und die GreatHouses. Hier liegt zudem ein Logger vor. In GameData liegt ein Ordner Configuration vor, welcher für die Konfiguration von Greathouses und Charakteren verantwortlich ist. Im Unterordner Parser liegt eine Klasse, welche sich um das Parsen der Kommandozeilen Argumente kümmert. Im Unterordner Pathfinder befanden sich Hilfsklassen, welche sich für die Spiel-Runden-Phasen von Relevanz sind. In einem weiteren Unterordner namens validation befinden sich Klassen, welche sich um die Validierung der Konfiguration kümmern. Innerhalb des Server-Moduls befindet sich ein Ordner ClientManager, welcher die Verwaltung der verschiedenen Arten von Clients handhabt. Im Ordner Konfiguration befindet sich Ordner für Konfigurationsdateien und zugehörige Schemas. Zudem befinden sich hier Klassen zum Laden und konfigurieren von Parteien und Szenarios. Im Ordner Parser befinden sich ein Kommandozeilen-Parser, welcher spezifische Kommandozeilenoptionen für den Server interpretiert. Im Ordner roundHandler befinden sich alle Klassen, welche für die Spiel-Logik und den Ablauf der Rundenphasen verantwortlich sind. Zudem befindet sich im Server-Modul eine Main Klasse, welche alle Startevents triggert, wenn der Server gestartet wird. Zu guter Letzt liegt noch eine Klasse ServerMessageController vor, welche sich um die Handhabung von serverseitigen Nachrichten kümmert.
+
+
+\section{KI-Client}
+
+\subsection{Allgemeines}
+
+Dieser Abschnitt behandlet die Handhabung des KI-Clients, wobei eine hohe Ähnlichkeit zum Server besteht. \\ Das bedeutet, dass die Installation, 
+das Bauen oder auch das Ausführen analog zu dem Vorgehen beim Server sind (siehe \autoref{sec:Server}). 
+
+\subsection{Kommandozeilenoptionen des KI-Clients}
+
+Der KI-Client besitzt alle im Standard aufgelisteten Konfigurationsmöglichkeiten(auch optionale Kommandozeilenoptionen). Weitere Kommandozeilenoptionen sind nicht vorgesehen.
+
 \textbf{Auflistung der Kommandozeilenoptionen des KI-Client:}
 
 \textbf{address:} Gibt die IP-Adresse des Servers auf dem gespielt wird an.
-
-\textbf{x:} Ermöglicht es optionale Schlüssel-Wert-Paare zu übermitteln, die verfügbaren Einstellungen sind von
-Server zu Server individuell.
 
 \textbf{help:} Listet alle verfügbaren Parameter auf. Falls individuelle Parameter hinzugefügt wurden so ist dieser Parameter verpflichtend.
 
 \textbf{port:} Fordert nachfolgend eine (gültige) Portnummer, wird keine angegeben oder sollte dieser Parameter
 nicht unterstützt werden, so wird die Portnummer 10191 ausgewählt.
 
-\textbf{name:} Fordert nachfolgend den Name des Clients im Spiel, wobei dieser mindestens drei Zeichen lang
+\textbf{name:} Fordert nachfolgend den Name des KI-Clients im Spiel, wobei dieser mindestens drei Zeichen lang
 sein muss.
-
-\subsubsection{Architektur und Funktionsweise des Servers}
-Die Projektmappe des Servers besteht aus einem \textbf{GameData} Modul und einem \textbf{Server} Modul. Das GameData Modul beinhaltet unter anderem ein Netzwerkmodul, welches für die Serialisierung und Deserialisierung von Nachrichten verantwortlich ist. Zudem kümmert sich das Netzwerkmodul um die Konnektivität von Client und Server. Außerdem beinhaltet das Netzwerkmodul einen Ordner util, welcher wichtige Spieldaten, die sowohl für den Client als auch für den Server relevant sind, beinhaltet. Zu diesen gehören beispielsweise Charaktere, die Karte und die GreatHouses. Hier liegt zudem ein Logger vor. In GameData liegt ein Ordner Configuration vor, welcher für die Konfiguration von Greathouses und Charakteren verantwortlich ist. Im Unterordner Parser liegt eine Klasse, welche sich um das Parsen der Kommandozeilen Argumente kümmert. Im Unterordner Pathfinder befanden sich Hilfsklassen, welche sich für die Spiel-Runden-Phasen von Relevanz sind. In einem weiteren Unterordner namens validation befinden sich Klassen, welche sich um die Validierung der Konfiguration kümmern. Innerhalb des Server-Moduls befindet sich ein Ordner ClientManager, welcher die Verwaltung der verschiedenen Arten von Clients handhabt. Im Ordner Konfiguration befindet sich Ordner für Konfigurationsdateien und zugehörige Schemas. Zudem befinden sich hier Klassen zum Laden und konfigurieren von Parteien und Szenarios. Im Ordner Parser befinden sich ein Kommandozeilen-Parser, welcher spezifische Kommandozeilenoptionen für den Server interpretiert. Im Ordner roundHandler befinden sich alle Klassen, welche für die Spiel-Logik und den Ablauf der Rundenphasen verantwortlich sind. Zudem befindet sich im Server-Modul eine Main Klasse, welche alle Startevents triggert, wenn der Server gestartet wird. Zu guter Letzt liegt noch eine Klasse ServerMessageController vor, welche sich um die Handhabung von serverseitigen Nachrichten kümmert.
-
 
 \end{document}
