@@ -16,7 +16,6 @@ using GameData.server.roundHandler;
 using GameData.network.util.world.mapField;
 using GameData.network.util.world.character;
 using GameData.roundHandler;
-using System.Threading;
 
 namespace GameData
 {
@@ -86,8 +85,7 @@ namespace GameData
 
             }
             Party.GetInstance().AddClient(client);
-            // send join accept
-            DoAcceptJoin(client.ClientSecret, client.ClientID, sessionID);
+            DoAcceptJoin(client.ClientSecret, client.ClientID, sessionID); // send join accept
 
             // check, if with new client two players are registred and start party
             if (Party.GetInstance().AreTwoPlayersRegistred() && !gameHasStarted)
@@ -103,9 +101,8 @@ namespace GameData
         /// <param name="sessionID">he session id of the client, who wants to rejoin to the party</param>
         public override void OnRejoinMessage(RejoinMessage msg, string sessionID)
         {
-            var connectedClients = Party.GetInstance().GetConnectedClients();
             bool rejoinSuccessful = false;
-            foreach (var client in connectedClients)
+            foreach (var client in Party.GetInstance().GetConnectedClients())
             {
                 if (client.ClientSecret == msg.clientSecret)
                 {
@@ -113,8 +110,7 @@ namespace GameData
                     rejoinSuccessful = true;
                     DoAcceptJoin(client.ClientSecret, client.ClientID, client.SessionID);
                     Log.Information($"Rejoin of client: {client.ClientName} was successful.");
-                    //Sending Gamestate for syncing reasons
-                    OnGameStateRequestMessage(new GameStateRequestMessage(client.ClientID));
+                    OnGameStateRequestMessage(new GameStateRequestMessage(client.ClientID)); //Sending Gamestate for syncing reasons
 
                 }
             }
@@ -515,17 +511,15 @@ namespace GameData
         /// <param name="msg">EndTurnMessage with clientID and characterID</param>
         public override void OnEndTurnRequestMessage(EndTurnRequestMessage msg)
         {
-            foreach (var player in Party.GetInstance().GetActivePlayers())
+            var player = Party.GetInstance().GetPlayerByClientID(msg.clientID);
+            if (player.ClientID == msg.clientID)
             {
-                if (player.ClientID == msg.clientID)
+                foreach (var character in player.UsedGreatHouse.Characters)
                 {
-                    foreach (var character in player.UsedGreatHouse.Characters)
+                    if (character.CharacterId == msg.characterID && character.MPcurrent == character.MPmax)
                     {
-                        if (character.CharacterId == msg.characterID && character.MPcurrent == character.MPmax)
-                        {
-                            character.HealIfHasntMoved();
-                            DoSendChangeCharacterStatsDemand(msg.clientID, msg.characterID, new CharacterStatistics(character));
-                        }
+                        character.HealIfHasntMoved();
+                        DoSendChangeCharacterStatsDemand(msg.clientID, msg.characterID, new CharacterStatistics(character));
                     }
                 }
             }
