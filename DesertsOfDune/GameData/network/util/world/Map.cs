@@ -73,7 +73,6 @@ namespace GameData.network.util.world
                     }
                     fields[y, x].XCoordinate = x;
                     fields[y, x].ZCoordinate = y;
-                    //  fields[y, x] = new MapField(scenarioConfiguration[x][(MAP_HEIGHT - 1) - y], x, y);
                 }
             }
         }
@@ -87,7 +86,6 @@ namespace GameData.network.util.world
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
                     MapField mapField = mapFields[y, x];
-                    // MapField mapField = GetMapFieldAtPosition(x, y);
 
                     switch (mapField.tileType)
                     {
@@ -264,7 +262,6 @@ namespace GameData.network.util.world
             }
             else
             {
-
                 return null;
             }
         }
