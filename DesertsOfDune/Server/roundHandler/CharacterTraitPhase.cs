@@ -27,14 +27,14 @@ namespace GameData.server.roundHandler
         public void Execute()
         {
             SetTimer(); //initialize timer
-            _allCharacters = GenerateTraitSequenze();
+            _allCharacters = GenerateTraitSequenze(); // set the radomized list of characters to _allCharacters
             _currentCharacterIndex = 0;
-            SendRequestForNextCharacter();
+            SendRequestForNextCharacter(); // requesting the first character of the list for his trait
         }
 
 
         /// <summary>
-        /// This method gets all characters and randomizes this list for the traitsequenze
+        /// This method gets all characters and randomizes this list for the next traitsequenze
         /// </summary>
         /// <returns>Returns the new sorted list of characters.</returns>
         public List<Character> GenerateTraitSequenze()
@@ -62,35 +62,31 @@ namespace GameData.server.roundHandler
 
                 if (_currentCharacterIndex < _allCharacters.Count)
                 {
-                    _currentCharacter = _allCharacters[_currentCharacterIndex++];
-                    _currentCharacter.SetSilent();
+                    _currentCharacter = _allCharacters[_currentCharacterIndex++]; // set the new current character whos turn it is
+                    _currentCharacter.SetSilent(); // set the current character silent before his trait starts
                     if (!_currentCharacter.IsDead() && !_currentCharacter.KilledBySandworm && !_currentCharacter.IsInSandStorm(Party.GetInstance().map)) // check if character is dead or staying in storm
                     {
                         _currentCharacter.resetMPandAp();
                         _currentCharacter.SteppedOnSandfield = false;
-                        foreach (var player in Party.GetInstance().GetActivePlayers())
+                        var player = Party.GetInstance().GetPlayerByCharacterID(_currentCharacter.CharacterId);
+                        foreach (var character in player.UsedGreatHouse.GetCharactersAlive())
                         {
-                            foreach (var character in player.UsedGreatHouse.GetCharactersAlive())
+                            if (character.CharacterId == _currentCharacter.CharacterId)
                             {
-                                if (character.CharacterId == _currentCharacter.CharacterId)
-                                {
-                                    Party.GetInstance().messageController.DoSendChangeCharacterStatsDemand(player.ClientID, character.CharacterId, new CharacterStatistics(character));
-                                }
+                                Party.GetInstance().messageController.DoSendChangeCharacterStatsDemand(player.ClientID, character.CharacterId, new CharacterStatistics(character));
                             }
                         }
                         RequestClientForNextCharacterTrait(_currentCharacter.CharacterId);
-
-
                     }
                     else
                     {
-                        SendRequestForNextCharacter();
+                        SendRequestForNextCharacter(); // if character is dead or staying in storm request the next character
                     }
 
                 }
                 else
                 {
-                    Party.GetInstance().RoundHandler.NextRound();
+                    Party.GetInstance().RoundHandler.NextRound(); // if all characters had its turn the next round in the round handler should be started
                 }
             }
         }
@@ -161,19 +157,6 @@ namespace GameData.server.roundHandler
         /// <param name="e"></param>
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
-            /**string sessionID = "";
-            foreach (var player in Party.GetInstance().GetActivePlayers())
-            {
-                foreach (var character in player.UsedGreatHouse.Characters)
-                {
-                    if (character.CharacterId == _currentCharacter.CharacterId)
-                    {
-                        sessionID = player.SessionID;
-                    }
-                }
-            }
-            // ((ServerConnectionHandler)Party.GetInstance().messageController.NetworkController.connectionHandler).sessionManager.CloseSession(sessionID, WebSocketSharp.CloseStatusCode.Normal, "Timeout happend in characterTraitPhase!");
-           // SendRequestForNextCharacter(); */
             Log.Warning($"Timeout for the client {_currentCharacter.CharacterId}");
 
             Party.GetInstance().messageController.OnEndTurnRequestMessage(new network.messages.EndTurnRequestMessage(Party.GetInstance().GetPlayerByCharacterID(_currentCharacter.CharacterId).ClientID, _currentCharacter.CharacterId));
@@ -183,7 +166,7 @@ namespace GameData.server.roundHandler
         /// This method freezes the timer if the player pauses the game
         /// </summary>
         /// <param name="pause">bool if the player pauses or unpauses the game</param>
-        public void freezeTraitPhase(bool pause)
+        public void FreezeTraitPhase(bool pause)
         {
             if (pause)
             {

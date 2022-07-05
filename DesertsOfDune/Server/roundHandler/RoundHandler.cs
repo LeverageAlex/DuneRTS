@@ -292,7 +292,7 @@ namespace GameData.gameObjects
             maximalPauseOverTimer.Start();
             if (characterTraitPhase != null)
             {
-                characterTraitPhase.freezeTraitPhase(true);
+                characterTraitPhase.FreezeTraitPhase(true);
             }
 
             // TODO: do not used Thread.Sleep() and <thread>.Interrupt()!!
@@ -321,7 +321,7 @@ namespace GameData.gameObjects
             }
             if (characterTraitPhase != null)
             {
-                characterTraitPhase.freezeTraitPhase(false);
+                characterTraitPhase.FreezeTraitPhase(false);
             }
             maximalPauseOverTimer.Stop();
             IsPartyPaused = false;

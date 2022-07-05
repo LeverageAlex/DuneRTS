@@ -160,9 +160,9 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
         {
             var characterTraitPhase = roundHandler.GetCharacterTraitPhase();
             characterTraitPhase.SetTimer();
-            characterTraitPhase.freezeTraitPhase(true);
+            characterTraitPhase.FreezeTraitPhase(true);
             Assert.IsFalse(characterTraitPhase.GetTimer().Enabled);
-            characterTraitPhase.freezeTraitPhase(false);
+            characterTraitPhase.FreezeTraitPhase(false);
             Assert.IsTrue(characterTraitPhase.GetTimer().Enabled);
         }
     }
