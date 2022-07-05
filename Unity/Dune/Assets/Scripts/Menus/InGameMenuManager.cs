@@ -68,6 +68,8 @@ public class InGameMenuManager : MonoBehaviour
         ActivateMenu(WaitingScreen);
     }
 
+    //transfer spice
+
     /// <summary>
     /// this method is called by Action_TransferSpiceTrigger
     /// </summary>
@@ -82,6 +84,7 @@ public class InGameMenuManager : MonoBehaviour
         SpiceAmountSlider.wholeNumbers = true;
         SpiceTransferButton.onClick.RemoveAllListeners();
         SpiceCancleButton.onClick.RemoveAllListeners();
+
         SpiceTransferButton.onClick.AddListener(() => {
             giver.TriggerRequestTransferSpice(receiver, Mathf.RoundToInt(SpiceAmountSlider.value));
             ActivateMenu(InGameUI);
@@ -94,16 +97,7 @@ public class InGameMenuManager : MonoBehaviour
         ActivateMenu(SpiceAmountDialog);
     }
 
-    /// <summary>
-    /// this method gets called by the SERVER to end the game and show the statistics
-    /// </summary>
-    /// <param name="statistics"></param>
-    public void DemandEndGame(string statistics)
-    {
-        statisticsText.text = statistics;
-        Time.timeScale = 0f;
-        ActivateMenu(EndScreen);
-    }
+    //rejoin
 
     /// <summary>
     /// this method gets called when the Player should have the option to rejoin, for example at a disconnect
@@ -121,8 +115,6 @@ public class InGameMenuManager : MonoBehaviour
     {
         Debug.Log("Rejoining");
 
-
-
         for (int i = 0; i < 3; i++)
         {
             SessionHandler.CreateNetworkModule(SessionHandler.lastIp, SessionHandler.lastPort);
@@ -136,7 +128,6 @@ public class InGameMenuManager : MonoBehaviour
                 Debug.Log("Error on establishing connection... Reconnecting.");
                 SessionHandler.CloseNetworkModule();
                 Thread.Sleep(250);
-                //SessionHandler.CreateNetworkModule(serverIP, int.Parse(serverPort));
             }
         }
         if (SessionHandler.clientconhandler.ConnectionIsAlive())
@@ -162,6 +153,8 @@ public class InGameMenuManager : MonoBehaviour
         ActivateMenu(InGameUI);
     }
 
+    //house selection
+
     /// <summary>
     /// this method is called by the SERVER to start the HouseSelcetion with two options
     /// </summary>
@@ -178,10 +171,12 @@ public class InGameMenuManager : MonoBehaviour
         ActivateMenu(HouseSelectionMenu);
     }
 
-    //THIS METHOD IS TEMPORARY AND ONLY MENT FOR THE BUTTON ACTIVATION OF THE HOUSE SELECTEION ToDo delete
-    public void StartHouseSelection()
+    /// <summary>
+    /// this method is called by the SERVER to end the HouseSelection when house gets acknowkledged
+    /// </summary>
+    public void DemandEndHouseSelection()
     {
-        DemandStartHouseSelection("option 1", "option 2");
+        ActivateMenu(WaitingScreen);
     }
 
     /// <summary>
@@ -192,17 +187,12 @@ public class InGameMenuManager : MonoBehaviour
         if (option1.isOn)
         {
             Debug.Log(option1.GetComponentInChildren<Text>().text + " was selected!");
-            //TODO send message to server
-
             SessionHandler.messageController.DoRequestHouse(option1Name);
-            //DemandEndHouseSelection();//TODO trigger by server instead
         }
         else if (option2.isOn)
         {
             Debug.Log(option2.GetComponentInChildren<Text>().text + " was selected!");
-            //TODO send message to server
             SessionHandler.messageController.DoRequestHouse(option2Name);
-            //DemandEndHouseSelection();//TODO trigger by server instead
         }
     }
 
@@ -238,23 +228,32 @@ public class InGameMenuManager : MonoBehaviour
         }
     }
 
+    //end game
+
     /// <summary>
-    /// this method is called by the SERVER to end the HouseSelection when house gets acknowkledged
+    /// this method gets called by the SERVER to end the game and show the statistics
     /// </summary>
-    public void DemandEndHouseSelection()
+    /// <param name="statistics"></param>
+    public void DemandEndGame(string statistics)
     {
-        //TODO
-        ActivateMenu(WaitingScreen);
+        statisticsText.text = statistics;
+        Time.timeScale = 0f;
+        ActivateMenu(EndScreen);
     }
 
+    /// <summary>
+    /// this methid gets called by a BUTTON to switch to the menu-scene
+    /// </summary>
     public void ExitToMainMenu()
     {
         SessionHandler.CloseNetworkModule();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 
+    //pause
+
     /// <summary>
-    /// this method is called by a button to send a pause request
+    /// this method is called by a BUTTON to send a pause request
     /// </summary>
     public void RequestPauseGame()
     {
@@ -262,7 +261,7 @@ public class InGameMenuManager : MonoBehaviour
     }
 
     /// <summary>
-    /// this method is called by a server message to pause the game
+    /// this method is called by a SERVER message to pause the game
     /// </summary>
     public void DemandPauseGame(bool forced)
     {
@@ -276,7 +275,7 @@ public class InGameMenuManager : MonoBehaviour
     }
 
     /// <summary>
-    /// this method is called by a button to send an unpause request
+    /// this method is called by a BUTTON to send an unpause request
     /// </summary>
     public void RequestUnpauseGame()
     {
@@ -284,7 +283,7 @@ public class InGameMenuManager : MonoBehaviour
     }
 
     /// <summary>
-    /// this method is called by a server message to unpause the game
+    /// this method is called by a SERVER message to unpause the game
     /// </summary>
     public void DemandUnpauseGame()
     {
@@ -295,6 +294,8 @@ public class InGameMenuManager : MonoBehaviour
 
         Time.timeScale = 1f;
     }
+
+    //menu switching
 
     /// <summary>
     /// this method is a HELPER-METHOD to change the .isActive trade of the menus
@@ -350,4 +351,5 @@ public class InGameMenuManager : MonoBehaviour
     {
         ActivateMenu(OptionsMenu);
     }
+
 }

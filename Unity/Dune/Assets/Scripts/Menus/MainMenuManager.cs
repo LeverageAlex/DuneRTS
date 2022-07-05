@@ -41,18 +41,9 @@ public class MainMenuManager : MonoBehaviour
     public void DemandPlayGame()
     {
         Log.Debug("DemandPlayGame");
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-       // if (SceneManager.GetActiveScene().buildIndex != 1)
-        {
-            Log.Debug("Active Scene != 1");
-            SceneManager.LoadScene(1);
-            Log.Debug("End of Loading Scene");
-        }
-        //else
-        {
-       //     Log.Debug("DemandPlayGame Else");
-         //   InGameMenuManager.instance.DemandAcceptRejoin();
-        }
+        Log.Debug("Active Scene != 1");
+        SceneManager.LoadScene(1);
+        Log.Debug("End of Loading Scene");
     }
 
     /// <summary>
@@ -73,12 +64,8 @@ public class MainMenuManager : MonoBehaviour
         string serverIP = serverIPInput.text;
         string serverPort = serverPortInput.text;
 
-        //TODO validate inputs
-
         Debug.Log("Join: " + name + " " + serverIP + " " + serverPort + " " + active);
 
-        //TODO send JOIN message to server with given IP and given port
-        
         for (int i = 0; i < 3; i++)
         {
             SessionHandler.CreateNetworkModule(serverIP, int.Parse(serverPort));
@@ -93,7 +80,6 @@ public class MainMenuManager : MonoBehaviour
                 Debug.Log("Error on establishing connection... Reconnecting.");
                 SessionHandler.CloseNetworkModule();
                 Thread.Sleep(250);
-                //SessionHandler.CreateNetworkModule(serverIP, int.Parse(serverPort));
             }
         }
         if (SessionHandler.clientconhandler.ConnectionIsAlive())
@@ -107,14 +93,10 @@ public class MainMenuManager : MonoBehaviour
     /// <summary>
     /// this method is called by the SERVER to accept a join and send the clienSecret
     /// </summary>
-    /// <param name="clientSecret"></param>
     public void DemandJoinAccept()
     {
-
-            DemandPlayGame();
-
+        DemandPlayGame();
         Log.Debug("DemandJoinAccept: " + clientSecret);
-
     }
 
 
