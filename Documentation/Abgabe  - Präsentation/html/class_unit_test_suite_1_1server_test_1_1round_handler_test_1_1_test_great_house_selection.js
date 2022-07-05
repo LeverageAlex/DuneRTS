@@ -1,0 +1,4 @@
+var class_unit_test_suite_1_1server_test_1_1round_handler_test_1_1_test_great_house_selection =
+[
+    [ "TestSelectGreatHouse", "class_unit_test_suite_1_1server_test_1_1round_handler_test_1_1_test_great_house_selection.html#a6abc39ad826addd7a7b83e1c16f55c8f", null ]
+];

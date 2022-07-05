@@ -1,0 +1,4 @@
+var class_unit_test_suite_1_1server_test_1_1round_handler_test_1_1_test_character_trait_phase =
+[
+    [ "TestGenerateTraitSequenze", "class_unit_test_suite_1_1server_test_1_1round_handler_test_1_1_test_character_trait_phase.html#a7dde53cbdcd90ffc60c34e5138af8fae", null ]
+];
