@@ -1,8 +1,11 @@
+using GameData.network.controller;
+using GameData.network.util.world;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using Serilog;
+using System.Linq;
 
 /**
  * This class provides functionality to maintain characters on the map:
@@ -15,7 +18,7 @@ using UnityEngine.UI;
 public class CharacterMgr : MonoBehaviour
 {
     //Connects CharacterID to CharacterObject
-    Dictionary<int, GameObject> characterDict = new Dictionary<int, GameObject>();
+    Dictionary<int, Character> characterDict = new Dictionary<int, Character>();
 
     public GameObject noblePrefab;
     public GameObject mentatPrefab;
@@ -24,7 +27,10 @@ public class CharacterMgr : MonoBehaviour
 
     public GameObject atomicPrefab;
 
+    public GameObject CharacterSpawnEffect;
+
     public GameObject sandwormPrefab;
+    public GameObject helicopterPrefab;
 
     private MoveAbles sandwormMoveScript;
 
@@ -35,41 +41,31 @@ public class CharacterMgr : MonoBehaviour
     public Sprite emblemOrdos;
     public Sprite emblemCorinno;
 
-
-
     private float charSpawnLowY = 0.35f;
     private float charSpawnHighY = 0.525f;
-
     private float wormHeightOffset = 0.35f;
 
-    public int clientID;
+    private HouseEnum playerHouse;
+    private HouseEnum enemyHouse;
 
+    private int nobleMaxHP;
+    private int fighterMaxHP;
+    private int benneGesseritMaxHP;
+    private int mentatMaxHP;
+
+    public static ClientConnectionHandler handler;
     public static CharacterMgr instance;
-
-
-
-
 
 
     // Start is called before the first frame update
     void Awake()
     {
         //Example to show Method
-        //spawnCharacter(175, "FIGHTER", 15, 15, 4, 10, 4, 4, 3, 6, false, false);
         if(instance == null)
         {
             instance = this;
         }
         
-    }
-
-    private void Start()
-    {
-        /*LinkedList<Vector3> path = new LinkedList<Vector3>();
-        path.AddLast(new Vector3(1, 0.6f, 1));
-        path.AddLast(new Vector3(8, 0.6f, 9));
-        SpawnSandworm(5, 5);
-        SandwormMove(path);*/
     }
 
 
@@ -78,7 +74,7 @@ public class CharacterMgr : MonoBehaviour
     /*
      * To be filled after open question regarding standardDocument has ben resolved
   */
-    public bool spawnCharacter(int characterID, CharTypeEnum type,int x, int z,int HPcurrent, int healingHP, int MPcurrent, int APcurrent, int attackDamage, int inventoryLeft, bool killedBySandworm, bool loud)
+    public bool spawnCharacter(int clientId, int characterID, CharTypeEnum type,int x, int z,int HPcurrent, int healthMax, int MPcurrent, int APcurrent, int APMax, int inventorySize, bool killedBySandworm, bool loud)
     {
         if (characterDict.ContainsKey(characterID))
             return false;
@@ -86,28 +82,51 @@ public class CharacterMgr : MonoBehaviour
 
         float charSpawnY = MapManager.instance.getNodeFromPos(x,z).heightLvl == Node.HeightLevel.high ? charSpawnHighY : charSpawnLowY;
         GameObject newChar = (GameObject) Instantiate(getCharTypeByEnum(type), new Vector3(x, charSpawnY, z), Quaternion.identity);
-        characterDict.Add(characterID, newChar);
+        PlayCharacterSpawnAnimation(newChar);
+        characterDict.Add(characterID, ((Character)newChar.GetComponent(typeof(Character))));
+        Log.Debug("Added Character to list: " + characterID);
+        Log.Debug(characterDict[characterID].charName);
+        Log.Debug("Successful print");
         Character localChar = (Character) newChar.GetComponent(typeof(Character));
-        localChar.UpdateCharStats(HPcurrent, healingHP, MPcurrent, APcurrent, attackDamage, inventoryLeft, loud, killedBySandworm);
+        localChar.characterId = characterID;
+        localChar.UpdateCharStats(HPcurrent, MPcurrent, APcurrent, inventorySize, loud, killedBySandworm);
+        if (clientId == SessionHandler.clientId)
+        {
+            localChar.house = playerHouse;
+        }
+        else
+        {
+            localChar.house = enemyHouse;
+        }
+        localChar.SetMatColorToHouse();
+        localChar.setMaxAP(APMax);
+        localChar.setMaxHP(healthMax);
         return true;
+    }
+
+    public void PlayCharacterSpawnAnimation(GameObject newChar)
+    {
+        GameObject spawnEffect = Instantiate(CharacterSpawnEffect, newChar.transform.position, Quaternion.identity);
+        
+        Destroy(spawnEffect, 2);
     }
 
     /**
      * Used to update data of a character (HP etc.)
      */
-    public bool characterStatChange(int characterID, int HP, int HealHP, int MP, int AP, int AD, int spiceInv, bool isLoud, bool isSwallowed)
+    public bool characterStatChange(int characterID, int HP, int MP, int AP, int AD, int spiceInv, bool isLoud, bool isSwallowed)
     {
         if (!characterDict.ContainsKey(characterID))
             return false;
 
         Character charScript = getCharScriptByID(characterID);
-        charScript.UpdateCharStats(HP, HealHP, MP, AP, AD, spiceInv, isLoud, isSwallowed);
+        charScript.UpdateCharStats(HP, MP, AP, spiceInv, isLoud, isSwallowed);
         return true;
     }
 
     public Character getCharScriptByID(int characterID)
     {
-        return (Character)characterDict[characterID].GetComponent(typeof(Character));
+        return characterDict[characterID];
     }
 
 
@@ -129,26 +148,99 @@ public class CharacterMgr : MonoBehaviour
         }
     }
 
+    public void ClearCharDictionary()
+    {
+        characterDict.Clear();
+    }
+
 
     /**
      * Inits a Sandworm at given pos
      */
     public void SpawnSandworm(int x, int z)
     {
-        if (sandwormMoveScript == null)
+        if (sandwormMoveScript != null)
         {
-            sandwormMoveScript = ((MoveAbles)Instantiate(sandwormPrefab, new Vector3(x, wormHeightOffset + MapManager.instance.getNodeFromPos(x, z).charHeightOffset, z), Quaternion.identity).GetComponent(typeof(MoveAbles)));
+            Destroy(sandwormMoveScript.gameObject);
         }
-        else Debug.Log("There is already a sandworm!");
+            sandwormMoveScript = ((MoveAbles)Instantiate(sandwormPrefab, new Vector3(x, wormHeightOffset + MapManager.instance.getNodeFromPos(x, z).charHeightOffset, z), Quaternion.identity).GetComponent(typeof(MoveAbles)));
+        
+    }
+
+    public void DespawnSandworm()
+    {
+        if (sandwormMoveScript != null)
+        {
+            Destroy(sandwormMoveScript.gameObject);
+            sandwormMoveScript = null;
+        }
     }
 
     /**
      * Makes the worm move along the given path
      */
-    public void SandwormMove(LinkedList<Vector3> path)
+    public void SandwormMove(List<Position> path)
     {
-        Debug.Log("It's about to happen: " + sandwormMoveScript.name);
-        sandwormMoveScript.WalkAlongPath(path);
+        if (sandwormMoveScript != null)
+        {
+            Debug.Log("It's about to happen: " + sandwormMoveScript.name);
+            LinkedList<Vector3> newPos = new LinkedList<Vector3>();
+
+            Vector3 tmp;
+            foreach (Position p in path)
+            {
+                tmp = new Vector3(p.x, 0.372f + MapManager.instance.getNodeFromPos(p.x, p.y).charHeightOffset, p.y);
+                newPos.AddLast(tmp);
+            }
+
+            sandwormMoveScript.WalkAlongPath(newPos);
+        }
+    }
+
+
+    public int MaxHP(CharTypeEnum character)
+    {
+        switch(character)
+        {
+            case CharTypeEnum.NOBLE:
+                return nobleMaxHP;
+            case CharTypeEnum.MENTANT:
+                return mentatMaxHP;
+            case CharTypeEnum.BENEGESSERIT:
+                return benneGesseritMaxHP;
+            //case CharTypeEnum.FIGHTER:
+            default:
+                return fighterMaxHP;
+        }
+    }
+
+    public Character randomChar()
+    {
+        List<Character> values = Enumerable.ToList(characterDict.Values);
+        return values.ElementAt(0);
+    }
+
+
+    public void SetPlayerHouse(HouseEnum house)
+    {
+        playerHouse = house;
+    }
+
+    public void SetEnemyHouse(HouseEnum house)
+    {
+        enemyHouse = house;
+    }
+
+    public void removeCharacter(int charID)
+    {
+        characterDict.Remove(charID);
+    }
+    public Helicopter spawnHelicopter(Character charToTransport, Position target, bool crash)
+    {
+        GameObject obj = Instantiate(helicopterPrefab, new Vector3(charToTransport.X, 0f, charToTransport.Z), Quaternion.identity);
+        Helicopter copterScript = (Helicopter)obj.GetComponent(typeof(Helicopter));
+        copterScript.InitHelicopter(charToTransport, new Vector3(target.x, 0f, target.y), crash);
+        return copterScript;
     }
 
 }

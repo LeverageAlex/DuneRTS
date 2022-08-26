@@ -1,0 +1,4 @@
+var class_game_data_1_1network_1_1messages_1_1_change_character_statistics_demand_message =
+[
+    [ "ChangeCharacterStatisticsDemandMessage", "class_game_data_1_1network_1_1messages_1_1_change_character_statistics_demand_message.html#a84ffdcd388eb0a692a6efada047ed271", null ]
+];

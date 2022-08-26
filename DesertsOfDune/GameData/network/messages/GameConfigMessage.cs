@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
+using GameData.network.util.world;
+using GameData.Configuration;
 
 namespace GameData.network.messages
 {
@@ -11,27 +13,27 @@ namespace GameData.network.messages
     public class GameConfigMessage : Message
     {
         [JsonProperty]
-        private List<List<string>> scenario;
+        public List<List<string>> scenario { get; }
         [JsonProperty]
-        private string party;
+        public PartyConfiguration party { get; }
         [JsonProperty]
-        private int client0ID;
+        public PlayerInfo[] playerInfo { get; }
         [JsonProperty]
-        private int client1ID;
+        public Position stormEye { get; }
 
         /// <summary>
         /// Constructor of the class GameConfigMessage
         /// </summary>
         /// <param name="scenario">the scenario configuration</param>
-        /// <param name="partyConfig">the party configuration</param>
-        /// <param name="partyConfig">array of houses that are offered to the client</param>
-        public GameConfigMessage(List<List<string>> scenario, string party, int client0ID, int client1ID) : base("0.1", MessageType.GAMECFG)
+        /// <param name="party">the party configuration</param>
+        /// <param name="playerInfo">The id or the client and the coordinates of his cityt</param>
+        /// <param name="stormEye">The Position of the Stormeye on the map</param>
+        public GameConfigMessage(List<List<string>> scenario, PartyConfiguration party, PlayerInfo[] playerInfo, Position stormEye) : base("1.1", MessageType.GAMECFG)
         {
-            //TODO: change GameConfigMessage like it's declared in standard document
             this.scenario = scenario;
             this.party = party;
-            this.client0ID = client0ID;
-            this.client1ID = client1ID;
+            this.playerInfo = playerInfo;
+            this.stormEye = stormEye;
         }
     }
 }

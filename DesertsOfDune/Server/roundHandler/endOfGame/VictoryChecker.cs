@@ -1,7 +1,7 @@
 ﻿using System;
-using Server.Clients;
+using GameData.Clients;
 
-namespace Server.roundHandler.endOfGame
+namespace GameData.roundHandler.endOfGame
 {
     /// <summary>
     /// Checks or determines, which player won the game, after it was ended.
@@ -123,7 +123,6 @@ namespace Server.roundHandler.endOfGame
         /// <param name="player1">the first active player of the party</param>
         /// <param name="player2">the second active player of the party</param>
         /// <returns>returns the player, with the last character standing or null, if there is no player with last standing character</returns>
-        /// TODO: do not return null
         private Player Check5thVictoryMetric(Player player1, Player player2)
         {
             if (player1.statistics.LastCharacterStanding)
@@ -136,7 +135,7 @@ namespace Server.roundHandler.endOfGame
             }
             else
             {
-                return null;
+                throw new Exception("There is no winner what shouldn't happen!");
             }
         }
     }

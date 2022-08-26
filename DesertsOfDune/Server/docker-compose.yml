@@ -1,0 +1,12 @@
+services:
+  server: 
+    build: 
+      context: ..
+      dockerfile: Server/Dockerfile
+    pull_policy: always
+    environment: 
+      PARTY_CONFIG_FILEPATH: "src/Server/Configuration/ConfigurationFiles/team08.party.json"
+      SCENARIO_CONFIG_FILEPATH: "src/Server/Configuration/ConfigurationFiles/team08.scenario.json"
+      PORT: 10101
+    ports:
+      - "10101:8000" # change 10101, if you want to expose the server (host system) on another port

@@ -23,12 +23,11 @@ namespace GameData.network.messages
         /// <param name="characterID">the id of the character</param>
         /// <param name="action">the action the client requests</param>
         /// <param name="target">the target the client wants to effect</param>
-        public ActionRequestMessage(int clientID, int characterID, ActionType action, Position target) : base(characterID,clientID,MessageType.ACTION_REQUEST)
+        [JsonConstructor]
+        public ActionRequestMessage(int clientID, int characterID, ActionType action, Specs specs) : base(characterID,clientID,MessageType.ACTION_REQUEST)
         {
             this.action = Enum.GetName(typeof(ActionType), action);
-            Specs s = new Specs();
-            s.target = target;
-            this.specs = s;
+            this.specs = specs;
         }
     }
 }

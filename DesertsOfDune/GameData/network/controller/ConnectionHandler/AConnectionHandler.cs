@@ -26,8 +26,8 @@ namespace GameData.network.controller
         /// SERVER_ADDRESS = "127.0.0.1"
         /// </example>
         /// </summary>
-        private string SERVER_ADDRESS { get; }
-        private int PORT { get; }
+        protected string SERVER_ADDRESS { get; set; }
+        protected int PORT { get; set; }
         private readonly string PROTOCOLL_SUFFIX = "ws://";
 
         /// <summary>

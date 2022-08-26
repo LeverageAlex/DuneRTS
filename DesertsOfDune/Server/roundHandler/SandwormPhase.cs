@@ -1,6 +1,7 @@
 ﻿using GameData.network.util.world;
-using Server.Configuration;
-using Server.roundHandler;
+using GameData;
+using GameData.Configuration;
+using GameData.roundHandler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace GameData.server.roundHandler
     /// </summary>
     public class SandwormPhase : IGamePhase
     {
-        private Sandworm _sandworm;
+//        private Sandworm _sandworm;
 
         private readonly Map _map;
 
@@ -26,22 +27,39 @@ namespace GameData.server.roundHandler
             this._map = map;
         }
 
+        /// <summary>
+        /// Executes the sandworm phase
+        /// </summary>
         public void Execute()
         {
             // check, whether there is a sandworm
-            if (_sandworm != null)
+            if (Sandworm.GetSandworm() != null)
             {
-                Queue<MapField> path = _sandworm.CalculatePathToTarget();
-                _sandworm.MoveSandWorm(path);
-            } else
+                var players = Party.GetInstance().GetActivePlayers();
+                int greatHouse1CharacterAmount = players[0].UsedGreatHouse.GetCharactersAlive().Count;
+                int greatHouse2CharacterAmount = players[1].UsedGreatHouse.GetCharactersAlive().Count;
+                Queue<MapField> path = Sandworm.GetSandworm().CalculatePathToTarget();
+                List<MapField> path2 = new List<MapField>(path);
+                path2.Reverse();
+                Sandworm.GetSandworm().MoveSandWorm(path2);
+                // check if character was swallowed by sandworm, if yes update player statistics
+                if (players[0].UsedGreatHouse.GetCharactersAlive().Count < greatHouse1CharacterAmount)
+                {
+                    players[0].statistics.AddToCharactersSwallowed(1);
+                }
+                else if (players[1].UsedGreatHouse.GetCharactersAlive().Count < greatHouse2CharacterAmount)
+                {
+                    players[1].statistics.AddToCharactersSwallowed(1);
+                }
+            }
+            else
             {
                 List<Character> characters = this._map.GetCharactersOnMap();
-
                 // check, if there are any loud characters on the map, so the sandworm spawns
                 if (CheckLoudness(characters))
                 {
                     // there is no sandworm, but loud characters, so spawn one
-                    _sandworm = Sandworm.Spawn(PartyConfiguration.GetInstance().sandWormSpeed, PartyConfiguration.GetInstance().sandWormSpawnDistance, this._map, characters);
+                    Sandworm.Spawn(PartyConfiguration.GetInstance().sandWormSpeed, PartyConfiguration.GetInstance().sandWormSpawnDistance, this._map, characters, Party.GetInstance().messageController);
                 }
             }
         }

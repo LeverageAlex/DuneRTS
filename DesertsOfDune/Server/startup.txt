@@ -1,0 +1,1 @@
+dotnet run --config-match "l.party.json" -s "p.scenario.json" --port 5000

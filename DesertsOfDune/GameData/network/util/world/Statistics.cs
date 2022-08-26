@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace GameData.network.util.world
 {
@@ -22,7 +23,9 @@ namespace GameData.network.util.world
         /// <returns>the statistics</returns>
         public List<String> GetFormatedStatistics()
         {
-            return null;
+            //TODO: not return null
+            throw new NotImplementedException("GetFormatedStatistics is not implemented!");
+            //return null;
         }
 
         /// <summary>
@@ -82,7 +85,8 @@ namespace GameData.network.util.world
         /// <returns></returns>
         public bool RemoveFromCharactersAlive(string name)
         {
-            return false;
+            //TODO: implement
+            throw new NotImplementedException();
         }
     }
 }

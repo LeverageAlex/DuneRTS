@@ -34,20 +34,20 @@ namespace GameData.network.util.world.character
         /// <summary>
         /// creates a new mentat 
         /// </summary>
-        public Mentat() : base(CharacterType.MENTAT, CharacterConfiguration.Mentat.maxHP, CharacterConfiguration.Mentat.maxMP, CharacterConfiguration.Mentat.maxAP, CharacterConfiguration.Mentat.damage, CharacterConfiguration.Mentat.inventorySize, CharacterConfiguration.Mentat.healingHP)
+        /// <param name="name">the name of the mentat</param>
+        public Mentat(string name) : base(CharacterType.MENTAT, CharacterConfiguration.Mentat.maxHP, CharacterConfiguration.Mentat.maxMP, CharacterConfiguration.Mentat.maxAP, CharacterConfiguration.Mentat.damage, CharacterConfiguration.Mentat.inventorySize, CharacterConfiguration.Mentat.healingHP, name)
         {
         }
 
         /// <summary>
         /// This method resets the data of the character
         /// </summary>
-        override
-        public void ResetData()
+        public override void ResetData()
         {
-            this.characterType = Enum.GetName(characterType.GetType(), characterType);
+            this.characterType = Enum.GetName(typeof(CharacterType), CharacterType.MENTAT);
             this.healthMax = CharacterConfiguration.Mentat.maxHP;
             this.healthCurrent = CharacterConfiguration.Mentat.maxHP;
-            this.healingHP = CharacterConfiguration.Mentat.healingHP;
+            this.HealingHP = CharacterConfiguration.Mentat.healingHP;
             this.MPmax = CharacterConfiguration.Mentat.maxMP;
             this.MPcurrent = CharacterConfiguration.Mentat.maxMP;
             this.APmax = CharacterConfiguration.Mentat.maxAP;
@@ -63,30 +63,37 @@ namespace GameData.network.util.world.character
         /// This method represents the action SpiceHoarding of the characterType Mentat
         /// </summary>
         /// <returns>true, if action was successful</returns>
-        override
-        public bool SpiceHoarding(Map map)
+        public override bool SpiceHoarding(Map map)
         {
             int inventoryFree = this.inventorySize - this.inventoryUsed;
-            List<MapField> NeighborFields = map.GetNeighborFields(this.currentMapfield);
-            NeighborFields.Add(this.currentMapfield);
+            List<MapField> NeighborFields = map.GetNeighborFields(this.CurrentMapfield);
+            NeighborFields.Add(this.CurrentMapfield);
             Random rnd = new Random();
             if (this.APcurrent == this.APmax && inventoryFree > 0)
             {
-                MapField spiceField = NeighborFields[rnd.Next(NeighborFields.Count)];
+                MapField spiceField;
                 while (inventoryFree > 0 && NeighborFields.Count > 0)
                 {
-                    if (spiceField.HasSpice)
+                    spiceField = NeighborFields[rnd.Next(NeighborFields.Count)];
+                    if (spiceField.hasSpice)
                     {
-                        CollectSpice();
+                        inventoryUsed++;
+                        spiceField.hasSpice = false;
                         inventoryFree--;
+                        if (spiceField.tileType == "DUNE" || spiceField.tileType == "FLAT_SAND")
+                        {
+                            this.SetLoud();
+                        }
                     }
                     NeighborFields.Remove(spiceField);
-                    spiceField = NeighborFields[rnd.Next(NeighborFields.Count)];
                 }
                 SpentAp(APmax);
+                
                 return true;
             }
             return false;
         }
     }
+
+
 }

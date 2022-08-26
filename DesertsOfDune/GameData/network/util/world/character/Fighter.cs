@@ -31,20 +31,20 @@ namespace GameData.network.util.world.character
         /// <summary>
         /// creates a new fighter 
         /// </summary>
-        public Fighter() : base(CharacterType.FIGHTER, CharacterConfiguration.Fighter.maxHP, CharacterConfiguration.Fighter.maxMP, CharacterConfiguration.Fighter.maxAP, CharacterConfiguration.Fighter.damage, CharacterConfiguration.Fighter.inventorySize, CharacterConfiguration.Fighter.healingHP)
+        /// <param name="name">the name of the figther</param>
+        public Fighter(string name) : base(CharacterType.FIGHTER, CharacterConfiguration.Fighter.maxHP, CharacterConfiguration.Fighter.maxMP, CharacterConfiguration.Fighter.maxAP, CharacterConfiguration.Fighter.damage, CharacterConfiguration.Fighter.inventorySize, CharacterConfiguration.Fighter.healingHP, name)
         {
         }
 
         /// <summary>
         /// This method resets the data of the character
         /// </summary>
-        override
-        public void ResetData()
+        public override void ResetData()
         {
-            this.characterType = Enum.GetName(characterType.GetType(), characterType);
+            this.characterType = Enum.GetName(typeof(CharacterType), CharacterType.FIGHTER);
             this.healthMax = CharacterConfiguration.Fighter.maxHP;
             this.healthCurrent = CharacterConfiguration.Fighter.maxHP;
-            this.healingHP = CharacterConfiguration.Fighter.healingHP;
+            this.HealingHP = CharacterConfiguration.Fighter.healingHP;
             this.MPmax = CharacterConfiguration.Fighter.maxMP;
             this.MPcurrent = CharacterConfiguration.Fighter.maxMP;
             this.APmax = CharacterConfiguration.Fighter.maxAP;
@@ -54,15 +54,18 @@ namespace GameData.network.util.world.character
             this.inventoryUsed = 0;
             this.killedBySandworm = false;
             this.isLoud = false;
+
         }
 
         /// <summary>
         /// This method represents the action SwordSpin of the character type fighter
         /// </summary>
-        /// <returns>true, if the action was successful</returns>
-        override
-        public bool SwordSpin(Map map)
+        /// <returns>characters hit by the sword spin</returns>
+        
+        public override List<Character> SwordSpin(Map map)
         {
+            List<Character> charactersHit = new List<Character>();
+            bool atLeastOneCharacterHittet = false;
             if(this.APcurrent == this.APmax)
             {
                 List<MapField> NeighborFields = map.GetNeighborFields(this.CurrentMapfield);
@@ -70,17 +73,20 @@ namespace GameData.network.util.world.character
                 {
                     if (mapfield.IsCharacterStayingOnThisField)
                     {
-                        if(mapfield.Character.greatHouse != this.greatHouse)
+                        if(mapfield.Character.greatHouse != this.greatHouse && !mapfield.Character.IsInSandStorm(map))
                         {
-                            Atack(mapfield.Character);
+                            charactersHit.Add(mapfield.Character);
+                            Attack(mapfield.Character);
+                            atLeastOneCharacterHittet = true;
                         }
-
                     }
                 }
-                SpentAp(APmax);
-                return true;
+                if (atLeastOneCharacterHittet)
+                {
+                    SpentAp(this.APcurrent);
+                }
             }
-            return false;
+            return charactersHit;
         }
     }
 }

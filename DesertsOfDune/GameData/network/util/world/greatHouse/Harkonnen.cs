@@ -14,7 +14,7 @@ namespace GameData.network.util.world
         /// <summary>
         /// create a new Great house of type "Harkonnen" with the characters from the "Standisierungsdokument"
         /// </summary>
-        public Harkonnen() : base("HARKONNEN", "ROT", GreatHouseConfiguration.HouseCharactersHarkonnen)
+        public Harkonnen() : base("HARKONNEN", "RED", GreatHouseConfiguration.HouseCharactersHarkonnen, true)
         {
         }
     }

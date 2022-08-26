@@ -3,6 +3,7 @@ using GameData.network.messages;
 using GameData.network.util.enums;
 using GameData.network.util.parser;
 using Serilog;
+using Serilog.Context;
 
 namespace GameData.network.controller
 {
@@ -45,6 +46,12 @@ namespace GameData.network.controller
             // check, whether the parsing was successful
             if (parsedMessage != null)
             {
+                // logging the sending message
+                using (LogContext.PushProperty("Direction", "send"))
+                {
+                    Log.Information("{ message: " + parsedMessage + " }, \"direction\": \"send\" } \n");
+                }
+
                 // broadcast parsed message to all active sessions so clients
                 ((ServerConnectionHandler)connectionHandler).sessionManager.Broadcast(parsedMessage);
                 return true;
@@ -70,6 +77,12 @@ namespace GameData.network.controller
             // check, whether the parsing was successful
             if (parsedMessage != null)
             {
+                // logging the sending message
+                using (LogContext.PushProperty("Direction", "send"))
+                {
+                    Log.Information("{ message: " + parsedMessage + " }, \"direction\": \"send\" } \n");
+                }
+
                 // broadcast parsed message to all active sessions so clients
                 ((ServerConnectionHandler)connectionHandler).sessionManager.SendTo(parsedMessage, clientID);
                 return true;
@@ -89,51 +102,74 @@ namespace GameData.network.controller
         /// <returns>true, if the message could successfully parsed and forwarded to the message controller</returns>
         public override bool HandleReceivedMessage(string message, string sessionID)
         {
-            Log.Debug("Server parsing the received message: " + message);
+            // Log.Debug("Server parsing the received message: " + message);
 
             // get Message-Object from JSON-String message
             Message receivedMessage = MessageConverter.ToMessage(message);
 
-            // get the type of the message for determine the controller methods needed to handle this message
-            MessageType type = (MessageType)Enum.Parse(typeof(MessageType), receivedMessage.GetMessageTypeAsString());
-
-            switch (type)
+            // logging the received message
+            using (LogContext.PushProperty("Direction", "receive"))
             {
-                case MessageType.DEBUG:
-                    messageController.OnDebugMessage((DebugMessage)receivedMessage);
-                    return true;
-                case MessageType.JOIN:
-                    messageController.OnJoinMessage((JoinMessage)receivedMessage, sessionID);
-                    return true;
-                case MessageType.REJOIN:
-                    messageController.OnRejoinMessage((RejoinMessage)receivedMessage, sessionID);
-                    return true;
-                case MessageType.HOUSE_REQUEST:
-                    messageController.OnHouseRequestMessage((HouseRequestMessage)receivedMessage, sessionID);
-                    return true;
-                case MessageType.MOVEMENT_REQUEST:
-                    messageController.OnMovementRequestMessage((MovementRequestMessage)receivedMessage);
-                    return true;
-                case MessageType.ACTION_REQUEST:
-                    messageController.OnActionRequestMessage((ActionRequestMessage)receivedMessage);
-                    return true;
-                case MessageType.TRANSFER_REQUEST:
-                    messageController.OnTransferRequestMessage((TransferRequestMessage)receivedMessage);
-                    return true;
-                case MessageType.END_TURN_REQUEST:
-                    messageController.OnEndTurnRequestMessage((EndTurnRequestMessage)receivedMessage);
-                    return true;
-                case MessageType.GAMESTATE_REQUEST:
-                    messageController.OnGameStateRequestMessage((GameStateRequestMessage)receivedMessage);
-                    return true;
-                case MessageType.PAUSE_REQUEST:
-                    messageController.OnPauseGameRequestMessage((PauseGameRequestMessage)receivedMessage);
-                    return true;
-                default:
-                    Log.Error("Incoming parsed message has invalid type (" + type + ") and could not be forwarded to the message controller!");
-                    break;
+                Log.Information("{ message: " + message + " }, \"direction\": \"receive\" } \n");
             }
 
+            // get the type of the message for determine the controller methods needed to handle this message
+            MessageType type = (MessageType)Enum.Parse(typeof(MessageType), receivedMessage.GetMessageTypeAsString());
+            if (GamePaused)
+            {
+                if (type == MessageType.PAUSE_REQUEST)
+                {
+                    messageController.OnPauseGameRequestMessage((PauseGameRequestMessage)receivedMessage, sessionID);
+                }
+                else
+                {
+                    Log.Warning($"Cannot process message ({message}), because the game is paused, so only pause request messages are received!");
+                }
+            }
+            else
+            {
+
+                switch (type)
+                {
+                    case MessageType.DEBUG:
+                        messageController.OnDebugMessage((DebugMessage)receivedMessage);
+                        return true;
+                    case MessageType.JOIN:
+                        messageController.OnJoinMessage((JoinMessage)receivedMessage, sessionID);
+                        return true;
+                    case MessageType.REJOIN:
+                        messageController.OnRejoinMessage((RejoinMessage)receivedMessage, sessionID);
+                        return true;
+                    case MessageType.HOUSE_REQUEST:
+                        messageController.OnHouseRequestMessage((HouseRequestMessage)receivedMessage, sessionID);
+                        return true;
+                    case MessageType.MOVEMENT_REQUEST:
+                        messageController.OnMovementRequestMessage((MovementRequestMessage)receivedMessage);
+                        return true;
+                    case MessageType.ACTION_REQUEST:
+                        messageController.OnActionRequestMessage((ActionRequestMessage)receivedMessage);
+                        return true;
+                    case MessageType.TRANSFER_REQUEST:
+                        messageController.OnTransferRequestMessage((TransferRequestMessage)receivedMessage);
+                        return true;
+                    case MessageType.END_TURN_REQUEST:
+                        messageController.OnEndTurnRequestMessage((EndTurnRequestMessage)receivedMessage);
+                        return true;
+                    case MessageType.GAMESTATE_REQUEST:
+                        messageController.OnGameStateRequestMessage((GameStateRequestMessage)receivedMessage);
+                        return true;
+                    case MessageType.PAUSE_REQUEST:
+
+                        messageController.OnPauseGameRequestMessage((PauseGameRequestMessage)receivedMessage, sessionID);
+                        return true;
+                    case MessageType.HELI_REQUEST:
+                        messageController.OnHeliRequestMessage((HeliRequestMessage)receivedMessage);
+                        return true;
+                    default:
+                        Log.Error("Incoming parsed message has invalid type (" + type + ") and could not be forwarded to the message controller!");
+                        break;
+                }
+            }
             return false;
         }
     }

@@ -31,8 +31,7 @@ namespace GameData.network.util.world.greatHouse
                 case GreatHouseType.VERNIUS:
                     return new Vernius();
                 default:
-                    // TODO: do not return null, but throw an exception
-                    return null;
+                    throw new ArgumentOutOfRangeException(nameof(type),"The GreatHouseType is not defined.");
             }
         }
     }

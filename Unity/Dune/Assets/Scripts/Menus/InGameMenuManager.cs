@@ -1,62 +1,198 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class InGameMenuManager : MonoBehaviour
 {
+
+    private static InGameMenuManager instance;
+
     [Header("Menus:")]
     public GameObject InGameMenu;
     public GameObject InGameUI;
     public GameObject OptionsMenu;
     public GameObject HouseSelectionMenu;
+    public GameObject RejoinMenu;
+    public GameObject EndScreen;
     public GameObject PauseScreenWithButton;
     public GameObject PauseScreenNoButton;
+    public GameObject SpiceAmountDialog;
+    public GameObject WaitingScreen;
+        
+    public GameObject[] forbiddenMenus;
+
+    [Header("EndScreen")]
+    public Text statisticsText;
 
     [Header("HouseSelection:")]
     public Toggle option1;
     public Toggle option2;
     public GameObject confirmButton;
 
+    [Header("SpiceAmountDialog")]
+    
+    public Slider SpiceAmountSlider;
+    public Text SpiceMaxText;
+    public Button SpiceCancleButton;
+    public Button SpiceTransferButton;
+
+
+    private string option1Name;
+    private string option2Name;
+
+    public bool IsPaused { get { return PauseScreenWithButton.activeSelf || PauseScreenNoButton.activeSelf; } }
+
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public static InGameMenuManager getInstance()
+    {
+        return instance;
+    }
+
+    private void Start()
+    {
+        ActivateMenu(WaitingScreen);
+    }
+
+    //transfer spice
+
+    /// <summary>
+    /// this method is called by Action_TransferSpiceTrigger
+    /// </summary>
+    /// <param name="giver"></param>
+    /// <param name="receiver"></param>
+    /// <param name="spiceInv"></param>
+    public void DemandSpiceAmount(Character giver, Character receiver, int spiceInv)
+    {
+        Debug.Log("This the the spiceInv: " + spiceInv);
+        SpiceMaxText.text = spiceInv.ToString();
+        SpiceAmountSlider.maxValue = spiceInv;
+        SpiceAmountSlider.wholeNumbers = true;
+        SpiceTransferButton.onClick.RemoveAllListeners();
+        SpiceCancleButton.onClick.RemoveAllListeners();
+
+        SpiceTransferButton.onClick.AddListener(() => {
+            giver.TriggerRequestTransferSpice(receiver, Mathf.RoundToInt(SpiceAmountSlider.value));
+            ActivateMenu(InGameUI);
+        });
+        SpiceCancleButton.onClick.AddListener(() => {
+            giver.CancleRequstTransferSpice();
+            ActivateMenu(InGameUI);
+        });
+
+        ActivateMenu(SpiceAmountDialog);
+    }
+
+    //rejoin
+
+    /// <summary>
+    /// this method gets called when the Player should have the option to rejoin, for example at a disconnect
+    /// </summary>
+    public void DemandRejoinOption()
+    {
+        Debug.Log("Opening rejoin menu");
+        ActivateMenu(RejoinMenu);
+    }
+
+    /// <summary>
+    /// this method is called by a BUTTON to rejoin the game
+    /// </summary>
+    public void RequestRejoinGame()
+    {
+        Debug.Log("Rejoining");
+
+        for (int i = 0; i < 3; i++)
+        {
+            SessionHandler.CreateNetworkModule(SessionHandler.lastIp, SessionHandler.lastPort);
+            if (SessionHandler.clientconhandler.ConnectionIsAlive())
+            {
+                Debug.Log("Successfuly established connection. Now starting Rejoin");
+                break;
+            }
+            else
+            {
+                Debug.Log("Error on establishing connection... Reconnecting.");
+                SessionHandler.CloseNetworkModule();
+                Thread.Sleep(250);
+            }
+        }
+        if (SessionHandler.clientconhandler.ConnectionIsAlive())
+        {
+            SessionHandler.messageController.DoRequestRejoin(SessionHandler.clientSecret);
+            RejoinMenu.SetActive(false);
+            StartConnectionWatchdog.instance.RestartConnectionMonitor();
+            GUIHandler.BroadcastGameMessage("Connected!");
+        }
+        else
+        {
+            GUIHandler.BroadcastGameMessage("Reconnect failed!");
+            Debug.Log("Rejoin failed");
+        }
+
+    }
+
+    /// <summary>
+    /// this method is called when Rejoin gets accepted
+    /// </summary>
+    public void DemandAcceptRejoin()
+    {
+        ActivateMenu(InGameUI);
+    }
+
+    //house selection
 
     /// <summary>
     /// this method is called by the SERVER to start the HouseSelcetion with two options
     /// </summary>
     /// <param name="houseName1"></param>
     /// <param name="houseName2"></param>
-    public void StartHouseSelection(string houseName1, string houseName2)
+    public void DemandStartHouseSelection(string houseName1, string houseName2)
     {
         SetOptionText(1, houseName1);
         SetOptionText(2, houseName2);
 
+        option1Name = houseName1;
+        option2Name = houseName2;
+
         ActivateMenu(HouseSelectionMenu);
     }
 
-    //THIS METHOD IS TEMPORARY AND ONLY MENT FOR THE BUTTON ACTIVATION OF THE HOUSE SELECTEION ToDo delete
-    public void StartHouseSelection()
+    /// <summary>
+    /// this method is called by the SERVER to end the HouseSelection when house gets acknowkledged
+    /// </summary>
+    public void DemandEndHouseSelection()
     {
-        StartHouseSelection("option 1", "option 2");
+        ActivateMenu(WaitingScreen);
     }
 
     /// <summary>
     /// this method is called by a BUTTON to select one of the two house options
     /// </summary>
-    public void SelectOption()
+    public void RequestSelectOption()
     {
         if (option1.isOn)
         {
             Debug.Log(option1.GetComponentInChildren<Text>().text + " was selected!");
-            //TODO send message to server
-
-            EndHouseSelection();//TODO trigger by server instead
+            SessionHandler.messageController.DoRequestHouse(option1Name);
         }
         else if (option2.isOn)
         {
             Debug.Log(option2.GetComponentInChildren<Text>().text + " was selected!");
-            //TODO send message to server
-
-            EndHouseSelection();//TODO trigger by server instead
+            SessionHandler.messageController.DoRequestHouse(option2Name);
         }
     }
 
@@ -92,58 +228,64 @@ public class InGameMenuManager : MonoBehaviour
         }
     }
 
+    //end game
+
     /// <summary>
-    /// this method is called by the SERVER to end the HouseSelection when house gets acknowkledged
+    /// this method gets called by the SERVER to end the game and show the statistics
     /// </summary>
-    public void EndHouseSelection()
+    /// <param name="statistics"></param>
+    public void DemandEndGame(string statistics)
     {
-        ActivateMenu(InGameUI);
+        statisticsText.text = statistics;
+        Time.timeScale = 0f;
+        ActivateMenu(EndScreen);
     }
 
+    /// <summary>
+    /// this methid gets called by a BUTTON to switch to the menu-scene
+    /// </summary>
     public void ExitToMainMenu()
     {
+        SessionHandler.CloseNetworkModule();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 
-    /// <summary>
-    /// this method is called by a button to send a pause request
-    /// </summary>
-    public void PauseGame()
-    {
-        PauseScreenWithButton.SetActive(true);
+    //pause
 
-        //TODO send message to server for a pause request
-        ForcedPauseGame();//TODO delete
+    /// <summary>
+    /// this method is called by a BUTTON to send a pause request
+    /// </summary>
+    public void RequestPauseGame()
+    {
+        SessionHandler.messageController.DoRequestPauseGame(true);
     }
 
     /// <summary>
-    /// this method is called by a server message to pause the game
+    /// this method is called by a SERVER message to pause the game
     /// </summary>
-    public void ForcedPauseGame()
+    public void DemandPauseGame(bool forced)
     {
         ActivateMenu(null);//deactivate all menus
 
-        if (!PauseScreenWithButton.activeSelf)
-        {
-            PauseScreenNoButton.SetActive(true);
-        }
+        PauseScreenWithButton.SetActive(!forced);
+        PauseScreenNoButton.SetActive(forced);
+ 
 
         Time.timeScale = 0f;
     }
 
     /// <summary>
-    /// this method is called by a button to send an unpause request
+    /// this method is called by a BUTTON to send an unpause request
     /// </summary>
-    public void UnpauseGame()
+    public void RequestUnpauseGame()
     {
-        //TODO send message to server for a unpause request
-        ForcedUnpauseGame();//TODO delete
+        SessionHandler.messageController.DoRequestPauseGame(false);
     }
 
     /// <summary>
-    /// this method is called by a server message to unpause the game
+    /// this method is called by a SERVER message to unpause the game
     /// </summary>
-    public void ForcedUnpauseGame()
+    public void DemandUnpauseGame()
     {
         ActivateMenu(InGameUI);
 
@@ -152,6 +294,8 @@ public class InGameMenuManager : MonoBehaviour
 
         Time.timeScale = 1f;
     }
+
+    //menu switching
 
     /// <summary>
     /// this method is a HELPER-METHOD to change the .isActive trade of the menus
@@ -163,10 +307,22 @@ public class InGameMenuManager : MonoBehaviour
         InGameUI.SetActive(false);
         OptionsMenu.SetActive(false);
         HouseSelectionMenu.SetActive(false);
-
-        if(menuToActivate != null)
+        RejoinMenu.SetActive(false);
+        EndScreen.SetActive(false);
+        SpiceAmountDialog.SetActive(false);
+        WaitingScreen.SetActive(false);
+        PauseScreenNoButton.SetActive(false);
+        PauseScreenWithButton.SetActive(false);
+        
+        if (menuToActivate != null)
         {
             menuToActivate.SetActive(true);
+        }
+        if(!SessionHandler.isPlayer)
+        {
+            foreach(GameObject obj in forbiddenMenus) {
+                obj.SetActive(false);
+            }
         }
     }
 
@@ -195,4 +351,5 @@ public class InGameMenuManager : MonoBehaviour
     {
         ActivateMenu(OptionsMenu);
     }
+
 }

@@ -15,6 +15,8 @@ namespace GameData.network.util.world
     {
         public MapField[,] fields { get; set; }
 
+        public static Map instance;
+
         public int MAP_WIDTH { get; }
         public int MAP_HEIGHT { get; }
 
@@ -24,6 +26,14 @@ namespace GameData.network.util.world
         {
             this.MAP_WIDTH = mapWidth;
             this.MAP_HEIGHT = mapHeight;
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Console.WriteLine("Error. There is more than one map. This doesn't make any sense!");
+            }
 
             // check, that the scenarionConfiguration has the correct sizes
             CreateMapFromScenario(scenarioConfiguration);
@@ -40,9 +50,75 @@ namespace GameData.network.util.world
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    fields[y, x] = new MapField(scenarioConfiguration[x][(MAP_HEIGHT - 1) - y], x, y);
+                    switch (scenarioConfiguration[x][y])
+                    {
+                        case "DUNE":
+                            fields[y, x] = new Dune(false, false);
+                            break;
+                        case "FLAT_SAND":
+                            fields[y, x] = new FlatSand(false, false);
+                            break;
+                        case "MOUNTAINS":
+                            fields[y, x] = new Mountain(false, false);
+                            break;
+                        case "PLATEAU":
+                            fields[y, x] = new RockPlateau(false, false);
+                            break;
+                        case "CITY":
+                            fields[y, x] = new City(0, false, false);
+                            break;
+                        case "HELIPORT":
+                            fields[y, x] = new Heliport(false, false);
+                            break;
+                    }
+                    fields[y, x].XCoordinate = x;
+                    fields[y, x].ZCoordinate = y;
                 }
             }
+        }
+
+        public MapField[,] GetNewMapFromMessage(MapField[,] mapFields)
+        {
+            MapField[,] newMap = new MapField[MAP_HEIGHT, MAP_WIDTH];
+
+            for (int x = 0; x < MAP_WIDTH; x++)
+            {
+                for (int y = 0; y < MAP_HEIGHT; y++)
+                {
+                    MapField mapField = mapFields[y, x];
+
+                    switch (mapField.tileType)
+                    {
+                        case "DUNE":
+                            newMap[y, x] = new Dune(mapField.hasSpice, mapField.isInSandstorm);
+                            break;
+                        case "FLAT_SAND":
+                            newMap[y, x] = new FlatSand(mapField.hasSpice, mapField.isInSandstorm);
+                            break;
+                        case "MOUNTAINS":
+                            newMap[y, x] = new Mountain(mapField.hasSpice, mapField.isInSandstorm);
+                            break;
+                        case "PLATEAU":
+                            newMap[y, x] = new RockPlateau(mapField.hasSpice, mapField.isInSandstorm);
+                            break;
+                        case "CITY":
+                            newMap[y, x] = new City(mapField.clientID, mapField.hasSpice, mapField.isInSandstorm);
+                            break;
+                        case "HELIPORT":
+                            newMap[y, x] = new Heliport(mapField.hasSpice, mapField.isInSandstorm);
+                            break;
+                    }
+                    newMap[y, x].XCoordinate = x;
+                    newMap[y, x].ZCoordinate = y;
+
+                    if (GetMapFieldAtPosition(x, y).Character != null && !GetMapFieldAtPosition(x, y).Character.KilledBySandworm)
+                    {
+                        newMap[y, x].PlaceCharacter(GetMapFieldAtPosition(x, y).Character);
+                    }
+
+                }
+            }
+            return newMap;
         }
 
         /// <summary>
@@ -97,7 +173,8 @@ namespace GameData.network.util.world
             if (amountOfNeighbors == 0)
             {
                 return null;
-            } else
+            }
+            else
             {
                 int index = random.Next(amountOfNeighbors);
                 return neighbors[index];
@@ -131,12 +208,41 @@ namespace GameData.network.util.world
         }
 
         /// <summary>
+        /// Spread spice on field and its neighbours
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="amount"></param>
+        public void SpreadSpiceOnFields(MapField field, int amount)
+        {
+            var random = new Random();
+            
+            List<MapField> neighbours = GetNeighborFields(field).Where(item => item.IsApproachable && !item.hasSpice && !item.IsCharacterStayingOnThisField).OrderBy(item => random.Next()).ToList<MapField>();
+            foreach (var neighb in neighbours)
+            {
+                if(amount > 0)
+                {
+                    neighb.hasSpice = true;
+                    amount--;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            if(amount > 0)
+            {
+                SpreadSpiceOnFields(neighbours.ElementAt(random.Next(neighbours.Count)), amount);
+            }
+        }
+
+
+        /// <summary>
         /// checks, wether a field specified through its x- and y-coordinate on the map, so whether the coordinates are x,y > 0 and x,y < maxX, maxY
         /// </summary>
         /// <param name="x"><the x-coordinate of the mapfield/param>
         /// <param name="y">the y-coordinate of the mapfield</param>
         /// <returns></returns>
-        private bool IsFieldOnMap(int x, int y)
+        public bool IsFieldOnMap(int x, int y)
         {
             return x >= 0 && y >= 0 && x < MAP_WIDTH && y < MAP_HEIGHT;
         }
@@ -152,7 +258,7 @@ namespace GameData.network.util.world
         {
             if (IsFieldOnMap(x, y))
             {
-                return this.fields[(MAP_HEIGHT - 1) - y, x];
+                return this.fields[y, x];
             }
             else
             {
@@ -171,7 +277,7 @@ namespace GameData.network.util.world
         {
             if (IsFieldOnMap(x, y))
             {
-                this.fields[(MAP_HEIGHT - 1) - y, x] = newField;
+                this.fields[y, x] = newField;
                 newField.XCoordinate = x;
                 newField.ZCoordinate = y;
                 return true;
@@ -193,7 +299,7 @@ namespace GameData.network.util.world
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    if (fields[y, x].TileType == TileType.CITY.ToString())
+                    if (fields[y, x].tileType.Equals(Enum.GetName(typeof(TileType), TileType.CITY)))
                     {
                         cities.Add((City)fields[y, x]);
                     }
@@ -210,7 +316,7 @@ namespace GameData.network.util.world
         /// <returns>true, if the given map field is a desert field</returns>
         public bool IsMapFieldADesertField(MapField mapField)
         {
-            return mapField.TileType.Equals(TileType.FLAT_SAND.ToString()) || mapField.TileType.Equals(TileType.DUNE.ToString());
+            return mapField.tileType.Equals(TileType.FLAT_SAND.ToString()) || mapField.tileType.Equals(TileType.DUNE.ToString());
         }
 
         /// <summary>
@@ -241,6 +347,54 @@ namespace GameData.network.util.world
         }
 
         /// <summary>
+        /// gets a random field from the map, where no character is standing on
+        /// </summary>
+        /// <remarks>
+        /// Be cautious when using this method, because it uses a while (true)-loop, so theoretically it is possible, that this method never return,
+        /// if there is no desert field on the map
+        /// </remarks>
+        /// <returns>a random map field, where no character is standing on</returns>
+        public MapField GetRandomFieldWithoutCharacter()
+        {
+            // as long, as the chosen map field has a character standing on
+
+            while (true)
+            {
+                // get a random map field on the map
+                Random random = new Random();
+                int randomX = random.Next(MAP_WIDTH);
+                int randomY = random.Next(MAP_HEIGHT);
+
+                MapField chosenField = GetMapFieldAtPosition(randomX, randomY);
+                if (!chosenField.IsCharacterStayingOnThisField && !chosenField.IsCityField)
+                {
+
+                    return chosenField;
+                }
+            }
+        }
+
+
+        public MapField GetRandomApproachableField()
+        {
+            // as long, as the chosen map field is approachable, choose a random field
+
+            while (true)
+            {
+                // get a random map field on the map
+                Random random = new Random();
+                int randomX = random.Next(MAP_WIDTH);
+                int randomY = random.Next(MAP_HEIGHT);
+
+                MapField chosenField = GetMapFieldAtPosition(randomX, randomY);
+                if (chosenField.IsApproachable && !chosenField.IsCharacterStayingOnThisField)
+                {
+                    return chosenField;
+                }
+            }
+        }
+
+        /// <summary>
         /// prints a map to the console for debugging purpose
         /// </summary>
         public void DrawMapToConsole()
@@ -253,12 +407,25 @@ namespace GameData.network.util.world
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    builder.Append(GetMapFieldAtPosition(x, y).TileType.ToString());
+                    if (GetMapFieldAtPosition(x, y).IsCharacterStayingOnThisField)
+                    {
+                        builder.Append("  C  ");
+                    }
+                    else
+                    {
+                        builder.Append(GetMapFieldAtPosition(x, y).tileType.ToString());
+                    }
 
                     if (GetMapFieldAtPosition(x, y).isInSandstorm)
                     {
                         builder.Append(" x ");
                     }
+
+                    if (GetMapFieldAtPosition(x, y).hasSpice)
+                    {
+                        builder.Append(" s ");
+                    }
+
                     builder.Append(", ");
                 }
                 builder.Append("\n");
@@ -266,7 +433,7 @@ namespace GameData.network.util.world
 
             builder.Append("\n");
 
-            Log.Debug(builder.ToString());
+            Log.Information(builder.ToString());
         }
 
         /// <summary>
@@ -280,7 +447,7 @@ namespace GameData.network.util.world
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    if (GetMapFieldAtPosition(x, y).HasSpice)
+                    if (GetMapFieldAtPosition(x, y).hasSpice)
                     {
                         spiceAmount++;
                     }
@@ -312,5 +479,156 @@ namespace GameData.network.util.world
             return characters;
         }
 
+        /// <summary>
+        /// calculates wheter a sandstorm is on the pathLine between two Points
+        /// </summary>
+        /// <param name="startField"> point 1 </param>
+        /// <param name="targetPosition"> point 2 </param>
+        /// <returns></returns>
+        public bool HasSandstormOnPath(MapField startField, Position targetPosition)
+        {
+            bool horicontal = startField.XCoordinate != targetPosition.x;
+            bool vertical = startField.ZCoordinate != targetPosition.y;
+
+            //first Point
+            float a = startField.XCoordinate;
+            float b = startField.ZCoordinate;
+            //second Point
+            float c = targetPosition.x;
+            float d = targetPosition.y;
+
+            //building f(x) = mx * x + tx and f(y) = my * y + ty
+            float mx = 0, my = 0, tx = 0, ty = 0;
+            if (horicontal)
+            {
+                mx = (d - b) / (c - a);//slope of f(x)
+                tx = b - mx * a;
+            }
+
+            if (vertical)
+            {
+                my = (c - a) / (d - b);//slope of f(y)
+                ty = a - my * b;
+            }
+
+            //check if sandstormFields get cut by the pathLine
+            foreach (MapField m in GetSandstormFieldsOnMap())
+            {
+                //checking if x is between a and c and if y is between b and d
+                if ((a <= c && a <= m.XCoordinate && m.XCoordinate <= c) || (c <= a && c <= m.XCoordinate && m.XCoordinate <= a))
+                {
+                    if ((b <= d && b <= m.ZCoordinate && m.ZCoordinate <= d) || (d <= b && d <= m.ZCoordinate && m.ZCoordinate <= b))
+                    {
+                        if (IsFieldCutByLine(m.XCoordinate, m.ZCoordinate, mx, tx, my, ty, horicontal, vertical))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// calculates wheter a 1x1-Square with ceter of (x,y) gets cut by a line given trough
+        /// f(x) = mx * x + tx and f(y) = my * y + ty
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="mx"></param>
+        /// <param name="tx"></param>
+        /// <param name="my"></param>
+        /// <param name="ty"></param>
+        /// <param name="horicontal"></param>
+        /// <param name="vertical"></param>
+        /// <returns></returns>
+        private bool IsFieldCutByLine(float x, float y, float mx, float tx, float my, float ty, bool horicontal, bool vertical)
+        {
+            int cuts = 0;
+
+            //checking all 4 edges of the square
+            if (horicontal)
+            {
+                //left edge
+                float yleft = (x - 0.5f) * mx + tx;//f(x)
+                if (yleft >= (y - 0.5f) && yleft < (y + 0.5f)) cuts++;//checking bounds
+
+                //right edge
+                float yright = (x + 0.5f) * mx + tx;//f(x)
+                if (yright > (y - 0.5f) && yright <= (y + 0.5f)) cuts++;//checking bounds
+            }
+
+            if (vertical)
+            {
+                //bottom edge
+                float xbottom = (y - 0.5f) * my + ty;//f(y)
+                if (xbottom > (x - 0.5f) && xbottom <= (x + 0.5f)) cuts++;//checking bounds
+
+                //top edge
+                float xtop = (y + 0.5f) * my + ty;//f(y)
+                if (xtop >= (x - 0.5f) && xtop < (x + 0.5f)) cuts++;//checking bounds
+            }
+
+            return cuts >= 2;
+        }
+
+        /// <summary>
+        /// returns all MapFields with isInSandstorm = true
+        /// </summary>
+        /// <returns></returns>
+        public List<MapField> GetSandstormFieldsOnMap()
+        {
+            List<MapField> sandstormFields = new List<MapField>();
+            for (int x = 0; x < MAP_WIDTH; x++)
+            {
+                for (int y = 0; y < MAP_HEIGHT; y++)
+                {
+                    if (fields[y, x].isInSandstorm)
+                    {
+                        sandstormFields.Add(fields[y, x]);
+                    }
+                }
+            }
+            return sandstormFields;
+        }
+
+        /// <summary>
+        /// returns all heliport fields from the map
+        /// </summary>
+        /// <returns>a list of all heliports on the map</returns>
+        public List<MapField> GetHeliPortsOnMap()
+        {
+            List<MapField> heliports = new List<MapField>();
+            for (int x = 0; x < MAP_WIDTH; x++)
+            {
+                for (int y = 0; y < MAP_HEIGHT; y++)
+                {
+                    if (GetMapFieldAtPosition(x, y).tileType.Equals(TileType.HELIPORT.ToString()))
+                    {
+                        heliports.Add(GetMapFieldAtPosition(x, y));
+                    }
+                }
+            }
+            return heliports;
+        }
+
+        /// <summary>
+        /// removes all characters from the map (used for tests!)
+        /// </summary>
+        public void RemoveCharactersFromMap()
+        {
+            for(int x = 0; x < MAP_WIDTH; x++)
+            {
+                for (int y = 0; y < MAP_HEIGHT; y++)
+                {
+                    MapField field = GetMapFieldAtPosition(x, y);
+                    if (field.IsCharacterStayingOnThisField)
+                    {
+                        field.DisplaceCharacter(field.Character);
+                    }
+                }
+            }
+        }
     }
 }

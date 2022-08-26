@@ -13,6 +13,7 @@ namespace GameData.network.util.enums
         FLAT_SAND,
         DUNE,
         PLATEAU,
-        MOUNTAINS
+        MOUNTAINS,
+        HELIPORT
     }
 }

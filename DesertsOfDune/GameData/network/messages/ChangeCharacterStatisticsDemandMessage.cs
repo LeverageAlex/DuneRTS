@@ -12,7 +12,7 @@ namespace GameData.network.messages
     public class ChangeCharacterStatisticsDemandMessage : TurnMessage
     {
         [JsonProperty]
-        private CharacterStatistics stats;
+        public CharacterStatistics stats { get; }
 
         /// <summary>
         /// Constructor of the Class CharacterStatisticsMessageDemand

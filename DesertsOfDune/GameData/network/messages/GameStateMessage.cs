@@ -11,9 +11,9 @@ namespace GameData.network.messages
     public class GameStateMessage : ClientServerMessage
     {
         [JsonProperty]
-        private int[] activelyPlayingIDs;
+        public int[] activelyPlayingIDs { get; }
         [JsonProperty]
-        private string[] history;
+        public string[] history { get; }
 
         /// <summary>
         /// Constructor of the class GameStateMessage

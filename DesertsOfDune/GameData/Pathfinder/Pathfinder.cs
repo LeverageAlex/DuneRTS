@@ -49,10 +49,21 @@ namespace GameData.Pathfinder
 
                 openSet.Remove(current);
 
-                foreach (MapField neighbor in graph.GetNeighborsOfVertex(current))
+                List<MapField> neighb = graph.GetNeighborsOfVertex(current);
+                Console.Write("neighb count: " + neighb.Count);
+                foreach (MapField neighbor in neighb)
                 {
-                    double tentativeGScore = gScore.GetValueOrDefault(current) + graph.GetWeigthOfEdge(current, neighbor);
-                    if (tentativeGScore < gScore.GetValueOrDefault(current))
+                    double tentativeGScore;
+                    if (gScore.GetValueOrDefault(current, double.MaxValue) == double.MaxValue || graph.GetWeigthOfEdge(current, neighbor) == double.MaxValue)
+                    {
+                        tentativeGScore = double.MaxValue;
+                    }
+                    else
+                    {
+                        tentativeGScore = gScore.GetValueOrDefault(current, double.MaxValue) + graph.GetWeigthOfEdge(current, neighbor);
+                    }
+
+                    if (tentativeGScore < gScore.GetValueOrDefault(neighbor, double.MaxValue))
                     {
                         cameFrom[neighbor] = current;
                         gScore[neighbor] = tentativeGScore;
@@ -65,7 +76,6 @@ namespace GameData.Pathfinder
                     }
                 }
             }
-
             return new Queue<MapField>();
         }
 
@@ -77,7 +87,7 @@ namespace GameData.Pathfinder
         /// <returns>the estimated cost to move from start node to target node</returns>
         private double H(MapField startNode, MapField targetNode)
         {
-            return Math.Sqrt((startNode.XCoordinate - targetNode.XCoordinate) ^ 2 + (startNode.ZCoordinate - targetNode.ZCoordinate) ^ 2);
+            return Math.Sqrt((startNode.XCoordinate - targetNode.XCoordinate) * (startNode.XCoordinate - targetNode.XCoordinate) + (startNode.ZCoordinate - targetNode.ZCoordinate) * (startNode.ZCoordinate - targetNode.ZCoordinate));
         }
 
         /// <summary>
@@ -89,15 +99,16 @@ namespace GameData.Pathfinder
         private MapField GetNodeWithLowestFScore(HashSet<MapField> openSet, Dictionary<MapField, double> fScore)
         {
             MapField fieldWithLowestScore = openSet.First();
-            double bestScore = fScore.GetValueOrDefault(fieldWithLowestScore);
+            double bestScore = fScore.GetValueOrDefault(fieldWithLowestScore, double.MaxValue);
 
             foreach (MapField field in openSet)
             {
-                if (fScore.GetValueOrDefault(field) < bestScore)
+                double localfscore = fScore.GetValueOrDefault(field, double.MaxValue);
+                if (localfscore < bestScore)
                 {
                     // new map field with a better fscore found
                     fieldWithLowestScore = field;
-                    bestScore = fScore.GetValueOrDefault(field);
+                    bestScore = localfscore;
                 }
             }
 

@@ -1,0 +1,13 @@
+Visual Studio (Community 2022) - https://visualstudio.microsoft.com/de/
+Visual Studio for Mac (2019 und 2022) - https://visualstudio.microsoft.com/de/
+.NET Core (Version 6.0) - https://dotnet.microsoft.com/en-us/download/dotnet/6.0
+.NET Core (Version 3.1) - https://dotnet.microsoft.com/en-us/download/dotnet/3.1
+
+SonarQube (Version 9.5) - https://www.sonarqube.org/downloads/
+
+Coverage Report-Generator - https://www.nuget.org/packages/dotnet-reportgenerator-globaltool
+
+Discord - https://discord.com
+GitLab - https://gitlab.informatik.uni-ulm.de
+Draw.io - https://app.diagrams.net
+Doxygen - https://doxygen.nl

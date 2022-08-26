@@ -1,0 +1,14 @@
+Bibliotheken in der Software:
+
+GameData - eigene Software 
+CommandLineParser - https://github.com/commandlineparser/commandline - MIT license
+Coverlet - https://github.com/coverlet-coverage/coverlet - MIT license
+Newtonsoft - https://www.newtonsoft.com/json - MIT license
+NUnit - https://nunit.org - MIT license
+NUnit3 Testadapter - https://docs.nunit.org/articles/vs-test-adapter/Index.html - MIT license
+Serilog - https://serilog.net - Apache-2.0
+Serilog Console - https://github.com/serilog/serilog-sinks-console -  Apache-2.0
+Serilog File - https://serilog.net - Apache-2.0
+Wegsacket-Sharp - https://github.com/sta/websocket-sharp - MIT license
+
+

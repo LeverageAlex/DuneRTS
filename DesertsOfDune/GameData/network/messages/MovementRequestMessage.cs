@@ -21,11 +21,9 @@ namespace GameData.network.messages
         /// <param name="clientID">the id of the client</param>
         /// <param name="characterID">the id of the character</param>
         /// <param name="path">the path the character requests to take</param>
-        public MovementRequestMessage(int clientID, int characterID, List<Position> path) : base(characterID, clientID, MessageType.MOVEMENT_REQUEST)
+        public MovementRequestMessage(int clientID, int characterID, Specs specs) : base(characterID, clientID, MessageType.MOVEMENT_REQUEST)
         {
-            Specs s = new Specs();
-            s.path = path;
-            this.specs = s;
+            this.specs = specs;
         }
     }
 }

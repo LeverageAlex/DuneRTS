@@ -35,19 +35,19 @@ namespace GameData.network.util.world.character
         /// <summary>
         /// creates a new nobel 
         /// </summary>
-        public Noble() : base(CharacterType.NOBLE, CharacterConfiguration.Noble.maxHP, CharacterConfiguration.Noble.maxMP, CharacterConfiguration.Noble.maxAP, CharacterConfiguration.Noble.damage, CharacterConfiguration.Noble.inventorySize, CharacterConfiguration.Noble.healingHP) {
+        /// <param name="name">the name of the nobel</param>
+        public Noble(string name) : base(CharacterType.NOBLE, CharacterConfiguration.Noble.maxHP, CharacterConfiguration.Noble.maxMP, CharacterConfiguration.Noble.maxAP, CharacterConfiguration.Noble.damage, CharacterConfiguration.Noble.inventorySize, CharacterConfiguration.Noble.healingHP, name) {
         }
 
         /// <summary>
         /// This method resets the data of the character
         /// </summary>
-        override
-        public void ResetData()
+        public override void ResetData()
         {
-            this.characterType = Enum.GetName(characterType.GetType(), characterType);
+            this.characterType = Enum.GetName(typeof(CharacterType), CharacterType.NOBLE);
             this.healthMax = CharacterConfiguration.Noble.maxHP;
             this.healthCurrent = CharacterConfiguration.Noble.maxHP;
-            this.healingHP = CharacterConfiguration.Noble.healingHP;
+            this.HealingHP = CharacterConfiguration.Noble.healingHP;
             this.MPmax = CharacterConfiguration.Noble.maxMP;
             this.MPcurrent = CharacterConfiguration.Noble.maxMP;
             this.APmax = CharacterConfiguration.Noble.maxAP;
@@ -64,31 +64,51 @@ namespace GameData.network.util.world.character
         /// </summary>
         /// <param name="target">the Nobel that is targeted by the atack</param>
         /// <returns>true, if action was successful</returns>
-        override
-        public bool Kanly(Character target)
+        public override bool Kanly(Character target)
         {
-            int dist = Math.Abs(target.CurrentMapfield.XCoordinate - currentMapfield.XCoordinate) + Math.Abs(target.CurrentMapfield.ZCoordinate - currentMapfield.ZCoordinate);
-            if (dist <= 2 && target.greatHouse != this.greatHouse && this.APcurrent == this.APmax)
+            if ("NOBLE".Equals(target.characterType))
             {
-                target.DecreaseHP(target.healthCurrent);
-                SpentAp(APmax);
-                return true;
+                int dist = Math.Abs(target.CurrentMapfield.XCoordinate - CurrentMapfield.XCoordinate) + Math.Abs(target.CurrentMapfield.ZCoordinate - CurrentMapfield.ZCoordinate);
+                if (dist <= 2 && target.greatHouse != this.greatHouse && this.APcurrent == this.APmax)
+                {
+                    Random random = new Random();
+                    double randomValue = random.NextDouble();
+                    if (PartyConfiguration.GetInstance().kanlySuccessProbability >= randomValue)
+                    {
+                        target.DecreaseHP(target.healthCurrent);
+                    }
+                    return true;
+                }
             }
             return false;
         }
 
         /// <summary>
+        /// information if the Great House Convention is already broken
+        /// </summary>
+        public static bool greatHouseConventionBroken { get; set; }
+
+        /// <summary>
         /// This method represents the action FamilyAtomic
         /// </summary>
-        /// <param name="target">The target Field for the Atack</param>
-        /// <returns>true, if the action was successful</returns>
-        override
-        public bool AtomicBomb(MapField target, Map map)
+        /// <param name="target">The target Field for the Attack</param>
+        /// <param name="map">the current map</param>
+        /// <param name="greatHouseConventionBroken">information if the greatHouseConvention was already broken before this atomic was thrown</param>
+        /// <param name="activePlayerGreatHouse">the great house of the player who did throw the atomic</param>
+        /// <param name="passivePlayerGreatHouse">the great house of the player who didn't throw the atomic</param>
+        /// <returns>characters hit by the atomic Bomb</returns>
+        public override List<Character> AtomicBomb(MapField target, Map map, bool greatHouseConventionBroken, GreatHouse activePlayerGreatHouse, GreatHouse passivePlayerGreatHouse)
         {
+            List<Character> charactersHit = new List<Character>();
             if(this.APcurrent == this.APmax && this.greatHouse.unusedAtomicBombs > 0)
             {
-                foreach (var mapfield in map.GetNeighborFields(target))
+                bool breakGreatHouseConvention = false;                 //information if this is the atomic bomb which breaks the greatHouseConvention
+                var mapFields = map.GetNeighborFields(target);
+                mapFields.Add(target);
+
+                foreach (var mapfield in mapFields)
                 {
+                    //change dune to flat sand and mountains to plateus
                     switch (Enum.Parse(typeof(TileType), mapfield.tileType))
                     {
                         case TileType.DUNE:
@@ -98,26 +118,67 @@ namespace GameData.network.util.world.character
                             mapfield.tileType = Enum.GetName(typeof(TileType), TileType.PLATEAU);
                             break;
                     }
+                    //check if the atomic hits characters
                     if (mapfield.IsCharacterStayingOnThisField)
                     {
+                        charactersHit.Add(mapfield.Character);
                         mapfield.Character.DecreaseHP(mapfield.Character.healthCurrent);
-                        if(mapfield.Character.greatHouse != this.greatHouse)
+                        //if the greatHouseConvention is not already broken this atomic breaks it
+                        if(!greatHouseConventionBroken)
                         {
-                            //TODO: implement supportive Characters from other Houses against the Great House who used the atomic bomb
-                            //greatConvention = false;
+                            Noble.greatHouseConventionBroken = true;
+                            breakGreatHouseConvention = true;
                         }
                     }
-                    //remove Sandworm
-                    if (mapfield.HasSpice)
+                    //if atomic hits spice remove it
+                    if (mapfield.hasSpice)
                     {
-                        mapfield.HasSpice = false;
+                        mapfield.hasSpice = false;
                     }
                 }
                 SpentAp(APmax);
                 this.greatHouse.unusedAtomicBombs--;
-                return true;
+                //get the great houses which are not used by any player
+                if (breakGreatHouseConvention)
+                {
+                    this.Shunned = true;
+                    List<GreatHouse> remainingGreatHouses = new List<GreatHouse>();
+                    if (activePlayerGreatHouse.houseName != "CORRINO" && passivePlayerGreatHouse.houseName != "CORRINO")
+                    {
+                        remainingGreatHouses.Add(new Corrino());
+                    }
+                    if (activePlayerGreatHouse.houseName != "ATREIDES" && passivePlayerGreatHouse.houseName != "ATREIDES")
+                    {
+                        remainingGreatHouses.Add(new Atreides());
+                    }
+                    if (activePlayerGreatHouse.houseName != "HARKONNEN" && passivePlayerGreatHouse.houseName != "HARKONNEN")
+                    {
+                        remainingGreatHouses.Add(new Harkonnen());
+                    }
+                    if (activePlayerGreatHouse.houseName != "ORDOS" && passivePlayerGreatHouse.houseName != "ORDOS")
+                    {
+                        remainingGreatHouses.Add(new Ordos());
+                    }
+                    if (activePlayerGreatHouse.houseName != "RICHESE" && passivePlayerGreatHouse.houseName != "RICHESE")
+                    {
+                        remainingGreatHouses.Add(new Richese());
+                    }
+                    if (activePlayerGreatHouse.houseName != "VERNIUS" && passivePlayerGreatHouse.houseName != "VERNIUS")
+                    {
+                        remainingGreatHouses.Add(new Vernius());
+                    }
+                    //select a random character from each unused great house
+                    Random rnd = new Random();
+                    CharactersToAddAfterAtomics = new List<Character>();
+                    foreach (var greatHouse in remainingGreatHouses)
+                    {
+                        int randomCharacterIndex = rnd.Next(greatHouse.Characters.Count);
+                        
+                        CharactersToAddAfterAtomics.Add(greatHouse.Characters[randomCharacterIndex]);
+                    }
+                }
             }
-            return false;
+            return charactersHit;
         }
     }
 }

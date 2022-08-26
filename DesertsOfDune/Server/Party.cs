@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Server.Clients;
+using GameData.Clients;
 using GameData.gameObjects;
-using Server.ClientManagement.Clients;
+using GameData.ClientManagement.Clients;
 using Serilog;
 using System.Runtime.CompilerServices;
 using GameData.network.util.world;
@@ -11,17 +11,19 @@ using System.Runtime.ExceptionServices;
 using System.Linq;
 using WebSocketSharp;
 using CommandLine;
-using Server.Configuration;
+using GameData.Configuration;
 using GameData.network.util.world.mapField;
+using GameData.network.util.world.character;
+using System.Threading;
 
-namespace Server
+namespace GameData
 {
     /// <summary>
     /// Represents a "Deserts of Dune"-Party, which is used for playing the game, so executing the game logic as well as the game start and ending.
     /// </summary>
     /// <remarks>
     /// Therefore this class stores all information about the party (identifier of this party) and the connected clients to this party.
-    /// If two players are connected, the party can be prepared and started with this class. Afterwards it executes all game phases via the <see cref="RoundHandler"/>.
+    /// If two players are connected, the party can be prepared and started with this class. Afterwards it executes all game phases via the <see cref="GameData.gameObjects.RoundHandler"/>.
     /// Furthermore this class regularly check for the winning condition and can end the party or launch the end game phase.
     /// </remarks>
     /// TODO: do not work with singleton and references on both sides (message controller)
@@ -38,17 +40,19 @@ namespace Server
         /// <summary>
         /// list of all players connected to this party
         /// </summary>
-        private readonly List<Client> connectedClients;
+        public List<Client> ConnectedClients { get; private set; }
 
         /// <summary>
         /// the round handler for this party, which execute the rounds in the correct order and handles the user input
         /// </summary>
-        private readonly RoundHandler roundHandler;
+        public RoundHandler RoundHandler { get; private set; }
+
+        public Thread roundHandlerThread { get; private set; }
 
         /// <summary>
         /// the map of this game / party
         /// </summary>
-        public readonly Map map;
+        public Map map { get; private set; }
 
         /// <summary>
         /// hides the constructor for implementing the singleton pattern and create all necessary instances
@@ -59,11 +63,28 @@ namespace Server
         /// </remarks>
         private Party()
         {
-            connectedClients = new List<Client>();
+            ConnectedClients = new List<Client>();
             map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
-            roundHandler = new RoundHandler(PartyConfiguration.GetInstance().numbOfRounds, PartyConfiguration.GetInstance().spiceMinimum, map);
+            RoundHandler = new RoundHandler(PartyConfiguration.GetInstance().numbOfRounds, PartyConfiguration.GetInstance().spiceMinimum, map);
+            Noble.greatHouseConventionBroken = false;
 
             Log.Debug("A new party was created!");
+        }
+
+        /// <summary>
+        /// resets a party
+        /// </summary>
+        public void Reset()
+        {
+            ConnectedClients = new List<Client>();
+            map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
+            RoundHandler = new RoundHandler(PartyConfiguration.GetInstance().numbOfRounds, PartyConfiguration.GetInstance().spiceMinimum, map);
+            Noble.greatHouseConventionBroken = false;
+        }
+
+        public void ResetClients()
+        {
+            ConnectedClients = new List<Client>();
         }
 
         /// <summary>
@@ -85,7 +106,7 @@ namespace Server
         /// <param name="client"></param>
         public void AddClient(Client client)
         {
-            connectedClients.Add(client);
+            ConnectedClients.Add(client);
         }
 
         /// <summary>
@@ -94,7 +115,7 @@ namespace Server
         /// <returns>true, if there are already two players registred</returns>
         public bool AreTwoPlayersRegistred()
         {
-            return connectedClients.FindAll(client => client.IsActivePlayer).Count == 2;
+            return ConnectedClients.FindAll(client => client.IsActivePlayer).Count == 2;
         }
 
         /// <summary>
@@ -104,7 +125,7 @@ namespace Server
         public List<Player> GetActivePlayers()
         {
             List<Player> foundActiveClients = new List<Player>();
-            foreach (var activePlayer in connectedClients)
+            foreach (var activePlayer in ConnectedClients)
             {
                 if (activePlayer.IsActivePlayer)
                 {
@@ -125,14 +146,15 @@ namespace Server
         /// </summary>
         public void Start()
         {
-            Log.Debug("Matching the cities to the players...");
-            MatchGreatHouseToCity();
+
 
             Log.Debug("Place the characters of each player around it's city...");
             PlaceCharactersAroundCity();
 
             Log.Information("The party was prepared, so both player chose their Greathouse. The party now will start ... ");
-            roundHandler.NextRound();
+            roundHandlerThread = new Thread(RoundHandler.NextRound);
+            roundHandlerThread.Start();
+          //  RoundHandler.NextRound();
             Log.Debug("Triggered first round by round handler");
         }
 
@@ -141,6 +163,14 @@ namespace Server
         /// </summary>
         public void PrepareGame()
         {
+            Log.Debug("Matching the cities to the players...");
+            MatchGreatHouseToCity();
+
+            // cities were matched to the characters, so send the game config message to the clients
+            messageController.DoSendGameConfig();
+
+
+            Log.Information("Preparing Game");
             // get two disjoint sets of each two great houses and offer them to the client
             GreatHouseType[] firstSet;
             GreatHouseType[] secondSet;
@@ -178,7 +208,7 @@ namespace Server
         /// <returns>the reference to the client or null, if the client was not found</returns>
         public Client GetClientBySessionID(string sessionID)
         {
-            return connectedClients.Find(client => client.SessionID == sessionID);
+            return ConnectedClients.Find(client => client.SessionID == sessionID);
         }
 
 
@@ -206,6 +236,75 @@ namespace Server
         }
 
         /// <summary>
+        /// gets a player from the list of all players, whose character has the given character id
+        /// </summary>
+        /// <param name="characterID">the id of the character, whose matched player need to be determined</param>
+        /// <returns>the player, who has the character with the given id or null, if the character do not belong to any player</returns>
+        public Player GetPlayerByCharacterID(int characterID)
+        {
+            Player player = null; 
+            foreach (Player activePlayer in GetActivePlayers())
+            {
+                Character foundCharacter = activePlayer.UsedGreatHouse.Characters.Find((character) => character.CharacterId == characterID);
+                if (foundCharacter != null)
+                {
+                    return activePlayer;
+                }
+            }
+            return player;
+        }
+
+
+        public List<Character> GetAllCharacters()
+        {
+            List<Character> list = new List<Character>();
+
+            foreach(Player activePlayer in GetActivePlayers())
+            {
+                list = list.Concat(activePlayer.UsedGreatHouse.Characters).ToList<Character>();
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// Gets a player by its clientID.
+        /// </summary>
+        /// <param name="clientID">ID of the client</param>
+        /// <returns></returns>
+        public Player GetPlayerByClientID(int clientID)
+        {
+            Player player = null;
+            foreach (Player activePlayer in GetActivePlayers())
+            {
+                if(activePlayer.ClientID == clientID)
+                {
+                    player = activePlayer;
+                }
+            }
+            return player;
+        }
+
+
+        /// <summary>
+        /// Gets a player by its clientID.
+        /// </summary>
+        /// <param name="clientID">ID of the client</param>
+        /// <returns></returns>
+        public string GetSessionIDbyClientID(int clientID)
+        {
+            Client client = null;
+            foreach (Client activePlayer in GetConnectedClients())
+            {
+                if (activePlayer.ClientID == clientID)
+                {
+                    client = activePlayer;
+                    break;
+                }
+            }
+            return client.SessionID;
+        }
+
+        /// <summary>
         /// decide for each city, which player will use this city and match the city to the player
         /// </summary>
         public void MatchGreatHouseToCity()
@@ -218,12 +317,17 @@ namespace Server
             if (random.NextDouble() < 0.5)
             {
                 players[0].City = cities[0];
+                players[0].City.clientID = players[0].ClientID;
                 players[1].City = cities[1];
+                players[1].City.clientID = players[1].ClientID;
+
             }
             else
             {
                 players[0].City = cities[1];
+                players[0].City.clientID = players[0].ClientID;
                 players[1].City = cities[0];
+                players[1].City.clientID = players[1].ClientID;
             }
 
         }
@@ -247,6 +351,7 @@ namespace Server
                     fieldForCharacter.PlaceCharacter(character);
                     character.CurrentMapfield = fieldForCharacter;
 
+                    messageController.DoSpawnCharacterDemand(character);
                     // neighborFieldsOfCity.Remove(fieldForCharacter);
                 }
                 
@@ -261,7 +366,7 @@ namespace Server
 
         public List<Client> GetConnectedClients()
         {
-            return this.connectedClients;
+            return this.ConnectedClients;
         }
     }
 }

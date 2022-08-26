@@ -27,28 +27,28 @@ namespace GameData.network.util.world.character
         /// <param name="inventoryUsed">the usedup InventorySpace of the Character</param>
         /// <param name="killedBySandworm">true, if the Character was killed by the sandworm</param>
         /// <param name="isLoud">true, if the character is loud</param>
-        public BeneGesserit(int healthMax, int healthCurrent, int healingHP, int MPmax, int MPcurrent, int APmax, int APcurrent, int attackDamage, int inventorySize, int inventoryUsed, bool killedBySandworm, bool isLoud) : base(CharacterType.BENEGESSERIT, healthMax, healthCurrent, healingHP, MPmax, MPcurrent, APmax, APcurrent, attackDamage, inventorySize, inventoryUsed, killedBySandworm, isLoud)
+        public BeneGesserit(int healthMax, int healthCurrent, int healingHP, int MPmax, int MPcurrent, int APmax, int APcurrent, int attackDamage, int inventorySize, int inventoryUsed, bool killedBySandworm, bool isLoud) : base(CharacterType.BENE_GESSERIT, healthMax, healthCurrent, healingHP, MPmax, MPcurrent, APmax, APcurrent, attackDamage, inventorySize, inventoryUsed, killedBySandworm, isLoud)
         {
 
         }
 
         /// <summary>
-        /// creates a new bene gesserit 
+        /// creates a new bene gesserit
         /// </summary>
-        public BeneGesserit() : base(CharacterType.BENEGESSERIT, CharacterConfiguration.BeneGesserit.maxHP, CharacterConfiguration.BeneGesserit.maxMP, CharacterConfiguration.BeneGesserit.maxAP, CharacterConfiguration.BeneGesserit.damage, CharacterConfiguration.BeneGesserit.inventorySize, CharacterConfiguration.BeneGesserit.healingHP)
+        /// <param name="name">the name of the bene gesserit</param>
+        public BeneGesserit(string name) : base(CharacterType.BENE_GESSERIT, CharacterConfiguration.BeneGesserit.maxHP, CharacterConfiguration.BeneGesserit.maxMP, CharacterConfiguration.BeneGesserit.maxAP, CharacterConfiguration.BeneGesserit.damage, CharacterConfiguration.BeneGesserit.inventorySize, CharacterConfiguration.BeneGesserit.healingHP, name)
         {
         }
 
         /// <summary>
         /// This method resets the data of the character
         /// </summary>
-        override
-        public void ResetData()
+        public override void ResetData()
         {
-            this.characterType = Enum.GetName(characterType.GetType(), characterType);
+            this.characterType = Enum.GetName(typeof(CharacterType), CharacterType.BENE_GESSERIT);
             this.healthMax = CharacterConfiguration.BeneGesserit.maxHP;
             this.healthCurrent = CharacterConfiguration.BeneGesserit.maxHP;
-            this.healingHP = CharacterConfiguration.BeneGesserit.healingHP;
+            this.HealingHP = CharacterConfiguration.BeneGesserit.healingHP;
             this.MPmax = CharacterConfiguration.BeneGesserit.maxMP;
             this.MPcurrent = CharacterConfiguration.BeneGesserit.maxMP;
             this.APmax = CharacterConfiguration.BeneGesserit.maxAP;
@@ -68,10 +68,10 @@ namespace GameData.network.util.world.character
         override
         public bool Voice(Character target)
         {
-            int dist = Math.Abs(target.CurrentMapfield.XCoordinate - currentMapfield.XCoordinate) + Math.Abs(target.CurrentMapfield.ZCoordinate - currentMapfield.ZCoordinate);
+            int dist = Math.Abs(target.CurrentMapfield.XCoordinate - CurrentMapfield.XCoordinate) + Math.Abs(target.CurrentMapfield.ZCoordinate - CurrentMapfield.ZCoordinate);
             int inventoryFree = this.inventorySize - this.inventoryUsed;
             int spiceGift = 0;
-            if (dist <= 2 && target.greatHouse != this.greatHouse 
+            if (dist <= 2 
                 && this.APcurrent == this.APmax
                 && inventoryFree > 0
                 && target.inventoryUsed > 0)

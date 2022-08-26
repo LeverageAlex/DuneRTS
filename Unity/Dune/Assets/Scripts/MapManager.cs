@@ -26,7 +26,7 @@ public class MapManager : MonoBehaviour
 
     [Header("Nodes:")]
     public Node[] nodes;
-    public GameObject cityNodePrefab, duneNodePrefab, FlatDuneNodePrefab, FlatRockNodePrefab, rockNodePrefab;
+    public GameObject cityNodePrefab, duneNodePrefab, FlatDuneNodePrefab, FlatRockNodePrefab, rockNodePrefab, heliNodePrefab;
 
     
     [Header("Spice:")]
@@ -160,6 +160,11 @@ public class MapManager : MonoBehaviour
         return enemiesOnBoard[node.Z + node.X * GridSizeZ];
     }
 
+    public Character GetCharOnNode(int x, int z)
+    {
+        return (Character)(enemiesOnBoard[z + x * GridSizeZ]).GetComponent(typeof(Character));
+    }
+
     public void ResetNodeColors()
     {
         foreach (Node node in nodes)
@@ -171,7 +176,10 @@ public class MapManager : MonoBehaviour
 
     public void SpawnSpiceCrumOn(int x, float y, int z)
     {
-        if (spiceCrumbs[z, x] != null) return;
+        if (spiceCrumbs[z, x] != null)
+        {
+            return;
+        }
         GameObject spice = Instantiate(spicePrefab, new Vector3(x, y, z), Quaternion.identity);
         spiceCrumbs[z, x] = spice;
 
@@ -206,7 +214,7 @@ public class MapManager : MonoBehaviour
     /**
      * Updates given Node with the given values
      */
-    public void UpdateBoard(int x, int z, bool spiceOnNode, NodeTypeEnum nodeEnum, bool isInStorm)
+    public void UpdateBoard(int x, int z, NodeTypeEnum nodeEnum, bool isInStorm)
     {
         Node currentNode = getNodeFromPos(x, z);
         if (currentNode == null || currentNode.nodeTypeEnum != nodeEnum)
@@ -223,17 +231,10 @@ public class MapManager : MonoBehaviour
                 case NodeTypeEnum.ROCK: nodePrefab = rockNodePrefab; break;
                 case NodeTypeEnum.FLATROCK: nodePrefab = FlatRockNodePrefab; break;
                 case NodeTypeEnum.CITY: nodePrefab = cityNodePrefab; break;
+                case NodeTypeEnum.HELIPORT: nodePrefab = heliNodePrefab; break;
             }
             currentNode = (Node)Instantiate(nodePrefab, new Vector3(x, 0, z), Quaternion.identity).GetComponent(typeof(Node));
             nodes[z + GridSizeZ * x] = currentNode;
-        }
-        if(spiceOnNode)
-        {
-            SpawnSpiceCrumOn(x, currentNode.charHeightOffset, z);
-        }
-        else
-        {
-            CollectSpice(x, z);
         }
         currentNode.SetSandstorm(isInStorm);
     }
@@ -250,6 +251,38 @@ public class MapManager : MonoBehaviour
         enemiesOnBoard = new GameObject[nodes.Length];
     }
 
+    /// <summary>
+    /// Whipes whole local map. Only needed if GameState is totaly reloaded
+    /// </summary>
+    public void ClearOldMapData()
+    {
+        if (nodes != null)
+        {
+            for (int i = 0; i < nodes.Length; i++)
+            {
+                Destroy(nodes[i].gameObject);
+                if (enemiesOnBoard[i] != null)
+                {
+                    Destroy(enemiesOnBoard[i]);
+                }
+            }
+
+            for (int x = 0; x < spiceCrumbs.GetLength(0); x++)
+            {
+                for (int z = 0; z < spiceCrumbs.GetLength(1); z++)
+                {
+                    if (spiceCrumbs[z, x] != null)
+                    {
+                        Destroy(spiceCrumbs[z, x]);
+                    }
+                }
+            }
+
+            CharacterMgr.instance.ClearCharDictionary();
+        }
+
+    }
+
     public void SetStormEye(int x, int z)
     {
         if (SandstormEffect == null || ((int)Mathf.Round(SandstormEffect.transform.position.x)) != x || ((int)Mathf.Round(SandstormEffect.transform.position.z)) != z)
@@ -257,6 +290,11 @@ public class MapManager : MonoBehaviour
             Destroy(SandstormEffect);
             SandstormEffect = Instantiate(SandstormEffectPrefab, new Vector3(x, 0.2f, z), Quaternion.identity);
         }
+    }
+
+    public Vector3 GetStormEyePosition()
+    {
+            return SandstormEffect.transform.position;
     }
 
     /**
@@ -277,4 +315,23 @@ public class MapManager : MonoBehaviour
     public int GridSizeX { get { return _gridSizeX; } }
     public int GridSizeZ { get { return _gridSizeZ; } }
 
+    public NodeTypeEnum StringtoNodeEnum(string nodeEnum)
+    {
+        switch(nodeEnum)
+        {
+            case "CITY":
+                return NodeTypeEnum.CITY;
+            case "MOUNTAINS":
+                return NodeTypeEnum.ROCK;
+            case "PLATEAU":
+                return NodeTypeEnum.FLATROCK;
+            case "FLAT_SAND":
+                return NodeTypeEnum.FLATDUNE;
+            case "DUNE":
+         //   default:
+                return NodeTypeEnum.DUNE;
+            default:
+               return NodeTypeEnum.HELIPORT;
+        }
+    }
 }

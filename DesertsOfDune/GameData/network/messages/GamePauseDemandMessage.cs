@@ -11,16 +11,16 @@ namespace GameData.network.messages
     public class GamePauseDemandMessage : Message
     {
         [JsonProperty]
-        private int requestedByClientID;
+        public int requestedByClientID { get; }
         [JsonProperty]
-        private bool pause;
+        public bool pause { get; }
 
         /// <summary>
         /// Constructor of the class PauseGameMessage
         /// </summary>
         /// <param name="requestedByClientID">the client id</param>
         /// <param name="pause">true if the game is paused.</param>
-        public GamePauseDemandMessage(int requestedByClientID, bool pause) : base("v1", MessageType.GAME_PAUSE_DEMAND)
+        public GamePauseDemandMessage(int requestedByClientID, bool pause) : base("1.1", MessageType.GAME_PAUSE_DEMAND)
         {
             this.pause = pause;
             this.requestedByClientID = requestedByClientID;

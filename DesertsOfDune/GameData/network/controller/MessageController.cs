@@ -80,6 +80,8 @@ namespace GameData.network.controller
 
         public abstract void OnJoinMessage(JoinMessage msg, string sessionID);
 
+        public abstract void OnJoinAccepted(JoinAcceptedMessage msg);
+
         public abstract void OnRejoinMessage(RejoinMessage msg, string sessionID);
 
         public abstract void OnHouseRequestMessage(HouseRequestMessage msg, string sessionID);
@@ -103,7 +105,57 @@ namespace GameData.network.controller
 
         public abstract void OnGameStateRequestMessage(GameStateRequestMessage msg);
 
-        public abstract void OnPauseGameRequestMessage(PauseGameRequestMessage msg);
+        public abstract void OnHeliDemandMessage(HeliDemandMessage msg);
+
+     //   public abstract void OnPauseGameRequestMessage(PauseGameRequestMessage msg);
+
+        public abstract void DoSendJoin(string clientName);
+
+        public abstract void OnJoinAcceptedMessage(JoinAcceptedMessage joinAcceptedMessage);
+
+        public abstract void OnGameConfigMessage(GameConfigMessage gameConfigMessage);
+
+        public abstract void OnMapChangeDemandMessage(MapChangeDemandMessage mapChangeDemandMessage);
+
+        public abstract void OnStrikeMessage(StrikeMessage strikeMessage);
+
+        public abstract void OnGameEndMessage(GameEndMessage gameEndMessage);
+
+        public abstract void OnGameStateMessage(GameStateMessage gameStateMessage);
+
+        public abstract void OnPauseGameDemandMessage(GamePauseDemandMessage gamePauseDemandMessage);
+
+        public abstract void OnPauseGameRequestMessage(PauseGameRequestMessage msg, string sessionID);
+
+        public abstract void OnHouseOfferMessage(HouseOfferMessage houseOfferMessage);
+
+        public abstract void OnHouseAcknowledgementMessage(HouseAcknowledgementMessage houseAcknowledgementMessage);
+
+        public abstract void OnTurnDemandMessage(TurnDemandMessage turnDemandMessage);
+
+        public abstract void OnMovementDemandMessage(MovementDemandMessage movementDemandMessage);
+
+        public abstract void OnActionDemandMessage(ActionDemandMessage actionDemandMessage);
+
+        public abstract void OnChangeCharacterStatisticsDemandMessage(ChangeCharacterStatisticsDemandMessage changeCharacterStatisticsDemandMessage);
+
+        public abstract void OnSpawnCharacterDemandMessage(SpawnCharacterDemandMessage spawnCharacterDemandMessage);
+
+        public abstract void OnChangePlayerSpiceDemandMessage(ChangePlayerSpiceDemandMessage changePlayerSpiceDemandMessage);
+
+        public abstract void OnSandwormSpawnDemandMessage(SandwormSpawnDemandMessage sandwormSpawnDemandMessage);
+
+        public abstract void OnSandwormMoveDemandMessage(SandwormMoveDemandMessage sandwormMoveMessage);
+
+        public abstract void OnSandwormDespawnMessage(SandwormDespawnDemandMessage sandwormDespawnDemandMessage);
+
+        public abstract void OnUnpauseOfferDemand(UnpauseGameOfferMessage unpauseGameOfferMessage);
+
+        public abstract void OnEndGameMessage(EndGameMessage endGameMessage);
+
+        public abstract void OnTransferDemandMessage(TransferDemandMessage transferDemandMessage);
+
+        public abstract void OnAtomicsUpdateDemandMessage(AtomicsUpdateDemandMessage atomicUpdateDemandMessage);
 
 
         public abstract void DoAcceptJoin(string clientSecret, int clientID, string sessionID);
@@ -120,7 +172,14 @@ namespace GameData.network.controller
 
         public abstract void DoSendHouseOffer(int clientID, GreatHouseType[] houses);
 
+        public virtual void DoSendHouseRequest(string houseName)
+        {
+
+        }
+
         public abstract void DoSendHouseAck(int clientID, string houseName);
+
+        public abstract void OnHeliRequestMessage(HeliRequestMessage heliRequestMessage);
 
         public abstract void DoSendTurnDemand(int clientID, int characterID);
 
@@ -132,7 +191,7 @@ namespace GameData.network.controller
 
         public abstract void DoSendChangeCharacterStatsDemand(int clientID, int characterID, CharacterStatistics stats);
 
-        public abstract void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons, MapField[,] newMap);
+        public abstract void DoSendMapChangeDemand(MapChangeReasons mapChangeReasons);
 
         public abstract void DoSendAtomicsUpdateDemand(int clientID, bool shunned, int atomicsLeft);
 
@@ -157,7 +216,7 @@ namespace GameData.network.controller
         /// <param name="winnerID">ID of the winner of the party</param>
         /// <param name="loserID">ID of the loser of the party</param>
         /// <param name="stats">Repräsentation of the statistics of the Game</param>
-        public abstract void DoGameEndMessage(int winnerID, int loserID, Statistics stats);
+        public abstract void DoGameEndMessage(int winnerID, int loserID, Statistics[] stats);
 
         public abstract void DoSendGameState(int clientID, int[] activlyPlayingIDs, String[] history);
 
@@ -170,6 +229,31 @@ namespace GameData.network.controller
 
         public abstract void DoGamePauseDemand(int requestedByClientID, bool pause);
 
-        public abstract void OnUnpauseGameOffer(int requestedByClientID);
+        public abstract void OnUnpauseGameOffer(int requestdByClient);
+
+        public virtual void OnErrorMessage(ErrorMessage msg)
+        {
+            // Method intentionally left empty.
+        }
+
+        public virtual void DoSendEndTurnRequest(int characterId)
+        {
+
+        }
+
+        public virtual void DoSendMovementRequest(int characterId, Position[] path)
+        {
+
+        }
+
+        public virtual void DoSendActionRequest(int characterId, ActionType actionType, Position target)
+        {
+
+        }
+
+        public virtual void DoSendTransferRequest(int characterId, int characterId2, int amount)
+        {
+
+        }
     }
 }

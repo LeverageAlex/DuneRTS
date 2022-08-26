@@ -4,11 +4,11 @@ using System.Text;
 using GameData.network.util.enums;
 using GameData.network.util.world;
 using GameData.network.util.world.mapField;
-using Server.ClientManagement.Clients;
+using GameData.ClientManagement.Clients;
 
-namespace Server.Clients
+namespace GameData.Clients
 {
-    abstract public class Player : Client
+    public abstract class Player : Client
     {
 
         /// <summary>
@@ -27,9 +27,10 @@ namespace Server.Clients
 
         public City City { get; set; }
 
-        protected Player(string clientName, string sessionID) : base(clientName, true, sessionID)
+        protected Player(string clientName, string sessionID, bool isAI) : base(clientName, true, sessionID, isAI)
         {
-            this.AmountOfStrikes = 0;          
+            this.AmountOfStrikes = 0;
+            statistics = new Statistics();
         }
 
         /// <summary>

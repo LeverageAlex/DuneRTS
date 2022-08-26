@@ -4,10 +4,10 @@ using System.Text;
 using GameData.network.util.world;
 using GameData.gameObjects;
 using GameData.network.util.world.mapField;
-using Server.roundHandler;
-using Server.Configuration;
-using Server;
-using Server.Clients;
+using GameData.roundHandler;
+using GameData.Configuration;
+using GameData;
+using GameData.Clients;
 
 namespace GameData.server.roundHandler
 {
@@ -74,7 +74,7 @@ namespace GameData.server.roundHandler
         /// </summary>
         private void CloneCharacter(Character character, City city)
         {
-            MapField spawnField = this._map.GetRandomFreeApproachableNeighborField(city);
+            MapField spawnField = _map.GetRandomFreeApproachableNeighborField(city);
 
             if (spawnField != null)
             {
@@ -86,6 +86,9 @@ namespace GameData.server.roundHandler
             }
         }
 
+        /// <summary>
+        /// This method executes the ClonePhase
+        /// </summary>
         public void Execute()
         {
             // get both active player

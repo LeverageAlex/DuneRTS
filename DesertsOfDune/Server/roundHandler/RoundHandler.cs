@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Timers;
 using GameData.network.messages;
 using GameData.network.util.world;
 using GameData.server.roundHandler;
 using Serilog;
-using Server;
-using Server.Clients;
-using Server.Configuration;
-using Server.roundHandler.duneMovementHandler;
-using Server.roundHandler.endOfGame;
+using GameData;
+using GameData.Clients;
+using GameData.Configuration;
+using GameData.roundHandler;
+using GameData.roundHandler.duneMovementHandler;
+using GameData.roundHandler.endOfGame;
+using GameData.network.util.world.character;
 
 namespace GameData.gameObjects
 {
@@ -22,7 +27,7 @@ namespace GameData.gameObjects
         /// <summary>
         /// the counter, which state the current round number
         /// </summary>
-        private int _roundCounter;
+        public int _roundCounter { get; private set; }
 
         /// <summary>
         /// the maximum number of rounds, that should be played.
@@ -35,7 +40,7 @@ namespace GameData.gameObjects
         /// </summary>
         private OverLengthMechanism _overLengthMechanism;
 
-        private bool IsOverlengthMechanismActive = false;
+        public bool IsOverlengthMechanismActive = false;
 
         /// <summary>
         /// checker, which determines the winner of the party after the overlength mechanism
@@ -51,7 +56,7 @@ namespace GameData.gameObjects
         /// game phases, handled only by the server (dune movement, sandstorm, sandworm, cloning, overlength mechanism)
         /// </summary>
         private readonly DuneMovementPhase _duneMovementPhase;
-        private readonly SandstormPhase _sandstormPhase;
+        public SandstormPhase SandstormPhase { get; }
         private readonly SandwormPhase _sandwormPhase;
         private readonly ClonePhase _clonePhase;
 
@@ -77,6 +82,27 @@ namespace GameData.gameObjects
         private bool partyFinished = false;
 
         /// <summary>
+        /// states, whether the party (so the current round) is currently paused or not
+        /// </summary>
+        /// <remarks>
+        /// This is necessary to know, because a paused game cannot be paused again and a game can only
+        /// be resumed, if it is currently paused
+        /// </remarks>
+        public bool IsPartyPaused { get; private set; }
+
+        /// <summary>
+        /// contains the current pause request or is null, if there is no request / active pause
+        /// </summary>
+        public PauseRequest PauseRequest { get; private set; }
+
+        private System.Timers.Timer maximalPauseOverTimer;
+
+        /// <summary>
+        /// false at the beginning; needed to check if the great house convention got broken in the last round
+        /// </summary>
+        private bool GreatHouseConventionBroken = false;
+
+        /// <summary>
         /// Constructor of the class RoundHandler
         /// </summary>
         /// <param name="numbOfRounds">the maximum number of rounds specified in the pary config</param>
@@ -92,11 +118,13 @@ namespace GameData.gameObjects
 
             // initialize game phases
             this._duneMovementPhase = new DuneMovementPhase(map);
-            this._sandstormPhase = new SandstormPhase(map);
+            this.SandstormPhase = new SandstormPhase(map);
             this._sandwormPhase = new SandwormPhase(map);
             this._clonePhase = new ClonePhase(map, PartyConfiguration.GetInstance().cloneProbability);
+            this._spiceBlow = new SpiceBlow(map);
+            this.characterTraitPhase = new CharacterTraitPhase();
 
-
+            SetMaximalPauseOverTimer();
         }
 
         /// <summary>
@@ -104,6 +132,12 @@ namespace GameData.gameObjects
         /// </summary>
         public void NextRound()
         {
+            //check if greatHouseConvention is broken and spawn characters if needed
+            if (GreatHouseConventionBroken != Noble.greatHouseConventionBroken)
+            {
+                GreatHouseConventionBroken = true;
+                AddCharactersFromAtomic();
+            }
             // check, whether a spice blow is necessary
             if (_spiceBlow.IsSpiceBlowNecessary(this._spiceMinimum, this._map.GetAmountOfSpiceOnMap()))
             {
@@ -112,10 +146,12 @@ namespace GameData.gameObjects
             }
 
             // check, whether the round limit is exceeded
-            if (IsLastRoundOver())
+            if (!IsOverlengthMechanismActive && IsLastRoundOver ())
             {
                 _overLengthMechanism = new OverLengthMechanism(this._map);
                 Log.Debug("The last round is over, so start the overlength mechanism.");
+                
+                NextRound();
             }
             else
             {
@@ -123,7 +159,7 @@ namespace GameData.gameObjects
                 _duneMovementPhase.Execute();
                 Log.Debug("Executed the dune movement phase.");
 
-                _sandstormPhase.Execute();
+                SandstormPhase.Execute();
                 Log.Debug("Executed the sandstorm phase.");
 
                 if (IsOverlengthMechanismActive)
@@ -136,8 +172,10 @@ namespace GameData.gameObjects
                         Player winner = this._victoryChecker.GetWinnerByCheckWinnerVictoryMetric();
                         int winnerID = winner.ClientID;
                         int loserID = Party.GetInstance().GetActivePlayers().Find(c => c.ClientID != winner.ClientID).ClientID;
-                        Party.GetInstance().messageController.DoGameEndMessage(winnerID, loserID, new Statistics());
+                        Statistics[] statistics = { Party.GetInstance().GetPlayerByClientID(winnerID).statistics, Party.GetInstance().GetPlayerByClientID(loserID).statistics };
+                        Party.GetInstance().messageController.DoGameEndMessage(winnerID, loserID, statistics);
 
+                        RestartServer();
                         Log.Information("The overlength mechanism was finished, so the game is over! \n The player " + winner.ClientName + " won the game!");
                     }
                 }
@@ -149,17 +187,29 @@ namespace GameData.gameObjects
                     if (CheckVictory())
                     {
                         Log.Information("The game is over. One player has no characters left");
+                        RestartServer();
+                        //Party.GetInstance().messageController.OnEndGameMessage(new EndGameMessage());
                     }
                 }
                 _clonePhase.Execute();
                 Log.Debug("Executed the clone phase.");
 
                 Log.Debug("Execute the character trait phase...");
-                characterTraitPhase.Execute();
-
-                // increase round counter, because the round was finished
                 _roundCounter++;
+                characterTraitPhase.Execute();
+                
+                // increase round counter, because the round was finished
             }
+        }
+
+        private void RestartServer()
+        {
+            Thread.Sleep(60000);
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = "Server.exe";
+            startInfo.Arguments = string.Join(' ', Programm.startArguments);
+            Process.Start(startInfo);
+            Process.GetCurrentProcess().Kill();
         }
 
         /// <summary>
@@ -187,11 +237,12 @@ namespace GameData.gameObjects
             {
                 foreach (var player in Party.GetInstance().GetActivePlayers())
                 {
-                    if (player.UsedGreatHouse.Characters.Count == 0) //TODO: check, if in Characters.count are also defeated characters which are not cloned again yet
+                    if (player.UsedGreatHouse.GetCharactersNotSwallowedBySandworm().Count <= 0)
                     {
                         int loserID = player.ClientID;
                         int winnerID = Party.GetInstance().GetActivePlayers().Find(c => c.ClientID != player.ClientID).ClientID;
-                        Party.GetInstance().messageController.DoGameEndMessage(winnerID, loserID, new Statistics()); //TODO: get stats for both players
+                        Statistics[] statistics = { Party.GetInstance().GetPlayerByClientID(winnerID).statistics, Party.GetInstance().GetPlayerByClientID(loserID).statistics };
+                        Party.GetInstance().messageController.DoGameEndMessage(winnerID, loserID, statistics);
                         partyFinished = true;
                         return true;
                     }
@@ -200,24 +251,144 @@ namespace GameData.gameObjects
             return false;
         }
 
-        /// <summary>
-        /// This method is responsible for pausing the game.
-        /// </summary>
-        /// <returns>true, if the game was paused</returns>
-        public bool PauseGame()
+        private void SetMaximalPauseOverTimer()
         {
-            // TODO implement logic
-            return false;
+            // Create a timer with a 100 miliseconds interval.
+            maximalPauseOverTimer = new System.Timers.Timer(PartyConfiguration.GetInstance().minPauseTime);
+            // Hook up the Elapsed event for the timer. 
+            maximalPauseOverTimer.Elapsed += OnMaxPauseOverTimedEvent;
+            maximalPauseOverTimer.AutoReset = false;
+            maximalPauseOverTimer.Enabled = true;
+        }
+
+        private void OnMaxPauseOverTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            // check, whether there is pause and if so, whether the other client can also request a resumption
+            if (PauseRequest != null && PauseRequest.RequestedPause && PauseRequest.CanPauseRepealedByOtherClient())
+            {
+                // send a unpause offer
+                Party.GetInstance().messageController.DoSendUnpauseGameOffer();
+
+            }
         }
 
         /// <summary>
-        /// This method is responsible for continuing the game.
+        /// pauses the game, so create a new pause request
         /// </summary>
-        /// <returns>true, if the game was continued</returns>
-        public bool ContinueGame()
+        /// <param name="clientID">the ID of the client, who requested pausing the game</param>
+        /// <returns>true, if the game was paused</returns>
+        public bool PauseGame(int clientID)
         {
-            // TODO implement logic
-            return false;
+            if (IsPartyPaused)
+            {
+                // party already paused, so it is not possible to pause the game again
+                return false;
+            }
+            IsPartyPaused = true;
+            PauseRequest = new PauseRequest(true, clientID);
+
+            Party.GetInstance().messageController.NetworkController.GamePaused = true;
+            
+            maximalPauseOverTimer.Start();
+            if (characterTraitPhase != null)
+            {
+                characterTraitPhase.FreezeTraitPhase(true);
+            }
+
+            // TODO: do not used Thread.Sleep() and <thread>.Interrupt()!!
+
+            return true;
         }
-    }
+
+        /// <summary>
+        /// resumes the game, so create a new "pause" request with the parameter, that this request is used for resumption
+        /// </summary>
+        /// <returns>true, if the game was resumed</returns>
+        public bool ContinueGame(int clientID)
+        {
+            if (!IsPartyPaused)
+            {
+                // party is not paused, so it is not possible to resume the game
+                return false;
+            }
+            if (!PauseRequest.CanPauseRepealedByOtherClient())
+            {
+                // only the client, who requested the pause can resume it
+                if (PauseRequest.ClientID != clientID)
+                {
+                    return false;
+                }
+            }
+            if (characterTraitPhase != null)
+            {
+                characterTraitPhase.FreezeTraitPhase(false);
+            }
+            maximalPauseOverTimer.Stop();
+            IsPartyPaused = false;
+            PauseRequest = new PauseRequest(false, clientID);
+
+
+            Party.GetInstance().messageController.NetworkController.GamePaused = false;
+
+            Party.GetInstance().roundHandlerThread.Interrupt();
+            return true;
+        }
+
+        /// <summary>
+        /// getter for the characterTraitPhase
+        /// </summary>
+        /// <returns>current characterTraitPhase</returns>
+        public CharacterTraitPhase GetCharacterTraitPhase()
+        {
+            return this.characterTraitPhase;
+        }
+        
+        /// <summary>
+        /// This methods adds new characters after the greatHouseConvention gets broken for the first time.
+        /// </summary>
+        private void AddCharactersFromAtomic()
+        {
+            Player harmedPlayer = null;
+            foreach (var character in Party.GetInstance().GetAllCharacters())
+            {
+                if (character.Shunned)
+                {
+                    var player = Party.GetInstance().GetPlayerByCharacterID(character.CharacterId);
+                    if (player.Equals(Party.GetInstance().GetActivePlayers()[0]))
+                    {
+                        harmedPlayer = Party.GetInstance().GetActivePlayers()[1];
+                    }
+                    else
+                    {
+                        harmedPlayer = Party.GetInstance().GetActivePlayers()[0];
+                    }
+                    break;
+                }
+            }
+
+            if (harmedPlayer == null)
+            {
+                throw new Exception("Exception happend at spwaning new characters because of atomic action in the next round.");
+            }
+
+            foreach (var character in Character.CharactersToAddAfterAtomics)
+            {
+                MapField fieldForCharacter = null;
+                bool emptyFieldFound = false;
+                while (!emptyFieldFound)
+                {
+                    fieldForCharacter = Party.GetInstance().map.GetRandomApproachableField();
+                    if (!fieldForCharacter.IsCharacterStayingOnThisField)
+                    {
+                        emptyFieldFound = true;
+                    }
+                }
+                fieldForCharacter.PlaceCharacter(character);
+                character.CurrentMapfield = fieldForCharacter;
+                harmedPlayer.UsedGreatHouse.Characters.Add(character);
+                Party.GetInstance().messageController.DoSpawnCharacterDemand(character);
+            }
+            Character.CharactersToAddAfterAtomics.Clear();
+        }
+    }  
 }

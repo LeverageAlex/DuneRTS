@@ -39,7 +39,6 @@ namespace GameData.network.controller
         {
             // parsing the message
             string parsedMessage = MessageConverter.FromMessage(message);
-
             // check, whether the parsing was successful
             if (parsedMessage != null)
             {
@@ -70,7 +69,7 @@ namespace GameData.network.controller
         /// <returns>true, if the message could successfully parsed and forwarded to the message controller</returns>
         public override bool HandleReceivedMessage(string message, string sessionID)
         {
-            Log.Debug("Client parsing the received message: " + message);
+            // Log.Debug("Client parsing the received message: " + message);
 
             // get Message-Object from JSON-String message
             Message receivedMessage = MessageConverter.ToMessage(message);
@@ -84,96 +83,78 @@ namespace GameData.network.controller
                     messageController.OnDebugMessage((DebugMessage)receivedMessage);
                     return true;
                 case MessageType.JOINACCEPTED:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnJoinAccepted((JoinAcceptedMessage)receivedMessage);
                     return true;
                 case MessageType.ERROR:
                     //todo: call method from client
                     Console.WriteLine(message);
                     return true;
                 case MessageType.GAMECFG:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnGameConfigMessage((GameConfigMessage)receivedMessage);
                     return true;
                 case MessageType.HOUSE_OFFER:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnHouseOfferMessage((HouseOfferMessage)receivedMessage);
                     return true;
                 case MessageType.HOUSE_ACKNOWLEDGEMENT:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnHouseAcknowledgementMessage((HouseAcknowledgementMessage)receivedMessage);
                     return true;
                 case MessageType.TURN_DEMAND:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnTurnDemandMessage((TurnDemandMessage)receivedMessage);
                     return true;
                 case MessageType.MOVEMENT_DEMAND:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnMovementDemandMessage((MovementDemandMessage)receivedMessage);
                     return true;
                 case MessageType.ACTION_DEMAND:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnActionDemandMessage((ActionDemandMessage)receivedMessage);
                     return true;
                 case MessageType.TRANSFER_DEMAND:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnTransferDemandMessage((TransferDemandMessage)receivedMessage);
                     return true;
                 case MessageType.CHARACTER_STAT_CHANGE_DEMAND:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnChangeCharacterStatisticsDemandMessage((ChangeCharacterStatisticsDemandMessage)receivedMessage);
                     return true;
                 case MessageType.MAP_CHANGE_DEMAND:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnMapChangeDemandMessage((MapChangeDemandMessage)receivedMessage);
                     return true;
                 case MessageType.ATOMICS_UPDATE_DEMAND:
                     //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnAtomicsUpdateDemandMessage((AtomicsUpdateDemandMessage)receivedMessage);
                     return true;
                 case MessageType.SPAWN_CHARACTER_DEMAND:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnSpawnCharacterDemandMessage((SpawnCharacterDemandMessage)receivedMessage);
                     return true;
                 case MessageType.CHANGE_PLAYER_SPICE_DEMAND:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnChangePlayerSpiceDemandMessage((ChangePlayerSpiceDemandMessage)receivedMessage);
                     return true;
                 case MessageType.SANDWORM_SPAWN_DEMAND:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnSandwormSpawnDemandMessage((SandwormSpawnDemandMessage)receivedMessage);
                     return true;
                 case MessageType.SANDWORM_MOVE_DEMAND:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnSandwormMoveDemandMessage((SandwormMoveDemandMessage)receivedMessage);
                     return true;
                 case MessageType.SANDWORM_DESPAWN_DEMAND:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnSandwormDespawnMessage((SandwormDespawnDemandMessage)receivedMessage);
                     return true;
                 case MessageType.ENDGAME:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnEndGameMessage((EndGameMessage)receivedMessage);
                     return true;
                 case MessageType.GAME_END:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnGameEndMessage((GameEndMessage)receivedMessage);
                     return true;
                 case MessageType.GAMESTATE:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnGameStateMessage((GameStateMessage)receivedMessage);
                     return true;
                 case MessageType.STRIKE:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnStrikeMessage((StrikeMessage)receivedMessage);
                     return true;
                 case MessageType.GAME_PAUSE_DEMAND:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnPauseGameDemandMessage((GamePauseDemandMessage)receivedMessage);
                     return true;
                 case MessageType.UNPAUSE_GAME_OFFER:
-                    //todo: call method from client
-                    Console.WriteLine(message);
+                    messageController.OnUnpauseOfferDemand((UnpauseGameOfferMessage)receivedMessage);
+                    return true;
+                case MessageType.HELI_DEMAND:
+                    messageController.OnHeliDemandMessage((HeliDemandMessage)receivedMessage);
                     return true;
                 default:
                     Log.Error("Incoming parsed message has invalid type (" + type + ") and could not be forwarded to the message controller!");

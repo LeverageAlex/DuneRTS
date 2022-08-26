@@ -11,9 +11,9 @@ namespace GameData.network.messages
     public class StrikeMessage : ClientServerMessage
     {
         [JsonProperty]
-        private string wrongMessage;
+        public string wrongMessage { get; }
         [JsonProperty]
-        private int count;
+        public int count { get; }
 
         /// <summary>
         /// Constructor of the class StrikeMessage

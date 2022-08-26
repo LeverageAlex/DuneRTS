@@ -1,8 +1,10 @@
 ﻿using System;
+using System.IO;
 using Serilog;
 using Serilog.Configuration;
 using Serilog.Core;
 using Serilog.Events;
+using Serilog.Filters;
 
 namespace GameData.network.util
 {
@@ -46,7 +48,20 @@ namespace GameData.network.util
             levelSwitch.MinimumLevel = LogEventLevel.Debug;
             Log.Logger = new LoggerConfiguration()
                  .MinimumLevel.ControlledBy(levelSwitch)
+                 .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss.fff}\t{Level:u3}]  {Message}{NewLine}{Exception}")
+                 .CreateLogger();
+        }
+
+        public void CreateReplayLogger()
+        {
+            Log.Logger = new LoggerConfiguration()
+                 .Enrich.FromLogContext()
+                 .MinimumLevel.ControlledBy(levelSwitch)
                  .WriteTo.Console()
+                 .WriteTo.Logger(lc => lc
+                    .Filter.ByIncludingOnly(arg => arg.Properties.ContainsKey("Direction"))
+                    .WriteTo.File(Path.Combine(Directory.GetCurrentDirectory(), "../../../Log/", "replayLog.txt"), outputTemplate: "{Message:j}")
+                 )
                  .CreateLogger();
         }
 
@@ -57,6 +72,6 @@ namespace GameData.network.util
         public void SetMinimumLevel(LogEventLevel level)
         {
             levelSwitch.MinimumLevel = level;
-        }
+        } 
     }
 }

@@ -12,25 +12,11 @@ public class CameraController : MonoBehaviour
     public float minY = 10f;
     public float maxY = 80f;
 
-
     // Update is called once per frame
     void Update()
     {
         
-      /*  if (GameManager.GameIsOver)
-        {
-            this.enabled = false;
-            return;
-        }
-
-        /*   if(Input.GetKeyDown(KeyCode.Escape))
-           {
-               doMovement = !doMovement;
-           }
-           if(!doMovement)
-           {
-               return;
-           }*/
+      
         if (Input.GetKey("w") /*|| Input.mousePosition.y >= Screen.height - panBorderThickness*/)
         {
             //Space.World will cause the camera moves along the real-axis instead of the looking axis of the cam

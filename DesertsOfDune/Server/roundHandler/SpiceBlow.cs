@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using GameData.network.messages;
 using GameData.network.util.enums;
 using GameData.network.util.world;
 using GameData.network.util.world.mapField;
-using Server.roundHandler;
+using GameData;
+using GameData.roundHandler;
 
 namespace GameData.server.roundHandler
 {
@@ -29,32 +31,45 @@ namespace GameData.server.roundHandler
         /// changes the selected random field and it's neightbors (of type desert field) to to a new random desert field
         /// </summary>
         /// <param name="randomField">the random field</param>
-        private void ChangeFieldAndNeighborsRandomly(MapField randomField)
+        private MapField ChangeFieldAndNeighborsRandomly(MapField randomField)
         {
+            bool wasMapChanged = false;
 
             Random random = new Random();
             List<MapField> neighbors = this._map.GetNeighborFields(randomField);
+            neighbors.Add(randomField);
 
             foreach (MapField neighbor in neighbors)
             {
                 if (this._map.IsMapFieldADesertField(neighbor))
                 {
-                    if (random.Next() < 0.5)
+                    if (random.NextDouble() < 0.5)
                     {
-                        MapField newDune = new Dune(randomField.HasSpice, randomField.isInSandstorm, randomField.stormEye);
-                        newDune.Character = randomField.Character;
+                        MapField newDune = new Dune(neighbor.hasSpice, neighbor.isInSandstorm);
+                        newDune.PlaceCharacter(neighbor.Character);
 
-                        this._map.SetMapFieldAtPosition(newDune, randomField.XCoordinate, randomField.ZCoordinate);
+                        this._map.SetMapFieldAtPosition(newDune, neighbor.XCoordinate, neighbor.ZCoordinate);
+                        wasMapChanged = true;
                     }
                     else
                     {
-                        MapField newFlatSand = new FlatSand(randomField.HasSpice, randomField.isInSandstorm, randomField.stormEye);
-                        newFlatSand.Character = randomField.Character;
+                        MapField newFlatSand = new FlatSand(neighbor.hasSpice, neighbor.isInSandstorm);
+                        newFlatSand.PlaceCharacter(neighbor.Character);
 
-                        this._map.SetMapFieldAtPosition(newFlatSand, randomField.XCoordinate, randomField.ZCoordinate);
+                        this._map.SetMapFieldAtPosition(newFlatSand, neighbor.XCoordinate, neighbor.ZCoordinate);
+                        wasMapChanged = true;
                     }
                 }
+
+
             }
+
+            // check, whether the map was changed while the spice blow, if so send a map change message
+            if (wasMapChanged)
+            {
+                Party.GetInstance().messageController.DoSendMapChangeDemand(MapChangeReasons.ROUND_PHASE);
+            }
+            return neighbors[neighbors.Count - 1];
         }
 
         /// <summary>
@@ -66,7 +81,7 @@ namespace GameData.server.roundHandler
             //TODO determine count neigthbors to break loop if necessary
             Random random = new Random();
 
-            int amountOfSpiceToSpread = random.Next(3, 7);
+            int amountOfSpiceToSpread = random.Next(3, 4);
 
             // spread the spice
             PlaceSpiceOnField(randomField, amountOfSpiceToSpread);
@@ -86,8 +101,6 @@ namespace GameData.server.roundHandler
             }
             else
             {
-                // get a random, approachble neighbor field
-                MapField nextField = this._map.GetRandomApproachableNeighborField(field);
 
                 if (field == null)
                 {
@@ -96,10 +109,13 @@ namespace GameData.server.roundHandler
                 }
                 else
                 {
+
+                    // get a random, approachble neighbor field
+                    MapField nextField = this._map.GetRandomApproachableNeighborField(field);
                     // if there is no spice on this map field, place it and call the method for a approachable neighbor field
-                    if (!field.HasSpice)
+                    if (!field.hasSpice)
                     {
-                        field.HasSpice = true;
+                        field.hasSpice = true;
                         return PlaceSpiceOnField(nextField, restAmountOfSpiceToPlace - 1);
                     }
                     else
@@ -127,11 +143,14 @@ namespace GameData.server.roundHandler
         /// </summary>
         public void Execute()
         {
+
             // get a random desert field on the map
             MapField randomField = this._map.GetRandomDesertField();
 
             // changes the terrain
-            ChangeFieldAndNeighborsRandomly(randomField);
+            randomField = ChangeFieldAndNeighborsRandomly(randomField);
+            this._map.SetMapFieldAtPosition(randomField, randomField.XCoordinate, randomField.ZCoordinate);
+
 
             // place the spice
             PlaceSpiceOnFields(randomField);

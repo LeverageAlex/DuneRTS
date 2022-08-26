@@ -15,122 +15,106 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
     /// </summary>
     public class TestSpiceBlow
     {
+        private List<List<string>> scenarioConfiguration;
+        private int scenarioWidth = 10;
+        private int scenarioHeight = 10;
 
-
-        /// <summary>
-        /// This Testcase validates the behaviour of the method ApplySpiceBlow
-        /// </summary>
-        [Test]
-        public void TestApplySpiceBlow()
+        [SetUp]
+        public void Setup()
         {
-            RoundHandler roundHandler = new RoundHandler(2, 3);
-            roundHandler.CurrentSpice = 2;
-            SpiceBlow spiceBlow = new SpiceBlow(roundHandler.Map);
-            bool spiceBlowApplicable = spiceBlow.SpiceBlowIsApplicable(roundHandler.SpiceMinimum,roundHandler.CurrentSpice);
-            Assert.IsTrue(spiceBlowApplicable);
-        }
-
-        /// <summary>
-        /// This Testcase validates the behaviour of the method ChoosRandomMapFieldIndxX
-        /// </summary>
-        [Test]
-        public void TestChoosRandomMapFieldIndxX()
-        {
-            RoundHandler roundHandler = new RoundHandler(2, 3);
-            MapField[,] mapFields = new MapField[2, 2];
-            mapFields[0, 0] = new MapField(false, false, 0, null);
-            mapFields[1, 0] = new MapField(false, false, 0, null);
-            mapFields[0, 1] = new MapField(false, false, 0, null);
-            mapFields[1, 1] = new MapField(false, false, 0, null);
-            roundHandler.Map = mapFields;
-
-            SpiceBlow spiceBlow = new SpiceBlow(roundHandler.Map);
-            int result = spiceBlow.ChoosRandomMapFieldIndexX();
-            Assert.GreaterOrEqual(result, 0);
-            Assert.LessOrEqual(result, 1);
-        }
-
-        /// <summary>
-        /// This Testcase validates the behaviour of the method ChoosRandomMapFieldIndexZ
-        /// </summary>
-        [Test]
-        public void TestChoosRandomMapFieldIndxZ()
-        {
-            RoundHandler roundHandler = new RoundHandler(2, 3);
-            MapField[,] mapFields = new MapField[2, 2];
-            mapFields[0, 0] = new MapField(false, false, 0, null);
-            mapFields[1, 0] = new MapField(false, false, 0, null);
-            mapFields[0, 1] = new MapField(false, false, 0, null);
-            mapFields[1, 1] = new MapField(false, false, 0, null);
-            roundHandler.Map = mapFields;
-
-            SpiceBlow spiceBlow = new SpiceBlow(roundHandler.Map);
-            int result = spiceBlow.ChoosRandomMapFieldIndexZ();
-            Assert.GreaterOrEqual(result, 0);
-            Assert.LessOrEqual(result, 1);
-        }
-
-        [Test]
-        public void TestplaceSpiceOnFields()
-        {
-            RoundHandler roundHandler = new RoundHandler(2, 3);
-            MapField[,] mapFields = new MapField[3, 3];
-            mapFields[0, 0] = new MapField(false, false, 0, null);
-            mapFields[0, 1] = new MapField(false, false, 0, null);
-            mapFields[0, 2] = new MapField(false, false, 0, null);
-            mapFields[1, 0] = new MapField(false, false, 0, null);
-            mapFields[1, 1] = new MapField(false, false, 0, null);
-            mapFields[1, 2] = new MapField(false, false, 0, null);
-            mapFields[2, 0] = new MapField(false, false, 0, null);
-            mapFields[2, 1] = new MapField(false, false, 0, null);
-            mapFields[2, 2] = new MapField(false, false, 0, null);
-            roundHandler.Map = mapFields;
-            SpiceBlow spiceBlow = new SpiceBlow(roundHandler.Map);
-            spiceBlow.PlaceSpiceOnFields(0, 0);
-            int counter = 0;
-            for(int i = 0; i < 3; i++)
+            scenarioConfiguration = new List<List<string>>();
+            for (int i = 0; i < 10; i++)
             {
-                for(int j = 0; j < 3; j++)
+                List<string> l = new List<string>();
+                for (int j = 0; j < 10; j++)
                 {
-                    if(mapFields[i,j].HasSpice == true)
-                    {
-                        counter++;
-                    }
+                    l.Add("FLAT_SAND");
                 }
+                scenarioConfiguration.Add(l);
             }
-            Assert.GreaterOrEqual(counter, 3);
-            Assert.LessOrEqual(counter, 6);
+
+        }
+
+        /// <summary>
+        /// This Testcase validates the behaviour of the method PlaceSpiceOnFields
+        /// </summary>
+        [Test]
+        public void TestPlaceSpiceOnFieldsAllFieldsAproachable()
+        {
+            
+            Map map = new Map(3, 3, scenarioConfiguration);
+            foreach (MapField mapField in map.fields)
+            {
+                mapField.IsApproachable = true;
+            }
+
+            SpiceBlow spiceBlow = new SpiceBlow(map);
+            MapField randomField = map.GetRandomDesertField();
+            Assert.AreEqual(0, map.GetAmountOfSpiceOnMap());
+            
+            spiceBlow.PlaceSpiceOnFields(randomField);
+
+            Assert.Greater(map.GetAmountOfSpiceOnMap(),2);
+            Assert.LessOrEqual(map.GetAmountOfSpiceOnMap(),7);
+        }
+
+        /// <summary>
+        /// This Testcase validates the behaviour of the method IsSpiceBlowNecessary
+        /// </summary>
+        [Test]
+        public void TestIsSpiceBlowNecessary()
+        {
+            SpiceBlow spiceBlow = new SpiceBlow(null);
+            Assert.False(spiceBlow.IsSpiceBlowNecessary(1,2));
+            Assert.False(spiceBlow.IsSpiceBlowNecessary(2, 2));
+            Assert.False(spiceBlow.IsSpiceBlowNecessary(2, 3));
         }
 
 
         /// <summary>
-        /// This Testcase validates the behaviour of the method ChangeFieldAndNeighborsRandomly
+        /// This Testcase validates the behaviour of the method Execute
         /// </summary>
         [Test]
-        public void TestChangeFieldAndNeighborsRandomly()
+        public void TestExecute()
         {
-            RoundHandler roundHandler = new RoundHandler(2, 3);
-            SpiceBlow spiceBlow = new SpiceBlow(roundHandler.Map);
-            MapField[,] mapFields = new MapField[3, 3];
-            mapFields[0, 0] = new MapField(false, false, 0, null);
-            mapFields[0, 1] = new MapField(false, false, 0, null);
-            mapFields[0, 2] = new MapField(false, false, 0, null);
-            mapFields[1, 0] = new MapField(false, false, 0, null);
-            mapFields[1, 1] = new MapField(false, false, 0, null);
-            mapFields[1, 2] = new MapField(false, false, 0, null);
-            mapFields[2, 0] = new MapField(false, false, 0, null);
-            mapFields[2, 1] = new MapField(false, false, 0, null);
-            mapFields[2, 2] = new MapField(false, false, 0, null);
-            roundHandler.Map = mapFields;
-            spiceBlow.ChangeFieldAndNeighborsRandomly(1, 1);
-
-            for(int i = 0; i < 3; i++)
+            List<List<string>> scenarioConfiguration = new List<List<string>>();
+            List<string> list1 = new List<string>();
+            list1.Add("FLAT_SAND");
+            list1.Add("FLAT_SAND");
+            list1.Add("FLAT_SAND");
+            List<string> list2 = new List<string>();
+            list2.Add("FLAT_SAND");
+            list2.Add("FLAT_SAND");
+            list2.Add("FLAT_SAND");
+            List<string> list3 = new List<string>();
+            list3.Add("FLAT_SAND");
+            list3.Add("FLAT_SAND");
+            list3.Add("FLAT_SAND");
+            scenarioConfiguration.Add(list1);
+            scenarioConfiguration.Add(list2);
+            scenarioConfiguration.Add(list3);
+            Map map = new Map(3, 3, scenarioConfiguration);
+            foreach (MapField mapField in map.fields)
             {
-                for(int j = 0; j < 3; j++)
-                {
-                    Assert.True(mapFields[i, j].TileType == "DUNE" || mapFields[i, j].TileType == "FLAT");
-                }
+                mapField.IsApproachable = true;
             }
+
+            SpiceBlow spiceBlow = new SpiceBlow(map);
+            Assert.AreEqual(0, map.GetAmountOfSpiceOnMap());
+            foreach (MapField mapField in map.fields)
+            {
+                Assert.AreEqual("FLAT_SAND", mapField.tileType);
+            }
+
+            spiceBlow.Execute();
+
+            foreach (MapField mapField in map.fields)
+            {
+                Assert.True(mapField.tileType.Equals("FLAT_SAND") || mapField.tileType.Equals("DUNE"));
+            }
+
+            Assert.Greater(map.GetAmountOfSpiceOnMap(), 1);
+            Assert.LessOrEqual(map.GetAmountOfSpiceOnMap(), 7);
         }
     }
 }

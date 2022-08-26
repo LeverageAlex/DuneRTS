@@ -17,7 +17,7 @@ namespace GameData.network.messages
         /// Constructor of the class ClientServerMessage
         /// </summary>
         /// <param name="clientID">the id of the client.</param>
-        public ClientServerMessage(int clientID, MessageType type) : base("0.1", type)
+        public ClientServerMessage(int clientID, MessageType type) : base("1.1", type)
         {
             this.clientID = clientID;
         }

@@ -1,7 +1,7 @@
 ﻿using System;
-using Server.Clients;
+using GameData.Clients;
 
-namespace Server
+namespace GameData
 {
     /// <summary>
     /// Represents a ai player, which can interact with the game and must send its moves within a certain time interval
@@ -13,7 +13,7 @@ namespace Server
         /// </summary>
         /// <param name="clientName">the name of the ai player</param>
         /// <param name="sessionID">the id of the session of this ai player (from websocket server)</param>
-        public AIPlayer(string clientName, string sessionID) : base(clientName, sessionID)
+        public AIPlayer(string clientName, string sessionID) : base(clientName, sessionID, true)
         {
         }
     }

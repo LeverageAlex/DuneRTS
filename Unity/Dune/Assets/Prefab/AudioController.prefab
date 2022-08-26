@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6734251008230276501
+--- !u!1 &7452567912769377692
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3530348497779172612}
-  - component: {fileID: 8400762842211456857}
+  - component: {fileID: 248256153000510225}
+  - component: {fileID: 7292414193024060957}
   m_Layer: 0
   m_Name: AudioController
   m_TagString: Untagged
@@ -17,13 +17,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3530348497779172612
+--- !u!4 &248256153000510225
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6734251008230276501}
+  m_GameObject: {fileID: 7452567912769377692}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,26 +31,107 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8400762842211456857
+--- !u!114 &7292414193024060957
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6734251008230276501}
+  m_GameObject: {fileID: 7452567912769377692}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a15615fa6d3cbf458fa9c6e48e1fc2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mixerGroup: {fileID: 24300002, guid: eebc7e79723e5924bacb67d8351bda7f, type: 2}
-  audioClip:
-  - {fileID: 8300000, guid: 04d0af4db8980b54fb5167f87b81e0cf, type: 3}
-  - {fileID: 8300000, guid: 84e1613fc22bf6442a7752d49198e10a, type: 3}
-  - {fileID: 8300000, guid: 30500a2a7f7a452449c600de36a36d11, type: 3}
-  - {fileID: 8300000, guid: e2e2a83381e225d4db28fc786cd538f7, type: 3}
-  - {fileID: 8300000, guid: 6c37c2bbcba935546bf10d61002211f7, type: 3}
-  - {fileID: 8300000, guid: 329642b872f24964db24de2ea2b8832a, type: 3}
-  - {fileID: 8300000, guid: a7650c73307d99241bf2e098acdd26c6, type: 3}
-  - {fileID: 8300000, guid: 6f74a8e3999b55d4a89efd7c856bffd1, type: 3}
-  - {fileID: 8300000, guid: 6bfadf104a7f70640a02308a3ff1f88b, type: 3}
+  sounds:
+  - name: CharWalk
+    clip: {fileID: 8300000, guid: 30500a2a7f7a452449c600de36a36d11, type: 3}
+    volume: 0.5
+    volumeVariance: 1
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: SwordStab
+    clip: {fileID: 8300000, guid: 6bfadf104a7f70640a02308a3ff1f88b, type: 3}
+    volume: 0.5
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: SpiceHoarding
+    clip: {fileID: 8300000, guid: 6f74a8e3999b55d4a89efd7c856bffd1, type: 3}
+    volume: 0.5
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: SpicePickup
+    clip: {fileID: 8300000, guid: 329642b872f24964db24de2ea2b8832a, type: 3}
+    volume: 0.35
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: AtomicExplosion
+    clip: {fileID: 8300000, guid: 04d0af4db8980b54fb5167f87b81e0cf, type: 3}
+    volume: 0.65
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: AtomicFly
+    clip: {fileID: 8300000, guid: 84e1613fc22bf6442a7752d49198e10a, type: 3}
+    volume: 0.55
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: background_theme
+    clip: {fileID: 8300000, guid: e2e2a83381e225d4db28fc786cd538f7, type: 3}
+    volume: 0.15
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: menuSelect
+    clip: {fileID: 8300000, guid: 6c37c2bbcba935546bf10d61002211f7, type: 3}
+    volume: 0.35
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: SpiceSpawn
+    clip: {fileID: 8300000, guid: a7650c73307d99241bf2e098acdd26c6, type: 3}
+    volume: 0.35
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: HelicopterFly
+    clip: {fileID: 8300000, guid: 84f6486fb278dd14289e27df5f9ca0f3, type: 3}
+    volume: 0.25
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0
+    loop: 1
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}

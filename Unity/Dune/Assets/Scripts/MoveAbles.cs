@@ -29,16 +29,6 @@ public class MoveAbles : MonoBehaviour
         walkPath = new LinkedList<Vector3>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(Input.GetKeyDown("c"))
-        {
-            walkPath.AddLast(new Vector3(7, transform.position.y + MapManager.instance.getNodeFromPos(7,7).charHeightOffset, 7));
-            walkPath.AddLast(new Vector3(2, transform.position.y + MapManager.instance.getNodeFromPos(2, 1).charHeightOffset, 1));
-            MovementManager.instance.addOtherToAnimate(this);
-        }
-    }
 
     public bool calledUpdate()
     {

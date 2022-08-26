@@ -11,17 +11,17 @@ namespace GameData.network.util.world
     public class CharacterStatistics
     {
         [JsonProperty]
-        private int HP;
+        public int HP { get; }
         [JsonProperty]
-        private int AP;
+        public int AP { get; }
         [JsonProperty]
-        private int MP;
+        public int MP { get; }
         [JsonProperty]
-        private int spice;
+        public int spice { get; }
         [JsonProperty]
-        private bool isLoud;
+        public bool isLoud { get; }
         [JsonProperty]
-        private bool isSwallowed;
+        public bool isSwallowed { get; }
 
         /// <summary>
         /// Constructor of the class CharacterStatistics
@@ -32,6 +32,7 @@ namespace GameData.network.util.world
         /// <param name="spice">the amount of spice the character has</param>
         /// <param name="isLoud">true, if the character is loud</param>
         /// <param name="isSwallowed">true, if the character got swallowed</param>
+        [JsonConstructor]
         public CharacterStatistics(int hp, int ap, int mp, int spice, bool isLoud, bool isSwallowed)
         {
             this.HP = hp;
@@ -40,6 +41,21 @@ namespace GameData.network.util.world
             this.spice = spice;
             this.isLoud = isLoud;
             this.isSwallowed = isSwallowed;
+        }
+
+        /// <summary>
+        /// creates the character statistics depending on a character
+        /// </summary>
+        /// <param name="character">the character, whose statistics should be created</param>
+        /// TODO: check, whether spice, isLoud and isSwallowed is correct
+        public CharacterStatistics(Character character)
+        {
+            this.HP = character.healthCurrent;
+            this.AP = character.APcurrent;
+            this.MP = character.MPcurrent;
+            this.spice = character.inventoryUsed;
+            this.isLoud = character.IsLoud();
+            this.isSwallowed = character.KilledBySandworm;
         }
     }
 }

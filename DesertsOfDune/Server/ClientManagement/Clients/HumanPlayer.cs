@@ -1,7 +1,7 @@
 ﻿using System;
-using Server.Clients;
+using GameData.Clients;
 
-namespace Server
+namespace GameData
 {
     /// <summary>
     /// Represents a human player, which can interact with the game and pause it.
@@ -13,7 +13,7 @@ namespace Server
         /// </summary>
         /// <param name="clientName">the name of the human player</param>
         /// <param name="sessionID">the id of the session of this human player (from websocket server)</param>
-        public HumanPlayer(string clientName, string sessionID) : base(clientName, sessionID)
+        public HumanPlayer(string clientName, string sessionID) : base(clientName, sessionID, false)
         {
         }
     }

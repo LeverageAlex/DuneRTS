@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using GameData.network.messages;
 using GameData.network.util.enums;
 using GameData.network.util.world;
 using GameData.network.util.world.mapField;
-using Server.roundHandler;
+using GameData;
+using GameData.roundHandler;
 
 namespace GameData.server.roundHandler
 {
@@ -16,8 +18,8 @@ namespace GameData.server.roundHandler
         /// <summary>
         /// the central field of the storm
         /// </summary>
-        private MapField eyeOfStorm;
-
+        /// 
+        public MapField EyeOfStorm { get; private set; }
         private Map map;
 
         /// <summary>
@@ -27,7 +29,7 @@ namespace GameData.server.roundHandler
         public SandstormPhase(Map map)
         {
             this.map = map;
-            this.eyeOfStorm = GetRandomStartField();
+            this.EyeOfStorm = GetRandomStartField();
 
             ChangeStatusOfMapFields();
         }
@@ -37,14 +39,14 @@ namespace GameData.server.roundHandler
         /// </summary>
         private void MoveStormToRandomNeighborField()
         {
-            List<MapField> neighbors = this.map.GetNeighborFields(eyeOfStorm);
+            List<MapField> neighbors = this.map.GetNeighborFields(EyeOfStorm);
 
             // chose a random neighbor
             Random random = new Random();
             int neighborIndex = random.Next(neighbors.Count);
 
-            eyeOfStorm = neighbors[neighborIndex];
-            this.map.PositionOfEyeOfStorm = new Position(eyeOfStorm.XCoordinate, eyeOfStorm.ZCoordinate);
+            EyeOfStorm = neighbors[neighborIndex];
+            this.map.PositionOfEyeOfStorm = new Position(EyeOfStorm.XCoordinate, EyeOfStorm.ZCoordinate);
         }
 
         /// <summary>
@@ -52,14 +54,17 @@ namespace GameData.server.roundHandler
         /// </summary>
         private void ChangeStatusOfMapFields()
         {
-            List<MapField> neighbors = this.map.GetNeighborFields(eyeOfStorm);
+            List<MapField> neighbors = this.map.GetNeighborFields(EyeOfStorm);
 
             for (int x = 0; x < this.map.MAP_WIDTH; x++)
             {
                 for (int y = 0; y < this.map.MAP_HEIGHT; y++)
                 {
                     MapField field = this.map.GetMapFieldAtPosition(x, y);
-                    if (field.Equals(eyeOfStorm) || neighbors.Contains(field))
+                  //  Console.WriteLine("Hello, this is the start of Logging");
+                  //  Console.WriteLine("The current field: " + field.ToString());
+                  //  Console.WriteLine("Neighbors are: " + neighbors);
+                    if (field.Equals(EyeOfStorm) || neighbors.Contains(field))
                     {
                         field.isInSandstorm = true;
                     }
@@ -92,12 +97,15 @@ namespace GameData.server.roundHandler
         /// </summary>
         private void RandomlyChangeDesertFieldsInStorm()
         {
-            List<MapField> mapFieldsInStorm = this.map.GetNeighborFields(eyeOfStorm);
+            bool wasMapChanged = false;
+
+            List<MapField> mapFieldsInStorm = this.map.GetNeighborFields(EyeOfStorm);
 
             // change the evelation of the eye of the storm, if it is a desert field
-            if (this.map.IsMapFieldADesertField(eyeOfStorm))
+            if (this.map.IsMapFieldADesertField(EyeOfStorm))
             {
-                ChangeDesertField(eyeOfStorm);
+                ChangeDesertField(EyeOfStorm);
+                wasMapChanged = true;
             }
 
             // change the evelation of the neighbor fields of the eye of the storm, if they are a desert field
@@ -107,7 +115,14 @@ namespace GameData.server.roundHandler
                 if (this.map.IsMapFieldADesertField(field))
                 {
                     ChangeDesertField(field);
+                    wasMapChanged = true;
                 }
+            }
+
+            // check, whether the was changed after the movement of the sandstorm and send map change message if so
+            if (wasMapChanged)
+            {
+                Party.GetInstance().messageController.DoSendMapChangeDemand(MapChangeReasons.SANDSTORM);
             }
         }
 
@@ -119,17 +134,17 @@ namespace GameData.server.roundHandler
         {
             Random random = new Random();
 
-            if (random.Next() < 0.5)
+            if (random.NextDouble() < 0.5)
             {
-                MapField newDune = new Dune(field.HasSpice, field.isInSandstorm, field.stormEye);
-                newDune.Character = field.Character;
+                MapField newDune = new Dune(field.hasSpice, field.isInSandstorm);
+                newDune.PlaceCharacter(field.Character);
 
                 map.SetMapFieldAtPosition(newDune, field.XCoordinate, field.ZCoordinate);
             }
             else
             {
-                MapField newFlatSand = new FlatSand(field.HasSpice, field.isInSandstorm, field.stormEye);
-                newFlatSand.Character = field.Character;
+                MapField newFlatSand = new FlatSand(field.hasSpice, field.isInSandstorm);
+                newFlatSand.PlaceCharacter(field.Character);
 
                 map.SetMapFieldAtPosition(newFlatSand, field.XCoordinate, field.ZCoordinate);
             }

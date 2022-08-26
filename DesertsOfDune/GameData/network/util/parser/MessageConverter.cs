@@ -2,6 +2,8 @@
 using System.Text.RegularExpressions;
 using GameData.network.messages;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Serilog;
 
 namespace GameData.network.util.parser
 {
@@ -15,7 +17,6 @@ namespace GameData.network.util.parser
         /// </summary>
         /// <param name="message">the Message-Object</param>
         /// <returns>the parsed JSON-String of the Object or "null" if the parsing was not possible (possible reasons: message has invalid type)</returns>
-        /// TODO: change the default behaviour and do not return null, but throw a "ParsingMessageToJSONStringNotPossible"-Exception
         static public String FromMessage(Message message)
         {
             switch (message.GetMessageType())
@@ -76,7 +77,7 @@ namespace GameData.network.util.parser
                     return JsonConvert.SerializeObject(endTurnRequestMessage);
                 case MessageType.MAP_CHANGE_DEMAND:
                     MapChangeDemandMessage mapChangeMessage = (MapChangeDemandMessage)message;
-                    return JsonConvert.SerializeObject(mapChangeMessage);
+                    return JsonConvert.SerializeObject(mapChangeMessage, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Include });
                 case MessageType.ATOMICS_UPDATE_DEMAND:
                     AtomicsUpdateDemandMessage atomicsUpdateDemandMessage = (AtomicsUpdateDemandMessage)message;
                     return JsonConvert.SerializeObject(atomicsUpdateDemandMessage);
@@ -114,11 +115,17 @@ namespace GameData.network.util.parser
                     PauseGameRequestMessage pauseGameRequestMessage = (PauseGameRequestMessage)message;
                     return JsonConvert.SerializeObject(pauseGameRequestMessage);
                 case MessageType.GAME_PAUSE_DEMAND:
-                    GamePauseDemandMessage pauseGameMessage = (GamePauseDemandMessage)message;
+                    PausGameDemandMessage pauseGameMessage = (PausGameDemandMessage)message;
                     return JsonConvert.SerializeObject(pauseGameMessage);
                 case MessageType.UNPAUSE_GAME_OFFER:
                     UnpauseGameOfferMessage unpauseGameOfferMessage = (UnpauseGameOfferMessage)message;
                     return JsonConvert.SerializeObject(unpauseGameOfferMessage);
+                case MessageType.HELI_REQUEST:
+                    HeliRequestMessage heliRequestMessage = (HeliRequestMessage)message;
+                    return JsonConvert.SerializeObject(heliRequestMessage);
+                case MessageType.HELI_DEMAND:
+                    HeliDemandMessage heliDemandMessage = (HeliDemandMessage)message;
+                    return JsonConvert.SerializeObject(heliDemandMessage);
                 default:
                     throw new ArgumentException($"The given message type: {message.GetMessageType()} is not implemented");
             }
@@ -130,7 +137,6 @@ namespace GameData.network.util.parser
         /// <param name="message">the message as a JSON-String, which should be converted to the fitting Message-Object</param>
         /// <returns>the Message object, which is "equivalent to the JSON-String or null if JSON-String could not be reassambled to a Message-Object
         /// (possible reasons: invalid JSON syntax, not a message string, not expected data in JSON-String)</returns>
-        /// TODO: change the default behaviour and do not return null, but throw a "ParsingJSONStringToMessageObjectNotPossible"-Exception
         static public Message ToMessage(String message)
         {
             string pattern = "{\"type\":\"([A-Z]*_*[A-Z]*_*[A-Z]*_*[A-Z]*)";
@@ -140,7 +146,6 @@ namespace GameData.network.util.parser
 
             MessageType msgType = (MessageType)Enum.Parse(typeof(MessageType), messageType);
 
-            Console.WriteLine("the match: " + messageType);
             switch (msgType)
             {
                 case MessageType.DEBUG:
@@ -156,8 +161,7 @@ namespace GameData.network.util.parser
                 case MessageType.GAMECFG:
                     return JsonConvert.DeserializeObject<GameConfigMessage>(message);
                 case MessageType.HOUSE_OFFER:
-                    return new HouseOfferMessage(123, null); //TODO: finish deserialization of HouseOfferMessage
-                    //return JsonConvert.DeserializeObject<HouseOfferMessage>(message);
+                    return JsonConvert.DeserializeObject<HouseOfferMessage>(message);
                 case MessageType.HOUSE_REQUEST:
                     return JsonConvert.DeserializeObject<HouseRequestMessage>(message);
                 case MessageType.HOUSE_ACKNOWLEDGEMENT:
@@ -210,6 +214,10 @@ namespace GameData.network.util.parser
                     return JsonConvert.DeserializeObject<GamePauseDemandMessage>(message);
                 case MessageType.UNPAUSE_GAME_OFFER:
                     return JsonConvert.DeserializeObject<UnpauseGameOfferMessage>(message);
+                case MessageType.HELI_REQUEST:
+                    return JsonConvert.DeserializeObject<HeliRequestMessage>(message);
+                case MessageType.HELI_DEMAND:
+                    return JsonConvert.DeserializeObject<HeliDemandMessage>(message);
                 default:
                     throw new ArgumentException($"The given message type: {messageType} is not implemented");
             }

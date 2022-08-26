@@ -6,25 +6,28 @@ using Newtonsoft.Json;
 
 namespace GameData.network.messages
 {
-     /// <summary>
+    /// <summary>
     /// This class is used to inform about Map changes.
     /// </summary>
     public class MapChangeDemandMessage : Message
     {
         [JsonProperty]
-        private string changeReason;
+        public string changeReason { get; }
         [JsonProperty]
-        private MapField[,] newMap;
+        public MapField[,] newMap { get; }
+        [JsonProperty]
+        public Position stormEye {get;}
 
         /// <summary>
         /// Constructor of the class MapChangeMessage
         /// </summary>
         /// <param name="changeReason">holds the reason for the Map change.</param>
         /// <param name="newMap">the new Map that is send.</param>
-        public MapChangeDemandMessage(MapChangeReasons changeReason, MapField[,] newMap) : base("0.1", MessageType.MAP_CHANGE_DEMAND)
+        public MapChangeDemandMessage(MapChangeReasons changeReason, MapField[,] newMap, Position stormEye) : base("1.1", MessageType.MAP_CHANGE_DEMAND)
         {
-            this.changeReason = Enum.GetName(typeof(MapChangeReasons), changeReason);
+            this.changeReason = changeReason.ToString();
             this.newMap = newMap;
+            this.stormEye = stormEye;
         }
 
     }

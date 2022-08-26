@@ -13,18 +13,18 @@ namespace GameData.network.util.world
     /// <summary>
     /// Base class for the Great Houses
     /// </summary>
-    public abstract class GreatHouse
+    public class GreatHouse
     {
-        [JsonProperty]
-        private string houseName;
-        [JsonProperty]
-        private string houseColor;
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(Order = 1)]
+        public string houseName { get; }
+        [JsonProperty(Order = 2)]
+        public string houseColor { get; }
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore, Order = 3)]
         private bool illegalAtomicUsage;
-        [JsonProperty]
-        private HouseCharacter[] houseCharacters;
+        [JsonProperty (Order = 4)]
+        public HouseCharacter[] houseCharacters { get; set; }
         [JsonIgnore]
-        public City City { get; }
+        public City City { get; set; }
         [JsonIgnore]
         public List<Character> Characters { get; }
         [JsonIgnore]
@@ -32,20 +32,47 @@ namespace GameData.network.util.world
 
         public static readonly int AMOUNT_OF_CHARACTERS_PER_GREAT_HOUSE = 6;
 
+        [JsonIgnore]
+        public static bool determineCharacters = true;
+
         /// <summary>
         /// Constructor of the Class GreatHouse
         /// </summary>
         /// <param name="houseName">the name of the Greathouse</param>
         /// <param name="houseColor">the color of the house</param>
         /// <param name="houseCharacters">the characters of the house</param>
-        protected GreatHouse(string houseName, string houseColor, HouseCharacter[] houseCharacters)
+
+        [JsonConstructor]
+        public GreatHouse(string houseName, string houseColor, HouseCharacter[] houseCharacters)
         {
             this.houseName = houseName;
             this.houseColor = houseColor;
             this.illegalAtomicUsage = false;
             this.houseCharacters = houseCharacters;
-            this.Characters = GetCharactersForHouse();
             this.unusedAtomicBombs = 3;
+        }
+
+        /// <summary>
+        /// This constructor is used for testing perpeces only in order to not use the method getcharactersforhouse.
+        /// </summary>
+        /// <param name="houseName">the name of the Greathouse</param>
+        /// <param name="houseColor">the color of the house</param>
+        /// <param name="houseCharacters">the characters of the house</param>
+        /// <param name="characters">the characters of the House</param>
+        protected GreatHouse(string houseName, string houseColor, HouseCharacter[] houseCharacters, bool initializeCharacters) : this(houseName, houseColor, houseCharacters)
+        {
+            if (initializeCharacters)
+            {
+                this.Characters = GetCharactersForHouse();
+            }
+        }
+
+        /// <summary>
+        /// constructor used for tests (ClientForTests)
+        /// </summary>
+        public GreatHouse(List<Character> characters)
+        {
+            this.Characters = characters;
         }
 
         /// <summary>
@@ -75,22 +102,22 @@ namespace GameData.network.util.world
 
                 switch ((CharacterType) Enum.Parse(typeof(CharacterType), houseCharacter.characterClass)) {
                     case CharacterType.NOBLE:
-                        newCharacter = new Noble();
+                        newCharacter = new Noble(houseCharacter.characterName);
                         break;
-                    case CharacterType.BENEGESSERIT:
-                        newCharacter = new BeneGesserit();
+                    case CharacterType.BENE_GESSERIT:
+                        newCharacter = new BeneGesserit(houseCharacter.characterName);
                         break;
                     case CharacterType.MENTAT:
-                        newCharacter = new Mentat();
+                        newCharacter = new Mentat(houseCharacter.characterName);
                         break;
                     case CharacterType.FIGHTER:
-                        newCharacter = new Fighter();
+                        newCharacter = new Fighter(houseCharacter.characterName);
                         break;
                     default:
                         // TODO: print error or throw exception, if type of character is not valid
                         break;
                 }
-
+                newCharacter.greatHouse = this;
                 characters.Add(newCharacter);
             }
 
@@ -108,6 +135,19 @@ namespace GameData.network.util.world
                 }
             }
             return charactersAlive;
+        }
+
+        public List<Character> GetCharactersNotSwallowedBySandworm()
+        {
+            var charactersNotSwallowed = new List<Character>();
+            foreach (var character in this.Characters)
+            {
+                if (!character.killedBySandworm)
+                {
+                    charactersNotSwallowed.Add(character);
+                }
+            }
+            return charactersNotSwallowed;
         }
     }
 }

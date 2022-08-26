@@ -1,7 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 /**
  * - stores in an state-machine the current state of selected char in turn
@@ -22,18 +23,20 @@ public class CharacterTurnHandler : MonoBehaviour
     [Header("Actions:")]
     public GameObject characterAttacksPanel;
     public GameObject confirmationPanel;
-    public GameObject kanlyButton, voiceButton, swordSpinButton, atomicsButton, spiceHoardingButton;
-    
+    public GameObject kanlyButton, voiceButton, swordSpinButton, atomicsButton, spiceHoardingButton, heliportButton;
+
+
+    public Text ClientName, EnemyName;
 
     [Header("Stats:")]
     public GameObject playerStatsPanel;
-    public GameObject PlayerText, SpiceText, CharacterText ,HPText, APText, MPText, SpiceInventoryText; 
+    public GameObject PlayerText, SpiceText, CharacterText ,HPText, APText, MPText, SpiceInventoryText, selectedArrow; 
 
     private MapManager nodeManager;
 
     public enum Actions
     {
-        ATTACK, MOVE, COLLECT, TRANSFER, KANLY, FAMILY_ATOMICS, SPICE_HOARDING, VOICE, SWORD_SPIN, EMPTY
+        ATTACK, MOVE, COLLECT, TRANSFER, KANLY, FAMILY_ATOMICS, SPICE_HOARDING, VOICE, SWORD_SPIN, EMPTY, HELIPORT
     }
 
     private void Awake()
@@ -45,16 +48,25 @@ public class CharacterTurnHandler : MonoBehaviour
     private void Start()
     {
         nodeManager = MapManager.instance;
-        // ButtonToggles();
-        //  ConfirmDeactivate();
+        ButtonToggles();
+        ConfirmDeactivate();
     }
 
 
     public void SelectCharacter(Character character)
     {
         selectedCharacter = character;
+        selectedArrow.SetActive(true);
+        updateSelectionArrow();
         ButtonToggles();
         selectedCharacter.DrawStats();
+    }
+
+    public void SelectAlienCharacter(Character character)
+    {
+        selectedCharacter = character;
+        selectedArrow.SetActive(true);
+        updateSelectionArrow();
     }
 
 
@@ -66,10 +78,18 @@ public class CharacterTurnHandler : MonoBehaviour
     public void ResetSelection()
     {
         selectedCharacter = null;
+        selectedArrow.SetActive(false);
         charState = Actions.EMPTY;
         ConfirmDeactivate();
         ButtonToggles();
     }
+
+    public void HideSelectedArrow(bool hide)
+    {
+        selectedArrow.SetActive(!hide);
+    }
+
+    
 
     public void ResetAction()
     {
@@ -132,7 +152,7 @@ public class CharacterTurnHandler : MonoBehaviour
     {
         if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
         selectedCharacter.Action_SpiceHoardingTrigger();
-        this.charState = Actions.SPICE_HOARDING;
+        this.charState = Actions.EMPTY;
         ConfirmDeactivate();
     }
 
@@ -140,7 +160,6 @@ public class CharacterTurnHandler : MonoBehaviour
     {
         if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
         selectedCharacter.Attack_SwordSpinTrigger();
-        EndTurn();
         ConfirmDeactivate();
     }
     public void SetCharStateAtomics()
@@ -151,20 +170,59 @@ public class CharacterTurnHandler : MonoBehaviour
         ConfirmDeactivate();
     }
 
+    public void SetCharStateHeliport()
+    {
+        if (charState == Actions.MOVE) nodeManager.ResetNodeColors();
+        this.charState = Actions.HELIPORT;
+        ConfirmDeactivate();
+      //  DisableSelectionBox();
+    }
+
+
+    /// <summary>
+    ///Is called when the confirmButton is pressed
+    /// </summary>
     public void confirmAction()
     {
         if (this.charState == Actions.MOVE)
         {
-            MovementManager.instance.AnimateSelectedChar();
+            //MovementManager.instance.AnimateSelectedChar();
+            MovementManager.instance.RequestMovement();
         }
-        ResetSelection();
+
+        charState = Actions.EMPTY;
+        ConfirmDeactivate();
     }
 
     public static void EndTurn()
     {
-        PlayerController.DoEndTurnRequest(1234,12);
+        //PlayerMessageController.DoEndTurnRequest(1234,12);
         Debug.Log("Ended Turn!");
-        instance.ResetSelection();
+        if(Mode.debugMode)
+        {
+            instance.ResetSelection();
+        } 
+        else
+        {
+            SessionHandler.messageController.DoRequestEndTurn(SessionHandler.clientId, instance.selectedCharacter.characterId);
+        }
+        
+    }
+
+
+    public void HeliportCheck()
+    {
+        if (SessionHandler.isPlayer)
+        {
+            if (MapManager.instance.getNodeFromPos(selectedCharacter.X, selectedCharacter.Z).nodeTypeEnum == NodeTypeEnum.HELIPORT)
+            {
+                heliportButton.SetActive(true);
+            }
+            else
+            {
+                heliportButton.SetActive(false);
+            }
+        }
     }
 
     //Button activation/deactivation
@@ -186,7 +244,7 @@ public class CharacterTurnHandler : MonoBehaviour
 
             return;
         }
-        else
+        else 
         {
             characterAttacksPanel.SetActive(true);
            
@@ -199,55 +257,59 @@ public class CharacterTurnHandler : MonoBehaviour
             APText.SetActive(true);
             SpiceInventoryText.SetActive(true);
         }
-
-        if(!selectedCharacter.isEligibleForSpecialAction())
+        if (SessionHandler.isPlayer)
         {
-            //special
-            atomicsButton.SetActive(false);
-            swordSpinButton.SetActive(false);
-            kanlyButton.SetActive(false);
-            voiceButton.SetActive(false);
-            spiceHoardingButton.SetActive(false);
-            return;
-        }
+            heliportButton.SetActive(false);
 
-        switch (selectedCharacter.characterType)
-        {
-            case CharTypeEnum.FIGHTER:
-                atomicsButton.SetActive(false);
-                swordSpinButton.SetActive(true);
-                kanlyButton.SetActive(false);
-                voiceButton.SetActive(false);
-                spiceHoardingButton.SetActive(false);
-                break;
-            case CharTypeEnum.NOBLE:
-                atomicsButton.SetActive(true);
-                swordSpinButton.SetActive(false);
-                kanlyButton.SetActive(true);
-                voiceButton.SetActive(false);
-                spiceHoardingButton.SetActive(false);
-                break;
-            case CharTypeEnum.MENTANT:
-                atomicsButton.SetActive(false);
-                swordSpinButton.SetActive(false);
-                kanlyButton.SetActive(false);
-                voiceButton.SetActive(false);
-                spiceHoardingButton.SetActive(true);
-                break;
-            case CharTypeEnum.BENEGESSERIT:
-                atomicsButton.SetActive(false);
-                swordSpinButton.SetActive(false);
-                kanlyButton.SetActive(false);
-                voiceButton.SetActive(true);
-                spiceHoardingButton.SetActive(false);
-                break;
-            default:
+            if (!selectedCharacter.isEligibleForSpecialAction())
+            {
+                //special
                 atomicsButton.SetActive(false);
                 swordSpinButton.SetActive(false);
                 kanlyButton.SetActive(false);
                 voiceButton.SetActive(false);
                 spiceHoardingButton.SetActive(false);
-                break;
+                return;
+            }
+
+            switch (selectedCharacter.characterType)
+            {
+                case CharTypeEnum.FIGHTER:
+                    atomicsButton.SetActive(false);
+                    swordSpinButton.SetActive(true);
+                    kanlyButton.SetActive(false);
+                    voiceButton.SetActive(false);
+                    spiceHoardingButton.SetActive(false);
+                    break;
+                case CharTypeEnum.NOBLE:
+                    atomicsButton.SetActive(true);
+                    swordSpinButton.SetActive(false);
+                    kanlyButton.SetActive(true);
+                    voiceButton.SetActive(false);
+                    spiceHoardingButton.SetActive(false);
+                    break;
+                case CharTypeEnum.MENTANT:
+                    atomicsButton.SetActive(false);
+                    swordSpinButton.SetActive(false);
+                    kanlyButton.SetActive(false);
+                    voiceButton.SetActive(false);
+                    spiceHoardingButton.SetActive(true);
+                    break;
+                case CharTypeEnum.BENEGESSERIT:
+                    atomicsButton.SetActive(false);
+                    swordSpinButton.SetActive(false);
+                    kanlyButton.SetActive(false);
+                    voiceButton.SetActive(true);
+                    spiceHoardingButton.SetActive(false);
+                    break;
+                default:
+                    atomicsButton.SetActive(false);
+                    swordSpinButton.SetActive(false);
+                    kanlyButton.SetActive(false);
+                    voiceButton.SetActive(false);
+                    spiceHoardingButton.SetActive(false);
+                    break;
+            }
         }
     }
 
@@ -256,5 +318,26 @@ public class CharacterTurnHandler : MonoBehaviour
         MovementManager.instance.unselectCharacter();
         confirmationPanel.SetActive(false);
         AudioController.instance.Play("menuSelect");
+    }
+
+
+    public void DisableSelectionBox()
+    {
+        PlayerText.SetActive(false);
+        SpiceText.SetActive(false);
+        CharacterText.SetActive(true);
+        HPText.SetActive(true);
+        MPText.SetActive(true);
+        APText.SetActive(true);
+        SpiceInventoryText.SetActive(false);
+    }
+
+
+    public void updateSelectionArrow()
+    {
+        if (selectedCharacter != null)
+        {
+            selectedArrow.transform.position = selectedCharacter.transform.position;
+        }
     }
 }

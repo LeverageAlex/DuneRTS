@@ -7,18 +7,24 @@ using NUnit.Framework;
 using GameData.server.roundHandler;
 using GameData.network.util.world;
 using GameData.network.util.world.mapField;
+using GameData.Configuration;
+using GameData.network.util.enums;
 
 namespace UnitTestSuite.serverTest.roundHandlerTest
 {
     /// <summary>
     /// This Class is used to Test the class Earthquake
     /// </summary>
-    public class TestEarthquake
+    public class TestEarthquake : Setup
     {
-        
+        private Map map;
+
         [SetUp]
         public void Setup()
         {
+            base.NetworkAndConfigurationSetUp();
+            map = new Map(ScenarioConfiguration.SCENARIO_WIDTH, ScenarioConfiguration.SCENARIO_HEIGHT, ScenarioConfiguration.GetInstance().scenario);
+
         }
 
         /// <summary>
@@ -27,34 +33,21 @@ namespace UnitTestSuite.serverTest.roundHandlerTest
         [Test]
         public void TestTransformRockPlanes()
         {
-            MapField[,] fields = new MapField[4, 2];
-            RockPlateau field = new RockPlateau(false, false, null);
-            for (int i = 0; i < 4; i++)
+            int n = 0;
+            foreach(MapField f in map.fields)
             {
-                for (int j = 0; j < 2; j++)
-                {
-                    fields[i, j] = field;
-                }
+                if(f.tileType.Equals(TileType.PLATEAU.ToString()) || f.tileType.Equals(TileType.MOUNTAINS.ToString())) n++;
             }
+            Assume.That(n > 0);
 
-            EarthQuakeExecutor e = new EarthQuake(fields);
+            EarthQuakeExecutor e = new EarthQuakeExecutor(map);
             e.TransformRockPlanes();
-            for (int i = 0; i < 4; i++)
+
+            foreach (MapField f in map.fields)
             {
-                for (int j = 0; j < 2; j++)
-                {
-                    Assert.AreEqual("DUNE", fields[i, j].TileType);
-                }
+                Assert.False(f.tileType.Equals(TileType.PLATEAU.ToString()) || f.tileType.Equals(TileType.MOUNTAINS.ToString()));
             }
         }
 
-        /// <summary>
-        /// This Testcase validates the behaviour of the method RemoveSandworm
-        /// </summary>
-        [Test]
-        public void TestRemoveSandworm()
-        {
-            // implement logic
-        }
     }
 }

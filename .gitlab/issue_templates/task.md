@@ -1,5 +1,4 @@
 # Aufgaben 
-<!-- Auflistung aller (Teil-)Aufgaben, die dabei erlegigt werden müssen in Form einer Liste -->
 - [ ] <Teilaufgabe 1 ...>
 - [ ] ...
 

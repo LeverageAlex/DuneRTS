@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using CommandLine;
+using GameData.network.messages;
 using GameData.network.util.enums;
 using GameData.network.util.world;
 using GameData.network.util.world.mapField;
 using Serilog;
+using GameData.Configuration;
 
-namespace Server.roundHandler.duneMovementHandler
+namespace GameData.roundHandler.duneMovementHandler
 {
     /// <summary>
     /// Represents a cellular automaton based on the principle of Conway's Game of Life
@@ -37,11 +39,10 @@ namespace Server.roundHandler.duneMovementHandler
         /// create a new cellular automaton with a given transition rule
         /// </summary>
         /// <param name="map">the map, the cellular automaton work on and manipulate</param>
-        /// <param name="transitionRule">the transition rule for the automaton</param>
-        public CellularAutomaton(Map map, string transitionRule)
+        public CellularAutomaton(Map map)
         {
             this.map = map;
-            ParseTransitionRule(transitionRule);
+            ParseTransitionRule(PartyConfiguration.GetInstance().cellularAutomaton);
         }
 
         /// <summary>
@@ -89,7 +90,7 @@ namespace Server.roundHandler.duneMovementHandler
         /// <returns></returns>
         private bool CellIsAlive(MapField field)
         {
-            return field.TileType.Equals(TileType.DUNE.ToString()) || field.TileType.Equals(TileType.MOUNTAINS.ToString()) || field.TileType.Equals(TileType.CITY.ToString());
+            return field.tileType.Equals(TileType.DUNE.ToString()) || field.tileType.Equals(TileType.MOUNTAINS.ToString()) || field.tileType.Equals(TileType.CITY.ToString());
         }
 
         /// <summary>
@@ -97,6 +98,8 @@ namespace Server.roundHandler.duneMovementHandler
         /// </summary>
         public void NextIteration()
         {
+            bool wasMapChanged = false;
+
             for (int x = 0; x < map.MAP_WIDTH; x++)
             {
                 for (int y = 0; y < map.MAP_HEIGHT; y++)
@@ -112,10 +115,15 @@ namespace Server.roundHandler.duneMovementHandler
                         if (born.Contains(numberOfAliveNeighborCells))
                         {
                             // cell will be born, so will be a dune
-                            MapField newDune = new Dune(cell.HasSpice, cell.isInSandstorm, cell.stormEye);
-                            newDune.PlaceCharacter(cell.Character);
+                            MapField newDune = new Dune(cell.hasSpice, cell.isInSandstorm);
+                            if (cell.Character != null)
+                            {
+
+                                newDune.PlaceCharacter(cell.Character);
+                            }
 
                             map.SetMapFieldAtPosition(newDune, x, y);
+                            wasMapChanged = true;
                             continue;
                         }
 
@@ -126,13 +134,22 @@ namespace Server.roundHandler.duneMovementHandler
                         }
                         
                         // cell will die, so will be a flat sand
-                        MapField newFlatSand = new FlatSand(cell.HasSpice, cell.isInSandstorm, cell.stormEye);
-                        newFlatSand.PlaceCharacter(cell.Character);
+                        MapField newFlatSand = new FlatSand(cell.hasSpice, cell.isInSandstorm);
+                        if (cell.Character != null)
+                        {
+                            newFlatSand.PlaceCharacter(cell.Character);
+                        }
 
                         map.SetMapFieldAtPosition(newFlatSand, x, y);
-
+                        wasMapChanged = true;
                     }
                 }
+            }
+
+            // if the map was changed in this iteration, send the map change message
+            if (wasMapChanged)
+            {
+                Party.GetInstance().messageController.DoSendMapChangeDemand(MapChangeReasons.DUNEWALKING);
             }
         }
 

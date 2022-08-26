@@ -12,11 +12,11 @@ namespace GameData.network.messages
     public class SpawnCharacterDemandMessage : TurnMessage
     {
         [JsonProperty]
-        private string characterName;
+        public string characterName { get; }
         [JsonProperty]
-        private Position position;
+        public Position position { get; }
         [JsonProperty]
-        private Character attributes;
+        public Character attributes { get; }
 
         /// <summary>
         /// Constructor of the class SpawnCharacterMessage
@@ -32,11 +32,6 @@ namespace GameData.network.messages
             this.characterName = characterName;
             this.position = position;
             this.attributes = attributes;
-        }
-
-        public string[] GetAttributesFromCharacter()
-        {
-            return null; //TODO
         }
     }
 }
