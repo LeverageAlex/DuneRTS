@@ -38,6 +38,13 @@ Dieses Benutzerhandbuch beinhaltet ebenso eine Anleitung, wie man den Server und
 # Test
 Der aktuelle Testreport befindet sich [hier](https://gitlab.informatik.uni-ulm.de/sopra/ws21-deserts-of-dune/teams/team08/-/jobs/artifacts/refactor/pipeline/raw/public?job=deploy-coverage-report)
 
+# Ingame Aufnahmen
+![startScreen](Documentation/Ingame_footage/main_screen.png)
+![optionsScreen](Documentation/Ingame_footage/main_options.png)
+![joinScreen](Documentation/Ingame_footage/main_join.png)
+![ingameScreen](Documentation/Ingame_footage/ingame_round_phase.png)
+![ornihopterScreen](Documentation/Ingame_footage/ingame_ornihopter.png)
+![ornihopterScreenAbsturz](Documentation/Ingame_footage/ingame_ornihopter_absturz.png)
 
 # Lizenzen
 ## Models
