@@ -1,7 +1,7 @@
-| [![Pipeline status](https://gitlab.informatik.uni-ulm.de/sopra/ws21-deserts-of-dune/teams/team08/badges/develop/pipeline.svg)](https://gitlab.informatik.uni-ulm.de/sopra/ws21-deserts-of-dune/teams/team08/-/jobs)
-[![download pdf](https://img.shields.io/badge/Download-Pflichtenheft.pdf-green)](https://gitlab.informatik.uni-ulm.de/sopra/ws21-deserts-of-dune/teams/team08/-/tree/develop/Documentation/Requirement_specification_document/Pflichtenheft.pdf)
-[![download pdf](https://img.shields.io/badge/Download-Benutzerhandbuch.pdf-green)](https://gitlab.informatik.uni-ulm.de/sopra/ws21-deserts-of-dune/teams/team08/-/tree/develop/Documentation/Benutzerhandbuch.pdf)
-[![download xlsx](https://img.shields.io/badge/Download-Projekttagebuch.xslx-green)](https://gitlab.informatik.uni-ulm.de/sopra/ws21-deserts-of-dune/teams/team08/-/tree/develop/Projekttagebuch/Projekttagebuch.pdf)
+[![Pipeline status](https://gitlab.informatik.uni-ulm.de/sopra/ws21-deserts-of-dune/teams/team08/badges/develop/pipeline.svg)](https://gitlab.informatik.uni-ulm.de/sopra/ws21-deserts-of-dune/teams/team08/-/jobs)
+[![download pdf](https://img.shields.io/badge/Download-Pflichtenheft.pdf-green)](https://github.com/LeverageAlex/DuneRTS/tree/main/Documentation/Requirement_specification_document/Pflichtenheft.pdf)
+[![download pdf](https://img.shields.io/badge/Download-Benutzerhandbuch.pdf-green)](https://github.com/LeverageAlex/DuneRTS/tree/main/Documentation/Benutzerhandbuch.pdf)
+[![download xlsx](https://img.shields.io/badge/Download-Projekttagebuch.xslx-green)](https://github.com/LeverageAlex/DuneRTS/tree/main/Projekttagebuch/Projekttagebuch.pdf)
 # Deserts of Dune - Team 08
 
 _*Deserts of Dune*_ ist ein Multiplayer-Spiel, welches im Rahmen des Softwaregrundprojekts 2021/2022 entwickelt wird. Es wurde in der Sprache C# bzw. mit .NET entwickelt, wobei Visual Studio und Unity verwendet wurden
@@ -25,18 +25,15 @@ Dieses Projekt kann wie folgt verwendet werden, um das Spiel zu spielen:
 
 # Dokumenation
 ## Pflichtenheft 
-Das Pflichtenheft wird durch eine Pipeline automatisch gebaut, das heißt die entsprechend Latex-Datei wird automatisch compiled und als Artefakt gespeichert. Die aktuellste Version des Pflichtenhefts findet sich [hier](https://gitlab.informatik.uni-ulm.de/sopra/ws21-deserts-of-dune/teams/team08/-/tree/develop/Documentation/Requirement_specification_document/Pflichtenheft.pdf). 
+Das Pflichtenheft wird durch eine Pipeline automatisch gebaut, das heißt die entsprechend Latex-Datei wird automatisch compiled und als Artefakt gespeichert. Die aktuellste Version des Pflichtenhefts findet sich [hier](https://github.com/LeverageAlex/DuneRTS/tree/main/Documentation/Requirement_specification_document/Pflichtenheft.pdf). 
 
 Außerdem enthält das Pflichtenheft den Architekturentwurf für das Projekt, also die Komponenten- und Klassendiagramme.
 
 Für Abgaben oder sonstige Information ist immer dieses Pflichtenheft zu verwenden.
 
 ## Benutzerhandbuch
-Genauso wie das Pflichtenheft wird auch das Benutzerhandbuch automatisch erstellt und findet sich [hier](https://gitlab.informatik.uni-ulm.de/sopra/ws21-deserts-of-dune/teams/team08/-/tree/develop/Documentation/Benutzerhandbuch.pdf).
+Genauso wie das Pflichtenheft wird auch das Benutzerhandbuch automatisch erstellt und findet sich [hier](https://github.com/LeverageAlex/DuneRTS/tree/main/Documentation/Benutzerhandbuch.pdf).
 Dieses Benutzerhandbuch beinhaltet ebenso eine Anleitung, wie man den Server und den KI-Client starten kann
-
-## Kommentare
-Der 
 
 # Test
 Der aktuelle Testreport befindet sich [hier](https://gitlab.informatik.uni-ulm.de/sopra/ws21-deserts-of-dune/teams/team08/-/jobs/artifacts/refactor/pipeline/raw/public?job=deploy-coverage-report)
